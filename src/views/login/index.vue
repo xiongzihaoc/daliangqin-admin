@@ -1,0 +1,315 @@
+<template>
+  <div class="login-container">
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left"
+    >
+      <div class="title-container">
+        <h3 class="title">大良卿科技</h3>
+      </div>
+
+      <el-form-item prop="phone">
+        <span class="svg-container">
+          <svg-icon icon-class="user" />
+        </span>
+        <el-input
+          ref="phone"
+          v-model="loginForm.phone"
+          placeholder="手机号"
+          name="phone"
+          oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+          tabindex="1"
+          auto-complete="on"
+        />
+        <el-button
+          v-show="show"
+          @click="getCodeBtn"
+          type="plain"
+          size="mini"
+          class="btnCode"
+          >验证码</el-button
+        >
+        <el-button v-show="!show" type="plain" size="mini" class="btnCode">{{
+          count + "S"
+        }}</el-button>
+      </el-form-item>
+
+      <el-form-item prop="code">
+        <span class="svg-container">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input
+          ref="code"
+          v-model.trim="loginForm.code"
+          placeholder="验证码"
+          name="code"
+          auto-complete="on"
+          oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+          @keyup.enter.native="handleLogin"
+        />
+      </el-form-item>
+      <el-button
+        :loading="loading"
+        type="primary"
+        style="width: 100%; margin-bottom: 30px"
+        @click.native.prevent="handleLogin"
+        >登 录</el-button
+      >
+    </el-form>
+  </div>
+</template>
+
+<script>
+import Cookies from "js-cookie";
+import { getCode } from "@/api/user";
+
+export default {
+  name: "Login",
+  data() {
+    const validatePhone = (rule, value, callback) => {
+      const reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
+      if (!value) {
+        return callback(new Error("请填写手机号码！"));
+      } else if (!reg.test(value)) {
+        return callback(new Error("请填写正确的手机号码！"));
+      } else {
+        callback();
+      }
+    };
+    const validateCode = (rule, value, callback) => {
+      const reg = /^\d{6}$/;
+      if (!value) {
+        return callback(new Error("请填写手机验证码！"));
+      } else if (!reg.test(value)) {
+        return callback(new Error("请填写6位数验证码！"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      loginForm: {
+        phone: "",
+        code: "",
+        userType: "DOCTOR",
+      },
+      loginRules: {
+        phone: [
+          { required: true, trigger: "change", validator: validatePhone },
+        ],
+        code: [{ required: true, trigger: "blur", validator: validateCode }],
+      },
+      loading: false,
+      redirect: undefined,
+      show: true,
+      count: "",
+      timer: null,
+    };
+  },
+  watch: {
+    $route: {
+      handler: function (route) {
+        this.redirect = route.query && route.query.redirect;
+      },
+      immediate: true,
+    },
+  },
+  created() {
+    this.getCookie();
+  },
+  methods: {
+    // 获取验证码按钮
+    getCodeBtn() {
+      if (this.loginForm.phone.trim().length <= 0) {
+        return this.$message.error("请输入手机号");
+      } else {
+        const TIME_COUNT = 60;
+        if (!this.timer) {
+          this.count = TIME_COUNT;
+          this.show = false;
+          this.timer = setInterval(() => {
+            if (this.count > 0 && this.count <= TIME_COUNT) {
+              this.count--;
+            } else {
+              this.show = true;
+              clearInterval(this.timer);
+              this.timer = null;
+            }
+          }, 1000);
+        }
+        var val = {
+          phone: Number(this.loginForm.phone),
+          // code: Number(this.loginForm.code),
+          smsType: "LOGIN",
+        };
+        getCode(val).then((res) => {
+          console.log(res);
+        });
+      }
+    },
+    getCookie() {
+      const phone = Cookies.get("phone");
+      const code = Cookies.get("code");
+      const rememberMe = Cookies.get("rememberMe");
+      this.loginForm = {
+        userType: "DOCTOR",
+        phone: phone === undefined ? this.loginForm.phone : phone,
+        code: code === undefined ? this.loginForm.code : code,
+        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
+      };
+    },
+    // 登录按钮
+    handleLogin() {
+      this.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          this.loading = true;
+          if (this.loginForm.rememberMe) {
+            Cookies.set("phone", this.loginForm.phone, { expires: 30 });
+            Cookies.set("code", encrypt(this.loginForm.code), { expires: 30 });
+            Cookies.set("rememberMe", this.loginForm.rememberMe, {
+              expires: 30,
+            });
+          } else {
+            Cookies.remove("phone");
+            Cookies.remove("code");
+            Cookies.remove("rememberMe");
+          }
+          this.$store
+            .dispatch("Login", this.loginForm)
+            .then(() => {
+              console.log(6666);
+              this.$router.push({ path: this.redirect || "/" });
+              this.loading = false;
+            })
+            .catch(() => {
+              this.loading = false;
+            });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+  },
+  // 清除定时器
+  beforeDestroy() {
+    clearInterval(this.timer);
+  },
+};
+</script>
+
+<style lang="scss">
+$bg: #283443;
+$light_gray: #fff;
+$cursor: #fff;
+
+@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
+  .login-container .el-input input {
+    color: $cursor;
+  }
+}
+
+/* reset element-ui css */
+.login-container {
+  .el-input {
+    display: inline-block;
+    height: 47px;
+    width: 85%;
+
+    input {
+      background: transparent;
+      border: 0px;
+      -webkit-appearance: none;
+      border-radius: 0px;
+      padding: 12px 5px 12px 15px;
+      color: $light_gray;
+      height: 47px;
+      caret-color: $cursor;
+
+      &:-webkit-autofill {
+        box-shadow: 0 0 0px 1000px $bg inset !important;
+        -webkit-text-fill-color: $cursor !important;
+      }
+    }
+  }
+
+  .el-form-item {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    color: #454545;
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
+
+.login-container {
+  min-height: 100%;
+  width: 100%;
+  background-color: $bg;
+  overflow: hidden;
+
+  .login-form {
+    position: relative;
+    width: 520px;
+    max-width: 100%;
+    padding: 160px 35px 0;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .tips {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 10px;
+
+    span {
+      &:first-of-type {
+        margin-right: 16px;
+      }
+    }
+  }
+
+  .svg-container {
+    padding: 6px 5px 6px 15px;
+    color: $dark_gray;
+    vertical-align: middle;
+    width: 30px;
+    display: inline-block;
+  }
+
+  .title-container {
+    position: relative;
+
+    .title {
+      font-size: 26px;
+      color: $light_gray;
+      margin: 0px auto 40px auto;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+  .btnCode {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    opacity: 0.3;
+    color: red;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+</style>

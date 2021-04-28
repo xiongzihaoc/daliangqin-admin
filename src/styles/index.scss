@@ -1,0 +1,101 @@
+@import './variables.scss';
+@import './mixin.scss';
+@import './transition.scss';
+@import './element-ui.scss';
+@import './sidebar.scss';
+
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+// main-container global css
+.app-container {
+  padding: 20px;
+}
+// el-input css
+.el-input-style {
+  width: 300px;
+}
+.search-box {
+  margin-bottom: 10px;
+}
+.el-button-style {
+  margin: 0 5px;
+}
+.el-pagination-style {
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+}
+.el-button--primary,.el-button--primary:focus,.el-button--primary.is-active, .el-button--primary:active{background: #1890FF;}
+.el-button--success,.el-button--success:focus,.el-button--success.is-active, .el-button--success:active{background: #13CE66;}
+.el-button--danger,.el-button--danger:focus,.el-button--danger.is-active, .el-button--danger:active{background: #F5222D;}
+.el-button--primary:hover {
+    background: #1890FF;
+    border-color: #1890FF;
+    color: #FFF;
+    opacity: .6;
+}
+.el-button--danger:hover {
+    background: #F5222D;
+    border-color: #F5222D;
+    color: #FFF;
+    opacity: .6;
+}
+.el-button--success:hover {
+  background: #13CE66;
+  border-color: #13CE66;
+  color: #FFF;
+  opacity: .6;
+}
