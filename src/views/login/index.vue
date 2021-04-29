@@ -180,7 +180,6 @@ export default {
           this.$store
             .dispatch("Login", this.loginForm)
             .then(() => {
-              console.log(6666);
               this.$router.push({ path: this.redirect || "/" });
               this.loading = false;
             })

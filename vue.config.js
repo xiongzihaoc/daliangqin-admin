@@ -28,14 +28,14 @@ module.exports = {
     // 代理
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
-        target: 'http://test-api.daliangqing.com',
+        target: 'http://test-api.daliangqing.com/public',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       },
       [process.env.VUE_APP_BASE_SECOND_API]: {
-        target: 'http://test-api.daliangqing.com',
+        target: 'http://test-api.daliangqing.com/admin',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_SECOND_API]: ''
@@ -53,7 +53,6 @@ module.exports = {
     }
   },
   chainWebpack(config) {
-    // it can improve the speed of the first screen, it is recommended to turn on preload
     config.plugin('preload').tap(() => [
       {
         rel: 'preload',

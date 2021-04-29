@@ -37,8 +37,8 @@ const user = {
         login(userInfo).then(res => {
           console.log(res);
           const { data } = res
-          commit('SET_TOKEN', data.token)
-          setToken(data.token)
+          commit('SET_TOKEN', '6666')
+          setToken('6666')
           resolve()
         }).catch(error => {
           reject(error)

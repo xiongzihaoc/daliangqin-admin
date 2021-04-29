@@ -62,6 +62,18 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/appVersion',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'appVersion',
+        component: () => import('@/views/appVersion/index'),
+        meta: { title: 'app版本管理', icon: 'form' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
