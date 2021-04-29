@@ -1,10 +1,33 @@
 import request from '@/utils/request'
 
 export function list(data) {
-    console.log(data);
   return request({
     url: 'update',
     method: 'get',
     params: data
+  })
+}
+
+export function add(data) {
+  return request({
+    url: 'update',
+    method: 'post',
+    data
+  })
+}
+
+export function edit(data) {
+  return request({
+    url: 'update',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteE(data) {
+  return request({
+    url: 'update',
+    method: 'delete',
+    data
   })
 }

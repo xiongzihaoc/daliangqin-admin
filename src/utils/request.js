@@ -19,6 +19,7 @@ const service = axios.create({
 })
 // request拦截器
 service.interceptors.request.use(config => {
+  console.log(config);
   // 是否需要设置 token
   const isToken = (config.headers || {}).isToken === false
   if (getToken() && !isToken) {

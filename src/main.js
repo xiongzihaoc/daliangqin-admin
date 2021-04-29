@@ -17,7 +17,8 @@ import '@/permission' // permission control
 Vue.use(ElementUI)
 Vue.prototype.$
 Vue.config.productionTip = false
-
+// 弹框拖拽功能
+import './utils/directives'
 new Vue({
   el: '#app',
   router,

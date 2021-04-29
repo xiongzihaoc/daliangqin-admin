@@ -35,10 +35,8 @@ const user = {
       console.log(userInfo);
       return new Promise((resolve, reject) => {
         login(userInfo).then(res => {
-          console.log(res);
-          const { data } = res
-          commit('SET_TOKEN', '6666')
-          setToken('6666')
+          commit('SET_TOKEN', res.data)
+          setToken(res.data)
           resolve()
         }).catch(error => {
           reject(error)
