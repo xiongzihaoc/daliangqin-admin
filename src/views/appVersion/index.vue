@@ -73,6 +73,20 @@
         <el-form-item label="安装包地址" prop="url">
           <el-input v-model="editAddForm.url"></el-input>
         </el-form-item>
+        <el-form-item label="app类型" prop="appType">
+          <el-select
+            v-model="editAddForm.appType"
+            placeholder="请选择"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in appTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="设备类型" prop="deviceType">
           <el-select
             v-model="editAddForm.deviceType"
@@ -103,12 +117,17 @@ export default {
       loginRules: [],
       searchInput: "",
       list: [],
+      appTypeList: [
+        { id: 1, label: "DOCTOR", value: "DOCTOR" },
+        { id: 2, label: "PATIENT", value: "PATIENT" },
+      ],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
         { prop: "updateLog", label: "更新日志" },
         { prop: "versionString", label: "版本号" },
         { prop: "url", label: "安装包地址" },
         { prop: "deviceType", label: "设备类型" },
+        { prop: "appType", label: "app类型" },
       ],
       pageSize: 10,
       pageNum: 1,
@@ -121,6 +140,7 @@ export default {
         versionString: "",
         deviceType: "",
         updateLog: "",
+        appType: "",
       },
     };
   },
@@ -133,11 +153,10 @@ export default {
       var value = {
         page: this.pageNum,
         pageSize: this.pageSize,
-        deviceType: "",
       };
       list(value).then((res) => {
         this.list = res.data.elements;
-        this.total = res.data.totalSize
+        this.total = res.data.totalSize;
       });
     },
     // 搜索
@@ -168,7 +187,6 @@ export default {
       }
       deleteE(id).then((res) => {
         console.log(res);
-        console.log("================================");
         this.$notify.success({
           title: "删除成功",
         });

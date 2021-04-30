@@ -76,10 +76,10 @@
             placeholder="请选择"
             style="width: 100%"
           >
-            <el-option label="一级甲等" value="CLASS-1-A"></el-option>
-            <el-option label="一级乙等" value="CLASS-2-A"></el-option>
-            <el-option label="二级甲等" value="CLASS-1-B"></el-option>
-            <el-option label="二级乙等" value="CLASS-2-B"></el-option>
+            <el-option label="一级甲等" value="CLASS-1"></el-option>
+            <el-option label="一级乙等" value="CLASS-2"></el-option>
+            <el-option label="二级甲等" value="CLASS-1"></el-option>
+            <el-option label="二级乙等" value="CLASS-2"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -102,6 +102,9 @@ export default {
       loginRules: [],
       searchInput: "",
       list: [],
+      appTypeList:[
+        
+      ],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
         { prop: "address", label: "地理位置" },

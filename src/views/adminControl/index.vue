@@ -67,7 +67,7 @@
         <el-form-item label="用户名" prop="name">
           <el-input v-model="editAddForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="手机号" prop="phone">
+        <el-form-item label="联系方式" prop="phone">
           <el-input v-model="editAddForm.phone"></el-input>
         </el-form-item>
         <el-form-item label="用户类型" prop="userType	">
@@ -195,7 +195,7 @@ export default {
       deleteE(id).then((res) => {
         console.log(res);
         this.$notify.success({
-          title: "成功",
+          title: "删除成功",
         });
         this.getList();
       });

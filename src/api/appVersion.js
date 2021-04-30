@@ -28,6 +28,5 @@ export function deleteE(data) {
   return request({
     url: 'update/' + data,
     method: 'DELETE',
-    data
   })
 }
