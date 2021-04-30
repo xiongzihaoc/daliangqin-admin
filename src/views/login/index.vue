@@ -95,7 +95,6 @@ export default {
         phone: "",
         code: "",
         userType: "DOCTOR",
-        deviceType:'PC_WEB'
       },
       loginRules: {
         phone: [
@@ -143,7 +142,6 @@ export default {
         }
         var val = {
           phone: Number(this.loginForm.phone),
-          // code: Number(this.loginForm.code),
           smsType: "LOGIN",
         };
         getCode(val).then((res) => {
@@ -157,6 +155,7 @@ export default {
       const rememberMe = Cookies.get("rememberMe");
       this.loginForm = {
         userType: "DOCTOR",
+        deviceType: "PC_WEB",
         phone: phone === undefined ? this.loginForm.phone : phone,
         code: code === undefined ? this.loginForm.code : code,
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
