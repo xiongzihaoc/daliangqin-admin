@@ -73,9 +73,9 @@
         <el-form-item label="安装包地址" prop="url">
           <el-input v-model="editAddForm.url"></el-input>
         </el-form-item>
-        <el-form-item label="设备类型" prop="deviceType">
+        <el-form-item label="设备类型" prop="updateAppType">
           <el-select
-            v-model="editAddForm.deviceType"
+            v-model="editAddForm.updateAppType"
             placeholder="请选择"
             style="width: 100%"
           >
@@ -93,7 +93,7 @@
 </template>
 <script>
 import EleTable from "../../components/Table";
-import { list, add, edit, deleteE } from "@/api/appVersion";
+import { list, add, edit, deleteE } from "@/api/message";
 export default {
   components: {
     EleTable,
@@ -108,7 +108,7 @@ export default {
         { prop: "updateLog", label: "更新日志" },
         { prop: "versionString", label: "版本号" },
         { prop: "url", label: "安装包地址" },
-        { prop: "deviceType", label: "设备类型" },
+        { prop: "updateAppType", label: "设备类型" },
       ],
       pageSize: 10,
       pageNum: 1,
@@ -119,7 +119,7 @@ export default {
       editAddForm: {
         url: "",
         versionString: "",
-        deviceType: "",
+        updateAppType: "",
         updateLog: "",
       },
     };
@@ -128,9 +128,9 @@ export default {
     var value = {
       page: this.pageNum,
       pageSize: this.pageSize,
-      deviceType: "ANDROID",
     };
     list(value).then((res) => {
+        console.log(res);
       this.list = res.data.elements;
     });
   },
