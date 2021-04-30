@@ -31,11 +31,8 @@
           <el-button size="mini" type="primary" @click="editBtn(scope.row)"
             >编辑</el-button
           >
-          <el-button
-            size="mini"
-            type="warning"
-            @click="deleteBtn(scope.row)"
-            >重置</el-button
+          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
+            >删除</el-button
           >
         </template>
       </el-table-column>
@@ -96,7 +93,7 @@
 </template>
 <script>
 import EleTable from "../../components/Table";
-import { list, add, edit, reset, query } from "@/api/adminControl";
+import { list, add, edit, deleteE, query } from "@/api/adminControl";
 export default {
   components: {
     EleTable,
@@ -108,7 +105,7 @@ export default {
       list: [],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
-        { prop: "devicId", label: "设备ID" },
+        { prop: "deviceId", label: "设备ID" },
         { prop: "deviceType", label: "设备类型" },
         { prop: "ip", label: "ip" },
         { prop: "name", label: "用户名" },
@@ -116,8 +113,6 @@ export default {
         { prop: "userAgent", label: "用户代理" },
         { prop: "createTime", label: "创建时间" },
         { prop: "updateTime", label: "更新时间" },
-
-
       ],
       pageSize: 10,
       pageNum: 1,
@@ -157,7 +152,7 @@ export default {
           this.$notify.success({
             title: "新增成功",
           });
-          this.list = res.data
+          this.list = res.data;
         }
       });
     },
@@ -172,14 +167,26 @@ export default {
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
-    deleteBtn(val) {
-      // reset({ phone: phone }).then((res) => {
-      //   console.log(res);
-      //   this.$notify.success({
-      //     title: "重置成功",
-      //   });
-      //   this.getList();
-      // });
+    async deleteBtn(id) {
+            const confirmResult = await this.$confirm(
+        "你确定要执行此操作, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => console.log(err));
+      if (confirmResult != "confirm") {
+        return this.$message.info("取消删除");
+      }
+      deleteE(id).then((res) => {
+        console.log(res);
+        this.$notify.success({
+          title: "成功",
+        });
+        this.getList();
+      });
     },
     // 弹框关闭
     getData() {},

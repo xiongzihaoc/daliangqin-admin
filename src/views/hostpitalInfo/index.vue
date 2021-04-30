@@ -31,11 +31,8 @@
           <el-button size="mini" type="primary" @click="editBtn(scope.row)"
             >编辑</el-button
           >
-          <el-button
-            size="mini"
-            type="warning"
-            @click="deleteBtn(scope.row)"
-            >重置</el-button
+          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
+            >删除</el-button
           >
         </template>
       </el-table-column>
@@ -67,23 +64,22 @@
         label-width="100px"
         @closed="editDialogClosed"
       >
-        <el-form-item label="手机号" prop="phone">
+        <el-form-item label="地理位置" prop="address">
           <el-input v-model="editAddForm.phone"></el-input>
         </el-form-item>
-        <el-form-item label="内容" prop="content">
-          <el-input v-model="editAddForm.content"></el-input>
+        <el-form-item label="联系方式" prop="contract">
+          <el-input v-model="editAddForm.contract"></el-input>
         </el-form-item>
-        <el-form-item label="发送类型" prop="sendType">
+        <el-form-item label="医院等级" prop="hospitalClass">
           <el-select
-            v-model="editAddForm.sendType"
+            v-model="editAddForm.hospitalClass"
             placeholder="请选择"
             style="width: 100%"
           >
-            <el-option label="LOGIN" value="RESET_PASSWORD"></el-option>
-            <el-option
-              label="RESET_PASSWORD"
-              value="RESET_PASSWORD"
-            ></el-option>
+            <el-option label="一级甲等" value="CLASS-1-A"></el-option>
+            <el-option label="一级乙等" value="CLASS-2-A"></el-option>
+            <el-option label="二级甲等" value="CLASS-1-B"></el-option>
+            <el-option label="二级乙等" value="CLASS-2-B"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -96,7 +92,7 @@
 </template>
 <script>
 import EleTable from "../../components/Table";
-import { list, add, edit, reset, query } from "@/api/hostpitalInfo";
+import { list, add, edit, deleteE, query } from "@/api/hostpitalInfo";
 export default {
   components: {
     EleTable,
@@ -108,16 +104,11 @@ export default {
       list: [],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
-        { prop: "devicId", label: "设备ID" },
-        { prop: "deviceType", label: "设备类型" },
-        { prop: "ip", label: "ip" },
+        { prop: "address", label: "地理位置" },
+        { prop: "contract", label: "联系方式" },
+        { prop: "hospitalClass", label: "医院等级" },
         { prop: "name", label: "用户名" },
         { prop: "phone", label: "手机号" },
-        { prop: "userAgent", label: "用户代理" },
-        { prop: "createTime", label: "创建时间" },
-        { prop: "updateTime", label: "更新时间" },
-
-
       ],
       pageSize: 10,
       pageNum: 1,
@@ -126,9 +117,9 @@ export default {
       editDialogVisible: false,
       infoTitle: "",
       editAddForm: {
-        phone: "",
-        content: "",
-        sendType: "",
+        address: "",
+        contract: "",
+        hospitalClass: "",
       },
     };
   },
@@ -157,7 +148,7 @@ export default {
           this.$notify.success({
             title: "新增成功",
           });
-          this.list = res.data
+          this.list = res.data;
         }
       });
     },
@@ -172,14 +163,26 @@ export default {
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
-    deleteBtn(val) {
-      // reset({ phone: phone }).then((res) => {
-      //   console.log(res);
-      //   this.$notify.success({
-      //     title: "重置成功",
-      //   });
-      //   this.getList();
-      // });
+    async deleteBtn(val) {
+      const confirmResult = await this.$confirm(
+        "你确定要执行此操作, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => console.log(err));
+      if (confirmResult != "confirm") {
+        return this.$message.info("取消删除");
+      }
+      deleteE(val).then((res) => {
+        console.log(res);
+        this.$notify.success({
+          title: "删除成功",
+        });
+        this.getList();
+      });
     },
     // 弹框关闭
     getData() {},

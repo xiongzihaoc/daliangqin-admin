@@ -18,6 +18,6 @@ export function add(data) {
 export function deleteE(data) {
   return request({
     url: 'hospital/info/' + data,
-    method: 'DELETE',
+    method: 'delete',
   })
 }
