@@ -132,6 +132,8 @@ export default {
   mounted() {},
   methods: {
     getList() {
+      console.log(this.pageNum);
+      console.log(this.pageSize);
       var value = {
         page: this.pageNum,
         pageSize: this.pageSize,

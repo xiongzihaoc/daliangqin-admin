@@ -26,6 +26,6 @@ export function edit(data) {
 export function deleteE(data) {
   return request({
     url: 'user/' + data,
-    method: 'DELETE',
+    method: 'delete',
   })
 }
