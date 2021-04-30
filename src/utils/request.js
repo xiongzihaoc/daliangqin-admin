@@ -64,9 +64,10 @@ service.interceptors.response.use(res => {
     const code = res.data.code || 'OK';
     // 获取错误信息
     if (code != "OK") {
-      return Notification.error({
+      Notification.error({
         title: res.data.message
       })
+      return res.data
     } else {
       return res.data
     }

@@ -95,6 +95,7 @@ export default {
         phone: "",
         code: "",
         userType: "DOCTOR",
+        deviceType:'PC_WEB'
       },
       loginRules: {
         phone: [

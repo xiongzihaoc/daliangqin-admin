@@ -31,8 +31,11 @@
           <el-button size="mini" type="primary" @click="editBtn(scope.row)"
             >编辑</el-button
           >
-          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
-            >删除</el-button
+          <el-button
+            size="mini"
+            type="warning"
+            @click="resetBtn(scope.row.phone)"
+            >重置</el-button
           >
         </template>
       </el-table-column>
@@ -64,23 +67,23 @@
         label-width="100px"
         @closed="editDialogClosed"
       >
-        <el-form-item label="更新日志" prop="updateLog">
-          <el-input v-model="editAddForm.updateLog"></el-input>
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="editAddForm.phone"></el-input>
         </el-form-item>
-        <el-form-item label="版本号" prop="versionString">
-          <el-input v-model="editAddForm.versionString"></el-input>
+        <el-form-item label="内容" prop="content">
+          <el-input v-model="editAddForm.content"></el-input>
         </el-form-item>
-        <el-form-item label="安装包地址" prop="url">
-          <el-input v-model="editAddForm.url"></el-input>
-        </el-form-item>
-        <el-form-item label="设备类型" prop="updateAppType">
+        <el-form-item label="发送类型" prop="sendType">
           <el-select
-            v-model="editAddForm.updateAppType"
+            v-model="editAddForm.sendType"
             placeholder="请选择"
             style="width: 100%"
           >
-            <el-option label="安卓" value="ANDROID"></el-option>
-            <el-option label="苹果" value="IOS"></el-option>
+            <el-option label="LOGIN" value="RESET_PASSWORD"></el-option>
+            <el-option
+              label="RESET_PASSWORD"
+              value="RESET_PASSWORD"
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -93,7 +96,7 @@
 </template>
 <script>
 import EleTable from "../../components/Table";
-import { list, add, edit, deleteE } from "@/api/message";
+import { list, add, edit, reset, query } from "@/api/message";
 export default {
   components: {
     EleTable,
@@ -105,10 +108,11 @@ export default {
       list: [],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
-        { prop: "updateLog", label: "更新日志" },
-        { prop: "versionString", label: "版本号" },
-        { prop: "url", label: "安装包地址" },
-        { prop: "updateAppType", label: "设备类型" },
+        { prop: "phone", label: "手机号" },
+        { prop: "sendType", label: "发送类型" },
+        { prop: "content", label: "内容" },
+        { prop: "ua", label: "浏览器类型" },
+        { prop: "ip", label: "访问ip" },
       ],
       pageSize: 10,
       pageNum: 1,
@@ -117,27 +121,41 @@ export default {
       editDialogVisible: false,
       infoTitle: "",
       editAddForm: {
-        url: "",
-        versionString: "",
-        updateAppType: "",
-        updateLog: "",
+        phone: "",
+        content: "",
+        sendType: "",
       },
     };
   },
   created() {
-    var value = {
-      page: this.pageNum,
-      pageSize: this.pageSize,
-    };
-    list(value).then((res) => {
-        console.log(res);
-      this.list = res.data.elements;
-    });
+    this.getList();
   },
   mounted() {},
   methods: {
+    getList() {
+      var value = {
+        page: this.pageNum,
+        pageSize: this.pageSize,
+      };
+      list(value).then((res) => {
+        console.log(res);
+        this.list = res.data.elements;
+        this.total = res.data.totalSize;
+      });
+    },
     // 搜索
-    searchChange(val) {},
+    searchChange(val) {
+      query(val).then((res) => {
+        if (res.code != "OK") {
+          return;
+        } else {
+          this.$notify.success({
+            title: "新增成功",
+          });
+          this.list = res.data
+        }
+      });
+    },
     // 新增
     add() {
       this.infoTitle = "新增";
@@ -149,45 +167,56 @@ export default {
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
-    async deleteBtn(id) {
-      const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }
-      ).catch(err => console.log(err));
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
-      }
-      deleteE(id)
-      this.$notify.success({
-        title: "删除成功",
+    resetBtn(phone) {
+      reset({ phone: phone }).then((res) => {
+        console.log(res);
+        this.$notify.success({
+          title: "重置成功",
+        });
+        this.getList();
       });
     },
     // 弹框关闭
     getData() {},
     editDialogClosed() {},
+    // 新增编辑确定
     editPageEnter() {
       if (this.infoTitle == "新增") {
         add(this.editAddForm).then((res) => {
-          list();
-          this.$notify.success({
-            title: "新增成功",
-          });
+          if (res.code != "OK") {
+            return;
+          } else {
+            this.$notify.success({
+              title: "新增成功",
+            });
+            this.getList();
+          }
         });
       } else {
-        //   edit()
-        this.$notify.success({
-          title: "编辑成功",
+        edit(this.editAddForm).then((res) => {
+          if (res.code != "OK") {
+            return;
+          } else {
+            this.$notify.success({
+              title: "编辑成功",
+            });
+            this.getList();
+          }
         });
       }
       this.editDialogVisible = false;
     },
-    handleSizeChange() {},
-    handleCurrentChange() {},
+    // 分页
+    handleSizeChange(newSize) {
+      console.log(newSize);
+      this.pageSize = newSize;
+      this.getList();
+    },
+    handleCurrentChange(newPage) {
+      console.log(newPage);
+      this.page = newPage;
+      this.getList();
+    },
   },
 };
 </script>

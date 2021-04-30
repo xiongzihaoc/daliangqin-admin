@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function list(data) {
   return request({
-    url: 'sms/record',
+    url: 'user',
     method: 'get',
     params: data
   })
@@ -10,7 +10,7 @@ export function list(data) {
 
 export function add(data) {
   return request({
-    url: 'sms/record',
+    url: 'user',
     method: 'post',
     data
   })
@@ -18,22 +18,14 @@ export function add(data) {
 
 export function edit(data) {
   return request({
-    url: 'sms/record',
+    url: 'user',
     method: 'put',
     data
   })
 }
-// 重置
-export function reset(data) {
+export function deleteE(data) {
   return request({
-    url: 'sms/record/reset',
-    method: 'get',
-    params: data
-  })
-}
-export function query(data) {
-  return request({
-    url: 'sms/record/' + data,
-    method: 'get',
+    url: 'user/' + data,
+    method: 'DELETE',
   })
 }

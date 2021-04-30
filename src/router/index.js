@@ -95,7 +95,33 @@ export const constantRoutes = [{
       name: 'appVersion',
       component: () => import('@/views/appVersion/index'),
       meta: {
-        title: 'app版本管理',
+        title: '版本管理',
+        icon: 'app'
+      }
+    }]
+  },
+  {
+    path: '/adminControl',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'adminControl',
+      component: () => import('@/views/adminControl/index'),
+      meta: {
+        title: '管理后台',
+        icon: 'app'
+      }
+    }]
+  },
+  {
+    path: '/hostpitalInfo',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'hostpitalInfo',
+      component: () => import('@/views/hostpitalInfo/index'),
+      meta: {
+        title: '医院信息',
         icon: 'app'
       }
     }]

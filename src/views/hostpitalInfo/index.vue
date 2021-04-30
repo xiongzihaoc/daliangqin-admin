@@ -96,7 +96,7 @@
 </template>
 <script>
 import EleTable from "../../components/Table";
-import { list, add, edit, reset, query } from "@/api/adminControl";
+import { list, add, edit, reset, query } from "@/api/hostpitalInfo";
 export default {
   components: {
     EleTable,

@@ -125,17 +125,21 @@ export default {
     };
   },
   created() {
-    var value = {
-      page: this.pageNum,
-      pageSize: this.pageSize,
-      deviceType: "ANDROID",
-    };
-    list(value).then((res) => {
-      this.list = res.data.elements;
-    });
+    this.getList();
   },
   mounted() {},
   methods: {
+    getList() {
+      var value = {
+        page: this.pageNum,
+        pageSize: this.pageSize,
+        deviceType: "",
+      };
+      list(value).then((res) => {
+        this.list = res.data.elements;
+        this.total = res.data.totalSize
+      });
+    },
     // 搜索
     searchChange(val) {},
     // 新增
@@ -156,32 +160,47 @@ export default {
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
         }
-      ).catch(err => console.log(err));
+      ).catch((err) => console.log(err));
       if (confirmResult != "confirm") {
         return this.$message.info("取消删除");
       }
-      deleteE(id)
-      this.$notify.success({
-        title: "删除成功",
+      deleteE(id).then((res) => {
+        console.log(res);
+        console.log("================================");
+        this.$notify.success({
+          title: "删除成功",
+        });
+        this.getList();
       });
     },
     // 弹框关闭
     getData() {},
     editDialogClosed() {},
+    // 新增编辑确定
     editPageEnter() {
       if (this.infoTitle == "新增") {
         add(this.editAddForm).then((res) => {
-          list();
-          this.$notify.success({
-            title: "新增成功",
-          });
+          if (res.code != "OK") {
+            return;
+          } else {
+            this.$notify.success({
+              title: "新增成功",
+            });
+            this.getList();
+          }
         });
       } else {
-        //   edit()
-        this.$notify.success({
-          title: "编辑成功",
+        edit(this.editAddForm).then((res) => {
+          if (res.code != "OK") {
+            return;
+          } else {
+            this.$notify.success({
+              title: "编辑成功",
+            });
+            this.getList();
+          }
         });
       }
       this.editDialogVisible = false;
