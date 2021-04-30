@@ -64,22 +64,23 @@
         label-width="100px"
         @closed="editDialogClosed"
       >
+        <el-form-item label="用户名" prop="name">
+          <el-input v-model="editAddForm.name"></el-input>
+        </el-form-item>
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="editAddForm.phone"></el-input>
         </el-form-item>
-        <el-form-item label="内容" prop="content">
-          <el-input v-model="editAddForm.content"></el-input>
-        </el-form-item>
-        <el-form-item label="发送类型" prop="sendType">
+        <el-form-item label="用户类型" prop="userType	">
           <el-select
-            v-model="editAddForm.sendType"
+            v-model="editAddForm.userType"
             placeholder="请选择"
             style="width: 100%"
           >
-            <el-option label="LOGIN" value="RESET_PASSWORD"></el-option>
             <el-option
-              label="RESET_PASSWORD"
-              value="RESET_PASSWORD"
+              v-for="item in usetTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -103,6 +104,12 @@ export default {
       loginRules: [],
       searchInput: "",
       list: [],
+      usetTypeList: [
+        { id: 1, label: "DOCTOR", value: "DOCTOR" },
+        { id: 2, label: "HOSPITAL_ADMIN", value: "HOSPITAL_ADMIN" },
+        { id: 3, label: "PATIENT", value: "PATIENT" },
+        { id: 4, label: "PLATFORM_ADMIN", value: "PLATFORM_ADMIN" },
+      ],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
         { prop: "deviceId", label: "设备ID" },
@@ -122,8 +129,8 @@ export default {
       infoTitle: "",
       editAddForm: {
         phone: "",
-        content: "",
-        sendType: "",
+        name: "",
+        userType: "",
       },
     };
   },
@@ -163,12 +170,17 @@ export default {
       this.editDialogVisible = true;
     },
     editBtn(val) {
+      let valObj = {
+        phone: val.phone,
+        name: val.name,
+        userType: val.userType,
+      };
       this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
+      this.editAddForm = JSON.parse(JSON.stringify(valObj));
       this.editDialogVisible = true;
     },
     async deleteBtn(id) {
-            const confirmResult = await this.$confirm(
+      const confirmResult = await this.$confirm(
         "你确定要执行此操作, 是否继续?",
         "提示",
         {
