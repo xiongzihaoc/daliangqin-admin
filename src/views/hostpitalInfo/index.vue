@@ -57,29 +57,35 @@
       @open="getData"
       v-dialogDrag
     >
-      <!-- :rules="loginRules" -->
       <el-form
         ref="FormRef"
+        :rules="FormRules"
         :model="editAddForm"
         label-width="100px"
         @closed="editDialogClosed"
       >
-        <el-form-item label="地理位置" prop="address">
-          <el-input v-model="editAddForm.phone"></el-input>
+        <el-form-item label="医院名称" prop="hospitalName">
+          <el-input v-model.trim="editAddForm.hospitalName"></el-input>
         </el-form-item>
         <el-form-item label="联系方式" prop="contract">
-          <el-input v-model="editAddForm.contract"></el-input>
+          <el-input
+            v-model.trim="editAddForm.contract"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="地理位置" prop="address">
+          <el-input v-model.trim="editAddForm.address"></el-input>
         </el-form-item>
         <el-form-item label="医院等级" prop="hospitalClass">
           <el-select
-            v-model="editAddForm.hospitalClass"
+            v-model.trim="editAddForm.hospitalClass"
             placeholder="请选择"
             style="width: 100%"
           >
-            <el-option label="一级甲等" value="CLASS-1"></el-option>
-            <el-option label="一级乙等" value="CLASS-2"></el-option>
-            <el-option label="二级甲等" value="CLASS-1"></el-option>
-            <el-option label="二级乙等" value="CLASS-2"></el-option>
+            <el-option label="一级甲等" value="CLASS-1-A-一级甲等"></el-option>
+            <el-option label="一级乙等" value="CLASS-1-A-一级甲等"></el-option>
+            <el-option label="二级甲等" value="CLASS-1-A-一级甲等"></el-option>
+            <el-option label="二级乙等" value="CLASS-1-A-一级甲等"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -98,20 +104,35 @@ export default {
     EleTable,
   },
   data() {
+    // 手机号格式验证
+    const validatePhone = (rule, value, callback) => {
+      const reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
+      if (!value) {
+        return callback(new Error("请填写手机号码！"));
+      } else if (!reg.test(value)) {
+        return callback(new Error("请填写正确的手机号码！"));
+      } else {
+        callback();
+      }
+    };
     return {
-      loginRules: [],
+      FormRules: {
+        hospitalName: [
+          { required: true, message: "请输入医院名称", trigger: "blur" },
+        ],
+        contract: [
+          { required: true, trigger: "change", validator: validatePhone },
+        ],
+      },
       searchInput: "",
       list: [],
-      appTypeList:[
-        
-      ],
+      appTypeList: [],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
-        { prop: "address", label: "地理位置" },
+        { prop: "hospitalName", label: "医院名称" },
         { prop: "contract", label: "联系方式" },
+        { prop: "address", label: "地理位置" },
         { prop: "hospitalClass", label: "医院等级" },
-        { prop: "name", label: "用户名" },
-        { prop: "phone", label: "手机号" },
       ],
       pageSize: 10,
       pageNum: 1,
@@ -194,40 +215,44 @@ export default {
     editDialogClosed() {},
     // 新增编辑确定
     editPageEnter() {
-      if (this.infoTitle == "新增") {
-        add(this.editAddForm).then((res) => {
-          if (res.code != "OK") {
-            return;
-          } else {
-            this.$notify.success({
-              title: "新增成功",
+      this.$refs.FormRef.validate((valid) => {
+        if (valid) {
+          if (this.infoTitle == "新增") {
+            add(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "新增成功",
+                });
+                this.getList();
+              }
             });
-            this.getList();
-          }
-        });
-      } else {
-        edit(this.editAddForm).then((res) => {
-          if (res.code != "OK") {
-            return;
           } else {
-            this.$notify.success({
-              title: "编辑成功",
+            edit(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "编辑成功",
+                });
+                this.getList();
+              }
             });
-            this.getList();
           }
-        });
-      }
-      this.editDialogVisible = false;
+          this.editDialogVisible = false;
+        } else {
+          return;
+        }
+      });
     },
     // 分页
     handleSizeChange(newSize) {
-      console.log(newSize);
       this.pageSize = newSize;
       this.getList();
     },
     handleCurrentChange(newPage) {
-      console.log(newPage);
-      this.page = newPage;
+      this.pageNum = newPage;
       this.getList();
     },
   },

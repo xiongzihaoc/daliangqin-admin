@@ -64,11 +64,11 @@
         label-width="100px"
         @closed="editDialogClosed"
       >
-        <el-form-item label="更新日志" prop="updateLog">
-          <el-input v-model="editAddForm.updateLog"></el-input>
-        </el-form-item>
         <el-form-item label="版本号" prop="versionString">
           <el-input v-model="editAddForm.versionString"></el-input>
+        </el-form-item>
+        <el-form-item label="更新日志" prop="updateLog">
+          <el-input v-model="editAddForm.updateLog"></el-input>
         </el-form-item>
         <el-form-item label="安装包地址" prop="url">
           <el-input v-model="editAddForm.url"></el-input>
@@ -123,8 +123,8 @@ export default {
       ],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
-        { prop: "updateLog", label: "更新日志" },
         { prop: "versionString", label: "版本号" },
+        { prop: "updateLog", label: "更新日志" },
         { prop: "url", label: "安装包地址" },
         { prop: "deviceType", label: "设备类型" },
         { prop: "appType", label: "app类型" },
@@ -223,8 +223,16 @@ export default {
       }
       this.editDialogVisible = false;
     },
-    handleSizeChange() {},
-    handleCurrentChange() {},
+    // 分页
+    handleSizeChange(newSize) {
+      this.pageSize = newSize;
+      this.getList()
+    },
+    handleCurrentChange(newPage) {
+      this.pageNum = newPage;
+      this.getList()
+
+    },
   },
 };
 </script>

@@ -95,7 +95,7 @@ export const constantRoutes = [{
       name: 'appVersion',
       component: () => import('@/views/appVersion/index'),
       meta: {
-        title: '版本管理',
+        title: '版本更新',
         icon: 'app'
       }
     }]
