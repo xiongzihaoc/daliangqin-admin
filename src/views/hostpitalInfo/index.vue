@@ -82,10 +82,12 @@
             placeholder="请选择"
             style="width: 100%"
           >
-            <el-option label="一级甲等" value="CLASS-1-A-一级甲等"></el-option>
-            <el-option label="一级乙等" value="CLASS-1-A-一级甲等"></el-option>
-            <el-option label="二级甲等" value="CLASS-1-A-一级甲等"></el-option>
-            <el-option label="二级乙等" value="CLASS-1-A-一级甲等"></el-option>
+            <el-option
+              v-for="item in hospitalClassList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -123,10 +125,20 @@ export default {
         contract: [
           { required: true, trigger: "change", validator: validatePhone },
         ],
+        address: [
+          { required: true, message: "请选择地理位置", trigger: "blur" },
+        ],
+        hospitalClass: [
+          { required: true, message: "请选择医院等级", trigger: "blur" },
+        ],
       },
       searchInput: "",
       list: [],
-      appTypeList: [],
+      hospitalClassList: [
+        { id: 1, label: "一级甲等", value: "CLASS-1-A" },
+        { id: 2, label: "一级乙等", value: "CLASS-1-B" },
+      ],
+      // appTypeList: [],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
         { prop: "hospitalName", label: "医院名称" },
@@ -134,6 +146,7 @@ export default {
         { prop: "address", label: "地理位置" },
         { prop: "hospitalClass", label: "医院等级" },
       ],
+
       pageSize: 10,
       pageNum: 1,
       total: 0,
@@ -144,6 +157,7 @@ export default {
         address: "",
         contract: "",
         hospitalClass: "",
+        hospitalName: "",
       },
     };
   },
