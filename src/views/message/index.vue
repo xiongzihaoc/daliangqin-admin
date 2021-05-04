@@ -9,13 +9,13 @@
         type="text"
         placeholder="search"
       ></el-input>
-      <el-button
+      <!-- <el-button
         @click="add"
         class="el-button-style"
         type="primary"
         icon="el-icon-edit"
         >新增</el-button
-      >
+      > -->
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list" :header="tableHeaderBig">
@@ -157,11 +157,11 @@ export default {
       });
     },
     // 新增
-    add() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
-    },
+    // add() {
+    //   this.infoTitle = "新增";
+    //   this.editAddForm = {};
+    //   this.editDialogVisible = true;
+    // },
     editBtn(val) {
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
