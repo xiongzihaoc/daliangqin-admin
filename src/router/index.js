@@ -126,6 +126,32 @@ export const constantRoutes = [{
       }
     }]
   },
+  {
+    path: '/hospitalRole',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'hospitalRole',
+      component: () => import('@/views/hospitalRole/index'),
+      meta: {
+        title: '医院角色',
+        icon: 'app'
+      }
+    }]
+  },
+  {
+    path: '/adminRole',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'adminRole',
+      component: () => import('@/views/adminRole/index'),
+      meta: {
+        title: '平台角色',
+        icon: 'app'
+      }
+    }]
+  },
   // 404 page must be placed at the end !!!
   {
     path: '*',
