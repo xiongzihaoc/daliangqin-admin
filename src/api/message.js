@@ -8,14 +8,6 @@ export function list(data) {
   })
 }
 
-export function add(data) {
-  return request({
-    url: 'sms/record',
-    method: 'post',
-    data
-  })
-}
-
 export function edit(data) {
   return request({
     url: 'sms/record',

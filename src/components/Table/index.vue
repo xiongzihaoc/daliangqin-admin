@@ -11,7 +11,7 @@
       @select="rowSelect"
       @select-all="selectAll"
       :header-cell-style="{
-        background: '#5BAEFF',
+        background: '#1890FF',
         height: '50px',
         color: '#fff',
       }"

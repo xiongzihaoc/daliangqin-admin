@@ -19,7 +19,6 @@ const service = axios.create({
 })
 // request拦截器
 service.interceptors.request.use(config => {
-  console.log(config);
   // 是否需要设置 token
   const isToken = (config.headers || {}).isToken === false
   if (getToken() && !isToken) {
@@ -65,7 +64,7 @@ service.interceptors.response.use(res => {
     // 获取错误信息
     if (code != "OK") {
       Notification.error({
-        title: res.data.message
+        title: res.data.message,
       })
       return res.data
     } else {

@@ -1,5 +1,13 @@
-import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import {
+  login,
+  logout,
+  getInfo
+} from '@/api/user'
+import {
+  getToken,
+  setToken,
+  removeToken
+} from '@/utils/auth'
 // import { resetRouter } from '@/router'
 
 const user = {
@@ -31,7 +39,9 @@ const user = {
 
   actions: {
     // 登录
-    Login({ commit }, userInfo) {
+    Login({
+      commit
+    }, userInfo) {
       console.log(userInfo);
       return new Promise((resolve, reject) => {
         login(userInfo).then(res => {
@@ -63,10 +73,12 @@ const user = {
     //     })
     //   })
     // },
-    
+
     // 退出系统
-    Logout({ commit, state }) {
-      console.log(state);
+    Logout({
+      commit,
+      state
+    }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
@@ -81,7 +93,9 @@ const user = {
     },
 
     // 前端 登出
-    FedLogOut({ commit }) {
+    FedLogOut({
+      commit
+    }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         removeToken()

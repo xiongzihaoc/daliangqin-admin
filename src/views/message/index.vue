@@ -9,13 +9,6 @@
         type="text"
         placeholder="search"
       ></el-input>
-      <!-- <el-button
-        @click="add"
-        class="el-button-style"
-        type="primary"
-        icon="el-icon-edit"
-        >新增</el-button
-      > -->
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list" :header="tableHeaderBig">
@@ -28,9 +21,6 @@
         width="220"
       >
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
-            >编辑</el-button
-          >
           <el-button
             size="mini"
             type="warning"
@@ -52,79 +42,30 @@
       :total="total"
       class="el-pagination-style"
     ></el-pagination>
-    <!-- 增改页面 -->
-    <el-dialog
-      :title="infoTitle"
-      :visible.sync="editDialogVisible"
-      width="40%"
-      @open="getData"
-      v-dialogDrag
-    >
-      <!-- :rules="loginRules" -->
-      <el-form
-        ref="FormRef"
-        :model="editAddForm"
-        label-width="100px"
-        @closed="editDialogClosed"
-      >
-        <el-form-item label="手机号" prop="phone">
-          <el-input v-model="editAddForm.phone"></el-input>
-        </el-form-item>
-        <el-form-item label="内容" prop="content">
-          <el-input v-model="editAddForm.content"></el-input>
-        </el-form-item>
-        <el-form-item label="发送类型" prop="sendType">
-          <el-select
-            v-model="editAddForm.sendType"
-            placeholder="请选择"
-            style="width: 100%"
-          >
-            <el-option label="LOGIN" value="RESET_PASSWORD"></el-option>
-            <el-option
-              label="RESET_PASSWORD"
-              value="RESET_PASSWORD"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
 import EleTable from "../../components/Table";
-import { list, add, edit, reset, query } from "@/api/message";
+import { list, reset, query } from "@/api/message";
 export default {
   components: {
     EleTable,
   },
   data() {
     return {
-      loginRules: [],
       searchInput: "",
       list: [],
       tableHeaderBig: [
-        // { prop: "id", label: "id" },
         { prop: "phone", label: "手机号" },
         { prop: "sendType", label: "发送类型" },
         { prop: "content", label: "内容" },
-        { prop: "ua", label: "浏览器类型" },
-        { prop: "ip", label: "访问ip" },
+        { prop: "createTime", label: "发送时间" },
+        // { prop: "ua", label: "浏览器类型" },
+        // { prop: "ip", label: "访问ip" },
       ],
       pageSize: 10,
       pageNum: 1,
       total: 0,
-      //   弹框区域
-      editDialogVisible: false,
-      infoTitle: "",
-      editAddForm: {
-        phone: "",
-        content: "",
-        sendType: "",
-      },
     };
   },
   created() {
@@ -146,26 +87,16 @@ export default {
     // 搜索
     searchChange(val) {
       query(val).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
-          this.$notify.success({
-            title: "新增成功",
-          });
-          this.list = res.data
-        }
+        console.log(res);
+        // if (res.code != "OK") {
+        //   return;
+        // } else {
+        //   this.$notify.success({
+        //     title: "成功",
+        //   });
+        //   this.list = res.data;
+        // }
       });
-    },
-    // 新增
-    // add() {
-    //   this.infoTitle = "新增";
-    //   this.editAddForm = {};
-    //   this.editDialogVisible = true;
-    // },
-    editBtn(val) {
-      this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editDialogVisible = true;
     },
     resetBtn(phone) {
       reset({ phone: phone }).then((res) => {
@@ -175,36 +106,6 @@ export default {
         });
         this.getList();
       });
-    },
-    // 弹框关闭
-    getData() {},
-    editDialogClosed() {},
-    // 新增编辑确定
-    editPageEnter() {
-      if (this.infoTitle == "新增") {
-        add(this.editAddForm).then((res) => {
-          if (res.code != "OK") {
-            return;
-          } else {
-            this.$notify.success({
-              title: "新增成功",
-            });
-            this.getList();
-          }
-        });
-      } else {
-        edit(this.editAddForm).then((res) => {
-          if (res.code != "OK") {
-            return;
-          } else {
-            this.$notify.success({
-              title: "编辑成功",
-            });
-            this.getList();
-          }
-        });
-      }
-      this.editDialogVisible = false;
     },
     // 分页
     handleSizeChange(newSize) {
