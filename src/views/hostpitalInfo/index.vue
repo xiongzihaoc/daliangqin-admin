@@ -167,13 +167,7 @@ export default {
   mounted() {},
   methods: {
     getList() {
-      console.log(this.pageNum);
-      console.log(this.pageSize);
-      var value = {
-        page: this.pageNum,
-        pageSize: this.pageSize,
-      };
-      list(value).then((res) => {
+      list({ page: this.pageNum, pageSize: this.pageSize }).then((res) => {
         console.log(res);
         this.list = res.data.elements;
         this.total = res.data.totalSize;

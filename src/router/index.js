@@ -108,7 +108,7 @@ export const constantRoutes = [{
       name: 'adminControl',
       component: () => import('@/views/adminControl/index'),
       meta: {
-        title: '管理后台',
+        title: '管理控制',
         icon: 'app'
       }
     }]

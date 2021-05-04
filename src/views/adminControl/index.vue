@@ -112,14 +112,14 @@ export default {
       ],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
-        { prop: "deviceId", label: "设备ID" },
-        { prop: "deviceType", label: "设备类型" },
-        { prop: "ip", label: "ip" },
+        // { prop: "deviceId", label: "设备ID" },
+        // { prop: "deviceType", label: "设备类型" },
+        // { prop: "ip", label: "ip" },
         { prop: "name", label: "用户名" },
-        { prop: "phone", label: "手机号" },
-        { prop: "userAgent", label: "用户代理" },
+        { prop: "phone", label: "联系方式" },
+        // { prop: "userAgent", label: "用户代理" },
         { prop: "createTime", label: "创建时间" },
-        { prop: "updateTime", label: "更新时间" },
+        // { prop: "updateTime", label: "更新时间" },
       ],
       pageSize: 10,
       pageNum: 1,
@@ -170,6 +170,7 @@ export default {
       this.editDialogVisible = true;
     },
     editBtn(val) {
+      console.log(val);
       let valObj = {
         phone: val.phone,
         name: val.name,
@@ -238,7 +239,7 @@ export default {
     },
     handleCurrentChange(newPage) {
       console.log(newPage);
-      this.page = newPage;
+      this.pageNum = newPage;
       this.getList();
     },
   },
