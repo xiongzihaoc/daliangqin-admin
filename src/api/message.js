@@ -7,14 +7,6 @@ export function list(data) {
     params: data
   })
 }
-
-export function edit(data) {
-  return request({
-    url: 'sms/record',
-    method: 'put',
-    data
-  })
-}
 // 重置
 export function reset(data) {
   return request({
@@ -23,9 +15,9 @@ export function reset(data) {
     params: data
   })
 }
-export function query(data) {
-  return request({
-    url: 'sms/record/' + data,
-    method: 'get',
-  })
-}
+// export function query(data) {
+//   return request({
+//     url: 'sms/record/' + data,
+//     method: 'get',
+//   })
+// }

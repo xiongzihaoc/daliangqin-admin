@@ -7,7 +7,7 @@
         v-model="searchInput"
         class="el-input-style"
         type="text"
-        placeholder="search"
+        placeholder="请输入手机号"
       ></el-input>
     </div>
     <!-- 表格区域 -->
@@ -74,11 +74,11 @@ export default {
   mounted() {},
   methods: {
     getList() {
-      var value = {
+      list({
         page: this.pageNum,
         pageSize: this.pageSize,
-      };
-      list(value).then((res) => {
+        phone: this.searchInput,
+      }).then((res) => {
         console.log(res);
         this.list = res.data.elements;
         this.total = res.data.totalSize;
@@ -86,18 +86,10 @@ export default {
     },
     // 搜索
     searchChange(val) {
-      query(val).then((res) => {
-        console.log(res);
-        // if (res.code != "OK") {
-        //   return;
-        // } else {
-        //   this.$notify.success({
-        //     title: "成功",
-        //   });
-        //   this.list = res.data;
-        // }
-      });
+      this.getList();
+
     },
+    // 重置
     resetBtn(phone) {
       reset({ phone: phone }).then((res) => {
         console.log(res);
@@ -109,14 +101,13 @@ export default {
     },
     // 分页
     handleSizeChange(newSize) {
-      console.log(newSize);
       this.pageSize = newSize;
-      this.getList();
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      console.log(newPage);
-      this.page = newPage;
-      this.getList();
+      this.pageNum = newPage;
+      this.getList()
+
     },
   },
 };
