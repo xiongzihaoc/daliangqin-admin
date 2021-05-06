@@ -140,7 +140,7 @@ export const constantRoutes = [{
       component: () => import('@/views/hospitalRole/index'),
       meta: {
         title: '医院角色',
-        icon: 'app'
+        icon: 'jiaoseguanli'
       }
     }]
   },
@@ -153,7 +153,7 @@ export const constantRoutes = [{
       component: () => import('@/views/adminRole/index'),
       meta: {
         title: '平台角色',
-        icon: 'app'
+        icon: 'edit-role'
       }
     }]
   },
