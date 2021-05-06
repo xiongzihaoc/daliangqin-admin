@@ -43,8 +43,7 @@
       @closed="editDialogClosed"
       v-dialogDrag
     >
-      <!-- :rules="loginRules" -->
-      <el-form ref="FormRef" :model="editAddForm" label-width="100px">
+      <el-form ref="FormRef" :rules="FormRules" :model="editAddForm" label-width="100px">
         <el-form-item label="app类型" prop="appType">
           <el-select
             v-model="editAddForm.appType"

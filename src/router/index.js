@@ -60,7 +60,7 @@ export const constantRoutes = [{
       component: () => import('@/views/docupload/index'),
       meta: {
         title: '文件上传',
-        icon: 'form',
+        icon: 'shangchuan',
       }
     }]
   },
@@ -73,7 +73,7 @@ export const constantRoutes = [{
       component: () => import('@/views/message/index'),
       meta: {
         title: '短信管理',
-        icon: 'message'
+        icon: 'duanxin'
       }
     }]
   },
@@ -83,7 +83,7 @@ export const constantRoutes = [{
     redirect: 'noRedirect',
     meta: {
       title: '版本更新',
-      icon: 'app'
+      icon: 'banben'
     },
     children: [{
         path: 'update',
@@ -91,7 +91,7 @@ export const constantRoutes = [{
         component: () => import('@/views/appVersion/update'),
         meta: {
           title: '版本记录',
-          icon: 'app'
+          icon: 'jilu'
         }
       },
       {
@@ -100,7 +100,7 @@ export const constantRoutes = [{
         component: () => import('@/views/appVersion/control'),
         meta: {
           title: '版本控制',
-          icon: 'app'
+          icon: 'kongzhi'
         }
       }
     ]
@@ -114,7 +114,7 @@ export const constantRoutes = [{
       component: () => import('@/views/adminControl/index'),
       meta: {
         title: '管理控制',
-        icon: 'app'
+        icon: 'tianchongxing-'
       }
     }]
   },
@@ -127,7 +127,7 @@ export const constantRoutes = [{
       component: () => import('@/views/hostpitalInfo/index'),
       meta: {
         title: '医院信息',
-        icon: 'app'
+        icon: 'yiyuan'
       }
     }]
   },
