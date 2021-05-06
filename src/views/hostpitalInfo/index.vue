@@ -137,6 +137,10 @@ export default {
       hospitalClassList: [
         { id: 1, label: "一级甲等", value: "CLASS_1_A" },
         { id: 2, label: "一级乙等", value: "CLASS_1_B" },
+        { id: 3, label: "二级甲等", value: "CLASS_2_A" },
+        { id: 4, label: "二级乙等", value: "CLASS_2_B" },
+        { id: 5, label: "三级甲等", value: "CLASS_3_A" },
+        { id: 6, label: "三级乙等", value: "CLASS_3_B" },
       ],
       // appTypeList: [],
       tableHeaderBig: [
