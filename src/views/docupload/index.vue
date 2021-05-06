@@ -30,11 +30,11 @@ export default {
   },
   mounted() {
     // 获取签名
-    uploadImg().then((res) => {
-      this.ossObj = res.data.aliYunUploadSignResult;
-      console.log(this.ossObj);
-      this.addressOos = this.ossObj.endPoint
-    });
+    // uploadImg().then((res) => {
+    //   this.ossObj = res.data.aliYunUploadSignResult;
+    //   console.log(this.ossObj);
+    //   this.addressOos = this.ossObj
+    // });
   },
   methods: {
     onProgress(file, fileList){

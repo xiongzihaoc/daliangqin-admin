@@ -7,8 +7,10 @@
         v-model="searchInput"
         class="el-input-style"
         type="text"
-        placeholder="search"
-      ></el-input>
+        placeholder="请输入id"
+      >
+       <el-button slot="append" icon="el-icon-search"></el-button>
+      </el-input>
       <el-button
         @click="add"
         class="el-button-style"
@@ -65,19 +67,26 @@
         @closed="editDialogClosed"
       >
         <el-form-item label="用户名" prop="name">
-          <el-input v-model="editAddForm.name"></el-input>
+          <el-input
+            v-model="editAddForm.name"
+            placeholder="请输入用户名"
+          ></el-input>
         </el-form-item>
         <el-form-item label="联系方式" prop="phone">
-          <el-input v-model="editAddForm.phone"></el-input>
+          <el-input
+            v-model="editAddForm.phone"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            placeholder="请输入联系方式"
+          ></el-input>
         </el-form-item>
         <el-form-item label="用户类型" prop="userType	">
           <el-select
             v-model="editAddForm.userType"
-            placeholder="请选择"
+            placeholder="请选择用户类型"
             style="width: 100%"
           >
             <el-option
-              v-for="item in usetTypeList"
+              v-for="item in userTypeList"
               :key="item.id"
               :label="item.label"
               :value="item.value"
@@ -112,19 +121,25 @@ export default {
       }
     };
     return {
-      FormRules: [],
+      FormRules: {
+        name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        phone: [{ required: true, validator: validatePhone, trigger: "blur" }],
+        userType: [
+          { required: true, message: "请选择用户类型", trigger: "blur" },
+        ],
+      },
       searchInput: "",
       list: [],
-      usetTypeList: [
-        { id: 1, label: "DOCTOR", value: "DOCTOR" },
-        { id: 2, label: "HOSPITAL_ADMIN", value: "HOSPITAL_ADMIN" },
-        { id: 3, label: "PATIENT", value: "PATIENT" },
-        { id: 4, label: "PLATFORM_ADMIN", value: "PLATFORM_ADMIN" },
+      userTypeList: [
+        { id: 1, label: "医生", value: "DOCTOR" },
+        { id: 2, label: "医院管理员", value: "HOSPITAL_ADMIN" },
+        { id: 3, label: "患者", value: "PATIENT" },
+        { id: 4, label: "平台管理员", value: "PLATFORM_ADMIN" },
       ],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
         // { prop: "deviceId", label: "设备ID" },
-        // { prop: "deviceType", label: "设备类型" },
+        { prop: "deviceType", label: "设备类型" },
         // { prop: "ip", label: "ip" },
         { prop: "name", label: "用户名" },
         { prop: "phone", label: "联系方式" },
@@ -181,7 +196,6 @@ export default {
       this.editDialogVisible = true;
     },
     editBtn(val) {
-      console.log(val);
       let valObj = {
         phone: val.phone,
         name: val.name,

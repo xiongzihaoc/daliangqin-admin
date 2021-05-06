@@ -154,10 +154,9 @@ export default {
         // { prop: "id", label: "id" },
         { prop: "appType", label: "app类型" },
         { prop: "deviceType", label: "设备类型" },
-        { prop: "forceUpdateAppId", label: "强制更新版本" },
-        { prop: "newestUpdateAppId", label: "最新版本" },
-        { prop: "recommendUpdateAppId", label: "推荐更新版本" },
-        { prop: "updateTime", label: "更新时间" },
+        { prop: "forceVersionString", label: "强制更新版本" },
+        { prop: "newestVersionString", label: "最新版本" },
+        { prop: "recommendVersionString", label: "推荐更新版本" },
       ],
       //   弹框区域
       editDialogVisible: false,

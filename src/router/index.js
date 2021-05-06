@@ -42,7 +42,7 @@ export const constantRoutes = [{
       component: () => import('@/views/docupload/index'),
       meta: {
         title: '文件上传',
-        icon: 'upload'
+        icon: 'form',
       }
     }]
   },
