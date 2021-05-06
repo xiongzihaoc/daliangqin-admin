@@ -61,18 +61,18 @@
       <!-- :rules="loginRules" -->
       <el-form ref="FormRef" :model="editAddForm" label-width="100px">
         <el-form-item label="版本号" prop="versionString">
-          <el-input v-model="editAddForm.versionString"></el-input>
+          <el-input v-model="editAddForm.versionString" placeholder="请输入版本号"></el-input>
         </el-form-item>
         <el-form-item label="更新日志" prop="updateLog">
-          <el-input v-model="editAddForm.updateLog"></el-input>
+          <el-input v-model="editAddForm.updateLog" placeholder="请输入更新日志"></el-input>
         </el-form-item>
         <el-form-item label="安装包地址" prop="url">
-          <el-input v-model="editAddForm.url"></el-input>
+          <el-input v-model="editAddForm.url" placeholder="请输入安装包地址"></el-input>
         </el-form-item>
         <el-form-item label="app类型" prop="appType">
           <el-select
             v-model="editAddForm.appType"
-            placeholder="请选择"
+            placeholder="请选择app类型"
             style="width: 100%"
           >
             <el-option
@@ -86,7 +86,7 @@
         <el-form-item label="设备类型" prop="deviceType">
           <el-select
             v-model="editAddForm.deviceType"
-            placeholder="请选择"
+            placeholder="请选择设备类型"
             style="width: 100%"
           >
             <el-option
