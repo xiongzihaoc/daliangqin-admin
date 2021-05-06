@@ -8,7 +8,7 @@ function resolve(dir) {
 
 const name = defaultSettings.title || 'daliangqin' // page title
 
-const port = process.env.port || process.env.npm_config_port || 9528 // dev port
+const port = process.env.port || process.env.npm_config_port || 8088 // dev port
 
 module.exports = {
   publicPath: '/',
@@ -25,23 +25,23 @@ module.exports = {
     //   warnings: false,
     //   errors: true
     // },
-    // 代理
-    proxy: {
-      [process.env.VUE_APP_BASE_API]: {
-        target: 'http://test-api.daliangqing.com/public',
-        changeOrigin: true,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_API]: ''
-        }
-      },
-      [process.env.VUE_APP_BASE_SECOND_API]: {
-        target: 'http://test-api.daliangqing.com/admin',
-        changeOrigin: true,
-        pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_SECOND_API]: ''
-        }
-      },
-    },
+    // // 代理
+    // proxy: {
+    //   [process.env.VUE_APP_BASE_API]: {
+    //     target: 'http://test-api.daliangqing.com/public',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       ['^' + process.env.VUE_APP_BASE_API]: ''
+    //     }
+    //   },
+    //   [process.env.VUE_APP_BASE_SECOND_API]: {
+    //     target: 'http://test-api.daliangqing.com/admin',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       ['^' + process.env.VUE_APP_BASE_SECOND_API]: ''
+    //     }
+    //   },
+    // },
     // before: require('./mock/mock-server.js')
   },
   configureWebpack: {
