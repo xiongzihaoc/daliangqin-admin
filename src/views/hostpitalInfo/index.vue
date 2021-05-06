@@ -65,21 +65,22 @@
         label-width="100px"
       >
         <el-form-item label="医院名称" prop="hospitalName">
-          <el-input v-model.trim="editAddForm.hospitalName"></el-input>
+          <el-input v-model.trim="editAddForm.hospitalName" placeholder="请输入医院名称"></el-input>
         </el-form-item>
         <el-form-item label="联系方式" prop="contract">
           <el-input
             v-model.trim="editAddForm.contract"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            placeholder="请输入联系方式"
           ></el-input>
         </el-form-item>
         <el-form-item label="地理位置" prop="address">
-          <el-input v-model.trim="editAddForm.address"></el-input>
+          <el-input v-model.trim="editAddForm.address" placeholder="请输入地理位置"></el-input>
         </el-form-item>
         <el-form-item label="医院等级" prop="hospitalClass">
           <el-select
             v-model.trim="editAddForm.hospitalClass"
-            placeholder="请选择"
+            placeholder="请选择医院等级"
             style="width: 100%"
           >
             <el-option
