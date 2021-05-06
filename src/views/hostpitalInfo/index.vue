@@ -28,9 +28,9 @@
         width="220"
       >
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
+          <!-- <el-button size="mini" type="primary" @click="editBtn(scope.row)"
             >编辑</el-button
-          >
+          > -->
           <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
             >删除</el-button
           >
@@ -55,6 +55,7 @@
       :visible.sync="editDialogVisible"
       width="40%"
       @open="getData"
+      @closed="editDialogClosed"
       v-dialogDrag
     >
       <el-form
@@ -62,7 +63,6 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px"
-        @closed="editDialogClosed"
       >
         <el-form-item label="医院名称" prop="hospitalName">
           <el-input v-model.trim="editAddForm.hospitalName"></el-input>
@@ -123,7 +123,7 @@ export default {
           { required: true, message: "请输入医院名称", trigger: "blur" },
         ],
         contract: [
-          { required: true, trigger: "change", validator: validatePhone },
+          { required: true, trigger: "blur", validator: validatePhone },
         ],
         address: [
           { required: true, message: "请选择地理位置", trigger: "blur" },
@@ -135,8 +135,8 @@ export default {
       searchInput: "",
       list: [],
       hospitalClassList: [
-        { id: 1, label: "一级甲等", value: "CLASS-1-A" },
-        { id: 2, label: "一级乙等", value: "CLASS-1-B" },
+        { id: 1, label: "一级甲等", value: "CLASS_1_A" },
+        { id: 2, label: "一级乙等", value: "CLASS_1_B" },
       ],
       // appTypeList: [],
       tableHeaderBig: [
@@ -220,7 +220,9 @@ export default {
     },
     // 弹框关闭
     getData() {},
-    editDialogClosed() {},
+    editDialogClosed() {
+      this.$refs.FormRef.resetFields();
+    },
     // 新增编辑确定
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {

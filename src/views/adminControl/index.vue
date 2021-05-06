@@ -57,9 +57,9 @@
       @open="getData"
       v-dialogDrag
     >
-      <!-- :rules="loginRules" -->
       <el-form
         ref="FormRef"
+        :rules="FormRules"
         :model="editAddForm"
         label-width="100px"
         @closed="editDialogClosed"
@@ -100,8 +100,19 @@ export default {
     EleTable,
   },
   data() {
+    // 手机号格式验证
+    const validatePhone = (rule, value, callback) => {
+      const reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
+      if (!value) {
+        return callback(new Error("请填写手机号码！"));
+      } else if (!reg.test(value)) {
+        return callback(new Error("请填写正确的手机号码！"));
+      } else {
+        callback();
+      }
+    };
     return {
-      loginRules: [],
+      FormRules: [],
       searchInput: "",
       list: [],
       usetTypeList: [
