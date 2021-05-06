@@ -3,13 +3,12 @@
     <!-- 搜索区域 -->
     <div class="search-box">
       <el-input
-        @input="searchChange"
         v-model="searchInput"
         class="el-input-style"
         type="text"
         placeholder="请输入id"
       >
-       <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-button slot="append" icon="el-icon-search" @click.native.prevent="searchChange"></el-button>
       </el-input>
       <el-button
         @click="add"
@@ -57,6 +56,7 @@
       :visible.sync="editDialogVisible"
       width="40%"
       @open="getData"
+      @closed="editDialogClosed"
       v-dialogDrag
     >
       <el-form
@@ -64,7 +64,6 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px"
-        @closed="editDialogClosed"
       >
         <el-form-item label="用户名" prop="name">
           <el-input
@@ -139,7 +138,7 @@ export default {
       tableHeaderBig: [
         // { prop: "id", label: "id" },
         // { prop: "deviceId", label: "设备ID" },
-        { prop: "deviceType", label: "设备类型" },
+        // { prop: "deviceType", label: "设备类型" },
         // { prop: "ip", label: "ip" },
         { prop: "name", label: "用户名" },
         { prop: "phone", label: "联系方式" },
@@ -169,6 +168,7 @@ export default {
       var value = {
         page: this.pageNum,
         pageSize: this.pageSize,
+        id:this.searchInput,
       };
       list(value).then((res) => {
         console.log(res);
@@ -178,16 +178,7 @@ export default {
     },
     // 搜索
     searchChange(val) {
-      query(val).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
-          this.$notify.success({
-            title: "新增成功",
-          });
-          this.list = res.data;
-        }
-      });
+      this.getList();
     },
     // 新增
     add() {
@@ -228,7 +219,9 @@ export default {
     },
     // 弹框关闭
     getData() {},
-    editDialogClosed() {},
+    editDialogClosed() {
+      this.$refs.FormRef.resetFields();
+    },
     // 新增编辑确定
     editPageEnter() {
       if (this.infoTitle == "新增") {
