@@ -45,19 +45,10 @@
     >
       <!-- :rules="loginRules" -->
       <el-form ref="FormRef" :model="editAddForm" label-width="100px">
-        <el-form-item label="版本号" prop="versionString">
-          <el-input v-model="editAddForm.versionString"></el-input>
-        </el-form-item>
-        <el-form-item label="更新日志" prop="updateLog">
-          <el-input v-model="editAddForm.updateLog"></el-input>
-        </el-form-item>
-        <el-form-item label="安装包地址" prop="url">
-          <el-input v-model="editAddForm.url"></el-input>
-        </el-form-item>
         <el-form-item label="app类型" prop="appType">
           <el-select
             v-model="editAddForm.appType"
-            placeholder="请选择"
+            placeholder="请选择app类型"
             style="width: 100%"
           >
             <el-option
@@ -71,7 +62,7 @@
         <el-form-item label="设备类型" prop="deviceType">
           <el-select
             v-model="editAddForm.deviceType"
-            placeholder="请选择"
+            placeholder="请选择设备类型"
             style="width: 100%"
           >
             <el-option
@@ -79,6 +70,48 @@
               :key="item.id"
               :label="item.label"
               :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="强制更新版本" prop="forceUpdateAppId">
+          <el-select
+            v-model="editAddForm.forceUpdateAppId"
+            placeholder="请选择强制更新版本"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in versionList"
+              :key="item.id"
+              :label="item.versionString"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="最新版本" prop="newestUpdateAppId">
+          <el-select
+            v-model="editAddForm.newestUpdateAppId"
+            placeholder="请选择最新版本"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in versionList"
+              :key="item.id"
+              :label="item.versionString"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="推荐更新版本" prop="recommendUpdateAppId">
+          <el-select
+            v-model="editAddForm.recommendUpdateAppId"
+            placeholder="请选择推荐更新版本"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in versionList"
+              :key="item.id"
+              :label="item.versionString"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -92,7 +125,7 @@
 </template>
 <script>
 import EleTable from "../../components/Table";
-import { list, add, edit, deleteE } from "@/api/appVersionControl";
+import { list, add, edit, versionList } from "@/api/appVersionControl";
 export default {
   components: {
     EleTable,
@@ -114,6 +147,8 @@ export default {
         { id: 3, label: "H5", value: "H5" },
         { id: 4, label: "PC_WEB", value: "PC_WEB" },
       ],
+      //   版本列表
+      versionList: [],
       // 表头数据
       tableHeaderBig: [
         // { prop: "id", label: "id" },
@@ -139,7 +174,12 @@ export default {
   created() {
     this.getList();
   },
-  mounted() {},
+  mounted() {
+    versionList({ page: 1, pageSize: 1000 }).then((res) => {
+      console.log(res);
+      this.versionList = res.data.elements;
+    });
+  },
   methods: {
     getList() {
       list().then((res) => {

@@ -7,7 +7,13 @@ export function list(data) {
     params: data
   })
 }
-
+export function versionList(data) {
+  return request({
+    url: 'update',
+    method: 'get',
+    params: data
+  })
+}
 export function add(data) {
   return request({
     url: 'update/addControl',
