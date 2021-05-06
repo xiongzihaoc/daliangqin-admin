@@ -58,16 +58,29 @@
       @closed="editDialogClosed"
       v-dialogDrag
     >
-      <!-- :rules="loginRules" -->
-      <el-form ref="FormRef" :model="editAddForm" label-width="100px">
+      <el-form
+        ref="FormRef"
+        :rules="FormRules"
+        :model="editAddForm"
+        label-width="100px"
+      >
         <el-form-item label="版本号" prop="versionString">
-          <el-input v-model.trim="editAddForm.versionString" placeholder="请输入版本号"></el-input>
+          <el-input
+            v-model.trim="editAddForm.versionString"
+            placeholder="请输入版本号"
+          ></el-input>
         </el-form-item>
         <el-form-item label="更新日志" prop="updateLog">
-          <el-input v-model.trim="editAddForm.updateLog" placeholder="请输入更新日志"></el-input>
+          <el-input
+            v-model.trim="editAddForm.updateLog"
+            placeholder="请输入更新日志"
+          ></el-input>
         </el-form-item>
         <el-form-item label="安装包地址" prop="url">
-          <el-input v-model.trim="editAddForm.url" placeholder="请输入安装包地址"></el-input>
+          <el-input
+            v-model.trim="editAddForm.url"
+            placeholder="请输入安装包地址"
+          ></el-input>
         </el-form-item>
         <el-form-item label="app类型" prop="appType">
           <el-select
@@ -114,7 +127,21 @@ export default {
   },
   data() {
     return {
-      loginRules: [],
+      FormRules: {
+        versionString: [
+          { required: true, message: "请输入版本号", trigger: "blur" },
+        ],
+        updateLog: [
+          { required: true, message: "请输入更新日志", trigger: "blur" },
+        ],
+        url: [{ required: true, message: "请输入安装包地址", trigger: "blur" }],
+        appType: [
+          { required: true, message: "请选择app类型", trigger: "blur" },
+        ],
+        deviceType: [
+          { required: true, message: "请选择设备类型", trigger: "blur" },
+        ],
+      },
       searchInput: "",
       list: [],
       // app类型
@@ -135,8 +162,8 @@ export default {
         { prop: "versionString", label: "版本号" },
         { prop: "updateLog", label: "更新日志" },
         { prop: "url", label: "安装包地址" },
-        { prop: "deviceType", label: "设备类型" },
         { prop: "appType", label: "app类型" },
+        { prop: "deviceType", label: "设备类型" },
       ],
       pageSize: 10,
       pageNum: 1,
@@ -159,11 +186,10 @@ export default {
   mounted() {},
   methods: {
     getList() {
-      var value = {
+      list({
         page: this.pageNum,
         pageSize: this.pageSize,
-      };
-      list(value).then((res) => {
+      }).then((res) => {
         this.list = res.data.elements;
         this.total = res.data.totalSize;
       });
@@ -204,33 +230,39 @@ export default {
     },
     // 弹框关闭
     getData() {},
-    editDialogClosed() {},
+    editDialogClosed() {
+      this.$refs.FormRef.resetFields();
+    },
     // 新增编辑确定
     editPageEnter() {
-      if (this.infoTitle == "新增") {
-        add(this.editAddForm).then((res) => {
-          if (res.code != "OK") {
-            return;
-          } else {
-            this.$notify.success({
-              title: "新增成功",
+      this.$refs.FormRef.validate((valid) => {
+        if (valid) {
+          if (this.infoTitle == "新增") {
+            add(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "新增成功",
+                });
+                this.getList();
+              }
             });
-            this.getList();
-          }
-        });
-      } else {
-        edit(this.editAddForm).then((res) => {
-          if (res.code != "OK") {
-            return;
           } else {
-            this.$notify.success({
-              title: "编辑成功",
+            edit(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "编辑成功",
+                });
+                this.getList();
+              }
             });
-            this.getList();
           }
-        });
-      }
-      this.editDialogVisible = false;
+          this.editDialogVisible = false;
+        }
+      });
     },
     // 分页
     handleSizeChange(newSize) {
