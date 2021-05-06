@@ -71,7 +71,7 @@
           <el-input
             v-model.trim="editAddForm.contract"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入联系方式"
+            placeholder="请输入手机号"
           ></el-input>
         </el-form-item>
         <el-form-item label="地理位置" prop="address">
@@ -180,16 +180,7 @@ export default {
     },
     // 搜索
     searchChange(val) {
-      query(val).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
-          this.$notify.success({
-            title: "新增成功",
-          });
-          this.list = res.data;
-        }
-      });
+ 
     },
     // 新增
     add() {

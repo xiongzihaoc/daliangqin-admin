@@ -3,12 +3,12 @@
     <!-- 搜索区域 -->
     <div class="search-box">
       <el-input
+        @input="searchChange"
         v-model="searchInput"
         class="el-input-style"
         type="text"
-        placeholder="请输入id"
+        placeholder="搜索"
       >
-        <el-button slot="append" icon="el-icon-search" @click.native.prevent="searchChange"></el-button>
       </el-input>
       <el-button
         @click="add"
@@ -78,7 +78,7 @@
             placeholder="请输入联系方式"
           ></el-input>
         </el-form-item>
-        <el-form-item label="用户类型" prop="userType	">
+        <el-form-item label="用户类型" prop="userType">
           <el-select
             v-model="editAddForm.userType"
             placeholder="请选择用户类型"
@@ -165,12 +165,11 @@ export default {
   mounted() {},
   methods: {
     getList() {
-      var value = {
+      list({
         page: this.pageNum,
         pageSize: this.pageSize,
-        id:this.searchInput,
-      };
-      list(value).then((res) => {
+        id: this.searchInput,
+      }).then((res) => {
         console.log(res);
         this.list = res.data.elements;
         this.total = res.data.totalSize;
@@ -224,30 +223,34 @@ export default {
     },
     // 新增编辑确定
     editPageEnter() {
-      if (this.infoTitle == "新增") {
-        add(this.editAddForm).then((res) => {
-          if (res.code != "OK") {
-            return;
-          } else {
-            this.$notify.success({
-              title: "新增成功",
+      this.$refs.FormRef.validate((valid) => {
+        if (valid) {
+          if (this.infoTitle == "新增") {
+            add(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "新增成功",
+                });
+                this.getList();
+              }
             });
-            this.getList();
-          }
-        });
-      } else {
-        edit(this.editAddForm).then((res) => {
-          if (res.code != "OK") {
-            return;
           } else {
-            this.$notify.success({
-              title: "编辑成功",
+            edit(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "编辑成功",
+                });
+                this.getList();
+              }
             });
-            this.getList();
           }
-        });
-      }
-      this.editDialogVisible = false;
+          this.editDialogVisible = false;
+        }
+      });
     },
     // 分页
     handleSizeChange(newSize) {
