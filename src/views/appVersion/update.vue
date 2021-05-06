@@ -55,15 +55,11 @@
       :visible.sync="editDialogVisible"
       width="40%"
       @open="getData"
+      @closed="editDialogClosed"
       v-dialogDrag
     >
       <!-- :rules="loginRules" -->
-      <el-form
-        ref="FormRef"
-        :model="editAddForm"
-        label-width="100px"
-        @closed="editDialogClosed"
-      >
+      <el-form ref="FormRef" :model="editAddForm" label-width="100px">
         <el-form-item label="版本号" prop="versionString">
           <el-input v-model="editAddForm.versionString"></el-input>
         </el-form-item>
@@ -93,8 +89,12 @@
             placeholder="请选择"
             style="width: 100%"
           >
-            <el-option label="安卓" value="ANDROID"></el-option>
-            <el-option label="苹果" value="IOS"></el-option>
+            <el-option
+              v-for="item in deviceTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -107,7 +107,7 @@
 </template>
 <script>
 import EleTable from "../../components/Table";
-import { list, add, edit, deleteE } from "@/api/appVersion";
+import { list, add, edit, deleteE } from "@/api/appVersionUpdate";
 export default {
   components: {
     EleTable,
@@ -117,10 +117,19 @@ export default {
       loginRules: [],
       searchInput: "",
       list: [],
+      // app类型
       appTypeList: [
         { id: 1, label: "DOCTOR", value: "DOCTOR" },
         { id: 2, label: "PATIENT", value: "PATIENT" },
       ],
+      // 设备类型
+      deviceTypeList: [
+        { id: 1, label: "ANDROID", value: "ANDROID" },
+        { id: 2, label: "IOS", value: "IOS" },
+        { id: 3, label: "H5", value: "H5" },
+        { id: 4, label: "PC_WEB", value: "PC_WEB" },
+      ],
+      // 表头数据
       tableHeaderBig: [
         // { prop: "id", label: "id" },
         { prop: "versionString", label: "版本号" },
@@ -226,12 +235,11 @@ export default {
     // 分页
     handleSizeChange(newSize) {
       this.pageSize = newSize;
-      this.getList()
+      this.getList();
     },
     handleCurrentChange(newPage) {
       this.pageNum = newPage;
-      this.getList()
-
+      this.getList();
     },
   },
 };

@@ -33,34 +33,6 @@ export const constantRoutes = [{
       }
     }]
   },
-  // {
-  //   path: '/example',
-  //   component: Layout,
-  //   redirect: "/example/table",
-  //   meta: {
-  //     title: '示例',
-  //     icon: 'form'
-  //   },
-  //   children: [{
-  //       path: 'table',
-  //       name: 'docupload',
-  //       component: () => import('@/views/examplee/table'),
-  //       meta: {
-  //         title: '表格',
-  //         icon: 'form'
-  //       }
-  //     },
-  //     {
-  //       path: 'form',
-  //       name: 'docupload',
-  //       component: () => import('@/views/examplee/form'),
-  //       meta: {
-  //         title: '表单',
-  //         icon: 'form'
-  //       }
-  //     }
-  //   ]
-  // },
   {
     path: '/docupload',
     component: Layout,
@@ -90,15 +62,30 @@ export const constantRoutes = [{
   {
     path: '/appVersion',
     component: Layout,
+    redirect: '/appVersion/update',
+    meta: {
+      title: '版本更新',
+      icon: 'app'
+    },
     children: [{
-      path: 'index',
-      name: 'appVersion',
-      component: () => import('@/views/appVersion/index'),
-      meta: {
-        title: '版本更新',
-        icon: 'app'
+        path: 'update',
+        name: 'appVersion',
+        component: () => import('@/views/appVersion/update'),
+        meta: {
+          title: '记录',
+          icon: 'app'
+        }
+      },
+      {
+        path: 'control',
+        name: 'appVersion',
+        component: () => import('@/views/appVersion/control'),
+        meta: {
+          title: '控制',
+          icon: 'app'
+        }
       }
-    }]
+    ]
   },
   {
     path: '/adminControl',
