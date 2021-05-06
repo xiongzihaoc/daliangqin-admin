@@ -103,7 +103,7 @@
 </template>
 <script>
 import EleTable from "../../components/Table";
-import { list, add, edit, deleteE, query } from "@/api/adminControl";
+import { list, add, edit, deleteE } from "@/api/adminControl";
 export default {
   components: {
     EleTable,

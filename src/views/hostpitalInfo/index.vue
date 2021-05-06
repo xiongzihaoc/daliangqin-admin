@@ -101,7 +101,7 @@
 </template>
 <script>
 import EleTable from "../../components/Table";
-import { list, add, edit, deleteE, query } from "@/api/hostpitalInfo";
+import { list, add, deleteE } from "@/api/hostpitalInfo";
 export default {
   components: {
     EleTable,
