@@ -146,15 +146,15 @@ export default {
       list: [],
       // app类型
       appTypeList: [
-        { id: 1, label: "DOCTOR", value: "DOCTOR" },
-        { id: 2, label: "PATIENT", value: "PATIENT" },
+        { id: 1, label: "医生端", value: "DOCTOR" },
+        { id: 2, label: "患者端", value: "PATIENT" },
       ],
       // 设备类型
       deviceTypeList: [
-        { id: 1, label: "ANDROID", value: "ANDROID" },
-        { id: 2, label: "IOS", value: "IOS" },
+        { id: 1, label: "安卓", value: "ANDROID" },
+        { id: 2, label: "苹果", value: "IOS" },
         { id: 3, label: "H5", value: "H5" },
-        { id: 4, label: "PC_WEB", value: "PC_WEB" },
+        { id: 4, label: "PC", value: "PC_WEB" },
       ],
       // 表头数据
       tableHeaderBig: [
