@@ -14,11 +14,11 @@
 
       <el-form-item prop="phone">
         <span class="svg-container">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="phone" />
         </span>
         <el-input
           ref="phone"
-          v-model="loginForm.phone"
+          v-model.trim="loginForm.phone"
           placeholder="手机号"
           name="phone"
           oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
@@ -123,9 +123,13 @@ export default {
   methods: {
     // 获取验证码按钮
     getCodeBtn() {
-      if (this.loginForm.phone.trim().length <= 0) {
-        return this.$message.error("请输入手机号");
+      const reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
+      if (this.loginForm.phone.length <= 0) {
+        return this.$message.error("请填写手机号码！");
+      } else if (!reg.test(this.loginForm.phone)) {
+        return this.$message.error("请填写正确的手机号码！");
       } else {
+        // 定时器
         const TIME_COUNT = 60;
         if (!this.timer) {
           this.count = TIME_COUNT;
@@ -140,13 +144,11 @@ export default {
             }
           }, 1000);
         }
-        var val = {
-          phone: Number(this.loginForm.phone),
-          smsType: "LOGIN",
-        };
-        getCode(val).then((res) => {
-          console.log(res);
-        });
+        getCode({ phone: Number(this.loginForm.phone), smsType: "LOGIN" }).then(
+          (res) => {
+            console.log(res);
+          }
+        );
       }
     },
     getCookie() {
@@ -302,6 +304,7 @@ $light_gray: #eee;
     transform: translateY(-50%);
     opacity: 0.3;
     color: red;
+    font-weight: 700;
   }
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
