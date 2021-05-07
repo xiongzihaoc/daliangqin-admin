@@ -47,7 +47,7 @@
         ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px"
+        label-width="120px"
       >
         <el-form-item label="app类型" prop="appType">
           <el-select
@@ -136,7 +136,23 @@ export default {
   },
   data() {
     return {
-      FormRules: [],
+      FormRules: {
+        forceUpdateAppId: [
+          { required: true, message: "请选择强制更新版本", trigger: "blur" },
+        ],
+        newestUpdateAppId: [
+          { required: true, message: "请选择最新版本", trigger: "blur" },
+        ],
+        recommendUpdateAppId: [
+          { required: true, message: "请选择推荐更新版本", trigger: "blur" },
+        ],
+        appType: [
+          { required: true, message: "请选择app类型", trigger: "blur" },
+        ],
+        deviceType: [
+          { required: true, message: "请选择设备类型", trigger: "blur" },
+        ],
+      },
       searchInput: "",
       list: [],
       // app类型
@@ -206,33 +222,39 @@ export default {
     },
     // 弹框关闭
     getData() {},
-    editDialogClosed() {},
+    editDialogClosed() {
+      this.$refs.FormRef.resetFields();
+    },
     // 新增编辑确定
     editPageEnter() {
-      if (this.infoTitle == "新增") {
-        add(this.editAddForm).then((res) => {
-          if (res.code != "OK") {
-            return;
-          } else {
-            this.$notify.success({
-              title: "新增成功",
+      this.$refs.FormRef.validate((valid) => {
+        if (valid) {
+          if (this.infoTitle == "新增") {
+            add(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "新增成功",
+                });
+                this.getList();
+              }
             });
-            this.getList();
-          }
-        });
-      } else {
-        edit(this.editAddForm).then((res) => {
-          if (res.code != "OK") {
-            return;
           } else {
-            this.$notify.success({
-              title: "编辑成功",
+            edit(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "编辑成功",
+                });
+                this.getList();
+              }
             });
-            this.getList();
           }
-        });
-      }
-      this.editDialogVisible = false;
+          this.editDialogVisible = false;
+        }
+      });
     },
   },
 };
