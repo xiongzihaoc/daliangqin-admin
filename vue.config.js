@@ -15,7 +15,7 @@ module.exports = {
   outputDir: 'dist',
   assetsDir: './static',
   // lintOnSave: process.env.NODE_ENV === 'development',
-  lintOnSave:false,
+  lintOnSave: false,
   productionSourceMap: false,
   devServer: {
     disableHostCheck: true,
@@ -26,22 +26,22 @@ module.exports = {
     //   errors: true
     // },
     // // 代理
-    // proxy: {
-    //   [process.env.VUE_APP_BASE_API]: {
-    //     target: 'http://test-api.daliangqing.com/public',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       ['^' + process.env.VUE_APP_BASE_API]: ''
-    //     }
-    //   },
-    //   [process.env.VUE_APP_BASE_SECOND_API]: {
-    //     target: 'http://test-api.daliangqing.com/admin',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       ['^' + process.env.VUE_APP_BASE_SECOND_API]: ''
-    //     }
-    //   },
-    // },
+    proxy: {
+      [process.env.VUE_APP_BASE_API]: {
+        target: 'http://test-api.daliangqing.com/public',
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_API]: ''
+        }
+      },
+      [process.env.VUE_APP_BASE_SECOND_API]: {
+        target: 'http://test-api.daliangqing.com/admin',
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_SECOND_API]: ''
+        }
+      },
+    },
     // before: require('./mock/mock-server.js')
   },
   configureWebpack: {
@@ -53,13 +53,11 @@ module.exports = {
     }
   },
   chainWebpack(config) {
-    config.plugin('preload').tap(() => [
-      {
-        rel: 'preload',
-        fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
-        include: 'initial'
-      }
-    ])
+    config.plugin('preload').tap(() => [{
+      rel: 'preload',
+      fileBlacklist: [/\.map$/, /hot-update\.js$/, /runtime\..*\.js$/],
+      include: 'initial'
+    }])
     config.plugins.delete('prefetch')
 
     // set svg-sprite-loader
@@ -86,7 +84,7 @@ module.exports = {
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
+              // `runtime` must same as runtimeChunk name. default is `runtime`
               inline: /runtime\..*\.js$/
             }])
             .end()

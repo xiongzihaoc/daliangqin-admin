@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-upload
-      action="http://colablog.oss-cn-hangzhou.aliyuncs.com"
+      action="http://daliangqing-c-user.oss-cn-hangzhou.aliyuncs.com"
       :data="dataObj"
       list-type="picture"
       :multiple="false"
@@ -37,7 +37,8 @@ export default {
         key: "",
         ossaccessKeyId: "",
         dir: "",
-        host: "",
+        endPoint: "",
+        bucketName: "daliangqing-c-user",
       },
       dialogVisible: false,
     };
@@ -92,14 +93,18 @@ export default {
       const _self = this;
       return new Promise((resolve, reject) => {
         // 前后端提交post异步请求获取签名信息
-        uploadImg().then((res) => {
-            var response = res.data
+        uploadImg()
+          .then((res) => {
+              console.log(res);
+            var response = res.data;
+
             _self.dataObj.policy = response.policy;
             _self.dataObj.signature = response.signature;
             _self.dataObj.ossaccessKeyId = response.accessId;
-            _self.dataObj.key = response.dir + this.getUUID() + "_${filename}";
-            _self.dataObj.dir = response.dir;
-            _self.dataObj.host = response.host;
+            _self.dataObj.key = response.key + this.getUUID() + "_${filename}";
+            _self.dataObj.dir = response.key;
+            _self.dataObj.endPoint = response.endPoint;
+            console.log(_self.dataObj);
             resolve(true);
           })
           .catch((err) => {
