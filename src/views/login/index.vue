@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import { getCode } from "@/api/user";
 
 export default {
@@ -94,6 +94,8 @@ export default {
       loginForm: {
         phone: "",
         code: "",
+        deviceType: "PC_WEB",
+        deviceId: "333333",
         userType: "DOCTOR",
       },
       loginRules: {
@@ -118,7 +120,7 @@ export default {
     },
   },
   created() {
-    this.getCookie();
+    // this.getCookie();
   },
   methods: {
     // 获取验证码按钮
@@ -151,33 +153,33 @@ export default {
         );
       }
     },
-    getCookie() {
-      const phone = Cookies.get("phone");
-      const code = Cookies.get("code");
+    // getCookie() {
+      // const phone = Cookies.get("phone");
+      // const code = Cookies.get("code");
       // const rememberMe = Cookies.get("rememberMe");
-      this.loginForm = {
-        userType: "DOCTOR",
-        deviceType: "PC_WEB",
-        phone: phone === undefined ? this.loginForm.phone : phone,
-        code: code === undefined ? this.loginForm.code : code,
+      // this.loginForm = {
+      //   userType: "DOCTOR",
+      //   deviceType: "PC_WEB",
+      //   phone: phone === undefined ? this.loginForm.phone : phone,
+      //   code: code === undefined ? this.loginForm.code : code,
         // rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
-      };
-    },
+      // };
+    // },
     // 登录按钮
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.loading = true;
           // if (this.loginForm.rememberMe) {
-          //   // Cookies.set("phone", this.loginForm.phone, { expires: 30 });
-          //   // Cookies.set("code", encrypt(this.loginForm.code), { expires: 30 });
-          //   // Cookies.set("rememberMe", this.loginForm.rememberMe, {
-          //   //   expires: 30,
-          //   // });
+            // Cookies.set("phone", this.loginForm.phone, { expires: 30 });
+            // Cookies.set("code", encrypt(this.loginForm.code), { expires: 30 });
+            // Cookies.set("rememberMe", this.loginForm.rememberMe, {
+            //   expires: 30,
+            // });
           // } else {
-          //   // Cookies.remove("phone");
-          //   // Cookies.remove("code");
-          //   // Cookies.remove("rememberMe");
+            // Cookies.remove("phone");
+            // Cookies.remove("code");
+            // Cookies.remove("rememberMe");
           // }
           this.$store
             .dispatch("Login", this.loginForm)

@@ -25,7 +25,7 @@ module.exports = {
     //   warnings: false,
     //   errors: true
     // },
-    // // 代理
+    // 代理
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
         target: 'http://test-api.daliangqing.com/public',
@@ -42,7 +42,6 @@ module.exports = {
         }
       },
     },
-    // before: require('./mock/mock-server.js')
   },
   configureWebpack: {
     name: name,
