@@ -95,13 +95,11 @@ export default {
         // 前后端提交post异步请求获取签名信息
         uploadImg()
           .then((res) => {
-              console.log(res);
             var response = res.data;
-
             _self.dataObj.policy = response.policy;
             _self.dataObj.signature = response.signature;
             _self.dataObj.ossaccessKeyId = response.accessId;
-            _self.dataObj.key = response.key + this.getUUID() + "_${filename}";
+            _self.dataObj.key = response.key + this.getUUID() + "${filename}";
             _self.dataObj.dir = response.key;
             _self.dataObj.endPoint = response.endPoint;
             console.log(_self.dataObj);
@@ -112,14 +110,16 @@ export default {
           });
       });
     },
-    handleUploadSuccess(res, file) {
-      console.log("上传成功...");
+    handleUploadSuccess(response, file,fileList) {
+      console.log(response);
+      console.log(file);
+      console.log(fileList);
       this.showFileList = true;
       this.fileList.pop();
       this.fileList.push({
         name: file.name,
         url:
-          this.dataObj.host +
+          this.dataObj.endPoint +
           "/" +
           this.dataObj.key.replace("${filename}", file.name),
       });
