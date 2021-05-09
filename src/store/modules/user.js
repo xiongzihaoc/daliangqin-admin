@@ -45,6 +45,7 @@ const user = {
       console.log(userInfo);
       return new Promise((resolve, reject) => {
         login(userInfo).then(res => {
+          console.log(res);
           commit('SET_TOKEN', res.data)
           setToken(res.data)
           resolve()
