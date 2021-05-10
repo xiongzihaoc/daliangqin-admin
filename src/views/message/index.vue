@@ -80,8 +80,8 @@ export default {
         phone: this.searchInput,
       }).then((res) => {
         console.log(res);
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
+        // this.list = res.data.elements;
+        // this.total = res.data.totalSize;
       });
     },
     // 搜索

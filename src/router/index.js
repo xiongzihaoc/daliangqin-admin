@@ -157,6 +157,19 @@ export const constantRoutes = [{
       }
     }]
   },
+  {
+    path: '/newsInformation',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'newsInformation',
+      component: () => import('@/views/newsInformation/index'),
+      meta: {
+        title: '新闻资讯',
+        icon: 'edit-role'
+      }
+    }]
+  },
   // 404 page must be placed at the end !!!
   {
     path: '*',

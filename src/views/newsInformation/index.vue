@@ -77,6 +77,12 @@
             placeholder="请输入手机号"
           ></el-input>
         </el-form-item>
+        <el-form-item label="地理位置" prop="address">
+          <el-input
+            v-model.trim="editAddForm.address"
+            placeholder="请输入地理位置"
+          ></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
@@ -87,7 +93,7 @@
 </template>
 <script>
 import EleTable from "../../components/Table";
-import { list, roleList, add, edit, deleteE } from "@/api/adminRole";
+import { list, add, edit, detail, deleteE } from "@/api/newsInformation";
 export default {
   components: {
     EleTable,
@@ -112,6 +118,9 @@ export default {
         contract: [
           { required: true, trigger: "blur", validator: validatePhone },
         ],
+        address: [
+          { required: true, message: "请选择地理位置", trigger: "blur" },
+        ],
         hospitalClass: [
           { required: true, message: "请选择医院等级", trigger: "blur" },
         ],
@@ -121,7 +130,10 @@ export default {
       // appTypeList: [],
       tableHeaderBig: [
         // { prop: "id", label: "id" },
-        { prop: "adminRoleType", label: "角色" },
+        { prop: "author", label: "新闻作者" },
+        { prop: "newsTitle", label: "新闻标题" },
+        { prop: "newsType", label: "客户端分类" },
+        { prop: "hospitalClass", label: "医院等级" },
       ],
 
       pageSize: 10,
@@ -146,8 +158,8 @@ export default {
     getList() {
       list({ page: this.pageNum, pageSize: this.pageSize }).then((res) => {
         console.log(res);
-        this.list = res.data;
-        // this.total = res.data.totalSize;
+        this.list = res.data.elements;
+        this.total = res.data.totalSize;
       });
     },
     // 搜索

@@ -7,7 +7,13 @@ export function list(data) {
     params: data
   })
 }
-
+export function roleList(data) {
+  return request({
+    url: 'adminRole/adminRoleList',
+    method: 'get',
+    params: data
+  })
+}
 export function add(data) {
   return request({
     url: 'adminRole',
