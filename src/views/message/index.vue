@@ -77,7 +77,7 @@ export default {
       list({
         page: this.pageNum,
         pageSize: this.pageSize,
-        msgPhone: this.searchInput,
+        phone: this.searchInput,
       }).then((res) => {
         console.log(res);
         this.list = res.data.elements;
