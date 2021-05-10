@@ -24,7 +24,7 @@
           <el-button
             size="mini"
             type="warning"
-            @click="resetBtn(scope.row.phone)"
+            @click="resetBtn(scope.row.msgPhone)"
             >重置</el-button
           >
         </template>
@@ -56,9 +56,9 @@ export default {
       searchInput: "",
       list: [],
       tableHeaderBig: [
-        { prop: "phone", label: "手机号" },
+        { prop: "msgPhone", label: "手机号" },
         { prop: "sendType", label: "发送类型" },
-        { prop: "content", label: "内容" },
+        // { prop: "content", label: "内容" },
         { prop: "createTime", label: "发送时间" },
         // { prop: "ua", label: "浏览器类型" },
         // { prop: "ip", label: "访问ip" },
@@ -77,11 +77,11 @@ export default {
       list({
         page: this.pageNum,
         pageSize: this.pageSize,
-        phone: this.searchInput,
+        msgPhone: this.searchInput,
       }).then((res) => {
         console.log(res);
-        // this.list = res.data.elements;
-        // this.total = res.data.totalSize;
+        this.list = res.data.elements;
+        this.total = res.data.totalSize;
       });
     },
     // 搜索
@@ -90,8 +90,8 @@ export default {
 
     },
     // 重置
-    resetBtn(phone) {
-      reset({ phone: phone }).then((res) => {
+    resetBtn(msgPhone) {
+      reset({ phone: msgPhone }).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "重置成功",

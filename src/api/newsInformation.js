@@ -11,7 +11,7 @@ export function add(data) {
   return request({
     url: 'newsRecord/addNews',
     method: 'post',
-    params: data
+    data
   })
 }
 export function edit(data) {

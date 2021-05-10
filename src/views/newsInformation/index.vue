@@ -28,9 +28,9 @@
         width="220"
       >
         <template slot-scope="scope">
-          <!-- <el-button size="mini" type="primary" @click="editBtn(scope.row)"
+          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
             >编辑</el-button
-          > -->
+          >
           <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
             >删除</el-button
           >
@@ -64,23 +64,10 @@
         :model="editAddForm"
         label-width="100px"
       >
-        <el-form-item label="医院名称" prop="hospitalName">
+        <el-form-item label="作者" prop="author">
           <el-input
-            v-model.trim="editAddForm.hospitalName"
-            placeholder="请输入医院名称"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="联系方式" prop="contract">
-          <el-input
-            v-model.trim="editAddForm.contract"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入手机号"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="地理位置" prop="address">
-          <el-input
-            v-model.trim="editAddForm.address"
-            placeholder="请输入地理位置"
+            v-model.trim="editAddForm.author"
+            placeholder="请输入作者名称"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -112,17 +99,8 @@ export default {
     };
     return {
       FormRules: {
-        hospitalName: [
-          { required: true, message: "请输入医院名称", trigger: "blur" },
-        ],
-        contract: [
-          { required: true, trigger: "blur", validator: validatePhone },
-        ],
-        address: [
-          { required: true, message: "请选择地理位置", trigger: "blur" },
-        ],
-        hospitalClass: [
-          { required: true, message: "请选择医院等级", trigger: "blur" },
+        author: [
+          { required: true, message: "请输入作者名称", trigger: "blur" },
         ],
       },
       searchInput: "",
@@ -133,7 +111,6 @@ export default {
         { prop: "author", label: "新闻作者" },
         { prop: "newsTitle", label: "新闻标题" },
         { prop: "newsType", label: "客户端分类" },
-        { prop: "hospitalClass", label: "医院等级" },
       ],
 
       pageSize: 10,
@@ -143,10 +120,17 @@ export default {
       editDialogVisible: false,
       infoTitle: "",
       editAddForm: {
-        address: "",
-        contract: "",
-        hospitalClass: "",
-        hospitalName: "",
+        author: "11",
+        cover: "11",
+        id: "11",
+        newsAvatarUrl: "11",
+        newsContent: "11",
+        newsTitle: "",
+        newsType: "11",
+        position: "11",
+        publishTime: "11",
+        shareCount: 0,
+        userId: "11",
       },
     };
   },
@@ -176,6 +160,7 @@ export default {
       this.editDialogVisible = true;
     },
     async deleteBtn(val) {
+        console.log(val);
       const confirmResult = await this.$confirm(
         "你确定要执行此操作, 是否继续?",
         "提示",
@@ -188,7 +173,7 @@ export default {
       if (confirmResult != "confirm") {
         return this.$message.info("取消删除");
       }
-      deleteE(val).then((res) => {
+      deleteE({id:val}).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -203,36 +188,51 @@ export default {
     },
     // 新增编辑确定
     editPageEnter() {
-      this.$refs.FormRef.validate((valid) => {
-        if (valid) {
-          if (this.infoTitle == "新增") {
-            add(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "新增成功",
-                });
-                this.getList();
-              }
-            });
-          } else {
-            edit(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "编辑成功",
-                });
-                this.getList();
-              }
-            });
-          }
-          this.editDialogVisible = false;
-        } else {
+      add({
+        author: "熊紫豪",
+        cover: "",
+        id: "",
+        newsAvatarUrl: "",
+        newsContent: "",
+        newsTitle: "",
+        newsType: "",
+        position: "",
+        publishTime: "",
+        shareCount: 0,
+        userId: "",
+      }).then((res) => {
+        console.log(this.editAddForm);
+        console.log(res);
+        if (res.code != "OK") {
           return;
+        } else {
+          this.$notify.success({
+            title: "新增成功",
+          });
+          this.getList();
         }
       });
+      //   this.$refs.FormRef.validate((valid) => {
+      //     if (valid) {
+      //       if (this.infoTitle == "新增") {
+
+      //       } else {
+      //         edit(this.editAddForm).then((res) => {
+      //           if (res.code != "OK") {
+      //             return;
+      //           } else {
+      //             this.$notify.success({
+      //               title: "编辑成功",
+      //             });
+      //             this.getList();
+      //           }
+      //         });
+      //       }
+      //       this.editDialogVisible = false;
+      //     } else {
+      //       return;
+      //     }
+      //   });
     },
     // 分页
     handleSizeChange(newSize) {

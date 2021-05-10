@@ -15,9 +15,4 @@ export function reset(data) {
     params: data
   })
 }
-// export function query(data) {
-//   return request({
-//     url: 'sms/record/' + data,
-//     method: 'get',
-//   })
-// }
+
