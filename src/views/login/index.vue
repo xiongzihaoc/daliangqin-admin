@@ -1,64 +1,56 @@
 <template>
   <div class="login-container">
-    <el-form
-      ref="loginForm"
+    <el-form ref="loginForm"
       :model="loginForm"
       :rules="loginRules"
       class="login-form"
       auto-complete="on"
-      label-position="left"
-    >
+      label-position="left">
       <div class="title-container">
         <h3 class="title">大良卿科技</h3>
       </div>
-
+      <!-- 手机号 -->
       <el-form-item prop="phone">
         <span class="svg-container">
           <svg-icon icon-class="phone" />
         </span>
-        <el-input
-          ref="phone"
+        <el-input ref="phone"
           v-model.trim="loginForm.phone"
           placeholder="手机号"
           name="phone"
           oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
           tabindex="1"
-          auto-complete="on"
-        />
-        <el-button
-          v-show="show"
+          auto-complete="on" />
+        <el-button v-show="show"
           @click="getCodeBtn"
           type="plain"
           size="mini"
-          class="btnCode"
-          >验证码</el-button
-        >
-        <el-button v-show="!show" type="plain" size="mini" class="btnCode">{{
+          class="btnCode">验证码</el-button>
+        <el-button v-show="!show"
+          type="plain"
+          size="mini"
+          class="btnCode">{{
           count + "S"
         }}</el-button>
       </el-form-item>
-
+      <!-- 验证码 -->
       <el-form-item prop="code">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input
-          ref="code"
+        <el-input ref="code"
           v-model.trim="loginForm.code"
           placeholder="验证码"
           name="code"
           auto-complete="on"
           oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-          @keyup.enter.native="handleLogin"
-        />
+          @keyup.enter.native="handleLogin" />
       </el-form-item>
-      <el-button
-        :loading="loading"
+      <!-- 登录按钮 -->
+      <el-button :loading="loading"
         type="primary"
         style="width: 100%; margin-bottom: 30px"
-        @click.native.prevent="handleLogin"
-        >登 录</el-button
-      >
+        @click.native.prevent="handleLogin">登 录</el-button>
     </el-form>
   </div>
 </template>
@@ -69,6 +61,7 @@ import { getCode } from "@/api/user";
 export default {
   name: "Login",
   data() {
+    // 手机号 验证码 验证规则
     const validatePhone = (rule, value, callback) => {
       const reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
       if (!value) {
@@ -90,18 +83,19 @@ export default {
       }
     };
     return {
+      // 表单验证
+      loginRules: {
+        phone: [
+          { required: true, trigger: "change", validator: validatePhone },
+        ],
+        code: [{ required: true, trigger: "blur", validator: validateCode }],
+      },
       loginForm: {
         phone: "",
         code: "",
         deviceType: "PC_WEB",
         deviceId: "333333",
         userType: "DOCTOR",
-      },
-      loginRules: {
-        phone: [
-          { required: true, trigger: "change", validator: validatePhone },
-        ],
-        code: [{ required: true, trigger: "blur", validator: validateCode }],
       },
       loading: false,
       redirect: undefined,
@@ -137,11 +131,13 @@ export default {
               this.count--;
             } else {
               this.show = true;
+              // 清除定时器
               clearInterval(this.timer);
               this.timer = null;
             }
           }, 1000);
         }
+        // 发送请求
         getCode({ phone: Number(this.loginForm.phone), smsType: "LOGIN" }).then(
           (res) => {
             console.log(res);

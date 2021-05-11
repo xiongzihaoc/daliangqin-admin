@@ -2,44 +2,37 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-input
-        @input="searchChange"
+      <el-input @input="searchChange"
         v-model="searchInput"
         class="el-input-style"
         type="text"
-        placeholder="search"
-      ></el-input>
-      <el-button
-        @click="add"
+        placeholder="search"></el-input>
+      <el-button @click="add"
         class="el-button-style"
         type="primary"
-        icon="el-icon-edit"
-        >新增</el-button
-      >
+        icon="el-icon-edit">新增</el-button>
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list" :header="tableHeaderBig">
+    <EleTable :data="list"
+      :header="tableHeaderBig">
       <!-- 操作 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220"
-      >
+        width="220">
         <template slot-scope="scope">
           <!-- <el-button size="mini" type="primary" @click="editBtn(scope.row)"
             >编辑</el-button
           > -->
-          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button size="mini"
+            type="danger"
+            @click="deleteBtn(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination
-      background
+    <el-pagination background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -47,40 +40,35 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"
-    ></el-pagination>
+      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog
-      :title="infoTitle"
+    <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @open="getData"
       @closed="editDialogClosed"
-      v-dialogDrag
-    >
-      <el-form
-        ref="FormRef"
+      v-dialogDrag>
+      <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px"
-      >
-        <el-form-item label="医院名称" prop="hospitalName">
-          <el-input
-            v-model.trim="editAddForm.hospitalName"
-            placeholder="请输入医院名称"
-          ></el-input>
+        label-width="100px">
+        <el-form-item label="医院名称"
+          prop="hospitalName">
+          <el-input v-model.trim="editAddForm.hospitalName"
+            placeholder="请输入医院名称"></el-input>
         </el-form-item>
-        <el-form-item label="联系方式" prop="contract">
-          <el-input
-            v-model.trim="editAddForm.contract"
+        <el-form-item label="联系方式"
+          prop="contract">
+          <el-input v-model.trim="editAddForm.contract"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入手机号"
-          ></el-input>
+            placeholder="请输入手机号"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -118,24 +106,24 @@ export default {
       },
       searchInput: "",
       list: [],
-      // appTypeList: [],
-      tableHeaderBig: [
-        // { prop: "id", label: "id" },
-        { prop: "adminRoleType", label: "角色" },
-      ],
-
-      pageSize: 10,
-      pageNum: 1,
-      total: 0,
-      //   弹框区域
-      editDialogVisible: false,
-      infoTitle: "",
       editAddForm: {
         address: "",
         contract: "",
         hospitalClass: "",
         hospitalName: "",
       },
+      // appTypeList: [],
+      tableHeaderBig: [
+        // { prop: "id", label: "id" },
+        { prop: "adminRoleType", label: "角色" },
+      ],
+      // 分页区域
+      pageSize: 10,
+      pageNum: 1,
+      total: 0,
+      //   弹框区域
+      editDialogVisible: false,
+      infoTitle: "",
     };
   },
   created() {
@@ -158,11 +146,13 @@ export default {
       this.editAddForm = {};
       this.editDialogVisible = true;
     },
+    // 编辑
     editBtn(val) {
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
+    // 删除
     async deleteBtn(val) {
       const confirmResult = await this.$confirm(
         "你确定要执行此操作, 是否继续?",
@@ -176,6 +166,7 @@ export default {
       if (confirmResult != "confirm") {
         return this.$message.info("取消删除");
       }
+      // 发送请求
       deleteE(val).then((res) => {
         console.log(res);
         this.$notify.success({
@@ -194,6 +185,7 @@ export default {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           if (this.infoTitle == "新增") {
+            // 发送请求
             add(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
@@ -205,6 +197,7 @@ export default {
               }
             });
           } else {
+            // 发送请求
             edit(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;

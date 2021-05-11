@@ -2,127 +2,104 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-input
-        @input="searchChange"
+      <el-input @input="searchChange"
         v-model="searchInput"
         class="el-input-style"
         type="text"
-        placeholder="search"
-      ></el-input>
-      <el-button
-        @click="add"
+        placeholder="search"></el-input>
+      <el-button @click="add"
         class="el-button-style"
         type="primary"
-        icon="el-icon-edit"
-        >新增</el-button
-      >
+        icon="el-icon-edit">新增</el-button>
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list" :header="tableHeaderBig">
+    <EleTable :data="list"
+      :header="tableHeaderBig">
       <!-- 操作 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220"
-      >
+        width="220">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
-            >编辑</el-button
-          >
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 增改页面 -->
-    <el-dialog
-      :title="infoTitle"
+    <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @open="getData"
       @closed="editDialogClosed"
-      v-dialogDrag
-    >
-      <el-form
-        ref="FormRef"
+      v-dialogDrag>
+      <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="120px"
-      >
-        <el-form-item label="app类型" prop="appType">
-          <el-select
-            v-model="editAddForm.appType"
+        label-width="120px">
+        <el-form-item label="app类型"
+          prop="appType">
+          <el-select v-model="editAddForm.appType"
             placeholder="请选择app类型"
-            style="width: 100%"
-          >
-            <el-option
-              v-for="item in appTypeList"
+            style="width: 100%">
+            <el-option v-for="item in appTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="设备类型" prop="deviceType">
-          <el-select
-            v-model="editAddForm.deviceType"
+        <el-form-item label="设备类型"
+          prop="deviceType">
+          <el-select v-model="editAddForm.deviceType"
             placeholder="请选择设备类型"
-            style="width: 100%"
-          >
-            <el-option
-              v-for="item in deviceTypeList"
+            style="width: 100%">
+            <el-option v-for="item in deviceTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="强制更新版本" prop="forceUpdateAppId">
-          <el-select
-            v-model="editAddForm.forceUpdateAppId"
+        <el-form-item label="强制更新版本"
+          prop="forceUpdateAppId">
+          <el-select v-model="editAddForm.forceUpdateAppId"
             placeholder="请选择强制更新版本"
-            style="width: 100%"
-          >
-            <el-option
-              v-for="item in versionList"
+            style="width: 100%">
+            <el-option v-for="item in versionList"
               :key="item.id"
               :label="item.versionString"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="最新版本" prop="newestUpdateAppId">
-          <el-select
-            v-model="editAddForm.newestUpdateAppId"
+        <el-form-item label="最新版本"
+          prop="newestUpdateAppId">
+          <el-select v-model="editAddForm.newestUpdateAppId"
             placeholder="请选择最新版本"
-            style="width: 100%"
-          >
-            <el-option
-              v-for="item in versionList"
+            style="width: 100%">
+            <el-option v-for="item in versionList"
               :key="item.id"
               :label="item.versionString"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="推荐更新版本" prop="recommendUpdateAppId">
-          <el-select
-            v-model="editAddForm.recommendUpdateAppId"
+        <el-form-item label="推荐更新版本"
+          prop="recommendUpdateAppId">
+          <el-select v-model="editAddForm.recommendUpdateAppId"
             placeholder="请选择推荐更新版本"
-            style="width: 100%"
-          >
-            <el-option
-              v-for="item in versionList"
+            style="width: 100%">
+            <el-option v-for="item in versionList"
               :key="item.id"
               :label="item.versionString"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -154,7 +131,15 @@ export default {
         ],
       },
       searchInput: "",
+      // 列表数据
       list: [],
+      editAddForm: {
+        appType: "",
+        deviceType: "",
+        forceUpdateAppId: "",
+        newestUpdateAppId: "",
+        recommendUpdateAppId: "",
+      },
       // app类型
       appTypeList: [
         { id: 1, label: "医生端", value: "DOCTOR" },
@@ -167,7 +152,7 @@ export default {
         { id: 3, label: "H5", value: "H5" },
         { id: 4, label: "PC", value: "PC_WEB" },
       ],
-      //   版本列表
+      // 版本列表
       versionList: [],
       // 表头数据
       tableHeaderBig: [
@@ -181,25 +166,20 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
-      editAddForm: {
-        appType: "",
-        deviceType: "",
-        forceUpdateAppId: "",
-        newestUpdateAppId: "",
-        recommendUpdateAppId: "",
-      },
     };
   },
   created() {
     this.getList();
   },
   mounted() {
+    // 获取版本列表
     versionList({ page: 1, pageSize: 1000 }).then((res) => {
       console.log(res);
       this.versionList = res.data.elements;
     });
   },
   methods: {
+    // 获取列表数据
     getList() {
       list().then((res) => {
         console.log(res);
@@ -215,6 +195,7 @@ export default {
       this.editAddForm = {};
       this.editDialogVisible = true;
     },
+    // 编辑
     editBtn(val) {
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
@@ -230,6 +211,7 @@ export default {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           if (this.infoTitle == "新增") {
+            // 发送请求
             add(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
@@ -241,6 +223,7 @@ export default {
               }
             });
           } else {
+            // 发送请求
             edit(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
