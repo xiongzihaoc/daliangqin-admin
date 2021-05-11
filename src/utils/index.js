@@ -115,3 +115,27 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+// 手机号验证规则
+ export function validatePhone(rule, value, callback) {
+
+  const reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
+    if (!value) {
+      return callback(new Error("请填写手机号码！"));
+    } else if (!reg.test(value)) {
+      return callback(new Error("请填写正确的手机号码！"));
+    } else {
+      callback();
+    }
+}
+// 验证码验证规则
+export function validateCode(rule, value, callback) {
+  const reg = /^\d{6}$/;
+  if (!value) {
+    return callback(new Error("请填写短信验证码！"));
+  } else if (!reg.test(value)) {
+    return callback(new Error("请填写6位短信验证码！"));
+  } else {
+    callback();
+  }
+}

@@ -87,23 +87,13 @@
 </template>
 <script>
 import EleTable from "../../components/Table";
+import { validatePhone } from "@/utils/index";
 import { list, add, edit, deleteE } from "@/api/adminControl";
 export default {
   components: {
     EleTable,
   },
   data() {
-    // 手机号格式验证
-    const validatePhone = (rule, value, callback) => {
-      const reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
-      if (!value) {
-        return callback(new Error("请填写手机号码！"));
-      } else if (!reg.test(value)) {
-        return callback(new Error("请填写正确的手机号码！"));
-      } else {
-        callback();
-      }
-    };
     return {
       FormRules: {
         name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
