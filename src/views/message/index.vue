@@ -2,37 +2,30 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-input
-        @input="searchChange"
+      <el-input @input="searchChange"
         v-model="searchInput"
         class="el-input-style"
         type="text"
-        placeholder="请输入手机号"
-      ></el-input>
+        placeholder="请输入手机号"></el-input>
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list" :header="tableHeaderBig">
+    <EleTable :data="list"
+      :header="tableHeaderBig">
       <!-- 操作 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220"
-      >
+        width="220">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
+          <el-button size="mini"
             type="warning"
-            @click="resetBtn(scope.row.msgPhone)"
-            >重置</el-button
-          >
+            @click="resetBtn(scope.row.msgPhone)">重置</el-button>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination
-      background
+    <el-pagination background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -40,8 +33,7 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"
-    ></el-pagination>
+      class="el-pagination-style"></el-pagination>
   </div>
 </template>
 <script>
@@ -54,6 +46,7 @@ export default {
   data() {
     return {
       searchInput: "",
+      // 列表数据
       list: [],
       tableHeaderBig: [
         { prop: "msgPhone", label: "手机号" },
@@ -63,12 +56,13 @@ export default {
         // { prop: "ua", label: "浏览器类型" },
         // { prop: "ip", label: "访问ip" },
       ],
+      // 分页数据
       pageSize: 10,
       pageNum: 1,
       total: 0,
     };
   },
-  mounted() {
+  created() {
     this.getList();
   },
   methods: {
