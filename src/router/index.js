@@ -170,7 +170,7 @@ export const constantRoutes = [{
       }
     }]
   },
-  // 404 page must be placed at the end !!!
+  // 404 page must be placed at the end !!!11
   {
     path: '*',
     redirect: '/404',
