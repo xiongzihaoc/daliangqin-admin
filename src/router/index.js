@@ -23,13 +23,15 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+// 引入分组路由
+import appVersionRouter from './modules/appVersion.js'
 
-export const constantRoutes = [{
+export const constantRoutes = [
+  {
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
   {
     path: '/404',
     component: () => import('@/views/404'),
@@ -51,6 +53,8 @@ export const constantRoutes = [{
       }
     }]
   },
+  // 引用分组路由
+  appVersionRouter,
   {
     path: '/docupload',
     component: Layout,
@@ -76,34 +80,6 @@ export const constantRoutes = [{
         icon: 'duanxin'
       }
     }]
-  },
-  {
-    path: '/appVersion',
-    component: Layout,
-    redirect: 'noRedirect',
-    meta: {
-      title: '版本更新',
-      icon: 'banben'
-    },
-    children: [{
-        path: 'update',
-        name: 'update',
-        component: () => import('@/views/appVersion/update'),
-        meta: {
-          title: '版本记录',
-          icon: 'jilu'
-        }
-      },
-      {
-        path: 'control',
-        name: 'control',
-        component: () => import('@/views/appVersion/control'),
-        meta: {
-          title: '版本控制',
-          icon: 'kongzhi'
-        }
-      }
-    ]
   },
   {
     path: '/adminControl',
