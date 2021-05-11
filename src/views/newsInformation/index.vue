@@ -2,44 +2,37 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-input
-        @input="searchChange"
+      <el-input @input="searchChange"
         v-model="searchInput"
         class="el-input-style"
         type="text"
-        placeholder="search"
-      ></el-input>
-      <el-button
-        @click="add"
+        placeholder="search"></el-input>
+      <el-button @click="add"
         class="el-button-style"
         type="primary"
-        icon="el-icon-edit"
-        >新增</el-button
-      >
+        icon="el-icon-edit">新增</el-button>
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list" :header="tableHeaderBig">
+    <EleTable :data="list"
+      :header="tableHeaderBig">
       <!-- 操作 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220"
-      >
+        width="220">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
-            >编辑</el-button
-          >
-          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
+          <el-button size="mini"
+            type="danger"
+            @click="deleteBtn(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination
-      background
+    <el-pagination background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -47,33 +40,29 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"
-    ></el-pagination>
+      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog
-      :title="infoTitle"
+    <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @open="getData"
       @closed="editDialogClosed"
-      v-dialogDrag
-    >
-      <el-form
-        ref="FormRef"
+      v-dialogDrag>
+      <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px"
-      >
-        <el-form-item label="作者" prop="author">
-          <el-input
-            v-model.trim="editAddForm.author"
-            placeholder="请输入作者名称"
-          ></el-input>
+        label-width="100px">
+        <el-form-item label="作者"
+          prop="author">
+          <el-input v-model.trim="editAddForm.author"
+            placeholder="请输入作者名称"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -98,14 +87,17 @@ export default {
       }
     };
     return {
+      // 表单验证规则
       FormRules: {
         author: [
           { required: true, message: "请输入作者名称", trigger: "blur" },
         ],
       },
       searchInput: "",
+      // 列表数据
       list: [],
       // appTypeList: [],
+      // 表格头部数据
       tableHeaderBig: [
         // { prop: "id", label: "id" },
         { prop: "author", label: "新闻作者" },
@@ -154,13 +146,15 @@ export default {
       this.editAddForm = {};
       this.editDialogVisible = true;
     },
+    // 修改
     editBtn(val) {
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
+    // 删除
     async deleteBtn(val) {
-        console.log(val);
+      console.log(val);
       const confirmResult = await this.$confirm(
         "你确定要执行此操作, 是否继续?",
         "提示",
@@ -173,7 +167,7 @@ export default {
       if (confirmResult != "confirm") {
         return this.$message.info("取消删除");
       }
-      deleteE({id:val}).then((res) => {
+      deleteE({ id: val }).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -186,7 +180,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
-    // 新增编辑确定
+    // 新增编辑弹框确定
     editPageEnter() {
       add({
         author: "熊紫豪",
@@ -212,27 +206,6 @@ export default {
           this.getList();
         }
       });
-      //   this.$refs.FormRef.validate((valid) => {
-      //     if (valid) {
-      //       if (this.infoTitle == "新增") {
-
-      //       } else {
-      //         edit(this.editAddForm).then((res) => {
-      //           if (res.code != "OK") {
-      //             return;
-      //           } else {
-      //             this.$notify.success({
-      //               title: "编辑成功",
-      //             });
-      //             this.getList();
-      //           }
-      //         });
-      //       }
-      //       this.editDialogVisible = false;
-      //     } else {
-      //       return;
-      //     }
-      //   });
     },
     // 分页
     handleSizeChange(newSize) {

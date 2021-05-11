@@ -68,10 +68,9 @@ export default {
       total: 0,
     };
   },
-  created() {
+  mounted() {
     this.getList();
   },
-  mounted() {},
   methods: {
     getList() {
       list({
@@ -87,7 +86,6 @@ export default {
     // 搜索
     searchChange(val) {
       this.getList();
-
     },
     // 重置
     resetBtn(msgPhone) {
@@ -102,12 +100,11 @@ export default {
     // 分页
     handleSizeChange(newSize) {
       this.pageSize = newSize;
-      this.getList()
+      this.getList();
     },
     handleCurrentChange(newPage) {
       this.pageNum = newPage;
-      this.getList()
-
+      this.getList();
     },
   },
 };
