@@ -1,47 +1,36 @@
 <template>
-  <div class="navbar">
-    <topbar/>
-    <hamburger :is-active="sidebar.opened"
-      class="hamburger-container"
-      @toggleClick="toggleSideBar" />
-    <breadcrumb class="breadcrumb-container" />
-    <div class="right-menu">
-      <template v-if="device !== 'mobile'">
-        <screenfull id="screenfull"
-          class="right-menu-item hover-effect" />
-      </template>
-      <el-dropdown class="avatar-container"
-        trigger="click">
-        <div class="avatar-wrapper">
-          <!-- <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" /> -->
-          <img src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"
-            class="user-avatar" />
+  <div>
+    <div class="navbar">
+      <div>
+        <hamburger
+          :is-active="sidebar.opened"
+          class="hamburger-container"
+          @toggleClick="toggleSideBar"
+        />
+        <!-- <breadcrumb class="breadcrumb-container" /> -->
+      </div>
+      <topbar />
+      <div class="right-menu">
+        <template v-if="device !== 'mobile'">
+          <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        </template>
+        <el-dropdown class="avatar-container" trigger="click">
+          <div class="avatar-wrapper">
+            <!-- <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" /> -->
+            <img
+              src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"
+              class="user-avatar"
+            />
 
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown"
-          class="user-dropdown">
-          <!-- <router-link to="/">
-            <el-dropdown-item> Home </el-dropdown-item>
-          </router-link>
-          <a
-            target="_blank"
-            href="https://github.com/PanJiaChen/vue-admin-template/"
-          >
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
-          <a
-            target="_blank"
-            href="https://panjiachen.github.io/vue-element-admin-site/#/"
-          >
-            <el-dropdown-item>Docs</el-dropdown-item>
-          </a> -->
-          <el-dropdown-item divided
-            @click.native="logout">
-            <span style="display: block">退出</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+            <i class="el-icon-caret-bottom" />
+          </div>
+          <el-dropdown-menu slot="dropdown" class="user-dropdown">
+            <el-dropdown-item divided @click.native="logout">
+              <span style="display: block">退出</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
   </div>
 </template>
@@ -57,7 +46,7 @@ export default {
     Breadcrumb,
     Hamburger,
     Screenfull,
-    Topbar
+    Topbar,
   },
   computed: {
     ...mapGetters(["sidebar", "avatar", "device"]),
@@ -99,7 +88,7 @@ export default {
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .hamburger-container {
-    line-height: 46px;
+    line-height: 54px;
     height: 100%;
     float: left;
     cursor: pointer;
