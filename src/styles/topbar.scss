@@ -5,7 +5,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 999;
+  // z-index:1;
   .log {
     padding: 0 20px;
     line-height: 54px;
@@ -27,11 +27,11 @@
         color: rgb(191, 203, 217);
 
         &:hover {
-          background-color: $subMenuHover !important;
+          background-color: #fff!important;
         }
 
         &:focus {
-          background-color: $subMenuHover !important;
+          background-color: #fff!important;
           // color: $subMenuActiveText !important;
         }
       }

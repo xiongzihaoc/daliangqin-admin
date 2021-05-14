@@ -131,13 +131,13 @@ export default {
       this.setSidebarHide(route);
     },
     // 设置侧边栏的显示和隐藏
-    // setSidebarHide(route) {
-    //   if (!route.children || route.children.length === 1) {
-    //     this.$store.dispatch("app/toggleSideBarHide", true);
-    //   } else {
-    //     this.$store.dispatch("app/toggleSideBarHide", false);
-    //   }
-    // },
+    setSidebarHide(route) {
+      if (!route.children || route.children.length === 1) {
+        this.$store.dispatch("app/toggleSideBarHide", true);
+      } else {
+        this.$store.dispatch("app/toggleSideBarHide", false);
+      }
+    },
     // async logout() {
     //   await this.$store.dispatch("user/logout");
     //   this.$router.push(`/login?redirect=${this.$route.fullPath}`);
@@ -145,3 +145,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.el-menu-item:hover {
+  background-color: #fff !important;
+  outline: 0 !important;
+  color: #409eff !important;
+}
+</style>
