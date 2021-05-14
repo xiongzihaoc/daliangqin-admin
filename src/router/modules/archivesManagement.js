@@ -11,7 +11,7 @@ const archivesRouter = {
     children: [{
         path: 'user',
         name: 'user',
-        component: () => import('@/views/appVersion/update'),
+        component: () => import('@/views/archivesManagement/user'),
         meta: {
             title: '用户管理',
             icon: 'jilu'
@@ -20,7 +20,7 @@ const archivesRouter = {
     {
         path: 'kinsfolk',
         name: 'kinsfolk',
-        component: () => import('@/views/appVersion/update'),
+        component: () => import('@/views/archivesManagement/kinsfolk'),
         meta: {
             title: '亲属管理',
             icon: 'jilu'
@@ -29,7 +29,7 @@ const archivesRouter = {
     {
         path: 'record',
         name: 'record',
-        component: () => import('@/views/appVersion/update'),
+        component: () => import('@/views/archivesManagement/record'),
         meta: {
             title: '设备检测记录',
             icon: 'jilu'
@@ -38,7 +38,7 @@ const archivesRouter = {
     {
         path: 'address',
         name: 'record',
-        component: () => import('@/views/appVersion/update'),
+        component: () => import('@/views/archivesManagement/address'),
         meta: {
             title: '收获地址',
             icon: 'jilu'

@@ -11,7 +11,7 @@ const systemRouter = {
     children: [{
         path: 'administrator',
         name: 'administrator',
-        component: () => import('@/views/appVersion/update'),
+        component: () => import('@/views/systemManagement/administrator'),
         meta: {
             title: '管理员管理',
             icon: 'jilu'
@@ -20,7 +20,7 @@ const systemRouter = {
     {
         path: 'loginRecord',
         name: 'loginRecord',
-        component: () => import('@/views/appVersion/update'),
+        component: () => import('@/views/systemManagement/loginRecord'),
         meta: {
             title: '登录记录',
             icon: 'jilu'
