@@ -14,7 +14,7 @@ const systemRouter = {
         component: () => import('@/views/systemManagement/administrator'),
         meta: {
             title: '管理员管理',
-            icon: 'jilu'
+            icon: 'admin'
         }
     },
     {
@@ -23,7 +23,7 @@ const systemRouter = {
         component: () => import('@/views/systemManagement/loginRecord'),
         meta: {
             title: '登录记录',
-            icon: 'jilu'
+            icon: 'loginRecord'
         }
     },
     ]

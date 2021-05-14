@@ -16,7 +16,7 @@ const hospitalRouter = {
             component: () => import('@/views/hospitalManagement/hospital'),
             meta: {
                 title: '医院管理',
-                icon: 'jilu'
+                icon: 'yiyuan'
             }
         },
         // 医生管理
@@ -26,7 +26,7 @@ const hospitalRouter = {
             component: () => import('@/views/hospitalManagement/doctor'),
             meta: {
                 title: '医生管理',
-                icon: 'jilu'
+                icon: 'doctor'
             }
         },
         // 工作管理
@@ -37,7 +37,7 @@ const hospitalRouter = {
             redirect: "/hospitalManagement/work/plan",
             meta: {
                 title: '工作管理',
-                icon: 'jilu'
+                icon: 'work'
             },
             children: [
                 {
@@ -46,7 +46,7 @@ const hospitalRouter = {
                     component: () => import('@/views/hospitalManagement/work/plan'),
                     meta: {
                         title: '工作计划',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -55,7 +55,7 @@ const hospitalRouter = {
                     component: () => import('@/views/hospitalManagement/work/followRecord'),
                     meta: {
                         title: '随访记录',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -64,7 +64,7 @@ const hospitalRouter = {
                     component: () => import('@/views/hospitalManagement/work/transfer'),
                     meta: {
                         title: '转诊记录',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -73,7 +73,7 @@ const hospitalRouter = {
                     component: () => import('@/views/hospitalManagement/work/leaveMessage'),
                     meta: {
                         title: '留言问诊',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -82,7 +82,7 @@ const hospitalRouter = {
                     component: () => import('@/views/hospitalManagement/work/note'),
                     meta: {
                         title: '个人笔记',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -91,7 +91,7 @@ const hospitalRouter = {
                     component: () => import('@/views/hospitalManagement/work/kpiIndex'),
                     meta: {
                         title: 'KPI指标',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -100,7 +100,7 @@ const hospitalRouter = {
                     component: () => import('@/views/hospitalManagement/work/kpiStatistics'),
                     meta: {
                         title: 'KPI完成统计',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -109,7 +109,7 @@ const hospitalRouter = {
                     component: () => import('@/views/hospitalManagement/work/prescription'),
                     meta: {
                         title: '个性化处方',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -118,7 +118,7 @@ const hospitalRouter = {
                     component: () => import('@/views/hospitalManagement/work/address'),
                     meta: {
                         title: '收货地址',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -127,7 +127,7 @@ const hospitalRouter = {
                     component: () => import('@/views/hospitalManagement/work/prescription'),
                     meta: {
                         title: '收藏管理',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
 

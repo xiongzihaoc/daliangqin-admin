@@ -14,7 +14,7 @@ const archivesRouter = {
         component: () => import('@/views/archivesManagement/user'),
         meta: {
             title: '用户管理',
-            icon: 'jilu'
+            icon: 'user'
         }
     },
     {
@@ -23,7 +23,7 @@ const archivesRouter = {
         component: () => import('@/views/archivesManagement/kinsfolk'),
         meta: {
             title: '亲属管理',
-            icon: 'jilu'
+            icon: 'qinshu'
         }
     },
     {
@@ -32,7 +32,7 @@ const archivesRouter = {
         component: () => import('@/views/archivesManagement/record'),
         meta: {
             title: '设备检测记录',
-            icon: 'jilu'
+            icon: 'shebei'
         }
     },
     {
@@ -41,7 +41,7 @@ const archivesRouter = {
         component: () => import('@/views/archivesManagement/address'),
         meta: {
             title: '收获地址',
-            icon: 'jilu'
+            icon: 'address'
         }
     },
     ]

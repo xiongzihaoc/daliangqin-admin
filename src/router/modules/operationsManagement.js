@@ -15,8 +15,8 @@ const operationsRouter = {
             name: 'banner',
             component: () => import('@/views/operationsManagement/banner'),
             meta: {
-                title: 'banner',
-                icon: 'jilu'
+                title: 'Banner',
+                icon: 'banner'
             }
         },
         {
@@ -26,7 +26,7 @@ const operationsRouter = {
             redirect: "/operationsManagement/search/recommend",
             meta: {
                 title: '搜索管理',
-                icon: 'kongzhi'
+                icon: 'search'
             },
             children: [
                 {
@@ -35,7 +35,7 @@ const operationsRouter = {
                     component: () => import('@/views/operationsManagement/search/recommend'),
                     meta: {
                         title: '推荐搜索',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -44,7 +44,7 @@ const operationsRouter = {
                     component: () => import('@/views/operationsManagement/search/history'),
                     meta: {
                         title: '搜索历史',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
             ],
@@ -57,7 +57,7 @@ const operationsRouter = {
             redirect: "/operationsManagement/questionnaire/questionnaireList",
             meta: {
                 title: '问卷管理',
-                icon: 'kongzhi'
+                icon: 'wenjuan'
             },
             children: [
                 {
@@ -66,7 +66,7 @@ const operationsRouter = {
                     component: () => import('@/views/operationsManagement/questionnaire/questionnaireList'),
                     meta: {
                         title: '问卷列表',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -75,7 +75,7 @@ const operationsRouter = {
                     component: () => import('@/views/operationsManagement/questionnaire/questionList'),
                     meta: {
                         title: '问题列表',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
             ],
@@ -87,7 +87,7 @@ const operationsRouter = {
             component: () => import('@/views/operationsManagement/contentManagement'),
             meta: {
                 title: '内容管理',
-                icon: 'kongzhi'
+                icon: 'content'
             },
         },
         // 商城管理
@@ -98,7 +98,7 @@ const operationsRouter = {
             redirect: "/operationsManagement/mall/product ",
             meta: {
                 title: '商城管理',
-                icon: 'kongzhi'
+                icon: 'mall'
             },
             children: [
                 {
@@ -107,7 +107,7 @@ const operationsRouter = {
                     component: () => import('@/views/operationsManagement/mall/product'),
                     meta: {
                         title: '单品管理',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -116,7 +116,7 @@ const operationsRouter = {
                     component: () => import('@/views/operationsManagement/mall/order'),
                     meta: {
                         title: '订单管理',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
                 {
@@ -125,7 +125,7 @@ const operationsRouter = {
                     component: () => import('@/views/operationsManagement/mall/dispatch'),
                     meta: {
                         title: '发货单',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 }, {
                     path: "returns",
@@ -133,7 +133,7 @@ const operationsRouter = {
                     component: () => import('@/views/operationsManagement/mall/returns'),
                     meta: {
                         title: '退货单',
-                        icon: 'kongzhi'
+                        icon: 'general'
                     },
                 },
             ],
@@ -145,7 +145,7 @@ const operationsRouter = {
             component: () => import('@/views/operationsManagement/cancelReason'),
             meta: {
                 title: '取消原因',
-                icon: 'kongzhi'
+                icon: 'reason'
             }
         },
     ]
