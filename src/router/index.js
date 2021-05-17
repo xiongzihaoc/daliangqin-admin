@@ -25,15 +25,21 @@ Vue.use(Router)
 import Layout from '@/layout'
 // 引入分组路由
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
 import operationsRouter from './modules/operationsManagement'
 import hospitalRouter from './modules/hospitalManagement'
 import archivesRouter from './modules/archivesManagement'
 import systemRouter from './modules/systemManagement'
 
 
+<<<<<<< HEAD
+=======
 
 =======
 import appVersionRouter from './modules/appVersion.js'
+>>>>>>> origin/master
 
 >>>>>>> origin/master
 export const constantRoutes = [
@@ -64,6 +70,9 @@ export const constantRoutes = [
   },
   // 引用分组路由
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
   operationsRouter,
   hospitalRouter,
   archivesRouter, 
@@ -159,6 +168,8 @@ export const constantRoutes = [
   //     }
   //   }]
   // },
+<<<<<<< HEAD
+=======
 =======
   appVersionRouter,
   {
@@ -252,6 +263,7 @@ export const constantRoutes = [
       }
     }]
   },
+>>>>>>> origin/master
 >>>>>>> origin/master
   // 404页面必须在最后 !!!
   {

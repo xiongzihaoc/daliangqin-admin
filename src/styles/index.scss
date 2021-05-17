@@ -82,6 +82,28 @@ div:focus {
 .el-pagination-style {
   margin-top: 10px;
   text-align: right;
+<<<<<<< HEAD
+}
+
+.tableAdd {
+  margin-bottom: 10px;
+}
+
+.el-button--primary,
+.el-button--primary:focus,
+.el-button--primary.is-active,
+.el-button--primary:active {
+  background: #1890FF;
+}
+
+.el-button--success,
+.el-button--success:focus,
+.el-button--success.is-active,
+.el-button--success:active {
+  background: #13CE66;
+}
+
+=======
 }
 .tableAdd {
   margin-bottom: 10px;
@@ -100,6 +122,7 @@ div:focus {
   background: #13CE66;
 }
 
+>>>>>>> origin/master
 .el-button--danger,
 .el-button--danger:focus,
 .el-button--danger.is-active,
