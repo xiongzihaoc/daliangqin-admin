@@ -36,18 +36,21 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-button @click="add"
-      type="primary"
-      class="tableAdd"
-      size="small"
-      plain
-      icon="el-icon-plus">新增</el-button>
-    <!-- <el-button @click="deleteMultiple"
+    <!-- 表格上方CRUD按钮 -->
+    <div>
+      <el-button @click="add"
+        type="primary"
+        class="tableAdd"
+        size="small"
+        plain
+        icon="el-icon-plus">新增</el-button>
+      <!-- <el-button @click="deleteMultiple"
       type="danger"
       class="tableAdd"
       size="small"
       plain
       icon="el-icon-delete">删除</el-button> -->
+    </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
@@ -161,6 +164,7 @@ export default {
   },
   data() {
     return {
+      // 表单验证规则
       FormRules: {
         adminPhone: [
           { required: true, trigger: "blur", validator: validatePhone },
@@ -176,17 +180,21 @@ export default {
           { required: true, message: "请选择医院等级", trigger: "blur" },
         ],
       },
+      // 搜索表单
       searchForm: {
         name: "",
         type: "",
       },
+      // 列表数据
       list: [],
+      // 增改表单
       editAddForm: {
         name: "",
         contract: "",
         address: "",
         hospitalClass: "",
       },
+      // 医院级别列表
       hospitalClass: [
         { id: 1, label: "三甲", value: "CLASS_1_A" },
         { id: 2, label: "三乙", value: "CLASS_1_B" },
@@ -194,6 +202,7 @@ export default {
         { id: 4, label: "二乙", value: "CLASS_2_B" },
         { id: 5, label: "一级", value: "CLASS_3_A" },
       ],
+      // 表格数据
       tableHeaderBig: [
         { prop: "name", label: "医院名称" },
         { prop: "contract", label: "医院电话" },

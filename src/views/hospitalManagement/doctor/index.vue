@@ -6,23 +6,40 @@
         :model="searchForm"
         class="searchForm"
         label-width="100px">
-        <el-form-item label="医院名称"
+        <el-form-item label="姓名"
           align="left"
           prop="name">
           <el-input v-model="searchForm.name"
             size="small"
-            placeholder="请输入医院名称"></el-input>
+            placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医院等级"
-          size="small"
-          prop="type">
-          <el-select v-model="searchForm.type"
-            placeholder="请选择医院等级">
-            <el-option value="DOCTOR"
-              label="医生端"></el-option>
-            <el-option value="PATIENT"
-              label="用户端"></el-option>
+        <el-form-item label="手机号"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.name"
+            size="small"
+            placeholder="请输入手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.name"
+            size="small"
+            placeholder="请输入身份证"></el-input>
+        </el-form-item>
+        <el-form-item label="性别"
+          align="left"
+          prop="name">
+          <el-select v-model="searchForm.name" size="small">
+            <el-option label="家医"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="手机号"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.name"
+            size="small"
+            placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item label-width="30px">
           <el-button @click="searchBtn"
@@ -151,9 +168,7 @@ export default {
   data() {
     return {
       FormRules: {
-        name: [
-          { required: true, message: "请输入医院名称", trigger: "blur" },
-        ],
+        name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
         contract: [
           { required: true, message: "请输入医院电话", trigger: "blur" },
         ],

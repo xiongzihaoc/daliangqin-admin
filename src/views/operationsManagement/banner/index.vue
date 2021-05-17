@@ -79,11 +79,15 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        prop="type"
+        prop="positionList"
         label="呈现位置">
         <template slot-scope="scope">
-          <span v-if="scope.row.type === 'DOCTOR'">医生端</span>
-          <span v-else>用户端</span>
+          <span v-for="(item,index) in scope.row.positionList"
+            :key="index">
+            <span v-if="item.position === 'PATIENT'">用户端 </span>
+            <span v-else>患者端</span>
+
+          </span>
         </template>
       </el-table-column>
       <el-table-column align="center"
