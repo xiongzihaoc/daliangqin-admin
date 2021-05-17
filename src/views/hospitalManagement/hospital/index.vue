@@ -104,7 +104,16 @@
       <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px">
+        label-width="110px">
+        <el-form-item label="管理员手机号"
+          prop="adminPhone">
+          <el-input v-if="this.infoTitle ==='新增'"
+            v-model="editAddForm.adminPhone"
+            placeholder="请输入管理员手机号"></el-input>
+          <el-input v-else
+            disabled
+            v-model="editAddForm.adminPhone"></el-input>
+        </el-form-item>
         <el-form-item label="医院名称"
           prop="name">
           <el-input v-model="editAddForm.name"
@@ -113,6 +122,7 @@
         <el-form-item label="医院电话"
           prop="contract">
           <el-input v-model="editAddForm.contract"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             placeholder="请输入医院电话"></el-input>
         </el-form-item>
         <el-form-item label="医院地址"
@@ -143,6 +153,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
+import { validatePhone } from "@/utils/index";
 import { list, add, edit, deleteE } from "@/api/hospitalManagement/hospital";
 export default {
   components: {
@@ -151,9 +162,10 @@ export default {
   data() {
     return {
       FormRules: {
-        name: [
-          { required: true, message: "请输入医院名称", trigger: "blur" },
+        adminPhone: [
+          { required: true, trigger: "blur", validator: validatePhone },
         ],
+        name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
         contract: [
           { required: true, message: "请输入医院电话", trigger: "blur" },
         ],

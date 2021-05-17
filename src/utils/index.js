@@ -45,7 +45,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -117,23 +117,23 @@ export function param2Obj(url) {
 }
 
 // 手机号验证规则
- export function validatePhone(rule, value, callback) {
+export function validatePhone(rule, value, callback) {
   const reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
-    if (!value) {
-      return callback(new Error("请填写手机号码！"));
-    } else if (!reg.test(value)) {
-      return callback(new Error("请填写正确的手机号码！"));
-    } else {
-      callback();
-    }
+  if (!value) {
+    return callback(new Error("请填写手机号码"));
+  } else if (!reg.test(value)) {
+    return callback(new Error("请填写正确的手机号码"));
+  } else {
+    callback();
+  }
 }
 // 验证码验证规则
 export function validateCode(rule, value, callback) {
   const reg = /^\d{6}$/;
   if (!value) {
-    return callback(new Error("请填写短信验证码！"));
+    return callback(new Error("请填写短信验证码"));
   } else if (!reg.test(value)) {
-    return callback(new Error("请填写6位短信验证码！"));
+    return callback(new Error("请填写6位短信验证码"));
   } else {
     callback();
   }
