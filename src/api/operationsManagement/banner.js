@@ -17,8 +17,9 @@ export function add(data) {
 }
 export function edit(data) {
     return request({
-        url: 'banner/' + data,
+        url: 'banner/' + data.id,
         method: 'put',
+        data
     })
 }
 export function deleteE(data) {

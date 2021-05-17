@@ -88,8 +88,8 @@
         prop="status"
         label="状态">
         <template slot-scope="scope">
-          <el-switch v-model="editAddForm.status"
-            @change="statusChange"
+          <el-switch v-model="scope.row.status"
+            @change="statusChange(scope.row)"
             active-value="UP"
             inactive-value="DOWN"
             active-color="#13ce66"
@@ -210,7 +210,7 @@ export default {
           { required: true, message: "请输入跳转地址", trigger: "blur" },
         ],
         zorder: [{ required: true, message: "请输入权重", trigger: "blur" }],
-        statusValue: [
+        status: [
           { required: true, message: "请选择状态", trigger: "blur" },
         ],
       },
@@ -302,7 +302,9 @@ export default {
       });
     },
     // 开关change事件
-    statusChange() {},
+    statusChange(val) {
+      
+    },
     // 弹框关闭
     getData() {},
     editDialogClosed() {
