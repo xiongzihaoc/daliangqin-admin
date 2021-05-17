@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
@@ -351,3 +352,17 @@ export default {
 
 <style>
 </style>
+=======
+  <h1>医生管理</h1>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style>
+
+</style>
+>>>>>>> origin/master
