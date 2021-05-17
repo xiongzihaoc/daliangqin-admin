@@ -1,13 +1,350 @@
 <template>
-  <h1>banner管理</h1>
+  <div class="app-container">
+    <!-- 搜索区域 -->
+    <div class="search-box">
+      <el-form ref="searchFormRef"
+        :model="searchForm"
+        class="searchForm"
+        label-width="100px">
+        <el-form-item label="轮播图名称"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.name"
+            size="small"
+            placeholder="请输入轮播图名称"></el-input>
+        </el-form-item>
+        <el-form-item label="呈现位置"
+          size="small"
+          prop="position">
+          <el-select v-model="searchForm.position"
+            placeholder="请选择呈现位置">
+            <el-option value="DOCTOR"
+              label="医生端"></el-option>
+            <el-option value="PATIENT"
+              label="用户端"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态"
+          size="small"
+          prop="status">
+          <el-select style="width:100%"
+            v-model="editAddForm.status"
+            placeholder="请选择状态">
+            <el-option value="UP"
+              label="上架"></el-option>
+            <el-option value="DOWN"
+              label="下架"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label-width="30px">
+          <el-button @click="searchBtn"
+            type="primary"
+            size="small"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
+            size="small"
+            plain
+            icon="el-icon-refresh">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    <el-button @click="add"
+      type="primary"
+      class="tableAdd"
+      size="small"
+      plain
+      icon="el-icon-plus">新增</el-button>
+    <!-- 表格区域 -->
+    <EleTable :data="list"
+      :header="tableHeaderBig">
+      <!-- 需要formatter的列 -->
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="title"
+        label="轮播图名称"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="imageUrl"
+        label="轮播图图片">
+        <template slot-scope="scope">
+          <span>{{scope.row.imageUrl}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="type"
+        label="呈现位置">
+        <template slot-scope="scope">
+          <span v-if="scope.row.type === 'DOCTOR'">医生端</span>
+          <span v-else>用户端</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        prop="status"
+        label="状态">
+        <template slot-scope="scope">
+          <el-switch v-model="editAddForm.statusValue"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
+      </el-table-column>
+      <!-- 操作 -->
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        label="操作"
+        width="220">
+        <template slot-scope="scope">
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
+          <el-button size="mini"
+            type="danger"
+            @click="deleteBtn(scope.row.id)">删除</el-button>
+        </template>
+      </el-table-column>
+    </EleTable>
+    <!-- 分页 -->
+    <el-pagination background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pageNum"
+      :page-sizes="[10, 20, 50]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      class="el-pagination-style"></el-pagination>
+    <!-- 增改页面 -->
+    <el-dialog :title="infoTitle"
+      :visible.sync="editDialogVisible"
+      width="40%"
+      @open="getData"
+      @closed="editDialogClosed"
+      v-dialogDrag>
+      <el-form ref="FormRef"
+        :rules="FormRules"
+        :model="editAddForm"
+        label-width="100px">
+        <el-form-item label="轮播图名称"
+          prop="name">
+          <el-input v-model="editAddForm.name"
+            placeholder="请输入轮播图名称"></el-input>
+        </el-form-item>
+        <el-form-item label="轮播图图片"
+          prop="imgUrl">
+          <el-input v-model="editAddForm.imgUrl"
+            placeholder="暂时输入图片名称"></el-input>
+          <!-- <single-upload v-model="editAddForm.imgUrl" /> -->
+        </el-form-item>
+        <el-form-item label="呈现位置"
+          prop="position">
+          <el-select style="width:100%"
+            v-model="editAddForm.position"
+            placeholder="请选择呈现位置">
+            <el-option value="DOCTOR"
+              label="医生端"></el-option>
+            <el-option value="PATIENT"
+              label="用户端"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="跳转地址"
+          prop="zorder">
+          <el-input v-model="editAddForm.zorder"
+            placeholder="请输入跳转地址"></el-input>
+        </el-form-item>
+        <el-form-item label="权重"
+          prop="zorder">
+          <el-input v-model="editAddForm.zorder"
+            placeholder="请输入权重"></el-input>
+        </el-form-item>
+        <el-form-item label="呈现位置"
+          prop="position">
+          <el-select style="width:100%"
+            v-model="editAddForm.statusValue"
+            placeholder="请选择状态">
+            <el-option value="UP"
+              label="上架"></el-option>
+            <el-option value="DOWN"
+              label="下架"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer"
+        class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
+      </span>
+    </el-dialog>
+  </div>
 </template>
-
 <script>
+import EleTable from "@/components/Table";
+import { validatePhone } from "@/utils/index";
+import { list, add, edit, deleteE } from "@/api/operationsManagement/banner";
+import singleUpload from "@/components/UploadFile";
 export default {
-
-}
+  components: {
+    EleTable,
+    singleUpload,
+  },
+  data() {
+    return {
+      FormRules: {
+        name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+        phone: [{ required: true, validator: validatePhone, trigger: "blur" }],
+        userType: [
+          { required: true, message: "请选择用户类型", trigger: "blur" },
+        ],
+      },
+      searchForm: {
+        name: "",
+        position: "",
+        status: "",
+      },
+      list: [],
+      editAddForm: {
+        name: "",
+        imgUrl: "",
+        position: "",
+        statusValue: "",
+      },
+      tableHeaderBig: [
+        { prop: "linkUrl", label: "跳转地址" },
+        { prop: "zorder", label: "权重" },
+      ],
+      // 分页区域
+      pageSize: 10,
+      pageNum: 1,
+      total: 0,
+      //   弹框区域
+      editDialogVisible: false,
+      infoTitle: "",
+    };
+  },
+  created() {},
+  mounted() {
+    this.getList();
+  },
+  methods: {
+    getList() {
+      list({
+        page: this.pageNum,
+        pageSize: this.pageSize,
+        id: this.searchInput,
+      }).then((res) => {
+        console.log(res);
+        this.list = res.data.elements;
+        this.total = res.data.totalSize;
+      });
+    },
+    /***** 搜索区域 *****/
+    // 搜索
+    searchBtn() {},
+    // 重置
+    searchReset() {
+      this.searchForm = {};
+    },
+    /***** CRUD *****/
+    // 新增
+    add() {
+      this.infoTitle = "新增";
+      this.editAddForm = {};
+      this.editDialogVisible = true;
+    },
+    // 编辑
+    editBtn(val) {
+      // 修改请求需要的参数
+      let valObj = {
+        phone: val.phone,
+        name: val.name,
+        userType: val.userType,
+      };
+      this.infoTitle = "编辑";
+      this.editAddForm = JSON.parse(JSON.stringify(valObj));
+      this.editDialogVisible = true;
+    },
+    // 删除
+    async deleteBtn(id) {
+      const confirmResult = await this.$confirm(
+        "你确定要执行此操作, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => console.log(err));
+      if (confirmResult != "confirm") {
+        return this.$message.info("取消删除");
+      }
+      // 发送请求
+      deleteE(id).then((res) => {
+        console.log(res);
+        this.$notify.success({
+          title: "删除成功",
+        });
+        this.getList();
+      });
+    },
+    // 弹框关闭
+    getData() {},
+    editDialogClosed() {
+      this.$refs.FormRef.resetFields();
+    },
+    // 新增编辑确定
+    editPageEnter() {
+      this.$refs.FormRef.validate((valid) => {
+        if (valid) {
+          if (this.infoTitle == "新增") {
+            // 发送请求
+            add(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "新增成功",
+                });
+                this.getList();
+              }
+            });
+          } else {
+            // 发送请求
+            edit(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "编辑成功",
+                });
+                this.getList();
+              }
+            });
+          }
+          this.editDialogVisible = false;
+        }
+      });
+    },
+    /***** 分页 *****/
+    handleSizeChange(newSize) {
+      console.log(newSize);
+      this.pageSize = newSize;
+      this.getList();
+    },
+    handleCurrentChange(newPage) {
+      console.log(newPage);
+      this.pageNum = newPage;
+      this.getList();
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>

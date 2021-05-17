@@ -11,9 +11,9 @@
       @select="rowSelect"
       @select-all="selectAll"
       :header-cell-style="{
-        background: '#F8F8F9',
+        background: '#1890FF',
         height: '50px',
-        color: '#515a6e',
+        color: '#fff',
       }"
       :border="option.border"
       :max-height="option.maxHeight"

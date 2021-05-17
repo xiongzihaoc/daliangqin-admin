@@ -15,7 +15,7 @@ const operationsRouter = {
             name: 'banner',
             component: () => import('@/views/operationsManagement/banner'),
             meta: {
-                title: 'Banner',
+                title: '轮播图',
                 icon: 'banner'
             }
         },
