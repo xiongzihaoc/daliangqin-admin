@@ -28,14 +28,14 @@ module.exports = {
     // 代理
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
-        target: 'http://test-api.daliangqing.com/public',
+        target: 'http://test-api.daliangqing.com/admin',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       },
       [process.env.VUE_APP_BASE_SECOND_API]: {
-        target: 'http://test-api.daliangqing.com/admin',
+        target: 'http://test-api.daliangqing.com/public',
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_SECOND_API]: ''

@@ -17,7 +17,7 @@
       </router-link>
     </scroll-pane>
     <ul v-show="visible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
-      <li @click="refreshSelectedTag(selectedTag)">Refresh</li>
+      <!-- <li @click="refreshSelectedTag(selectedTag)">Refresh</li> -->
       <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">关闭</li>
       <li @click="closeOthersTags">关闭其他</li>
       <li @click="closeAllTags(selectedTag)">关闭全部</li>
@@ -255,9 +255,9 @@ export default {
         margin-right: 15px;
       }
       &.active {
-        background-color: #42b983;
+        background-color: #1890FF;
         color: #fff;
-        border-color: #42b983;
+        border-color: #1890FF;
         &::before {
           content: '';
           background: #fff;

@@ -1,7 +1,7 @@
 module.exports = {
 
   title: 'daliangqing',
-
+  topNav: true,
   tagsView: true,
   /**
    * @type {boolean} true | false

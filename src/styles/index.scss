@@ -3,6 +3,7 @@
 @import './transition.scss';
 @import './element-ui.scss';
 @import './sidebar.scss';
+@import './topbar.scss';
 
 body {
   height: 100%;
@@ -63,34 +64,63 @@ div:focus {
 .app-container {
   padding: 20px;
 }
+
 // el-input css
 .el-input-style {
   width: 300px;
 }
-.search-box {
+
+.searchForm .el-form-item {
+  display: inline-block;
   margin-bottom: 10px;
 }
+
 .el-button-style {
   margin: 0 5px;
 }
+
 .el-pagination-style {
   margin-top: 10px;
+  text-align: right;
 }
-.el-button--primary,.el-button--primary:focus,.el-button--primary.is-active, .el-button--primary:active{background: #1890FF;}
-.el-button--success,.el-button--success:focus,.el-button--success.is-active, .el-button--success:active{background: #13CE66;}
-.el-button--danger,.el-button--danger:focus,.el-button--danger.is-active, .el-button--danger:active{background: #F5222D;}
+.tableAdd {
+  margin-bottom: 10px;
+}
+.el-button--primary,
+.el-button--primary:focus,
+.el-button--primary.is-active,
+.el-button--primary:active {
+  background: #1890FF;
+}
+
+.el-button--success,
+.el-button--success:focus,
+.el-button--success.is-active,
+.el-button--success:active {
+  background: #13CE66;
+}
+
+.el-button--danger,
+.el-button--danger:focus,
+.el-button--danger.is-active,
+.el-button--danger:active {
+  background: #F5222D;
+}
+
 .el-button--primary:hover {
-    background: #1890FF;
-    border-color: #1890FF;
-    color: #FFF;
-    opacity: .6;
+  background: #1890FF;
+  border-color: #1890FF;
+  color: #FFF;
+  opacity: .6;
 }
+
 .el-button--danger:hover {
-    background: #F5222D;
-    border-color: #F5222D;
-    color: #FFF;
-    opacity: .6;
+  background: #F5222D;
+  border-color: #F5222D;
+  color: #FFF;
+  opacity: .6;
 }
+
 .el-button--success:hover {
   background: #13CE66;
   border-color: #13CE66;

@@ -25,7 +25,7 @@
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination background
+    <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"

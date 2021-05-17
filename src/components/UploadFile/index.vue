@@ -1,7 +1,6 @@
 <template>
   <div>
-    <el-upload
-      action="http://daliangqing-c-user.oss-cn-hangzhou.aliyuncs.com"
+    <el-upload action="http://daliangqing-c-user.oss-cn-hangzhou.aliyuncs.com"
       :data="dataObj"
       list-type="picture"
       :multiple="false"
@@ -10,16 +9,16 @@
       :before-upload="beforeUpload"
       :on-remove="handleRemove"
       :on-success="handleUploadSuccess"
-      :on-preview="handlePreview"
-    >
-      <el-button size="small" type="primary">点击上传</el-button>
-      <div slot="tip" class="el-upload__tip">
-        只能上传jpg/png文件，且不超过10MB
+      :on-preview="handlePreview">
+      <i slot="default"
+        class="el-icon-plus"></i>
+      <div slot="tip"
+        class="el-upload__tip">
       </div>
     </el-upload>
-    <el-dialog :visible.sync="dialogVisible">
+    <!-- <el-dialog :visible.sync="dialogVisible">
       <img width="100%" :src="fileList[0].url" alt="" />
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -110,7 +109,7 @@ export default {
           });
       });
     },
-    handleUploadSuccess(response, file,fileList) {
+    handleUploadSuccess(response, file, fileList) {
       console.log(response);
       console.log(file);
       console.log(fileList);
