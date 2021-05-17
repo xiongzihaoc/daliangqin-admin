@@ -24,7 +24,6 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 // 引入分组路由
-<<<<<<< HEAD
 import operationsRouter from './modules/operationsManagement'
 import hospitalRouter from './modules/hospitalManagement'
 import archivesRouter from './modules/archivesManagement'
@@ -32,10 +31,6 @@ import systemRouter from './modules/systemManagement'
 
 
 
-=======
-import appVersionRouter from './modules/appVersion.js'
-
->>>>>>> origin/master
 export const constantRoutes = [
   {
     path: '/login',
@@ -63,7 +58,6 @@ export const constantRoutes = [
     }]
   },
   // 引用分组路由
-<<<<<<< HEAD
   operationsRouter,
   hospitalRouter,
   archivesRouter, 
@@ -159,100 +153,6 @@ export const constantRoutes = [
   //     }
   //   }]
   // },
-=======
-  appVersionRouter,
-  {
-    path: '/docupload',
-    component: Layout,
-    children: [{
-      path: 'docupload',
-      name: 'docupload',
-      component: () => import('@/views/docupload/index'),
-      meta: {
-        title: '文件上传',
-        icon: 'shangchuan',
-      }
-    }]
-  },
-  {
-    path: '/message',
-    component: Layout,
-    children: [{
-      path: 'index',
-      name: 'message',
-      component: () => import('@/views/message/index'),
-      meta: {
-        title: '短信管理',
-        icon: 'duanxin'
-      }
-    }]
-  },
-  {
-    path: '/adminControl',
-    component: Layout,
-    children: [{
-      path: 'index',
-      name: 'adminControl',
-      component: () => import('@/views/adminControl/index'),
-      meta: {
-        title: '管理控制',
-        icon: 'tianchongxing-'
-      }
-    }]
-  },
-  {
-    path: '/hostpitalInfo',
-    component: Layout,
-    children: [{
-      path: 'index',
-      name: 'hostpitalInfo',
-      component: () => import('@/views/hostpitalInfo/index'),
-      meta: {
-        title: '医院信息',
-        icon: 'yiyuan'
-      }
-    }]
-  },
-  {
-    path: '/hospitalRole',
-    component: Layout,
-    children: [{
-      path: 'index',
-      name: 'hospitalRole',
-      component: () => import('@/views/hospitalRole/index'),
-      meta: {
-        title: '医院角色',
-        icon: 'jiaoseguanli'
-      }
-    }]
-  },
-  {
-    path: '/adminRole',
-    component: Layout,
-    children: [{
-      path: 'index',
-      name: 'adminRole',
-      component: () => import('@/views/adminRole/index'),
-      meta: {
-        title: '平台角色',
-        icon: 'edit-role'
-      }
-    }]
-  },
-  {
-    path: '/newsInformation',
-    component: Layout,
-    children: [{
-      path: 'index',
-      name: 'newsInformation',
-      component: () => import('@/views/newsInformation/index'),
-      meta: {
-        title: '新闻资讯',
-        icon: 'edit-role'
-      }
-    }]
-  },
->>>>>>> origin/master
   // 404页面必须在最后 !!!
   {
     path: '*',

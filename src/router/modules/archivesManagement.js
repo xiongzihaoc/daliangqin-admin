@@ -36,11 +36,11 @@ const archivesRouter = {
         }
     },
     {
-        path: 'address',
-        name: 'record',
+        path: 'archivesAddress',
+        name: 'archivesAddress',
         component: () => import('@/views/archivesManagement/address'),
         meta: {
-            title: '收获地址',
+            title: '收货地址',
             icon: 'address'
         }
     },

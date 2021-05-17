@@ -146,9 +146,11 @@
           <!-- <single-upload v-model="editAddForm.imageUrl" /> -->
         </el-form-item>
         <el-form-item label="呈现位置"
-          prop="type">
+          prop="typeList">
           <el-select style="width:100%"
-            v-model="editAddForm.type"
+            multiple
+            clearable
+            v-model="editAddForm.typeList"
             placeholder="请选择呈现位置">
             <el-option value="DOCTOR"
               label="医生端"></el-option>
@@ -158,12 +160,13 @@
         </el-form-item>
         <el-form-item label="跳转地址"
           prop="linkUrl">
-          <el-input v-model="editAddForm.linkUrl"
+          <el-input v-model.trim="editAddForm.linkUrl"
             placeholder="请输入跳转地址"></el-input>
         </el-form-item>
         <el-form-item label="权重"
           prop="zorder">
-          <el-input v-model="editAddForm.zorder"
+          <el-input v-model.trim="editAddForm.zorder"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             placeholder="请输入权重"></el-input>
         </el-form-item>
         <el-form-item label="状态"
@@ -205,14 +208,14 @@ export default {
         imageUrl: [
           { required: true, message: "请上传轮播图图片", trigger: "blur" },
         ],
-        type: [{ required: true, message: "请选择呈现位置", trigger: "blur" }],
+        typeList: [
+          { required: true, message: "请选择呈现位置", trigger: "blur" },
+        ],
         linkUrl: [
           { required: true, message: "请输入跳转地址", trigger: "blur" },
         ],
         zorder: [{ required: true, message: "请输入权重", trigger: "blur" }],
-        status: [
-          { required: true, message: "请选择状态", trigger: "blur" },
-        ],
+        status: [{ required: true, message: "请选择状态", trigger: "blur" }],
       },
       searchForm: {
         name: "",
@@ -225,7 +228,7 @@ export default {
         imageUrl: "",
         linkUrl: "",
         zorder: "",
-        type: "",
+        typeList: [],
         status: "",
       },
       tableHeaderBig: [
@@ -302,9 +305,7 @@ export default {
       });
     },
     // 开关change事件
-    statusChange(val) {
-      
-    },
+    statusChange(val) {},
     // 弹框关闭
     getData() {},
     editDialogClosed() {

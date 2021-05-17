@@ -12,6 +12,8 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+
+import 'default-passive-events'  // Passive Event Listeners——让页面滑动更加流畅的新特性
 Vue.use(ElementUI)
 Vue.prototype.$
 Vue.config.productionTip = false
