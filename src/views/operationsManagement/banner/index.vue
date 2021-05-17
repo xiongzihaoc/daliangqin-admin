@@ -15,8 +15,8 @@
         </el-form-item>
         <el-form-item label="呈现位置"
           size="small"
-          prop="position">
-          <el-select v-model="searchForm.position"
+          prop="type">
+          <el-select v-model="searchForm.type"
             placeholder="请选择呈现位置">
             <el-option value="DOCTOR"
               label="医生端"></el-option>
@@ -88,7 +88,10 @@
         prop="status"
         label="状态">
         <template slot-scope="scope">
-          <el-switch v-model="editAddForm.statusValue"
+          <el-switch v-model="editAddForm.status"
+            @change="statusChange"
+            active-value="UP"
+            inactive-value="DOWN"
             active-color="#13ce66"
             inactive-color="#ff4949">
           </el-switch>
@@ -132,20 +135,20 @@
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="轮播图名称"
-          prop="name">
-          <el-input v-model="editAddForm.name"
+          prop="title">
+          <el-input v-model="editAddForm.title"
             placeholder="请输入轮播图名称"></el-input>
         </el-form-item>
         <el-form-item label="轮播图图片"
-          prop="imgUrl">
-          <el-input v-model="editAddForm.imgUrl"
+          prop="imageUrl">
+          <el-input v-model="editAddForm.imageUrl"
             placeholder="暂时输入图片名称"></el-input>
-          <!-- <single-upload v-model="editAddForm.imgUrl" /> -->
+          <!-- <single-upload v-model="editAddForm.imageUrl" /> -->
         </el-form-item>
         <el-form-item label="呈现位置"
-          prop="position">
+          prop="type">
           <el-select style="width:100%"
-            v-model="editAddForm.position"
+            v-model="editAddForm.type"
             placeholder="请选择呈现位置">
             <el-option value="DOCTOR"
               label="医生端"></el-option>
@@ -154,8 +157,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="跳转地址"
-          prop="zorder">
-          <el-input v-model="editAddForm.zorder"
+          prop="linkUrl">
+          <el-input v-model="editAddForm.linkUrl"
             placeholder="请输入跳转地址"></el-input>
         </el-form-item>
         <el-form-item label="权重"
@@ -163,10 +166,10 @@
           <el-input v-model="editAddForm.zorder"
             placeholder="请输入权重"></el-input>
         </el-form-item>
-        <el-form-item label="呈现位置"
-          prop="position">
+        <el-form-item label="状态"
+          prop="status">
           <el-select style="width:100%"
-            v-model="editAddForm.statusValue"
+            v-model="editAddForm.status"
             placeholder="请选择状态">
             <el-option value="UP"
               label="上架"></el-option>
@@ -186,7 +189,6 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { validatePhone } from "@/utils/index";
 import { list, add, edit, deleteE } from "@/api/operationsManagement/banner";
 import singleUpload from "@/components/UploadFile";
 export default {
@@ -197,23 +199,34 @@ export default {
   data() {
     return {
       FormRules: {
-        name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-        phone: [{ required: true, validator: validatePhone, trigger: "blur" }],
-        userType: [
-          { required: true, message: "请选择用户类型", trigger: "blur" },
+        title: [
+          { required: true, message: "请输入轮播图名称", trigger: "blur" },
+        ],
+        imageUrl: [
+          { required: true, message: "请上传轮播图图片", trigger: "blur" },
+        ],
+        type: [{ required: true, message: "请选择呈现位置", trigger: "blur" }],
+        linkUrl: [
+          { required: true, message: "请输入跳转地址", trigger: "blur" },
+        ],
+        zorder: [{ required: true, message: "请输入权重", trigger: "blur" }],
+        statusValue: [
+          { required: true, message: "请选择状态", trigger: "blur" },
         ],
       },
       searchForm: {
         name: "",
-        position: "",
+        type: "",
         status: "",
       },
       list: [],
       editAddForm: {
-        name: "",
-        imgUrl: "",
-        position: "",
-        statusValue: "",
+        title: "",
+        imageUrl: "",
+        linkUrl: "",
+        zorder: "",
+        type: "",
+        status: "",
       },
       tableHeaderBig: [
         { prop: "linkUrl", label: "跳转地址" },
@@ -260,14 +273,9 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      // 修改请求需要的参数
-      let valObj = {
-        phone: val.phone,
-        name: val.name,
-        userType: val.userType,
-      };
+      console.log(val);
       this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(valObj));
+      this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
     // 删除
@@ -293,6 +301,8 @@ export default {
         this.getList();
       });
     },
+    // 开关change事件
+    statusChange() {},
     // 弹框关闭
     getData() {},
     editDialogClosed() {
@@ -302,7 +312,7 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle == "新增") {
+          if (this.infoTitle === "新增") {
             // 发送请求
             add(this.editAddForm).then((res) => {
               if (res.code != "OK") {
