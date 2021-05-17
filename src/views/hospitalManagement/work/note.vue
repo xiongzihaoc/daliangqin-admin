@@ -18,10 +18,10 @@
           prop="job">
           <el-select v-model="searchForm.job"
             placeholder="请选择职位">
-            <el-option value="DOCTOR"
-              label="主任"></el-option>
-            <el-option value="PATIENT"
-              label="医师"></el-option>
+            <el-option value="FAMILY_DOCTOR"
+              label="家医"></el-option>
+            <el-option value="HOSPITAL_DOCTOR"
+              label="院医"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="发布时间"
@@ -29,7 +29,6 @@
           prop="status">
           <el-date-picker v-model="searchForm.searchTime"
             type="datetimerange"
-            value-formate="timestamp"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期">
@@ -54,8 +53,23 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
+        type="index"
+        label="序号"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
         prop="userName"
         label="医生姓名"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="type"
+        label="职位">
+        <template slot-scope="scope">
+          <span v-if="scope.row.type === 'FAMILY_DOCTOR'">家医</span>
+          <span v-else>院医</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
@@ -64,27 +78,24 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        label="笔记图集"></el-table-column>
+        label="笔记图集">
+        <template slot-scope="scope">
+          <div v-if="scope.row.imageUrlList.length > 0">
+            <!-- <img v-for="(item,index) in scope.row.imageUrlList"
+              :key="index"
+              :src="item"
+              alt="" /> -->
+            <span style="margin:0 5px;"
+              v-for="(item,index) in scope.row.imageUrlList"
+              :key="index">{{item}}</span>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="发布时间"
         prop="createTime"></el-table-column>
-      <!-- 操作 -->
-      <!-- <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        label="操作"
-        width="220">
-        <template slot-scope="scope">
-          <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
-          <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button>
-        </template>
-      </el-table-column> -->
     </EleTable>
     <!-- 分页 -->
     <el-pagination background
@@ -96,87 +107,21 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
       class="el-pagination-style"></el-pagination>
-    <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
-      :visible.sync="editDialogVisible"
-      width="40%"
-      @open="getData"
-      @closed="editDialogClosed"
-      v-dialogDrag>
-      <el-form ref="FormRef"
-        :model="editAddForm"
-        label-width="100px">
-        <el-form-item label="轮播图名称"
-          prop="title">
-          <el-input v-model="editAddForm.title"
-            placeholder="请输入轮播图名称"></el-input>
-        </el-form-item>
-        <el-form-item label="轮播图图片"
-          prop="imageUrl">
-          <el-input v-model="editAddForm.imageUrl"
-            placeholder="暂时输入图片名称"></el-input>
-          <!-- <single-upload v-model="editAddForm.imageUrl" /> -->
-        </el-form-item>
-        <el-form-item label="呈现位置"
-          prop="type">
-          <el-select style="width:100%"
-            multiple
-            clearable
-            v-model="editAddForm.type"
-            placeholder="请选择呈现位置">
-            <el-option value="DOCTOR"
-              label="医生端"></el-option>
-            <el-option value="PATIENT"
-              label="用户端"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="跳转地址"
-          prop="linkUrl">
-          <el-input v-model.trim="editAddForm.linkUrl"
-            placeholder="请输入跳转地址"></el-input>
-        </el-form-item>
-        <el-form-item label="权重"
-          prop="zorder">
-          <el-input v-model.trim="editAddForm.zorder"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入权重"></el-input>
-        </el-form-item>
-        <el-form-item label="状态"
-          prop="status">
-          <el-select style="width:100%"
-            v-model="editAddForm.status"
-            placeholder="请选择状态">
-            <el-option value="UP"
-              label="上架"></el-option>
-            <el-option value="DOWN"
-              label="下架"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <span slot="footer"
-        class="dialog-footer">
-        <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
 import EleTable from "@/components/Table";
 import { list } from "@/api/hospitalManagement/note";
-import singleUpload from "@/components/UploadFile";
 export default {
   components: {
     EleTable,
-    singleUpload,
   },
   data() {
     return {
       searchForm: {
         name: "",
         job: "",
-        searchTime:"",
+        searchTime: "",
       },
       list: [],
       editAddForm: {
@@ -187,10 +132,7 @@ export default {
         type: "",
         status: "",
       },
-      tableHeaderBig: [
-        { prop: "linkUrl", label: "职位" },
-        { prop: "title", label: "笔记标题" },
-      ],
+      tableHeaderBig: [{ prop: "title", label: "笔记标题" }],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -209,7 +151,6 @@ export default {
       list({
         page: this.pageNum,
         pageSize: this.pageSize,
-        id: this.searchInput,
       }).then((res) => {
         console.log(res);
         this.list = res.data.elements;

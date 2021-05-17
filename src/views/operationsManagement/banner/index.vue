@@ -61,6 +61,10 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
+        type="selection"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
         prop="title"
         label="轮播图名称"></el-table-column>
       <el-table-column align="center"
