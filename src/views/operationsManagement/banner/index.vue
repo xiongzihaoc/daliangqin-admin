@@ -9,7 +9,7 @@
         <el-form-item label="轮播图名称"
           align="left"
           prop="title">
-          <el-input v-model="searchForm.name"
+          <el-input v-model="searchForm.title"
             size="small"
             placeholder="请输入轮播图名称"></el-input>
         </el-form-item>
@@ -287,6 +287,7 @@ export default {
     // 重置
     searchReset() {
       this.searchForm = {};
+      this.getList()
     },
     /***** CRUD *****/
     // 新增

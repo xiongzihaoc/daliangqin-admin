@@ -57,11 +57,8 @@ export default {
       list: [],
       tableHeaderBig: [
         { prop: "phone", label: "手机号" },
-        { prop: "type", label: "发送类型" },
-        // { prop: "content", label: "内容" },
+        // { prop: "type", label: "发送类型" }, 
         { prop: "createTime", label: "发送时间" },
-        // { prop: "ua", label: "浏览器类型" },
-        // { prop: "ip", label: "访问ip" },
       ],
       // 分页数据
       pageSize: 10,
