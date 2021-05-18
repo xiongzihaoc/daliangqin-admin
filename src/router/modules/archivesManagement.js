@@ -41,7 +41,8 @@ const archivesRouter = {
         component: () => import('@/views/archivesManagement/address'),
         meta: {
             title: '收货地址',
-      }  
+            icon: "address"
+        }
     }
     ],
 }
