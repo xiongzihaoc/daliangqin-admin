@@ -2,85 +2,145 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form ref="searchFormRef"
+      <el-form
+        ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        label-width="100px">
-        <el-form-item label="医院名称"
-          align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+        label-width="100px"
+      >
+        <el-form-item label="用户姓名" prop="fromUserName">
+          <el-input
+            v-model="searchForm.fromUserName"
             size="small"
-            placeholder="请输入医院名称"></el-input>
+            placeholder="请输入用户姓名"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医院等级"
-          size="small"
-          prop="type">
-          <el-select v-model="searchForm.type"
-            placeholder="请选择医院等级">
-            <el-option value="DOCTOR"
-              label="医生端"></el-option>
-            <el-option value="PATIENT"
-              label="用户端"></el-option>
-          </el-select>
+        <el-form-item label="留言时间" size="small" prop="leaveMessageTime">
+          <el-date-picker
+            v-model="leaveMessageTime"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="医生姓名" prop="toUserName">
+          <el-input
+            v-model="searchForm.toUserName"
+            size="small"
+            placeholder="请输入医生姓名"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="回复时间" size="small" prop="leaveMessageTime">
+          <el-date-picker
+            v-model="leaveMessageTime"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right"
+          >
+          </el-date-picker>
         </el-form-item>
         <el-form-item label-width="30px">
-          <el-button @click="searchBtn"
+          <el-button
+            @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search">搜索</el-button>
-          <el-button @click="searchReset"
+            icon="el-icon-search"
+            >搜索</el-button
+          >
+          <el-button
+            @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh">重置</el-button>
+            icon="el-icon-refresh"
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
-    <!-- 表格上方CRUD按钮 -->
-    <div>
-      <el-button @click="add"
-        type="primary"
-        class="tableAdd"
-        size="small"
-        plain
-        icon="el-icon-plus">新增</el-button>
-      <!-- <el-button @click="deleteMultiple"
-      type="danger"
-      class="tableAdd"
-      size="small"
-      plain
-      icon="el-icon-delete">删除</el-button> -->
-    </div>
     <!-- 表格区域 -->
-    <EleTable :data="list"
-      :header="tableHeaderBig">
+    <EleTable :data="list" :header="tableHeaderBig">
       <!-- 需要formatter的列 -->
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
-        type="selection"></el-table-column>
-      <el-table-column align="center"
+        type="selection"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
         type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
+        label="序号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
-        prop="hospitalClass"
-        :formatter="hosLevelFormatter"
-        label="医院等级">
+        prop="fromUserName"
+        label="用户姓名"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        slot="fixed"
+        fixed="right"
+        prop="fromUserName"
+        label="用户留言数"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        slot="fixed"
+        fixed="right"
+        prop="fromUserName"
+        label="最近留言时间"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        slot="fixed"
+        fixed="right"
+        prop="fromUserName"
+        label="医生姓名"
+      >
+      </el-table-column>
+      <el-table-column
+        align="center"
+        slot="fixed"
+        fixed="right"
+        prop="fromUserName"
+        label="医生回复数"
+      >
+      </el-table-column
+      >、
+      <el-table-column
+        align="center"
+        slot="fixed"
+        fixed="right"
+        prop="fromUserName"
+        label="最近回复时间"
+      >
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220">
+        width="220"
+      >
         <template slot-scope="scope">
-          <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
+          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
+            >编辑</el-button
+          >
           <!-- <el-button size="mini"
             type="danger"
             @click="deleteBtn(scope.row.id)">删除</el-button> -->
@@ -88,7 +148,8 @@
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination background
+    <el-pagination
+      background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -96,60 +157,68 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"></el-pagination>
+      class="el-pagination-style"
+    ></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
+    <el-dialog
+      :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @open="getData"
       @closed="editDialogClosed"
-      v-dialogDrag>
-      <el-form ref="FormRef"
+      v-dialogDrag
+    >
+      <el-form
+        ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="110px">
-        <el-form-item label="医院名称"
-          prop="name">
-          <el-input v-model="editAddForm.name"
-            placeholder="请输入医院名称"></el-input>
+        label-width="110px"
+      >
+        <el-form-item label="医院名称" prop="name">
+          <el-input
+            v-model="editAddForm.name"
+            placeholder="请输入医院名称"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医院电话"
-          prop="contract">
-          <el-input v-model="editAddForm.contract"
+        <el-form-item label="医院电话" prop="contract">
+          <el-input
+            v-model="editAddForm.contract"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入医院电话"></el-input>
+            placeholder="请输入医院电话"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医院地址"
-          prop="address">
-          <el-input v-model="editAddForm.address"
-            placeholder="请输入医院地址"></el-input>
+        <el-form-item label="医院地址" prop="address">
+          <el-input
+            v-model="editAddForm.address"
+            placeholder="请输入医院地址"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医院等级"
-          prop="hospitalClass">
-          <el-select v-model="editAddForm.hospitalClass"
+        <el-form-item label="医院等级" prop="hospitalClass">
+          <el-select
+            v-model="editAddForm.hospitalClass"
             placeholder="请选择医院等级"
-            style="width:100%">
-            <el-option v-for="item in hospitalClass"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in hospitalClass"
               :key="item.id"
               :value="item.value"
-              :label="item.label"></el-option>
+              :label="item.label"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="管理员手机号"
-          prop="adminPhone">
-          <el-input v-if="this.infoTitle ==='新增'"
+        <el-form-item label="管理员手机号" prop="adminPhone">
+          <el-input
+            v-if="this.infoTitle === '新增'"
             v-model="editAddForm.adminPhone"
-            placeholder="请输入管理员手机号"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.adminPhone"></el-input>
+            placeholder="请输入管理员手机号"
+          ></el-input>
+          <el-input v-else disabled v-model="editAddForm.adminPhone"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer"
-        class="dialog-footer">
+      <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
+        <el-button type="primary" @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -169,45 +238,23 @@ export default {
         adminPhone: [
           { required: true, trigger: "blur", validator: validatePhone },
         ],
-        name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
-        contract: [
-          { required: true, message: "请输入医院电话", trigger: "blur" },
-        ],
-        address: [
-          { required: true, message: "请输入医院地址", trigger: "blur" },
-        ],
-        hospitalClass: [
-          { required: true, message: "请选择医院等级", trigger: "blur" },
-        ],
       },
       // 搜索表单
       searchForm: {
-        name: "",
-        type: "",
+        fromUserName: "",
+        toUserName: "",
+        leaveMessageTime: "",
       },
       // 列表数据
       list: [],
       // 增改表单
       editAddForm: {
-        name: "",
+        fromUserName: "",
         contract: "",
         address: "",
-        hospitalClass: "",
       },
-      // 医院级别列表
-      hospitalClass: [
-        { id: 1, label: "三甲", value: "CLASS_1_A" },
-        { id: 2, label: "三乙", value: "CLASS_1_B" },
-        { id: 3, label: "二甲", value: "CLASS_2_A" },
-        { id: 4, label: "二乙", value: "CLASS_2_B" },
-        { id: 5, label: "一级", value: "CLASS_3_A" },
-      ],
       // 表格数据
-      tableHeaderBig: [
-        { prop: "name", label: "医院名称" },
-        { prop: "contract", label: "医院电话" },
-        { prop: "address", label: "医院地址" },
-      ],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
