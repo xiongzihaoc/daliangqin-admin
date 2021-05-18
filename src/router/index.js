@@ -24,30 +24,11 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 // 引入分组路由
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/master
->>>>>>> origin/master
 import operationsRouter from './modules/operationsManagement'
 import hospitalRouter from './modules/hospitalManagement'
 import archivesRouter from './modules/archivesManagement'
 import systemRouter from './modules/systemManagement'
-
-
-<<<<<<< HEAD
-=======
-
-<<<<<<< HEAD
-=======
-=======
 import appVersionRouter from './modules/appVersion.js'
->>>>>>> origin/master
-
->>>>>>> origin/master
->>>>>>> origin/master
 export const constantRoutes = [
   {
     path: '/login',
@@ -75,13 +56,6 @@ export const constantRoutes = [
     }]
   },
   // 引用分组路由
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> origin/master
->>>>>>> origin/master
   operationsRouter,
   hospitalRouter,
   archivesRouter,
@@ -177,12 +151,6 @@ export const constantRoutes = [
   //     }
   //   }]
   // },
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
->>>>>>> origin/master
   appVersionRouter,
   {
     path: '/docupload',
@@ -275,11 +243,6 @@ export const constantRoutes = [
       }
     }]
   },
-<<<<<<< HEAD
-=======
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
   // 404页面必须在最后 !!!
   {
     path: '*',

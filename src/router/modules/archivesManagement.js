@@ -36,22 +36,13 @@ const archivesRouter = {
         }
     },
     {
-<<<<<<< HEAD
         path: 'archivesAddress',
         name: 'archivesAddress',
         component: () => import('@/views/archivesManagement/address'),
         meta: {
             title: '收货地址',
-=======
-        path: 'address',
-        name: 'record',
-        component: () => import('@/views/archivesManagement/address'),
-        meta: {
-            title: '收获地址',
->>>>>>> origin/master
-            icon: 'address'
-        }
-    },
-    ]
+      }  
+    }
+    ],
 }
 export default archivesRouter
