@@ -172,11 +172,9 @@
                 <el-option value="PATIENT"
                   label="用户端"></el-option>
               </el-select>
-
         </el-form-item> -->
         <el-form-item label="跳转地址"
           prop="linkUrl">
-
           <el-input v-model.trim="editAddForm.linkUrl"
             placeholder="请输入跳转地址"></el-input>
         </el-form-item>
@@ -367,12 +365,10 @@ export default {
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      console.log(newSize);
       this.pageSize = newSize;
       this.getList();
     },
     handleCurrentChange(newPage) {
-      console.log(newPage);
       this.pageNum = newPage;
       this.getList();
     },
