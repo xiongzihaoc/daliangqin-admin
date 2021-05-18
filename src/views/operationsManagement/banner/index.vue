@@ -8,7 +8,7 @@
         label-width="100px">
         <el-form-item label="轮播图名称"
           align="left"
-          prop="name">
+          prop="title">
           <el-input v-model="searchForm.name"
             size="small"
             placeholder="请输入轮播图名称"></el-input>
@@ -28,7 +28,7 @@
           size="small"
           prop="status">
           <el-select style="width:100%"
-            v-model="editAddForm.status"
+            v-model="searchForm.status"
             placeholder="请选择状态">
             <el-option value="UP"
               label="上架"></el-option>
@@ -65,6 +65,11 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
+        type="index"
+        label="序号"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
         prop="title"
         label="轮播图名称"></el-table-column>
       <el-table-column align="center"
@@ -84,8 +89,8 @@
         <template slot-scope="scope">
           <span v-for="(item,index) in scope.row.positionList"
             :key="index">
-            <span v-if="item.position === 'PATIENT'">用户端 </span>
-            <span v-else>患者端</span>
+            <span v-if="item === 'PATIENT'">用户端 </span>
+            <span v-else>医生端 </span>
           </span>
         </template>
       </el-table-column>
@@ -143,36 +148,26 @@
         label-width="100px">
         <el-form-item label="轮播图名称"
           prop="title">
-          <el-input v-model="editAddForm.title"
+          <el-input v-model.trim="editAddForm.title"
             placeholder="请输入轮播图名称"></el-input>
         </el-form-item>
         <el-form-item label="轮播图图片"
           prop="imageUrl">
-          <el-input v-model="editAddForm.imageUrl"
+          <el-input v-model.trim="editAddForm.imageUrl"
             placeholder="暂时输入图片名称"></el-input>
-          <!-- <single-upload v-model="editAddForm.imageUrl" /> -->
         </el-form-item>
-        <!-- <el-form-item label="呈现位置"
-          prop="typeList">
+        <el-form-item label="呈现位置"
+          prop="positionList">
           <el-select style="width:100%"
             multiple
-            clearable
-            v-model="editAddForm.typeList"
-            HEAD
-            prop="typeList">
-            <el-select style="width:100%"
-              multiple
-              clearable
-              v-model="editAddForm.typeList">
-              <el-select style="width:100%"
-                v-model="editAddForm.type"
-                placeholder="请选择呈现位置">
-                <el-option value="DOCTOR"
-                  label="医生端"></el-option>
-                <el-option value="PATIENT"
-                  label="用户端"></el-option>
-              </el-select>
-        </el-form-item> -->
+            v-model="editAddForm.positionList"
+            placeholder="请选择呈现位置">
+            <el-option value="DOCTOR"
+              label="医生端"></el-option>
+            <el-option value="PATIENT"
+              label="用户端"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="跳转地址"
           prop="linkUrl">
           <el-input v-model.trim="editAddForm.linkUrl"
@@ -207,7 +202,12 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, add, edit, deleteE } from "@/api/operationsManagement/banner";
+import {
+  list,
+  add,
+  edit,
+  deleteElement,
+} from "@/api/operationsManagement/banner";
 import singleUpload from "@/components/UploadFile";
 export default {
   components: {
@@ -224,7 +224,7 @@ export default {
           { required: true, message: "请上传轮播图图片", trigger: "blur" },
         ],
 
-        typeList: [
+        positionList: [
           { required: true, message: "请选择呈现位置", trigger: "blur" },
         ],
         linkUrl: [
@@ -235,7 +235,7 @@ export default {
         status: [{ required: true, message: "请选择状态", trigger: "blur" }],
       },
       searchForm: {
-        name: "",
+        title: "",
         type: "",
         status: "",
       },
@@ -270,7 +270,9 @@ export default {
       list({
         page: this.pageNum,
         pageSize: this.pageSize,
-        id: this.searchInput,
+        title: this.searchForm.title,
+        type: this.searchForm.type,
+        status: this.searchForm.status,
       }).then((res) => {
         console.log(res);
         this.list = res.data.elements;
@@ -279,7 +281,9 @@ export default {
     },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {},
+    searchBtn() {
+      this.getList();
+    },
     // 重置
     searchReset() {
       this.searchForm = {};
@@ -313,7 +317,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      deleteE(id).then((res) => {
+      deleteElement(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
