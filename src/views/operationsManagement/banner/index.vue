@@ -61,13 +61,10 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-<<<<<<< HEAD
         type="selection"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-=======
->>>>>>> origin/master
         prop="title"
         label="轮播图名称"></el-table-column>
       <el-table-column align="center"
@@ -82,7 +79,6 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-<<<<<<< HEAD
         prop="positionList"
         label="呈现位置">
         <template slot-scope="scope">
@@ -92,13 +88,6 @@
             <span v-else>患者端</span>
 
           </span>
-=======
-        prop="type"
-        label="呈现位置">
-        <template slot-scope="scope">
-          <span v-if="scope.row.type === 'DOCTOR'">医生端</span>
-          <span v-else>用户端</span>
->>>>>>> origin/master
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -165,17 +154,11 @@
           <!-- <single-upload v-model="editAddForm.imageUrl" /> -->
         </el-form-item>
         <el-form-item label="呈现位置"
-<<<<<<< HEAD
           prop="typeList">
           <el-select style="width:100%"
             multiple
             clearable
             v-model="editAddForm.typeList"
-=======
-          prop="type">
-          <el-select style="width:100%"
-            v-model="editAddForm.type"
->>>>>>> origin/master
             placeholder="请选择呈现位置">
             <el-option value="DOCTOR"
               label="医生端"></el-option>
@@ -185,21 +168,13 @@
         </el-form-item>
         <el-form-item label="跳转地址"
           prop="linkUrl">
-<<<<<<< HEAD
           <el-input v-model.trim="editAddForm.linkUrl"
-=======
-          <el-input v-model="editAddForm.linkUrl"
->>>>>>> origin/master
             placeholder="请输入跳转地址"></el-input>
         </el-form-item>
         <el-form-item label="权重"
           prop="zorder">
-<<<<<<< HEAD
           <el-input v-model.trim="editAddForm.zorder"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-=======
-          <el-input v-model="editAddForm.zorder"
->>>>>>> origin/master
             placeholder="请输入权重"></el-input>
         </el-form-item>
         <el-form-item label="状态"
@@ -241,24 +216,14 @@ export default {
         imageUrl: [
           { required: true, message: "请上传轮播图图片", trigger: "blur" },
         ],
-<<<<<<< HEAD
         typeList: [
           { required: true, message: "请选择呈现位置", trigger: "blur" },
         ],
-=======
-        type: [{ required: true, message: "请选择呈现位置", trigger: "blur" }],
->>>>>>> origin/master
         linkUrl: [
           { required: true, message: "请输入跳转地址", trigger: "blur" },
         ],
         zorder: [{ required: true, message: "请输入权重", trigger: "blur" }],
-<<<<<<< HEAD
         status: [{ required: true, message: "请选择状态", trigger: "blur" }],
-=======
-        status: [
-          { required: true, message: "请选择状态", trigger: "blur" },
-        ],
->>>>>>> origin/master
       },
       searchForm: {
         name: "",
@@ -271,11 +236,7 @@ export default {
         imageUrl: "",
         linkUrl: "",
         zorder: "",
-<<<<<<< HEAD
         typeList: [],
-=======
-        type: "",
->>>>>>> origin/master
         status: "",
       },
       tableHeaderBig: [
@@ -352,13 +313,7 @@ export default {
       });
     },
     // 开关change事件
-<<<<<<< HEAD
     statusChange(val) {},
-=======
-    statusChange(val) {
-      
-    },
->>>>>>> origin/master
     // 弹框关闭
     getData() {},
     editDialogClosed() {

@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
@@ -32,7 +31,7 @@
           align="left"
           prop="name">
           <el-select v-model="searchForm.name" size="small">
-            <el-option label="家医"></el-option>
+            <el-option label="家医" val></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="手机号"
@@ -352,17 +351,3 @@ export default {
 
 <style>
 </style>
-=======
-  <h1>医生管理</h1>
-</template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style>
-
-</style>
->>>>>>> origin/master

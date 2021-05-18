@@ -24,21 +24,12 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 // 引入分组路由
-<<<<<<< HEAD
-
-=======
->>>>>>> f5637a3a009f82900779754f9f76d0d07f005ee3
 import operationsRouter from './modules/operationsManagement'
 import hospitalRouter from './modules/hospitalManagement'
 import archivesRouter from './modules/archivesManagement'
 import systemRouter from './modules/systemManagement'
 
 
-<<<<<<< HEAD
-=======
-
-import appVersionRouter from './modules/appVersion.js'
->>>>>>> f5637a3a009f82900779754f9f76d0d07f005ee3
 
 export const constantRoutes = [
   {
@@ -162,10 +153,6 @@ export const constantRoutes = [
   //     }
   //   }]
   // },
-<<<<<<< HEAD
-
-=======
->>>>>>> f5637a3a009f82900779754f9f76d0d07f005ee3
   appVersionRouter,
   {
     path: '/docupload',
