@@ -1,4 +1,8 @@
 <template>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/master
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
@@ -31,7 +35,11 @@
           align="left"
           prop="name">
           <el-select v-model="searchForm.name" size="small">
+<<<<<<< HEAD
             <el-option label="家医" val></el-option>
+=======
+            <el-option label="家医"></el-option>
+>>>>>>> origin/master
           </el-select>
         </el-form-item>
         <el-form-item label="手机号"
@@ -157,6 +165,8 @@
       </span>
     </el-dialog>
   </div>
+<<<<<<< HEAD
+=======
 </template>
 <script>
 import EleTable from "@/components/Table";
@@ -351,3 +361,206 @@ export default {
 
 <style>
 </style>
+=======
+  <h1>医生管理</h1>
+>>>>>>> origin/master
+</template>
+<script>
+import EleTable from "@/components/Table";
+import { list, add, edit, deleteE } from "@/api/hospitalManagement/hospital";
+export default {
+  components: {
+    EleTable,
+  },
+  data() {
+    return {
+      FormRules: {
+        name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
+        contract: [
+          { required: true, message: "请输入医院电话", trigger: "blur" },
+        ],
+        address: [
+          { required: true, message: "请输入医院地址", trigger: "blur" },
+        ],
+        hospitalClass: [
+          { required: true, message: "请选择医院等级", trigger: "blur" },
+        ],
+      },
+      searchForm: {
+        name: "",
+        type: "",
+      },
+      list: [],
+      editAddForm: {
+        name: "",
+        contract: "",
+        address: "",
+        hospitalClass: "",
+      },
+      hospitalClass: [
+        { id: 1, label: "三甲", value: "CLASS_1_A" },
+        { id: 2, label: "三乙", value: "CLASS_1_B" },
+        { id: 3, label: "二甲", value: "CLASS_2_A" },
+        { id: 4, label: "二乙", value: "CLASS_2_B" },
+        { id: 5, label: "一级", value: "CLASS_3_A" },
+      ],
+      tableHeaderBig: [
+        { prop: "name", label: "医院名称" },
+        { prop: "contract", label: "医院电话" },
+        { prop: "address", label: "医院地址" },
+      ],
+      // 分页区域
+      pageSize: 10,
+      pageNum: 1,
+      total: 0,
+      //   弹框区域
+      editDialogVisible: false,
+      infoTitle: "",
+    };
+  },
+  created() {},
+  mounted() {
+    this.getList();
+  },
+  methods: {
+    getList() {
+      list({
+        page: this.pageNum,
+        pageSize: this.pageSize,
+        id: this.searchInput,
+      }).then((res) => {
+        console.log(res);
+        this.list = res.data.elements;
+        this.total = res.data.totalSize;
+      });
+    },
+    /***** 搜索区域 *****/
+    // 搜索
+    searchBtn() {},
+    // 重置
+    searchReset() {
+      this.searchForm = {};
+    },
+    /***** CRUD *****/
+    // 新增
+    add() {
+      this.infoTitle = "新增";
+      this.editAddForm = {};
+      this.editDialogVisible = true;
+    },
+    // 编辑
+    editBtn(val) {
+      console.log(val);
+      this.infoTitle = "编辑";
+      this.editAddForm = JSON.parse(JSON.stringify(val));
+      this.editDialogVisible = true;
+    },
+    // 删除多个
+    deleteMultiple() {},
+    // 删除单个
+    async deleteBtn(id) {
+      const confirmResult = await this.$confirm(
+        "你确定要执行此操作, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => console.log(err));
+      if (confirmResult != "confirm") {
+        return this.$message.info("取消删除");
+      }
+      // 发送请求
+      deleteE(id).then((res) => {
+        console.log(res);
+        this.$notify.success({
+          title: "删除成功",
+        });
+        this.getList();
+      });
+    },
+    // 弹框关闭
+    getData() {},
+    editDialogClosed() {
+      this.$refs.FormRef.resetFields();
+    },
+    // 新增编辑确定
+    editPageEnter() {
+      this.$refs.FormRef.validate((valid) => {
+        if (valid) {
+          if (this.infoTitle === "新增") {
+            // 发送请求
+            add(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "新增成功",
+                });
+                this.getList();
+              }
+            });
+          } else {
+            // 发送请求
+            edit(this.editAddForm).then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "编辑成功",
+                });
+                this.getList();
+              }
+            });
+          }
+          this.editDialogVisible = false;
+        }
+      });
+    },
+    // Formatter表格数据
+    hosLevelFormatter(coloumn) {
+      switch (coloumn.hospitalClass) {
+        case "CLASS_1_A":
+          return "三甲";
+          break;
+        case "CLASS_1_B":
+          return "三乙";
+          break;
+        case "CLASS_2_A":
+          return "二甲";
+          break;
+        case "CLASS_2_B":
+          return "二乙";
+          break;
+        case "CLASS_3_A":
+          return "一甲";
+          break;
+        case "CLASS_3_B":
+          return "一乙";
+          break;
+      }
+    },
+    /***** 分页 *****/
+    handleSizeChange(newSize) {
+      console.log(newSize);
+      this.pageSize = newSize;
+      this.getList();
+    },
+    handleCurrentChange(newPage) {
+      console.log(newPage);
+      this.pageNum = newPage;
+      this.getList();
+    },
+  },
+};
+</script>
+
+<style>
+<<<<<<< HEAD
+</style>
+=======
+
+</style>
+>>>>>>> origin/master
+>>>>>>> origin/master
