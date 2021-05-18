@@ -108,15 +108,6 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="110px">
-        <el-form-item label="管理员手机号"
-          prop="adminPhone">
-          <el-input v-if="this.infoTitle ==='新增'"
-            v-model="editAddForm.adminPhone"
-            placeholder="请输入管理员手机号"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.adminPhone"></el-input>
-        </el-form-item>
         <el-form-item label="医院名称"
           prop="name">
           <el-input v-model="editAddForm.name"
@@ -143,6 +134,15 @@
               :value="item.value"
               :label="item.label"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="管理员手机号"
+          prop="adminPhone">
+          <el-input v-if="this.infoTitle ==='新增'"
+            v-model="editAddForm.adminPhone"
+            placeholder="请输入管理员手机号"></el-input>
+          <el-input v-else
+            disabled
+            v-model="editAddForm.adminPhone"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -279,7 +279,7 @@ export default {
         this.getList();
       });
     },
-    // 弹框关闭
+    // 弹框开启
     getData() {},
     editDialogClosed() {
       this.$refs.FormRef.resetFields();

@@ -30,16 +30,17 @@
         <el-form-item label="性别"
           align="left"
           prop="name">
-          <el-select v-model="searchForm.name" size="small">
-            <el-option label="家医"></el-option>
+          <el-select v-model="searchForm.name"
+            size="small">
+            <!-- <el-option label="家医"></el-option> -->
           </el-select>
         </el-form-item>
-        <el-form-item label="手机号"
+        <el-form-item label="职位"
           align="left"
           prop="name">
           <el-input v-model="searchForm.name"
             size="small"
-            placeholder="请输入手机号"></el-input>
+            placeholder="请选择职位"></el-input>
         </el-form-item>
         <el-form-item label-width="30px">
           <el-button @click="searchBtn"
@@ -50,21 +51,27 @@
             size="small"
             plain
             icon="el-icon-refresh">重置</el-button>
+          <el-button size="small"
+            type="success"
+            icon="el-icon-download">导入</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <el-button @click="add"
-      type="primary"
-      class="tableAdd"
-      size="small"
-      plain
-      icon="el-icon-plus">新增</el-button>
-    <!-- <el-button @click="deleteMultiple"
-      type="danger"
-      class="tableAdd"
-      size="small"
-      plain
-      icon="el-icon-delete">删除</el-button> -->
+    <!-- 表格操作按钮 -->
+    <div>
+      <el-button @click="add"
+        type="primary"
+        class="tableAdd"
+        size="small"
+        plain
+        icon="el-icon-plus">新增</el-button>
+      <el-button @click="deleteMultiple"
+        type="danger"
+        class="tableAdd"
+        size="small"
+        plain
+        icon="el-icon-delete">删除</el-button>
+    </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
@@ -80,10 +87,63 @@
         label="序号"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
-        fixed="right"
-        prop="hospitalClass"
-        :formatter="hosLevelFormatter"
-        label="医院等级">
+        fixed="left"
+        prop="name"
+        label="姓名">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="avatarUrl"
+        label="头像">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="phone"
+        label="手机号">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="idCard"
+        label="身份证号">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="birthday"
+        label="出生日期">
+        <template slot-scope="scope">
+          {{scope.row.birthday.slice(0,10)}}
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="age"
+        label="年龄">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="gender"
+        label="性别">
+        <template slot-scope="scope">
+          <span v-if="scope.row.gender === 'MALE'">男</span>
+          <span v-else>女</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="type"
+        label="职位">
+        <!-- PROFESSIONAL_DOCTOR -->
+        <template slot-scope="scope">
+          <span v-if="scope.row.type === 'HOSPITAL_DOCTOR'">专家</span>
+          <span v-else>家医</span>
+        </template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
@@ -122,30 +182,57 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
-        <el-form-item label="医院名称"
+        <el-form-item label="医生姓名"
           prop="name">
           <el-input v-model="editAddForm.name"
-            placeholder="请输入医院名称"></el-input>
+            placeholder="请输入医生真实姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医院电话"
-          prop="contract">
-          <el-input v-model="editAddForm.contract"
-            placeholder="请输入医院电话"></el-input>
+        <el-form-item label="医生头像"
+          prop="avatarUrl">
+          <el-input v-model="editAddForm.avatarUrl"
+            placeholder="请上传医生头像"></el-input>
         </el-form-item>
-        <el-form-item label="医院地址"
-          prop="address">
-          <el-input v-model="editAddForm.address"
-            placeholder="请输入医院地址"></el-input>
+        <el-form-item label="手机号"
+          prop="phone">
+          <el-input v-model="editAddForm.phone"
+            placeholder="请输入该医生手机号"></el-input>
         </el-form-item>
-        <el-form-item label="医院等级"
-          prop="hospitalClass">
-          <el-select v-model="editAddForm.hospitalClass"
-            placeholder="请选择医院等级"
+        <el-form-item label="身份证号"
+          prop="idCard">
+          <el-input v-model="editAddForm.idCard"
+            placeholder="请输入该医生身份证号"></el-input>
+        </el-form-item>
+        <el-form-item label="职位"
+          prop="type">
+          <el-select v-model="editAddForm.type"
+            placeholder="请选择职位"
             style="width:100%">
-            <el-option v-for="item in hospitalClass"
+            <el-option label="家医"
+              value="FAMILY_DOCTOR"></el-option>
+            <el-option label="专家"
+              value="HOSPITAL_DOCTOR"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="医院名称"
+          prop="hospitalName">
+          <el-select v-model="editAddForm.hospitalName"
+            placeholder="请选择医院"
+            style="width:100%">
+            <el-option v-for="item in hospitalList"
               :key="item.id"
-              :value="item.value"
-              :label="item.label"></el-option>
+              :value="item.id"
+              :label="item.name"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="转诊医生"
+          prop="toDoctor">
+          <el-select v-model="editAddForm.toDoctor"
+            placeholder="请选择转诊医生"
+            style="width:100%">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -160,7 +247,8 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, add, edit, deleteE } from "@/api/hospitalManagement/hospital";
+import { list, hospitalList } from "@/api/hospitalManagement/doctor";
+import { validateIdCard, validatePhone } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -168,15 +256,20 @@ export default {
   data() {
     return {
       FormRules: {
-        name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
-        contract: [
-          { required: true, message: "请输入医院电话", trigger: "blur" },
+        name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
+        avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
+        phone: [
+          { required: true, trigger: "blur", validator: validatePhone },
         ],
-        address: [
-          { required: true, message: "请输入医院地址", trigger: "blur" },
+        idCard: [
+          { required: true, trigger: "blur", validator: validateIdCard },
         ],
-        hospitalClass: [
-          { required: true, message: "请选择医院等级", trigger: "blur" },
+        type: [{ required: true, message: "请选择职位", trigger: "blur" }],
+        hospitalName: [
+          { required: true, message: "请选择医院", trigger: "blur" },
+        ],
+        toDoctor: [
+          { required: true, message: "请选择转诊医生  ", trigger: "blur" },
         ],
       },
       searchForm: {
@@ -186,22 +279,14 @@ export default {
       list: [],
       editAddForm: {
         name: "",
-        contract: "",
-        address: "",
-        hospitalClass: "",
+        avatarUrl: "",
+        phone: "",
+        idCard: "",
+        hospitalName: "",
+        type: "",
       },
-      hospitalClass: [
-        { id: 1, label: "三甲", value: "CLASS_1_A" },
-        { id: 2, label: "三乙", value: "CLASS_1_B" },
-        { id: 3, label: "二甲", value: "CLASS_2_A" },
-        { id: 4, label: "二乙", value: "CLASS_2_B" },
-        { id: 5, label: "一级", value: "CLASS_3_A" },
-      ],
-      tableHeaderBig: [
-        { prop: "name", label: "医院名称" },
-        { prop: "contract", label: "医院电话" },
-        { prop: "address", label: "医院地址" },
-      ],
+      hospitalList: [],
+      tableHeaderBig: [{ prop: "toDoctor", label: "对应转诊医生" }],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -220,7 +305,6 @@ export default {
       list({
         page: this.pageNum,
         pageSize: this.pageSize,
-        id: this.searchInput,
       }).then((res) => {
         console.log(res);
         this.list = res.data.elements;
@@ -273,8 +357,12 @@ export default {
         this.getList();
       });
     },
-    // 弹框关闭
-    getData() {},
+    // 弹框开启
+    getData() {
+      hospitalList({ pageSize: 20, pageNum: 1 }).then((res) => {
+        this.hospitalList = res.data.elements;
+      });
+    },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
@@ -310,29 +398,6 @@ export default {
           this.editDialogVisible = false;
         }
       });
-    },
-    // Formatter表格数据
-    hosLevelFormatter(coloumn) {
-      switch (coloumn.hospitalClass) {
-        case "CLASS_1_A":
-          return "三甲";
-          break;
-        case "CLASS_1_B":
-          return "三乙";
-          break;
-        case "CLASS_2_A":
-          return "二甲";
-          break;
-        case "CLASS_2_B":
-          return "二乙";
-          break;
-        case "CLASS_3_A":
-          return "一甲";
-          break;
-        case "CLASS_3_B":
-          return "一乙";
-          break;
-      }
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
