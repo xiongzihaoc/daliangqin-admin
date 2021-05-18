@@ -15,22 +15,13 @@
         size="small"
         plain
         icon="el-icon-refresh">重置</el-button>
+      <el-button size="mini"
+        type="warning"
+        @click="resetBtn">短信重置</el-button>
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 操作 -->
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        label="操作"
-        width="220">
-        <template slot-scope="scope">
-          <el-button size="mini"
-            type="warning"
-            @click="resetBtn(scope.row.phone)">重置</el-button>
-        </template>
-      </el-table-column>
     </EleTable>
     <!-- 分页 -->
     <el-pagination @size-change="handleSizeChange"
@@ -41,11 +32,34 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
       class="el-pagination-style"></el-pagination>
+    <!-- 增改页面 -->
+    <el-dialog title="短信重置"
+      :visible.sync="editDialogVisible"
+      width="40%"
+      @closed="editDialogClosed"
+      v-dialogDrag>
+      <el-form ref="FormRef"
+        :rules="FormRules"
+        :model="editAddForm"
+        label-width="100px">
+        <el-form-item prop="phone"
+          label="手机号">
+          <el-input v-model="editAddForm.phone"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer"
+        class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 import EleTable from "@/components/Table";
 import { list, reset } from "@/api/operationsManagement/message";
+import { validatePhone } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -53,13 +67,20 @@ export default {
   data() {
     return {
       searchInput: "",
+      editDialogVisible: false,
       // 列表数据
       list: [],
       tableHeaderBig: [
         { prop: "phone", label: "手机号" },
-        // { prop: "type", label: "发送类型" }, 
+        { prop: "type", label: "发送类型" },
         { prop: "createTime", label: "发送时间" },
       ],
+      FormRules: {
+        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
+      },
+      editAddForm: {
+        phone: "",
+      },
       // 分页数据
       pageSize: 10,
       pageNum: 1,
@@ -91,13 +112,24 @@ export default {
       this.getList();
     },
     // 短信重置
-    resetBtn(phone) {
-      reset({ phone: phone }).then((res) => {
-        console.log(res);
-        this.$notify.success({
-          title: "重置成功",
-        });
-        this.getList();
+    resetBtn() {
+      this.editDialogVisible = true;
+    },
+    editDialogClosed() {
+      this.$refs.FormRef.resetFields();
+    },
+    editPageEnter() {
+      this.$refs.FormRef.validate((valid) => {
+        if (valid) {
+          reset({ phone: this.editAddForm.phone }).then((res) => {
+            console.log(res);
+            this.$notify.success({
+              title: "重置成功",
+            });
+            this.getList();
+            this.editDialogVisible = false;
+          });
+        }
       });
     },
     // 分页

@@ -338,7 +338,7 @@ export default {
     // 新增编辑确定
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
-        if (valid) {
+        if (valid) {  
           if (this.infoTitle === "新增") {
             // 发送请求
             add(this.editAddForm).then((res) => {
