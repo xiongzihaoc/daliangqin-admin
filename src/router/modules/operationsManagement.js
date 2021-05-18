@@ -148,6 +148,16 @@ const operationsRouter = {
                 icon: 'reason'
             }
         },
+        // 取消原因
+        {
+            path: 'message',
+            name: 'message',
+            component: () => import('@/views/operationsManagement/message'),
+            meta: {
+                title: '短信管理',
+                icon: 'duanxin'
+            }
+        },
     ]
 }
 export default operationsRouter

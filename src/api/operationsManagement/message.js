@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function list(data) {
   return request({
-    url: 'sms/record',
+    url: 'sms',
     method: 'get',
     params: data
   })
@@ -10,7 +10,7 @@ export function list(data) {
 // 重置
 export function reset(data) {
   return request({
-    url: 'sms/record/reset',
+    url: 'sms/reset',
     method: 'get',
     params: data
   })
