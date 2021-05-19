@@ -8,7 +8,6 @@ export function list(data) {
     })
 }
 
-
 export function hospitalList(data) {
     return request({
         url: 'hospital',
