@@ -49,6 +49,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       meta: {
+        hidden: true,
         title: '首页',
         icon: 'dashboard',
         affix: true

@@ -139,10 +139,24 @@
         fixed="left"
         prop="type"
         label="职位">
-        <!-- PROFESSIONAL_DOCTOR -->
         <template slot-scope="scope">
-          <span v-if="scope.row.type === 'HOSPITAL_DOCTOR'">专家</span>
+          <span v-if="scope.row.type === 'PROFESSIONAL_DOCTOR'">专家</span>
           <span v-else>家医</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="hospitalName"
+        label="医院名称">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="type"
+        label="对应转诊医生">
+        <template slot-scope="scope">
+          <span>{{scope.row.name}}</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
@@ -258,9 +272,7 @@ export default {
       FormRules: {
         name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
         avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
-        phone: [
-          { required: true, trigger: "blur", validator: validatePhone },
-        ],
+        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
         idCard: [
           { required: true, trigger: "blur", validator: validateIdCard },
         ],
@@ -286,7 +298,7 @@ export default {
         type: "",
       },
       hospitalList: [],
-      tableHeaderBig: [{ prop: "toDoctor", label: "对应转诊医生" }],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,

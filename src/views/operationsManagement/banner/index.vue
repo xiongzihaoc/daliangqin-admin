@@ -242,6 +242,7 @@ export default {
       list: [],
       editAddForm: {
         title: "",
+        positionList:[],
         imageUrl: "",
         linkUrl: "",
         zorder: "",
