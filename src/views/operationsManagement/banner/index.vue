@@ -5,7 +5,7 @@
       <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        label-width="100px">
+        inline="true" >
         <el-form-item label="轮播图名称"
           align="left"
           prop="title">
@@ -208,11 +208,9 @@ import {
   edit,
   deleteElement,
 } from "@/api/operationsManagement/banner";
-import singleUpload from "@/components/UploadFile";
 export default {
   components: {
     EleTable,
-    singleUpload,
   },
   data() {
     return {

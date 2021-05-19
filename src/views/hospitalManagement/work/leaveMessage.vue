@@ -6,7 +6,7 @@
         ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        label-width="100px"
+        inline="true" 
       >
         <el-form-item label="用户姓名" prop="fromUserName">
           <el-input

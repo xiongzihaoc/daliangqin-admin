@@ -2,7 +2,7 @@ import {
   login,
   logout,
   getInfo
-} from '@/api/user'
+} from '@/api/login/user'
 import {
   getToken,
   setToken,

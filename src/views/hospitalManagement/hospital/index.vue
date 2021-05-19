@@ -5,7 +5,7 @@
       <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        label-width="100px">
+        inline="true">
         <el-form-item label="医院名称"
           align="left"
           prop="name">
