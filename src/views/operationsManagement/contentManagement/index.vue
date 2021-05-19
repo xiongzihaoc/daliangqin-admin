@@ -14,9 +14,9 @@
             placeholder="请输入标题"></el-input>
         </el-form-item>
         <el-form-item label="内容类型"
-          size="small"
           prop="contentType">
           <el-select v-model="searchForm.contentType"
+            size="small"
             placeholder="请选择内容类型">
             <el-option value="DOCTOR"
               label="医生端"></el-option>
@@ -25,10 +25,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="状态"
-          size="small"
           prop="status">
           <el-select style="width:100%"
             v-model="editAddForm.status"
+            size="small"
             placeholder="请选择状态">
             <el-option value="UP"
               label="上架"></el-option>
@@ -36,7 +36,7 @@
               label="下架"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label-width="30px">
+        <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
             size="small"

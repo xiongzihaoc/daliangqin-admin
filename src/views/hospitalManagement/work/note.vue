@@ -5,7 +5,7 @@
       <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        inline="true" >
+        inline="true">
         <el-form-item label="医生姓名"
           align="left"
           prop="name">
@@ -14,9 +14,9 @@
             placeholder="请输入医生姓名"></el-input>
         </el-form-item>
         <el-form-item label="职位"
-          size="small"
           prop="job">
           <el-select v-model="searchForm.job"
+            size="small"
             placeholder="请选择职位">
             <el-option value="FAMILY_DOCTOR"
               label="家医"></el-option>
@@ -25,16 +25,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="发布时间"
-          size="small"
           prop="status">
           <el-date-picker v-model="searchForm.searchTime"
+            size="small"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label-width="30px">
+        <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
             size="small"

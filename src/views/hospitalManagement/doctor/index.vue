@@ -4,7 +4,7 @@
     <div class="search-box">
       <el-form ref="searchFormRef"
         :model="searchForm"
-        inline="true" 
+        inline="true"
         class="searchForm">
         <el-form-item label="姓名"
           align="left"
@@ -42,7 +42,7 @@
             size="small"
             placeholder="请选择职位"></el-input>
         </el-form-item>
-        <el-form-item label-width="30px">
+        <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
             size="small"

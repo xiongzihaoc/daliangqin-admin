@@ -15,7 +15,7 @@
         size="small"
         plain
         icon="el-icon-refresh">重置</el-button>
-      <el-button size="mini"
+      <el-button size="small"
         type="warning"
         @click="resetBtn">短信重置</el-button>
     </div>

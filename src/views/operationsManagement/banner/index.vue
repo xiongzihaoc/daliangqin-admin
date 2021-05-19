@@ -5,7 +5,7 @@
       <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        inline="true" >
+        inline="true">
         <el-form-item label="轮播图名称"
           align="left"
           prop="title">
@@ -14,9 +14,9 @@
             placeholder="请输入轮播图名称"></el-input>
         </el-form-item>
         <el-form-item label="呈现位置"
-          size="small"
           prop="type">
           <el-select v-model="searchForm.type"
+            size="small"
             placeholder="请选择呈现位置">
             <el-option value="DOCTOR"
               label="医生端"></el-option>
@@ -25,9 +25,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="状态"
-          size="small"
           prop="status">
           <el-select style="width:100%"
+            size="small"
             v-model="searchForm.status"
             placeholder="请选择状态">
             <el-option value="UP"
@@ -36,7 +36,7 @@
               label="下架"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label-width="30px">
+        <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
             size="small"
@@ -240,7 +240,7 @@ export default {
       list: [],
       editAddForm: {
         title: "",
-        positionList:[],
+        positionList: [],
         imageUrl: "",
         linkUrl: "",
         zorder: "",
@@ -286,7 +286,7 @@ export default {
     // 重置
     searchReset() {
       this.searchForm = {};
-      this.getList()
+      this.getList();
     },
     /***** CRUD *****/
     // 新增
@@ -337,7 +337,7 @@ export default {
     // 新增编辑确定
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
-        if (valid) {  
+        if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
             add(this.editAddForm).then((res) => {

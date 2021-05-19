@@ -13,7 +13,7 @@
             size="small"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label-width="30px">
+        <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
             size="small"
