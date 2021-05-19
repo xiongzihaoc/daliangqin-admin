@@ -310,7 +310,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, hospitalList } from "@/api/hospitalManagement/httpDoctor";
+import { list, hospitalList, add } from "@/api/hospitalManagement/httpDoctor";
 import { validateIdCard, validatePhone } from "@/utils/index";
 export default {
   components: {
@@ -422,7 +422,7 @@ export default {
     getData() {
       hospitalList({ pageSize: 20, pageNum: 1 }).then((res) => {
         console.log(res);
-        // this.hospitalList = res.data.elements;
+        this.hospitalList = res.data.elements;
       });
     },
     editDialogClosed() {
