@@ -50,9 +50,9 @@ const hospitalRouter = {
                     },
                 },
                 {
-                    path: "followRecord",
-                    name: "followRecord",
-                    component: () => import('@/views/hospitalManagement/work/followRecord'),
+                    path: "follow",
+                    name: "follow",
+                    component: () => import('@/views/hospitalManagement/work/follow'),
                     meta: {
                         title: '随访记录',
                         icon: 'general'
