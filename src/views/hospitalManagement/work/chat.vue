@@ -13,8 +13,8 @@
             placeholder="请输入用户姓名"></el-input>
         </el-form-item>
         <el-form-item label="留言时间"
-          prop="leaveMessageTime">
-          <el-date-picker v-model="leaveMessageTime"
+          prop="chatTime">
+          <el-date-picker v-model="chatTime"
             size="small"
             type="datetimerange"
             :picker-options="pickerOptions"
@@ -31,8 +31,8 @@
             placeholder="请输入医生姓名"></el-input>
         </el-form-item>
         <el-form-item label="回复时间"
-          prop="leaveMessageTime">
-          <el-date-picker v-model="leaveMessageTime"
+          prop="chatTime">
+          <el-date-picker v-model="chatTime"
             size="small"
             type="datetimerange"
             :picker-options="pickerOptions"
@@ -189,7 +189,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { list } from "@/api/hospitalManagement/address";
+import { list } from "@/api/hospitalManagement/httpChat";
 export default {
   components: {
     EleTable,
@@ -206,7 +206,7 @@ export default {
       searchForm: {
         fromUserName: "",
         toUserName: "",
-        leaveMessageTime: "",
+        chatTime: "",
       },
       // 列表数据
       list: [],

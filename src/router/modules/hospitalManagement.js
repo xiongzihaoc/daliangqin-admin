@@ -68,9 +68,9 @@ const hospitalRouter = {
                     },
                 },
                 {
-                    path: "leaveMessage",
-                    name: "leaveMessage",
-                    component: () => import('@/views/hospitalManagement/work/leaveMessage'),
+                    path: "chat",
+                    name: "chat",
+                    component: () => import('@/views/hospitalManagement/work/chat'),
                     meta: {
                         title: '留言问诊',
                         icon: 'general'

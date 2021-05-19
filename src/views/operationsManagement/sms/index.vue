@@ -58,7 +58,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, reset } from "@/api/operationsManagement/message";
+import { list, reset } from "@/api/operationsManagement/httpSms";
 import { validatePhone } from "@/utils/index";
 export default {
   components: {

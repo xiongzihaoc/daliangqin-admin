@@ -82,9 +82,9 @@ const operationsRouter = {
         },
         // 内容管理
         {
-            path: 'content',
-            name: 'content',
-            component: () => import('@/views/operationsManagement/contentManagement'),
+            path: 'news',
+            name: 'news',
+            component: () => import('@/views/operationsManagement/news'),
             meta: {
                 title: '内容管理',
                 icon: 'content'
@@ -150,9 +150,9 @@ const operationsRouter = {
         },
         // 取消原因
         {
-            path: 'message',
-            name: 'message',
-            component: () => import('@/views/operationsManagement/message'),
+            path: 'sms',
+            name: 'sms',
+            component: () => import('@/views/operationsManagement/sms'),
             meta: {
                 title: '短信管理',
                 icon: 'duanxin'

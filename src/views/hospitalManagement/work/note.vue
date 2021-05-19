@@ -111,7 +111,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list } from "@/api/hospitalManagement/note";
+import { list } from "@/api/hospitalManagement/httpNote";
 export default {
   components: {
     EleTable,

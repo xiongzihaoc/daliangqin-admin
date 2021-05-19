@@ -279,7 +279,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, add, edit, deleteE } from "@/api/operationsManagement/news";
+import { list, add, edit, deleteE } from "@/api/operationsManagement/httpNews";
 import { parseTime } from "@/utils/index";
 export default {
   components: {

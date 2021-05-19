@@ -119,7 +119,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, add, edit, deleteElement } from "@/api/systemManagement/admin";
+import { list, add, edit, deleteElement } from "@/api/systemManagement/httpAdmin";
 // import { validateIdCard, validatePhone } from "@/utils/index";
 export default {
   components: {
