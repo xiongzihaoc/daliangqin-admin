@@ -5,7 +5,7 @@
       <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        inline="true">
+        :inline="true">
         <el-form-item label="用户姓名"
           prop="fromUserName">
           <el-input v-model="searchForm.fromUserName"
@@ -14,7 +14,7 @@
         </el-form-item>
         <el-form-item label="留言时间"
           prop="chatTime">
-          <el-date-picker v-model="chatTime"
+          <el-date-picker v-model="searchForm.chatTime"
             size="small"
             type="datetimerange"
             :picker-options="pickerOptions"
@@ -32,7 +32,7 @@
         </el-form-item>
         <el-form-item label="回复时间"
           prop="chatTime">
-          <el-date-picker v-model="chatTime"
+          <el-date-picker v-model="searchForm.chatTime"
             size="small"
             type="datetimerange"
             :picker-options="pickerOptions"
@@ -156,17 +156,6 @@
           <el-input v-model="editAddForm.address"
             placeholder="请输入医院地址"></el-input>
         </el-form-item>
-        <el-form-item label="医院等级"
-          prop="hospitalClass">
-          <el-select v-model="editAddForm.hospitalClass"
-            placeholder="请选择医院等级"
-            style="width: 100%">
-            <el-option v-for="item in hospitalClass"
-              :key="item.id"
-              :value="item.value"
-              :label="item.label"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="管理员手机号"
           prop="adminPhone">
           <el-input v-if="this.infoTitle === '新增'"
@@ -227,7 +216,6 @@ export default {
       infoTitle: "",
     };
   },
-  created() {},
   mounted() {
     this.getList();
   },
@@ -243,6 +231,8 @@ export default {
         this.total = res.data.totalSize;
       });
     },
+    // 日期控件选择事件
+    pickerOptions(){},
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {},
@@ -326,29 +316,6 @@ export default {
           this.editDialogVisible = false;
         }
       });
-    },
-    // Formatter表格数据
-    hosLevelFormatter(coloumn) {
-      switch (coloumn.hospitalClass) {
-        case "CLASS_1_A":
-          return "三甲";
-          break;
-        case "CLASS_1_B":
-          return "三乙";
-          break;
-        case "CLASS_2_A":
-          return "二甲";
-          break;
-        case "CLASS_2_B":
-          return "二乙";
-          break;
-        case "CLASS_3_A":
-          return "一甲";
-          break;
-        case "CLASS_3_B":
-          return "一乙";
-          break;
-      }
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

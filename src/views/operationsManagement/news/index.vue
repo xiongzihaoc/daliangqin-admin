@@ -5,7 +5,7 @@
       <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        inline="true">
+        :inline="true">
         <el-form-item label="标题"
           align="left"
           prop="title">
@@ -244,7 +244,7 @@
         </el-form-item>
         <el-form-item label="发布时间"
           prop="publishTime">
-          <el-date-picker v-model="publishTime"
+          <el-date-picker v-model="editAddForm.publishTime"
             type="datetime"
             placeholder="选择日期时间"
             align="right"
@@ -335,7 +335,6 @@ export default {
       infoTitle: "",
     };
   },
-  created() {},
   mounted() {
     this.getList();
   },
@@ -351,6 +350,8 @@ export default {
         this.total = res.data.totalSize;
       });
     },
+    // 日期控件选择事件
+    pickerOptions(){},
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {},

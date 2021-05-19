@@ -5,7 +5,7 @@
       <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        inline="true">
+        :inline="true">
         <el-form-item label="医生姓名"
           align="left"
           prop="name">

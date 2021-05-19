@@ -4,7 +4,7 @@
     <div class="search-box">
       <el-form ref="searchFormRef"
         :model="searchForm"
-        inline="true"
+        :inline="true"
         class="searchForm">
         <el-form-item label="姓名"
           align="left"
