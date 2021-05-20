@@ -2,17 +2,15 @@ import request from '@/utils/request'
 
 export function list(data) {
     return request({
-        url: 'doctor/page',
+        url: 'push',
         method: 'get',
         params: data
     })
 }
-
-
-export function hospitalList(data) {
+export function push(data) {
     return request({
-        url: 'hospital',
-        method: 'get',
-        params: data
+        url: 'push',
+        method: 'post',
+        data
     })
 }

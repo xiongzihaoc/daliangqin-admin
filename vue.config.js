@@ -34,11 +34,18 @@ module.exports = {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       },
-      [process.env.VUE_APP_BASE_SECOND_API]: {
+      [process.env.VUE_APP_BASE_PUBLIC_API]: {
         target: 'http://test-api.daliangqing.com/public',
         changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_BASE_SECOND_API]: ''
+          ['^' + process.env.VUE_APP_BASE_PUBLIC_API]: ''
+        }
+      },
+      [process.env.VUE_APP_BASE_HOSPITAL_API]: {
+        target: 'http://test-api.daliangqing.com/hospital',
+        changeOrigin: true,
+        pathRewrite: {
+          ['^' + process.env.VUE_APP_BASE_HOSPITAL_API]: ''
         }
       },
     },

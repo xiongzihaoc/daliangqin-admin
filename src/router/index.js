@@ -32,7 +32,7 @@ Vue.use(Router)
 export const constantRoutes = [
   {
     path: '/login',
-    component: () => import('@/views/login/index'),
+    component: () => import('@/views/login'),
     hidden: true
   },
   {
@@ -49,6 +49,7 @@ export const constantRoutes = [
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
+      component: () => import('@/views/dashboard'),
       meta: {
         title: '首页',
         icon: 'dashboard',
@@ -71,7 +72,7 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-  mode: 'history', // require service support
+  mode: 'hash', // require service support
   scrollBehavior: () => ({
     y: 0
   }),

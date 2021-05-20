@@ -5,7 +5,7 @@
       <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        label-width="100px">
+        :inline="true">
         <el-form-item label="轮播图名称"
           align="left"
           prop="title">
@@ -14,9 +14,9 @@
             placeholder="请输入轮播图名称"></el-input>
         </el-form-item>
         <el-form-item label="呈现位置"
-          size="small"
           prop="type">
           <el-select v-model="searchForm.type"
+            size="small"
             placeholder="请选择呈现位置">
             <el-option value="DOCTOR"
               label="医生端"></el-option>
@@ -25,9 +25,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="状态"
-          size="small"
           prop="status">
-          <el-select style="width:100%"
+          <el-select style="width: 100%"
+            size="small"
             v-model="searchForm.status"
             placeholder="请选择状态">
             <el-option value="UP"
@@ -36,7 +36,7 @@
               label="下架"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label-width="30px">
+        <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
             size="small"
@@ -78,7 +78,7 @@
         prop="imageUrl"
         label="轮播图图片">
         <template slot-scope="scope">
-          <span>{{scope.row.imageUrl}}</span>
+          <span>{{ scope.row.imageUrl }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -87,7 +87,7 @@
         prop="positionList"
         label="呈现位置">
         <template slot-scope="scope">
-          <span v-for="(item,index) in scope.row.positionList"
+          <span v-for="(item, index) in scope.row.positionList"
             :key="index">
             <span v-if="item === 'PATIENT'">用户端 </span>
             <span v-else>医生端 </span>
@@ -158,7 +158,7 @@
         </el-form-item>
         <el-form-item label="呈现位置"
           prop="positionList">
-          <el-select style="width:100%"
+          <el-select style="width: 100%"
             multiple
             v-model="editAddForm.positionList"
             placeholder="请选择呈现位置">
@@ -181,7 +181,7 @@
         </el-form-item>
         <el-form-item label="状态"
           prop="status">
-          <el-select style="width:100%"
+          <el-select style="width: 100%"
             v-model="editAddForm.status"
             placeholder="请选择状态">
             <el-option value="UP"
@@ -202,17 +202,10 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import {
-  list,
-  add,
-  edit,
-  deleteElement,
-} from "@/api/operationsManagement/banner";
-import singleUpload from "@/components/UploadFile";
+import { list, add, edit, deleteElement } from "@/api/admin/banner";
 export default {
   components: {
     EleTable,
-    singleUpload,
   },
   data() {
     return {
@@ -242,6 +235,7 @@ export default {
       list: [],
       editAddForm: {
         title: "",
+        positionList: [],
         imageUrl: "",
         linkUrl: "",
         zorder: "",
@@ -287,7 +281,7 @@ export default {
     // 重置
     searchReset() {
       this.searchForm = {};
-      this.getList()
+      this.getList();
     },
     /***** CRUD *****/
     // 新增
@@ -327,8 +321,18 @@ export default {
       });
     },
     // 开关change事件
-
-    statusChange(val) {},
+    statusChange(val) {
+      edit(val).then((res) => {
+        if (res.code != "OK") {
+          return;
+        } else {
+          this.$notify.success({
+            title: "状态更改成功",
+          });
+          this.getList();
+        }
+      });
+    },
 
     // 弹框关闭
     getData() {},
@@ -338,7 +342,7 @@ export default {
     // 新增编辑确定
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
-        if (valid) {  
+        if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
             add(this.editAddForm).then((res) => {

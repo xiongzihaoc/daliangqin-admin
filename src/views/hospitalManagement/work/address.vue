@@ -5,7 +5,7 @@
       <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        label-width="100px">
+        :inline="true">
         <el-form-item label="医院名称"
           align="left"
           prop="name">
@@ -14,9 +14,9 @@
             placeholder="请输入医院名称"></el-input>
         </el-form-item>
         <el-form-item label="医院等级"
-          size="small"
           prop="type">
           <el-select v-model="searchForm.type"
+            size="small"
             placeholder="请选择医院等级">
             <el-option value="DOCTOR"
               label="医生端"></el-option>
@@ -24,7 +24,7 @@
               label="用户端"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label-width="30px">
+        <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
             size="small"
@@ -157,7 +157,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { list } from "@/api/hospitalManagement/address";
+import { list } from "@/api/admin/addressDoctor";
 export default {
   components: {
     EleTable,

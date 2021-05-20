@@ -2,103 +2,130 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form ref="searchFormRef"
+      <el-form
+        ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        label-width="100px">
-        <el-form-item label="医生姓名"
-          align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+        :inline="true"
+      >
+        <el-form-item label="医生姓名" align="left" prop="name">
+          <el-input
+            v-model="searchForm.name"
             size="small"
-            placeholder="请输入医生姓名"></el-input>
+            placeholder="请输入医生姓名"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="职位"
-          size="small"
-          prop="job">
-          <el-select v-model="searchForm.job"
-            placeholder="请选择职位">
-            <el-option value="FAMILY_DOCTOR"
-              label="家医"></el-option>
-            <el-option value="HOSPITAL_DOCTOR"
-              label="院医"></el-option>
+        <el-form-item label="职位" prop="job">
+          <el-select
+            v-model="searchForm.job"
+            size="small"
+            placeholder="请选择职位"
+          >
+            <el-option value="FAMILY_DOCTOR" label="家医"></el-option>
+            <el-option value="PROFESSIONAL_DOCTOR" label="专家"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="发布时间"
-          size="small"
-          prop="status">
-          <el-date-picker v-model="searchForm.searchTime"
+        <el-form-item label="发布时间" prop="status">
+          <el-date-picker
+            v-model="searchForm.searchTime"
+            size="small"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
-            end-placeholder="结束日期">
+            end-placeholder="结束日期"
+          >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label-width="30px">
-          <el-button @click="searchBtn"
+        <el-form-item>
+          <el-button
+            @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search">搜索</el-button>
-          <el-button @click="searchReset"
+            icon="el-icon-search"
+            >搜索</el-button
+          >
+          <el-button
+            @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh">重置</el-button>
+            icon="el-icon-refresh"
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list"
-      :header="tableHeaderBig">
+    <EleTable :data="list" :header="tableHeaderBig">
       <!-- 需要formatter的列 -->
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
         type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
+        label="序号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
         prop="userName"
-        label="医生姓名"></el-table-column>
-      <el-table-column align="center"
+        label="医生姓名"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
         prop="type"
-        label="职位">
+        label="职位"
+      >
         <template slot-scope="scope">
           <span v-if="scope.row.type === 'FAMILY_DOCTOR'">家医</span>
-          <span v-else>院医</span>
+          <span v-else>专家</span>
         </template>
       </el-table-column>
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         prop="content"
-        label="笔记内容"></el-table-column>
-      <el-table-column align="center"
+        label="笔记内容"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
-        label="笔记图集">
+        label="笔记图集"
+      >
         <template slot-scope="scope">
           <div v-if="scope.row.imageUrlList.length > 0">
             <!-- <img v-for="(item,index) in scope.row.imageUrlList"
               :key="index"
               :src="item"
               alt="" /> -->
-            <span style="margin:0 5px;"
-              v-for="(item,index) in scope.row.imageUrlList"
-              :key="index">{{item}}</span>
+            <span
+              style="margin: 0 5px"
+              v-for="(item, index) in scope.row.imageUrlList"
+              :key="index"
+              >{{ item }}</span
+            >
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         label="发布时间"
-        prop="createTime"></el-table-column>
+        prop="createTime"
+      >
+        <template slot-scope="scope">{{
+          parseTime(scope.row.createTime)
+        }}</template>
+      </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination background
+    <el-pagination
+      background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -106,18 +133,21 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"></el-pagination>
+      class="el-pagination-style"
+    ></el-pagination>
   </div>
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list } from "@/api/hospitalManagement/note";
+import { list } from "@/api/admin/note";
+import { parseTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
   },
   data() {
     return {
+      parseTime,
       searchForm: {
         name: "",
         job: "",

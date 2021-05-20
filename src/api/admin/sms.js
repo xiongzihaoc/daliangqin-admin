@@ -11,7 +11,7 @@ export function list(data) {
 export function reset(data) {
   return request({
     url: 'sms/reset',
-    method: 'get',
+    method: 'post',
     params: data
   })
 }
