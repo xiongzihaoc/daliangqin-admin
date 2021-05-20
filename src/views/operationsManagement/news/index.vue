@@ -142,6 +142,7 @@
         label="状态">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.deletedStatus"
+            @change="statusChange(scope.row)"
             active-value="SHOW"
             inactive-value="DELETE"
             active-color="#13ce66"
@@ -352,6 +353,20 @@ export default {
         this.total = res.data.totalSize;
       });
     },
+    // 开关change事件
+    statusChange(val) {
+      console.log(val);
+      edit(val).then((res) => {
+        if (res.code != "OK") {
+          return;
+        } else {
+          this.$notify.success({
+            title: "状态更改成功",
+          });
+          this.getList();
+        }
+      });
+    },
     // 日期控件选择事件
     dateChange(val) {
       console.log(val);
@@ -400,9 +415,6 @@ export default {
         this.getList();
       });
     },
-    // 开关change事件
-    statusChange(val) {},
-
     // 弹框开启
     getData() {},
     editDialogClosed() {

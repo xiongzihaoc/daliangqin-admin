@@ -22,7 +22,7 @@ export function edit(data) {
         data
     })
 }
-export function deleteE(data) {
+export function deleteElement(data) {
     return request({
         url: 'news/' + data,
         method: 'delete',

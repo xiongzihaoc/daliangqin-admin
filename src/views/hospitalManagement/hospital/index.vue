@@ -66,17 +66,41 @@
         label="序号"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
+        fixed="left"
+        prop="name"
+        label="医院名称">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="hospitalClass"
+        label="医院头像">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="contract"
+        label="医院电话">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="address"
+        label="医院地址">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
         fixed="right"
         prop="hospitalClass"
         :formatter="hosLevelFormatter"
         label="医院等级">
       </el-table-column>
-      <el-table-column align="center"
+      <!-- <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="adminPhone"
         label="管理员手机号">
-      </el-table-column>
+      </el-table-column> -->
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -157,12 +181,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import {
-  list,
-  add,
-  edit,
-  deleteElement,
-} from "@/api/admin/hospital";
+import { list, add, edit, deleteElement } from "@/api/admin/hospital";
 export default {
   components: {
     EleTable,
@@ -208,11 +227,7 @@ export default {
         { id: 5, label: "一级", value: "CLASS_3_A" },
       ],
       // 表格数据
-      tableHeaderBig: [
-        { prop: "name", label: "医院名称" },
-        { prop: "contract", label: "医院电话" },
-        { prop: "address", label: "医院地址" },
-      ],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
