@@ -5,7 +5,7 @@ export function list(data) {
     url: 'banner',
     method: 'post',
     data,
-    baseURL: process.env.VUE_APP_BASE_PUBLIC_API,
+    baseURL: process.env.API_TARGET_PUBLIC,
   })
 }
 
