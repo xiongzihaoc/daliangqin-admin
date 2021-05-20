@@ -18,8 +18,11 @@ const service = axios.create({
   // 超时
   timeout: 10000
 })
+
 // request拦截器
 service.interceptors.request.use(config => {
+  console.log(process.env);
+
   // 是否需要设置 token
   const isToken = (config.headers || {}).isToken === false
   if (getToken() && !isToken) {

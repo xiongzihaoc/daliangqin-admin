@@ -26,26 +26,49 @@ module.exports = {
     //   errors: true
     // },
     // 代理
+    // proxy: {
+    //   [process.env.VUE_APP_API_TARGET_ADMIN]: {
+    //     target: [process.env.VUE_APP_API_SOURCE_ADMIN],
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       ['^' + process.env.VUE_APP_API_TARGET_ADMIN]: ''
+    //     }
+    //   },
+    //   [process.env.VUE_APP_API_TARGET_PUBLIC]: {
+    //     target: [process.env.VUE_APP_API_SOURCE_PUBLIC],
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       ['^' + process.env.VUE_APP_API_TARGET_PUBLIC]: ''
+    //     }
+    //   },
+    //   [process.env.API_TARGET_HOSPITAL]: {
+    //     target: [process.env.VUE_APP_API_SOURCE_HOSPITAL],
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       ['^' + process.env.VUE_APP_API_TARGET_HOSPITAL]: ''
+    //     }
+    //   },
+    // },
     proxy: {
-    [process.env.API_TARGET_ADMIN]: {
-        target: process.env.API_SOURCE_ADMIN,
+      [process.env.VUE_APP_BASE_API]: {
+        target: 'http://test-api.daliangqing.com/admin',
         changeOrigin: true,
         pathRewrite: {
-        ['^' + process.env.API_TARGET_ADMIN]: ''
+          ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       },
-      [process.env.API_TARGET_PUBLIC]: {
-        target: process.env.API_SOURCE_PUBLIC,
+      [process.env.VUE_APP_BASE_PUBLIC_API]: {
+        target: 'http://test-api.daliangqing.com/public',
         changeOrigin: true,
         pathRewrite: {
-        ['^' + process.env.API_TARGET_PUBLIC]: ''
+          ['^' + process.env.VUE_APP_BASE_PUBLIC_API]: ''
         }
       },
-      [process.env.API_TARGET_HOSPITAL]: {
-        target: process.env.API_SOURCE_HOSPITAL,
+      [process.env.VUE_APP_BASE_HOSPITAL_API]: {
+        target: 'http://test-api.daliangqing.com/hospital',
         changeOrigin: true,
         pathRewrite: {
-        ['^' + process.env.API_TARGET_HOSPITAL]: ''
+          ['^' + process.env.VUE_APP_BASE_HOSPITAL_API]: ''
         }
       },
     },
