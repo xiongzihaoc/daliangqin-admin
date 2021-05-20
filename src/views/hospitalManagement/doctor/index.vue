@@ -65,12 +65,12 @@
         size="small"
         plain
         icon="el-icon-plus">新增</el-button>
-      <el-button @click="deleteMultiple"
+      <!-- <el-button @click="deleteMultiple"
         type="danger"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-delete">删除</el-button>
+        icon="el-icon-delete">删除</el-button> -->
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
@@ -115,7 +115,7 @@
         prop="birthday"
         label="出生日期">
         <template slot-scope="scope">
-          {{ scope.row.birthday.slice(0, 10) }}
+          <span>{{ parseTime(scope.row.birthday).slice(0, 10) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -262,7 +262,8 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, hospitalList, add } from "@/api/admin/doctor";
+import { list, hospitalList, add, deleteElement } from "@/api/admin/doctor";
+import { parseTime } from "@/utils/index";
 import { validateIdCard, validatePhone } from "@/utils/index";
 export default {
   components: {
@@ -270,6 +271,7 @@ export default {
   },
   data() {
     return {
+      parseTime,
       FormRules: {
         name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
         avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
@@ -309,7 +311,6 @@ export default {
       infoTitle: "",
     };
   },
-  created() {},
   mounted() {
     this.getList();
   },
@@ -369,7 +370,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      deleteE(id).then((res) => {
+      deleteElement(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",

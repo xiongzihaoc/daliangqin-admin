@@ -14,6 +14,13 @@ export function add(data) {
     data
   })
 }
+export function deleteElement(data) {
+  return request({
+    url: 'doctor/' + data,
+    method: 'delete',
+  })
+
+}
 // 获取医院列表
 export function hospitalList(data) {
   return request({
