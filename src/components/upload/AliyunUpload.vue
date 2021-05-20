@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { httpAdminUploadApi } from '@/api/admin/httpAdminUploadApi'
+
 export default {
   data() {
     return {
@@ -37,6 +39,10 @@ export default {
       return isJPG && isLt2M
     },
     httpRequest(file) {
+      httpAdminUploadApi.postAliyunSignAdmin('BANNER').then(res => {
+        console.log(res)
+      })
+
       let OSS = require('ali-oss')
 
       let client = new OSS({
@@ -50,8 +56,26 @@ export default {
         bucket: 'examplebucket'
       })
 
-      console.log(file)
-      console.log('httpRequest')
+// 支持File对象、Blob数据以及OSS Buffer。
+// 填写本地文件的完整路径。如果未指定本地路径，则默认从示例程序所属项目对应本地路径中上传文件。
+      const data = 'D:\\localpath\\examplefile.txt'
+// 填写上传的内容。
+//const data = new Blob('Hello OSS');
+// 填写上传的内容。
+//const data = new OSS.Buffer('Hello OSS'));
+
+      async function putObject() {
+        try {
+          // 填写Object完整路径。Object完整路径中不能包含Bucket名称。
+          // 您可以通过自定义文件名（例如exampleobject.txt）或目录（例如mytestdoc/exampleobject.txt）的形式实现将文件上传到当前Bucket或Bucket中的指定目录。
+          const result = await client.put('exampleobject.txt', data)
+          console.log(result)
+        } catch (e) {
+          console.log(e)
+        }
+      }
+
+      putObject()
     }
   }
 }
