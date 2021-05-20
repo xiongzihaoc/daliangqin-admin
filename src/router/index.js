@@ -1,5 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+/* Layout */
+import Layout from '@/layout'
+// 引入分组路由
+import operationsRouter from './modules/operationsManagement'
+import hospitalRouter from './modules/hospitalManagement'
+import archivesRouter from './modules/archivesManagement'
+import systemRouter from './modules/systemManagement'
+import testRouter from './modules/testRouter'
 
 Vue.use(Router)
 
@@ -21,13 +29,6 @@ Vue.use(Router)
   }
  */
 
-/* Layout */
-import Layout from '@/layout'
-// 引入分组路由
-import operationsRouter from './modules/operationsManagement'
-import hospitalRouter from './modules/hospitalManagement'
-import archivesRouter from './modules/archivesManagement'
-import systemRouter from './modules/systemManagement'
 export const constantRoutes = [
   {
     path: '/login',
@@ -61,6 +62,7 @@ export const constantRoutes = [
   hospitalRouter,
   archivesRouter,
   systemRouter,
+  testRouter,
   // 404页面必须在最后 !!!
   {
     path: '*',
