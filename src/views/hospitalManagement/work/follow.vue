@@ -276,7 +276,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { list } from "@/api/hospitalManagement/httpFollow";
+import { list } from "@/api/hospital/follow";
 import { parseTime } from "@/utils/index";
 export default {
   components: {

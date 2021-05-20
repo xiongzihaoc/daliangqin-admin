@@ -178,7 +178,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { list } from "@/api/hospitalManagement/httpChat";
+import { list } from "@/api/admin/chat";
 export default {
   components: {
     EleTable,

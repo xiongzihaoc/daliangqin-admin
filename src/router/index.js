@@ -31,7 +31,7 @@ import systemRouter from './modules/systemManagement'
 export const constantRoutes = [
   {
     path: '/login',
-    component: () => import('@/views/login/index'),
+    component: () => import('@/views/login'),
     hidden: true
   },
   {
@@ -48,8 +48,8 @@ export const constantRoutes = [
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
+      component: () => import('@/views/dashboard'),
       meta: {
-        hidden: true,
         title: '首页',
         icon: 'dashboard',
         affix: true

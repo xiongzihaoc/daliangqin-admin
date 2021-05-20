@@ -262,7 +262,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, hospitalList, add } from "@/api/hospitalManagement/httpDoctor";
+import { list, hospitalList, add } from "@/api/admin/doctor";
 import { validateIdCard, validatePhone } from "@/utils/index";
 export default {
   components: {

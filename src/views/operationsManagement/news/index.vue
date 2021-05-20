@@ -281,7 +281,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, add, edit, deleteE } from "@/api/operationsManagement/httpNews";
+import { list, add, edit, deleteElement } from "@/api/admin/news";
 import { parseTime } from "@/utils/index";
 export default {
   components: {
@@ -392,7 +392,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      deleteE(id).then((res) => {
+      deleteElement(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",

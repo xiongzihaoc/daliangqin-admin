@@ -162,7 +162,7 @@ import {
   add,
   edit,
   deleteElement,
-} from "@/api/hospitalManagement/httpHospital";
+} from "@/api/admin/hospital";
 export default {
   components: {
     EleTable,

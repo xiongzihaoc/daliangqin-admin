@@ -28,4 +28,3 @@ export function deleteE(data) {
         method: 'delete',
     })
 }
-

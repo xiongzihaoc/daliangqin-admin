@@ -50,7 +50,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, edit } from "@/api/systemManagement/httpAdmin";
+import { list, edit } from "@/api/admin/adminRole";
 export default {
   components: {
     EleTable,

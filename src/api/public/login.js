@@ -8,14 +8,6 @@ export function login(data) {
     baseURL: process.env.VUE_APP_BASE_PUBLIC_API,
   })
 }
-export function getCode(data) {
-  return request({
-    url: 'sms/send',
-    method: 'post',
-    data,
-    baseURL: process.env.VUE_APP_BASE_PUBLIC_API,
-  })
-}
 
 export function logout(data) {
   return request({
@@ -24,3 +16,12 @@ export function logout(data) {
     baseURL: process.env.VUE_APP_BASE_PUBLIC_API  ,
   })
 }
+
+export function status(data) {
+  return request({
+    url: 'login/status',
+    method: 'get',
+    baseURL: process.env.VUE_APP_BASE_PUBLIC_API  ,
+  })
+}
+

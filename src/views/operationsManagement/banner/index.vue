@@ -236,7 +236,7 @@ import {
   add,
   edit,
   deleteElement,
-} from "@/api/operationsManagement/httpBanner";
+} from "@/api/admin/banner";
 export default {
   components: {
     EleTable,

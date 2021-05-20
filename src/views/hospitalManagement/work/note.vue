@@ -139,7 +139,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list } from "@/api/hospitalManagement/httpNote";
+import { list } from "@/api/admin/note";
 import { parseTime } from "@/utils/index";
 export default {
   components: {

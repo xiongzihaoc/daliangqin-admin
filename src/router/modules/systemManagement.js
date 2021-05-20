@@ -9,9 +9,9 @@ const systemRouter = {
     icon: 'banben'
   },
   children: [{
-      path: 'administrator',
-      name: 'administrator',
-      component: () => import('@/views/systemManagement/administrator'),
+      path: 'adminRole',
+      name: 'adminRole',
+      component: () => import('@/views/systemManagement/adminRole'),
       meta: {
         title: '管理员管理',
         icon: 'admin'

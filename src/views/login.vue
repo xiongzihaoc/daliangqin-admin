@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { getCode } from "@/api/login/httpUser";
+import { getCode } from "@/api/public/sms";
 import { validatePhone, validateCode } from "@/utils/index";
 export default {
   name: "Login",

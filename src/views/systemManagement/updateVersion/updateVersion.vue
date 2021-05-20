@@ -159,7 +159,7 @@ import {
   add,
   edit,
   deleteElement,
-} from "@/api/systemManagement/httpUpdateVersion";
+} from "@/api/admin/updateVersion";
 import { parseTime } from "@/utils/index";
 // import { validateIdCard, validatePhone } from "@/utils/index";
 export default {
