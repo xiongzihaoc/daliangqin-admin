@@ -26,37 +26,6 @@ module.exports = {
     //   warnings: false,
     //   errors: true
     // },
-    // 代理
-    // proxy: {
-    // [process.env.VUE_APP_API_TARGET_ADMIN]: {
-    //   target: process.env.VUE_APP_API_SOURCE_ADMIN,
-    //   changeOrigin: true,
-    //   pathRewrite: {
-    //     ['^' + process.env.VUE_APP_API_TARGET_ADMIN]: ''
-    //   }
-    // },
-    // [process.env.VUE_APP_API_TARGET_PUBLIC]: {
-    //   target: process.env.VUE_APP_API_SOURCE_PUBLIC,
-    //   changeOrigin: true,
-    //   pathRewrite: {
-    //     ['^' + process.env.VUE_APP_API_TARGET_PUBLIC]: ''
-    //   }
-    // },
-    //   '/api/public/': {
-    //     target: process.env.VUE_APP_API_SOURCE_PUBLIC,
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       ['^' + process.env.VUE_APP_API_TARGET_PUBLIC]: ''
-    //     }
-    //   },
-    // [process.env.API_TARGET_HOSPITAL]: {
-    //   target: process.env.VUE_APP_API_SOURCE_HOSPITAL,
-    //   changeOrigin: true,
-    //   pathRewrite: {
-    //     ['^' + process.env.VUE_APP_API_TARGET_HOSPITAL]: ''
-    //   }
-    // },
-    // },
     proxy: {
       '/api/public': {
         target: ENV[ENV.current].public.source,
@@ -79,37 +48,6 @@ module.exports = {
       },
 
     }
-    // 代理
-    // proxy: {
-    //   '/api/public': {
-    //     target: 'http://test-api.daliangqing.com/public/',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/api/public/': ''
-    //     }
-    //   }, '/api/admin': {
-    //     target: 'http://test-api.daliangqing.com/admin/',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/api/admin/': ''
-    //     }
-    //   }, '/api/hospital': {
-    //     target: 'http://test-api.daliangqing.com/hospital/',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/api/hospital/': ''
-    //     }
-    //   },
-    // },
-    // proxy: {
-    //   '/api/public/': {
-    //     target: [process.env.VUE_APP_BASE_PUBLIC_API],
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^api/public/': ''
-    //     }
-    //   }
-    // },
     // proxy: {
     //   [process.env.VUE_APP_BASE_API]: {
     //     target: 'http://test-api.daliangqing.com/admin',
