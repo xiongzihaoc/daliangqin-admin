@@ -2,48 +2,62 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form ref="searchFormRef"
+      <el-form
+        ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true">
-        <el-form-item label="医院名称"
-          align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+        :inline="true"
+      >
+        <el-form-item label="医院名称" align="left" prop="name">
+          <el-input
+            v-model="searchForm.name"
             size="small"
-            placeholder="请输入医院名称"></el-input>
+            placeholder="请输入医院名称"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医院等级"
-          prop="type">
-          <el-select v-model="searchForm.type"
+        <el-form-item label="医院等级" prop="type">
+          <el-select
+            v-model="searchForm.type"
             size="small"
-            placeholder="请选择医院等级">
-            <el-option value="DOCTOR"
-              label="医生端"></el-option>
-            <el-option value="PATIENT"
-              label="用户端"></el-option>
+            placeholder="请选择医院等级"
+          >
+            <el-option
+              v-for="item in hospitalClass"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn"
+          <el-button
+            @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search">搜索</el-button>
-          <el-button @click="searchReset"
+            icon="el-icon-search"
+            >搜索</el-button
+          >
+          <el-button
+            @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh">重置</el-button>
+            icon="el-icon-refresh"
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格上方CRUD按钮 -->
     <div>
-      <el-button @click="add"
+      <el-button
+        @click="add"
         type="primary"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-plus">新增</el-button>
+        icon="el-icon-plus"
+        >新增</el-button
+      >
       <!-- <el-button @click="deleteMultiple"
       type="danger"
       class="tableAdd"
@@ -52,48 +66,61 @@
       icon="el-icon-delete">删除</el-button> -->
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list"
-      :header="tableHeaderBig">
+    <EleTable :data="list" :header="tableHeaderBig">
       <!-- 需要formatter的列 -->
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
-        type="selection"></el-table-column>
-      <el-table-column align="center"
+        type="selection"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
         type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
+        label="序号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
         prop="name"
-        label="医院名称">
+        label="医院名称"
+      >
       </el-table-column>
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
-        prop="hospitalClass"
-        label="医院头像">
+        prop="avatarUrl"
+        label="医院头像"
+      >
       </el-table-column>
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
         prop="contract"
-        label="医院电话">
+        label="医院电话"
+      >
       </el-table-column>
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
         prop="address"
-        label="医院地址">
+        label="医院地址"
+      >
       </el-table-column>
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         prop="hospitalClass"
         :formatter="hosLevelFormatter"
-        label="医院等级">
+        label="医院等级"
+      >
       </el-table-column>
       <!-- <el-table-column align="center"
         slot="fixed"
@@ -102,20 +129,23 @@
         label="管理员手机号">
       </el-table-column> -->
       <!-- 操作 -->
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220">
+        width="220"
+      >
         <template slot-scope="scope">
-          <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
+          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
+            >编辑</el-button
+          >
         </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination background
+    <el-pagination
+      background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -123,57 +153,77 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"></el-pagination>
+      class="el-pagination-style"
+    ></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
+    <el-dialog
+      :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @open="getData"
       @closed="editDialogClosed"
-      v-dialogDrag>
-      <el-form ref="FormRef"
+      v-dialogDrag
+    >
+      <el-form
+        ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="110px">
-        <el-form-item label="医院名称"
-          prop="name">
-          <el-input v-model="editAddForm.name"
-            placeholder="请输入医院名称"></el-input>
+        label-width="110px"
+      >
+        <el-form-item label="医院名称" prop="name">
+          <el-input
+            v-model="editAddForm.name"
+            placeholder="请输入医院名称"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医院电话"
-          prop="contract">
-          <el-input v-model="editAddForm.contract"
+        <el-form-item label="医院名头像" prop="name">
+          <el-input
+            v-model="editAddForm.avatarUrl"
+            placeholder="请输入医院名称"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="医院电话" prop="contract">
+          <el-input
+            v-model="editAddForm.contract"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入医院电话"></el-input>
+            placeholder="请输入医院电话"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医院地址"
-          prop="address">
-          <el-input v-model="editAddForm.address"
-            placeholder="请输入医院地址"></el-input>
+        <el-form-item label="医院地址" prop="address">
+          <el-input
+            v-model="editAddForm.address"
+            placeholder="请输入医院地址"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医院等级"
-          prop="hospitalClass">
-          <el-select v-model="editAddForm.hospitalClass"
+        <el-form-item label="医院等级" prop="hospitalClass">
+          <el-select
+            v-model="editAddForm.hospitalClass"
             placeholder="请选择医院等级"
-            style="width: 100%">
-            <el-option v-for="item in hospitalClass"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in hospitalClass"
               :key="item.id"
               :value="item.value"
-              :label="item.label"></el-option>
+              :label="item.label"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="管理员手机号"
+        <el-form-item
+          label="管理员手机号"
           v-if="this.infoTitle === '新增'"
-          prop="adminPhone">
-          <el-input v-model="editAddForm.adminPhone"
-            placeholder="请输入管理员手机号"></el-input>
+          prop="adminPhone"
+        >
+          <el-input
+            v-model="editAddForm.adminPhone"
+            placeholder="请输入管理员手机号"
+          ></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer"
-        class="dialog-footer">
+      <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
+        <el-button type="primary" @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -181,7 +231,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { list, add, edit, deleteElement } from "@/api/admin/hospital";
+import { httpHospital } from "@/api/admin/httpHospital";
 export default {
   components: {
     EleTable,
@@ -242,20 +292,27 @@ export default {
   },
   methods: {
     getList() {
-      list({
-        page: this.pageNum,
-        pageSize: this.pageSize,
-      }).then((res) => {
-        console.log(res);
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+      httpHospital
+        .list({
+          page: this.pageNum,
+          pageSize: this.pageSize,
+          name: this.searchForm.name,
+          type: this.searchForm.type,
+        })
+        .then((res) => {
+          console.log(res);
+          this.list = res.data.elements;
+          this.total = res.data.totalSize;
+        });
     },
     /***** 搜索区域 *****/
-    searchBtn() {},
+    searchBtn() {
+      this.getList();
+    },
     // 重置
     searchReset() {
       this.searchForm = {};
+      this.getList();
     },
     /***** CRUD *****/
     // 新增
@@ -288,7 +345,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      deleteElement(id).then((res) => {
+      httpHospital.deleteElement(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -307,7 +364,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            add(this.editAddForm).then((res) => {
+            httpHospital.add(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -319,7 +376,7 @@ export default {
             });
           } else {
             // 发送请求
-            edit(this.editAddForm).then((res) => {
+            httpHospital.edit(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -350,10 +407,7 @@ export default {
           return "二乙";
           break;
         case "CLASS_3_A":
-          return "一甲";
-          break;
-        case "CLASS_3_B":
-          return "一乙";
+          return "一级";
           break;
       }
     },

@@ -88,7 +88,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, reset } from "@/api/admin/sms";
+import { httpSms} from "@/api/admin/httpSms";
 import { validatePhone } from "@/utils/index";
 import { parseTime } from "@/utils/index";
 export default {
@@ -115,12 +115,12 @@ export default {
       total: 0,
     };
   },
-  created() {
+  mounted() {
     this.getList();
   },
   methods: {
     getList() {
-      list({
+     httpSms.list({
         page: this.pageNum,
         pageSize: this.pageSize,
         phone: this.searchInput,
@@ -149,7 +149,7 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          reset({ phone: this.editAddForm.phone }).then((res) => {
+         httpSms. reset({ phone: this.editAddForm.phone }).then((res) => {
             console.log(res);
             this.$notify.success({
               title: "重置成功",

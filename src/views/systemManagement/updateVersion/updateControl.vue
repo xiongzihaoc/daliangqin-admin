@@ -7,9 +7,14 @@
         align="center"
         slot="fixed"
         fixed="right"
-        prop="name"
-        label="添加时间"
-      ></el-table-column>
+        label="app类型"
+        prop="appType"
+      >
+        <template slot-scope="scope">
+          <span v-if="scope.row.appType === 'DOCTOR'">医生端</span>
+          <span v-else>用户端</span>
+        </template>
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column
         align="center"
@@ -30,7 +35,6 @@
       title="编辑"
       :visible.sync="editDialogVisible"
       width="40%"
-      @open="getData"
       @closed="editDialogClosed"
       v-dialogDrag
     >
@@ -40,6 +44,15 @@
         :model="editAddForm"
         label-width="100px"
       >
+        <el-form-item label="推荐更新版本">
+          <el-input v-model="editAddForm.recommendUpdateAppId"></el-input>
+        </el-form-item>
+        <el-form-item label="强制更新版本">
+          <el-input v-model="editAddForm.forceUpdateAppId"></el-input>
+        </el-form-item>
+        <el-form-item label="最新版本">
+          <el-input v-model="editAddForm.newestUpdateAppId"></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
@@ -50,7 +63,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, edit } from "@/api/admin/httpAdminRole";
+import { httpUpdateControl } from "@/api/admin/httpUpdateControl";
 export default {
   components: {
     EleTable,
@@ -59,55 +72,37 @@ export default {
     return {
       FormRules: {
         name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
-        avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
-        type: [{ required: true, message: "请选择职位", trigger: "blur" }],
-        hospitalName: [
-          { required: true, message: "请选择医院", trigger: "blur" },
-        ],
-        toDoctor: [
-          { required: true, message: "请选择转诊医生  ", trigger: "blur" },
-        ],
-      },
-      searchForm: {
-        name: "",
-        type: "",
       },
       list: [],
       editAddForm: {
-        name: "",
-        avatarUrl: "",
-        phone: "",
-        idCard: "",
-        hospitalName: "",
-        type: "",
+        recommendUpdateAppId: "",
+        forceUpdateAppId: "",
+        newestUpdateAppId: "",
       },
       tableHeaderBig: [
-        { prop: "name", label: "姓名" },
-        { prop: "phone", label: "手机号" },
+        { prop: "newestVersionString", label: "最新版本" },
+        { prop: "recommendVersionString", label: "推荐更新版本" },
+        { prop: "forceVersionString", label: "强制更新版本" },
       ],
-      // 分页区域
-      pageSize: 10,
-      pageNum: 1,
-      total: 0,
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
     };
   },
-  created() {},
   mounted() {
     this.getList();
   },
   methods: {
     getList() {
-      list({
-        page: this.pageNum,
-        pageSize: this.pageSize,
-      }).then((res) => {
-        console.log(res);
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+      httpUpdateControl
+        .list({
+          page: this.pageNum,
+          pageSize: this.pageSize,
+        })
+        .then((res) => {
+          console.log(res);
+          this.list = res.data;
+        });
     },
     /***** CRUD *****/
     // 编辑
@@ -120,12 +115,12 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
-    // 新增编辑确定
+    // 编辑确定
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 发送请求
-          edit(this.editAddForm).then((res) => {
+          httpUpdateControl.edit(this.editAddForm).then((res) => {
             if (res.code != "OK") {
               return;
             } else {
@@ -135,7 +130,6 @@ export default {
               this.getList();
             }
           });
-
           this.editDialogVisible = false;
         }
       });

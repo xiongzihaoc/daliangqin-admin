@@ -139,7 +139,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list } from "@/api/admin/note";
+import { httpNote } from "@/api/admin/httpNote";
 import { parseTime } from "@/utils/index";
 export default {
   components: {
@@ -172,13 +172,12 @@ export default {
       infoTitle: "",
     };
   },
-  created() {},
   mounted() {
     this.getList();
   },
   methods: {
     getList() {
-      list({
+      httpNote.list({
         page: this.pageNum,
         pageSize: this.pageSize,
       }).then((res) => {
@@ -225,7 +224,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      deleteE(id).then((res) => {
+      httpNote.deleteElement(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -244,7 +243,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            add(this.editAddForm).then((res) => {
+            httpNote.add(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -256,7 +255,7 @@ export default {
             });
           } else {
             // 发送请求
-            edit(this.editAddForm).then((res) => {
+            httpNote.edit(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -273,12 +272,10 @@ export default {
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      console.log(newSize);
       this.pageSize = newSize;
       this.getList();
     },
     handleCurrentChange(newPage) {
-      console.log(newPage);
       this.pageNum = newPage;
       this.getList();
     },

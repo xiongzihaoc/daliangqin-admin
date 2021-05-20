@@ -2,107 +2,145 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form ref="searchFormRef"
+      <el-form
+        ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true">
-        <el-form-item label="姓名"
-          align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+        :inline="true"
+      >
+        <el-form-item label="姓名" align="left" prop="name">
+          <el-input
+            v-model="searchForm.name"
             size="small"
-            placeholder="请输入姓名"></el-input>
+            placeholder="请输入姓名"
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn"
+          <el-button
+            @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search">搜索</el-button>
-          <el-button @click="searchReset"
+            icon="el-icon-search"
+            >搜索</el-button
+          >
+          <el-button
+            @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh">重置</el-button>
+            icon="el-icon-refresh"
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格操作按钮 -->
     <div>
-      <el-button @click="add"
+      <el-button
+        @click="add"
         type="primary"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-plus">新增</el-button>
+        icon="el-icon-plus"
+        >新增</el-button
+      >
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list"
-      :header="tableHeaderBig">
+    <EleTable :data="list" :header="tableHeaderBig">
       <!-- 需要formatter的列 -->
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
+        label="序号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         prop="appType"
-        label="app类型">
+        label="app类型"
+      >
         <template slot-scope="scope">
           <span v-if="scope.row.appType === 'DOCTOR'">医生端</span>
           <span v-else>用户端</span>
         </template>
       </el-table-column>
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         prop="deviceType"
-        label="设备类型"></el-table-column>
-      <el-table-column align="center"
+        label="设备类型"
+      >
+        <template slot-scope="scope">
+          <span v-if="scope.row.deviceType === 'IOS'">苹果</span>
+          <span v-else-if="scope.row.deviceType === 'ANDROID'">安卓</span>
+          <span v-else-if="scope.row.deviceType === 'H5'">H5</span>
+          <span v-else>PC</span>
+        </template></el-table-column
+      >
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         prop="versionString"
-        label="版本号"></el-table-column>
-      <el-table-column align="center"
+        label="版本号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         prop="versionCode"
-        label="版本code"></el-table-column>
-      <el-table-column align="center"
+        label="版本code"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         prop="updateLog"
-        label="版本日志"></el-table-column>
-      <el-table-column align="center"
+        label="版本日志"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         prop="url"
-        label="url"></el-table-column>
-      <el-table-column align="center"
+        label="url"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         prop="updateTime"
-        label="更新时间">
-        <template slot-scope="scope">{{parseTime(scope.row.updateTime)}}</template>
+        label="更新时间"
+      >
+        <template slot-scope="scope">{{
+          parseTime(scope.row.updateTime)
+        }}</template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220">
+        width="220"
+      >
         <template slot-scope="scope">
-          <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
-          <!-- <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button> -->
+          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
+            >编辑</el-button
+          >
+          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination background
+    <el-pagination
+      background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -110,58 +148,71 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"></el-pagination>
+      class="el-pagination-style"
+    ></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
+    <el-dialog
+      :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @open="getData"
       @closed="editDialogClosed"
-      v-dialogDrag>
-      <el-form ref="FormRef"
+      v-dialogDrag
+    >
+      <el-form
+        ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px">
-        <el-form-item label="app类型"
-          prop="appType">
-          <el-select style="width:100%"
-            v-model="editAddForm.appType">
-            <el-option label="医生端"
-              value="DOCTOR"></el-option>
-            <el-option label="用户端"
-              value="PATIENT"></el-option>
+        label-width="100px"
+      >
+        <el-form-item
+          v-if="this.infoTitle === '新增'"
+          label="app类型"
+          prop="appType"
+        >
+          <el-select style="width: 100%" v-model="editAddForm.appType">
+            <el-option label="医生端" value="DOCTOR"></el-option>
+            <el-option label="用户端" value="PATIENT"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="设备类型"
-          prop="deviceType">
-          <el-select style="width:100%"
-            v-model="editAddForm.deviceType">
-            <el-option v-for="item in deviceTypeList"
+        <el-form-item
+          v-if="this.infoTitle === '新增'"
+          label="设备类型"
+          prop="deviceType"
+        >
+          <el-select style="width: 100%" v-model="editAddForm.deviceType">
+            <el-option
+              v-for="item in deviceTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"></el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="版本号" prop="versionString">
+          <el-input v-model="editAddForm.versionString"></el-input>
+        </el-form-item>
+        <el-form-item label="版本code" prop="versionCode">
+          <el-input v-model="editAddForm.versionCode"></el-input
+        ></el-form-item>
+        <el-form-item label="版本日志" prop="updateLog">
+          <el-input v-model="editAddForm.updateLog"></el-input>
+        </el-form-item>
+        <el-form-item label="url" prop="url">
+          <el-input v-model="editAddForm.url"></el-input>
+        </el-form-item>
       </el-form>
-      <span slot="footer"
-        class="dialog-footer">
+      <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
+        <el-button type="primary" @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
 import EleTable from "@/components/Table";
-import {
-  list,
-  add,
-  edit,
-  deleteElement,
-} from "@/api/admin/updateVersion";
+import { httpUpdateVersion } from "@/api/admin/httpUpdateVersion";
 import { parseTime } from "@/utils/index";
-// import { validateIdCard, validatePhone } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -170,15 +221,22 @@ export default {
     return {
       parseTime,
       FormRules: {
-        name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
-        avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
-        type: [{ required: true, message: "请选择职位", trigger: "blur" }],
-        hospitalName: [
-          { required: true, message: "请选择医院", trigger: "blur" },
+        appType: [
+          { required: true, message: "请选择app类型", trigger: "blur" },
         ],
-        toDoctor: [
-          { required: true, message: "请选择转诊医生  ", trigger: "blur" },
+        deviceType: [
+          { required: true, message: "请选择设备类型", trigger: "blur" },
         ],
+        versionString: [
+          { required: true, message: "请输入版本", trigger: "blur" },
+        ],
+        versionCode: [
+          { required: true, message: "请输入版本号", trigger: "blur" },
+        ],
+        updateLog: [
+          { required: true, message: "请选择更新日志  ", trigger: "blur" },
+        ],
+        url: [{ required: true, message: "请输入url  ", trigger: "blur" }],
       },
       searchForm: {
         name: "",
@@ -188,10 +246,10 @@ export default {
       editAddForm: {
         appType: "",
         deviceType: "",
-        phone: "",
-        idCard: "",
-        hospitalName: "",
-        type: "",
+        versionString: "",
+        versionCode: "",
+        updateLog: "",
+        url: "",
       },
       deviceTypeList: [
         { id: 1, label: "苹果", value: "IOS" },
@@ -209,20 +267,21 @@ export default {
       infoTitle: "",
     };
   },
-  created() {},
   mounted() {
     this.getList();
   },
   methods: {
     getList() {
-      list({
-        page: this.pageNum,
-        pageSize: this.pageSize,
-      }).then((res) => {
-        console.log(res);
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+      httpUpdateVersion
+        .list({
+          page: this.pageNum,
+          pageSize: this.pageSize,
+        })
+        .then((res) => {
+          console.log(res);
+          this.list = res.data.elements;
+          this.total = res.data.totalSize;
+        });
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -262,7 +321,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      deleteE(id).then((res) => {
+      httpUpdateVersion.deleteElement(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -281,7 +340,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            add(this.editAddForm).then((res) => {
+            httpUpdateVersion.add(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -293,7 +352,7 @@ export default {
             });
           } else {
             // 发送请求
-            edit(this.editAddForm).then((res) => {
+            httpUpdateVersion.edit(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -310,12 +369,10 @@ export default {
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      console.log(newSize);
       this.pageSize = newSize;
       this.getList();
     },
     handleCurrentChange(newPage) {
-      console.log(newPage);
       this.pageNum = newPage;
       this.getList();
     },

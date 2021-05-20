@@ -130,10 +130,16 @@
         label="高血压"
       >
         <template slot-scope="scope">
-          <span style="color:#16E127" v-if="scope.row.highBlood === 'HEALTH'">健康</span>
+          <span style="color: #16e127" v-if="scope.row.highBlood === 'HEALTH'"
+            >健康</span
+          >
           <span v-else-if="scope.row.highBlood === 'SLIGHT'">轻度</span>
-          <span style="color:#E6A23C" v-else-if="scope.row.highBlood === 'MEDIUM'">中度</span>
-          <span style="color:#F56C6C" v-else>重度</span>
+          <span
+            style="color: #e6a23c"
+            v-else-if="scope.row.highBlood === 'MEDIUM'"
+            >中度</span
+          >
+          <span style="color: #f56c6c" v-else>重度</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -144,10 +150,16 @@
         label="糖尿病"
       >
         <template slot-scope="scope">
-          <span style="color:#16E127" v-if="scope.row.diabetes === ''">健康</span>
+          <span style="color: #16e127" v-if="scope.row.diabetes === ''"
+            >健康</span
+          >
           <span v-else-if="scope.row.diabetes === 'SLIGHT'">轻度</span>
-          <span style="color:#E6A23C" v-else-if="scope.row.diabetes === 'MEDIUM'">中度</span>
-          <span style="color:#F56C6C" v-else>重度</span>
+          <span
+            style="color: #e6a23c"
+            v-else-if="scope.row.diabetes === 'MEDIUM'"
+            >中度</span
+          >
+          <span style="color: #f56c6c" v-else>重度</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -276,7 +288,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { list } from "@/api/hospital/follow";
+import { httpFollow } from "@/api/hospital/httoFollow";
 import { parseTime } from "@/utils/index";
 export default {
   components: {
@@ -321,15 +333,17 @@ export default {
   },
   methods: {
     getList() {
-      list({
-        page: this.pageNum,
-        pageSize: this.pageSize,
-        id: this.searchInput,
-      }).then((res) => {
-        console.log(res);
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+      httpFollow
+        .list({
+          page: this.pageNum,
+          pageSize: this.pageSize,
+          id: this.searchInput,
+        })
+        .then((res) => {
+          console.log(res);
+          this.list = res.data.elements;
+          this.total = res.data.totalSize;
+        });
     },
     // 日期控件选择事件
     pickerOptions() {},
@@ -371,7 +385,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      deleteE(id).then((res) => {
+      httpFollow.deleteElement(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -390,7 +404,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            add(this.editAddForm).then((res) => {
+            httpFollow.add(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -402,7 +416,7 @@ export default {
             });
           } else {
             // 发送请求
-            edit(this.editAddForm).then((res) => {
+            httpFollow.edit(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -419,12 +433,10 @@ export default {
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      console.log(newSize);
       this.pageSize = newSize;
       this.getList();
     },
     handleCurrentChange(newPage) {
-      console.log(newPage);
       this.pageNum = newPage;
       this.getList();
     },
