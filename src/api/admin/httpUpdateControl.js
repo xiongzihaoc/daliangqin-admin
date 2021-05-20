@@ -8,7 +8,6 @@ export const httpUpdateControl = {
       params: data
     })
   },
-
   add(data) {
     return request({
       url: 'update/control',
