@@ -39,7 +39,7 @@ const systemRouter = {
       name: 'updateVersion',
       component: () => import('@/views/systemManagement/updateVersion/updateVersion'),
       meta: {
-        title: '更新版本',
+        title: '更新记录',
         icon: 'jilu'
       }
     },

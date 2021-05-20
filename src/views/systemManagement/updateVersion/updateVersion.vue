@@ -33,12 +33,6 @@
         size="small"
         plain
         icon="el-icon-plus">新增</el-button>
-      <el-button @click="deleteMultiple"
-        type="danger"
-        class="tableAdd"
-        size="small"
-        plain
-        icon="el-icon-delete">删除</el-button>
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
@@ -47,18 +41,50 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="name"
-        label="添加时间"></el-table-column>
+        type="index"
+        label="序号"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="name"
-        label="身份"></el-table-column>
+        prop="appType"
+        label="app类型">
+        <template slot-scope="scope">
+          <span v-if="scope.row.appType === 'DOCTOR'">医生端</span>
+          <span v-else>用户端</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="roleName"
-        label="最后登录时间"></el-table-column>
+        prop="deviceType"
+        label="设备类型"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        prop="versionString"
+        label="版本号"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        prop="versionCode"
+        label="版本code"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        prop="updateLog"
+        label="版本日志"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        prop="url"
+        label="url"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        prop="updateTime"
+        label="更新时间">
+        <template slot-scope="scope">{{parseTime(scope.row.updateTime)}}</template>
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -96,15 +122,24 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
-        <el-form-item label="转诊医生"
-          prop="toDoctor">
-          <el-select v-model="editAddForm.toDoctor"
-            placeholder="请选择转诊医生"
-            style="width:100%">
-            <el-option v-for="item in hospitalList"
+        <el-form-item label="app类型"
+          prop="appType">
+          <el-select style="width:100%"
+            v-model="editAddForm.appType">
+            <el-option label="医生端"
+              value="DOCTOR"></el-option>
+            <el-option label="用户端"
+              value="PATIENT"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备类型"
+          prop="deviceType">
+          <el-select style="width:100%"
+            v-model="editAddForm.deviceType">
+            <el-option v-for="item in deviceTypeList"
               :key="item.id"
-              :value="item.id"
-              :label="item.name"></el-option>
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -119,7 +154,13 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, add, edit, deleteElement } from "@/api/systemManagement/httpAdmin";
+import {
+  list,
+  add,
+  edit,
+  deleteElement,
+} from "@/api/systemManagement/httpUpdateVersion";
+import { parseTime } from "@/utils/index";
 // import { validateIdCard, validatePhone } from "@/utils/index";
 export default {
   components: {
@@ -127,6 +168,7 @@ export default {
   },
   data() {
     return {
+      parseTime,
       FormRules: {
         name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
         avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
@@ -144,18 +186,20 @@ export default {
       },
       list: [],
       editAddForm: {
-        name: "",
-        avatarUrl: "",
+        appType: "",
+        deviceType: "",
         phone: "",
         idCard: "",
         hospitalName: "",
         type: "",
       },
-      hospitalList: [],
-      tableHeaderBig: [
-        { prop: "name", label: "姓名" },
-        { prop: "phone", label: "手机号" },
+      deviceTypeList: [
+        { id: 1, label: "苹果", value: "IOS" },
+        { id: 2, label: "安卓", value: "ANDROID" },
+        { id: 3, label: "PC", value: "PC_WEB" },
+        { id: 4, label: "H5", value: "H5" },
       ],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,

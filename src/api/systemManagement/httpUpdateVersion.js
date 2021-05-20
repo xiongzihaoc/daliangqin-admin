@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function list(data) {
     return request({
-        url: 'adminRole',
+        url: 'update/version',
         method: 'get',
         params: data
     })
@@ -10,21 +10,21 @@ export function list(data) {
 
 export function add(data) {
     return request({
-        url: 'adminRole',
+        url: 'update/version',
         method: 'post',
         data
     })
 }
 export function edit(data) {
     return request({
-        url: 'adminRole/' + data.id,
+        url: 'update/version/' + data.id,
         method: 'put',
         data
     })
 }
 export function deleteElement(data) {
     return request({
-        url: 'adminRole/' + data,
+        url: 'update/version/' + data,
         method: 'delete',
     })
 }
