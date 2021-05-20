@@ -157,7 +157,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { list } from "@/api/admin/addressDoctor";
+import { list } from "@/api/admin/http_addressDoctor";
 export default {
   components: {
     EleTable,
