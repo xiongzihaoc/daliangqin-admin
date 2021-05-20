@@ -139,19 +139,6 @@ export default {
           this.total = res.data.totalSize;
         });
     },
-    // 开关change事件
-    statusChange(val) {
-      httpSystem.edit(val).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
-          this.$notify.success({
-            title: "状态更改成功",
-          });
-          this.getList();
-        }
-      });
-    },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
