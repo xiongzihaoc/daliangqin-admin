@@ -1,4 +1,3 @@
-'use strict'
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
 
@@ -10,6 +9,7 @@ const name = defaultSettings.title || 'daliangqin' // page title
 
 const port = process.env.port || process.env.npm_config_port || 8088 // dev port
 
+const ENV = require('./env')
 
 module.exports = {
   publicPath: '/',
@@ -57,28 +57,50 @@ module.exports = {
     //   }
     // },
     // },
-    // 代理
     proxy: {
       '/api/public': {
-        target: 'http://test-api.daliangqing.com/public/',
+        target: ENV[ENV.current].public.source,
         changeOrigin: true,
         pathRewrite: {
           '^/api/public/': ''
         }
       }, '/api/admin': {
-        target: 'http://test-api.daliangqing.com/admin/',
+        target: ENV[ENV.current].admin.source,
         changeOrigin: true,
         pathRewrite: {
           '^/api/admin/': ''
         }
       }, '/api/hospital': {
-        target: 'http://test-api.daliangqing.com/hospital/',
+        target: ENV[ENV.current].hospital.source,
         changeOrigin: true,
         pathRewrite: {
           '^/api/hospital/': ''
         }
       },
-    },
+
+    }
+    // 代理
+    // proxy: {
+    //   '/api/public': {
+    //     target: 'http://test-api.daliangqing.com/public/',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/api/public/': ''
+    //     }
+    //   }, '/api/admin': {
+    //     target: 'http://test-api.daliangqing.com/admin/',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/api/admin/': ''
+    //     }
+    //   }, '/api/hospital': {
+    //     target: 'http://test-api.daliangqing.com/hospital/',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^/api/hospital/': ''
+    //     }
+    //   },
+    // },
     // proxy: {
     //   '/api/public/': {
     //     target: [process.env.VUE_APP_BASE_PUBLIC_API],
