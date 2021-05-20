@@ -5,7 +5,7 @@ export function login(data) {
     url: 'login/phone',
     method: 'post',
     data,
-    baseURL: process.env.VUE_APP_BASE_PUBLIC_API
+    baseURL: process.env.VUE_APP_API_TARGET_PUBLIC
   })
 }
 
@@ -13,7 +13,7 @@ export function logout(data) {
   return request({
     url: 'login/logout',
     method: 'post',
-    baseURL: process.env.VUE_APP_BASE_PUBLIC_API
+    baseURL: process.env.VUE_APP_API_TARGET_PUBLIC
   })
 }
 
@@ -21,7 +21,7 @@ export function status(data) {
   return request({
     url: 'login/status',
     method: 'get',
-    baseURL: process.env.VUE_APP_BASE_PUBLIC_API,
+    baseURL: process.env.VUE_APP_API_TARGET_PUBLIC,
   })
 }
 
