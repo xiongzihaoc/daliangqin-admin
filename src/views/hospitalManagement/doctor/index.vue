@@ -262,7 +262,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, hospitalList, add, deleteElement } from "@/api/admin/doctor";
+import { httpDoctor } from "@/api/admin/httpDoctor";
 import { parseTime } from "@/utils/index";
 import { validateIdCard, validatePhone } from "@/utils/index";
 export default {
@@ -316,7 +316,7 @@ export default {
   },
   methods: {
     getList() {
-      list({
+      httpDoctor.list({
         page: this.pageNum,
         pageSize: this.pageSize,
       }).then((res) => {
@@ -370,7 +370,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      deleteElement(id).then((res) => {
+      httpDoctor.deleteElement(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -394,7 +394,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            add(this.editAddForm).then((res) => {
+            httpDoctor.add(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -406,7 +406,7 @@ export default {
             });
           } else {
             // 发送请求
-            edit(this.editAddForm).then((res) => {
+            httpDoctor.edit(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {

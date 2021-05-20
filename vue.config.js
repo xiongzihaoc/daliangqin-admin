@@ -10,6 +10,7 @@ const name = defaultSettings.title || 'daliangqin' // page title
 
 const port = process.env.port || process.env.npm_config_port || 8088 // dev port
 
+
 module.exports = {
   publicPath: '/',
   outputDir: 'dist',
@@ -26,29 +27,67 @@ module.exports = {
     //   errors: true
     // },
     // 代理
+    // proxy: {
+    // [process.env.VUE_APP_API_TARGET_ADMIN]: {
+    //   target: process.env.VUE_APP_API_SOURCE_ADMIN,
+    //   changeOrigin: true,
+    //   pathRewrite: {
+    //     ['^' + process.env.VUE_APP_API_TARGET_ADMIN]: ''
+    //   }
+    // },
+    // [process.env.VUE_APP_API_TARGET_PUBLIC]: {
+    //   target: process.env.VUE_APP_API_SOURCE_PUBLIC,
+    //   changeOrigin: true,
+    //   pathRewrite: {
+    //     ['^' + process.env.VUE_APP_API_TARGET_PUBLIC]: ''
+    //   }
+    // },
+    //   '/api/public/': {
+    //     target: process.env.VUE_APP_API_SOURCE_PUBLIC,
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       ['^' + process.env.VUE_APP_API_TARGET_PUBLIC]: ''
+    //     }
+    //   },
+    // [process.env.API_TARGET_HOSPITAL]: {
+    //   target: process.env.VUE_APP_API_SOURCE_HOSPITAL,
+    //   changeOrigin: true,
+    //   pathRewrite: {
+    //     ['^' + process.env.VUE_APP_API_TARGET_HOSPITAL]: ''
+    //   }
+    // },
+    // },
+    // 代理
     proxy: {
-      [process.env.VUE_APP_API_TARGET_ADMIN]: {
-        target: [process.env.VUE_APP_API_SOURCE_ADMIN],
+      '/api/public': {
+        target: 'http://test-api.daliangqing.com/public/',
         changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_API_TARGET_ADMIN]: ''
+          '^/api/public/': ''
         }
-      },
-      [process.env.VUE_APP_API_TARGET_PUBLIC]: {
-        target: [process.env.VUE_APP_API_SOURCE_PUBLIC],
+      }, '/api/admin': {
+        target: 'http://test-api.daliangqing.com/admin/',
         changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_API_TARGET_PUBLIC]: ''
+          '^/api/admin/': ''
         }
-      },
-      [process.env.API_TARGET_HOSPITAL]: {
-        target: [process.env.VUE_APP_API_SOURCE_HOSPITAL],
+      }, '/api/hospital': {
+        target: 'http://test-api.daliangqing.com/hospital/',
         changeOrigin: true,
         pathRewrite: {
-          ['^' + process.env.VUE_APP_API_TARGET_HOSPITAL]: ''
+          '^/api/hospital/': ''
         }
       },
     },
+    // proxy: {
+    //   '/api/public/': {
+    //     target: [process.env.VUE_APP_BASE_PUBLIC_API],
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^api/public/': ''
+    //     }
+    //   }
+    // },
     // proxy: {
     //   [process.env.VUE_APP_BASE_API]: {
     //     target: 'http://test-api.daliangqing.com/admin',
@@ -71,25 +110,6 @@ module.exports = {
     //       ['^' + process.env.VUE_APP_BASE_HOSPITAL_API]: ''
     //     }
     //   },
-    // },
-    // // 代理
-    // proxy: {
-    //   '/api/public/': {
-    //     target: 'http://test-api.daliangqing.com/public/',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^api/public/': ''
-    //     }
-    //   }
-    // },
-    // proxy: {
-    //   '/api/public/': {
-    //     target: [process.env.VUE_APP_BASE_PUBLIC_API],
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^api/public/': ''
-    //     }
-    //   }
     // },
   },
   configureWebpack: {

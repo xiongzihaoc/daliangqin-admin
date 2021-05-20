@@ -178,7 +178,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { list } from "@/api/admin/chat";
+import { httpChat } from "@/api/admin/httpChat";
 export default {
   components: {
     EleTable,
@@ -221,7 +221,7 @@ export default {
   },
   methods: {
     getList() {
-      list({
+      httpChat.list({
         page: this.pageNum,
         pageSize: this.pageSize,
         id: this.searchInput,
@@ -271,7 +271,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      deleteE(id).then((res) => {
+      httpChat.deleteElement(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -290,7 +290,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            add(this.editAddForm).then((res) => {
+            httpChat.add(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -302,7 +302,7 @@ export default {
             });
           } else {
             // 发送请求
-            edit(this.editAddForm).then((res) => {
+            httpChat.edit(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {

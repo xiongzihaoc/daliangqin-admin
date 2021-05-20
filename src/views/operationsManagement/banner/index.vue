@@ -202,7 +202,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, add, edit, deleteElement } from "@/api/admin/banner";
+import { httpBanner } from "@/api/admin/httpBanner";
 export default {
   components: {
     EleTable,
@@ -261,16 +261,31 @@ export default {
   },
   methods: {
     getList() {
-      list({
-        page: this.pageNum,
-        pageSize: this.pageSize,
-        title: this.searchForm.title,
-        type: this.searchForm.type,
-        status: this.searchForm.status,
-      }).then((res) => {
-        console.log(res);
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
+      httpBanner
+        .list({
+          page: this.pageNum,
+          pageSize: this.pageSize,
+          title: this.searchForm.title,
+          type: this.searchForm.type,
+          status: this.searchForm.status,
+        })
+        .then((res) => {
+          console.log(res);
+          this.list = res.data.elements;
+          this.total = res.data.totalSize;
+        });
+    },
+    // 开关change事件
+    statusChange(val) {
+      httpBanner.edit(val).then((res) => {
+        if (res.code != "OK") {
+          return;
+        } else {
+          this.$notify.success({
+            title: "状态更改成功",
+          });
+          this.getList();
+        }
       });
     },
     /***** 搜索区域 *****/
@@ -312,7 +327,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      deleteElement(id).then((res) => {
+      httpBanner.deleteElement(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -320,20 +335,6 @@ export default {
         this.getList();
       });
     },
-    // 开关change事件
-    statusChange(val) {
-      edit(val).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
-          this.$notify.success({
-            title: "状态更改成功",
-          });
-          this.getList();
-        }
-      });
-    },
-
     // 弹框关闭
     getData() {},
     editDialogClosed() {
@@ -345,7 +346,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            add(this.editAddForm).then((res) => {
+            httpBanner.add(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -357,7 +358,7 @@ export default {
             });
           } else {
             // 发送请求
-            edit(this.editAddForm).then((res) => {
+            httpBanner.edit(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {

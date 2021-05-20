@@ -282,7 +282,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { list, add, edit, deleteElement } from "@/api/admin/news";
+import { httpNews } from "@/api/admin/httpNews";
 import { parseTime } from "@/utils/index";
 export default {
   components: {
@@ -343,7 +343,7 @@ export default {
   },
   methods: {
     getList() {
-      list({
+      httpNews.list({
         page: this.pageNum,
         pageSize: this.pageSize,
         id: this.searchInput,
@@ -356,7 +356,7 @@ export default {
     // 开关change事件
     statusChange(val) {
       console.log(val);
-      edit(val).then((res) => {
+      httpNews.edit(val).then((res) => {
         if (res.code != "OK") {
           return;
         } else {
@@ -426,7 +426,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            add(this.editAddForm).then((res) => {
+            httpNews.add(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -438,7 +438,7 @@ export default {
             });
           } else {
             // 发送请求
-            edit(this.editAddForm).then((res) => {
+            httpNews.edit(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
