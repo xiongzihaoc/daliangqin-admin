@@ -124,7 +124,7 @@
         label="添加时间"
       >
         <template slot-scope="scope">
-          {{parseTime(scope.row.createTime).slice(0,10)}}
+          {{parseTime(scope.row.createTime)}}
         </template>
       </el-table-column>
       <el-table-column
@@ -135,7 +135,7 @@
         label="发布时间"
       >
         <template slot-scope="scope">
-          {{parseTime(scope.row.publishTime).slice(0,10)}}
+          {{parseTime(scope.row.publishTime)}}
         </template>
       </el-table-column>
       <el-table-column

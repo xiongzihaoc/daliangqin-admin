@@ -22,7 +22,7 @@
             placeholder="请选择职位"
           >
             <el-option value="FAMILY_DOCTOR" label="家医"></el-option>
-            <el-option value="HOSPITAL_DOCTOR" label="院医"></el-option>
+            <el-option value="PROFESSIONAL_DOCTOR" label="专家"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="发布时间" prop="status">
@@ -80,7 +80,7 @@
       >
         <template slot-scope="scope">
           <span v-if="scope.row.type === 'FAMILY_DOCTOR'">家医</span>
-          <span v-else>院医</span>
+          <span v-else>专家</span>
         </template>
       </el-table-column>
       <el-table-column
