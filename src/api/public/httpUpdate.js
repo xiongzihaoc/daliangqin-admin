@@ -5,6 +5,6 @@ export function verify(data) {
     url: 'update/check',
     method: 'post',
     data,
-    baseURL: process.env.VUE_APP_BASE_PUBLIC_API,
+    baseURL: '/api/public',
   })
 }

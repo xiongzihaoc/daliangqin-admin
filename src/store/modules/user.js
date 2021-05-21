@@ -2,7 +2,7 @@ import {
   login,
   logout,
   getInfo
-} from '@/api/public/login'
+} from '@/api/public/httpLogin'
 import {
   getToken,
   setToken,

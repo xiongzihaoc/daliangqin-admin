@@ -5,6 +5,6 @@ export function login(data) {
     url: 'code/tree',
     method: 'get',
     data,
-    baseURL: process.env.VUE_APP_BASE_PUBLIC_API,
+    baseURL: '/api/public',
   })
 }

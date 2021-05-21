@@ -89,8 +89,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpSms} from "@/api/admin/httpSms";
-import { validatePhone } from "@/utils/index";
-import { parseTime } from "@/utils/index";
+import { validatePhone,parseTime } from "@/utils/index";
 export default {
   components: {
     EleTable,

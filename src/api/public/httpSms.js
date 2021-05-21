@@ -5,7 +5,7 @@ export function getCode(data) {
         url: 'sms/send',
         method: 'post',
         data,
-        baseURL: process.env.VUE_APP_API_TARGET_PUBLIC,
+        baseURL: '/api/public',
     })
 }
 
@@ -14,7 +14,7 @@ export function verify(data) {
         url: 'sms/check',
         method: 'post',
         data,
-        baseURL: process.env.VUE_APP_API_TARGET_PUBLIC,
+        baseURL: '/api/public',
     })
 }
 
