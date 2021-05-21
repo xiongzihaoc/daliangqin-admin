@@ -44,10 +44,13 @@ const user = {
       console.log(userInfo);
       return new Promise((resolve, reject) => {
         login(userInfo).then(res => {
-          console.log(res);
-          commit('SET_TOKEN', "666")
-          setToken("666")
-          resolve()
+          if (res.code !== 'OK') {
+            return
+          } else {
+            commit('SET_TOKEN', "666")
+            setToken("666")
+            resolve()
+          }
         }).catch(error => {
           reject(error)
         })
