@@ -1,69 +1,83 @@
 <template>
   <div class="app-container">
     <!-- 表格区域 -->
-    <EleTable :data="list" :header="tableHeaderBig">
+    <EleTable :data="list"
+      :header="tableHeaderBig">
       <!-- 需要formatter的列 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="app类型"
-        prop="appType"
-      >
+        prop="appType">
         <template slot-scope="scope">
           <span v-if="scope.row.appType === 'DOCTOR'">医生端</span>
           <span v-else>用户端</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220"
-      >
+        width="220">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
-            >编辑</el-button
-          >
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 增改页面 -->
-    <el-dialog
-      title="编辑"
+    <el-dialog title="编辑"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
-      v-dialogDrag
-    >
-      <el-form
-        ref="FormRef"
+      v-dialogDrag>
+      <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px"
-      >
+        label-width="100px">
         <el-form-item label="推荐更新版本">
-          <el-input v-model="editAddForm.recommendUpdateAppId"></el-input>
+          <el-select style="width:100%;"
+            v-model="editAddForm.recommendUpdateAppId">
+            <el-option v-for="item in versionList"
+              :key="item.id"
+              :label="item.versionString"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="强制更新版本">
-          <el-input v-model="editAddForm.forceUpdateAppId"></el-input>
+            <el-select style="width:100%;"
+              v-model="editAddForm.forceUpdateAppId">
+              <el-option v-for="item in versionList"
+                :key="item.id"
+                :label="item.versionString"
+                :value="item.id"></el-option>
+            </el-select>
         </el-form-item>
         <el-form-item label="最新版本">
-          <el-input v-model="editAddForm.newestUpdateAppId"></el-input>
+          <el-select style="width:100%;"
+            v-model="editAddForm.newestUpdateAppId">
+            <el-option v-for="item in versionList"
+              :key="item.id"
+              :label="item.versionString"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { httpUpdateControl } from "@/api/admin/httpUpdateControl";
+import { httpAdminUpdateControl } from "@/api/admin/httpAdminUpdateControl";
+import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion";
 export default {
   components: {
     EleTable,
@@ -74,6 +88,7 @@ export default {
         name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
       },
       list: [],
+      versionList: [],
       editAddForm: {
         recommendUpdateAppId: "",
         forceUpdateAppId: "",
@@ -91,17 +106,30 @@ export default {
   },
   mounted() {
     this.getList();
+    this.getVersionList()
   },
   methods: {
     getList() {
-      httpUpdateControl
-        .list({
+      httpAdminUpdateControl
+        .getUpdateControl({
           page: this.pageNum,
           pageSize: this.pageSize,
         })
         .then((res) => {
           console.log(res);
           this.list = res.data;
+        });
+    },
+    // 弹框开启事件 获取版本列表
+    getVersionList() {
+      httpAdminUpdateVersion
+        .getUpdateVersion({
+          page: this.pageNum,
+          pageSize: this.pageSize,
+        })
+        .then((res) => {
+          console.log(res);
+          this.versionList = res.data.elements;
         });
     },
     /***** CRUD *****/
@@ -120,16 +148,18 @@ export default {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 发送请求
-          httpUpdateControl.edit(this.editAddForm).then((res) => {
-            if (res.code != "OK") {
-              return;
-            } else {
-              this.$notify.success({
-                title: "编辑成功",
-              });
-              this.getList();
-            }
-          });
+          httpAdminUpdateControl
+            .putUpdateControl(this.editAddForm)
+            .then((res) => {
+              if (res.code != "OK") {
+                return;
+              } else {
+                this.$notify.success({
+                  title: "编辑成功",
+                });
+                this.getList();
+              }
+            });
           this.editDialogVisible = false;
         }
       });

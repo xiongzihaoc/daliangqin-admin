@@ -133,7 +133,6 @@
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
-      @open="getData"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
@@ -178,7 +177,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { httpChat } from "@/api/admin/httpChat";
+import { httpAdminChat } from "@/api/admin/httpAdminChat";
 export default {
   components: {
     EleTable,
@@ -221,18 +220,20 @@ export default {
   },
   methods: {
     getList() {
-      httpChat.list({
-        page: this.pageNum,
-        pageSize: this.pageSize,
-        id: this.searchInput,
-      }).then((res) => {
-        console.log(res);
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+      httpAdminChat
+        .getChat({
+          page: this.pageNum,
+          pageSize: this.pageSize,
+          id: this.searchInput,
+        })
+        .then((res) => {
+          console.log(res);
+          this.list = res.data.elements;
+          this.total = res.data.totalSize;
+        });
     },
     // 日期控件选择事件
-    pickerOptions(){},
+    pickerOptions() {},
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {},
@@ -271,16 +272,17 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpChat.deleteElement(id).then((res) => {
-        console.log(res);
-        this.$notify.success({
-          title: "删除成功",
-        });
+      httpAdminChat.deleteChat(id).then((res) => {
+        if (res.code != "OK") {
+          return;
+        } else {
+          this.$notify.success({
+            title: "删除成功",
+          });
+        }
         this.getList();
       });
     },
-    // 弹框开启
-    getData() {},
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
@@ -290,7 +292,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpChat.add(this.editAddForm).then((res) => {
+            httpAdminChat.postChat(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -302,7 +304,7 @@ export default {
             });
           } else {
             // 发送请求
-            httpChat.edit(this.editAddForm).then((res) => {
+            httpAdminChat.putChat(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -319,12 +321,10 @@ export default {
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      console.log(newSize);
       this.pageSize = newSize;
       this.getList();
     },
     handleCurrentChange(newPage) {
-      console.log(newPage);
       this.pageNum = newPage;
       this.getList();
     },

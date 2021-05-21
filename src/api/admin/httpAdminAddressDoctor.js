@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 
 export const httpAddressDoctor = {
-    list(data) {
+    getAddressDoctor(data) {
         return request({
             url: 'address/doctor',
             method: 'get',

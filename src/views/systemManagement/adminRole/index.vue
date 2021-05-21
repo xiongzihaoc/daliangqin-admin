@@ -2,95 +2,80 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        ref="searchFormRef"
+      <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true"
-      >
-        <el-form-item label="登录名称" align="left" prop="name">
-          <el-input
-            v-model="searchForm.name"
+        :inline="true">
+        <el-form-item label="登录名称"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.name"
             size="small"
-            placeholder="请输入登录名称"
-          ></el-input>
+            placeholder="请输入登录名称"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <el-button
-      @click="add"
+    <el-button @click="add"
       type="primary"
       class="tableAdd"
       size="small"
       plain
-      icon="el-icon-plus"
-      >新增</el-button
-    >
+      icon="el-icon-plus">新增</el-button>
     <!-- 表格区域 -->
-    <EleTable :data="list" :header="tableHeaderBig">
+    <EleTable :data="list"
+      :header="tableHeaderBig">
       <!-- 需要formatter的列 -->
-      <el-table-column
-        align="center"
-        slot="fixed"
-        fixed="right"
-        label="添加时间"
-      >
-        {{ parseTime(Date.now()) }}</el-table-column
-      >
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="roleName"
-        label="身份"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        label="身份"></el-table-column>
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        label="最后添加时间"
-      >
-        <template>
-          {{ parseTime(Date.now()) }}
+        label="添加时间"
+        prop="createTime">
+        <template slot-scope="scope">
+          {{ parseTime(scope.row.createTime) }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        label="最后登录时间"
+        prop="loginTime">
+        <template slot-scope="scope">
+          {{ parseTime(scope.row.loginTime) }}
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220"
-      >
+        width="220">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
-            >编辑</el-button
-          >
-          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
+          <el-button size="mini"
+            type="danger"
+            @click="deleteBtn(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination
-      background
+    <el-pagination background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -98,55 +83,54 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"
-    ></el-pagination>
+      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog
-      :title="infoTitle"
+    <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
-      v-dialogDrag
-    >
-      <el-form
-        ref="FormRef"
+      v-dialogDrag>
+      <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px"
-      >
-        <el-form-item label="选择身份" prop="adminRoleType">
-          <el-select style="width: 100%" v-model="editAddForm.adminRoleType">
-            <el-option
-              v-for="item in adminRoleTypeList"
+        label-width="100px">
+        <el-form-item label="选择身份"
+          prop="adminRoleType">
+          <el-select style="width: 100%"
+            v-model="editAddForm.adminRoleType">
+            <el-option v-for="item in adminRoleTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="设备类型" prop="deviceType">
-          <el-select style="width: 100%" v-model="editAddForm.deviceType">
-            <el-option
-              v-for="item in deviceTypeList"
+        <el-form-item label="设备类型"
+          prop="deviceType"
+          v-if="this.infoTitle === '新增'">
+          <el-select style="width: 100%"
+            v-model="editAddForm.deviceType">
+            <el-option v-for="item in deviceTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option
-          ></el-select>
+              :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
+        <el-form-item label="姓名"
+          prop="name">
           <el-input v-model="editAddForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="手机号" prop="phone">
-          <el-input
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            v-model="editAddForm.phone"
-          ></el-input>
+        <el-form-item label="手机号"
+          prop="phone"
+          v-if="this.infoTitle === '新增'">
+          <el-input oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            v-model="editAddForm.phone"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -154,8 +138,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminRole } from "@/api/admin/httpAdminRole";
-import { parseTime } from "@/utils/index";
-import { validatePhone } from "@/utils/index";
+import { parseTime, validatePhone } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -179,14 +162,14 @@ export default {
       list: [],
       editAddForm: {
         adminRoleType: "",
-        deviceType: "",
+        // deviceType: "",
         name: "",
-        phone: "",
+        // phone: "",
       },
       adminRoleTypeList: [
         { id: 1, label: "管理员", value: "ADMIN" },
         { id: 2, label: "运营人员", value: "OPERATOR" },
-        { id: 3, label: "可视化大图", value: "VIEWER" },
+        { id: 3, label: "数据大图", value: "VIEWER" },
       ],
       deviceTypeList: [
         { id: 1, label: "苹果", value: "IOS" },
@@ -214,7 +197,7 @@ export default {
   methods: {
     getList() {
       httpAdminRole
-        .list({
+        .getAdminRole({
           page: this.pageNum,
           pageSize: this.pageSize,
           name: this.searchForm.name,
@@ -264,15 +247,14 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpAdminRole.deleteElement(id).then((res) => {
-        if (res.code !== "ok") {
-          return;
+      httpAdminRole.deleteAdminRole(id).then((res) => {
+        if (res.code != "OK") {
+          return
         } else {
           this.$notify.success({
             title: "删除成功",
           });
         }
-
         this.getList();
       });
     },
@@ -285,7 +267,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpAdminRole.add(this.editAddForm).then((res) => {
+            httpAdminRole.postAdminRole(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -297,7 +279,7 @@ export default {
             });
           } else {
             // 发送请求
-            httpAdminRole.edit(this.editAddForm).then((res) => {
+            httpAdminRole.putAdminRole(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {

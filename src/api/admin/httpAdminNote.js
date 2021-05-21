@@ -1,32 +1,33 @@
 import request from '@/utils/request'
 
-export const httpUpdateVersion = {
-  list(data) {
+export const httpAdminNote = {
+  getNotes(data) {
     return request({
-      url: 'update/version',
+      url: 'notes',
       method: 'get',
       params: data
     })
   },
-
-  add(data) {
+  postNotes(data) {
     return request({
-      url: 'update/version',
+      url: 'hospital',
       method: 'post',
       data
     })
   },
-  edit(data) {
+  putNotes(data) {
     return request({
-      url: 'update/version/' + data.id,
+      url: 'hospital/' + data.id,
       method: 'put',
       data
     })
   },
-  deleteElement(data) {
+  deleteNotes(data) {
     return request({
-      url: 'update/version/' + data,
+      url: 'hospital/' + data,
       method: 'delete',
     })
   }
 }
+
+

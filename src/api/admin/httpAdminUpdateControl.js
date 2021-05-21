@@ -1,28 +1,28 @@
 import request from '@/utils/request'
 
-export const httpUpdateControl = {
-  list(data) {
+export const httpAdminUpdateControl = {
+  getUpdateControl(data) {
     return request({
       url: 'update/control',
       method: 'get',
       params: data
     })
   },
-  add(data) {
+  postUpdateControl(data) {
     return request({
       url: 'update/control',
       method: 'post',
       data
     })
   },
-  edit(data) {
+  putUpdateControl(data) {
     return request({
       url: 'update/control/' + data.id,
       method: 'put',
       data
     })
   },
-  deleteElement(data) {
+  deleteUpdateControl(data) {
     return request({
       url: 'update/control/' + data,
       method: 'delete',

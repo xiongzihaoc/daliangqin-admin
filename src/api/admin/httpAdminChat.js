@@ -1,33 +1,32 @@
 import request from '@/utils/request'
 
-export const httpSystem = {
-    list(data) {
+
+export const httpAdminChat = {
+    getChat(data) {
         return request({
-            url: 'system',
+            url: 'chat',
             method: 'get',
             params: data
         })
     },
-    add(data) {
+    postChat(data) {
         return request({
-            url: 'system',
+            url: 'chat',
             method: 'post',
             data
         })
     },
-    edit(data) {
+    putChat(data) {
         return request({
-            url: 'system/' + data.id,
+            url: 'chat/' + data.id,
             method: 'put',
             data
         })
     },
-    deleteElement(data) {
+    deleteChat(id) {
         return request({
-            url: 'system/' + data,
+            url: 'chat/' + id,
             method: 'delete',
         })
     }
-
-
 }

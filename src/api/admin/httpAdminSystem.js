@@ -1,32 +1,33 @@
 import request from '@/utils/request'
 
-
-export const httpNews = {
-    list(data) {
+export const httpAdminSystem = {
+    getSystem(data) {
         return request({
-            url: 'news',
+            url: 'system',
             method: 'get',
             params: data
         })
-    } ,
-    add(data) {
+    },
+    postSystem(data) {
         return request({
-            url: 'news',
+            url: 'system',
             method: 'post',
             data
         })
     },
-    edit(data) {
+    putSystem(data) {
         return request({
-            url: 'news/' + data.id,
+            url: 'system/' + data.id,
             method: 'put',
             data
         })
     },
-    deleteElement(data) {
+    deleteSystem(data) {
         return request({
-            url: 'news/' + data,
+            url: 'system/' + data,
             method: 'delete',
         })
     }
+
+
 }

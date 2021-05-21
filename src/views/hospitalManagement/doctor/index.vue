@@ -189,7 +189,7 @@
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
-      @open="getData"
+      @open="openBounced"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
@@ -262,9 +262,9 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { httpDoctor } from "@/api/admin/httpDoctor";
-import { parseTime } from "@/utils/index";
-import { validateIdCard, validatePhone } from "@/utils/index";
+import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
+import { validateIdCard, validatePhone, parseTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -316,14 +316,16 @@ export default {
   },
   methods: {
     getList() {
-      httpDoctor.list({
-        page: this.pageNum,
-        pageSize: this.pageSize,
-      }).then((res) => {
-        console.log(res);
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+      httpAdminDoctor
+        .getDoctor({
+          page: this.pageNum,
+          pageSize: this.pageSize,
+        })
+        .then((res) => {
+          console.log(res);
+          this.list = res.data.elements;
+          this.total = res.data.totalSize;
+        });
     },
     toDoctorChange(val) {
       // console.log(val);
@@ -370,20 +372,24 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpDoctor.deleteElement(id).then((res) => {
-        console.log(res);
-        this.$notify.success({
-          title: "删除成功",
-        });
+      httpAdminDoctor.deleteDoctor(id).then((res) => {
+        if (res.code != "OK") {
+          return;
+        } else {
+          this.$notify.success({
+            title: "删除成功",
+          });
+        }
         this.getList();
       });
     },
     // 弹框开启
-    getData() {
-      hospitalList({ pageSize: 20, pageNum: 1 }).then((res) => {
-        console.log(res);
-        this.hospitalList = res.data.elements;
-      });
+    openBounced() {
+      httpAdminHospital
+        .getHospital({ pageSize: 20, pageNum: 1 })
+        .then((res) => {
+          this.hospitalList = res.data.elements;
+        });
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
@@ -394,7 +400,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpDoctor.add(this.editAddForm).then((res) => {
+            httpAdminDoctor.postDoctor(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -406,7 +412,7 @@ export default {
             });
           } else {
             // 发送请求
-            httpDoctor.edit(this.editAddForm).then((res) => {
+            httpAdminDoctor.putDoctor(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {

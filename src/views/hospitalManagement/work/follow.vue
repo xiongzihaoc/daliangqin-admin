@@ -2,211 +2,166 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        ref="searchFormRef"
+      <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true"
-      >
-        <el-form-item label="用户姓名" prop="fromUserName">
-          <el-input
-            v-model="searchForm.fromUserName"
+        :inline="true">
+        <el-form-item label="用户姓名"
+          prop="fromUserName">
+          <el-input v-model="searchForm.fromUserName"
             size="small"
-            placeholder="请输入用户姓名"
-          ></el-input>
+            placeholder="请输入用户姓名"></el-input>
         </el-form-item>
-        <el-form-item label="留言时间" prop="chatTime">
-          <el-date-picker
-            v-model="searchForm.chatTime"
+        <el-form-item label="留言时间"
+          prop="chatTime">
+          <el-date-picker v-model="searchForm.chatTime"
             size="small"
             type="datetimerange"
             :picker-options="pickerOptions"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            align="right"
-          >
+            align="right">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="医生姓名" prop="toUserName">
-          <el-input
-            v-model="searchForm.toUserName"
+        <el-form-item label="医生姓名"
+          prop="toUserName">
+          <el-input v-model="searchForm.toUserName"
             size="small"
-            placeholder="请输入医生姓名"
-          ></el-input>
+            placeholder="请输入医生姓名"></el-input>
         </el-form-item>
-        <el-form-item label="回复时间" prop="chatTime">
-          <el-date-picker
-            v-model="searchForm.chatTime"
+        <el-form-item label="回复时间"
+          prop="chatTime">
+          <el-date-picker v-model="searchForm.chatTime"
             size="small"
             type="datetimerange"
             :picker-options="pickerOptions"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            align="right"
-          >
+            align="right">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list" :header="tableHeaderBig">
+    <EleTable :data="list"
+      :header="tableHeaderBig">
       <!-- 需要formatter的列 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        type="selection"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        type="selection"></el-table-column>
+      <el-table-column align="center"
         slot="fixed"
         fixed="left"
         type="index"
-        label="序号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        label="序号"></el-table-column>
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="doctorUserName"
-        label="医生姓名"
-      >
+        label="医生姓名">
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="position"
-        label="职位"
-      >
+        label="职位">
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="type"
-        label="随访方式"
-      >
+        label="随访方式">
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="content"
-        label="随访内容"
-      >
+        label="随访内容">
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="patientUserName"
-        label="随访用户"
-      >
+        label="随访用户">
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="highBlood"
-        label="高血压"
-      >
+        label="高血压">
         <template slot-scope="scope">
-          <span style="color: #16e127" v-if="scope.row.highBlood === 'HEALTH'"
-            >健康</span
-          >
+          <span style="color: #16e127"
+            v-if="scope.row.highBlood === 'HEALTH'">健康</span>
           <span v-else-if="scope.row.highBlood === 'SLIGHT'">轻度</span>
-          <span
-            style="color: #e6a23c"
-            v-else-if="scope.row.highBlood === 'MEDIUM'"
-            >中度</span
-          >
-          <span style="color: #f56c6c" v-else>重度</span>
+          <span style="color: #e6a23c"
+            v-else-if="scope.row.highBlood === 'MEDIUM'">中度</span>
+          <span style="color: #f56c6c"
+            v-else>重度</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="diabetes"
-        label="糖尿病"
-      >
+        label="糖尿病">
         <template slot-scope="scope">
-          <span style="color: #16e127" v-if="scope.row.diabetes === ''"
-            >健康</span
-          >
+          <span style="color: #16e127"
+            v-if="scope.row.diabetes === ''">健康</span>
           <span v-else-if="scope.row.diabetes === 'SLIGHT'">轻度</span>
-          <span
-            style="color: #e6a23c"
-            v-else-if="scope.row.diabetes === 'MEDIUM'"
-            >中度</span
-          >
-          <span style="color: #f56c6c" v-else>重度</span>
+          <span style="color: #e6a23c"
+            v-else-if="scope.row.diabetes === 'MEDIUM'">中度</span>
+          <span style="color: #f56c6c"
+            v-else>重度</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="startTime"
-        label="随访开始时间"
-      >
+        label="随访开始时间">
         <template slot-scope="scope">
           {{ parseTime(scope.row.startTime).slice(6) }}
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="endTime"
-        label="随访结束时间"
-      >
+        label="随访结束时间">
         <template slot-scope="scope">
           {{ parseTime(scope.row.endTime).slice(6) }}
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="userStatus"
-        label="用户状态"
-      >
+        label="用户状态">
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="diabetes"
-        label="加入方式"
-      >
+        label="加入方式">
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="diabetes"
-        label="操作时间"
-      >
+        label="操作时间">
       </el-table-column>
       <!-- 操作 -->
       <!-- <el-table-column
@@ -224,8 +179,7 @@
       </el-table-column> -->
     </EleTable>
     <!-- 分页 -->
-    <el-pagination
-      background
+    <el-pagination background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -233,54 +187,49 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"
-    ></el-pagination>
+      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog
-      :title="infoTitle"
+    <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @open="getData"
       @closed="editDialogClosed"
-      v-dialogDrag
-    >
-      <el-form
-        ref="FormRef"
+      v-dialogDrag>
+      <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="110px"
-      >
-        <el-form-item label="医院名称" prop="name">
-          <el-input
-            v-model="editAddForm.name"
-            placeholder="请输入医院名称"
-          ></el-input>
+        label-width="110px">
+        <el-form-item label="医院名称"
+          prop="name">
+          <el-input v-model="editAddForm.name"
+            placeholder="请输入医院名称"></el-input>
         </el-form-item>
-        <el-form-item label="医院电话" prop="contract">
-          <el-input
-            v-model="editAddForm.contract"
+        <el-form-item label="医院电话"
+          prop="contract">
+          <el-input v-model="editAddForm.contract"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入医院电话"
-          ></el-input>
+            placeholder="请输入医院电话"></el-input>
         </el-form-item>
-        <el-form-item label="医院地址" prop="address">
-          <el-input
-            v-model="editAddForm.address"
-            placeholder="请输入医院地址"
-          ></el-input>
+        <el-form-item label="医院地址"
+          prop="address">
+          <el-input v-model="editAddForm.address"
+            placeholder="请输入医院地址"></el-input>
         </el-form-item>
-        <el-form-item label="管理员手机号" prop="adminPhone">
-          <el-input
-            v-if="this.infoTitle === '新增'"
+        <el-form-item label="管理员手机号"
+          prop="adminPhone">
+          <el-input v-if="this.infoTitle === '新增'"
             v-model="editAddForm.adminPhone"
-            placeholder="请输入管理员手机号"
-          ></el-input>
-          <el-input v-else disabled v-model="editAddForm.adminPhone"></el-input>
+            placeholder="请输入管理员手机号"></el-input>
+          <el-input v-else
+            disabled
+            v-model="editAddForm.adminPhone"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -288,7 +237,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { httpFollow } from "@/api/hospital/httoFollow";
+import { httpFollow } from "@/api/hospital/httoHospitalFollow";
 import { parseTime } from "@/utils/index";
 export default {
   components: {
@@ -386,10 +335,13 @@ export default {
       }
       // 发送请求
       httpFollow.deleteElement(id).then((res) => {
-        console.log(res);
-        this.$notify.success({
-          title: "删除成功",
-        });
+        if (res.code != "OK") {
+          return;
+        } else {
+          this.$notify.success({
+            title: "删除成功",
+          });
+        }
         this.getList();
       });
     },

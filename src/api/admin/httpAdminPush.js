@@ -1,19 +1,18 @@
 import request from '@/utils/request'
 
-export const httpSms = {
-  list(data) {
+export const httpAdminPush = {
+  getPush(data) {
     return request({
-      url: 'sms',
+      url: 'push',
       method: 'get',
       params: data
     })
   },
-  // 重置
-  reset(data) {
+  postPush(data) {
     return request({
-      url: 'sms/reset',
+      url: 'push',
       method: 'post',
-      params: data
+      data
     })
   }
 

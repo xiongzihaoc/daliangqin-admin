@@ -139,7 +139,6 @@
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
-      @open="getData"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
@@ -202,7 +201,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { httpBanner } from "@/api/admin/httpBanner";
+import { httpAdminBanner } from "@/api/admin/httpAdminBanner";
 export default {
   components: {
     EleTable,
@@ -261,8 +260,8 @@ export default {
   },
   methods: {
     getList() {
-      httpBanner
-        .list({
+      httpAdminBanner
+        .getBanner({
           page: this.pageNum,
           pageSize: this.pageSize,
           title: this.searchForm.title,
@@ -270,14 +269,13 @@ export default {
           status: this.searchForm.status,
         })
         .then((res) => {
-          console.log(res);
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
     },
     // 开关change事件
     statusChange(val) {
-      httpBanner.edit(val).then((res) => {
+      httpAdminBanner.putBanner(val).then((res) => {
         if (res.code != "OK") {
           return;
         } else {
@@ -327,7 +325,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpBanner.deleteElement(id).then((res) => {
+      httpAdminBanner.deleteBanner(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -335,8 +333,6 @@ export default {
         this.getList();
       });
     },
-    // 弹框关闭
-    getData() {},
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
@@ -346,7 +342,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpBanner.add(this.editAddForm).then((res) => {
+            httpAdminBanner.postBanner(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -358,7 +354,7 @@ export default {
             });
           } else {
             // 发送请求
-            httpBanner.edit(this.editAddForm).then((res) => {
+            httpAdminBanner.putBanner(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {

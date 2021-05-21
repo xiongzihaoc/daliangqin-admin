@@ -1,31 +1,31 @@
 import request from '@/utils/request'
 
 
-export const httpChat = {
-    list(data) {
+export const httpAdminNews = {
+    getNews(data) {
         return request({
-            url: 'chat',
+            url: 'news',
             method: 'get',
             params: data
         })
-    },
-    add(data) {
+    } ,
+    postNews(data) {
         return request({
-            url: 'chat',
+            url: 'news',
             method: 'post',
             data
         })
     },
-    edit(data) {
+    putNews(data) {
         return request({
-            url: 'chat/' + data.id,
+            url: 'news/' + data.id,
             method: 'put',
             data
         })
     },
-    deleteE(data) {
+    deleteNews(data) {
         return request({
-            url: 'chat/' + data,
+            url: 'news/' + data,
             method: 'delete',
         })
     }

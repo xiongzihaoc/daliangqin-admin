@@ -157,7 +157,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { httpAddressDoctor } from "@/api/admin/httpAddressDoctor";
+import { httpAddressDoctor } from "@/api/admin/httpAdminAddressDoctor";
 export default {
   components: {
     EleTable,
@@ -222,15 +222,17 @@ export default {
   },
   methods: {
     getList() {
-      httpAddressDoctor.list({
-        page: this.pageNum,
-        pageSize: this.pageSize,
-        id: this.searchInput,
-      }).then((res) => {
-        console.log(res);
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+      httpAddressDoctor
+        .getAddressDoctor({
+          page: this.pageNum,
+          pageSize: this.pageSize,
+          id: this.searchInput,
+        })
+        .then((res) => {
+          console.log(res);
+          this.list = res.data.elements;
+          this.total = res.data.totalSize;
+        });
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -270,11 +272,14 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpAddressDoctor.deleteE(id).then((res) => {
-        console.log(res);
-        this.$notify.success({
-          title: "删除成功",
-        });
+      httpAddressDoctor.deleteAddressDoctor(id).then((res) => {
+        if (res.code != "OK") {
+          return;
+        } else {
+          this.$notify.success({
+            title: "删除成功",
+          });
+        }
         this.getList();
       });
     },
@@ -289,19 +294,21 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpAddressDoctor.add(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "新增成功",
-                });
-                this.getList();
-              }
-            });
+            httpAddressDoctor
+              .postAddressDoctor(this.editAddForm)
+              .then((res) => {
+                if (res.code != "OK") {
+                  return;
+                } else {
+                  this.$notify.success({
+                    title: "新增成功",
+                  });
+                  this.getList();
+                }
+              });
           } else {
             // 发送请求
-            httpAddressDoctor.edit(this.editAddForm).then((res) => {
+            httpAddressDoctor.putAddressDoctor(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {

@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
-export const httpHospital = {
-  list(data) {
+export const httpAdminHospital = {
+  getHospital(data) {
     return request({
       url: 'hospital',
       method: 'get',
@@ -9,21 +9,21 @@ export const httpHospital = {
     })
   },
 
-  add(data) {
+  postHospital(data) {
     return request({
       url: 'hospital',
       method: 'post',
       data
     })
   },
-  edit(data) {
+  putHospital(data) {
     return request({
       url: 'hospital/' + data.id,
       method: 'put',
       data
     })
   },
-  deleteElement(data) {
+  deleteHospital(data) {
     return request({
       url: 'hospital/' + data,
       method: 'delete',

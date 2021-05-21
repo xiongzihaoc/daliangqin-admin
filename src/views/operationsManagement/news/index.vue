@@ -2,152 +2,128 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        ref="searchFormRef"
+      <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true"
-      >
-        <el-form-item label="标题" align="left" prop="title">
-          <el-input
-            v-model="searchForm.title"
+        :inline="true">
+        <el-form-item label="标题"
+          align="left"
+          prop="title">
+          <el-input v-model="searchForm.title"
             size="small"
-            placeholder="请输入标题"
-          ></el-input>
+            placeholder="请输入标题"></el-input>
         </el-form-item>
-        <el-form-item label="内容类型" prop="contentType">
-          <el-select
-            v-model="searchForm.contentType"
+        <el-form-item label="内容类型"
+          prop="contentType">
+          <el-select v-model="searchForm.contentType"
             size="small"
-            placeholder="请选择内容类型"
-          >
-            <el-option value="NEWS" label="资讯"></el-option>
-            <el-option value="VIDEO" label="视频"></el-option>
-            <el-option value="LIVE" label="直播"></el-option>
+            placeholder="请选择内容类型">
+            <el-option value="NEWS"
+              label="资讯"></el-option>
+            <el-option value="VIDEO"
+              label="视频"></el-option>
+            <el-option value="LIVE"
+              label="直播"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="状态" prop="deletedStatus">
-          <el-select
-            style="width: 100%"
+        <el-form-item label="状态"
+          prop="deletedStatus">
+          <el-select style="width: 100%"
             v-model="searchForm.deletedStatus"
             size="small"
-            placeholder="请选择状态"
-          >
-            <el-option value="SHOW" label="上架"></el-option>
-            <el-option value="DELETE" label="下架"></el-option>
+            placeholder="请选择状态">
+            <el-option value="SHOW"
+              label="上架"></el-option>
+            <el-option value="DELETE"
+              label="下架"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <el-button
-      @click="add"
+    <el-button @click="add"
       type="primary"
       class="tableAdd"
       size="small"
       plain
-      icon="el-icon-plus"
-      >新增</el-button
-    >
+      icon="el-icon-plus">新增</el-button>
     <!-- 表格区域 -->
-    <EleTable :data="list" :header="tableHeaderBig">
+    <EleTable :data="list"
+      :header="tableHeaderBig">
       <!-- 需要formatter的列 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        type="selection"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        type="selection"></el-table-column>
+      <el-table-column align="center"
         slot="fixed"
         fixed="left"
         type="index"
-        label="序号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        label="序号"></el-table-column>
+      <el-table-column align="center"
         slot="fixed"
         fixed="left"
         prop="title"
-        label="标题"
-      >
+        label="标题">
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="left"
         prop="contentType"
-        label="内容类型"
-      >
+        label="内容类型">
         <template slot-scope="scope">
           <span v-if="scope.row.contentType === 'NEWS'">资讯</span>
           <span v-else-if="scope.row.contentType === 'VIEDO'">视频</span>
           <span v-else>直播</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="coverUrl"
-        label="封面图"
-      >
+        label="封面图">
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="author"
-        label="发布人"
-      >
+        label="发布人">
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="publishTime"
-        label="添加时间"
-      >
+        label="添加时间">
         <template slot-scope="scope">
           {{ parseTime(scope.row.createTime) }}
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="publishTime"
-        label="发布时间"
-      >
+        label="发布时间">
         <template slot-scope="scope">
-          {{ parseTime(scope.row.publishTime) }}
+          {{ parseTime(scope.row.publishTime).slice(0,10) }}
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="appTypes"
-        label="呈现位置"
-      >
+        label="呈现位置">
         <template slot-scope="scope">
-          <span v-for="(item, index) in scope.row.appTypes" :key="index">
+          <span v-for="(item, index) in scope.row.appTypes"
+            :key="index">
             <span v-if="item === 'PATIENT'">用户端 </span>
             <span v-else>医生端 </span>
           </span>
@@ -161,46 +137,39 @@
         label="推荐">
       </el-table-column> -->
       <!-- 状态 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="deletedStatus"
-        label="状态"
-      >
+        label="状态">
         <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.deletedStatus"
+          <el-switch v-model="scope.row.deletedStatus"
             @change="statusChange(scope.row)"
             active-value="SHOW"
             inactive-value="DELETE"
             active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
+            inactive-color="#ff4949">
           </el-switch>
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220"
-      >
+        width="220">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
-            >编辑</el-button
-          >
-          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
+          <el-button size="mini"
+            type="danger"
+            @click="deleteBtn(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination
-      background
+    <el-pagination background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -208,121 +177,113 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"
-    ></el-pagination>
+      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog
-      :title="infoTitle"
+    <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
-      @open="getData"
       @closed="editDialogClosed"
-      v-dialogDrag
-    >
-      <el-form
-        ref="FormRef"
+      v-dialogDrag>
+      <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px"
-      >
-        <el-form-item label="内容类型" prop="contentType">
-          <el-select
-            style="width: 100%"
+        label-width="100px">
+        <el-form-item label="内容类型"
+          prop="contentType">
+          <el-select style="width: 100%"
             v-model="editAddForm.contentType"
-            placeholder="请选择内容类型"
-          >
-            <el-option label="资讯" value="NEWS"></el-option>
-            <el-option label="视频" value="VIDEO"></el-option>
-            <el-option label="直播" value="LIVE"></el-option>
+            placeholder="请选择内容类型">
+            <el-option label="资讯"
+              value="NEWS"></el-option>
+            <el-option label="视频"
+              value="VIDEO"></el-option>
+            <el-option label="直播"
+              value="LIVE"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="标题" prop="title">
-          <el-input
-            v-model.trim="editAddForm.title"
-            placeholder="请输入标题"
-          ></el-input>
+        <el-form-item label="标题"
+          prop="title">
+          <el-input v-model.trim="editAddForm.title"
+            placeholder="请输入标题"></el-input>
         </el-form-item>
-        <el-form-item label="封面图" prop="coverUrl">
-          <el-input
-            v-model.trim="editAddForm.coverUrl"
-            placeholder="请上传封面图"
-          ></el-input>
+        <el-form-item label="封面图"
+          prop="coverUrl">
+          <el-input v-model.trim="editAddForm.coverUrl"
+            placeholder="请上传封面图"></el-input>
         </el-form-item>
-        <el-form-item label="详情" prop="content">
-          <el-input
-            v-model.trim="editAddForm.content"
-            placeholder="请输入详情"
-          ></el-input>
+        <el-form-item label="详情"
+          prop="content">
+          <el-input v-model.trim="editAddForm.content"
+            placeholder="请输入详情"></el-input>
         </el-form-item>
-        <el-form-item label="呈现位置" prop="appTypes">
-          <el-select
-            style="width: 100%"
+        <el-form-item label="呈现位置"
+          prop="appTypes">
+          <el-select style="width: 100%"
             multiple
             v-model="editAddForm.appTypes"
-            placeholder="请选择呈现位置"
-          >
-            <el-option value="DOCTOR" label="医生端"></el-option>
-            <el-option value="PATIENT" label="用户端"></el-option>
+            placeholder="请选择呈现位置">
+            <el-option value="DOCTOR"
+              label="医生端"></el-option>
+            <el-option value="PATIENT"
+              label="用户端"></el-option>
           </el-select>
         </el-form-item>
         <!-- 问卷选择暂时搁置 -->
-        <el-form-item label="发布人" prop="author">
-          <el-input
-            v-model.trim="editAddForm.author"
-            placeholder="请输入发布人"
-          ></el-input>
+        <el-form-item label="发布人"
+          prop="author">
+          <el-input v-model.trim="editAddForm.author"
+            placeholder="请输入发布人"></el-input>
         </el-form-item>
-        <el-form-item label="发布头像" prop="avatarUrl">
-          <el-input
-            v-model.trim="editAddForm.avatarUrl"
-            placeholder="请上传发布头像"
-          ></el-input>
+        <el-form-item label="发布头像"
+          prop="avatarUrl">
+          <el-input v-model.trim="editAddForm.avatarUrl"
+            placeholder="请上传发布头像"></el-input>
         </el-form-item>
-        <el-form-item label="发布人职位" prop="position">
-          <el-input
-            v-model.trim="editAddForm.position"
-            placeholder="请输入发布人职位"
-          ></el-input>
+        <el-form-item label="发布人职位"
+          prop="position">
+          <el-input v-model.trim="editAddForm.position"
+            placeholder="请输入发布人职位"></el-input>
         </el-form-item>
-        <el-form-item label="发布时间" prop="publishTime">
-          <el-date-picker
-            v-model="editAddForm.publishTime"
+        <el-form-item label="发布时间"
+          prop="publishTime">
+          <el-date-picker v-model="editAddForm.publishTime"
             style="width: 100%"
             type="datetime"
             @change="dateChange"
             placeholder="选择日期时间"
             value-format="timestamp"
-            align="right"
-          >
+            align="right">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="权重" prop="zorder">
-          <el-input
-            v-model.trim="editAddForm.zorder"
-            placeholder="请输入权重"
-          ></el-input>
+        <el-form-item label="权重"
+          prop="zorder">
+          <el-input v-model.trim="editAddForm.zorder"
+            placeholder="请输入权重"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="deletedStatus">
-          <el-select
-            style="width: 100%"
+        <el-form-item label="状态"
+          prop="deletedStatus">
+          <el-select style="width: 100%"
             v-model="editAddForm.deletedStatus"
-            placeholder="请选择状态"
-          >
-            <el-option value="SHOW" label="上架"></el-option>
-            <el-option value="DELETE" label="下架"></el-option>
+            placeholder="请选择状态">
+            <el-option value="SHOW"
+              label="上架"></el-option>
+            <el-option value="DELETE"
+              label="下架"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { httpNews } from "@/api/admin/httpNews";
+import { httpAdminNews } from "@/api/admin/httpAdminNews";
 import { parseTime } from "@/utils/index";
 export default {
   components: {
@@ -336,7 +297,9 @@ export default {
           { required: true, message: "请输入轮播图名称", trigger: "blur" },
         ],
         title: [{ required: true, message: "请输入标题", trigger: "blur" }],
-        coverUrl: [{ required: true, message: "请上传封面图", trigger: "blur" }],
+        coverUrl: [
+          { required: true, message: "请上传封面图", trigger: "blur" },
+        ],
         avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
         appTypes: [
           { required: true, message: "请选择呈现位置", trigger: "blur" },
@@ -350,7 +313,9 @@ export default {
           { required: true, message: "请选择发布时间", trigger: "blur" },
         ],
         zorder: [{ required: true, message: "请输入权重", trigger: "blur" }],
-        deletedStatus: [{ required: true, message: "请选择状态", trigger: "blur" }],
+        deletedStatus: [
+          { required: true, message: "请选择状态", trigger: "blur" },
+        ],
       },
       searchForm: {
         title: "",
@@ -386,8 +351,8 @@ export default {
   },
   methods: {
     getList() {
-      httpNews
-        .list({
+      httpAdminNews
+        .getNews({
           page: this.pageNum,
           pageSize: this.pageSize,
           title: this.searchForm.title,
@@ -402,8 +367,7 @@ export default {
     },
     // 开关change事件
     statusChange(val) {
-      console.log(val);
-      httpNews.edit(val).then((res) => {
+      httpAdminNews.putNews(val).then((res) => {
         if (res.code != "OK") {
           return;
         } else {
@@ -457,7 +421,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpNews.deleteElement(id).then((res) => {
+      httpAdminNews.deleteNews(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -465,8 +429,6 @@ export default {
         this.getList();
       });
     },
-    // 弹框开启
-    getData() {},
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
@@ -476,7 +438,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpNews.add(this.editAddForm).then((res) => {
+            httpAdminNews.postNews(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -488,7 +450,7 @@ export default {
             });
           } else {
             // 发送请求
-            httpNews.edit(this.editAddForm).then((res) => {
+            httpAdminNews.putNews(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {

@@ -88,7 +88,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { httpSms} from "@/api/admin/httpSms";
+import { httpAdminSms} from "@/api/admin/httpAdminSms";
 import { validatePhone,parseTime } from "@/utils/index";
 export default {
   components: {
@@ -119,7 +119,7 @@ export default {
   },
   methods: {
     getList() {
-     httpSms.list({
+     httpAdminSms.getSms({
         page: this.pageNum,
         pageSize: this.pageSize,
         phone: this.searchInput,
@@ -148,7 +148,7 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-         httpSms. reset({ phone: this.editAddForm.phone }).then((res) => {
+         httpAdminSms.postSmsReset({ phone: this.editAddForm.phone }).then((res) => {
             console.log(res);
             this.$notify.success({
               title: "重置成功",

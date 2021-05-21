@@ -1,21 +1,21 @@
 import request from '@/utils/request'
 
-export const httpPatient = {
-  list(data) {
+export const httpAdminPatient = {
+  getPatient(data) {
     return request({
       url: 'patient',
       method: 'get',
       params: data
     })
   },
-  add(data) {
+  postPatient(data) {
     return request({
       url: 'patient',
       method: 'post',
       data
     })
   },
-  edit(data) {
+  putPatient(data) {
     return request({
       url: 'patient/' + data.id,
       method: 'put',

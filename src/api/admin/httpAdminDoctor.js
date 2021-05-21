@@ -1,33 +1,26 @@
 import request from '@/utils/request'
 
 
-export const httpDoctor = {
-  list(data) {
+export const httpAdminDoctor = {
+  getDoctor(data) {
     return request({
       url: 'doctor',
       method: 'get',
       params: data
     })
   },
-  add(data) {
+  postDoctor(data) {
     return request({
       url: 'doctor',
       method: 'post',
       data
     })
   },
-  deleteElement(data) {
+  deleteDoctor(id) {
     return request({
-      url: 'doctor/' + data,
+      url: 'doctor/' + id,
       method: 'delete',
     })
 
   },
-  hospitalList(data) {
-    return request({
-      url: 'hospital',
-      method: 'get',
-      params: data
-    })
-  }
 }

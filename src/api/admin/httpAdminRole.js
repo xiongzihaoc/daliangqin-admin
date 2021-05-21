@@ -1,28 +1,28 @@
 import request from '@/utils/request'
 
 export const httpAdminRole = {
-    list(data) {
+    getAdminRole(data) {
         return request({
             url: 'adminRole',
             method: 'get',
             params: data
         })
     },
-    add(data) {
+    postAdminRole(data) {
         return request({
             url: 'adminRole',
             method: 'post',
             data
         })
     },
-    edit(data) {
+    putAdminRole(data) {
         return request({
             url: 'adminRole/' + data.id,
             method: 'put',
             data
         })
     },
-    deleteElement(data) {
+    deleteAdminRole(data) {
         return request({
             url: 'adminRole/' + data,
             method: 'delete',
