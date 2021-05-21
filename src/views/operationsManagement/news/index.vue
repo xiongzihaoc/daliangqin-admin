@@ -22,7 +22,7 @@
             placeholder="请选择内容类型"
           >
             <el-option value="NEWS" label="资讯"></el-option>
-            <el-option value="VIEDO" label="视频"></el-option>
+            <el-option value="VIDEO" label="视频"></el-option>
             <el-option value="LIVE" label="直播"></el-option>
           </el-select>
         </el-form-item>
@@ -336,6 +336,8 @@ export default {
           { required: true, message: "请输入轮播图名称", trigger: "blur" },
         ],
         title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+        coverUrl: [{ required: true, message: "请上传封面图", trigger: "blur" }],
+        avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
         appTypes: [
           { required: true, message: "请选择呈现位置", trigger: "blur" },
         ],
@@ -348,6 +350,7 @@ export default {
           { required: true, message: "请选择发布时间", trigger: "blur" },
         ],
         zorder: [{ required: true, message: "请输入权重", trigger: "blur" }],
+        deletedStatus: [{ required: true, message: "请选择状态", trigger: "blur" }],
       },
       searchForm: {
         title: "",
