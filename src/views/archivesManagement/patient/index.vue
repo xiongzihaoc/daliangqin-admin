@@ -137,7 +137,6 @@
         fixed="left"
         prop="address"
         label="家庭住址">
-
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
@@ -161,9 +160,8 @@
           <el-button size="mini"
             type="primary"
             @click="editBtn(scope.row)">编辑</el-button>
-          <!-- <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button> -->
+          <el-button size="mini"
+            plain>详细资料</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -188,39 +186,42 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
-        <el-form-item label="医生姓名"
+        <el-form-item label="用户姓名"
           prop="name">
           <el-input v-model="editAddForm.name"
-            placeholder="请输入医生真实姓名"></el-input>
+            placeholder="请输入用户姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医生头像"
+        <el-form-item label="用户头像"
           prop="avatarUrl">
           <el-input v-model="editAddForm.avatarUrl"
-            placeholder="请上传医生头像"></el-input>
+            placeholder="请上传用户头像"></el-input>
         </el-form-item>
         <el-form-item label="手机号"
           prop="phone">
           <el-input v-model="editAddForm.phone"
-            placeholder="请输入该医生手机号"></el-input>
+            placeholder="请输入该用户手机号"></el-input>
         </el-form-item>
         <el-form-item label="身份证号"
           prop="idCard">
           <el-input v-model="editAddForm.idCard"
-            placeholder="请输入该医生身份证号"></el-input>
+            placeholder="请输入该用户身份证号"></el-input>
         </el-form-item>
-        <el-form-item label="医院名称"
-          prop="hospitalId">
-          <el-select v-model="editAddForm.hospitalId"
-            placeholder="请选择医院"
+        <el-form-item label="家庭住址"
+          prop="address">
+          <el-input v-model="editAddForm.address"></el-input>
+        </el-form-item>
+        <el-form-item label="转诊医生">
+          <el-select v-model="editAddForm.address"
+            placeholder="请选择转诊医生"
             style="width: 100%">
-            <el-option v-for="item in hospitalList"
+            <!-- <el-option v-for="item in hospitalList"
               :key="item.id"
               :value="item.id"
-              :label="item.name"></el-option>
+              :label="item.name"></el-option> -->
           </el-select>
         </el-form-item>
         <!-- PHYSICIAN 医师的枚举值 只有职位选中医师 才能选择转诊医生 -->
-        <el-form-item v-if="editAddForm.type === 'PHYSICIAN'"
+        <!-- <el-form-item v-if="editAddForm.type === 'PHYSICIAN'"
           label="转诊医生"
           prop="toDoctorUserId">
           <el-select v-model="editAddForm.toDoctorUserId"
@@ -231,7 +232,7 @@
               :value="item.id"
               :label="item.name"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <span slot="footer"
         class="dialog-footer">

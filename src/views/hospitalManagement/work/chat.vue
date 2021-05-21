@@ -58,7 +58,7 @@
     <EleTable :data="list"
       :header="tableHeaderBig">
       <!-- 需要formatter的列 -->
-      <el-table-column align="center"
+      <!-- <el-table-column align="center"
         slot="fixed"
         fixed="left"
         type="selection"></el-table-column>
@@ -102,17 +102,17 @@
         fixed="right"
         prop="fromUserName"
         label="最近回复时间">
-      </el-table-column>
+      </el-table-column> -->
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
         width="220">
-        <template slot-scope="scope">
+        <template>
+          <!-- @click="editBtn(scope.row)" -->
           <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
+            type="primary">查看</el-button>
           <!-- <el-button size="mini"
             type="danger"
             @click="deleteBtn(scope.row.id)">删除</el-button> -->
@@ -205,7 +205,15 @@ export default {
         address: "",
       },
       // 表格数据
-      tableHeaderBig: [],
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "fromUserName", label: "用户姓名" },
+        { prop: "", label: "用户留言数" },
+        { prop: "", label: "最近留言时间" },
+        { prop: "toUserName", label: "医生姓名" },
+        { prop: "", label: "医生回复数" },
+        { prop: "", label: "最近回复时间" },
+      ],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -224,7 +232,6 @@ export default {
         .getChat({
           page: this.pageNum,
           pageSize: this.pageSize,
-          id: this.searchInput,
         })
         .then((res) => {
           console.log(res);

@@ -101,7 +101,7 @@
         label="发布时间"
         prop="createTime">
         <template slot-scope="scope">
-          <span v-if="scope.row.createTime">{{ parseTime(scope.row.createTime).slice(0,10) }}</span>
+          <span v-if="scope.row.createTime">{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
     </EleTable>
