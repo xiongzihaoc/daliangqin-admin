@@ -71,7 +71,6 @@ service.interceptors.response.use(res => {
       })
       return res.data
     } else {
-
       return res.data
     }
   },
