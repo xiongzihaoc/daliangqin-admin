@@ -248,7 +248,7 @@
           prop="publishTime">
           <el-date-picker v-model="editAddForm.publishTime"
             style="width: 100%"
-            type="datetime"
+            type="date"
             @change="dateChange"
             placeholder="选择日期时间"
             value-format="timestamp"
