@@ -116,20 +116,25 @@ export default {
         // 发送请求
         getCode({ phone: Number(this.loginForm.phone), smsType: "LOGIN" }).then(
           (res) => {
-            const TIME_COUNT = 60;
-            if (!this.timer) {
-              this.count = TIME_COUNT;
-              this.show = false;
-              this.timer = setInterval(() => {
-                if (this.count > 0 && this.count <= TIME_COUNT) {
-                  this.count--;
-                } else {
-                  this.show = true;
-                  // 清除定时器
-                  clearInterval(this.timer);
-                  this.timer = null;
-                }
-              }, 1000);
+            console.log(res);
+            if (res.code !== "OK") {
+              return;
+            } else {
+              const TIME_COUNT = 60;
+              if (!this.timer) {
+                this.count = TIME_COUNT;
+                this.show = false;
+                this.timer = setInterval(() => {
+                  if (this.count > 0 && this.count <= TIME_COUNT) {
+                    this.count--;
+                  } else {
+                    this.show = true;
+                    // 清除定时器
+                    clearInterval(this.timer);
+                    this.timer = null;
+                  }
+                }, 1000);
+              }
             }
           }
         );
