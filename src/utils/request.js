@@ -1,5 +1,5 @@
 import axios from 'axios'
-// import Env from './env.js'
+
 import {
   Notification,
   MessageBox,
@@ -15,15 +15,13 @@ axios.defaults.withCredentials = true
 // 创建axios实例
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
-  baseURL:  process.env.VUE_APP_API_TARGET_ADMIN,
+  baseURL:  '/api/admin',
   // 超时
   timeout: 10000
 })
 
 // request拦截器
 service.interceptors.request.use(config => {
-  console.log(process.env);
-
   // 是否需要设置 token
   const isToken = (config.headers || {}).isToken === false
   if (getToken() && !isToken) {
