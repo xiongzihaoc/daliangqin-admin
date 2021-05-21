@@ -90,9 +90,9 @@
         fixed="right"
         prop="updateTime"
         label="更新时间">
-        <template slot-scope="scope">{{
-          parseTime(scope.row.updateTime)
-        }}</template>
+        <template slot-scope="scope">
+          <span v-if="scope.row.updateTime">{{ parseTime(scope.row.updateTime)}}</span>
+        </template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"

@@ -9,9 +9,9 @@ const archivesRouter = {
         icon: 'banben'
     },
     children: [{
-        path: 'user',
-        name: 'user',
-        component: () => import('@/views/archivesManagement/user'),
+        path: 'patient',
+        name: 'patient',
+        component: () => import('@/views/archivesManagement/patient'),
         meta: {
             title: '用户管理',
             icon: 'user'

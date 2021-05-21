@@ -46,7 +46,7 @@
         label="添加时间"
         prop="createTime">
         <template slot-scope="scope">
-          {{ parseTime(scope.row.createTime) }}
+          <span v-if="scope.row.createTime">{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -55,7 +55,7 @@
         label="最后登录时间"
         prop="loginTime">
         <template slot-scope="scope">
-          {{ parseTime(scope.row.loginTime) }}
+          <span v-if="scope.row.loginTime">{{ parseTime(scope.row.loginTime) }}</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
@@ -230,7 +230,7 @@ export default {
       console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editAddForm.adminRoleType = val.roleType
+      this.editAddForm.adminRoleType = val.roleType;
       this.editDialogVisible = true;
     },
     // 删除
@@ -250,7 +250,7 @@ export default {
       // 发送请求
       httpAdminRole.deleteAdminRole(id).then((res) => {
         if (res.code != "OK") {
-          return
+          return;
         } else {
           this.$notify.success({
             title: "删除成功",

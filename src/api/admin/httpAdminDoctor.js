@@ -16,6 +16,14 @@ export const httpAdminDoctor = {
       data
     })
   },
+
+  putDoctor(data) {
+    return request({
+      url: 'doctor',
+      method: 'put',
+      data
+    })
+  },
   deleteDoctor(id) {
     return request({
       url: 'doctor/' + id,

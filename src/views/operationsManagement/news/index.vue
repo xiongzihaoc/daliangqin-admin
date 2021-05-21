@@ -101,10 +101,10 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="publishTime"
+        prop="createTime"
         label="添加时间">
         <template slot-scope="scope">
-          {{ parseTime(scope.row.createTime) }}
+          <span v-if="scope.row.createTime">{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -113,7 +113,7 @@
         prop="publishTime"
         label="发布时间">
         <template slot-scope="scope">
-          {{ parseTime(scope.row.publishTime).slice(0,10) }}
+          <span v-if="scope.row.publishTime">{{ parseTime(scope.row.publishTime).slice(0,10) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"

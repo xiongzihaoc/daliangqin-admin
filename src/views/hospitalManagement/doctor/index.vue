@@ -32,7 +32,6 @@
           prop="name">
           <el-select v-model="searchForm.name"
             size="small">
-            <!-- <el-option label="家医"></el-option> -->
           </el-select>
         </el-form-item>
         <el-form-item label="职位"
@@ -115,7 +114,7 @@
         prop="birthday"
         label="出生日期">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.birthday).slice(0, 10) }}</span>
+          <span v-if="scope.row.birthday">{{ parseTime(scope.row.birthday).slice(0, 10) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -140,8 +139,10 @@
         prop="type"
         label="职位">
         <template slot-scope="scope">
-          <span v-if="scope.row.type === 'PROFESSIONAL_DOCTOR'">专家</span>
-          <span v-else>家医</span>
+          <span v-if="scope.row.type === 'PHYSICIAN'">医师</span>
+          <span v-else-if="scope.row.type === 'ATTENDING_PHYSICIAN'">主治医师</span>
+          <span v-else-if="scope.row.type === 'ASSOCIATE_CHIEF_PHYSICIAN'">副主任医师</span>
+          <span v-else>主任医师</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -222,15 +223,15 @@
             placeholder="请选择职位"
             @change="toDoctorChange"
             style="width: 100%">
-            <el-option label="家医"
-              value="FAMILY_DOCTOR"></el-option>
-            <el-option label="专家"
-              value="_DOCTOR"></el-option>
+            <el-option v-for="item in doctorTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="医院名称"
-          prop="hospitalName">
-          <el-select v-model="editAddForm.hospitalName"
+          prop="hospitalId">
+          <el-select v-model="editAddForm.hospitalId"
             placeholder="请选择医院"
             style="width: 100%">
             <el-option v-for="item in hospitalList"
@@ -239,12 +240,14 @@
               :label="item.name"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="转诊医生"
-          prop="toDoctor">
-          <el-select v-model="editAddForm.toDoctor"
+        <!-- PHYSICIAN 医师的枚举值 只有职位选中医师 才能选择转诊医生 -->
+        <el-form-item v-if="editAddForm.type === 'PHYSICIAN'"
+          label="转诊医生"
+          prop="toDoctorUserId">
+          <el-select v-model="editAddForm.toDoctorUserId"
             placeholder="请选择转诊医生"
             style="width: 100%">
-            <el-option v-for="item in list"
+            <el-option v-for="item in toDoctorList"
               :key="item.id"
               :value="item.id"
               :label="item.name"></el-option>
@@ -280,10 +283,10 @@ export default {
           { required: true, trigger: "blur", validator: validateIdCard },
         ],
         type: [{ required: true, message: "请选择职位", trigger: "blur" }],
-        hospitalName: [
+        hospitalId: [
           { required: true, message: "请选择医院", trigger: "blur" },
         ],
-        toDoctor: [
+        toDoctorUserId: [
           { required: true, message: "请选择转诊医生  ", trigger: "blur" },
         ],
       },
@@ -297,16 +300,27 @@ export default {
         avatarUrl: "",
         phone: "",
         idCard: "",
-        hospitalName: "",
+        hospitalId: "",
+        toDoctorUserId: "",
         type: "",
       },
+      // 医院列表
       hospitalList: [],
+      // 医生类型列表
+      doctorTypeList: [
+        { id: 1, label: "医师", value: "PHYSICIAN" },
+        { id: 2, label: "主治医师", value: "ATTENDING_PHYSICIAN" },
+        { id: 3, label: "副主任医师", value: "ASSOCIATE_CHIEF_PHYSICIAN" },
+        { id: 4, label: "主任医师", value: "CHIEF_PHYSICIAN" },
+      ],
+      // 转诊医生列表
+      toDoctorList: [],
       tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
       total: 0,
-      //   弹框区域
+      // 弹框区域
       editDialogVisible: false,
       infoTitle: "",
     };
@@ -328,11 +342,25 @@ export default {
         });
     },
     toDoctorChange(val) {
-      // console.log(val);
-      // list({
-      //   page: this.pageNum,
-      //   pageSize: this.pageSize,
-      // });
+      // PHYSICIAN 医师枚举值 选中医师用其他三个值去获取转诊列表
+      if (val === "PHYSICIAN") {
+        // ATTENDING_PHYSICIAN
+        // ASSOCIATE_CHIEF_PHYSICIAN
+        // CHIEF_PHYSICIAN
+        httpAdminDoctor
+          .getDoctor({
+            page: this.pageNum,
+            pageSize: this.pageSize,
+          })
+          .then((res) => {
+            let doctorList = res.data.elements;
+            this.toDoctorList = doctorList.filter((item) => {
+              return item.type !== "PHYSICIAN";
+            });
+            console.log(this.toDoctorList);
+            // this.total = res.data.totalSize;
+          });
+      }
     },
     /***** 搜索区域 *****/
     // 搜索

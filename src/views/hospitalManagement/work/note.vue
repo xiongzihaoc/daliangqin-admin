@@ -14,14 +14,14 @@
             placeholder="请输入医生姓名"></el-input>
         </el-form-item>
         <el-form-item label="职位"
-          prop="job">
-          <el-select v-model="searchForm.job"
+          prop="type">
+          <el-select v-model="searchForm.type"
             size="small"
             placeholder="请选择职位">
-            <el-option value="FAMILY_DOCTOR"
-              label="家医"></el-option>
-            <el-option value="PROFESSIONAL_DOCTOR"
-              label="专家"></el-option>
+            <el-option v-for="item in doctorTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="发布时间"
@@ -29,6 +29,8 @@
           <el-date-picker v-model="searchForm.searchTime"
             size="small"
             type="datetimerange"
+            @change="dateChange"
+            value-format="timestamp"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期">
@@ -66,8 +68,10 @@
         prop="type"
         label="职位">
         <template slot-scope="scope">
-          <span v-if="scope.row.type === 'FAMILY_DOCTOR'">家医</span>
-          <span v-else>专家</span>
+          <span v-if="scope.row.type === 'PHYSICIAN'">医师</span>
+          <span v-else-if="scope.row.type === 'ATTENDING_PHYSICIAN'">主治医师</span>
+          <span v-else-if="scope.row.type === 'ASSOCIATE_CHIEF_PHYSICIAN'">副主任医师</span>
+          <span v-else>主任医师</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -96,9 +100,9 @@
         fixed="right"
         label="发布时间"
         prop="createTime">
-        <template slot-scope="scope">{{
-          parseTime(scope.row.createTime)
-        }}</template>
+        <template slot-scope="scope">
+          <span v-if="scope.row.createTime">{{ parseTime(scope.row.createTime).slice(0,10) }}</span>
+        </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
@@ -126,10 +130,16 @@ export default {
       parseTime,
       searchForm: {
         userName: "",
-        job: "",
-        searchTime: "",
+        type: "",
+        searchTime: [],
       },
       list: [],
+      doctorTypeList: [
+        { id: 1, label: "医师", value: "PHYSICIAN" },
+        { id: 2, label: "主治医师", value: "ATTENDING_PHYSICIAN" },
+        { id: 3, label: "副主任医师", value: "ASSOCIATE_CHIEF_PHYSICIAN" },
+        { id: 4, label: "主任医师", value: "CHIEF_PHYSICIAN" },
+      ],
       editAddForm: {
         userName: "",
         imageUrl: "",
@@ -157,6 +167,10 @@ export default {
         .getNotes({
           page: this.pageNum,
           pageSize: this.pageSize,
+          userName: this.searchForm.userName,
+          type: this.searchForm.type,
+          startTime: this.searchTime,
+          endTime: this.searchTime,
         })
         .then((res) => {
           console.log(res);
@@ -164,12 +178,18 @@ export default {
           this.total = res.data.totalSize;
         });
     },
+    dateChange(val) {
+      console.log(val);
+    },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {},
+    searchBtn() {
+      this.getList();
+    },
     // 重置
     searchReset() {
       this.searchForm = {};
+      this.getList();
     },
     /***** CRUD *****/
     // 新增

@@ -4,43 +4,43 @@
     <div class="search-box">
       <el-form ref="searchFormRef"
         :model="searchForm"
-        class="searchForm"
-        :inline="true">
-        <el-form-item label="用户姓名"
-          prop="fromUserName">
-          <el-input v-model="searchForm.fromUserName"
+        :inline="true"
+        class="searchForm">
+        <el-form-item label="姓名"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.name"
             size="small"
-            placeholder="请输入用户姓名"></el-input>
+            placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="留言时间"
-          prop="chatTime">
-          <el-date-picker v-model="searchForm.chatTime"
+        <el-form-item label="手机号"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.name"
             size="small"
-            type="datetimerange"
-            :picker-options="pickerOptions"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            align="right">
-          </el-date-picker>
+            placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item label="医生姓名"
-          prop="toUserName">
-          <el-input v-model="searchForm.toUserName"
+        <el-form-item label="身份证"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.name"
             size="small"
-            placeholder="请输入医生姓名"></el-input>
+            placeholder="请输入身份证"></el-input>
         </el-form-item>
-        <el-form-item label="回复时间"
-          prop="chatTime">
-          <el-date-picker v-model="searchForm.chatTime"
+        <el-form-item label="性别"
+          align="left"
+          prop="name">
+          <el-select v-model="searchForm.name"
+            size="small">
+            <!-- <el-option label="家医"></el-option> -->
+          </el-select>
+        </el-form-item>
+        <el-form-item label="职位"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.name"
             size="small"
-            type="datetimerange"
-            :picker-options="pickerOptions"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            align="right">
-          </el-date-picker>
+            placeholder="请选择职位"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -51,8 +51,20 @@
             size="small"
             plain
             icon="el-icon-refresh">重置</el-button>
+          <el-button size="small"
+            type="success"
+            icon="el-icon-download">导入</el-button>
         </el-form-item>
       </el-form>
+    </div>
+    <!-- 表格操作按钮 -->
+    <div>
+      <el-button @click="add"
+        type="primary"
+        class="tableAdd"
+        size="small"
+        plain
+        icon="el-icon-plus">新增</el-button>
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
@@ -69,114 +81,91 @@
         label="序号"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
-        fixed="right"
-        prop="doctorUserName"
-        label="医生姓名">
+        fixed="left"
+        prop="name"
+        label="姓名">
       </el-table-column>
+
       <el-table-column align="center"
         slot="fixed"
-        fixed="right"
-        prop="position"
-        label="职位">
+        fixed="left"
+        prop="avatarUrl"
+        label="头像">
       </el-table-column>
+
       <el-table-column align="center"
         slot="fixed"
-        fixed="right"
-        prop="type"
-        label="随访方式">
+        fixed="left"
+        prop="phone"
+        label="手机号">
       </el-table-column>
+
       <el-table-column align="center"
         slot="fixed"
-        fixed="right"
-        prop="content"
-        label="随访内容">
+        fixed="left"
+        prop="idCard"
+        label="身份证号">
       </el-table-column>
+
       <el-table-column align="center"
         slot="fixed"
-        fixed="right"
-        prop="patientUserName"
-        label="随访用户">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="highBlood"
-        label="高血压">
+        fixed="left"
+        prop="birthday"
+        label="出生日期">
         <template slot-scope="scope">
-          <span style="color: #16e127"
-            v-if="scope.row.highBlood === 'HEALTH'">健康</span>
-          <span v-else-if="scope.row.highBlood === 'SLIGHT'">轻度</span>
-          <span style="color: #e6a23c"
-            v-else-if="scope.row.highBlood === 'MEDIUM'">中度</span>
-          <span style="color: #f56c6c"
-            v-else>重度</span>
+          <span v-if="scope.row.birthday">{{ parseTime(scope.row.birthday).slice(0,10)}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
-        fixed="right"
-        prop="diabetes"
-        label="糖尿病">
+        fixed="left"
+        prop="age"
+        label="年龄">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="gender"
+        label="性别">
         <template slot-scope="scope">
-          <span style="color: #16e127"
-            v-if="scope.row.diabetes === ''">健康</span>
-          <span v-else-if="scope.row.diabetes === 'SLIGHT'">轻度</span>
-          <span style="color: #e6a23c"
-            v-else-if="scope.row.diabetes === 'MEDIUM'">中度</span>
-          <span style="color: #f56c6c"
-            v-else>重度</span>
+          <span v-if="scope.row.gender === 'MALE'">男</span>
+          <span v-else>女</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
-        fixed="right"
-        prop="startTime"
-        label="随访开始时间">
-        <template slot-scope="scope">
-          <span v-if="scope.row.startTime">{{ parseTime(scope.row.startTime).slice(6) }}</span>
-        </template>
+        fixed="left"
+        prop="address"
+        label="家庭住址">
+
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
-        fixed="right"
-        prop="endTime"
-        label="随访结束时间">
-        <template slot-scope="scope">
-          <span v-if="scope.row.endTime">{{ parseTime(scope.row.endTime).slice(6) }}</span>
-        </template>
+        fixed="left"
+        prop="hospitalName"
+        label="两慢指数">
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
-        fixed="right"
-        prop="userStatus"
-        label="用户状态">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="diabetes"
-        label="加入方式">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="diabetes"
-        label="操作时间">
+        fixed="left"
+        prop="doctor"
+        label="对应医生">
       </el-table-column>
       <!-- 操作 -->
-      <!-- <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220"
-      >
+        width="220">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
-            >编辑</el-button
-          >
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
+          <!-- <el-button size="mini"
+            type="danger"
+            @click="deleteBtn(scope.row.id)">删除</el-button> -->
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </EleTable>
     <!-- 分页 -->
     <el-pagination background
@@ -192,37 +181,56 @@
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
-      @open="getData"
+      @open="openBounced"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="110px">
-        <el-form-item label="医院名称"
+        label-width="100px">
+        <el-form-item label="医生姓名"
           prop="name">
           <el-input v-model="editAddForm.name"
-            placeholder="请输入医院名称"></el-input>
+            placeholder="请输入医生真实姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医院电话"
-          prop="contract">
-          <el-input v-model="editAddForm.contract"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入医院电话"></el-input>
+        <el-form-item label="医生头像"
+          prop="avatarUrl">
+          <el-input v-model="editAddForm.avatarUrl"
+            placeholder="请上传医生头像"></el-input>
         </el-form-item>
-        <el-form-item label="医院地址"
-          prop="address">
-          <el-input v-model="editAddForm.address"
-            placeholder="请输入医院地址"></el-input>
+        <el-form-item label="手机号"
+          prop="phone">
+          <el-input v-model="editAddForm.phone"
+            placeholder="请输入该医生手机号"></el-input>
         </el-form-item>
-        <el-form-item label="管理员手机号"
-          prop="adminPhone">
-          <el-input v-if="this.infoTitle === '新增'"
-            v-model="editAddForm.adminPhone"
-            placeholder="请输入管理员手机号"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.adminPhone"></el-input>
+        <el-form-item label="身份证号"
+          prop="idCard">
+          <el-input v-model="editAddForm.idCard"
+            placeholder="请输入该医生身份证号"></el-input>
+        </el-form-item>
+        <el-form-item label="医院名称"
+          prop="hospitalId">
+          <el-select v-model="editAddForm.hospitalId"
+            placeholder="请选择医院"
+            style="width: 100%">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"></el-option>
+          </el-select>
+        </el-form-item>
+        <!-- PHYSICIAN 医师的枚举值 只有职位选中医师 才能选择转诊医生 -->
+        <el-form-item v-if="editAddForm.type === 'PHYSICIAN'"
+          label="转诊医生"
+          prop="toDoctorUserId">
+          <el-select v-model="editAddForm.toDoctorUserId"
+            placeholder="请选择转诊医生"
+            style="width: 100%">
+            <el-option v-for="item in toDoctorList"
+              :key="item.id"
+              :value="item.id"
+              :label="item.name"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -236,9 +244,8 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { validatePhone } from "@/utils/index";
-import { httpFollow } from "@/api/hospital/httpHospitalFollow";
-import { parseTime } from "@/utils/index";
+import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
+import { validateIdCard, validatePhone, parseTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -246,27 +253,46 @@ export default {
   data() {
     return {
       parseTime,
-      // 表单验证规则
       FormRules: {
-        adminPhone: [
-          { required: true, trigger: "blur", validator: validatePhone },
+        name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
+        avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
+        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
+        idCard: [
+          { required: true, trigger: "blur", validator: validateIdCard },
+        ],
+        type: [{ required: true, message: "请选择职位", trigger: "blur" }],
+        hospitalId: [
+          { required: true, message: "请选择医院", trigger: "blur" },
+        ],
+        toDoctorUserId: [
+          { required: true, message: "请选择转诊医生  ", trigger: "blur" },
         ],
       },
-      // 搜索表单
       searchForm: {
-        fromUserName: "",
-        toUserName: "",
-        chatTime: "",
+        name: "",
+        type: "",
       },
-      // 列表数据
       list: [],
-      // 增改表单
       editAddForm: {
-        fromUserName: "",
-        contract: "",
-        address: "",
+        name: "",
+        avatarUrl: "",
+        phone: "",
+        idCard: "",
+        hospitalId: "",
+        toDoctorUserId: "",
+        type: "",
       },
-      // 表格数据
+      // 医院列表
+      hospitalList: [],
+      // 医生类型列表
+      doctorTypeList: [
+        { id: 1, label: "医师", value: "PHYSICIAN" },
+        { id: 2, label: "主治医师", value: "ATTENDING_PHYSICIAN" },
+        { id: 3, label: "副主任医师", value: "ASSOCIATE_CHIEF_PHYSICIAN" },
+        { id: 4, label: "主任医师", value: "CHIEF_PHYSICIAN" },
+      ],
+      // 转诊医生列表
+      toDoctorList: [],
       tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
@@ -282,11 +308,10 @@ export default {
   },
   methods: {
     getList() {
-      httpFollow
-        .list({
+      httpAdminPatient
+        .getPatient({
           page: this.pageNum,
           pageSize: this.pageSize,
-          id: this.searchInput,
         })
         .then((res) => {
           console.log(res);
@@ -294,8 +319,6 @@ export default {
           this.total = res.data.totalSize;
         });
     },
-    // 日期控件选择事件
-    pickerOptions() {},
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {},
@@ -334,7 +357,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpFollow.deleteElement(id).then((res) => {
+      httpAdminPatient.deleteDoctor(id).then((res) => {
         if (res.code != "OK") {
           return;
         } else {
@@ -346,7 +369,7 @@ export default {
       });
     },
     // 弹框开启
-    getData() {},
+    openBounced() {},
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
@@ -356,7 +379,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpFollow.add(this.editAddForm).then((res) => {
+            httpAdminPatient.postPatient(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -368,7 +391,7 @@ export default {
             });
           } else {
             // 发送请求
-            httpFollow.edit(this.editAddForm).then((res) => {
+            httpAdminPatient.putPatient(this.editAddForm).then((res) => {
               if (res.code != "OK") {
                 return;
               } else {
@@ -385,10 +408,12 @@ export default {
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
+      console.log(newSize);
       this.pageSize = newSize;
       this.getList();
     },
     handleCurrentChange(newPage) {
+      console.log(newPage);
       this.pageNum = newPage;
       this.getList();
     },

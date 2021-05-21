@@ -275,7 +275,7 @@ export default {
     // 开关change事件
     statusChange(val) {
       httpAdminBanner.putBanner(val).then((res) => {
-        if (res.code != "OK") {
+        if (res.code !== "OK") {
           return;
         } else {
           this.$notify.success({
@@ -342,7 +342,7 @@ export default {
           if (this.infoTitle === "新增") {
             // 发送请求
             httpAdminBanner.postBanner(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
+              if (res.code !== "OK") {
                 return;
               } else {
                 this.$notify.success({
@@ -354,7 +354,7 @@ export default {
           } else {
             // 发送请求
             httpAdminBanner.putBanner(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
+              if (res.code !== "OK") {
                 return;
               } else {
                 this.$notify.success({
