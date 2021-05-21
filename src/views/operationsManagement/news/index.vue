@@ -346,7 +346,7 @@ export default {
       infoTitle: "",
     };
   },
-  mounted() {
+  created() {
     this.getList();
   },
   methods: {

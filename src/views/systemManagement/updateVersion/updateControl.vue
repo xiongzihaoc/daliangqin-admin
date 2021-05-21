@@ -104,7 +104,7 @@ export default {
       infoTitle: "",
     };
   },
-  mounted() {
+  created() {
     this.getList();
     this.getVersionList()
   },

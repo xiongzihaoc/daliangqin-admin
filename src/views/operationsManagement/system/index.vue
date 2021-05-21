@@ -112,8 +112,7 @@ export default {
       infoTitle: "",
     };
   },
-  created() {},
-  mounted() {
+  created() {
     this.getList();
   },
   methods: {
