@@ -257,8 +257,8 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="权重"
-          prop="zorder">
-          <el-input v-model.trim="editAddForm.zorder"
+          prop="zOrder">
+          <el-input v-model.trim="editAddForm.zOrder"
             placeholder="请输入权重"></el-input>
         </el-form-item>
         <el-form-item label="状态"
@@ -313,7 +313,7 @@ export default {
         publishTime: [
           { required: true, message: "请选择发布时间", trigger: "blur" },
         ],
-        zorder: [{ required: true, message: "请输入权重", trigger: "blur" }],
+        zOrder: [{ required: true, message: "请输入权重", trigger: "blur" }],
         deletedStatus: [
           { required: true, message: "请选择状态", trigger: "blur" },
         ],
@@ -334,7 +334,7 @@ export default {
         avatarUrl: "",
         position: "",
         publishTime: "",
-        zorder: "",
+        zOrder: "",
         deletedStatus: "",
       },
       tableHeaderBig: [],

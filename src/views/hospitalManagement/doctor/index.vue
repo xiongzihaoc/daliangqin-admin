@@ -190,7 +190,6 @@
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
-      @open="openBounced"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
@@ -237,6 +236,7 @@
           prop="type">
           <el-select v-model="editAddForm.type"
             placeholder="请选择职位"
+            @change="TypeChange"
             style="width: 100%">
             <el-option v-for="item in doctorTypeList"
               :key="item.id"
@@ -328,6 +328,7 @@ export default {
         { id: 3, label: "副主任医师", value: "ASSOCIATE_CHIEF_PHYSICIAN" },
         { id: 4, label: "主任医师", value: "CHIEF_PHYSICIAN" },
       ],
+      editVal:{},
       // 转诊医生列表
       toDoctorList: [],
       tableHeaderBig: [],
@@ -342,6 +343,11 @@ export default {
   },
   created() {
     this.getList();
+  },
+  mounted() {
+    // 获取医院  转诊医生列表
+    this.getHospitalList();
+    this.getToDoctorList();
   },
   methods: {
     getList() {
@@ -368,16 +374,7 @@ export default {
       httpAdminHospital
         .getHospital({ pageSize: 1, pageNum: 500 })
         .then((res) => {
-          console.log(res);
-          let hospitalList = res.data.elements;
-          this.hospitalList = hospitalList;
-          // hospitalList = JSON.parse(
-          //   JSON.stringify(hospitalList).replace(/id/g, "hospitalId")
-          // );
-          // hospitalList = JSON.parse(
-          //   JSON.stringify(hospitalList).replace(/name/g, "hospitalName")
-          // );
-          // console.log(hospitalList);
+          this.hospitalList = res.data.elements;
         });
     },
     /***** 搜索区域 *****/
@@ -397,6 +394,7 @@ export default {
     // 编辑
     editBtn(val) {
       console.log(val);
+      this.editVal = val
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
@@ -429,13 +427,18 @@ export default {
         this.getList();
       });
     },
-    // 弹框开启
-    openBounced() {
-      this.getHospitalList();
-      this.getToDoctorList();
-    },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
+    },
+    TypeChange(val){
+      console.log(val);
+      if(this.infoTitle === '编辑'){
+        if(val !== 'PHYSICIAN') {
+          this.editAddForm.toDoctorUserId = ''
+        } else {
+
+        }
+      }
     },
     // 新增编辑确定
     editPageEnter() {

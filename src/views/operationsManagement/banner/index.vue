@@ -173,8 +173,8 @@
             placeholder="请输入跳转地址"></el-input>
         </el-form-item>
         <el-form-item label="权重"
-          prop="zorder">
-          <el-input v-model.trim="editAddForm.zorder"
+          prop="zOrder">
+          <el-input v-model.trim="editAddForm.zOrder"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             placeholder="请输入权重"></el-input>
         </el-form-item>
@@ -222,7 +222,7 @@ export default {
         linkUrl: [
           { required: true, message: "请输入跳转地址", trigger: "blur" },
         ],
-        zorder: [{ required: true, message: "请输入权重", trigger: "blur" }],
+        zOrder: [{ required: true, message: "请输入权重", trigger: "blur" }],
 
         status: [{ required: true, message: "请选择状态", trigger: "blur" }],
       },
@@ -237,13 +237,13 @@ export default {
         positionList: [],
         imageUrl: "",
         linkUrl: "",
-        zorder: "",
+        zOrder: "",
         type: "",
         status: "",
       },
       tableHeaderBig: [
         { prop: "linkUrl", label: "跳转地址" },
-        { prop: "zorder", label: "权重" },
+        { prop: "zOrder", label: "权重" },
       ],
       // 分页区域
       pageSize: 10,

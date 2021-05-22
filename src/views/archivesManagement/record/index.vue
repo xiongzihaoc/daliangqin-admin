@@ -213,8 +213,8 @@
             placeholder="请输入跳转地址"></el-input>
         </el-form-item>
         <el-form-item label="权重"
-          prop="zorder">
-          <el-input v-model.trim="editAddForm.zorder"
+          prop="zOrder">
+          <el-input v-model.trim="editAddForm.zOrder"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             placeholder="请输入权重"></el-input>
         </el-form-item>

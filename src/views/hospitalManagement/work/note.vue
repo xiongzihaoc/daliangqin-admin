@@ -141,7 +141,6 @@ export default {
         userName: "",
         imageUrl: "",
         linkUrl: "",
-        zorder: "",
         type: "",
         status: "",
       },
