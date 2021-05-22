@@ -27,6 +27,13 @@ export const httpAdminBanner = {
             url: 'banner/' + id,
             method: 'delete',
         })
+    },
+    postBannerSort(data) {
+        return request({
+            url: 'banner/' + data.id,
+            method: 'post',
+            data
+        })
     }
 }
 

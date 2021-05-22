@@ -114,7 +114,7 @@
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220">
+        width="320">
         <template slot-scope="scope">
           <el-button size="mini"
             type="primary"
@@ -122,6 +122,14 @@
           <el-button size="mini"
             type="danger"
             @click="deleteBtn(scope.row.id)">删除</el-button>
+          <el-button size="mini"
+            plain
+            icon="el-icon-caret-top"
+            @click="sortTop(scope.row.id)"></el-button>
+          <el-button size="mini"
+            plain
+            icon="el-icon-caret-bottom"
+            @click="sortBottom(scope.row.id)"></el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -264,7 +272,7 @@ export default {
           page: this.pageNum,
           pageSize: this.pageSize,
           title: this.searchForm.title,
-          type: this.searchForm.type,
+          positionTypeList: this.searchForm.type,
           status: this.searchForm.status,
         })
         .then((res) => {
@@ -368,6 +376,18 @@ export default {
             });
           }
         }
+      });
+    },
+    sortTop(id) {
+      httpAdminBanner.postBannerSort({ id: id, status: "UP" }).then((res) => {
+        console.log(res);
+        this.getList();
+      });
+    },
+    sortBottom(id) {
+      httpAdminBanner.postBannerSort({ id: id, status: "DOWN" }).then((res) => {
+        console.log(res);
+        this.getList();
       });
     },
     /***** 分页 *****/
