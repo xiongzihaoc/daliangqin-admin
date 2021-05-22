@@ -118,8 +118,13 @@
         fixed="left"
         prop="healthScore"
         label="指数">
-        <!-- <template slot-scope="scope">
-        </template> -->
+        <template slot-scope="scope">
+          <span v-if="scope.row.diseaseType === 'HEART_RATE'">{{scope.row.healthScore}}</span>
+          <span v-else-if="scope.row.diseaseType === 'DIABETES'">{{scope.row.healthScore}}</span>
+          <div v-else >
+            <!-- <span v-for="item in scope.row.healthScore" :key="item.id">{{item.}}</span> -->
+          </div>
+        </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
