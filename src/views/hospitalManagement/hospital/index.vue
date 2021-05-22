@@ -14,8 +14,8 @@
             placeholder="请输入医院名称"></el-input>
         </el-form-item>
         <el-form-item label="医院等级"
-          prop="hospitalClass">
-          <el-select v-model="searchForm.hospitalClass"
+          prop="hospitalType">
+          <el-select v-model="searchForm.hospitalType"
             size="small"
             placeholder="请选择医院等级">
             <el-option v-for="item in hospitalClass"
@@ -91,7 +91,7 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="hospitalClass"
+        prop="hospitalType"
         :formatter="hosLevelFormatter"
         label="医院等级">
       </el-table-column>
@@ -139,10 +139,10 @@
           <el-input v-model="editAddForm.name"
             placeholder="请输入医院名称"></el-input>
         </el-form-item>
-        <el-form-item label="医院名头像"
+        <el-form-item label="医院头像"
           prop="name">
           <el-input v-model="editAddForm.avatarUrl"
-            placeholder="请输入医院名称"></el-input>
+            placeholder="请上传医院头像"></el-input>
         </el-form-item>
 
         <el-form-item label="医院电话"
@@ -157,8 +157,8 @@
             placeholder="请输入医院地址"></el-input>
         </el-form-item>
         <el-form-item label="医院等级"
-          prop="hospitalClass">
-          <el-select v-model="editAddForm.hospitalClass"
+          prop="hospitalType">
+          <el-select v-model="editAddForm.hospitalType"
             placeholder="请选择医院等级"
             style="width: 100%">
             <el-option v-for="item in hospitalClass"
@@ -205,14 +205,14 @@ export default {
         address: [
           { required: true, message: "请输入医院地址", trigger: "blur" },
         ],
-        hospitalClass: [
+        hospitalType: [
           { required: true, message: "请选择医院等级", trigger: "blur" },
         ],
       },
       // 搜索表单
       searchForm: {
         name: "",
-        hospitalClass: "",
+        hospitalType: "",
       },
       // 列表数据
       list: [],
@@ -221,7 +221,7 @@ export default {
         name: "",
         contract: "",
         address: "",
-        hospitalClass: "",
+        hospitalType: "",
       },
       // 医院级别列表
       hospitalClass: [
@@ -252,7 +252,7 @@ export default {
           page: this.pageNum,
           pageSize: this.pageSize,
           name: this.searchForm.name,
-          hospitalClass: this.searchForm.hospitalClass,
+          hospitalType: this.searchForm.hospitalType,
         })
         .then((res) => {
           console.log(res);
@@ -349,7 +349,7 @@ export default {
     },
     // Formatter表格数据
     hosLevelFormatter(coloumn) {
-      switch (coloumn.hospitalClass) {
+      switch (coloumn.hospitalType) {
         case "CLASS_1_A":
           return "三甲";
           break;

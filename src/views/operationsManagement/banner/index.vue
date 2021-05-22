@@ -274,6 +274,7 @@ export default {
     },
     // 开关change事件
     statusChange(val) {
+      this.editAddForm.status = val
       httpAdminBanner.putBanner(val).then((res) => {
         if (res.code !== "OK") {
           return;

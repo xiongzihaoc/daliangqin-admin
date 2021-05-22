@@ -36,6 +36,11 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
+        prop="howMany"
+        label="剩余次数"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
         prop="createTime"
         label="发送时间"><template slot-scope="scope">
           <span v-if="scope.row.createTime">{{ parseTime(scope.row.createTime) }}</span>
@@ -90,7 +95,10 @@ export default {
       editDialogVisible: false,
       // 列表数据
       list: [],
-      tableHeaderBig: [{ prop: "phone", label: "手机号" }],
+      tableHeaderBig: [
+        { label: "序号", type: "index" },
+        { prop: "phone", label: "手机号" },
+      ],
       FormRules: {
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
       },

@@ -213,7 +213,7 @@
         </el-form-item>
         <el-form-item label="详情"
           prop="content">
-          <el-input v-model.trim="editAddForm.content"
+          <el-input type="textarea" v-model.trim="editAddForm.content"
             placeholder="请输入详情"></el-input>
         </el-form-item>
         <el-form-item label="呈现位置"

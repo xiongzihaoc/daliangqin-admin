@@ -6,23 +6,12 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
-        <el-form-item label="医院名称"
+        <el-form-item label="医生姓名"
           align="left"
           prop="name">
           <el-input v-model="searchForm.name"
             size="small"
-            placeholder="请输入医院名称"></el-input>
-        </el-form-item>
-        <el-form-item label="医院等级"
-          prop="type">
-          <el-select v-model="searchForm.type"
-            size="small"
-            placeholder="请选择医院等级">
-            <el-option value="DOCTOR"
-              label="医生端"></el-option>
-            <el-option value="PATIENT"
-              label="用户端"></el-option>
-          </el-select>
+            placeholder="职位"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -36,21 +25,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- 表格上方CRUD按钮 -->
-    <div>
-      <el-button @click="add"
-        type="primary"
-        class="tableAdd"
-        size="small"
-        plain
-        icon="el-icon-plus">新增</el-button>
-      <!-- <el-button @click="deleteMultiple"
-      type="danger"
-      class="tableAdd"
-      size="small"
-      plain
-      icon="el-icon-delete">删除</el-button> -->
-    </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
@@ -58,18 +32,44 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         type="index"
-        label="序号"></el-table-column>
+        label="序号" width="50"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="hospitalClass"
         :formatter="hosLevelFormatter"
-        label="医院等级">
+        label="医生姓名">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        prop="hospitalClass"
+        :formatter="hosLevelFormatter"
+        label="职位">
+        <el-table-column align="center"
+          slot="fixed"
+          fixed="right"
+          prop="hospitalClass"
+          label="收货地址">
+        </el-table-column>
+        <!-- <el-table-column align="center"
+          slot="fixed"
+          fixed="right"
+          prop="hospitalClass"
+          :formatter="hosLevelFormatter"
+          label="是否默认">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.status"
+              @change="statusChange(scope.row)"
+              active-value="UP"
+              inactive-value="DOWN"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+            </el-switch>
+          </template>
+        </el-table-column> -->
+
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
@@ -182,7 +182,7 @@ export default {
       },
       // 搜索表单
       searchForm: {
-        name: "",
+        patientName: "",
         type: "",
       },
       // 列表数据
@@ -203,11 +203,7 @@ export default {
         { id: 5, label: "一级", value: "CLASS_3_A" },
       ],
       // 表格数据
-      tableHeaderBig: [
-        { prop: "name", label: "医院名称" },
-        { prop: "contract", label: "医院电话" },
-        { prop: "address", label: "医院地址" },
-      ],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,

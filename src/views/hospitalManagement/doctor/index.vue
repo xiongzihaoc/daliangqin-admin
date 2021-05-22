@@ -199,14 +199,20 @@
         label-width="100px">
         <el-form-item label="医生姓名"
           prop="name">
-          <el-input v-model="editAddForm.name"
+          <!-- 编辑阻止修改医生姓名 -->
+          <el-input v-if="this.infoTitle === '新增'"
+            v-model="editAddForm.name"
             placeholder="请输入医生真实姓名"></el-input>
+          <el-input v-else
+            disabled
+            v-model="editAddForm.name"></el-input>
         </el-form-item>
         <el-form-item label="医生头像"
           prop="avatarUrl">
           <el-input v-model="editAddForm.avatarUrl"
             placeholder="请上传医生头像"></el-input>
         </el-form-item>
+        <!-- 编辑阻止修改医生手机号-->
         <el-form-item label="手机号"
           prop="phone">
           <el-input v-if="this.infoTitle === '新增'"
@@ -217,16 +223,20 @@
             v-model="editAddForm.phone"
             placeholder="请输入该医生手机号"></el-input>
         </el-form-item>
+        <!-- 编辑阻止修改医生身份证号 -->
         <el-form-item label="身份证号"
           prop="idCard">
           <el-input v-model="editAddForm.idCard"
-            placeholder="请输入该医生身份证号"></el-input>
+            placeholder="请输入该医生身份证号"
+            v-if="this.infoTitle === '新增'"></el-input>
+          <el-input v-else
+            disabled
+            v-model="editAddForm.idCard"></el-input>
         </el-form-item>
         <el-form-item label="职位"
           prop="type">
           <el-select v-model="editAddForm.type"
             placeholder="请选择职位"
-            @change="toDoctorChange"
             style="width: 100%">
             <el-option v-for="item in doctorTypeList"
               :key="item.id"
@@ -242,7 +252,7 @@
             <el-option v-for="item in hospitalList"
               :key="item.id"
               :value="item.id"
-              :label="item.name"></el-option>
+              :label="item.hospitalName"></el-option>
           </el-select>
         </el-form-item>
         <!-- PHYSICIAN 医师的枚举值 只有职位选中医师 才能选择转诊医生 -->
@@ -346,26 +356,28 @@ export default {
           this.total = res.data.totalSize;
         });
     },
-    toDoctorChange(val) {
-      // PHYSICIAN 医师枚举值 选中医师用其他三个值去获取转诊列表
-      if (val === "PHYSICIAN") {
-        // ATTENDING_PHYSICIAN
-        // ASSOCIATE_CHIEF_PHYSICIAN
-        // CHIEF_PHYSICIAN
-        httpAdminDoctor
-          .getDoctor({
-            page: this.pageNum,
-            pageSize: this.pageSize,
-          })
-          .then((res) => {
-            let doctorList = res.data.elements;
-            this.toDoctorList = doctorList.filter((item) => {
-              return item.type !== "PHYSICIAN";
-            });
-            console.log(this.toDoctorList);
-            // this.total = res.data.totalSize;
-          });
-      }
+    getToDoctorList() {
+      httpAdminDoctor
+        .getDoctoTransfer({ page: 1, pageSize: 500 })
+        .then((res) => {
+          this.toDoctorList = res.data.elements;
+        });
+    },
+    getHospitalList() {
+      httpAdminHospital
+        .getHospital({ pageSize: 1, pageNum: 500 })
+        .then((res) => {
+          console.log(res);
+          let hospitalList = res.data.elements;
+          // hospitalList = JSON.parse(
+          //   JSON.stringify(hospitalList).replace(/id/g, "hospitalId")
+          // );
+          // hospitalList = JSON.parse(
+          //   JSON.stringify(hospitalList).replace(/name/g, "hospitalName")
+          // );
+          this.hospitalList = hospitalList;
+          // console.log(hospitalList);
+        });
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -418,11 +430,8 @@ export default {
     },
     // 弹框开启
     openBounced() {
-      httpAdminHospital
-        .getHospital({ pageSize: 20, pageNum: 1 })
-        .then((res) => {
-          this.hospitalList = res.data.elements;
-        });
+      this.getHospitalList();
+      this.getToDoctorList();
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();

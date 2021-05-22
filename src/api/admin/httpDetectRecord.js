@@ -1,30 +1,30 @@
 import request from '@/utils/request'
 
-export const httpAdminBanner = {
-    getBanner(data) {
+export const httpDetectRecord = {
+    getDetectRecord(data) {
         return request({
-            url: 'banner',
+            url: 'detect/record',
             method: 'get',
             params: data
         })
     },
-    postBanner(data) {
+    postDetectRecord(data) {
         return request({
-            url: 'banner',
+            url: 'detect/record',
             method: 'post',
             data
         })
     },
-    putBanner(data) {
+    putDetectRecord(data) {
         return request({
-            url: 'banner/' + data.id,
+            url: 'detect/record/' + data.id,
             method: 'put',
             data
         })
     },
-    deleteBanner(id) {
+    deleteDetectRecord(id) {
         return request({
-            url: 'banner/' + id,
+            url: 'detect/record/' + id,
             method: 'delete',
         })
     }
