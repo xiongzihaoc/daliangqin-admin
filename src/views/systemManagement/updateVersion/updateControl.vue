@@ -47,13 +47,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="强制更新版本">
-            <el-select style="width:100%;"
-              v-model="editAddForm.forceUpdateAppId">
-              <el-option v-for="item in versionList"
-                :key="item.id"
-                :label="item.versionString"
-                :value="item.id"></el-option>
-            </el-select>
+          <el-select style="width:100%;"
+            v-model="editAddForm.forceUpdateAppId">
+            <el-option v-for="item in versionList"
+              :key="item.id"
+              :label="item.versionString"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="最新版本">
           <el-select style="width:100%;"
@@ -106,7 +106,7 @@ export default {
   },
   created() {
     this.getList();
-    this.getVersionList()
+    this.getVersionList();
   },
   methods: {
     getList() {
@@ -158,9 +158,9 @@ export default {
                   title: "编辑成功",
                 });
                 this.getList();
+                this.editDialogVisible = false;
               }
             });
-          this.editDialogVisible = false;
         }
       });
     },

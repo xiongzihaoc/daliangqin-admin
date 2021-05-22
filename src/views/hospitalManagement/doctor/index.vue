@@ -252,7 +252,7 @@
             <el-option v-for="item in hospitalList"
               :key="item.id"
               :value="item.id"
-              :label="item.hospitalName"></el-option>
+              :label="item.name"></el-option>
           </el-select>
         </el-form-item>
         <!-- PHYSICIAN 医师的枚举值 只有职位选中医师 才能选择转诊医生 -->
@@ -360,6 +360,7 @@ export default {
       httpAdminDoctor
         .getDoctoTransfer({ page: 1, pageSize: 500 })
         .then((res) => {
+          console.log(res);
           this.toDoctorList = res.data.elements;
         });
     },
@@ -369,13 +370,13 @@ export default {
         .then((res) => {
           console.log(res);
           let hospitalList = res.data.elements;
+          this.hospitalList = hospitalList;
           // hospitalList = JSON.parse(
           //   JSON.stringify(hospitalList).replace(/id/g, "hospitalId")
           // );
           // hospitalList = JSON.parse(
           //   JSON.stringify(hospitalList).replace(/name/g, "hospitalName")
           // );
-          this.hospitalList = hospitalList;
           // console.log(hospitalList);
         });
     },
@@ -450,6 +451,7 @@ export default {
                   title: "新增成功",
                 });
                 this.getList();
+                this.editDialogVisible = false;
               }
             });
           } else {
@@ -462,10 +464,10 @@ export default {
                   title: "编辑成功",
                 });
                 this.getList();
+                this.editDialogVisible = false;
               }
             });
           }
-          this.editDialogVisible = false;
         }
       });
     },

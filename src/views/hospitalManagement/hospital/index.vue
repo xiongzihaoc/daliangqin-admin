@@ -328,6 +328,7 @@ export default {
                   title: "新增成功",
                 });
                 this.getList();
+                this.editDialogVisible = false;
               }
             });
           } else {
@@ -340,10 +341,10 @@ export default {
                   title: "编辑成功",
                 });
                 this.getList();
+                this.editDialogVisible = false;
               }
             });
           }
-          this.editDialogVisible = false;
         }
       });
     },
