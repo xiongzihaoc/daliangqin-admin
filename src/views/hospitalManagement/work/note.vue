@@ -85,13 +85,10 @@
         label="笔记图集">
         <template slot-scope="scope">
           <div v-if="scope.row.imageUrlList.length > 0">
-            <!-- <img v-for="(item,index) in scope.row.imageUrlList"
-              :key="index"
-              :src="item"
-              alt="" /> -->
-            <span style="margin: 0 5px"
+            <img style="margin: 0 5px"
               v-for="(item, index) in scope.row.imageUrlList"
-              :key="index">{{ item }}</span>
+              :src="item"
+              :key="index" />
           </div>
         </template>
       </el-table-column>

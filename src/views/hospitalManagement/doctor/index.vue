@@ -64,12 +64,12 @@
         size="small"
         plain
         icon="el-icon-plus">新增</el-button>
-      <!-- <el-button @click="deleteMultiple"
+      <el-button @click="deleteMultiple"
         type="danger"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-delete">删除</el-button> -->
+        icon="el-icon-delete">删除</el-button>
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
@@ -170,9 +170,9 @@
           <el-button size="mini"
             type="primary"
             @click="editBtn(scope.row)">编辑</el-button>
-          <!-- <el-button size="mini"
+          <el-button size="mini"
             type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button> -->
+            @click="deleteBtn(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -209,7 +209,12 @@
         </el-form-item>
         <el-form-item label="手机号"
           prop="phone">
-          <el-input v-model="editAddForm.phone"
+          <el-input v-if="this.infoTitle === '新增'"
+            v-model="editAddForm.phone"
+            placeholder="请输入该医生手机号"></el-input>
+          <el-input v-else
+            disabled
+            v-model="editAddForm.phone"
             placeholder="请输入该医生手机号"></el-input>
         </el-form-item>
         <el-form-item label="身份证号"
@@ -401,7 +406,7 @@ export default {
       }
       // 发送请求
       httpAdminDoctor.deleteDoctor(id).then((res) => {
-        if (res.code != "OK") {
+        if (res.code !== "OK") {
           return;
         } else {
           this.$notify.success({

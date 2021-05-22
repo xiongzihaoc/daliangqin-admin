@@ -41,14 +41,14 @@ const user = {
     Login({
       commit
     }, userInfo) {
-      console.log(userInfo);
+      // console.log(userInfo);
       return new Promise((resolve, reject) => {
         login(userInfo).then(res => {
           if (res.code !== 'OK') {
             return
           } else {
-            commit('SET_TOKEN', "666")
-            setToken("666")
+            commit('SET_TOKEN', "xzh")
+            setToken("xzh")
             resolve()
           }
         }).catch(error => {
