@@ -70,47 +70,68 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        prop="title"
-        label="轮播图名称"></el-table-column>
+        prop="doctorUserName"
+        label="医生姓名"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        prop="imageUrl"
-        label="轮播图图片">
-        <template slot-scope="scope">
-          <div v-if="scope.row.imageUrl">
-            <img class="tableImg" :src="scope.row.imageUrl" />
-          </div>
-
-        </template>
+        prop="type"
+        label="随访方式"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="content"
+        label="随访内容"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="patientUserName"
+        label="随访用户"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="highBlood"
+        label="高血压"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="diabetes"
+        label="糖尿病"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="startTime"
+        label="随访时间">
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        prop="positionList"
-        label="呈现位置">
-        <template slot-scope="scope">
-          <span v-for="(item, index) in scope.row.positionList"
-            :key="index">
-            <span v-if="item === 'PATIENT'">用户端 </span>
-            <span v-else>医生端 </span>
-          </span>
-        </template>
+        prop="startTime"
+        label="添加时间">
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
-        fixed="right"
+        fixed="left"
+        prop="resource"
+        label="加入方式">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
         prop="status"
         label="状态">
-        <template slot-scope="scope">
-          <el-switch v-model="scope.row.status"
-            @change="statusChange(scope.row)"
-            active-value="UP"
-            inactive-value="DOWN"
-            active-color="#13ce66"
-            inactive-color="#ff4949">
-          </el-switch>
-        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="cancelTime"
+        label="取消时间">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="cancelReason"
+        label="取消原因">
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
@@ -125,14 +146,6 @@
           <el-button size="mini"
             type="danger"
             @click="deleteBtn(scope.row.id)">删除</el-button>
-          <el-button size="mini"
-            plain
-            icon="el-icon-top"
-            @click="sortTop(scope.row.id)"></el-button>
-          <el-button size="mini"
-            plain
-            icon="el-icon-bottom"
-            @click="sortBottom(scope.row.id)"></el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -212,7 +225,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { httpAdminBanner } from "@/api/admin/httpAdminBanner";
+import { httpHospitalTask } from "@/api/hospital/httpHospitalTask";
 export default {
   components: {
     EleTable,
@@ -270,32 +283,15 @@ export default {
   },
   methods: {
     getList() {
-      httpAdminBanner
-        .getBanner({
+      httpHospitalTask
+        .getTask({
           page: this.pageNum,
           pageSize: this.pageSize,
-          title: this.searchForm.title,
-          positionTypeList: this.searchForm.type,
-          status: this.searchForm.status,
         })
         .then((res) => {
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
-    },
-    // 开关change事件
-    statusChange(val) {
-      this.editAddForm.status = val;
-      httpAdminBanner.putBanner(val).then((res) => {
-        if (res.code !== "OK") {
-          return;
-        } else {
-          this.$notify.success({
-            title: "状态更改成功",
-          });
-          this.getList();
-        }
-      });
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -353,7 +349,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpAdminBanner.postBanner(this.editAddForm).then((res) => {
+            httpHospitalTask.postTask(this.editAddForm).then((res) => {
               if (res.code !== "OK") {
                 return;
               } else {
@@ -366,7 +362,7 @@ export default {
             });
           } else {
             // 发送请求
-            httpAdminBanner.putBanner(this.editAddForm).then((res) => {
+            httpHospitalTask.putTask(this.editAddForm).then((res) => {
               if (res.code !== "OK") {
                 return;
               } else {
@@ -378,27 +374,6 @@ export default {
               }
             });
           }
-        }
-      });
-    },
-    // 排序
-    sortTop(id) {
-      httpAdminBanner.postBannerSort({ id: id, status: "UP" }).then((res) => {
-        if (res.code === "OK") {
-          this.getList();
-          return this.$notify.success({
-            title: res.message,
-          });
-        }
-      });
-    },
-    sortBottom(id) {
-      httpAdminBanner.postBannerSort({ id: id, status: "DOWN" }).then((res) => {
-        if (res.code === "OK") {
-          this.getList();
-          return this.$notify.success({
-            title: res.message,
-          });
         }
       });
     },

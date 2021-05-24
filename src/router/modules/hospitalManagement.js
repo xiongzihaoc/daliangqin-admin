@@ -41,9 +41,9 @@ const hospitalRouter = {
             },
             children: [
                 {
-                    path: "plan",
-                    name: "plan",
-                    component: () => import('@/views/hospitalManagement/work/plan'),
+                    path: "task",
+                    name: "task",
+                    component: () => import('@/views/hospitalManagement/work/task'),
                     meta: {
                         title: '工作计划',
                         icon: 'general'

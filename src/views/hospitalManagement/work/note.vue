@@ -85,7 +85,7 @@
         label="笔记图集">
         <template slot-scope="scope">
           <div v-if="scope.row.imageUrlList.length > 0">
-            <img style="margin: 0 5px"
+            <img class="tableImg"
               v-for="(item, index) in scope.row.imageUrlList"
               :src="item"
               :key="index" />
