@@ -15,31 +15,40 @@
         </el-form-item>
         <el-form-item label="手机号"
           align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+          prop="phone">
+          <el-input v-model="searchForm.phone"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             size="small"
             placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item label="身份证"
           align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+          prop="idCard">
+          <el-input v-model="searchForm.idCard"
             size="small"
             placeholder="请输入身份证"></el-input>
         </el-form-item>
         <el-form-item label="性别"
           align="left"
-          prop="name">
-          <el-select v-model="searchForm.name"
+          prop="gender">
+          <el-select v-model="searchForm.gender"
             size="small">
+            <el-option label="男"
+              value="MALE"></el-option>
+            <el-option label="女"
+              value="FEMALE"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="职位"
           align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
-            size="small"
-            placeholder="请选择职位"></el-input>
+          prop="type">
+          <el-select v-model="searchForm.type"
+            placeholder="请选择职位">
+            <el-option v-for="item in doctorTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -307,6 +316,9 @@ export default {
       },
       searchForm: {
         name: "",
+        phone: "",
+        idCard: "",
+        gender: "",
         type: "",
       },
       list: [],
@@ -328,7 +340,7 @@ export default {
         { id: 3, label: "副主任医师", value: "ASSOCIATE_CHIEF_PHYSICIAN" },
         { id: 4, label: "主任医师", value: "CHIEF_PHYSICIAN" },
       ],
-      editVal:{},
+      editVal: {},
       // 转诊医生列表
       toDoctorList: [],
       tableHeaderBig: [],
@@ -355,6 +367,11 @@ export default {
         .getDoctor({
           page: this.pageNum,
           pageSize: this.pageSize,
+          name: this.searchForm.name,
+          phone: this.searchForm.phone,
+          idCard: this.searchForm.idCard,
+          gender: this.searchForm.gender,
+          type: this.searchForm.type,
         })
         .then((res) => {
           console.log(res);
@@ -379,10 +396,13 @@ export default {
     },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {},
+    searchBtn() {
+      this.getList();
+    },
     // 重置
     searchReset() {
       this.searchForm = {};
+      this.getList();
     },
     /***** CRUD *****/
     // 新增
@@ -394,7 +414,7 @@ export default {
     // 编辑
     editBtn(val) {
       console.log(val);
-      this.editVal = val
+      this.editVal = val;
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
@@ -430,13 +450,12 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
-    TypeChange(val){
+    TypeChange(val) {
       console.log(val);
-      if(this.infoTitle === '编辑'){
-        if(val !== 'PHYSICIAN') {
-          this.editAddForm.toDoctorUserId = ''
+      if (this.infoTitle === "编辑") {
+        if (val !== "PHYSICIAN") {
+          this.editAddForm.toDoctorUserId = "";
         } else {
-
         }
       }
     },
