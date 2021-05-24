@@ -26,10 +26,10 @@
         </el-form-item>
         <el-form-item label="发布时间"
           prop="status">
-          <el-date-picker v-model="searchForm.searchTime"
+          <el-date-picker v-model="searchForm.noteTime"
             size="small"
             type="datetimerange"
-            @change="dateChange"
+            @change="selectNoteTime"
             value-format="timestamp"
             range-separator="至"
             start-placeholder="开始日期"
@@ -128,7 +128,8 @@ export default {
       searchForm: {
         userName: "",
         type: "",
-        searchTime: [],
+        startTime: "",
+        endTime: "",
       },
       list: [],
       doctorTypeList: [
@@ -165,8 +166,8 @@ export default {
           pageSize: this.pageSize,
           userName: this.searchForm.userName,
           type: this.searchForm.type,
-          startTime: this.searchTime,
-          endTime: this.searchTime,
+          startTime: this.searchForm.startTime,
+          endTime: this.searchForm.endTime,
         })
         .then((res) => {
           console.log(res);
@@ -174,8 +175,11 @@ export default {
           this.total = res.data.totalSize;
         });
     },
-    dateChange(val) {
-      console.log(val);
+    // 日期选择事件
+    selectNoteTime(val) {
+      this.searchForm.startTime = val[0];
+      this.searchForm.endTime = val[1];
+      console.log(this.searchForm.startTime);
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -186,83 +190,6 @@ export default {
     searchReset() {
       this.searchForm = {};
       this.getList();
-    },
-    /***** CRUD *****/
-    // 新增
-    add() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
-    },
-    // 编辑
-    editBtn(val) {
-      console.log(val);
-      this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editDialogVisible = true;
-    },
-    // 删除
-    async deleteBtn(id) {
-      const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }
-      ).catch((err) => console.log(err));
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
-      }
-      // 发送请求
-      httpAdminNote.deleteNotes(id).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
-          this.$notify.success({
-            title: "删除成功",
-          });
-        }
-        this.getList();
-      });
-    },
-    editDialogClosed() {
-      this.$refs.FormRef.resetFields();
-    },
-    // 新增编辑确定
-    editPageEnter() {
-      this.$refs.FormRef.validate((valid) => {
-        if (valid) {
-          if (this.infoTitle === "新增") {
-            // 发送请求
-            httpAdminNote.postNotes(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "新增成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
-              }
-            });
-          } else {
-            // 发送请求
-            httpAdminNote.putNotes(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
-              }
-            });
-          }
-        }
-      });
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

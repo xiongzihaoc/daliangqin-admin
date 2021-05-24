@@ -13,13 +13,6 @@
             size="small"
             placeholder="请输入用户姓名"></el-input>
         </el-form-item>
-        <el-form-item label="职位"
-          align="left"
-          prop="patientName">
-          <el-input v-model="searchForm.patientName"
-            size="small"
-            placeholder="请输入职位"></el-input>
-        </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -61,7 +54,7 @@
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column align="center"
+      <!-- <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
@@ -70,11 +63,11 @@
           <el-button size="mini"
             type="primary"
             @click="editBtn(scope.row)">编辑</el-button>
-          <!-- <el-button size="mini"
+          <el-button size="mini"
             type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button> -->
+            @click="deleteBtn(scope.row.id)">删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </EleTable>
     <!-- 分页 -->
     <el-pagination background
@@ -97,30 +90,36 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="110px">
-        <el-form-item label="医院名称"
+        <el-form-item label="姓名"
           prop="name">
           <el-input v-model="editAddForm.name"
-            placeholder="请输入医院名称"></el-input>
+            placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医院电话"
+        <el-form-item label="电话"
           prop="contract">
           <el-input v-model="editAddForm.contract"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入医院电话"></el-input>
+            placeholder="请输入电话"></el-input>
         </el-form-item>
-        <el-form-item label="医院地址"
+        <el-form-item label="省"
           prop="address">
           <el-input v-model="editAddForm.address"
-            placeholder="请输入医院地址"></el-input>
+            placeholder="请输入省"></el-input>
         </el-form-item>
-        <el-form-item label="管理员手机号"
-          prop="adminPhone">
-          <el-input v-if="this.infoTitle ==='新增'"
-            v-model="editAddForm.adminPhone"
-            placeholder="请输入管理员手机号"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.adminPhone"></el-input>
+        <el-form-item label="市"
+          prop="address">
+          <el-input v-model="editAddForm.address"
+            placeholder="请输入市"></el-input>
+        </el-form-item>
+        <el-form-item label="区"
+          prop="address">
+          <el-input v-model="editAddForm.address"
+            placeholder="请输入区"></el-input>
+        </el-form-item>
+        <el-form-item label="详细地址"
+          prop="address">
+          <el-input v-model="editAddForm.address"
+            placeholder="请输入详细地址"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -160,6 +159,16 @@
               active-color="#13ce66"
               inactive-color="#ff4949">
             </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column align="center"
+          slot="fixed"
+          fixed="right"
+          label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini"
+              type="primary"
+              @click="editBtn(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
       </EleTable>

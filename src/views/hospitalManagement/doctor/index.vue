@@ -370,7 +370,7 @@ export default {
           name: this.searchForm.name,
           phone: this.searchForm.phone,
           idCard: this.searchForm.idCard,
-          gender: this.searchForm.gender,
+          genderType: this.searchForm.gender,
           type: this.searchForm.type,
         })
         .then((res) => {

@@ -6,12 +6,27 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
-        <el-form-item label="姓名"
+        <el-form-item label="app类型"
           align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
-            size="small"
-            placeholder="请输入姓名"></el-input>
+          prop="appType">
+          <el-select placeholder="请选择app类型"
+            v-model="searchForm.appType">
+            <el-option label="医生端"
+              value="DOCTOR"></el-option>
+            <el-option label="用户端"
+              value="PATIENT"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备类型"
+          align="left"
+          prop="deviceType">
+          <el-select placeholder="请选择设备类型"
+            v-model="searchForm.deviceType">
+            <el-option v-for="item in deviceTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -208,8 +223,8 @@ export default {
         url: [{ required: true, message: "请输入url  ", trigger: "blur" }],
       },
       searchForm: {
-        name: "",
-        type: "",
+        appType: "",
+        deviceType: "",
       },
       list: [],
       editAddForm: {
@@ -245,6 +260,8 @@ export default {
         .getUpdateVersion({
           page: this.pageNum,
           pageSize: this.pageSize,
+          appType: this.searchForm.appType,
+          deviceType: this.searchForm.deviceType,
         })
         .then((res) => {
           console.log(res);
@@ -254,10 +271,13 @@ export default {
     },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {},
+    searchBtn() {
+      this.getList();
+    },
     // 重置
     searchReset() {
       this.searchForm = {};
+      this.getList();
     },
     /***** CRUD *****/
     // 新增
