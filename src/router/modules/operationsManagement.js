@@ -29,23 +29,23 @@ const operationsRouter = {
         icon: 'search'
       },
       children: [{
-          path: "recommend",
-          name: "recommend",
-          component: () => import('@/views/operationsManagement/search/recommend'),
-          meta: {
-            title: '推荐搜索',
-            icon: 'general'
-          },
+        path: "recommend",
+        name: "recommend",
+        component: () => import('@/views/operationsManagement/search/recommend'),
+        meta: {
+          title: '推荐搜索',
+          icon: 'general'
         },
-        {
-          path: "history",
-          name: "history",
-          component: () => import('@/views/operationsManagement/search/history'),
-          meta: {
-            title: '搜索历史',
-            icon: 'general'
-          },
+      },
+      {
+        path: "history",
+        name: "history",
+        component: () => import('@/views/operationsManagement/search/history'),
+        meta: {
+          title: '搜索历史',
+          icon: 'general'
         },
+      },
       ],
     },
     // 问卷管理
@@ -59,23 +59,23 @@ const operationsRouter = {
         icon: 'wenjuan'
       },
       children: [{
-          path: "questionnaireList",
-          name: "questionnaireList",
-          component: () => import('@/views/operationsManagement/questionnaire/questionnaireList'),
-          meta: {
-            title: '问卷列表',
-            icon: 'general'
-          },
+        path: "questionnaireList",
+        name: "questionnaireList",
+        component: () => import('@/views/operationsManagement/questionnaire/questionnaireList'),
+        meta: {
+          title: '问卷列表',
+          icon: 'general'
         },
-        {
-          path: "questionList",
-          name: "questionList",
-          component: () => import('@/views/operationsManagement/questionnaire/questionList'),
-          meta: {
-            title: '问题列表',
-            icon: 'general'
-          },
+      },
+      {
+        path: "questionList",
+        name: "questionList",
+        component: () => import('@/views/operationsManagement/questionnaire/questionList'),
+        meta: {
+          title: '问题列表',
+          icon: 'general'
         },
+      },
       ],
     },
     // 内容管理
@@ -99,40 +99,40 @@ const operationsRouter = {
         icon: 'mall'
       },
       children: [{
-          path: "product",
-          name: "product",
-          component: () => import('@/views/operationsManagement/mall/product'),
-          meta: {
-            title: '单品管理',
-            icon: 'general'
-          },
+        path: "product",
+        name: "product",
+        component: () => import('@/views/operationsManagement/mall/product'),
+        meta: {
+          title: '单品管理',
+          icon: 'general'
         },
-        {
-          path: "order",
-          name: "order",
-          component: () => import('@/views/operationsManagement/mall/order'),
-          meta: {
-            title: '订单管理',
-            icon: 'general'
-          },
+      },
+      {
+        path: "order",
+        name: "order",
+        component: () => import('@/views/operationsManagement/mall/order'),
+        meta: {
+          title: '订单管理',
+          icon: 'general'
         },
-        {
-          path: "dispatch",
-          name: "dispatch",
-          component: () => import('@/views/operationsManagement/mall/dispatch'),
-          meta: {
-            title: '发货单',
-            icon: 'general'
-          },
-        }, {
-          path: "returns",
-          name: "returns",
-          component: () => import('@/views/operationsManagement/mall/returns'),
-          meta: {
-            title: '退货单',
-            icon: 'general'
-          },
+      },
+      {
+        path: "dispatch",
+        name: "dispatch",
+        component: () => import('@/views/operationsManagement/mall/dispatch'),
+        meta: {
+          title: '发货单',
+          icon: 'general'
         },
+      }, {
+        path: "returns",
+        name: "returns",
+        component: () => import('@/views/operationsManagement/mall/returns'),
+        meta: {
+          title: '退货单',
+          icon: 'general'
+        },
+      },
       ],
     },
     // 取消原因

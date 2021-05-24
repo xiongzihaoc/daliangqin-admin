@@ -377,22 +377,26 @@ export default {
           }
         }
       });
-    },  
+    },
     // 排序
     sortTop(id) {
       httpAdminBanner.postBannerSort({ id: id, status: "UP" }).then((res) => {
         if (res.code === "OK") {
+          this.getList();
           return this.$notify.success({
             title: res.message,
           });
         }
-        this.getList();
       });
     },
     sortBottom(id) {
       httpAdminBanner.postBannerSort({ id: id, status: "DOWN" }).then((res) => {
-        console.log(res);
-        this.getList();
+        if (res.code === "OK") {
+          this.getList();
+          return this.$notify.success({
+            title: res.message,
+          });
+        }
       });
     },
     /***** 分页 *****/

@@ -62,7 +62,7 @@
         label="身份">
         <template slot-scope="scope">
           <span v-if="scope.row.relationship === 'RELATIVE'">亲戚</span>
-          <span v-if="scope.row.relationship === 'FRIENDS'">朋友</span>
+          <span v-else-if="scope.row.relationship === 'FRIENDS'">朋友</span>
           <span v-else>家属</span>
         </template>
       </el-table-column>

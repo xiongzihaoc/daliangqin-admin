@@ -7,39 +7,39 @@
         class="searchForm"
         :inline="true">
         <el-form-item label="用户姓名"
-          prop="fromUserName">
-          <el-input v-model="searchForm.fromUserName"
+          prop="patientUserName">
+          <el-input v-model="searchForm.patientUserName"
             size="small"
             placeholder="请输入用户姓名"></el-input>
         </el-form-item>
         <el-form-item label="留言时间"
-          prop="chatTime">
-          <el-date-picker v-model="searchForm.chatTime"
+          prop="leaveTime">
+          <el-date-picker v-model="searchForm.leaveTime"
             size="small"
             type="datetimerange"
-            :picker-options="pickerOptions"
+            @change="selectLeaveTime"
+            value-format="timestamp"
             range-separator="至"
             start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            align="right">
+            end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="医生姓名"
-          prop="toUserName">
-          <el-input v-model="searchForm.toUserName"
+          prop="doctorUserName">
+          <el-input v-model="searchForm.doctorUserName"
             size="small"
             placeholder="请输入医生姓名"></el-input>
         </el-form-item>
         <el-form-item label="回复时间"
-          prop="chatTime">
-          <el-date-picker v-model="searchForm.chatTime"
+          prop="replyTime">
+          <el-date-picker v-model="searchForm.replyTime"
             size="small"
             type="datetimerange"
-            :picker-options="pickerOptions"
+            @change="selectReplyTime"
+            value-format="timestamp"
             range-separator="至"
             start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            align="right">
+            end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -58,51 +58,48 @@
     <EleTable :data="list"
       :header="tableHeaderBig">
       <!-- 需要formatter的列 -->
-      <!-- <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="fromUserName"
+        prop="patientUserName"
         label="用户姓名">
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="fromUserName"
+        prop="leaveCount"
         label="用户留言数">
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="fromUserName"
+        prop="leaveTime"
         label="最近留言时间">
+        <template slot-scope="scope">
+          <span>{{parseTime(scope.row.leaveTime)}}</span>
+        </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="fromUserName"
+        prop="doctorUserName"
         label="医生姓名">
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="fromUserName"
+        prop="replyCount"
         label="医生回复数">
       </el-table-column>、
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="fromUserName"
+        prop="replyTime"
         label="最近回复时间">
-      </el-table-column> -->
+        <template slot-scope="scope">
+          <span>{{parseTime(scope.row.replyTime)}}</span>
+        </template>
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -113,9 +110,6 @@
           <!-- @click="editBtn(scope.row)" -->
           <el-button size="mini"
             type="primary">查看</el-button>
-          <!-- <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button> -->
         </template>
       </el-table-column>
     </EleTable>
@@ -176,7 +170,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { validatePhone } from "@/utils/index";
+import { validatePhone, parseTime } from "@/utils/index";
 import { httpAdminChat } from "@/api/admin/httpAdminChat";
 export default {
   components: {
@@ -184,6 +178,7 @@ export default {
   },
   data() {
     return {
+      parseTime,
       // 表单验证规则
       FormRules: {
         adminPhone: [
@@ -194,7 +189,10 @@ export default {
       searchForm: {
         fromUserName: "",
         toUserName: "",
-        chatTime: "",
+        leaveStartTime: "",
+        leaveEndTime: "",
+        replyStartTime: "",
+        replayEndTime: "",
       },
       // 列表数据
       list: [],
@@ -205,15 +203,7 @@ export default {
         address: "",
       },
       // 表格数据
-      tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "fromUserName", label: "用户姓名" },
-        { prop: "", label: "用户留言数" },
-        { prop: "", label: "最近留言时间" },
-        { prop: "toUserName", label: "医生姓名" },
-        { prop: "", label: "医生回复数" },
-        { prop: "", label: "最近回复时间" },
-      ],
+      tableHeaderBig: [{ type: "index", label: "序号" }],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -232,6 +222,12 @@ export default {
         .getChat({
           page: this.pageNum,
           pageSize: this.pageSize,
+          patientUserName: this.searchForm.patientUserName,
+          doctorUserName: this.searchForm.doctorUserName,
+          leaveStartTime: this.searchForm.leaveStartTime,
+          leaveEndTime: this.searchForm.leaveEndTime,
+          replyStartTime: this.searchForm.replyStartTime,
+          replayEndTime: this.searchForm.replayEndTime,
         })
         .then((res) => {
           console.log(res);
@@ -240,13 +236,21 @@ export default {
         });
     },
     // 日期控件选择事件
-    pickerOptions() {},
+    selectLeaveTime(val) {
+      console.log(val);
+    },
+    selectReplyTime(val) {
+      console.log(val);
+    },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {},
+    searchBtn() {
+      this.getList();
+    },
     // 重置
     searchReset() {
       this.searchForm = {};
+      this.getList();
     },
     /***** CRUD *****/
     // 新增

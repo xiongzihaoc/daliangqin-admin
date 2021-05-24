@@ -9,38 +9,41 @@
         <el-form-item label="姓名"
           align="left"
           prop="name">
-          <el-input v-model="searchForm.name"
+          <el-input v-model.trim="searchForm.name"
             size="small"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="手机号"
           align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+          prop="phone">
+          <el-input v-model.trim="searchForm.phone"
             size="small"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item label="身份证"
           align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+          prop="idCard">
+          <el-input v-model.trim="searchForm.idCard"
             size="small"
             placeholder="请输入身份证"></el-input>
         </el-form-item>
         <el-form-item label="性别"
           align="left"
-          prop="name">
-          <el-select v-model="searchForm.name"
+          prop="gender">
+          <el-select v-model="searchForm.gender"
             size="small">
-            <!-- <el-option label="家医"></el-option> -->
+            <el-option label="男"
+              value="MALE"></el-option>
+            <el-option label="女"
+              value="FEMALE"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="职位"
+        <el-form-item label="对应医师"
           align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
-            size="small"
-            placeholder="请选择职位"></el-input>
+          prop="doctorName">
+          <el-input placeholder="请输入对应医师"
+            v-model.trim="searchForm.doctorName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -85,28 +88,24 @@
         prop="name"
         label="姓名">
       </el-table-column>
-
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
         prop="avatarUrl"
         label="头像">
       </el-table-column>
-
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
         prop="phone"
         label="手机号">
       </el-table-column>
-
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
         prop="idCard"
         label="身份证号">
       </el-table-column>
-
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
@@ -148,7 +147,7 @@
         slot="fixed"
         fixed="left"
         prop="doctorInfoVO"
-        label="对应医生">
+        label="对应医师">
         <template slot-scope="scope">{{scope.row.doctorInfoVO.name}}</template>
       </el-table-column>
       <!-- 操作 -->
@@ -214,7 +213,8 @@
         <!-- 家庭住址 -->
         <el-form-item label="家庭住址"
           prop="address">
-          <el-input v-model="editAddForm.address" placeholder="请输入家庭住址"></el-input>
+          <el-input v-model="editAddForm.address"
+            placeholder="请输入家庭住址"></el-input>
         </el-form-item>
         <!-- 对应医师 -->
         <el-form-item label="对应医师"
@@ -269,7 +269,10 @@ export default {
       },
       searchForm: {
         name: "",
-        type: "",
+        phone: "",
+        idCard: "",
+        gender: "",
+        doctorInfoVO: "",
       },
       list: [],
       editAddForm: {
@@ -313,6 +316,11 @@ export default {
         .getPatient({
           page: this.pageNum,
           pageSize: this.pageSize,
+          name: this.searchForm.name,
+          phone: this.searchForm.phone,
+          idCard: this.searchForm.idCard,
+          gender: this.searchForm.gender,
+          doctorName: this.searchForm.doctorName  ,
         })
         .then((res) => {
           console.log(res);
@@ -323,15 +331,19 @@ export default {
     // 获取转诊医生列表
     getTodoctorList() {
       httpAdminPatient.getPatientTransfer().then((res) => {
+        console.log(res);
         this.toDoctorList = res.data.elements;
       });
     },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {},
+    searchBtn() {
+      this.getList()
+    },
     // 重置
     searchReset() {
       this.searchForm = {};
+      this.getList()
     },
     /***** CRUD *****/
     // 新增
