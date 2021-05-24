@@ -6,41 +6,80 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
-        <el-form-item label="用户姓名"
-          prop="fromUserName">
-          <el-input v-model="searchForm.fromUserName"
-            size="small"
-            placeholder="请输入用户姓名"></el-input>
-        </el-form-item>
-        <el-form-item label="留言时间"
-          prop="chatTime">
-          <el-date-picker v-model="searchForm.chatTime"
-            size="small"
-            type="datetimerange"
-            :picker-options="pickerOptions"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            align="right">
-          </el-date-picker>
-        </el-form-item>
         <el-form-item label="医生姓名"
-          prop="toUserName">
-          <el-input v-model="searchForm.toUserName"
+          prop="doctorUserName">
+          <el-input v-model="searchForm.doctorUserName"
             size="small"
             placeholder="请输入医生姓名"></el-input>
         </el-form-item>
-        <el-form-item label="回复时间"
-          prop="chatTime">
-          <el-date-picker v-model="searchForm.chatTime"
+        <el-form-item label="职位"
+          prop="doctorType">
+          <el-select v-model="searchForm.doctorType"
+            placeholder="请选择职位">
+            <el-option v-for="item in doctorTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用户"
+          prop="patientUserName">
+          <el-input v-model="searchForm.patientUserName"
             size="small"
+            placeholder="请输入用户"></el-input>
+        </el-form-item>
+        <el-form-item label="随访方式"
+          prop="type">
+          <el-select v-model="searchForm.type"
+            placeholder="请选择随访方式">
+            <el-option v-for="item in followTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="高血压"
+          prop="highBlood">
+          <el-select v-model="searchForm.highBlood"
+            placeholder="请选择">
+            <el-option v-for="item in healthList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="糖尿病"
+          prop="diabetes">
+          <el-select v-model="searchForm.diabetes"
+            placeholder="请选择">
+            <el-option v-for="item in healthList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="随访时间"
+          prop="chatTime">
+          <el-date-picker v-model="searchForm.followTime"
+            size="small"
+            @change="selectFollowTime"
             type="datetimerange"
-            :picker-options="pickerOptions"
+            value-format="timestamp"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             align="right">
           </el-date-picker>
+        </el-form-item>
+        <el-form-item label="用户状态"
+          prop="userStatus">
+          <el-select v-model="searchForm.userStatus"
+            placeholder="请选择用户状态">
+            <el-option v-for="item in userStatusList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -51,6 +90,9 @@
             size="small"
             plain
             icon="el-icon-refresh">重置</el-button>
+          <el-button size="small"
+            type="success"
+            icon="el-icon-download">导出</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -76,14 +118,27 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="position"
+        prop="doctorType"
         label="职位">
+        <template slot-scope="scope">
+          <span v-if="scope.row.doctorType === 'PHYSICIAN'">医师</span>
+          <span v-else-if="scope.row.doctorType === 'ATTENDING_PHYSICIAN'">主治医师</span>
+          <span v-else-if="scope.row.doctorType === 'ASSOCIATE_CHIEF_PHYSICIAN'">副主任医师</span>
+          <span v-else>主任医师</span>
+        </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="type"
         label="随访方式">
+        <template slot-scope="scope">
+          <span v-if="scope.row.type === 'CLINIC'">诊间随访</span>
+          <span v-else-if="scope.row.type === 'DOOR'">上门随访</span>
+          <span v-else-if="scope.row.type === 'VIDEO'">视频随访</span>
+          <!-- VOICE -->
+          <span v-else>语音随访</span>
+        </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
@@ -103,13 +158,10 @@
         prop="highBlood"
         label="高血压">
         <template slot-scope="scope">
-          <span style="color: #16e127"
-            v-if="scope.row.highBlood === 'HEALTH'">健康</span>
+          <span v-if="scope.row.highBlood === 'HEALTH'">健康</span>
           <span v-else-if="scope.row.highBlood === 'SLIGHT'">轻度</span>
-          <span style="color: #e6a23c"
-            v-else-if="scope.row.highBlood === 'MEDIUM'">中度</span>
-          <span style="color: #f56c6c"
-            v-else>重度</span>
+          <span v-else-if="scope.row.highBlood === 'MEDIUM'">中度</span>
+          <span v-else>重度</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -118,13 +170,10 @@
         prop="diabetes"
         label="糖尿病">
         <template slot-scope="scope">
-          <span style="color: #16e127"
-            v-if="scope.row.diabetes === ''">健康</span>
+          <span v-if="scope.row.diabetes === ''">健康</span>
           <span v-else-if="scope.row.diabetes === 'SLIGHT'">轻度</span>
-          <span style="color: #e6a23c"
-            v-else-if="scope.row.diabetes === 'MEDIUM'">中度</span>
-          <span style="color: #f56c6c"
-            v-else>重度</span>
+          <span v-else-if="scope.row.diabetes === 'MEDIUM'">中度</span>
+          <span v-else>重度</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -150,33 +199,21 @@
         fixed="right"
         prop="userStatus"
         label="用户状态">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="diabetes"
-        label="加入方式">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="diabetes"
-        label="操作时间">
-      </el-table-column>
-      <!-- 操作 -->
-      <!-- <el-table-column
-        align="center"
-        slot="fixed"
-        fixed="right"
-        label="操作"
-        width="220"
-      >
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
-            >编辑</el-button
-          >
+          <span v-if="scope.row.userStatus === 'HEALTH'">良好</span>
+          <span v-else-if="scope.row.userStatus === 'SLIGHT'">轻微</span>
+          <span v-else>严重</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        prop="updateTime"
+        label="操作时间">
+        <template slot-scope="scope">
+          <span>{{parseTime(scope.row.updateTime)}}</span>
+        </template>
+      </el-table-column>
     </EleTable>
     <!-- 分页 -->
     <el-pagination background
@@ -188,56 +225,12 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
       class="el-pagination-style"></el-pagination>
-    <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
-      :visible.sync="editDialogVisible"
-      width="40%"
-      @open="getData"
-      @closed="editDialogClosed"
-      v-dialogDrag>
-      <el-form ref="FormRef"
-        :rules="FormRules"
-        :model="editAddForm"
-        label-width="110px">
-        <el-form-item label="医院名称"
-          prop="name">
-          <el-input v-model="editAddForm.name"
-            placeholder="请输入医院名称"></el-input>
-        </el-form-item>
-        <el-form-item label="医院电话"
-          prop="contract">
-          <el-input v-model="editAddForm.contract"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入医院电话"></el-input>
-        </el-form-item>
-        <el-form-item label="医院地址"
-          prop="address">
-          <el-input v-model="editAddForm.address"
-            placeholder="请输入医院地址"></el-input>
-        </el-form-item>
-        <el-form-item label="管理员手机号"
-          prop="adminPhone">
-          <el-input v-if="this.infoTitle === '新增'"
-            v-model="editAddForm.adminPhone"
-            placeholder="请输入管理员手机号"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.adminPhone"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer"
-        class="dialog-footer">
-        <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { httpFollow } from "@/api/hospital/httpHospitalFollow";
+import { httpHospitalFollow } from "@/api/hospital/httpHospitalFollow";
 import { parseTime } from "@/utils/index";
 export default {
   components: {
@@ -254,12 +247,42 @@ export default {
       },
       // 搜索表单
       searchForm: {
-        fromUserName: "",
-        toUserName: "",
-        chatTime: "",
+        doctorUserName: "",
+        doctorType: "",
+        patientUserName: "",
+        type: "",
+        highBlood: "",
+        diabetes: "",
+        startTime: "",
+        endTime: "",
+        userStatus: "",
       },
       // 列表数据
       list: [],
+      // 随访方式列表
+      followTypeList: [
+        { id: 1, label: "诊间随访", value: "CLINIC" },
+        { id: 2, label: "上门随访", value: "DOOR" },
+        { id: 3, label: "视频随访", value: "VIDEO" },
+        { id: 4, label: "语音随访", value: "VOICE" },
+      ],
+      healthList: [
+        { id: 1, label: "健康", value: "HEALTH" },
+        { id: 2, label: "轻微", value: "SLIGHT  " },
+        { id: 3, label: "中度", value: "MEDIUM" },
+        { id: 4, label: "重度", value: "SERIOUS" },
+      ],
+      userStatusList: [
+        { id: 1, label: "良好", value: "HEALTH" },
+        { id: 2, label: "轻微", value: "SLIGHT  " },
+        { id: 3, label: "严重", value: "SERIOUS" },
+      ],
+      doctorTypeList: [
+        { id: 1, label: "医师", value: "PHYSICIAN" },
+        { id: 2, label: "主治医师", value: "ATTENDING_PHYSICIAN" },
+        { id: 3, label: "副主任医师", value: "ASSOCIATE_CHIEF_PHYSICIAN" },
+        { id: 4, label: "主任医师", value: "CHIEF_PHYSICIAN" },
+      ],
       // 增改表单
       editAddForm: {
         fromUserName: "",
@@ -282,11 +305,19 @@ export default {
   },
   methods: {
     getList() {
-      httpFollow
-        .list({
+      httpHospitalFollow
+        .getFollowList({
           page: this.pageNum,
           pageSize: this.pageSize,
-          id: this.searchInput,
+          doctorUserName: this.searchForm.doctorUserName,
+          doctorType: this.searchForm.doctorType,
+          patientUserName: this.searchForm.patientUserName,
+          type: this.searchForm.type,
+          highBlood: this.searchForm.highBlood,
+          diabetes: this.searchForm.diabetes,
+          startTime: this.searchForm.startTime,
+          endTime: this.searchForm.endTime,
+          userStatus: this.searchForm.userStatus,
         })
         .then((res) => {
           console.log(res);
@@ -295,94 +326,20 @@ export default {
         });
     },
     // 日期控件选择事件
-    pickerOptions() {},
+    selectFollowTime(val) {
+      this.searchForm.startTime = val[0];
+      this.searchForm.endTime = val[1];
+      console.log(this.searchForm);
+    },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {},
+    searchBtn() {
+      this.getList()
+    },
     // 重置
     searchReset() {
       this.searchForm = {};
-    },
-    /***** CRUD *****/
-    // 新增
-    add() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
-    },
-    // 编辑
-    editBtn(val) {
-      console.log(val);
-      this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editDialogVisible = true;
-    },
-    // 删除多个
-    deleteMultiple() {},
-    // 删除单个
-    async deleteBtn(id) {
-      const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }
-      ).catch((err) => console.log(err));
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
-      }
-      // 发送请求
-      httpFollow.deleteElement(id).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
-          this.$notify.success({
-            title: "删除成功",
-          });
-        }
-        this.getList();
-      });
-    },
-    // 弹框开启
-    getData() {},
-    editDialogClosed() {
-      this.$refs.FormRef.resetFields();
-    },
-    // 新增编辑确定
-    editPageEnter() {
-      this.$refs.FormRef.validate((valid) => {
-        if (valid) {
-          if (this.infoTitle === "新增") {
-            // 发送请求
-            httpFollow.add(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "新增成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
-              }
-            });
-          } else {
-            // 发送请求
-            httpFollow.edit(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
-              }
-            });
-          }
-        }
-      });
+      this.getList()
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

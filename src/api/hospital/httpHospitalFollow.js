@@ -1,12 +1,13 @@
 import request from '@/utils/request'
 
 
-export const httpFollow = {
-  list(data) {
+export const httpHospitalFollow = {
+  getFollowList(data) {
     return request({
       url: 'follow',
       method: 'get',
-      params: data
+      params: data,
+      baseURL: '/api/hospital',
     })
   }
 }
