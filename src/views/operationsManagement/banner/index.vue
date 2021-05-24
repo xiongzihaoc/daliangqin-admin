@@ -124,11 +124,11 @@
             @click="deleteBtn(scope.row.id)">删除</el-button>
           <el-button size="mini"
             plain
-            icon="el-icon-caret-top"
+            icon="el-icon-top"
             @click="sortTop(scope.row.id)"></el-button>
           <el-button size="mini"
             plain
-            icon="el-icon-caret-bottom"
+            icon="el-icon-bottom"
             @click="sortBottom(scope.row.id)"></el-button>
         </template>
       </el-table-column>
@@ -377,10 +377,15 @@ export default {
           }
         }
       });
-    },
+    },  
+    // 排序
     sortTop(id) {
       httpAdminBanner.postBannerSort({ id: id, status: "UP" }).then((res) => {
-        console.log(res);
+        if (res.code === "OK") {
+          return this.$notify.success({
+            title: res.message,
+          });
+        }
         this.getList();
       });
     },

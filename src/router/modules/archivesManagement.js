@@ -18,9 +18,9 @@ const archivesRouter = {
         }
     },
     {
-        path: 'kinsfolk',
-        name: 'kinsfolk',
-        component: () => import('@/views/archivesManagement/kinsfolk'),
+        path: 'relatives',
+        name: 'relatives',
+        component: () => import('@/views/archivesManagement/relatives'),
         meta: {
             title: '亲属管理',
             icon: 'qinshu'

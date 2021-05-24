@@ -187,31 +187,38 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
+        <!-- 用户姓名 -->
         <el-form-item label="用户姓名"
           prop="name">
           <el-input v-model="editAddForm.name"
             placeholder="请输入用户姓名"></el-input>
         </el-form-item>
+        <!-- 用户头像 -->
         <el-form-item label="用户头像"
           prop="avatarUrl">
           <el-input v-model="editAddForm.avatarUrl"
             placeholder="请上传用户头像"></el-input>
         </el-form-item>
+        <!-- 手机号 -->
         <el-form-item label="手机号"
           prop="phone">
           <el-input v-model="editAddForm.phone"
             placeholder="请输入该用户手机号"></el-input>
         </el-form-item>
+        <!-- 身份证 -->
         <el-form-item label="身份证号"
           prop="idCard">
           <el-input v-model="editAddForm.idCard"
             placeholder="请输入该用户身份证号"></el-input>
         </el-form-item>
+        <!-- 家庭住址 -->
         <el-form-item label="家庭住址"
           prop="address">
-          <el-input v-model="editAddForm.address"></el-input>
+          <el-input v-model="editAddForm.address" placeholder="请输入家庭住址"></el-input>
         </el-form-item>
-        <el-form-item label="对应医师">
+        <!-- 对应医师 -->
+        <el-form-item label="对应医师"
+          prop="doctorUserId">
           <el-select v-model="editAddForm.doctorUserId"
             filterable
             placeholder="请输入内容搜索"
@@ -244,18 +251,20 @@ export default {
     return {
       parseTime,
       FormRules: {
-        name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
-        avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
+        name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
+        avatarUrl: [
+          { required: true, message: "请上传用户头像", trigger: "blur" },
+        ],
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
         idCard: [
           { required: true, trigger: "blur", validator: validateIdCard },
         ],
         type: [{ required: true, message: "请选择职位", trigger: "blur" }],
-        hospitalId: [
-          { required: true, message: "请选择医院", trigger: "blur" },
+        address: [
+          { required: true, message: "请输入家庭地址", trigger: "blur" },
         ],
-        toDoctorUserId: [
-          { required: true, message: "请选择转诊医生  ", trigger: "blur" },
+        doctorUserId: [
+          { required: true, message: "请选择对应医师", trigger: "blur" },
         ],
       },
       searchForm: {

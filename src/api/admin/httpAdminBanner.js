@@ -32,7 +32,7 @@ export const httpAdminBanner = {
         return request({
             url: 'banner/' + data.id,
             method: 'post',
-            data
+            params: data
         })
     }
 }

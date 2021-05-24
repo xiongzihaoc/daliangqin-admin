@@ -19,10 +19,10 @@
             size="small"
             v-model="searchForm.diseaseType"
             placeholder="请选择病症">
-            <el-option value="HIGH_BLOOD"
-              label="高血压"></el-option>
-            <el-option value="DIABETES"
-              label="糖尿病"></el-option>
+            <el-option v-for="item in diseaseList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.vlaue"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="录入方式"
@@ -158,8 +158,8 @@
           <span style="color:#F56C6C"
             v-else-if="scope.row.resultType === 'SERIOUS'">重度</span>
           <span v-else-if="scope.row.resultType === 'NORMAL'"> 正常</span>
-          <span v-else-if="scope.row.resultType === 'FAST'">稍快</span>
           <span v-else-if="scope.row.resultType === 'SLOW'">稍慢</span>
+          <span v-else>稍快</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -204,16 +204,19 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
+        <!-- 用户 -->
         <el-form-item label="选择用户"
           prop="patientId">
           <el-input v-model.trim="editAddForm.patientId"
             placeholder="请输入内容搜索"></el-input>
         </el-form-item>
+        <!-- 设备 -->
         <el-form-item label="设备"
           prop="deviceId">
           <el-input v-model.trim="editAddForm.deviceId"
             placeholder="请选择设备"></el-input>
         </el-form-item>
+        <!-- 病症 -->
         <el-form-item label="病症"
           prop="diseaseType">
           <el-select style="width: 100%"
@@ -226,6 +229,7 @@
           </el-select>
         </el-form-item>
         <!-- 血压 -->
+        <!-- 高压 -->
         <el-form-item v-if="this.editAddForm.diseaseType === 'HIGH_BLOOD'"
           label="收缩压 / 高压"
           prop="shrinkHighPressure">
@@ -233,6 +237,7 @@
             placeholder="请输入收缩压 / 高压"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
         </el-form-item>
+        <!-- 低压 -->
         <el-form-item v-if="this.editAddForm.diseaseType === 'HIGH_BLOOD'"
           label="舒张压 / 低压"
           prop="diastoleLowPressure">
@@ -295,6 +300,9 @@ export default {
         { id: 2, label: "轻微", value: "SLIGHT" },
         { id: 3, label: "中度", value: "MEDIUM" },
         { id: 4, label: "重度", value: "SERIOUS" },
+        { id: 5, label: "正常", value: "NORMAL" },
+        { id: 6, label: "稍慢", value: "SLOW" },
+        { id: 7, label: "稍快", value: "FAST" },
       ],
       diseaseList: [
         { id: 1, label: "高血压", value: "HIGH_BLOOD" },
