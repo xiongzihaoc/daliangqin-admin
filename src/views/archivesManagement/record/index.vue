@@ -110,19 +110,26 @@
         label="病症">
         <template slot-scope="scope">
           <span v-if="scope.row.diseaseType === 'HIGH_BLOOD'">高血压</span>
-          <span v-else>糖尿病</span>
+          <span v-else-if="scope.row.diseaseType === 'DIABETES'">糖尿病</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        prop="healthScore"
+        prop="healthScoreList"
         label="指数">
         <template slot-scope="scope">
-          <span v-if="scope.row.diseaseType === 'HEART_RATE'">{{scope.row.healthScore}}</span>
-          <span v-else-if="scope.row.diseaseType === 'DIABETES'">{{scope.row.healthScore}}</span>
-          <div v-else >
-            <!-- <span v-for="item in scope.row.healthScore" :key="item.id">{{item.}}</span> -->
+          <div v-if="scope.row.diseaseType === 'HEART_RATE'">
+            <span v-for="item in scope.row.healthScoreList"
+              :key="item.id">{{item + 'bpm'}}</span>
+          </div>
+          <div v-else-if="scope.row.diseaseType === 'DIABETES'">
+            <span v-for="item in scope.row.healthScoreList"
+              :key="item.id">{{item + 'mmol/L'}}</span>
+          </div>
+          <div v-else>
+            <span style="display:block;">{{'收缩压(高压) ' + scope.row.healthScoreList[0] + 'mmHg'}}</span>
+            <span style="display:block;">{{'舒张压(低压) ' + scope.row.healthScoreList[1] + 'mmHg'}}</span>
           </div>
         </template>
       </el-table-column>
@@ -142,10 +149,17 @@
         prop="resultType"
         label="检测结果">
         <template slot-scope="scope">
-          <span v-if="scope.row.resultType === 'HEALTH'">健康</span>
-          <span v-else-if="scope.row.resultType === 'SLIGHT'">轻微</span>
-          <span v-else-if="scope.row.resultType === 'MEDIUM'">中度</span>
-          <span v-else>重度</span>
+          <span style="color:#67C23A"
+            v-if="scope.row.resultType === 'HEALTH'">健康</span>
+          <span style="color:#909399"
+            v-else-if="scope.row.resultType === 'SLIGHT'">轻微</span>
+          <span style="color:#E6A23C"
+            v-else-if="scope.row.resultType === 'MEDIUM'">中度</span>
+          <span style="color:#F56C6C"
+            v-else-if="scope.row.resultType === 'SERIOUS'">重度</span>
+          <span v-else-if="scope.row.resultType === 'NORMAL'"> 正常</span>
+          <span v-else-if="scope.row.resultType === 'FAST'">稍快</span>
+          <span v-else-if="scope.row.resultType === 'SLOW'">稍慢</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -153,10 +167,10 @@
         fixed="left"
         prop="createTime"
         label="检测日期">
-        <!-- <template slot-scope="scope">
-        </template> -->
+        <template slot-scope="scope">
+          <span>{{parseTime(scope.row.createTime)}}</span>
+        </template>
       </el-table-column>
-
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -190,49 +204,57 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
-        <el-form-item label="轮播图名称"
-          prop="title">
-          <el-input v-model.trim="editAddForm.title"
-            placeholder="请输入轮播图名称"></el-input>
+        <el-form-item label="选择用户"
+          prop="patientId">
+          <el-input v-model.trim="editAddForm.patientId"
+            placeholder="请输入内容搜索"></el-input>
         </el-form-item>
-        <el-form-item label="轮播图图片"
-          prop="imageUrl">
-          <el-input v-model.trim="editAddForm.imageUrl"
-            placeholder="暂时输入图片名称"></el-input>
+        <el-form-item label="设备"
+          prop="deviceId">
+          <el-input v-model.trim="editAddForm.deviceId"
+            placeholder="请选择设备"></el-input>
         </el-form-item>
-        <el-form-item label="呈现位置"
-          prop="positionList">
+        <el-form-item label="病症"
+          prop="diseaseType">
           <el-select style="width: 100%"
-            multiple
-            v-model="editAddForm.positionList"
-            placeholder="请选择呈现位置">
-            <el-option value="DOCTOR"
-              label="医生端"></el-option>
-            <el-option value="PATIENT"
-              label="用户端"></el-option>
+            v-model="editAddForm.diseaseType"
+            placeholder="请选择病症">
+            <el-option v-for="item in diseaseList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="跳转地址"
-          prop="linkUrl">
-          <el-input v-model.trim="editAddForm.linkUrl"
-            placeholder="请输入跳转地址"></el-input>
+        <!-- 血压 -->
+        <el-form-item v-if="this.editAddForm.diseaseType === 'HIGH_BLOOD'"
+          label="收缩压 / 高压"
+          prop="shrinkHighPressure">
+          <el-input v-model="editAddForm.shrinkHighPressure"
+            placeholder="请输入收缩压 / 高压"><i slot="suffix"
+              style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
         </el-form-item>
-        <el-form-item label="权重"
-          prop="zOrder">
-          <el-input v-model.trim="editAddForm.zOrder"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入权重"></el-input>
+        <el-form-item v-if="this.editAddForm.diseaseType === 'HIGH_BLOOD'"
+          label="舒张压 / 低压"
+          prop="diastoleLowPressure">
+          <el-input v-model="editAddForm.diastoleLowPressure"
+            placeholder="请输入舒张压 / 低压"><i slot="suffix"
+              style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
         </el-form-item>
-        <el-form-item label="状态"
-          prop="status">
-          <el-select style="width: 100%"
-            v-model="editAddForm.status"
-            placeholder="请选择状态">
-            <el-option value="UP"
-              label="上架"></el-option>
-            <el-option value="DOWN"
-              label="下架"></el-option>
-          </el-select>
+        <!-- 血糖 -->
+        <el-form-item v-if="this.editAddForm.diseaseType === 'DIABETES'"
+          label="空腹血糖"
+          prop="diastoleLowPressure">
+          <el-input v-model="editAddForm.diastoleLowPressure"
+            placeholder="请输入空腹血糖"><i slot="suffix"
+              style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
+        </el-form-item>
+        <!-- 心率 -->
+        <el-form-item v-if="this.editAddForm.diseaseType === 'HEART_RATE'"
+          label="心率"
+          prop="diastoleLowPressure">
+          <el-input v-model="editAddForm.diastoleLowPressure"
+            placeholder="请输入心率"><i slot="suffix"
+              style="font-style:normal;margin-right: 10px;">bpm</i></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -247,12 +269,14 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpDetectRecord } from "@/api/admin/httpDetectRecord";
+import { parseTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
   },
   data() {
     return {
+      parseTime,
       FormRules: {
         title: [
           { required: true, message: "请输入轮播图名称", trigger: "blur" },
@@ -272,11 +296,17 @@ export default {
         { id: 3, label: "中度", value: "MEDIUM" },
         { id: 4, label: "重度", value: "SERIOUS" },
       ],
+      diseaseList: [
+        { id: 1, label: "高血压", value: "HIGH_BLOOD" },
+        { id: 2, label: "糖尿病", value: "DIABETES" },
+        { id: 3, label: "心率", value: "HEART_RATE" },
+      ],
       editAddForm: {
-        patientUserName: "",
+        patientId: "",
+        deviceId: "",
         diseaseType: "",
-        resource: "",
-        resultType: "",
+        shrinkHighPressure: "",
+        diastoleLowPressure: "",
       },
       tableHeaderBig: [],
       // 分页区域

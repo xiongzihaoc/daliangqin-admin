@@ -141,14 +141,15 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        prop="hospitalName"
+        prop="healthScore"
         label="两慢指数">
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        prop="doctor"
+        prop="doctorInfoVO"
         label="对应医生">
+        <template slot-scope="scope">{{scope.row.doctorInfoVO.name}}</template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
@@ -210,29 +211,17 @@
           prop="address">
           <el-input v-model="editAddForm.address"></el-input>
         </el-form-item>
-        <el-form-item label="转诊医生">
-          <el-select v-model="editAddForm.address"
-            placeholder="请选择转诊医生"
-            style="width: 100%">
-            <!-- <el-option v-for="item in hospitalList"
-              :key="item.id"
-              :value="item.id"
-              :label="item.name"></el-option> -->
-          </el-select>
-        </el-form-item>
-        <!-- PHYSICIAN 医师的枚举值 只有职位选中医师 才能选择转诊医生 -->
-        <!-- <el-form-item v-if="editAddForm.type === 'PHYSICIAN'"
-          label="转诊医生"
-          prop="toDoctorUserId">
-          <el-select v-model="editAddForm.toDoctorUserId"
-            placeholder="请选择转诊医生"
+        <el-form-item label="对应医师">
+          <el-select v-model="editAddForm.doctorUserId"
+            filterable
+            placeholder="请输入内容搜索"
             style="width: 100%">
             <el-option v-for="item in toDoctorList"
               :key="item.id"
               :value="item.id"
               :label="item.name"></el-option>
           </el-select>
-        </el-form-item> -->
+        </el-form-item>
       </el-form>
       <span slot="footer"
         class="dialog-footer">
@@ -279,9 +268,8 @@ export default {
         avatarUrl: "",
         phone: "",
         idCard: "",
-        hospitalId: "",
-        toDoctorUserId: "",
-        type: "",
+        address: "",
+        doctorUserId: "",
       },
       // 医院列表
       hospitalList: [],
@@ -307,6 +295,9 @@ export default {
   created() {
     this.getList();
   },
+  mounted() {
+    this.getTodoctorList();
+  },
   methods: {
     getList() {
       httpAdminPatient
@@ -319,6 +310,12 @@ export default {
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
+    },
+    // 获取转诊医生列表
+    getTodoctorList() {
+      httpAdminPatient.getPatientTransfer().then((res) => {
+        this.toDoctorList = res.data.elements;
+      });
     },
     /***** 搜索区域 *****/
     // 搜索

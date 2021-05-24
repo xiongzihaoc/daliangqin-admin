@@ -8,6 +8,14 @@ export const httpAdminPatient = {
       params: data
     })
   },
+  // 获取转诊医生列表
+  getPatientTransfer(data) {
+    return request({
+      url: 'patient/transfer',
+      method: 'get',
+      params: data
+    })
+  },
   postPatient(data) {
     return request({
       url: 'patient',
