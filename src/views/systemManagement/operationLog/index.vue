@@ -6,31 +6,12 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
-        <el-form-item label="用户姓名"
+        <el-form-item label="姓名"
           align="left"
           prop="userName">
           <el-input v-model="searchForm.userName"
             size="small"
-            placeholder="请输入用户姓名"></el-input>
-        </el-form-item>
-        <el-form-item label="亲属姓名"
-          align="left"
-          prop="userName">
-          <el-input v-model="searchForm.name"
-            size="small"
-            placeholder="请输入亲属姓名"></el-input>
-        </el-form-item>
-        <el-form-item label="身份"
-          prop="relationship">
-          <el-select style="width: 100%"
-            size="small"
-            v-model="searchForm.relationship"
-            placeholder="请选择身份">
-            <el-option v-for="item in relationshipList"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"></el-option>
-          </el-select>
+            placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="手机号"
           align="left"
@@ -58,12 +39,10 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="relationship"
-        label="身份">
+        prop="createTime"
+        label="操作">
         <template slot-scope="scope">
-          <span v-if="scope.row.relationship === 'RELATIVE'">亲戚</span>
-          <span v-else-if="scope.row.relationship === 'FRIENDS'">朋友</span>
-          <span v-else>家属</span>
+            <span>{{parseTime(scope.row.createTime)}}</span>
         </template>
       </el-table-column>
     </EleTable>
@@ -80,7 +59,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { httpAdminRelatives } from "@/api/admin/httpAdminRelatives";
+import { httpAdminLog } from "@/api/admin/httpAdminLog";
 import { validatePhone, parseTime } from "@/utils/index";
 export default {
   components: {
@@ -93,9 +72,12 @@ export default {
       list: [],
       tableHeaderBig: [
         { label: "序号", type: "index" },
-        { prop: "userName", label: "用户姓名" },
-        { prop: "name", label: "亲属姓名" },
+        { prop: "description", label: "目录" },
+        { prop: "url", label: "链接" },
+        { prop: "name", label: "姓名" },
         { prop: "phone", label: "手机号" },
+        { prop: "idCard", label: "身份证号" },
+        { prop: "ip", label: "ip" },
       ],
       FormRules: {
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
@@ -130,8 +112,8 @@ export default {
   },
   methods: {
     getList() {
-      httpAdminRelatives
-        .getRelatives({
+      httpAdminLog
+        .getLog({
           page: this.pageNum,
           pageSize: this.pageSize,
           userName: this.searchForm.userName,
