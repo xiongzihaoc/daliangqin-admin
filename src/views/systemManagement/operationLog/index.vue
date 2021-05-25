@@ -6,10 +6,17 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
+        <el-form-item label="目录"
+          align="left"
+          prop="description">
+          <el-input v-model="searchForm.description"
+            size="small"
+            placeholder="请输入姓名"></el-input>
+        </el-form-item>
         <el-form-item label="姓名"
           align="left"
-          prop="userName">
-          <el-input v-model="searchForm.userName"
+          prop="name">
+          <el-input v-model="searchForm.name"
             size="small"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
@@ -42,7 +49,7 @@
         prop="createTime"
         label="操作">
         <template slot-scope="scope">
-            <span>{{parseTime(scope.row.createTime)}}</span>
+          <span>{{parseTime(scope.row.createTime)}}</span>
         </template>
       </el-table-column>
     </EleTable>
@@ -96,10 +103,9 @@ export default {
       ],
       // 搜索区域
       searchForm: {
-        userName: "",
         name: "",
         phone: "",
-        relationship: "",
+        description:"",
       },
       // 分页数据
       pageSize: 10,
@@ -116,10 +122,9 @@ export default {
         .getLog({
           page: this.pageNum,
           pageSize: this.pageSize,
-          userName: this.searchForm.userName,
           name: this.searchForm.name,
           phone: this.searchForm.phone,
-          relationship: this.searchForm.relationship,
+          description: this.searchForm.description,
         })
         .then((res) => {
           console.log(res);
@@ -133,7 +138,7 @@ export default {
     },
     // 搜索条件重置
     searchReset() {
-      this.searchInput = "";
+      this.searchForm = {};
       this.getList();
     },
     // 分页

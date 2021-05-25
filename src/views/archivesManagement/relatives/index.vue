@@ -151,7 +151,7 @@ export default {
     },
     // 搜索条件重置
     searchReset() {
-      this.searchInput = "";
+      this.searchForm = {};
       this.getList();
     },
     // 分页
