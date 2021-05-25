@@ -229,7 +229,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { validatePhone } from "@/utils/index";
+import { validatePhone, doctorTypeList } from "@/utils/index";
 import { httpHospitalFollow } from "@/api/hospital/httpHospitalFollow";
 import { parseTime } from "@/utils/index";
 export default {
@@ -238,6 +238,7 @@ export default {
   },
   data() {
     return {
+      doctorTypeList,
       parseTime,
       // 表单验证规则
       FormRules: {
@@ -276,12 +277,6 @@ export default {
         { id: 1, label: "良好", value: "HEALTH" },
         { id: 2, label: "轻微", value: "SLIGHT  " },
         { id: 3, label: "严重", value: "SERIOUS" },
-      ],
-      doctorTypeList: [
-        { id: 1, label: "医师", value: "PHYSICIAN" },
-        { id: 2, label: "主治医师", value: "ATTENDING_PHYSICIAN" },
-        { id: 3, label: "副主任医师", value: "ASSOCIATE_CHIEF_PHYSICIAN" },
-        { id: 4, label: "主任医师", value: "CHIEF_PHYSICIAN" },
       ],
       // 增改表单
       editAddForm: {
@@ -334,12 +329,12 @@ export default {
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList()
+      this.getList();
     },
     // 重置
     searchReset() {
       this.searchForm = {};
-      this.getList()
+      this.getList();
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

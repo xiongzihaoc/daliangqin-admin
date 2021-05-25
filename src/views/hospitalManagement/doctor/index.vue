@@ -303,7 +303,7 @@
 import EleTable from "@/components/Table";
 import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
 import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
-import { validateIdCard, validatePhone, parseTime } from "@/utils/index";
+import { validateIdCard, validatePhone, parseTime,doctorTypeList } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -311,6 +311,7 @@ export default {
   data() {
     return {
       parseTime,
+      doctorTypeList,
       FormRules: {
         name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
         avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
@@ -348,12 +349,6 @@ export default {
       // 医院列表
       hospitalList: [],
       // 医生类型列表
-      doctorTypeList: [
-        { id: 1, label: "医师", value: "PHYSICIAN" },
-        { id: 2, label: "主治医师", value: "ATTENDING_PHYSICIAN" },
-        { id: 3, label: "副主任医师", value: "ASSOCIATE_CHIEF_PHYSICIAN" },
-        { id: 4, label: "主任医师", value: "CHIEF_PHYSICIAN" },
-      ],
       editVal: {},
       // 转诊医生列表
       toDoctorList: [],

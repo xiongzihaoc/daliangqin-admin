@@ -16,9 +16,14 @@
         <el-form-item label="职位"
           align="left"
           prop="doctorType">
-          <el-input v-model="searchForm.doctorType"
+          <el-select v-model="searchForm.doctorType"
             size="small"
-            placeholder="请输入医生姓名"></el-input>
+            placeholder="请输入医生姓名">
+            <el-option v-for="item in doctorTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -209,7 +214,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { validatePhone } from "@/utils/index";
+import { validatePhone, doctorTypeList } from "@/utils/index";
 import { httpAdminAddressDoctor } from "@/api/admin/httpAdminAddressDoctor";
 import { httpPublicDistrictProvince } from "@/api/public/httpPublicDistrictProvince";
 export default {
@@ -218,6 +223,7 @@ export default {
   },
   data() {
     return {
+      doctorTypeList,
       // 表单验证规则
       FormRules: {
         adminPhone: [
@@ -281,6 +287,8 @@ export default {
         .getAddressDoctor({
           page: this.pageNum,
           pageSize: this.pageSize,
+          doctorName: this.searchForm.doctorName,
+          doctorType: this.searchForm.doctorType,
         })
         .then((res) => {
           console.log(res);
@@ -311,7 +319,7 @@ export default {
       console.log(val);
       httpAdminAddressDoctor.putAddressDefault(id).then((res) => {
         console.log(res);
-        if (res.code != "OK") {
+        if (res.code !== "OK") {
           return;
         } else {
           this.$notify.success({
@@ -323,17 +331,20 @@ export default {
     },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {},
+    searchBtn() {
+      this.getList();
+    },
     // 重置
     searchReset() {
       this.searchForm = {};
+      this.getList();
     },
+    /***** CRUD *****/
     // 查看收货地址按钮
     examineBtn(val) {
       this.examineDialogVisible = true;
       this.addressList = val;
     },
-    /***** CRUD *****/
     // 选择省加载下一级数据
     selectProvince(id) {
       this.editAddForm.city = "";

@@ -206,10 +206,12 @@ export default {
     },
     // 日期控件选择事件
     selectLeaveTime(val) {
-      console.log(val);
+      this.searchForm.leaveStartTime = val[0];
+      this.searchForm.leaveEndTime = val[1];
     },
     selectReplyTime(val) {
-      console.log(val);
+      this.searchForm.replyStartTime = val[0];
+      this.searchForm.replayEndTime = val[1];
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -227,9 +229,7 @@ export default {
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
-    editDialogClosed() {
-      
-    },
+    editDialogClosed() {},
     // 新增编辑确定
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {

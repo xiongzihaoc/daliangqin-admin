@@ -146,3 +146,11 @@ export function validateIdCard(rule, value, callback) {
     callback();
   }
 }
+
+// 医生类型枚举值
+export const doctorTypeList = [
+  { id: 1, label: "医师", value: "PHYSICIAN" },
+  { id: 2, label: "主治医师", value: "ATTENDING_PHYSICIAN" },
+  { id: 3, label: "副主任医师", value: "ASSOCIATE_CHIEF_PHYSICIAN" },
+  { id: 4, label: "主任医师", value: "CHIEF_PHYSICIAN" },
+]

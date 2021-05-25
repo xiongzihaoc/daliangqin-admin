@@ -214,12 +214,7 @@ export default {
       },
       // 搜索表单
       searchForm: {
-        name: "",
-        phone: "",
-        province: "",
-        city: "",
-        area: "",
-        detail: "",
+        patientName: "",
       },
       // 列表数据
       list: [],
@@ -265,6 +260,7 @@ export default {
         .getAddressPatient({
           page: this.pageNum,
           pageSize: this.pageSize,
+          patientName: this.searchForm.patientName,
         })
         .then((res) => {
           console.log(res);
@@ -291,9 +287,8 @@ export default {
       });
     },
     // 是否默认
-    statusChange(val) {
-      console.log(val);
-      httpAdminAddressPatient.putAddressDefault(val).then((res) => {
+    statusChange(id) {
+      httpAdminAddressPatient.putAddressDefault(id).then((res) => {
         console.log(res);
         if (res.code != "OK") {
           return;
@@ -307,30 +302,32 @@ export default {
     },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {},
+    searchBtn() {
+      this.getList();
+    },
     // 重置
     searchReset() {
       this.searchForm = {};
-    },
-    // 查看收货地址按钮
-    examineBtn(val) {
-      this.examineDialogVisible = true;
-      this.addressList = val;
+      this.getList();
     },
     /***** CRUD *****/
+    // 查看收货地址按钮
+    examineBtn(id) {
+      this.examineDialogVisible = true;
+      this.addressList = id;
+    },
     // 选择省加载下一级数据
-    selectProvince(val) {
+    selectProvince(id) {
       this.editAddForm.city = "";
       this.editAddForm.area = "";
-      this.getCityList(val);
+      this.getCityList(id);
     },
-    selectCity(val) {
+    selectCity(id) {
       this.editAddForm.area = "";
-      this.getAreaList(val);
+      this.getAreaList(id);
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },

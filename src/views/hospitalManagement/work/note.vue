@@ -117,7 +117,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminNote } from "@/api/admin/httpAdminNote";
-import { parseTime } from "@/utils/index";
+import { parseTime, doctorTypeList } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -125,6 +125,7 @@ export default {
   data() {
     return {
       parseTime,
+      doctorTypeList,
       searchForm: {
         userName: "",
         type: "",
@@ -132,12 +133,6 @@ export default {
         endTime: "",
       },
       list: [],
-      doctorTypeList: [
-        { id: 1, label: "医师", value: "PHYSICIAN" },
-        { id: 2, label: "主治医师", value: "ATTENDING_PHYSICIAN" },
-        { id: 3, label: "副主任医师", value: "ASSOCIATE_CHIEF_PHYSICIAN" },
-        { id: 4, label: "主任医师", value: "CHIEF_PHYSICIAN" },
-      ],
       editAddForm: {
         userName: "",
         imageUrl: "",
