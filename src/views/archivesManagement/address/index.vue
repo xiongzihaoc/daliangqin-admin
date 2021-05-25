@@ -33,8 +33,7 @@
         slot="fixed"
         fixed="left"
         type="index"
-        label="序号"
-        width="50"></el-table-column>
+        label="序号"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
@@ -53,21 +52,6 @@
             @click="examineBtn(scope.row)">查看收货地址</el-button>
         </template>
       </el-table-column>
-      <!-- 操作 -->
-      <!-- <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        label="操作"
-        width="220">
-        <template slot-scope="scope">
-          <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
-          <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button>
-        </template>
-      </el-table-column> -->
     </EleTable>
     <!-- 分页 -->
     <el-pagination background
@@ -80,56 +64,7 @@
       :total="total"
       class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
-      :visible.sync="editDialogVisible"
-      width="40%"
-      @open="getData"
-      @closed="editDialogClosed"
-      v-dialogDrag>
-      <el-form ref="FormRef"
-        :rules="FormRules"
-        :model="editAddForm"
-        label-width="110px">
-        <el-form-item label="姓名"
-          prop="name">
-          <el-input v-model="editAddForm.name"
-            placeholder="请输入姓名"></el-input>
-        </el-form-item>
-        <el-form-item label="电话"
-          prop="contract">
-          <el-input v-model="editAddForm.contract"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入电话"></el-input>
-        </el-form-item>
-        <el-form-item label="省"
-          prop="address">
-          <el-input v-model="editAddForm.address"
-            placeholder="请输入省"></el-input>
-        </el-form-item>
-        <el-form-item label="市"
-          prop="address">
-          <el-input v-model="editAddForm.address"
-            placeholder="请输入市"></el-input>
-        </el-form-item>
-        <el-form-item label="区"
-          prop="address">
-          <el-input v-model="editAddForm.address"
-            placeholder="请输入区"></el-input>
-        </el-form-item>
-        <el-form-item label="详细地址"
-          prop="address">
-          <el-input v-model="editAddForm.address"
-            placeholder="请输入详细地址"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer"
-        class="dialog-footer">
-        <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
-      </span>
-    </el-dialog>
-    <!-- 查看收货地址弹框 -->
+    <!-- 查看收货地址 -->
     <el-dialog title="收货地址"
       :visible.sync="examineDialogVisible"
       width="40%"
@@ -137,6 +72,14 @@
       <el-table :data="addressList.addressInfos"
         style="width: 100%">
         <!-- 需要formatter的列 -->
+        <el-table-column align="center"
+          label="收货人姓名"
+          prop="name">
+        </el-table-column>
+        <el-table-column align="center"
+          label="收货人电话"
+          prop="phone">
+        </el-table-column>
         <el-table-column align="center"
           label="收货地址"
           prop="addressInfos">
@@ -168,6 +111,75 @@
       </el-table>
       <span slot="footer"
         class="dialog-footer">
+        <el-button @click="examineDialogVisible = false">取 消</el-button>
+        <el-button type="primary"
+          @click="examineDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 编辑收货地址 -->
+    <el-dialog title="编辑"
+      :visible.sync="editDialogVisible"
+      width="40%"
+      @closed="editDialogClosed"
+      v-dialogDrag>
+      <el-form ref="FormRef"
+        :rules="FormRules"
+        :model="editAddForm"
+        label-width="110px">
+        <el-form-item label="姓名"
+          prop="name">
+          <el-input v-model="editAddForm.name"
+            placeholder="请输入姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="电话"
+          prop="phone">
+          <el-input v-model="editAddForm.phone"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            placeholder="请输入电话"></el-input>
+        </el-form-item>
+        <el-form-item label="省"
+          prop="province">
+          <el-select style="width:100%;"
+            v-model="editAddForm.province"
+            @change="selectProvince"
+            placeholder="请选择省">
+            <el-option v-for="item in provinceList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="市"
+          prop="city">
+          <el-select style="width:100%;"
+            v-model="editAddForm.city"
+            @change="selectCity"
+            placeholder="请选择市">
+            <el-option v-for="item in cityList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="区"
+          prop="area">
+          <el-select style="width:100%;"
+            v-model="editAddForm.area"
+            placeholder="请选择区">
+            <el-option v-for="item in areaList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="详细地址"
+          prop="detail">
+          <el-input v-model="editAddForm.detail"
+            placeholder="请输入详细地址"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
         <el-button type="primary"
           @click="editPageEnter">确 定</el-button>
@@ -179,6 +191,7 @@
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
 import { httpAdminAddressPatient } from "@/api/admin/httpAdminAddressPatient";
+import { httpPublicDistrictProvince } from "@/api/public/httpPublicDistrictProvince";
 export default {
   components: {
     EleTable,
@@ -191,9 +204,7 @@ export default {
           { required: true, trigger: "blur", validator: validatePhone },
         ],
         name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
-        contract: [
-          { required: true, message: "请输入医院电话", trigger: "blur" },
-        ],
+        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
         address: [
           { required: true, message: "请输入医院地址", trigger: "blur" },
         ],
@@ -204,18 +215,32 @@ export default {
       // 搜索表单
       searchForm: {
         name: "",
-        type: "",
+        phone: "",
+        province: "",
+        city: "",
+        area: "",
+        detail: "",
       },
       // 列表数据
       list: [],
       addressList: {},
+      // 省市区列表
+      provinceList: [],
+      cityList: [],
+      areaList: [],
       // 增改表单
       editAddForm: {
         name: "",
-        contract: "",
-        address: "",
-        hospitalClass: "",
+        phone: "",
+        province: "",
+        city: "",
+        area: "",
+        isDefault: false,
+        detail: "",
+        userId: "",
       },
+      patientName: "",
+      patientUserId: "",
       // 表格数据
       tableHeaderBig: [],
       addressListtableHeader: [],
@@ -225,12 +250,14 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
       examineDialogVisible: false,
     };
   },
   created() {
     this.getList();
+  },
+  mounted() {
+    this.getProvinceList();
   },
   methods: {
     getList() {
@@ -238,7 +265,6 @@ export default {
         .getAddressPatient({
           page: this.pageNum,
           pageSize: this.pageSize,
-          id: this.searchInput,
         })
         .then((res) => {
           console.log(res);
@@ -246,15 +272,34 @@ export default {
           this.total = res.data.totalSize;
         });
     },
+    // 获取省列表
+    getProvinceList() {
+      httpPublicDistrictProvince.getProvince().then((res) => {
+        this.provinceList = res.data;
+      });
+    },
+    // 获取市列表
+    getCityList(val) {
+      httpPublicDistrictProvince.getArea({ id: val }).then((res) => {
+        this.cityList = res.data;
+      });
+    },
+    // 获取区列表
+    getAreaList(val) {
+      httpPublicDistrictProvince.getArea({ id: val }).then((res) => {
+        this.areaList = res.data;
+      });
+    },
     // 是否默认
     statusChange(val) {
       console.log(val);
-      httpAdminAddressPatient.putAddressPatient(val).then((res) => {
+      httpAdminAddressPatient.putAddressDefault(val).then((res) => {
+        console.log(res);
         if (res.code != "OK") {
           return;
         } else {
           this.$notify.success({
-            title: "删除成功",
+            title: res.message,
           });
         }
         this.getList();
@@ -269,92 +314,45 @@ export default {
     },
     // 查看收货地址按钮
     examineBtn(val) {
-      console.log(val);
       this.examineDialogVisible = true;
       this.addressList = val;
     },
     /***** CRUD *****/
-    // 新增
-    add() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
+    // 选择省加载下一级数据
+    selectProvince(val) {
+      this.editAddForm.city = "";
+      this.editAddForm.area = "";
+      this.getCityList(val);
+    },
+    selectCity(val) {
+      this.editAddForm.area = "";
+      this.getAreaList(val);
     },
     // 编辑
     editBtn(val) {
       console.log(val);
-      this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
-    // 删除多个
-    deleteMultiple() {},
-    // 删除单个
-    async deleteBtn(id) {
-      const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }
-      ).catch((err) => console.log(err));
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
-      }
-      // 发送请求
-      httpAdminAddressPatient.deleteAddressPatient(id).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
-          this.$notify.success({
-            title: "删除成功",
-          });
-        }
-        this.getList();
-      });
-    },
-    // 弹框开启
-    getData() {},
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
-    // 新增编辑确定
+    // 编辑确定
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
-            // 发送请求
-            httpAdminAddressPatient
-              .postAddressPatient(this.editAddForm)
-              .then((res) => {
-                if (res.code != "OK") {
-                  return;
-                } else {
-                  this.$notify.success({
-                    title: "新增成功",
-                  });
-                  this.getList();
-                  this.editDialogVisible = false;
-                }
+          // 发送请求
+          httpAdminAddressPatient.putAddress(this.editAddForm).then((res) => {
+            if (res.code !== "OK") {
+              return;
+            } else {
+              this.$notify.success({
+                title: "编辑成功",
               });
-          } else {
-            // 发送请求
-            httpAdminAddressPatient
-              .putAddressPatient(this.editAddForm)
-              .then((res) => {
-                if (res.code != "OK") {
-                  return;
-                } else {
-                  this.$notify.success({
-                    title: "编辑成功",
-                  });
-                  this.getList();
-                  this.editDialogVisible = false;
-                }
-              });
-          }
+              this.getList();
+              this.editDialogVisible = false;
+            }
+          });
         }
       });
     },

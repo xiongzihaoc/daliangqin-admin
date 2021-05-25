@@ -9,4 +9,18 @@ export const httpAdminAddressPatient = {
             params: data
         })
     },
+    putAddress(data) {
+        return request({
+            url: 'address/' + data.id,
+            method: 'put',
+            data
+        })
+    },
+    putAddressDefault(data) {
+        return request({
+            url: 'address/default/' + data.id,
+            method: 'put',
+        })
+    },
+
 }

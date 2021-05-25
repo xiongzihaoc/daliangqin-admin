@@ -1,27 +1,21 @@
 import request from '@/utils/request'
 
-export function login(data) {
-  return request({
-    url: 'login/phone',
-    method: 'post',
-    data,
-    baseURL: '/api/public',
-  })
+export const httpPublicDistrictProvince = {
+  getProvince(data) {
+    return request({
+      url: 'district/province',
+      method: 'get',
+      baseURL: '/api/public',
+    })
+  },
+  getArea(data) {
+    return request({
+      url: 'district/' + data.id,
+      method: 'get',
+      baseURL: '/api/public',
+    })
+  },
 }
 
-export function logout(data) {
-  return request({
-    url: 'login/logout',
-    method: 'post',
-    baseURL: '/api/public',
-  })
-}
 
-export function status(data) {
-  return request({
-    url: 'login/status',
-    method: 'get',
-    baseURL: '/api/public',
-  })
-}
 

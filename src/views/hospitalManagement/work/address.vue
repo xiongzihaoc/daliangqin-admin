@@ -8,10 +8,17 @@
         :inline="true">
         <el-form-item label="医生姓名"
           align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+          prop="doctorName">
+          <el-input v-model="searchForm.doctorName"
             size="small"
-            placeholder="职位"></el-input>
+            placeholder="请输入医生姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="职位"
+          align="left"
+          prop="doctorType">
+          <el-input v-model="searchForm.doctorType"
+            size="small"
+            placeholder="请输入医生姓名"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -33,58 +40,36 @@
         slot="fixed"
         fixed="left"
         type="index"
-        label="序号"
-        width="50"></el-table-column>
+        label="序号"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="hospitalClass"
-        :formatter="hosLevelFormatter"
+        prop="doctorName"
         label="医生姓名">
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        prop="hospitalClass"
-        :formatter="hosLevelFormatter"
+        prop="doctorType"
         label="职位">
-        <el-table-column align="center"
-          slot="fixed"
-          fixed="right"
-          prop="hospitalClass"
-          label="收货地址">
-        </el-table-column>
-        <!-- <el-table-column align="center"
-          slot="fixed"
-          fixed="right"
-          prop="hospitalClass"
-          :formatter="hosLevelFormatter"
-          label="是否默认">
-          <template slot-scope="scope">
-            <el-switch v-model="scope.row.status"
-              @change="statusChange(scope.row)"
-              active-value="UP"
-              inactive-value="DOWN"
-              active-color="#13ce66"
-              inactive-color="#ff4949">
-            </el-switch>
-          </template>
-        </el-table-column> -->
-
+        <template slot-scope="scope">
+          <span v-if="scope.row.doctorType === 'PHYSICIAN'">医师</span>
+          <span v-else-if="scope.row.doctorType === 'ATTENDING_PHYSICIAN'">主治医师</span>
+          <span v-else-if="scope.row.doctorType === 'ASSOCIATE_CHIEF_PHYSICIAN'">副主任医师</span>
+          <!-- CHIEF_PHYSICIAN -->
+          <span v-else>主任医师</span>
+        </template>
       </el-table-column>
-      <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        label="操作"
-        width="220">
+        label="收货地址"
+        prop="addressInfos">
         <template slot-scope="scope">
           <el-button size="mini"
             type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
-          <!-- <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button> -->
+            plain
+            @click="examineBtn(scope.row)">查看收货地址</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -99,51 +84,118 @@
       :total="total"
       class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
+    <!-- 查看收货地址 -->
+    <el-dialog title="收货地址"
+      :visible.sync="examineDialogVisible"
+      width="40%"
+      v-dialogDrag>
+      <el-table :data="addressList.addressInfos"
+        style="width: 100%">
+        <!-- 需要formatter的列 -->
+        <el-table-column align="center"
+          label="收货人姓名"
+          prop="name">
+        </el-table-column>
+        <el-table-column align="center"
+          label="收货人电话"
+          prop="phone">
+        </el-table-column>
+        <el-table-column align="center"
+          label="收货地址"
+          prop="addressInfos">
+          <template slot-scope="scope">
+            {{scope.row.province}}{{scope.row.city}}{{scope.row.area}}{{scope.row.detail}}
+          </template>
+        </el-table-column>
+        <el-table-column align="center"
+          prop="isDefault"
+          label="是否默认">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.isDefault"
+              @change="statusChange(scope.row)"
+              :active-value="true"
+              :inactive-value="false"
+              active-color="#13ce66"
+              inactive-color="#ff4949">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column align="center"
+          label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini"
+              type="primary"
+              @click="editBtn(scope.row)">编辑</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer"
+        class="dialog-footer">
+        <el-button @click="examineDialogVisible = false">取 消</el-button>
+        <el-button type="primary"
+          @click="examineDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 编辑收货地址 -->
+    <el-dialog title="编辑"
       :visible.sync="editDialogVisible"
       width="40%"
-      @open="getData"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
         label-width="110px">
-        <el-form-item label="医院名称"
+        <el-form-item label="姓名"
           prop="name">
           <el-input v-model="editAddForm.name"
-            placeholder="请输入医院名称"></el-input>
+            placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医院电话"
-          prop="contract">
-          <el-input v-model="editAddForm.contract"
+        <el-form-item label="电话"
+          prop="phone">
+          <el-input v-model="editAddForm.phone"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入医院电话"></el-input>
+            placeholder="请输入电话"></el-input>
         </el-form-item>
-        <el-form-item label="医院地址"
-          prop="address">
-          <el-input v-model="editAddForm.address"
-            placeholder="请输入医院地址"></el-input>
-        </el-form-item>
-        <el-form-item label="医院等级"
-          prop="hospitalClass">
-          <el-select v-model="editAddForm.hospitalClass"
-            placeholder="请选择医院等级"
-            style="width:100%">
-            <el-option v-for="item in hospitalClass"
+        <el-form-item label="省"
+          prop="province">
+          <el-select style="width:100%;"
+            v-model="editAddForm.province"
+            @change="selectProvince"
+            placeholder="请选择省">
+            <el-option v-for="item in provinceList"
               :key="item.id"
-              :value="item.value"
-              :label="item.label"></el-option>
+              :label="item.name"
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="管理员手机号"
-          prop="adminPhone">
-          <el-input v-if="this.infoTitle ==='新增'"
-            v-model="editAddForm.adminPhone"
-            placeholder="请输入管理员手机号"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.adminPhone"></el-input>
+        <el-form-item label="市"
+          prop="city">
+          <el-select style="width:100%;"
+            v-model="editAddForm.city"
+            @change="selectCity"
+            placeholder="请选择市">
+            <el-option v-for="item in cityList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="区"
+          prop="area">
+          <el-select style="width:100%;"
+            v-model="editAddForm.area"
+            placeholder="请选择区">
+            <el-option v-for="item in areaList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="详细地址"
+          prop="detail">
+          <el-input v-model="editAddForm.detail"
+            placeholder="请输入详细地址"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -158,7 +210,8 @@
 <script>
 import EleTable from "@/components/Table";
 import { validatePhone } from "@/utils/index";
-import { httpAddressDoctor } from "@/api/admin/httpAdminAddressDoctor";
+import { httpAdminAddressDoctor } from "@/api/admin/httpAdminAddressDoctor";
+import { httpPublicDistrictProvince } from "@/api/public/httpPublicDistrictProvince";
 export default {
   components: {
     EleTable,
@@ -171,9 +224,7 @@ export default {
           { required: true, trigger: "blur", validator: validatePhone },
         ],
         name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
-        contract: [
-          { required: true, message: "请输入医院电话", trigger: "blur" },
-        ],
+        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
         address: [
           { required: true, message: "请输入医院地址", trigger: "blur" },
         ],
@@ -183,53 +234,92 @@ export default {
       },
       // 搜索表单
       searchForm: {
-        patientName: "",
-        type: "",
+        doctorName: "",
+        doctorType: "",
       },
       // 列表数据
       list: [],
+      addressList: {},
+      // 省市区列表
+      provinceList: [],
+      cityList: [],
+      areaList: [],
       // 增改表单
       editAddForm: {
         name: "",
-        contract: "",
-        address: "",
-        hospitalClass: "",
+        phone: "",
+        province: "",
+        city: "",
+        area: "",
+        isDefault: false,
+        detail: "",
+        userId: "",
       },
-      // 医院级别列表
-      hospitalClass: [
-        { id: 1, label: "三甲", value: "CLASS_1_A" },
-        { id: 2, label: "三乙", value: "CLASS_1_B" },
-        { id: 3, label: "二甲", value: "CLASS_2_A" },
-        { id: 4, label: "二乙", value: "CLASS_2_B" },
-        { id: 5, label: "一级", value: "CLASS_3_A" },
-      ],
+      patientName: "",
+      patientUserId: "",
       // 表格数据
       tableHeaderBig: [],
+      addressListtableHeader: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      examineDialogVisible: false,
     };
   },
   created() {
     this.getList();
   },
+  mounted() {
+    this.getProvinceList();
+  },
   methods: {
     getList() {
-      httpAddressDoctor
+      httpAdminAddressDoctor
         .getAddressDoctor({
           page: this.pageNum,
           pageSize: this.pageSize,
-          id: this.searchInput,
         })
         .then((res) => {
           console.log(res);
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
+    },
+    // 获取省列表
+    getProvinceList() {
+      httpPublicDistrictProvince.getProvince().then((res) => {
+        this.provinceList = res.data;
+      });
+    },
+    // 获取市列表
+    getCityList(id) {
+      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
+        this.cityList = res.data;
+      });
+    },
+    // 获取区列表
+    getAreaList(id) {
+      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
+        this.areaList = res.data;
+      });
+    },
+    // 是否默认
+    statusChange(id) {
+      console.log(val);
+      httpAdminAddressDoctor.putAddressDefault(id).then((res) => {
+        console.log(res);
+        if (res.code != "OK") {
+          return;
+        } else {
+          this.$notify.success({
+            title: res.message,
+          });
+        }
+        this.getList();
+      });
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -238,120 +328,59 @@ export default {
     searchReset() {
       this.searchForm = {};
     },
+    // 查看收货地址按钮
+    examineBtn(val) {
+      this.examineDialogVisible = true;
+      this.addressList = val;
+    },
     /***** CRUD *****/
-    // 新增
-    add() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
+    // 选择省加载下一级数据
+    selectProvince(id) {
+      this.editAddForm.city = "";
+      this.editAddForm.area = "";
+      this.getCityList(id);
+    },
+    selectCity(id) {
+      this.editAddForm.area = "";
+      this.getAreaList(id);
     },
     // 编辑
     editBtn(val) {
       console.log(val);
-      this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
-    // 删除多个
-    deleteMultiple() {},
-    // 删除单个
-    async deleteBtn(id) {
-      const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }
-      ).catch((err) => console.log(err));
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
-      }
-      // 发送请求
-      httpAddressDoctor.deleteAddressDoctor(id).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
-          this.$notify.success({
-            title: "删除成功",
-          });
-        }
-        this.getList();
-      });
-    },
-    // 弹框开启
-    getData() {},
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
-    // 新增编辑确定
+    // 编辑确定
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
-            // 发送请求
-            httpAddressDoctor
-              .postAddressDoctor(this.editAddForm)
-              .then((res) => {
-                if (res.code != "OK") {
-                  return;
-                } else {
-                  this.$notify.success({
-                    title: "新增成功",
-                  });
-                  this.getList();
-                  this.editDialogVisible = false;
-                }
+          // 发送请求
+          httpAdminAddressDoctor.putAddress(this.editAddForm).then((res) => {
+            if (res.code !== "OK") {
+              return;
+            } else {
+              this.$notify.success({
+                title: "编辑成功",
               });
-          } else {
-            // 发送请求
-            httpAddressDoctor.putAddressDoctor(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
-              }
-            });
-          }
+              // this.timer = new Date().getTime();
+              // this.showDetailDialog(this.id);
+              this.getList();
+              this.editDialogVisible = false;
+            }
+          });
         }
       });
     },
-    // Formatter表格数据
-    hosLevelFormatter(coloumn) {
-      switch (coloumn.hospitalClass) {
-        case "CLASS_1_A":
-          return "三甲";
-          break;
-        case "CLASS_1_B":
-          return "三乙";
-          break;
-        case "CLASS_2_A":
-          return "二甲";
-          break;
-        case "CLASS_2_B":
-          return "二乙";
-          break;
-        case "CLASS_3_A":
-          return "一甲";
-          break;
-        case "CLASS_3_B":
-          return "一乙";
-          break;
-      }
-    },
+    // 收货地址弹框区域
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      console.log(newSize);
       this.pageSize = newSize;
       this.getList();
     },
     handleCurrentChange(newPage) {
-      console.log(newPage);
       this.pageNum = newPage;
       this.getList();
     },
@@ -359,5 +388,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.examineBtn {
+  color: blue;
+}
 </style>

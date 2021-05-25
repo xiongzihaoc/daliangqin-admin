@@ -92,7 +92,7 @@ export default {
       // 列表数据
       list: [],
       tableHeaderBig: [
-        { label: "序号", type: "index" },
+        { label: "序号", type: "index"},
         { prop: "userName", label: "用户姓名" },
         { prop: "name", label: "亲属姓名" },
         { prop: "phone", label: "手机号" },
