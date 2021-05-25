@@ -225,11 +225,11 @@ export default {
       },
       // 医院级别列表
       hospitalClass: [
-        { id: 1, label: "三甲", value: "CLASS_1_A" },
-        { id: 2, label: "三乙", value: "CLASS_1_B" },
+        { id: 1, label: "三甲", value: "CLASS_3_A" },
+        { id: 2, label: "三乙", value: "CLASS_3_B" },
         { id: 3, label: "二甲", value: "CLASS_2_A" },
         { id: 4, label: "二乙", value: "CLASS_2_B" },
-        { id: 5, label: "一级", value: "CLASS_3_A" },
+        { id: 5, label: "一级", value: "CLASS_1_A" },
       ],
       // 表格数据
       tableHeaderBig: [],
@@ -351,10 +351,10 @@ export default {
     // Formatter表格数据
     hosLevelFormatter(coloumn) {
       switch (coloumn.hospitalType) {
-        case "CLASS_1_A":
+        case "CLASS_3_A":
           return "三甲";
           break;
-        case "CLASS_1_B":
+        case "CLASS_3_B":
           return "三乙";
           break;
         case "CLASS_2_A":
@@ -363,7 +363,7 @@ export default {
         case "CLASS_2_B":
           return "二乙";
           break;
-        case "CLASS_3_A":
+        case "CLASS_1_A":
           return "一级";
           break;
       }

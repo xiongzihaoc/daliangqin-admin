@@ -137,7 +137,8 @@ export default {
           this.$store
             .dispatch("Login", this.loginForm)
             .then((res) => {
-              this.$router.push({ path: "/operationsManagement/banner" });
+              this.$router.push({ path: "operationsManagement/banner" });
+              // this.$router.push({ path: this.redirect || "/" });
               this.loading = false;
             })
             .catch(() => {
