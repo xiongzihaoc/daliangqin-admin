@@ -134,12 +134,10 @@
       :visible.sync="examineDialogVisible"
       width="40%"
       v-dialogDrag>
-      <EleTable :data="addressList.addressInfos"
-        :header="addressListtableHeader">
+      <el-table :data="addressList.addressInfos"
+        style="width: 100%">
         <!-- 需要formatter的列 -->
         <el-table-column align="center"
-          slot="fixed"
-          fixed="right"
           label="收货地址"
           prop="addressInfos">
           <template slot-scope="scope">
@@ -147,8 +145,6 @@
           </template>
         </el-table-column>
         <el-table-column align="center"
-          slot="fixed"
-          fixed="right"
           prop="isDefault"
           label="是否默认">
           <template slot-scope="scope">
@@ -162,8 +158,6 @@
           </template>
         </el-table-column>
         <el-table-column align="center"
-          slot="fixed"
-          fixed="right"
           label="操作">
           <template slot-scope="scope">
             <el-button size="mini"
@@ -171,7 +165,7 @@
               @click="editBtn(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
-      </EleTable>
+      </el-table>
       <span slot="footer"
         class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
@@ -367,12 +361,10 @@ export default {
     // 收货地址弹框区域
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      console.log(newSize);
       this.pageSize = newSize;
       this.getList();
     },
     handleCurrentChange(newPage) {
-      console.log(newPage);
       this.pageNum = newPage;
       this.getList();
     },

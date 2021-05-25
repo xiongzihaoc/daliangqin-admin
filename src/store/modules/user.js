@@ -1,13 +1,5 @@
-import {
-  login,
-  logout,
-  getInfo
-} from '@/api/public/httpPublicLogin'
-import {
-  getToken,
-  setToken,
-  removeToken
-} from '@/utils/auth'
+import { httpPublicLogin } from '@/api/public/httpPublicLogin'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 
 const user = {
   state: {
@@ -41,9 +33,8 @@ const user = {
     Login({
       commit
     }, userInfo) {
-      // console.log(userInfo);
       return new Promise((resolve, reject) => {
-        login(userInfo).then(res => {
+        httpPublicLogin.login(userInfo).then(res => {
           if (res.code !== 'OK') {
             return
           } else {
@@ -56,12 +47,12 @@ const user = {
         })
       })
     },
-    // // 获取用户信息
+    // 获取用户信息
     // GetInfo({ commit, state }) {
     //   return new Promise((resolve, reject) => {
     //     getInfo(state.token).then(res => {
     //       const user = res.user
-    //       // const avatar = user.avatar == "" ? require("@/assets/images/profile.jpg") : process.env.VUE_APP_BASE_API + user.avatar;
+    // const avatar = user.avatar == "" ? require("@/assets/images/profile.jpg") : process.env.VUE_APP_BASE_API + user.avatar;
     //       if (res.roles && res.roles.length > 0) { // 验证返回的roles是否是一个非空数组
     //         commit('SET_ROLES', res.roles)
     //         commit('SET_PERMISSIONS', res.permissions)
@@ -83,7 +74,7 @@ const user = {
       state
     }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        httpPublicLogin.logout(state.token).then(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           commit('SET_PERMISSIONS', [])

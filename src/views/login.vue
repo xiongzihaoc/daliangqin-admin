@@ -1,13 +1,11 @@
 <template>
   <div class="login-container">
-    <el-form
-      ref="loginForm"
+    <el-form ref="loginForm"
       :model="loginForm"
       :rules="loginRules"
       class="login-form"
       auto-complete="on"
-      label-position="left"
-    >
+      label-position="left">
       <div class="title-container">
         <h3 class="title">大良卿科技</h3>
       </div>
@@ -16,24 +14,22 @@
         <span class="svg-container">
           <svg-icon icon-class="phone" />
         </span>
-        <el-input
-          ref="phone"
+        <el-input ref="phone"
           v-model.trim="loginForm.phone"
           placeholder="手机号"
           name="phone"
           oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
           tabindex="1"
-          auto-complete="on"
-        />
-        <el-button
-          v-show="show"
+          auto-complete="on" />
+        <el-button v-show="show"
           @click="getCodeBtn"
           type="plain"
           size="mini"
-          class="btnCode"
-          >验证码</el-button
-        >
-        <el-button v-show="!show" type="plain" size="mini" class="btnCode">{{
+          class="btnCode">验证码</el-button>
+        <el-button v-show="!show"
+          type="plain"
+          size="mini"
+          class="btnCode">{{
           count + "S"
         }}</el-button>
       </el-form-item>
@@ -42,24 +38,19 @@
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input
-          ref="code"
+        <el-input ref="code"
           v-model.trim="loginForm.code"
           placeholder="验证码"
           name="code"
           auto-complete="on"
           oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-          @keyup.enter.native="handleLogin"
-        />
+          @keyup.enter.native="handleLogin" />
       </el-form-item>
       <!-- 登录按钮 -->
-      <el-button
-        :loading="loading"
+      <el-button :loading="loading"
         type="primary"
         style="width: 100%; margin-bottom: 30px"
-        @click.native.prevent="handleLogin"
-        >登 录</el-button
-      >
+        @click.native.prevent="handleLogin">登 录</el-button>
     </el-form>
   </div>
 </template>
@@ -111,15 +102,13 @@ export default {
       } else if (!reg.test(this.loginForm.phone)) {
         return this.$message.error("请填写正确的手机号码！");
       } else {
-        // 定时器
-
         // 发送请求
         getCode({ phone: Number(this.loginForm.phone), smsType: "LOGIN" }).then(
           (res) => {
-            console.log(res);
             if (res.code !== "OK") {
               return;
             } else {
+              // 定时器60s
               const TIME_COUNT = 60;
               if (!this.timer) {
                 this.count = TIME_COUNT;
@@ -148,7 +137,7 @@ export default {
           this.$store
             .dispatch("Login", this.loginForm)
             .then((res) => {
-              this.$router.push({ path: this.redirect || "/" });
+              this.$router.push({ path: "/operationsManagement/banner" });
               this.loading = false;
             })
             .catch(() => {

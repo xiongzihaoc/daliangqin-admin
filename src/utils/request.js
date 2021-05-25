@@ -15,17 +15,16 @@ axios.defaults.withCredentials = true
 // 创建axios实例
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
-  baseURL:  '/api/admin',
+  baseURL: '/api/admin',
   // 超时
   timeout: 10000
 })
 // request拦截器
 service.interceptors.request.use(config => {
-  
   // 是否需要设置 token
   const isToken = (config.headers || {}).isToken === false
   if (getToken() && !isToken) {
-   // 让每个请求携带自定义token
+    // 让每个请求携带自定义token
   }
   // get请求映射params参数
   if (config.method === 'get' && config.params) {
@@ -57,23 +56,24 @@ service.interceptors.request.use(config => {
 
 // 响应拦截器
 service.interceptors.response.use(res => {
-    console.groupCollapsed('%c' + res.config.method.toUpperCase() + '%c ' + res.request.responseURL, 'background:#FF6958;color:white', 'color:#000')
-    console.log(res.config.data ? JSON.parse(res.config.data) : '<null>')
-    console.log(res.data ? res.data : '<null>')
-    console.groupEnd()
+  console.log(res);
+  console.groupCollapsed('%c' + res.config.method.toUpperCase() + '%c ' + res.request.responseURL, 'background:#FF6958;color:white', 'color:#000')
+  console.log(res.config.data ? JSON.parse(res.config.data) : '<null>')
+  console.log(res.data ? res.data : '<null>')
+  console.groupEnd()
 
-    // 未设置状态码则默认成功状态
-    const code = res.data.code || 'OK';
-    // 获取错误信息
-    if (code !== "OK") {
-      Notification.error({
-        title: res.data.message,
-      })
-      return res.data
-    } else {
-      return res.data
-    }
-  },
+  // 未设置状态码则默认成功状态
+  const code = res.data.code || 'OK';
+  // 获取错误信息
+  if (code !== "OK") {
+    Notification.error({
+      title: res.data.message,
+    })
+    return res.data
+  } else {
+    return res.data
+  }
+},
   error => {
     console.log('err' + error)
     let {

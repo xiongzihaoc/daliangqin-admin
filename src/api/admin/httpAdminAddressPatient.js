@@ -8,5 +8,5 @@ export const httpAdminAddressPatient = {
             method: 'get',
             params: data
         })
-    }
+    },
 }
