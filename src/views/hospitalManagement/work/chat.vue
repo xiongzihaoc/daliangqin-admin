@@ -106,9 +106,9 @@
         fixed="right"
         label="操作"
         width="220">
-        <template>
-          <!-- @click="editBtn(scope.row)" -->
+        <template slot-scope="scope">
           <el-button size="mini"
+            @click="examineBtn(scope.row)"
             type="primary">查看</el-button>
         </template>
       </el-table-column>
@@ -124,41 +124,11 @@
       :total="total"
       class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
+    <el-dialog title="查看"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
       v-dialogDrag>
-      <el-form ref="FormRef"
-        :rules="FormRules"
-        :model="editAddForm"
-        label-width="110px">
-        <el-form-item label="医院名称"
-          prop="name">
-          <el-input v-model="editAddForm.name"
-            placeholder="请输入医院名称"></el-input>
-        </el-form-item>
-        <el-form-item label="医院电话"
-          prop="contract">
-          <el-input v-model="editAddForm.contract"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入医院电话"></el-input>
-        </el-form-item>
-        <el-form-item label="医院地址"
-          prop="address">
-          <el-input v-model="editAddForm.address"
-            placeholder="请输入医院地址"></el-input>
-        </el-form-item>
-        <el-form-item label="管理员手机号"
-          prop="adminPhone">
-          <el-input v-if="this.infoTitle === '新增'"
-            v-model="editAddForm.adminPhone"
-            placeholder="请输入管理员手机号"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.adminPhone"></el-input>
-        </el-form-item>
-      </el-form>
       <span slot="footer"
         class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
@@ -210,7 +180,6 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
     };
   },
   created() {
@@ -253,81 +222,30 @@ export default {
       this.getList();
     },
     /***** CRUD *****/
-    // 新增
-    add() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
-    },
     // 编辑
-    editBtn(val) {
-      console.log(val);
-      this.infoTitle = "编辑";
+    examineBtn(val) {
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
-    // 删除多个
-    deleteMultiple() {},
-    // 删除单个
-    async deleteBtn(id) {
-      const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }
-      ).catch((err) => console.log(err));
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
-      }
-      // 发送请求
-      httpAdminChat.deleteChat(id).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
-          this.$notify.success({
-            title: "删除成功",
-          });
-        }
-        this.getList();
-      });
-    },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      
     },
     // 新增编辑确定
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
-            // 发送请求
-            httpAdminChat.postChat(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "新增成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
-              }
-            });
-          } else {
-            // 发送请求
-            httpAdminChat.putChat(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
-              }
-            });
-          }
+          // 发送请求
+          httpAdminChat.putChat(this.editAddForm).then((res) => {
+            if (res.code != "OK") {
+              return;
+            } else {
+              this.$notify.success({
+                title: "编辑成功",
+              });
+              this.getList();
+              this.editDialogVisible = false;
+            }
+          });
         }
       });
     },

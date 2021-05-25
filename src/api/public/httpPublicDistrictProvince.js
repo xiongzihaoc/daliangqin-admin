@@ -1,5 +1,7 @@
 import request from '@/utils/request'
 
+// let baseUrl = 
+
 export function login(data) {
   return request({
     url: 'login/phone',

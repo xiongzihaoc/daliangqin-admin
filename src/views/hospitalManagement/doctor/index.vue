@@ -277,6 +277,18 @@
               :label="item.name"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="个人简介"
+          prop="avatarUrl">
+          <el-input type="textarea"
+            v-model="editAddForm.introduction"
+            placeholder="请输入个人简介"></el-input>
+        </el-form-item>
+        <el-form-item label="医生擅长"
+          prop="avatarUrl">
+          <el-input type="textarea"
+            v-model="editAddForm.goodAt"
+            placeholder="请输入医生擅长"></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer"
         class="dialog-footer">
@@ -330,6 +342,8 @@ export default {
         hospitalId: "",
         toDoctorUserId: "",
         type: "",
+        introduction:"",
+        goodAt:"",
       },
       // 医院列表
       hospitalList: [],
