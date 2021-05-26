@@ -226,17 +226,14 @@ export default {
       doctorTypeList,
       // 表单验证规则
       FormRules: {
-        adminPhone: [
-          { required: true, trigger: "blur", validator: validatePhone },
+        name: [
+          { required: true, message: "请输入收货人名字", trigger: "blur" },
         ],
-        name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
-        address: [
-          { required: true, message: "请输入医院地址", trigger: "blur" },
-        ],
-        hospitalClass: [
-          { required: true, message: "请选择医院等级", trigger: "blur" },
-        ],
+        province: [{ required: true, message: "请选择省", trigger: "blur" }],
+        city: [{ required: true, message: "请选择市", trigger: "blur" }],
+        area: [{ required: true, message: "请选择区", trigger: "blur" }],
+        detail: [{ required: true, message: "请输入详细地址", trigger: "blur" }],
       },
       // 搜索表单
       searchForm: {
@@ -316,7 +313,6 @@ export default {
     },
     // 是否默认
     statusChange(id) {
-      console.log(val);
       httpAdminAddressDoctor.putAddressDefault(id).then((res) => {
         console.log(res);
         if (res.code !== "OK") {
@@ -358,6 +354,8 @@ export default {
     // 编辑
     editBtn(val) {
       console.log(val);
+      this.getCityList(val.province);
+      this.getAreaList(val.city);
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
