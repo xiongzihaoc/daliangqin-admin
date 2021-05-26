@@ -34,7 +34,7 @@ const hospitalRouter = {
             path: 'work',
             name: 'work',
             component: () => import('@/views/hospitalManagement/work/work'),
-            redirect: "/hospitalManagement/work/plan",
+            redirect: "/hospitalManagement/work/task",
             meta: {
                 title: '工作管理',
                 icon: 'work'

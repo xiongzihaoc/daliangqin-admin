@@ -29,11 +29,31 @@ const archivesRouter = {
     {
         path: 'record',
         name: 'record',
-        component: () => import('@/views/archivesManagement/record'),
+        component: () => import('@/views/archivesManagement/record/record'),
+        redirect: "/archivesManagement/record/bloodPressure",
         meta: {
             title: '设备检测记录',
             icon: 'shebei'
-        }
+        },
+        children: [{
+            path: "bloodPressure",
+            name: "bloodPressure",
+            component: () => import('@/views/archivesManagement/record/bloodPressure'),
+            meta: {
+                title: '血压检测',
+                icon: 'general'
+            },
+        },
+        {
+            path: "demo",
+            name: "demo",
+            component: () => import('@/views/archivesManagement/record/demo'),
+            meta: {
+                title: 'DEMO',
+                icon: 'general'
+            },
+        },
+        ],
     },
     {
         path: 'archivesAddress',

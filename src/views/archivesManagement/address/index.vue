@@ -350,7 +350,10 @@ export default {
                 title: "编辑成功",
               });
               this.getList();
+              this.examineDialogVisible = false;
               this.editDialogVisible = false;
+              this.examineDialogVisible = false;
+              this.examineDialogVisible = true;
             }
           });
         }
