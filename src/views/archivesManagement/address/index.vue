@@ -82,10 +82,8 @@
         </el-table-column>
         <el-table-column align="center"
           label="收货地址"
+          :formatter="addressFormatter"
           prop="addressInfos">
-          <template slot-scope="scope">
-            {{scope.row.provinceName}}{{scope.row.cityName}}{{scope.row.areaName}}{{scope.row.detail}}
-          </template>
         </el-table-column>
         <el-table-column align="center"
           prop="isDefault"
@@ -350,16 +348,20 @@ export default {
                 title: "编辑成功",
               });
               this.getList();
-              this.examineDialogVisible = false;
-              this.editDialogVisible = false;
-              this.examineDialogVisible = false;
-              this.examineDialogVisible = true;
+              // this.examineDialogVisible = false;
+              // this.editDialogVisible = false;
+              // this.examineDialogVisible = false;
+              // this.examineDialogVisible = true;
             }
           });
         }
       });
     },
-    // 收货地址弹框区域
+    /***** 表格格式化内容区域 *****/
+    // 收货地址省市区详细地址拼接
+    addressFormatter(row) {
+      return row.provinceName + row.cityName + row.areaName + row.detail;
+    },
     /***** 分页 *****/
     handleSizeChange(newSize) {
       this.pageSize = newSize;

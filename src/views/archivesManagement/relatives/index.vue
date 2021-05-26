@@ -59,6 +59,7 @@
         slot="fixed"
         fixed="right"
         prop="relationship"
+        :formatter="relationshipFormatter"
         label="身份">
         <template slot-scope="scope">
           <span v-if="scope.row.relationship === 'RELATIVE'">亲戚</span>
@@ -81,7 +82,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminRelatives } from "@/api/admin/httpAdminRelatives";
-import { validatePhone, parseTime } from "@/utils/index";
+import { validatePhone, parseTime, relationshipList } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -92,7 +93,7 @@ export default {
       // 列表数据
       list: [],
       tableHeaderBig: [
-        { label: "序号", type: "index"},
+        { label: "序号", type: "index" },
         { prop: "userName", label: "用户姓名" },
         { prop: "name", label: "亲属姓名" },
         { prop: "phone", label: "手机号" },
@@ -106,12 +107,7 @@ export default {
         phone: "",
         relationship: "",
       },
-      // 关系列表
-      relationshipList: [
-        { id: 1, label: "家人", value: "FAMILY" },
-        { id: 2, label: "朋友", value: "FRIENDS" },
-        { id: 3, label: "亲戚", value: "RELATIVE" },
-      ],
+      relationshipList,
       // 搜索区域
       searchForm: {
         userName: "",
@@ -154,6 +150,9 @@ export default {
       this.searchForm = {};
       this.getList();
     },
+    /***** 表格格式化内容区域 *****/
+    // 收货地址省市区详细地址拼接
+    relationshipFormatter(row) {},
     // 分页
     handleSizeChange(newSize) {
       this.pageSize = newSize;

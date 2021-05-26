@@ -110,10 +110,8 @@
         slot="fixed"
         fixed="left"
         prop="birthday"
+        :formatter="birthdayFormatter"
         label="出生日期">
-        <template slot-scope="scope">
-          <span v-if="scope.row.birthday">{{ parseTime(scope.row.birthday).slice(0,10)}}</span>
-        </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
@@ -125,11 +123,8 @@
         slot="fixed"
         fixed="left"
         prop="gender"
+        :formatter="genderFormatter"
         label="性别">
-        <template slot-scope="scope">
-          <span v-if="scope.row.gender === 'MALE'">男</span>
-          <span v-else>女</span>
-        </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
@@ -415,6 +410,17 @@ export default {
           }
         }
       });
+    } /***** 表格格式化内容区域 *****/,
+    // 出生年月
+    birthdayFormatter(row) {
+      return parseTime(row.birthday).slice(0, 10);
+    },
+    genderFormatter(row) {
+      if (row.gender === "MALE") {
+        return "男";
+      } else {
+        return "女";
+      }
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

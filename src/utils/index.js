@@ -167,6 +167,13 @@ export const appTypeList = [
   { id: 1, label: "医生端", value: "DOCTOR" },
   { id: 2, label: "用户端", value: "PATIENT" },
 ]
+// 关系列表
+export const relationshipList = [
+  { id: 1, label: "家人", value: "FAMILY" },
+  { id: 2, label: "朋友", value: "FRIENDS" },
+  { id: 3, label: "亲戚", value: "RELATIVE" },
+]
+
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式
