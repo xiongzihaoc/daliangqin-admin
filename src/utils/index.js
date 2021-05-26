@@ -147,10 +147,64 @@ export function validateIdCard(rule, value, callback) {
   }
 }
 
-// 医生类型枚举值
+// 医生类型列表
 export const doctorTypeList = [
   { id: 1, label: "医师", value: "PHYSICIAN" },
   { id: 2, label: "主治医师", value: "ATTENDING_PHYSICIAN" },
   { id: 3, label: "副主任医师", value: "ASSOCIATE_CHIEF_PHYSICIAN" },
   { id: 4, label: "主任医师", value: "CHIEF_PHYSICIAN" },
 ]
+
+// 随访方式列表
+export const followTypeList = [
+  { id: 1, label: "诊间随访", value: "CLINIC" },
+  { id: 2, label: "上门随访", value: "DOOR" },
+  { id: 3, label: "视频随访", value: "VIDEO" },
+  { id: 4, label: "语音随访", value: "VOICE" },
+]
+// app类型列表
+export const appTypeList = [
+  { id: 1, label: "医生端", value: "DOCTOR" },
+  { id: 2, label: "用户端", value: "PATIENT" },
+]
+// 所有枚举类型转义
+export const formatterElement = {
+  // 随访方式
+  followType: {
+    CLINIC: "诊间随访",
+    VOICE: "语音随访",
+    DOOR: "上门随访",
+    VIDEO: "视频随访"
+  },
+  // 高血压状态
+  highBlood: {
+    HEALTH: "健康",
+    SERIOUS: "严重",
+    MEDIUM: "中等",
+    SLIGHT: "轻微",
+    SLOW: "稍慢",
+    FAST: "稍快",
+    NORMAL: "正常",
+  },
+  // 糖尿病状态
+  diabetes: {
+    HEALTH: "健康",
+    SERIOUS: "严重",
+    MEDIUM: "中等",
+    SLIGHT: "轻微",
+    SLOW: "稍慢",
+    FAST: "稍快",
+    NORMAL: "正常",
+  },
+  // 加入方式
+  resource: {
+    ADMIN: "后台派发",
+    INITIATIVE: "主动加入",
+  },
+  status: {
+    PENDING: "未完成",
+    FINISH: "已完成",
+    CANCEL: "已取消",
+    OVERDUE: "超时",
+  },
+}

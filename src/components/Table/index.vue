@@ -1,11 +1,8 @@
 <template>
-  <div
-    class="w-table"
+  <div class="w-table"
     :class="{ 'w-table_moving': dragState.dragging }"
-    ref="wTable"
-  >
-    <el-table
-      :data="data"
+    ref="wTable">
+    <el-table :data="data"
       @row-click="rowClick"
       @row-dblclick="rowDblClick"
       @select="rowSelect"
@@ -21,11 +18,9 @@
       :style="{ width: parseInt(option.width) + 'px' }"
       :cell-class-name="cellClassName"
       :header-cell-class-name="headerCellClassName"
-      :row-class-name="tableRowClassName"
-    >
+      :row-class-name="tableRowClassName">
       <slot name="fixed"></slot>
-      <el-table-column
-        v-for="(col, index) in tableHeader"
+      <el-table-column v-for="(col, index) in tableHeader"
         :key="index"
         align="center"
         :prop="col.prop"
@@ -35,14 +30,12 @@
         :type="col.type"
         :header-align="col.headerAlign"
         :column-key="index.toString()"
-        show-overflow-tooltip
-      ></el-table-column>
+        show-overflow-tooltip></el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
-// import { deepClone } from '@/api/common'
 export default {
   props: {
     data: {
@@ -261,7 +254,7 @@ export default {
   color: red;
 }
 .el-table--striped .el-table__body tr.el-table__row--striped td {
-  background: #E5F5FF;
+  background: #e5f5ff;
 }
 .w-table {
   .el-table__row {

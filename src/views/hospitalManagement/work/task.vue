@@ -6,34 +6,65 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
-        <el-form-item label="轮播图名称"
+        <!-- 医生姓名 -->
+        <el-form-item label="医生姓名"
           align="left"
-          prop="title">
-          <el-input v-model="searchForm.title"
+          prop="doctorUserName">
+          <el-input v-model="searchForm.doctorUserName"
             size="small"
-            placeholder="请输入轮播图名称"></el-input>
+            placeholder="请输入医生姓名"></el-input>
         </el-form-item>
-        <el-form-item label="呈现位置"
+        <!-- 用户姓名 -->
+        <el-form-item label="用户姓名"
+          prop="patientUserName">
+          <el-input v-model="searchForm.patientUserName"
+            size="small"
+            placeholder="请输入用户姓名"></el-input>
+        </el-form-item>
+        <!-- 随访方式 -->
+        <el-form-item label="随访方式"
           prop="type">
           <el-select v-model="searchForm.type"
-            size="small"
-            placeholder="请选择呈现位置">
-            <el-option value="DOCTOR"
-              label="医生端"></el-option>
-            <el-option value="PATIENT"
-              label="用户端"></el-option>
+            placeholder="请选择随访方式">
+            <el-option v-for="item in followTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
+        <!-- 随访时间 -->
+        <el-form-item label="随访时间"
+          prop="chatTime">
+          <el-date-picker v-model="searchForm.taskTime"
+            size="small"
+            type="datetimerange"
+            value-format="timestamp"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+          </el-date-picker>
+        </el-form-item>
+        <!-- 加入方式 -->
+        <el-form-item label="加入方式"
+          prop="resource">
+          <el-select v-model="searchForm.resource"
+            placeholder="请选择加入方式">
+            <el-option v-for="item in resourceTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <!-- 状态 -->
         <el-form-item label="状态"
           prop="status">
-          <el-select style="width: 100%"
-            size="small"
-            v-model="searchForm.status"
+          <el-select v-model="searchForm.status"
             placeholder="请选择状态">
-            <el-option value="UP"
-              label="上架"></el-option>
-            <el-option value="DOWN"
-              label="下架"></el-option>
+            <el-option v-for="item in followTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -45,15 +76,20 @@
             size="small"
             plain
             icon="el-icon-refresh">重置</el-button>
+          <el-button size="small"
+            type="success"
+            icon="el-icon-upload2">导出</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <el-button @click="add"
-      type="primary"
-      class="tableAdd"
-      size="small"
-      plain
-      icon="el-icon-plus">新增</el-button>
+    <div>
+      <el-button @click="add"
+        type="primary"
+        class="tableAdd"
+        size="small"
+        plain
+        icon="el-icon-plus">新增</el-button>
+    </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
@@ -76,12 +112,15 @@
         slot="fixed"
         fixed="left"
         prop="type"
-        label="随访方式"></el-table-column>
+        :formatter="typeFormatter"
+        label="随访方式">
+      </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
         prop="content"
-        label="随访内容"></el-table-column>
+        label="随访内容">
+      </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
@@ -91,34 +130,40 @@
         slot="fixed"
         fixed="left"
         prop="highBlood"
+        :formatter="highBloodFormatter"
         label="高血压"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
         prop="diabetes"
+        :formatter="diabetesFormatter"
         label="糖尿病"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
         prop="startTime"
+        :formatter="startTimeFormatter"
         label="随访时间">
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        prop="startTime"
+        prop="finishTime"
+        :formatter="finishTimeFormatter"
         label="添加时间">
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
         prop="resource"
+        :formatter="resourceFormatter"
         label="加入方式">
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
         prop="status"
+        :formatter="statusFormatter"
         label="状态">
       </el-table-column>
       <el-table-column align="center"
@@ -169,49 +214,57 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
-        <el-form-item label="轮播图名称"
-          prop="title">
-          <el-input v-model.trim="editAddForm.title"
-            placeholder="请输入轮播图名称"></el-input>
-        </el-form-item>
-        <el-form-item label="轮播图图片"
-          prop="imageUrl">
-          <el-input v-model.trim="editAddForm.imageUrl"
-            placeholder="暂时输入图片名称"></el-input>
-        </el-form-item>
-        <el-form-item label="呈现位置"
-          prop="positionList">
-          <el-select style="width: 100%"
-            multiple
-            v-model="editAddForm.positionList"
-            placeholder="请选择呈现位置">
-            <el-option value="DOCTOR"
-              label="医生端"></el-option>
-            <el-option value="PATIENT"
-              label="用户端"></el-option>
+        <el-form-item label="选择医生"
+          prop="doctorUserId">
+          <el-select style="width:100%;"
+            v-model.trim="editAddForm.doctorUserId"
+            placeholder="请选择医生">
+            <el-option v-for="item in doctorList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="跳转地址"
-          prop="linkUrl">
-          <el-input v-model.trim="editAddForm.linkUrl"
-            placeholder="请输入跳转地址"></el-input>
-        </el-form-item>
-        <el-form-item label="权重"
-          prop="zOrder">
-          <el-input v-model.trim="editAddForm.zOrder"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入权重"></el-input>
-        </el-form-item>
-        <el-form-item label="状态"
-          prop="status">
-          <el-select style="width: 100%"
-            v-model="editAddForm.status"
-            placeholder="请选择状态">
-            <el-option value="UP"
-              label="上架"></el-option>
-            <el-option value="DOWN"
-              label="下架"></el-option>
+        <el-form-item label="选择用户"
+          prop="patientUserId">
+          <el-select style="width:100%;"
+            v-model.trim="editAddForm.patientUserId"
+            placeholder="请选择用户">
+            <el-option v-for="item in patientList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="随访方式"
+          prop="type">
+          <el-select style="width: 100%"
+            v-model="editAddForm.type"
+            placeholder="请选择随访方式">
+            <el-option v-for="item in followTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="随访内容"
+          prop="content">
+          <el-input v-model.trim="editAddForm.content"
+            placeholder="请输入随访内容"></el-input>
+        </el-form-item>
+        <el-form-item label="随访时间"
+          prop="taskTime">
+          <el-date-picker style="width:100%;"
+            v-model="editAddForm.taskTime"
+            size="small"
+            @change="selectTaskTime"
+            type="datetimerange"
+            value-format="timestamp"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -226,6 +279,10 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpHospitalTask } from "@/api/hospital/httpHospitalTask";
+import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
+import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
+import { followTypeList, parseTime, formatterElement } from "@/utils/index";
+
 export default {
   components: {
     EleTable,
@@ -233,42 +290,43 @@ export default {
   data() {
     return {
       FormRules: {
-        title: [
-          { required: true, message: "请输入轮播图名称", trigger: "blur" },
+        doctorUserId: [
+          { required: true, message: "请选择医生名称", trigger: "blur" },
         ],
-        imageUrl: [
-          { required: true, message: "请上传轮播图图片", trigger: "blur" },
+        patientUserId: [
+          { required: true, message: "请选择用户名称", trigger: "blur" },
         ],
-
-        positionList: [
-          { required: true, message: "请选择呈现位置", trigger: "blur" },
-        ],
-        linkUrl: [
-          { required: true, message: "请输入跳转地址", trigger: "blur" },
-        ],
-        zOrder: [{ required: true, message: "请输入权重", trigger: "blur" }],
-
-        status: [{ required: true, message: "请选择状态", trigger: "blur" }],
+        type: [{ required: true, message: "请选择随访方式", trigger: "blur" }],
+        content: [{ required: true, message: "请输入内容", trigger: "blur" }],
+        taskTime: [{ required: true, message: "请选择时间", trigger: "blur" }],
       },
       searchForm: {
-        title: "",
+        doctorUserName: "",
+        patientUserName: "",
         type: "",
+        startTime: "",
+        endTime: "",
         status: "",
       },
       list: [],
+      doctorList: [],
+      patientList: [],
+      // 随访方式列表
+      followTypeList,
+      // 加入方式列表
+      resourceTypeList: [
+        { id: 1, label: "主动加入", value: "INITIATIVE" },
+        { id: 2, label: "后台派发", value: "ADMIN" },
+      ],
       editAddForm: {
-        title: "",
-        positionList: [],
-        imageUrl: "",
-        linkUrl: "",
-        zOrder: "",
+        doctorUserId: "",
+        patientUserId: "",
         type: "",
+        startTime: "",
+        endTime: "",
         status: "",
       },
-      tableHeaderBig: [
-        { prop: "linkUrl", label: "跳转地址" },
-        { prop: "zOrder", label: "权重" },
-      ],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -280,6 +338,10 @@ export default {
   },
   created() {
     this.getList();
+  },
+  mounted() {
+    this.getDoctorList();
+    this.getPatientList();
   },
   methods: {
     getList() {
@@ -293,7 +355,25 @@ export default {
           this.total = res.data.totalSize;
         });
     },
+    // 获取医生列表
+    getDoctorList() {
+      httpAdminDoctor.getDoctor().then((res) => {
+        this.doctorList = res.data.elements;
+      });
+    },
+    // 获取用户列表
+    getPatientList() {
+      httpAdminPatient.getPatient().then((res) => {
+        this.patientList = res.data.elements;
+      });
+    },
     /***** 搜索区域 *****/
+    // 选择时间
+    selectTaskTime(val) {
+      this.editAddForm.startTime = val[0];
+      this.editAddForm.endTime = val[1];
+      // this.editAddForm;
+    },
     // 搜索
     searchBtn() {
       this.getList();
@@ -332,7 +412,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpAdminBanner.deleteBanner(id).then((res) => {
+      httpHospitalTask.deleteTask(id).then((res) => {
         console.log(res);
         this.$notify.success({
           title: "删除成功",
@@ -376,6 +456,34 @@ export default {
           }
         }
       });
+    },
+    /***** 表格格式化内容区域 *****/
+    // 随访方式
+    typeFormatter(row) {
+      return formatterElement.followType[row.type];
+    },
+    // 高血压状态
+    highBloodFormatter(row) {
+      return formatterElement.highBlood[row.highBlood];
+    },
+    // 糖尿病状态
+    diabetesFormatter(row) {
+      return formatterElement.diabetes[row.diabetes];
+    },
+    // 加入方式
+    resourceFormatter(row) {
+      return formatterElement.resource[row.resource];
+    },
+    // 状态
+    statusFormatter(row) {
+      return formatterElement.status[row.status];
+    },
+    // 时间
+    startTimeFormatter(row) {
+      return parseTime(row.startTime).slice(6);
+    },
+    finishTimeFormatter(row) {
+      return parseTime(row.startTime).slice(6);
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

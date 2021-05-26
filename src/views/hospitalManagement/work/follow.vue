@@ -15,6 +15,7 @@
         <el-form-item label="职位"
           prop="doctorType">
           <el-select v-model="searchForm.doctorType"
+            size="small"
             placeholder="请选择职位">
             <el-option v-for="item in doctorTypeList"
               :key="item.id"
@@ -22,15 +23,16 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户"
+        <el-form-item label="用户姓名"
           prop="patientUserName">
           <el-input v-model="searchForm.patientUserName"
             size="small"
-            placeholder="请输入用户"></el-input>
+            placeholder="请输入用户姓名"></el-input>
         </el-form-item>
         <el-form-item label="随访方式"
           prop="type">
           <el-select v-model="searchForm.type"
+            size="small"
             placeholder="请选择随访方式">
             <el-option v-for="item in followTypeList"
               :key="item.id"
@@ -41,6 +43,7 @@
         <el-form-item label="高血压"
           prop="highBlood">
           <el-select v-model="searchForm.highBlood"
+            size="small"
             placeholder="请选择">
             <el-option v-for="item in healthList"
               :key="item.id"
@@ -51,6 +54,7 @@
         <el-form-item label="糖尿病"
           prop="diabetes">
           <el-select v-model="searchForm.diabetes"
+            size="small"
             placeholder="请选择">
             <el-option v-for="item in healthList"
               :key="item.id"
@@ -73,7 +77,8 @@
         </el-form-item>
         <el-form-item label="用户状态"
           prop="userStatus">
-          <el-select v-model="searchForm.userStatus"
+          <el-select size="small"
+            v-model="searchForm.userStatus"
             placeholder="请选择用户状态">
             <el-option v-for="item in userStatusList"
               :key="item.id"
@@ -92,7 +97,7 @@
             icon="el-icon-refresh">重置</el-button>
           <el-button size="small"
             type="success"
-            icon="el-icon-download">导出</el-button>
+            icon="el-icon-upload2">导出</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -229,23 +234,15 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { validatePhone, doctorTypeList } from "@/utils/index";
 import { httpHospitalFollow } from "@/api/hospital/httpHospitalFollow";
-import { parseTime } from "@/utils/index";
+import { doctorTypeList, followTypeList, parseTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
   },
   data() {
     return {
-      doctorTypeList,
       parseTime,
-      // 表单验证规则
-      FormRules: {
-        adminPhone: [
-          { required: true, trigger: "blur", validator: validatePhone },
-        ],
-      },
       // 搜索表单
       searchForm: {
         doctorUserName: "",
@@ -260,13 +257,10 @@ export default {
       },
       // 列表数据
       list: [],
+      // 医生类型列表
+      doctorTypeList,
       // 随访方式列表
-      followTypeList: [
-        { id: 1, label: "诊间随访", value: "CLINIC" },
-        { id: 2, label: "上门随访", value: "DOOR" },
-        { id: 3, label: "视频随访", value: "VIDEO" },
-        { id: 4, label: "语音随访", value: "VOICE" },
-      ],
+      followTypeList,
       healthList: [
         { id: 1, label: "健康", value: "HEALTH" },
         { id: 2, label: "轻微", value: "SLIGHT  " },

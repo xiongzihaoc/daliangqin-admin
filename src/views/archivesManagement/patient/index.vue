@@ -146,9 +146,8 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        prop="doctorInfoVO"
+        prop="doctorUserName"
         label="对应医师">
-        <template slot-scope="scope">{{scope.row.doctorInfoVO.name}}</template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
@@ -242,12 +241,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import {
-  validateIdCard,
-  validatePhone,
-  parseTime,
-  // doctorTypeList,
-} from "@/utils/index";
+import { validateIdCard, validatePhone, parseTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -277,7 +271,6 @@ export default {
         phone: "",
         idCard: "",
         gender: "",
-        doctorInfoVO: "",
       },
       list: [],
       editAddForm: {
@@ -321,7 +314,6 @@ export default {
           doctorName: this.searchForm.doctorName,
         })
         .then((res) => {
-          console.log(res);
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });

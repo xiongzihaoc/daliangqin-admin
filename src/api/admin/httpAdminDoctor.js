@@ -13,7 +13,7 @@ export const httpAdminDoctor = {
   // 获取转诊医生列表
   getDoctoTransfer(data) {
     return request({
-      url: 'doctor',
+      url: 'doctor/transfer',
       method: 'get',
       params: data
     })

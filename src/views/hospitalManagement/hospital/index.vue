@@ -95,12 +95,6 @@
         :formatter="hosLevelFormatter"
         label="医院等级">
       </el-table-column>
-      <!-- <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="adminPhone"
-        label="管理员手机号">
-      </el-table-column> -->
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -349,8 +343,8 @@ export default {
       });
     },
     // Formatter表格数据
-    hosLevelFormatter(coloumn) {
-      switch (coloumn.hospitalType) {
+    hosLevelFormatter(row) {
+      switch (row.hospitalType) {
         case "CLASS_3_A":
           return "三甲";
           break;

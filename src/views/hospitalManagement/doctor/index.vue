@@ -163,10 +163,12 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        prop="type"
+        prop="toDoctorInfo"
         label="对应转诊医生">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <div v-if="scope.row.toDoctorInfo">
+            <span v-for="item in scope.row.toDoctorInfo" :key="item.id">{{item.name + '  '}}</span>
+          </div>
         </template>
       </el-table-column>
       <!-- 操作 -->
@@ -389,12 +391,10 @@ export default {
         });
     },
     getToDoctorList() {
-      httpAdminDoctor
-        .getDoctoTransfer({ page: 1, pageSize: 500 })
-        .then((res) => {
-          console.log(res);
-          this.toDoctorList = res.data.elements;
-        });
+      httpAdminDoctor.getDoctoTransfer().then((res) => {
+        console.log(res);
+        this.toDoctorList = res.data.elements;
+      });
     },
     getHospitalList() {
       httpAdminHospital

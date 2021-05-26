@@ -271,18 +271,19 @@ export default {
     // 获取省列表
     getProvinceList() {
       httpPublicDistrictProvince.getProvince().then((res) => {
+        console.log(res);
         this.provinceList = res.data;
       });
     },
     // 获取市列表
-    getCityList(val) {
-      httpPublicDistrictProvince.getArea({ id: val }).then((res) => {
+    getCityList(id) {
+      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
         this.cityList = res.data;
       });
     },
     // 获取区列表
-    getAreaList(val) {
-      httpPublicDistrictProvince.getArea({ id: val }).then((res) => {
+    getAreaList(id) {
+      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
         this.areaList = res.data;
       });
     },
@@ -312,9 +313,10 @@ export default {
     },
     /***** CRUD *****/
     // 查看收货地址按钮
-    examineBtn(id) {
+    examineBtn(val) {
+      console.log(val);
       this.examineDialogVisible = true;
-      this.addressList = id;
+      this.addressList = val;
     },
     // 选择省加载下一级数据
     selectProvince(id) {
@@ -328,6 +330,8 @@ export default {
     },
     // 编辑
     editBtn(val) {
+      this.getCityList(val.province);
+      this.getAreaList(val.city);
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },

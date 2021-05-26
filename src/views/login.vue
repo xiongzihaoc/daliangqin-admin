@@ -76,7 +76,6 @@ export default {
         deviceId: "333333",
         isAdmin: true,
         maxAge: 2592000,
-        // userType: "DOCTOR",
       },
       loading: false,
       redirect: undefined,
