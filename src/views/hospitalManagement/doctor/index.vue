@@ -400,6 +400,7 @@ export default {
       httpAdminHospital
         .getHospital({ pageSize: 1, pageNum: 500 })
         .then((res) => {
+          console.log(res);
           this.hospitalList = res.data.elements;
         });
     },

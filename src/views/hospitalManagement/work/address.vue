@@ -109,7 +109,7 @@
           label="收货地址"
           prop="addressInfos">
           <template slot-scope="scope">
-            {{scope.row.province}}{{scope.row.city}}{{scope.row.area}}{{scope.row.detail}}
+            {{scope.row.provinceName}}{{scope.row.cityName}}{{scope.row.areaName}}{{scope.row.detail}}
           </template>
         </el-table-column>
         <el-table-column align="center"

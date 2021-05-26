@@ -82,7 +82,7 @@
         label="内容类型">
         <template slot-scope="scope">
           <span v-if="scope.row.contentType === 'NEWS'">资讯</span>
-          <span v-else-if="scope.row.contentType === 'VIEDO'">视频</span>
+          <span v-else-if="scope.row.contentType === 'VIDEO'">视频</span>
           <span v-else>直播</span>
         </template>
       </el-table-column>
