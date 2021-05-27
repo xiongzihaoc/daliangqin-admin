@@ -43,30 +43,6 @@
       <!-- 需要formatter的列 -->
       <el-table-column align="center"
         slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="doctorName"
-        label="医生姓名">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="doctorType"
-        label="职位">
-        <template slot-scope="scope">
-          <span v-if="scope.row.doctorType === 'PHYSICIAN'">医师</span>
-          <span v-else-if="scope.row.doctorType === 'ATTENDING_PHYSICIAN'">主治医师</span>
-          <span v-else-if="scope.row.doctorType === 'ASSOCIATE_CHIEF_PHYSICIAN'">副主任医师</span>
-          <!-- CHIEF_PHYSICIAN -->
-          <span v-else>主任医师</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
         fixed="right"
         label="收货地址"
         prop="addressInfos">
@@ -94,6 +70,7 @@
       :visible.sync="examineDialogVisible"
       width="40%"
       v-dialogDrag>
+      <!-- 表格 -->
       <el-table :data="addressList.addressInfos"
         style="width: 100%">
         <!-- 需要formatter的列 -->
@@ -107,10 +84,8 @@
         </el-table-column>
         <el-table-column align="center"
           label="收货地址"
+          :formatter="addressInfosFormatter"
           prop="addressInfos">
-          <template slot-scope="scope">
-            {{scope.row.provinceName}}{{scope.row.cityName}}{{scope.row.areaName}}{{scope.row.detail}}
-          </template>
         </el-table-column>
         <el-table-column align="center"
           prop="isDefault"
@@ -214,9 +189,9 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { validatePhone, doctorTypeList } from "@/utils/index";
 import { httpAdminAddressDoctor } from "@/api/admin/httpAdminAddressDoctor";
 import { httpPublicDistrictProvince } from "@/api/public/httpPublicDistrictProvince";
+import { validatePhone, doctorTypeList, formatterElement } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -233,7 +208,9 @@ export default {
         province: [{ required: true, message: "请选择省", trigger: "blur" }],
         city: [{ required: true, message: "请选择市", trigger: "blur" }],
         area: [{ required: true, message: "请选择区", trigger: "blur" }],
-        detail: [{ required: true, message: "请输入详细地址", trigger: "blur" }],
+        detail: [
+          { required: true, message: "请输入详细地址", trigger: "blur" },
+        ],
       },
       // 搜索表单
       searchForm: {
@@ -258,11 +235,21 @@ export default {
         detail: "",
         userId: "",
       },
+      // 表格数据
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "doctorName", label: "医生姓名" },
+        {
+          prop: "doctorType",
+          label: "职位",
+          formatter: (row) => {
+            return this.doctorTypeFormatter(row);
+          },
+        },
+      ],
+      addressListtableHeader: [],
       patientName: "",
       patientUserId: "",
-      // 表格数据
-      tableHeaderBig: [],
-      addressListtableHeader: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -315,14 +302,12 @@ export default {
     statusChange(id) {
       httpAdminAddressDoctor.putAddressDefault(id).then((res) => {
         console.log(res);
-        if (res.code !== "OK") {
-          return;
-        } else {
+        if (res.code === "OK") {
           this.$notify.success({
             title: res.message,
           });
+          this.getList();
         }
-        this.getList();
       });
     },
     /***** 搜索区域 *****/
@@ -368,14 +353,10 @@ export default {
         if (valid) {
           // 发送请求
           httpAdminAddressDoctor.putAddress(this.editAddForm).then((res) => {
-            if (res.code !== "OK") {
-              return;
-            } else {
+            if (res.code === "OK") {
               this.$notify.success({
                 title: "编辑成功",
               });
-              // this.timer = new Date().getTime();
-              // this.showDetailDialog(this.id);
               this.getList();
               this.editDialogVisible = false;
             }
@@ -383,7 +364,13 @@ export default {
         }
       });
     },
-    // 收货地址弹框区域
+    /***** 表格格式化内容 *****/
+    doctorTypeFormatter(row) {
+      return formatterElement.doctorType[row.doctorType];
+    },
+    addressInfosFormatter(row) {
+      return row.provinceName + row.cityName + row.areaName + row.detail;
+    },
     /***** 分页 *****/
     handleSizeChange(newSize) {
       this.pageSize = newSize;

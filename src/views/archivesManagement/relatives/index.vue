@@ -55,18 +55,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="relationship"
-        :formatter="relationshipFormatter"
-        label="身份">
-        <template slot-scope="scope">
-          <span v-if="scope.row.relationship === 'RELATIVE'">亲戚</span>
-          <span v-else-if="scope.row.relationship === 'FRIENDS'">朋友</span>
-          <span v-else>家属</span>
-        </template>
-      </el-table-column>
     </EleTable>
     <!-- 分页 -->
     <el-pagination @size-change="handleSizeChange"
@@ -82,7 +70,12 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminRelatives } from "@/api/admin/httpAdminRelatives";
-import { validatePhone, parseTime, relationshipList } from "@/utils/index";
+import {
+  validatePhone,
+  parseTime,
+  relationshipList,
+  formatterElement,
+} from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -97,6 +90,13 @@ export default {
         { prop: "userName", label: "用户姓名" },
         { prop: "name", label: "亲属姓名" },
         { prop: "phone", label: "手机号" },
+        {
+          prop: "relationship",
+          label: "身份",
+          formatter: (row) => {
+            return this.relationshipFormatter(row);
+          },
+        },
       ],
       FormRules: {
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
@@ -151,8 +151,9 @@ export default {
       this.getList();
     },
     /***** 表格格式化内容区域 *****/
-    // 收货地址省市区详细地址拼接
-    relationshipFormatter(row) {},
+    relationshipFormatter(row) {
+      return formatterElement.relationship[row.relationship];
+    },
     // 分页
     handleSizeChange(newSize) {
       this.pageSize = newSize;

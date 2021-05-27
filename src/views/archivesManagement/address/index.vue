@@ -31,17 +31,6 @@
       <!-- 需要formatter的列 -->
       <el-table-column align="center"
         slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="patientName"
-        label="用户姓名">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
         fixed="right"
         label="收货地址"
         prop="addressInfos">
@@ -231,11 +220,14 @@ export default {
         detail: "",
         userId: "",
       },
+      // 表格数据
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "patientName", label: "用户姓名" },
+      ],
+      addressListtableHeader: [],
       patientName: "",
       patientUserId: "",
-      // 表格数据
-      tableHeaderBig: [],
-      addressListtableHeader: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -341,17 +333,11 @@ export default {
         if (valid) {
           // 发送请求
           httpAdminAddressPatient.putAddress(this.editAddForm).then((res) => {
-            if (res.code !== "OK") {
-              return;
-            } else {
+            if (res.code === "OK") {
               this.$notify.success({
                 title: "编辑成功",
               });
               this.getList();
-              // this.examineDialogVisible = false;
-              // this.editDialogVisible = false;
-              // this.examineDialogVisible = false;
-              // this.examineDialogVisible = true;
             }
           });
         }

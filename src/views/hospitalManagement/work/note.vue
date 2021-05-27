@@ -54,33 +54,6 @@
       <!-- 需要formatter的列 -->
       <el-table-column align="center"
         slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="userName"
-        label="医生姓名"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="type"
-        label="职位">
-        <template slot-scope="scope">
-          <span v-if="scope.row.type === 'PHYSICIAN'">医师</span>
-          <span v-else-if="scope.row.type === 'ATTENDING_PHYSICIAN'">主治医师</span>
-          <span v-else-if="scope.row.type === 'ASSOCIATE_CHIEF_PHYSICIAN'">副主任医师</span>
-          <span v-else>主任医师</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="content"
-        label="笔记内容"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
         fixed="right"
         label="笔记图集">
         <template slot-scope="scope">
@@ -96,10 +69,8 @@
         slot="fixed"
         fixed="right"
         label="发布时间"
+        :formatter="(row)=>{return parseTime(row.createTime)}"
         prop="createTime">
-        <template slot-scope="scope">
-          <span v-if="scope.row.createTime">{{ parseTime(scope.row.createTime) }}</span>
-        </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
@@ -117,7 +88,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminNote } from "@/api/admin/httpAdminNote";
-import { parseTime, doctorTypeList } from "@/utils/index";
+import { parseTime, doctorTypeList,formatterElement } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -140,7 +111,19 @@ export default {
         type: "",
         status: "",
       },
-      tableHeaderBig: [{ prop: "title", label: "笔记标题" }],
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "userName", label: "医生姓名" },
+        {
+          prop: "type",
+          label: "职位",
+          formatter: (row) => {
+            return this.typeFormatter(row);
+          },
+        },
+        { prop: "title", label: "笔记标题" },
+        { prop: "content", label: "笔记内容" },
+      ],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -185,6 +168,10 @@ export default {
     searchReset() {
       this.searchForm = {};
       this.getList();
+    },
+    /***** 表格格式化内容 *****/
+    typeFormatter(row) {
+      return formatterElement.doctorType[row.type];
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

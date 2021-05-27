@@ -18,7 +18,7 @@
           <el-select v-model="searchForm.hospitalType"
             size="small"
             placeholder="请选择医院等级">
-            <el-option v-for="item in hospitalClass"
+            <el-option v-for="item in hospitalClassList"
               :key="item.id"
               :label="item.label"
               :value="item.value"></el-option>
@@ -59,42 +59,6 @@
         slot="fixed"
         fixed="left"
         type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="name"
-        label="医院名称">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="avatarUrl"
-        label="医院头像">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="contract"
-        label="医院电话">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="address"
-        label="医院地址">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="hospitalType"
-        :formatter="hosLevelFormatter"
-        label="医院等级">
-      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -155,7 +119,7 @@
           <el-select v-model="editAddForm.hospitalType"
             placeholder="请选择医院等级"
             style="width: 100%">
-            <el-option v-for="item in hospitalClass"
+            <el-option v-for="item in hospitalClassList"
               :key="item.id"
               :value="item.value"
               :label="item.label"></el-option>
@@ -179,14 +143,15 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { validatePhone } from "@/utils/index";
 import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
+import { validatePhone, hospitalClassList,formatterElement } from "@/utils/index";
 export default {
   components: {
     EleTable,
   },
   data() {
     return {
+      hospitalClassList,
       // 表单验证规则
       FormRules: {
         adminPhone: [
@@ -217,16 +182,17 @@ export default {
         address: "",
         hospitalType: "",
       },
-      // 医院级别列表
-      hospitalClass: [
-        { id: 1, label: "三甲", value: "CLASS_3_A" },
-        { id: 2, label: "三乙", value: "CLASS_3_B" },
-        { id: 3, label: "二甲", value: "CLASS_2_A" },
-        { id: 4, label: "二乙", value: "CLASS_2_B" },
-        { id: 5, label: "一级", value: "CLASS_1_A" },
-      ],
       // 表格数据
-      tableHeaderBig: [],
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "name", label: "医院名称" },
+        { prop: "avatarUrl", label: "医院头像" },
+        { prop: "contract", label: "医院电话" },
+        { prop: "address", label: "医院地址" },
+        { prop: "hospitalType", label: "医院等级" ,formatter:(row)=>{
+          return this.hospitalTypeFormatter(row)
+        }},
+      ],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -295,14 +261,12 @@ export default {
       }
       // 发送请求
       httpAdminHospital.deleteHospital(id).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
+        if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
           });
+          this.getList();
         }
-        this.getList();
       });
     },
     editDialogClosed() {
@@ -315,9 +279,7 @@ export default {
           if (this.infoTitle === "新增") {
             // 发送请求
             httpAdminHospital.postHospital(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
                 });
@@ -328,9 +290,7 @@ export default {
           } else {
             // 发送请求
             httpAdminHospital.putHospital(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
                 });
@@ -342,25 +302,9 @@ export default {
         }
       });
     },
-    // Formatter表格数据
-    hosLevelFormatter(row) {
-      switch (row.hospitalType) {
-        case "CLASS_3_A":
-          return "三甲";
-          break;
-        case "CLASS_3_B":
-          return "三乙";
-          break;
-        case "CLASS_2_A":
-          return "二甲";
-          break;
-        case "CLASS_2_B":
-          return "二乙";
-          break;
-        case "CLASS_1_A":
-          return "一级";
-          break;
-      }
+    /***** 表格格式化内容 *****/
+    hospitalTypeFormatter(row) {
+      return formatterElement.hospitalType[row.hospitalType];
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

@@ -162,16 +162,68 @@ export const followTypeList = [
   { id: 3, label: "视频随访", value: "VIDEO" },
   { id: 4, label: "语音随访", value: "VOICE" },
 ]
+
+// 角色类型
+export const adminRoleTypeList = [
+  { id: 1, label: "管理员", value: "ADMIN" },
+  { id: 2, label: "运营人员", value: "OPERATOR" },
+  { id: 3, label: "数据大图", value: "VIEWER" },
+]
+
+// 设备类型
+export const deviceTypeList = [
+  { id: 1, label: "苹果", value: "IOS" },
+  { id: 2, label: "安卓", value: "ANDROID" },
+  { id: 3, label: "H5", value: "H5" },
+  { id: 4, label: "PC", value: "PC" },
+]
+
 // app类型列表
 export const appTypeList = [
   { id: 1, label: "医生端", value: "DOCTOR" },
   { id: 2, label: "用户端", value: "PATIENT" },
 ]
+
+// banner上下架状态
+export const typeList = [
+  { id: 1, label: "上架", value: "UP" },
+  { id: 2, label: "下架", value: "DOWN" },
+]
+
+// 新闻资讯上下架状态
+export const newsStatusList = [
+  { id: 1, label: "上架", value: "SHOW" },
+  { id: 2, label: "下架", value: "DELETE" },
+]
+
+// 新闻类型
+export const newsTypeList = [
+  { id: 1, label: "资讯", value: "NEWS" },
+  { id: 2, label: "视频", value: "VIDEO" },
+  { id: 3, label: "直播", value: "LIVE" },
+]
+
+// 医院级别列表
+export const hospitalClassList = [
+  { id: 1, label: "三甲", value: "CLASS_3_A" },
+  { id: 2, label: "三乙", value: "CLASS_3_B" },
+  { id: 3, label: "二甲", value: "CLASS_2_A" },
+  { id: 4, label: "二乙", value: "CLASS_2_B" },
+  { id: 5, label: "一级", value: "CLASS_1_A" },
+]
+
 // 关系列表
 export const relationshipList = [
   { id: 1, label: "家人", value: "FAMILY" },
   { id: 2, label: "朋友", value: "FRIENDS" },
   { id: 3, label: "亲戚", value: "RELATIVE" },
+]
+
+
+// 性别列表
+export const genderList = [
+  { id: 1, label: "男", value: "MALE" },
+  { id: 2, label: "女", value: "FEMALE" },
 ]
 
 // 所有枚举类型转义
@@ -208,10 +260,48 @@ export const formatterElement = {
     ADMIN: "后台派发",
     INITIATIVE: "主动加入",
   },
+  doctorType: {
+    PHYSICIAN: "医师",
+    ATTENDING_PHYSICIAN: "主治医师",
+    ASSOCIATE_CHIEF_PHYSICIAN: "副主任医师",
+    CHIEF_PHYSICIAN: "主任医师",
+  },
   status: {
     PENDING: "未完成",
     FINISH: "已完成",
     CANCEL: "已取消",
     OVERDUE: "超时",
+  },
+  contentType: {
+    NEWS: "资讯",
+    VIDEO: "视频",
+    LIVE: "直播",
+  },
+  // 医院级别列表
+  hospitalType: {
+    CLASS_3_A: "三甲",
+    CLASS_3_B: "三乙",
+    CLASS_2_A: "二甲",
+    CLASS_2_B: "二乙",
+    CLASS_1_A: "一级",
+  },
+  gender: {
+    MALE: "男",
+    FEMALE: "女"
+  },
+  relationship: {
+    FAMILY: "家人",
+    FRIENDS: "朋友",
+    RELATIVE: "亲戚"
+  },
+  appType: {
+    DOCTOR: "家人",
+    PATIENT: "朋友",
+  },
+  deviceType: {
+    IOS: "苹果",
+    ANDROID: "安卓",
+    H5: "H5",
+    PC: "PC",
   },
 }

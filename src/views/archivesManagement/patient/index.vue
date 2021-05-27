@@ -33,10 +33,10 @@
           prop="gender">
           <el-select v-model="searchForm.gender"
             size="small">
-            <el-option label="男"
-              value="MALE"></el-option>
-            <el-option label="女"
-              value="FEMALE"></el-option>
+            <el-option v-for="item in genderList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="对应医师"
@@ -77,73 +77,6 @@
         slot="fixed"
         fixed="left"
         type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="name"
-        label="姓名">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="avatarUrl"
-        label="头像">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="phone"
-        label="手机号">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="idCard"
-        label="身份证号">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="birthday"
-        :formatter="birthdayFormatter"
-        label="出生日期">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="age"
-        label="年龄">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="gender"
-        :formatter="genderFormatter"
-        label="性别">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="address"
-        label="家庭住址">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="healthScore"
-        label="两慢指数">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="doctorUserName"
-        label="对应医师">
-      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -236,7 +169,13 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { validateIdCard, validatePhone, parseTime } from "@/utils/index";
+import {
+  validateIdCard,
+  validatePhone,
+  parseTime,
+  genderList,
+  formatterElement,
+} from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -244,6 +183,7 @@ export default {
   data() {
     return {
       parseTime,
+      genderList,
       FormRules: {
         name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
         avatarUrl: [
@@ -276,11 +216,35 @@ export default {
         address: "",
         doctorUserId: "",
       },
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "name", label: "姓名" },
+        { prop: "avatarUrl", label: "头像" },
+        { prop: "phone", label: "手机号" },
+        { prop: "idCard", label: "身份证号" },
+        {
+          prop: "birthday",
+          label: "出生日期",
+          formatter: (row) => {
+            return parseTime(row.birthday).slice(0, 10);
+          },
+        },
+        { prop: "age", label: "年龄" },
+        {
+          prop: "gender",
+          label: "性别",
+          formatter: (row) => {
+            return this.genderFormatter(row);
+          },
+        },
+        { prop: "address", label: "家庭住址" },
+        { prop: "healthScore", label: "两慢指数" },
+        { prop: "doctorUserName", label: "对应医师" },
+      ],
       // 医院列表
       hospitalList: [],
       // 转诊医生列表
       toDoctorList: [],
-      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -362,14 +326,12 @@ export default {
       }
       // 发送请求
       httpAdminPatient.deleteDoctor(id).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
+        if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
           });
+          this.getList();
         }
-        this.getList();
       });
     },
     // 弹框开启
@@ -384,9 +346,7 @@ export default {
           if (this.infoTitle === "新增") {
             // 发送请求
             httpAdminPatient.postPatient(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
                 });
@@ -397,9 +357,7 @@ export default {
           } else {
             // 发送请求
             httpAdminPatient.putPatient(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
                 });
@@ -412,15 +370,8 @@ export default {
       });
     } /***** 表格格式化内容区域 *****/,
     // 出生年月
-    birthdayFormatter(row) {
-      return parseTime(row.birthday).slice(0, 10);
-    },
     genderFormatter(row) {
-      if (row.gender === "MALE") {
-        return "男";
-      } else {
-        return "女";
-      }
+      return formatterElement.gender[row.gender];
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

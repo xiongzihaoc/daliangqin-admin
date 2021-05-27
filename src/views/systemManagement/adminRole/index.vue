@@ -34,30 +34,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="roleName"
-        label="身份"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        label="添加时间"
-        prop="createTime">
-        <template slot-scope="scope">
-          <span v-if="scope.row.createTime">{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        label="最后登录时间"
-        prop="loginTime">
-        <template slot-scope="scope">
-          <span v-if="scope.row.loginTime">{{ parseTime(scope.row.loginTime) }}</span>
-        </template>
-      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -138,7 +114,12 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminRole } from "@/api/admin/httpAdminRole";
-import { parseTime, validatePhone } from "@/utils/index";
+import {
+  parseTime,
+  validatePhone,
+  adminRoleTypeList,
+  deviceTypeList,
+} from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -146,6 +127,8 @@ export default {
   data() {
     return {
       parseTime,
+      adminRoleTypeList,
+      deviceTypeList,
       FormRules: {
         adminRoleType: [
           { required: true, message: "请选择身份", trigger: "blur" },
@@ -166,21 +149,25 @@ export default {
         name: "",
         phone: "",
       },
-      adminRoleTypeList: [
-        { id: 1, label: "管理员", value: "ADMIN" },
-        { id: 2, label: "运营人员", value: "OPERATOR" },
-        { id: 3, label: "数据大图", value: "VIEWER" },
-      ],
-      deviceTypeList: [
-        { id: 1, label: "苹果", value: "IOS" },
-        { id: 2, label: "安卓", value: "ANDROID" },
-        { id: 3, label: "H5", value: "H5" },
-        { id: 4, label: "PC", value: "PC" },
-      ],
       tableHeaderBig: [
         { label: "序号", type: "index" },
         { prop: "name", label: "姓名" },
         { prop: "phone", label: "手机号" },
+        { prop: "roleName", label: "身份" },
+        {
+          prop: "createTime",
+          label: "添加时间",
+          formatter: (row) => {
+            return parseTime(row.createTime);
+          },
+        },
+        {
+          prop: "loginTime",
+          label: "最后登录时间",
+          formatter: (row) => {
+            return parseTime(row.loginTime);
+          },
+        },
       ],
       // 分页区域
       pageSize: 10,
@@ -249,14 +236,12 @@ export default {
       }
       // 发送请求
       httpAdminRole.deleteAdminRole(id).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
+        if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
           });
+          this.getList();
         }
-        this.getList();
       });
     },
     editDialogClosed() {
@@ -269,9 +254,7 @@ export default {
           if (this.infoTitle === "新增") {
             // 发送请求
             httpAdminRole.postAdminRole(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
                 });
@@ -282,9 +265,7 @@ export default {
           } else {
             // 发送请求
             httpAdminRole.putAdminRole(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
                 });

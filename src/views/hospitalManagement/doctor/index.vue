@@ -33,10 +33,10 @@
           prop="gender">
           <el-select v-model="searchForm.gender"
             size="small">
-            <el-option label="男"
-              value="MALE"></el-option>
-            <el-option label="女"
-              value="FEMALE"></el-option>
+            <el-option v-for="item in genderList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="职位"
@@ -90,84 +90,13 @@
         type="selection"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="name"
-        label="姓名">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="avatarUrl"
-        label="头像">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="phone"
-        label="手机号">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="idCard"
-        label="身份证号">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="birthday"
-        label="出生日期">
-        <template slot-scope="scope">
-          <span v-if="scope.row.birthday">{{ parseTime(scope.row.birthday).slice(0, 10) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="age"
-        label="年龄">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="gender"
-        label="性别">
-        <template slot-scope="scope">
-          <span v-if="scope.row.gender === 'MALE'">男</span>
-          <span v-else>女</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="type"
-        label="职位">
-        <template slot-scope="scope">
-          <span v-if="scope.row.type === 'PHYSICIAN'">医师</span>
-          <span v-else-if="scope.row.type === 'ATTENDING_PHYSICIAN'">主治医师</span>
-          <span v-else-if="scope.row.type === 'ASSOCIATE_CHIEF_PHYSICIAN'">副主任医师</span>
-          <span v-else>主任医师</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="hospitalName"
-        label="医院名称">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
+        fixed="right"
         prop="toDoctorInfo"
         label="对应转诊医生">
         <template slot-scope="scope">
-          <div v-if="scope.row.toDoctorInfo">
-            <span v-for="item in scope.row.toDoctorInfo" :key="item.id">{{item.name + '  '}}</span>
+          <div v-if="scope.row.toDoctorInfo[0]">
+            <span v-for="item in scope.row.toDoctorInfo"
+              :key="item.id">{{item.name + '  '}}</span>
           </div>
         </template>
       </el-table-column>
@@ -305,7 +234,14 @@
 import EleTable from "@/components/Table";
 import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
 import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
-import { validateIdCard, validatePhone, parseTime,doctorTypeList } from "@/utils/index";
+import {
+  validateIdCard,
+  validatePhone,
+  parseTime,
+  doctorTypeList,
+  genderList,
+  formatterElement,
+} from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -314,6 +250,7 @@ export default {
     return {
       parseTime,
       doctorTypeList,
+      genderList,
       FormRules: {
         name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
         avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
@@ -345,16 +282,45 @@ export default {
         hospitalId: "",
         toDoctorUserId: "",
         type: "",
-        introduction:"",
-        goodAt:"",
+        introduction: "",
+        goodAt: "",
       },
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "name", label: "姓名" },
+        { prop: "avatarUrl", label: "头像" },
+        { prop: "phone", label: "手机号" },
+        { prop: "idCard", label: "身份证号" },
+        {
+          prop: "birthday",
+          label: "出生日期",
+          formatter: (row) => {
+            return parseTime(row.birthday).slice(0, 10);
+          },
+        },
+        { prop: "age", label: "年龄" },
+        {
+          prop: "gender",
+          label: "性别",
+          formatter: (row) => {
+            return this.genderFormatter(row);
+          },
+        },
+        {
+          prop: "type",
+          label: "职位",
+          formatter: (row) => {
+            return this.typeFormatter(row);
+          },
+        },
+        { prop: "hospitalName", label: "医院名称" },
+      ],
       // 医院列表
       hospitalList: [],
       // 医生类型列表
       editVal: {},
       // 转诊医生列表
       toDoctorList: [],
-      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -385,24 +351,20 @@ export default {
           type: this.searchForm.type,
         })
         .then((res) => {
-          console.log(res);
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
     },
     getToDoctorList() {
       httpAdminDoctor.getDoctoTransfer().then((res) => {
-        console.log(res);
         this.toDoctorList = res.data.elements;
       });
     },
     getHospitalList() {
-      httpAdminHospital
-        .getHospital({ pageSize: 1, pageNum: 500 })
-        .then((res) => {
-          console.log(res);
-          this.hospitalList = res.data.elements;
-        });
+      httpAdminHospital.getHospital().then((res) => {
+        console.log(res);
+        this.hospitalList = res.data.elements;
+      });
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -423,7 +385,6 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.editVal = val;
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
@@ -447,9 +408,7 @@ export default {
       }
       // 发送请求
       httpAdminDoctor.deleteDoctor(id).then((res) => {
-        if (res.code !== "OK") {
-          return;
-        } else {
+        if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
           });
@@ -461,7 +420,6 @@ export default {
       this.$refs.FormRef.resetFields();
     },
     TypeChange(val) {
-      console.log(val);
       if (this.infoTitle === "编辑") {
         if (val !== "PHYSICIAN") {
           this.editAddForm.toDoctorUserId = "";
@@ -476,9 +434,7 @@ export default {
           if (this.infoTitle === "新增") {
             // 发送请求
             httpAdminDoctor.postDoctor(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
                 });
@@ -489,9 +445,7 @@ export default {
           } else {
             // 发送请求
             httpAdminDoctor.putDoctor(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
                 });
@@ -503,14 +457,19 @@ export default {
         }
       });
     },
+    /***** 表格格式化内容 *****/
+    genderFormatter(row) {
+      return formatterElement.gender[row.gender];
+    },
+    typeFormatter(row) {
+      return formatterElement.doctorType[row.type];
+    },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      console.log(newSize);
       this.pageSize = newSize;
       this.getList();
     },
     handleCurrentChange(newPage) {
-      console.log(newPage);
       this.pageNum = newPage;
       this.getList();
     },

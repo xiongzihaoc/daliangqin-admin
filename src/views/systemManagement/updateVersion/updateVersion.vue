@@ -11,10 +11,10 @@
           prop="appType">
           <el-select placeholder="请选择app类型"
             v-model="searchForm.appType">
-            <el-option label="医生端"
-              value="DOCTOR"></el-option>
-            <el-option label="用户端"
-              value="PATIENT"></el-option>
+            <el-option v-for="item in appTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="设备类型"
@@ -52,63 +52,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="appType"
-        label="app类型">
-        <template slot-scope="scope">
-          <span v-if="scope.row.appType === 'DOCTOR'">医生端</span>
-          <span v-else>用户端</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="deviceType"
-        label="设备类型">
-        <template slot-scope="scope">
-          <span v-if="scope.row.deviceType === 'IOS'">苹果</span>
-          <span v-else-if="scope.row.deviceType === 'ANDROID'">安卓</span>
-          <span v-else-if="scope.row.deviceType === 'H5'">H5</span>
-          <span v-else>PC</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="versionString"
-        label="版本号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="versionCode"
-        label="版本code"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="updateLog"
-        label="版本日志"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="url"
-        label="url"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="updateTime"
-        label="更新时间">
-        <template slot-scope="scope">
-          <span v-if="scope.row.updateTime">{{ parseTime(scope.row.updateTime)}}</span>
-        </template>
-      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -150,10 +93,10 @@
           prop="appType">
           <el-select style="width: 100%"
             v-model="editAddForm.appType">
-            <el-option label="医生端"
-              value="DOCTOR"></el-option>
-            <el-option label="用户端"
-              value="PATIENT"></el-option>
+            <el-option v-for="item in appTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item v-if="this.infoTitle === '新增'"
@@ -196,7 +139,12 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion";
-import { parseTime } from "@/utils/index";
+import {
+  parseTime,
+  deviceTypeList,
+  appTypeList,
+  formatterElement,
+} from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -204,6 +152,8 @@ export default {
   data() {
     return {
       parseTime,
+      appTypeList,
+      deviceTypeList,
       FormRules: {
         appType: [
           { required: true, message: "请选择app类型", trigger: "blur" },
@@ -235,13 +185,28 @@ export default {
         updateLog: "",
         url: "",
       },
-      deviceTypeList: [
-        { id: 1, label: "苹果", value: "IOS" },
-        { id: 2, label: "安卓", value: "ANDROID" },
-        { id: 3, label: "PC", value: "PC_WEB" },
-        { id: 4, label: "H5", value: "H5" },
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        {
+          prop: "appType",
+          label: "app类型",
+          formatter: (row) => {
+            return this.appTypeFormatter(row);
+          },
+        },
+        {
+          prop: "deviceType",
+          label: "设备类型",
+          formatter: (row) => {
+            return this.deviceTypeFormatter(row);
+          },
+        },
+        { prop: "versionString", label: "版本号" },
+        { prop: "versionCode", label: "版本code" },
+        { prop: "updateLog", label: "版本日志" },
+        { prop: "url", label: "链接" },
+        { prop: "updateTime", label: "更新时间" },
       ],
-      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -311,14 +276,12 @@ export default {
       }
       // 发送请求
       httpAdminUpdateVersion.deleteUpdateVersion(id).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
+        if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
           });
+          this.getList();
         }
-        this.getList();
       });
     },
     editDialogClosed() {
@@ -333,9 +296,7 @@ export default {
             httpAdminUpdateVersion
               .postUpdateVersion(this.editAddForm)
               .then((res) => {
-                if (res.code != "OK") {
-                  return;
-                } else {
+                if (res.code === "OK") {
                   this.$notify.success({
                     title: "新增成功",
                   });
@@ -348,9 +309,7 @@ export default {
             httpAdminUpdateVersion
               .putUpdateVersion(this.editAddForm)
               .then((res) => {
-                if (res.code != "OK") {
-                  return;
-                } else {
+                if (res.code === "OK") {
                   this.$notify.success({
                     title: "编辑成功",
                   });
@@ -361,6 +320,13 @@ export default {
           }
         }
       });
+    },
+    /***** 表格格式化内容 *****/
+    appTypeFormatter(row) {
+      return formatterElement.appType[row.appType];
+    },
+    deviceTypeFormatter(row) {
+      return formatterElement.deviceType[row.deviceType];
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

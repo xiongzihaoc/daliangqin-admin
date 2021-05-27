@@ -10,11 +10,6 @@
     <EleTable :data="list"
       :header="tableHeaderBig">
       <!-- 需要formatter的列 -->
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -99,6 +94,7 @@ export default {
         configValue: "",
       },
       tableHeaderBig: [
+        { type: "index", label: "序号" },
         { prop: "configKey", label: "key" },
         { prop: "configName", label: "名称" },
         { prop: "configValue", label: "数值" },
@@ -168,14 +164,12 @@ export default {
       }
       // 发送请求
       httpAdminSystem.deleteSystem(id).then((res) => {
-        if (res.code != "OK") {
-          return;
-        } else {
+        if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
           });
+          this.getList();
         }
-        this.getList();
       });
     },
     editDialogClosed() {
@@ -188,9 +182,7 @@ export default {
           if (this.infoTitle === "新增") {
             // 发送请求
             httpAdminSystem.postSystem(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
                 });
@@ -201,9 +193,7 @@ export default {
           } else {
             // 发送请求
             httpAdminSystem.putSystem(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
                 });

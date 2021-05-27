@@ -43,15 +43,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="createTime"
-        label="操作">
-        <template slot-scope="scope">
-          <span>{{parseTime(scope.row.createTime)}}</span>
-        </template>
-      </el-table-column>
     </EleTable>
     <!-- 分页 -->
     <el-pagination @size-change="handleSizeChange"
@@ -85,6 +76,7 @@ export default {
         { prop: "phone", label: "手机号" },
         { prop: "idCard", label: "身份证号" },
         { prop: "ip", label: "ip" },
+        { prop: "createTime", label: "操作时间",formatter:(row)=>{return parseTime(row.createTime)} },
       ],
       FormRules: {
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],

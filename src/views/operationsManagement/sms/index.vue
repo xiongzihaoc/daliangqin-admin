@@ -23,29 +23,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="type"
-        label="内容">
-        <template slot-scope="scope">
-          <span v-if="scope.row.type === 'LOGIN'">登录</span>
-          <span v-else>其他</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="howMany"
-        label="剩余次数"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="createTime"
-        label="发送时间"><template slot-scope="scope">
-          <span v-if="scope.row.createTime">{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
     </EleTable>
     <!-- 分页 -->
     <el-pagination @size-change="handleSizeChange"
@@ -98,6 +75,21 @@ export default {
       tableHeaderBig: [
         { label: "序号", type: "index" },
         { prop: "phone", label: "手机号" },
+        {
+          prop: "type",
+          label: "内容",
+          formatter: (row) => {
+            return this.typeFormatter(row);
+          },
+        },
+        { prop: "howMany", label: "剩余次数" },
+        {
+          prop: "createTime",
+          label: "发送时间",
+          formatter: (row) => {
+            return parseTime(row.createTime);
+          },
+        },
       ],
       FormRules: {
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
@@ -150,15 +142,24 @@ export default {
           httpAdminSms
             .postSmsReset({ phone: this.editAddForm.phone })
             .then((res) => {
-              console.log(res);
-              this.$notify.success({
-                title: "重置成功",
-              });
-              this.getList();
-              this.editDialogVisible = false;
+              if (res.code === "OK") {
+                this.$notify.success({
+                  title: "重置成功",
+                });
+                this.getList();
+                this.editDialogVisible = false;
+              }
             });
         }
       });
+    },
+    /***** 表格格式化内容 *****/
+    typeFormatter(row) {
+      if (row.type === "LOGIN") {
+        return "登录";
+      } else {
+        return "其他";
+      }
     },
     // 分页
     handleSizeChange(newSize) {

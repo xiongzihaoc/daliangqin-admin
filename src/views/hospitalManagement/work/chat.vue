@@ -57,49 +57,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="patientUserName"
-        label="用户姓名">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="leaveCount"
-        label="用户留言数">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="leaveTime"
-        label="最近留言时间">
-        <template slot-scope="scope">
-          <span>{{parseTime(scope.row.leaveTime)}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="doctorUserName"
-        label="医生姓名">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="replyCount"
-        label="医生回复数">
-      </el-table-column>、
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="replyTime"
-        label="最近回复时间">
-        <template slot-scope="scope">
-          <span>{{parseTime(scope.row.replyTime)}}</span>
-        </template>
-      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -173,7 +130,27 @@ export default {
         address: "",
       },
       // 表格数据
-      tableHeaderBig: [{ type: "index", label: "序号" }],
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "patientUserName", label: "用户姓名" },
+        { prop: "leaveCount", label: "用户姓名" },
+        {
+          prop: "leaveTime",
+          label: "最近留言时间",
+          formatter: (row) => {
+            return parseTime(row.leaveTime);
+          },
+        },
+        { prop: "doctorUserName", label: "医生姓名" },
+        { prop: "replyCount", label: "医生回复数" },
+        {
+          prop: "replyTime",
+          label: "最近回复时间",
+          formatter: (row) => {
+            return parseTime(row.replyTime);
+          },
+        },
+      ],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -236,9 +213,7 @@ export default {
         if (valid) {
           // 发送请求
           httpAdminChat.putChat(this.editAddForm).then((res) => {
-            if (res.code != "OK") {
-              return;
-            } else {
+            if (res.code === "OK") {
               this.$notify.success({
                 title: "编辑成功",
               });

@@ -18,10 +18,10 @@
           <el-select v-model="searchForm.type"
             size="small"
             placeholder="请选择呈现位置">
-            <el-option value="DOCTOR"
-              label="医生端"></el-option>
-            <el-option value="PATIENT"
-              label="用户端"></el-option>
+            <el-option v-for="item in appTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="状态"
@@ -30,10 +30,10 @@
             size="small"
             v-model="searchForm.status"
             placeholder="请选择状态">
-            <el-option value="UP"
-              label="上架"></el-option>
-            <el-option value="DOWN"
-              label="下架"></el-option>
+            <el-option v-for="item in typeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -48,12 +48,15 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-button @click="add"
-      type="primary"
-      class="tableAdd"
-      size="small"
-      plain
-      icon="el-icon-plus">新增</el-button>
+    <!-- 表格上方操作按钮 -->
+    <div>
+      <el-button @click="add"
+        type="primary"
+        class="tableAdd"
+        size="small"
+        plain
+        icon="el-icon-plus">新增</el-button>
+    </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
@@ -62,35 +65,25 @@
         slot="fixed"
         fixed="left"
         type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="title"
-        label="轮播图名称"></el-table-column>
-      <el-table-column align="center"
+      <!-- <el-table-column align="center"
         slot="fixed"
         fixed="left"
         prop="imageUrl"
         label="轮播图图片">
         <template slot-scope="scope">
           <div v-if="scope.row.imageUrl">
-            <img class="tableImg" :src="scope.row.imageUrl" />
+            <img class="tableImg"
+              :src="scope.row.imageUrl" />
           </div>
-
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center"
         slot="fixed"
-        fixed="left"
-        prop="positionList"
+        fixed="right"
+        prop="appType"
         label="呈现位置">
         <template slot-scope="scope">
-          <span v-for="(item, index) in scope.row.positionList"
+          <span v-for="(item, index) in scope.row.appType"
             :key="index">
             <span v-if="item === 'PATIENT'">用户端 </span>
             <span v-else>医生端 </span>
@@ -167,15 +160,15 @@
             placeholder="暂时输入图片名称"></el-input>
         </el-form-item>
         <el-form-item label="呈现位置"
-          prop="positionList">
+          prop="appType">
           <el-select style="width: 100%"
             multiple
-            v-model="editAddForm.positionList"
+            v-model="editAddForm.appType"
             placeholder="请选择呈现位置">
-            <el-option value="DOCTOR"
-              label="医生端"></el-option>
-            <el-option value="PATIENT"
-              label="用户端"></el-option>
+            <el-option v-for="item in appTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="跳转地址"
@@ -194,10 +187,10 @@
           <el-select style="width: 100%"
             v-model="editAddForm.status"
             placeholder="请选择状态">
-            <el-option value="UP"
-              label="上架"></el-option>
-            <el-option value="DOWN"
-              label="下架"></el-option>
+            <el-option v-for="item in typeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -213,12 +206,17 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminBanner } from "@/api/admin/httpAdminBanner";
+import { appTypeList, typeList } from "@/utils/index";
 export default {
   components: {
     EleTable,
   },
   data() {
     return {
+      // app类型列表
+      appTypeList,
+      // 上下架状态
+      typeList,
       FormRules: {
         title: [
           { required: true, message: "请输入轮播图名称", trigger: "blur" },
@@ -227,7 +225,7 @@ export default {
           { required: true, message: "请上传轮播图图片", trigger: "blur" },
         ],
 
-        positionList: [
+        appType: [
           { required: true, message: "请选择呈现位置", trigger: "blur" },
         ],
         linkUrl: [
@@ -237,25 +235,28 @@ export default {
 
         status: [{ required: true, message: "请选择状态", trigger: "blur" }],
       },
-      searchForm: {
-        title: "",
-        type: "",
-        status: "",
-      },
+      // 表格数据
       list: [],
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "title", label: "轮播图名称" },
+        { prop: "imageUrl", label: "轮播图图片" },
+      ],
+      // 新增编辑表单
       editAddForm: {
         title: "",
-        positionList: [],
+        appType: [],
         imageUrl: "",
         linkUrl: "",
         zOrder: "",
         type: "",
         status: "",
       },
-      tableHeaderBig: [
-        { prop: "linkUrl", label: "跳转地址" },
-        { prop: "zOrder", label: "权重" },
-      ],
+      searchForm: {
+        title: "",
+        type: "",
+        status: "",
+      },
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -287,9 +288,7 @@ export default {
     statusChange(val) {
       this.editAddForm.status = val;
       httpAdminBanner.putBanner(val).then((res) => {
-        if (res.code !== "OK") {
-          return;
-        } else {
+        if (res.code === "OK") {
           this.$notify.success({
             title: "状态更改成功",
           });
@@ -337,11 +336,12 @@ export default {
       }
       // 发送请求
       httpAdminBanner.deleteBanner(id).then((res) => {
-        console.log(res);
-        this.$notify.success({
-          title: "删除成功",
-        });
-        this.getList();
+        if (res.code === "OK") {
+          this.$notify.success({
+            title: "删除成功",
+          });
+          this.getList();
+        }
       });
     },
     editDialogClosed() {
@@ -354,9 +354,7 @@ export default {
           if (this.infoTitle === "新增") {
             // 发送请求
             httpAdminBanner.postBanner(this.editAddForm).then((res) => {
-              if (res.code !== "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
                 });
@@ -367,9 +365,7 @@ export default {
           } else {
             // 发送请求
             httpAdminBanner.putBanner(this.editAddForm).then((res) => {
-              if (res.code !== "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
                 });

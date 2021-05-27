@@ -18,12 +18,10 @@
           <el-select v-model="searchForm.contentType"
             size="small"
             placeholder="请选择内容类型">
-            <el-option value="NEWS"
-              label="资讯"></el-option>
-            <el-option value="VIDEO"
-              label="视频"></el-option>
-            <el-option value="LIVE"
-              label="直播"></el-option>
+            <el-option v-for="item in newsTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="状态"
@@ -32,10 +30,10 @@
             v-model="searchForm.deletedStatus"
             size="small"
             placeholder="请选择状态">
-            <el-option value="SHOW"
-              label="上架"></el-option>
-            <el-option value="DELETE"
-              label="下架"></el-option>
+            <el-option v-for="item in newsStatusList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -64,58 +62,6 @@
         slot="fixed"
         fixed="left"
         type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="title"
-        label="标题">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="contentType"
-        label="内容类型">
-        <template slot-scope="scope">
-          <span v-if="scope.row.contentType === 'NEWS'">资讯</span>
-          <span v-else-if="scope.row.contentType === 'VIDEO'">视频</span>
-          <span v-else>直播</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="coverUrl"
-        label="封面图">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="author"
-        label="发布人">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="createTime"
-        label="添加时间">
-        <template slot-scope="scope">
-          <span v-if="scope.row.createTime">{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="publishTime"
-        label="发布时间">
-        <template slot-scope="scope">
-          <span v-if="scope.row.publishTime">{{ parseTime(scope.row.publishTime).slice(0,10) }}</span>
-        </template>
-      </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
@@ -193,12 +139,10 @@
           <el-select style="width: 100%"
             v-model="editAddForm.contentType"
             placeholder="请选择内容类型">
-            <el-option label="资讯"
-              value="NEWS"></el-option>
-            <el-option label="视频"
-              value="VIDEO"></el-option>
-            <el-option label="直播"
-              value="LIVE"></el-option>
+            <el-option v-for="item in newsTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="标题"
@@ -223,10 +167,10 @@
             multiple
             v-model="editAddForm.appTypes"
             placeholder="请选择呈现位置">
-            <el-option value="DOCTOR"
-              label="医生端"></el-option>
-            <el-option value="PATIENT"
-              label="用户端"></el-option>
+            <el-option v-for="item in appTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <!-- 问卷选择暂时搁置 -->
@@ -250,7 +194,6 @@
           <el-date-picker v-model="editAddForm.publishTime"
             style="width: 100%"
             type="date"
-            @change="dateChange"
             placeholder="选择日期时间"
             value-format="timestamp"
             align="right">
@@ -266,10 +209,10 @@
           <el-select style="width: 100%"
             v-model="editAddForm.deletedStatus"
             placeholder="请选择状态">
-            <el-option value="SHOW"
-              label="上架"></el-option>
-            <el-option value="DELETE"
-              label="下架"></el-option>
+            <el-option v-for="item in newsStatusList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -285,7 +228,13 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminNews } from "@/api/admin/httpAdminNews";
-import { parseTime } from "@/utils/index";
+import {
+  parseTime,
+  formatterElement,
+  newsTypeList,
+  newsStatusList,
+  appTypeList,
+} from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -293,9 +242,12 @@ export default {
   data() {
     return {
       parseTime,
+      newsTypeList,
+      newsStatusList,
+      appTypeList,
       FormRules: {
         contentType: [
-          { required: true, message: "请输入轮播图名称", trigger: "blur" },
+          { required: true, message: "请选择内容类型", trigger: "blur" },
         ],
         title: [{ required: true, message: "请输入标题", trigger: "blur" }],
         coverUrl: [
@@ -337,7 +289,33 @@ export default {
         zOrder: "",
         deletedStatus: "",
       },
-      tableHeaderBig: [],
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "title", label: "标题" },
+        {
+          prop: "contentType",
+          label: "内容类型",
+          formatter: (row) => {
+            return this.contentTypeFormatter(row);
+          },
+        },
+        { prop: "coverUrl", label: "封面图" },
+        { prop: "author", label: "发布人" },
+        {
+          prop: "createTime",
+          label: "添加时间",
+          formatter: (row) => {
+            return parseTime(row.createTime);
+          },
+        },
+        {
+          prop: "publishTime",
+          label: "发布时间",
+          formatter: (row) => {
+            return parseTime(row.publishTime).slice(0, 10);
+          },
+        },
+      ],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -378,10 +356,6 @@ export default {
           this.getList();
         }
       });
-    },
-    // 日期控件选择事件
-    dateChange(val) {
-      console.log(val);
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -440,9 +414,7 @@ export default {
           if (this.infoTitle === "新增") {
             // 发送请求
             httpAdminNews.postNews(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
                 });
@@ -453,9 +425,7 @@ export default {
           } else {
             // 发送请求
             httpAdminNews.putNews(this.editAddForm).then((res) => {
-              if (res.code != "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
                 });
@@ -466,6 +436,10 @@ export default {
           }
         }
       });
+    },
+    /***** 表格格式化内容 *****/
+    contentTypeFormatter(row) {
+      return formatterElement.contentType[row.contentType];
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
