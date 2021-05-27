@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-
 export const httpAdminDoctor = {
   // 获取医生列表
   getDoctor(data) {

@@ -219,7 +219,11 @@ export const relationshipList = [
   { id: 3, label: "亲戚", value: "RELATIVE" },
 ]
 
-
+// 加入方式
+export const resourceTypeList = [
+  { id: 1, label: "后台派发", value: "ADMIN" },
+  { id: 2, label: "主动加入", value: "INITIATIVE" },
+]
 // 性别列表
 export const genderList = [
   { id: 1, label: "男", value: "MALE" },

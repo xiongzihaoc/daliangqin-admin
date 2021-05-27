@@ -93,97 +93,16 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
         type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="doctorUserName"
-        label="医生姓名"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="type"
-        :formatter="typeFormatter"
-        label="随访方式">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="content"
-        label="随访内容">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="patientUserName"
-        label="随访用户"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="highBlood"
-        :formatter="highBloodFormatter"
-        label="高血压"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="diabetes"
-        :formatter="diabetesFormatter"
-        label="糖尿病"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="startTime"
-        :formatter="startTimeFormatter"
-        label="随访时间">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="finishTime"
-        :formatter="finishTimeFormatter"
-        label="添加时间">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="resource"
-        :formatter="resourceFormatter"
-        label="加入方式">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="status"
-        :formatter="statusFormatter"
-        label="状态">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="cancelTime"
-        label="取消时间">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="cancelReason"
-        label="取消原因">
-      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="320">
+        width="220">
         <template slot-scope="scope">
           <el-button size="mini"
             type="primary"
@@ -281,7 +200,12 @@ import EleTable from "@/components/Table";
 import { httpHospitalTask } from "@/api/hospital/httpHospitalTask";
 import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { followTypeList, parseTime, formatterElement } from "@/utils/index";
+import {
+  followTypeList,
+  parseTime,
+  resourceTypeList,
+  formatterElement,
+} from "@/utils/index";
 
 export default {
   components: {
@@ -289,6 +213,10 @@ export default {
   },
   data() {
     return {
+      // 随访列表
+      followTypeList,
+      // 加入方式
+      resourceTypeList,
       FormRules: {
         doctorUserId: [
           { required: true, message: "请选择医生名称", trigger: "blur" },
@@ -311,13 +239,6 @@ export default {
       list: [],
       doctorList: [],
       patientList: [],
-      // 随访方式列表
-      followTypeList,
-      // 加入方式列表
-      resourceTypeList: [
-        { id: 1, label: "主动加入", value: "INITIATIVE" },
-        { id: 2, label: "后台派发", value: "ADMIN" },
-      ],
       editAddForm: {
         doctorUserId: "",
         patientUserId: "",
@@ -326,7 +247,69 @@ export default {
         endTime: "",
         status: "",
       },
-      tableHeaderBig: [],
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "doctorUserName", label: "医生姓名" },
+        {
+          prop: "type",
+          label: "随访方式",
+          formatter: (row) => {
+            return this.typeFormatter(row);
+          },
+        },
+        { prop: "content", label: "随访内容" },
+        { prop: "patientUserName", label: "随访用户" },
+        {
+          prop: "highBloodStatus",
+          label: "高血压",
+          formatter: (row) => {
+            return this.highBloodFormatter(row);
+          },
+        },
+        {
+          prop: "diabetesStatus",
+          label: "糖尿病",
+          formatter: (row) => {
+            return this.diabetesFormatter(row);
+          },
+        },
+        {
+          prop: "startTime",
+          label: "随访时间",
+          formatter: (row) => {
+            return parseTime(row.startTime)?.slice(6);
+          },
+        },
+        {
+          prop: "finishTime",
+          label: "添加时间",
+          formatter: (row) => {
+            return parseTime(row.finishTime)?.slice(6);
+          },
+        },
+        {
+          prop: "resource",
+          label: "加入方式",
+          formatter: (row) => {
+            return this.resourceFormatter(row);
+          },
+        },
+        {
+          prop: "status",
+          label: "状态",
+          formatter: (row) => {
+            return this.statusFormatter(row);
+          },
+        },
+        {
+          prop: "cancelTime",
+          label: "取消时间",
+          formatter: (row) => {
+            return parseTime(row.cancelTime);
+          },
+        },
+        { prop: "cancelReason", label: "取消原因" },
+      ],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -370,9 +353,7 @@ export default {
     /***** 搜索区域 *****/
     // 选择时间
     selectTaskTime(val) {
-      this.editAddForm.startTime = val[0];
-      this.editAddForm.endTime = val[1];
-      // this.editAddForm;
+      this.editAddForm.taskTime = JSON.parse(JSON.stringify(val))
     },
     // 搜索
     searchBtn() {
@@ -392,10 +373,10 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
+      this.editAddForm.taskTime = JSON.parse(JSON.stringify([val.startTime, val.endTime]))
     },
     // 删除
     async deleteBtn(id) {
@@ -413,11 +394,12 @@ export default {
       }
       // 发送请求
       httpHospitalTask.deleteTask(id).then((res) => {
-        console.log(res);
-        this.$notify.success({
-          title: "删除成功",
-        });
-        this.getList();
+        if (res.code === "OK") {
+          this.$notify.success({
+            title: "删除成功",
+          });
+          this.getList();
+        }
       });
     },
     editDialogClosed() {
@@ -430,9 +412,7 @@ export default {
           if (this.infoTitle === "新增") {
             // 发送请求
             httpHospitalTask.postTask(this.editAddForm).then((res) => {
-              if (res.code !== "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
                 });
@@ -443,9 +423,7 @@ export default {
           } else {
             // 发送请求
             httpHospitalTask.putTask(this.editAddForm).then((res) => {
-              if (res.code !== "OK") {
-                return;
-              } else {
+              if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
                 });
@@ -464,11 +442,11 @@ export default {
     },
     // 高血压状态
     highBloodFormatter(row) {
-      return formatterElement.highBlood[row.highBlood];
+      return formatterElement.highBlood[row.healthStatus];
     },
     // 糖尿病状态
     diabetesFormatter(row) {
-      return formatterElement.diabetes[row.diabetes];
+      return formatterElement.diabetes[row.diabetesStatus];
     },
     // 加入方式
     resourceFormatter(row) {
@@ -477,13 +455,6 @@ export default {
     // 状态
     statusFormatter(row) {
       return formatterElement.status[row.status];
-    },
-    // 时间
-    startTimeFormatter(row) {
-      return parseTime(row.startTime).slice(6);
-    },
-    finishTimeFormatter(row) {
-      return parseTime(row.startTime).slice(6);
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

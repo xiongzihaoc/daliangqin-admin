@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-
 export const httpAdminAddressDoctor = {
     getAddressDoctor(data) {
         return request({

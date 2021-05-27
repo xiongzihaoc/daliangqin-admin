@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-
 export const httpHospitalFollow = {
   getFollowList(data) {
     return request({

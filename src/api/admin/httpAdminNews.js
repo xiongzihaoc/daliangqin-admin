@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-
 export const httpAdminNews = {
     getNews(data) {
         return request({
