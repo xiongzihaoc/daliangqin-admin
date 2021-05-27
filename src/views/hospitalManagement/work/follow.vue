@@ -41,8 +41,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="高血压"
-          prop="highBlood">
-          <el-select v-model="searchForm.highBlood"
+          prop="highBloodStatus">
+          <el-select v-model="searchForm.highBloodStatus"
             size="small"
             placeholder="请选择">
             <el-option v-for="item in healthList"
@@ -52,8 +52,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="糖尿病"
-          prop="diabetes">
-          <el-select v-model="searchForm.diabetes"
+          prop="diabetesStatus">
+          <el-select v-model="searchForm.diabetesStatus"
             size="small"
             placeholder="请选择">
             <el-option v-for="item in healthList"
@@ -104,121 +104,10 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
         type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="doctorUserName"
-        label="医生姓名">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="doctorType"
-        label="职位">
-        <template slot-scope="scope">
-          <span v-if="scope.row.doctorType === 'PHYSICIAN'">医师</span>
-          <span v-else-if="scope.row.doctorType === 'ATTENDING_PHYSICIAN'">主治医师</span>
-          <span v-else-if="scope.row.doctorType === 'ASSOCIATE_CHIEF_PHYSICIAN'">副主任医师</span>
-          <span v-else>主任医师</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="type"
-        label="随访方式">
-        <template slot-scope="scope">
-          <span v-if="scope.row.type === 'CLINIC'">诊间随访</span>
-          <span v-else-if="scope.row.type === 'DOOR'">上门随访</span>
-          <span v-else-if="scope.row.type === 'VIDEO'">视频随访</span>
-          <!-- VOICE -->
-          <span v-else>语音随访</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="content"
-        label="随访内容">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="patientUserName"
-        label="随访用户">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="highBlood"
-        label="高血压">
-        <template slot-scope="scope">
-          <span v-if="scope.row.highBlood === 'HEALTH'">健康</span>
-          <span v-else-if="scope.row.highBlood === 'SLIGHT'">轻度</span>
-          <span v-else-if="scope.row.highBlood === 'MEDIUM'">中度</span>
-          <span v-else>重度</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="diabetes"
-        label="糖尿病">
-        <template slot-scope="scope">
-          <span v-if="scope.row.diabetes === ''">健康</span>
-          <span v-else-if="scope.row.diabetes === 'SLIGHT'">轻度</span>
-          <span v-else-if="scope.row.diabetes === 'MEDIUM'">中度</span>
-          <span v-else>重度</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="startTime"
-        label="随访开始时间">
-        <template slot-scope="scope">
-          <span v-if="scope.row.startTime">{{ parseTime(scope.row.startTime).slice(6) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="endTime"
-        label="随访结束时间">
-        <template slot-scope="scope">
-          <span v-if="scope.row.endTime">{{ parseTime(scope.row.endTime).slice(6) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="userStatus"
-        label="用户状态">
-        <template slot-scope="scope">
-          <span v-if="scope.row.userStatus === 'HEALTH'">良好</span>
-          <span v-else-if="scope.row.userStatus === 'SLIGHT'">轻微</span>
-          <span v-else>严重</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="updateTime"
-        label="操作时间">
-        <template slot-scope="scope">
-          <span>{{parseTime(scope.row.updateTime)}}</span>
-        </template>
-      </el-table-column>
     </EleTable>
     <!-- 分页 -->
     <el-pagination background
@@ -235,7 +124,14 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpHospitalFollow } from "@/api/hospital/httpHospitalFollow";
-import { doctorTypeList, followTypeList, parseTime } from "@/utils/index";
+import {
+  doctorTypeList,
+  followTypeList,
+  healthList,
+  userStatusList,
+  parseTime,
+  formatterElement,
+} from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -243,35 +139,26 @@ export default {
   data() {
     return {
       parseTime,
+      // 医生类型列表
+      doctorTypeList,
+      // 随访方式列表
+      followTypeList,
+      healthList,
+      userStatusList,
       // 搜索表单
       searchForm: {
         doctorUserName: "",
         doctorType: "",
         patientUserName: "",
         type: "",
-        highBlood: "",
-        diabetes: "",
+        highBloodStatus: "",
+        diabetesStatus: "",
         startTime: "",
         endTime: "",
         userStatus: "",
       },
       // 列表数据
       list: [],
-      // 医生类型列表
-      doctorTypeList,
-      // 随访方式列表
-      followTypeList,
-      healthList: [
-        { id: 1, label: "健康", value: "HEALTH" },
-        { id: 2, label: "轻微", value: "SLIGHT  " },
-        { id: 3, label: "中度", value: "MEDIUM" },
-        { id: 4, label: "重度", value: "SERIOUS" },
-      ],
-      userStatusList: [
-        { id: 1, label: "良好", value: "HEALTH" },
-        { id: 2, label: "轻微", value: "SLIGHT  " },
-        { id: 3, label: "严重", value: "SERIOUS" },
-      ],
       // 增改表单
       editAddForm: {
         fromUserName: "",
@@ -279,7 +166,68 @@ export default {
         address: "",
       },
       // 表格数据
-      tableHeaderBig: [],
+      tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "doctorUserName", label: "医生姓名" },
+        {
+          prop: "doctorType",
+          label: "职位",
+          formatter: (row) => {
+            return this.doctorTypeFormatter(row);
+          },
+        },
+        {
+          prop: "type",
+          label: "随访方式",
+          formatter: (row) => {
+            return this.typeFormatter(row);
+          },
+        },
+        { prop: "content", label: "随访内容" },
+        { prop: "patientUserName", label: "随访用户" },
+        {
+          prop: "highBloodStatus",
+          label: "高血压",
+          formatter: (row) => {
+            return this.highBloodStatusFormatter(row);
+          },
+        },
+        {
+          prop: "diabetesStatus",
+          label: "糖尿病",
+          formatter: (row) => {
+            return this.diabetesStatusFormatter(row);
+          },
+        },
+        {
+          prop: "startTime",
+          label: "随访开始时间",
+          formatter: (row) => {
+            return parseTime(row.startTime)?.slice(6);
+          },
+        },
+        {
+          prop: "endTime",
+          label: "随访结束时间",
+          formatter: (row) => {
+            return parseTime(row.endTime)?.slice(6);
+          },
+        },
+        {
+          prop: "userStatus",
+          label: "用户状态",
+          formatter: (row) => {
+            return this.userStatusFormatter(row);
+          },
+        },
+        {
+          prop: "updateTime",
+          label: "操作时间",
+          formatter: (row) => {
+            return parseTime(row.updateTime);
+          },
+        },
+      ],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -298,12 +246,12 @@ export default {
         .getFollowList({
           page: this.pageNum,
           pageSize: this.pageSize,
-          doctorUserName: this.searchForm.doctorUserName,
+          doctorName: this.searchForm.doctorUserName,
           doctorType: this.searchForm.doctorType,
-          patientUserName: this.searchForm.patientUserName,
+          patientName: this.searchForm.patientUserName,
           type: this.searchForm.type,
-          highBlood: this.searchForm.highBlood,
-          diabetes: this.searchForm.diabetes,
+          highBloodStatus: this.searchForm.highBloodStatus,
+          diabetesStatus: this.searchForm.diabetesStatus,
           startTime: this.searchForm.startTime,
           endTime: this.searchForm.endTime,
           userStatus: this.searchForm.userStatus,
@@ -329,6 +277,22 @@ export default {
     searchReset() {
       this.searchForm = {};
       this.getList();
+    },
+    /***** 表格格式化内容 *****/
+    doctorTypeFormatter(row) {
+      return formatterElement.doctorType[row.doctorType];
+    },
+    typeFormatter(row) {
+      return formatterElement.followType[row.type];
+    },
+    highBloodStatusFormatter(row) {
+      return formatterElement.highBlood[row.highBloodStatus];
+    },
+    diabetesStatusFormatter(row) {
+      return formatterElement.diabetes[row.diabetesStatus];
+    },
+    userStatusFormatter(row) {
+      return formatterElement.userStatus[row.userStatus];
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

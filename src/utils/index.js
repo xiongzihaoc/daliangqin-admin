@@ -230,6 +230,32 @@ export const genderList = [
   { id: 2, label: "女", value: "FEMALE" },
 ]
 
+// 状态
+export const statusList = [
+  { id: 1, label: "未完成", value: "PENDING" },
+  { id: 2, label: "已完成", value: "FINISH" },
+  { id: 3, label: "已取消", value: "CANCEL" },
+  { id: 4, label: "超时", value: "OVERDUE" }
+]
+
+// 高血压糖尿病结果列表
+export const healthList = [
+  { id: 1, label: "健康", value: "HEALTH" },
+  { id: 2, label: "严重", value: "SERIOUS" },
+  { id: 3, label: "中等", value: "MEDIUM" },
+  { id: 4, label: "轻微", value: "SLIGHT" },
+  { id: 5, label: "稍慢", value: "SLOW" },
+  { id: 6, label: "稍快", value: "FAST" },
+  { id: 7, label: "正常", value: "NORMAL" },
+]
+
+// 用户状态
+export const userStatusList = [
+  { id: 1, label: "良好", value: "HEALTH" },
+  { id: 2, label: "轻微", value: "SLIGHT  " },
+  { id: 3, label: "严重", value: "SERIOUS" },
+]
+
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式
@@ -308,4 +334,9 @@ export const formatterElement = {
     H5: "H5",
     PC: "PC",
   },
+  userStatus: {
+    HEALTH: "良好",
+    SLIGHT: "轻微",
+    SERIOUS: "严重",
+  }
 }

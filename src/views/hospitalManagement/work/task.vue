@@ -61,7 +61,7 @@
           prop="status">
           <el-select v-model="searchForm.status"
             placeholder="请选择状态">
-            <el-option v-for="item in followTypeList"
+            <el-option v-for="item in statusList"
               :key="item.id"
               :label="item.label"
               :value="item.value"></el-option>
@@ -204,6 +204,7 @@ import {
   followTypeList,
   parseTime,
   resourceTypeList,
+  statusList,
   formatterElement,
 } from "@/utils/index";
 
@@ -217,6 +218,7 @@ export default {
       followTypeList,
       // 加入方式
       resourceTypeList,
+      statusList,
       FormRules: {
         doctorUserId: [
           { required: true, message: "请选择医生名称", trigger: "blur" },
@@ -244,6 +246,7 @@ export default {
         patientUserId: "",
         type: "",
         startTime: "",
+        taskTime: "",
         endTime: "",
         status: "",
       },
@@ -275,9 +278,16 @@ export default {
         },
         {
           prop: "startTime",
-          label: "随访时间",
+          label: "随访开始时间",
           formatter: (row) => {
             return parseTime(row.startTime)?.slice(6);
+          },
+        },
+        {
+          prop: "endTime",
+          label: "随访结束时间",
+          formatter: (row) => {
+            return parseTime(row.endTime)?.slice(6);
           },
         },
         {
@@ -353,7 +363,8 @@ export default {
     /***** 搜索区域 *****/
     // 选择时间
     selectTaskTime(val) {
-      this.editAddForm.taskTime = JSON.parse(JSON.stringify(val))
+      this.editAddForm.startTime = val[0];
+      this.editAddForm.endTime = val[1];
     },
     // 搜索
     searchBtn() {
@@ -375,8 +386,8 @@ export default {
     editBtn(val) {
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
+      this.$set(this.editAddForm,'taskTime',[val.startTime,val.endTime])
       this.editDialogVisible = true;
-      this.editAddForm.taskTime = JSON.parse(JSON.stringify([val.startTime, val.endTime]))
     },
     // 删除
     async deleteBtn(id) {
