@@ -439,6 +439,8 @@ export default {
                   title: "新增成功",
                 });
                 this.getList();
+                this.getHospitalList();
+                this.getToDoctorList();
                 this.editDialogVisible = false;
               }
             });
@@ -450,6 +452,8 @@ export default {
                   title: "编辑成功",
                 });
                 this.getList();
+                this.getHospitalList();
+                this.getToDoctorList();
                 this.editDialogVisible = false;
               }
             });

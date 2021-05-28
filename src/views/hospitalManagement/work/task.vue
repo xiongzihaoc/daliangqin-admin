@@ -342,6 +342,11 @@ export default {
         .getTask({
           page: this.pageNum,
           pageSize: this.pageSize,
+          doctorUserName: this.searchForm.doctorUserName,
+          patientUserName: this.searchForm.patientUserName,
+          type: this.searchForm.type,
+          taskStatus: this.searchForm.status,
+          resource: this.searchForm.resource,
         })
         .then((res) => {
           this.list = res.data.elements;
