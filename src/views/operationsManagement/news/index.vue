@@ -516,9 +516,11 @@ export default {
 <style>
 /* 富文本汉化 */
 .quill-editor {
-  line-height: normal;
+  padding: 0;
 }
-
+.ql-container {
+  height: 200px;
+}
 .ql-toolbar.ql-snow {
   background-color: #f5f5f5;
 }
