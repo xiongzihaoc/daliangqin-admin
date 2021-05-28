@@ -255,7 +255,8 @@ export default {
   color: red;
 }
 .el-table--striped .el-table__body tr.el-table__row--striped td {
-  background: #e5f5ff;
+  background: #f9f9f9;
+  // background: #e5f5ff;
 }
 .w-table {
   .el-table__row {
