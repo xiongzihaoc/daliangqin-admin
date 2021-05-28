@@ -157,9 +157,16 @@
         </el-form-item>
         <el-form-item label="详情"
           prop="content">
-          <el-input type="textarea"
+          <!-- <el-input type="textarea"
             v-model.trim="editAddForm.content"
-            placeholder="请输入详情"></el-input>
+            placeholder="请输入详情"></el-input> -->
+            <quill-editor v-model="editAddForm.content"
+              ref="myQuillEditor"
+              :options="editorOption"
+              @blur="onEditorBlur($event)"
+              @focus="onEditorFocus($event)"
+              @change="onEditorChange($event)">
+            </quill-editor>
         </el-form-item>
         <el-form-item label="呈现位置"
           prop="appTypes">
@@ -228,6 +235,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminNews } from "@/api/admin/httpAdminNews";
+
 import {
   parseTime,
   formatterElement,
@@ -323,6 +331,28 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
+
+      editorOption: {
+        placeholder: "请在这里输入",
+        modules: {
+          toolbar: [
+            ["bold", "italic", "underline", "strike"], //加粗，斜体，下划线，删除线
+            // ["blockquote", "code-block"], //引用，代码块
+            [{ header: 1 }, { header: 2 }], // 标题，键值对的形式；1、2表示字体大小
+            // [{ list: "ordered" }, { list: "bullet" }], //列表
+            // [{ script: "sub" }, { script: "super" }], // 上下标
+            // [{ indent: "-1" }, { indent: "+1" }], // 缩进
+            // [{ direction: "rtl" }], // 文本方向
+            // [{ size: ["small", false, "large", "huge"] }], // 字体大小
+            // [{ header: [1, 2, 3, 4, 5, 6, false] }], //几级标题
+            [{ color: [] }, { background: [] }], // 字体颜色，字体背景颜色
+            // [{ font: ['Helvetica Neue', 'Helvetica', 'Arial'] }], //字体
+            // [{ align: [] }], //对齐方式
+            ["clean"], //清除字体样式
+            ["image", "video"], //上传图片、上传视频
+          ],
+        },
+      },
     };
   },
   created() {
@@ -437,6 +467,13 @@ export default {
         }
       });
     },
+    // 富文本
+    onEditorReady(editor) {
+      // 准备编辑器
+    },
+    onEditorBlur() {}, // 失去焦点事件
+    onEditorFocus() {}, // 获得焦点事件
+    onEditorChange() {}, // 内容改变事件
     /***** 表格格式化内容 *****/
     contentTypeFormatter(row) {
       return formatterElement.contentType[row.contentType];
@@ -451,8 +488,15 @@ export default {
       this.getList();
     },
   },
+  computed: {
+    editor() {
+      return this.$refs.myQuillEditor.quill;
+    },
+  },
 };
 </script>
 
+
 <style>
+/* 富文本汉化 */
 </style>
