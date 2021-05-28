@@ -3,17 +3,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        label="app类型"
-        prop="appType">
-        <template slot-scope="scope">
-          <span v-if="scope.row.appType === 'DOCTOR'">医生端</span>
-          <span v-else>用户端</span>
-        </template>
-      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -78,6 +67,7 @@
 import EleTable from "@/components/Table";
 import { httpAdminUpdateControl } from "@/api/admin/httpAdminUpdateControl";
 import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion";
+import { formatterElement } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -98,6 +88,20 @@ export default {
         { prop: "newestVersionString", label: "最新版本" },
         { prop: "recommendVersionString", label: "推荐更新版本" },
         { prop: "forceVersionString", label: "强制更新版本" },
+        {
+          prop: "appType",
+          label: "app类型",
+          formatter: (row) => {
+            return this.appTypeFormatter(row);
+          },
+        },
+        {
+          prop: "deviceType",
+          label: "设备类型",
+          formatter: (row) => {
+            return this.deviceTypeFormatter(row);
+          },
+        },
       ],
       //   弹框区域
       editDialogVisible: false,
@@ -163,6 +167,13 @@ export default {
             });
         }
       });
+    },
+    /***** 表格格式化内容 *****/
+    appTypeFormatter(row) {
+      return formatterElement.appType[row.appType];
+    },
+    deviceTypeFormatter(row) {
+      return formatterElement.deviceType[row.deviceType];
     },
   },
 };

@@ -325,8 +325,8 @@ export const formatterElement = {
     RELATIVE: "亲戚"
   },
   appType: {
-    DOCTOR: "家人",
-    PATIENT: "朋友",
+    DOCTOR: "医生端",
+    PATIENT: "用户端",
   },
   deviceType: {
     IOS: "苹果",
