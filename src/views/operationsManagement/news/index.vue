@@ -157,17 +157,14 @@
         </el-form-item>
         <el-form-item label="详情"
           prop="content">
-          <!-- <el-input type="textarea"
-            v-model.trim="editAddForm.content"
-            placeholder="请输入详情"></el-input> -->
-            <quill-editor v-model="editAddForm.content"
-              ref="myQuillEditor"
-              class="quill-editor"
-              :options="editorOption"
-              @blur="onEditorBlur($event)"
-              @focus="onEditorFocus($event)"
-              @change="onEditorChange($event)">
-            </quill-editor>
+          <quill-editor v-model="editAddForm.content"
+            ref="myQuillEditor"
+            class="ql-editor"
+            :options="editorOption"
+            @blur="onEditorBlur($event)"
+            @focus="onEditorFocus($event)"
+            @change="onEditorChange($event)">
+          </quill-editor>
         </el-form-item>
         <el-form-item label="呈现位置"
           prop="appTypes">
@@ -236,7 +233,17 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminNews } from "@/api/admin/httpAdminNews";
-
+import Vue from "vue";
+import VueQuillEditor from "vue-quill-editor";
+import * as Quill from "quill"; //引入编辑器
+import resizeImage from "quill-image-resize-module"; // 图片缩放组件。
+import { ImageDrop } from "quill-image-drop-module"; // 图片拖动组件。
+Quill.register("modules/imageDrop", ImageDrop);
+Quill.register("modules/resizeImage ", resizeImage);
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
+Vue.use(VueQuillEditor);
 import {
   parseTime,
   formatterElement,
@@ -332,7 +339,6 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
-
       editorOption: {
         placeholder: "请在这里输入",
         modules: {
@@ -352,6 +358,15 @@ export default {
             ["clean"], //清除字体样式
             ["image", "video"], //上传图片、上传视频
           ],
+          imageDrop: true,
+          imageResize: {
+            displayStyles: {
+              backgroundColor: "black",
+              border: "none",
+              color: "white",
+            },
+            modules: ["Resize", "DisplaySize", "Toolbar"],
+          },
         },
       },
     };
@@ -501,9 +516,12 @@ export default {
 <style>
 /* 富文本汉化 */
 .quill-editor {
-    line-height: normal;
+  line-height: normal;
 }
 
+.ql-toolbar.ql-snow {
+  background-color: #f5f5f5;
+}
 .ql-snow .ql-tooltip {
   z-index: 999;
 }

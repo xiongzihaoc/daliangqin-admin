@@ -1,5 +1,6 @@
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
+const webpack = require('webpack')
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -77,7 +78,7 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    }
+    },
   },
   chainWebpack(config) {
     config.plugin('preload').tap(() => [{
@@ -86,7 +87,9 @@ module.exports = {
       include: 'initial'
     }])
     config.plugins.delete('prefetch')
-
+    config.plugin('provide').use(webpack.ProvidePlugin, [{
+      'window.Quill': 'quill',
+    }]);
     // set svg-sprite-loader
     config.module
       .rule('svg')

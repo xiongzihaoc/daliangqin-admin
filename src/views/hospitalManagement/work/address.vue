@@ -71,7 +71,7 @@
       width="40%"
       v-dialogDrag>
       <!-- 表格 -->
-      <el-table :data="addressList.addressInfos"
+      <el-table :data="addressList"
         style="width: 100%">
         <!-- 需要formatter的列 -->
         <el-table-column align="center"
@@ -216,10 +216,11 @@ export default {
       searchForm: {
         doctorName: "",
         doctorType: "",
+        userId: "",
       },
       // 列表数据
       list: [],
-      addressList: {},
+      addressList: [],
       // 省市区列表
       provinceList: [],
       cityList: [],
@@ -280,6 +281,14 @@ export default {
           this.total = res.data.totalSize;
         });
     },
+    // 获取第一个弹框的表格数据
+    getEditList() {
+      httpAdminAddressDoctor
+        .getAddressDoctor({ userId: this.searchForm.userId })
+        .then((res) => {
+          this.addressList = res.data.elements[0].addressInfos;
+        });
+    },
     // 获取省列表
     getProvinceList() {
       httpPublicDistrictProvince.getProvince().then((res) => {
@@ -306,6 +315,7 @@ export default {
           this.$notify.success({
             title: res.message,
           });
+          this.getEditList();
           this.getList();
         }
       });
@@ -323,13 +333,16 @@ export default {
     /***** CRUD *****/
     // 查看收货地址按钮
     examineBtn(val) {
+      console.log(val);
+      this.searchForm.userId = val.userId;
+      this.getEditList();
       this.examineDialogVisible = true;
-      this.addressList = val;
     },
     // 选择省加载下一级数据
     selectProvince(id) {
       this.editAddForm.city = "";
       this.editAddForm.area = "";
+      this.areaList = [];
       this.getCityList(id);
     },
     selectCity(id) {
@@ -358,6 +371,7 @@ export default {
                 title: "编辑成功",
               });
               this.getList();
+              this.getEditList();
               this.editDialogVisible = false;
             }
           });

@@ -85,7 +85,8 @@ const operationsRouter = {
       component: () => import('@/views/operationsManagement/news'),
       meta: {
         title: '内容管理',
-        icon: 'content'
+        icon: 'content', 
+        // noCache: true
       },
     },
     // 商城管理

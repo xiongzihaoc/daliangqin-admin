@@ -58,7 +58,7 @@
       :visible.sync="examineDialogVisible"
       width="40%"
       v-dialogDrag>
-      <el-table :data="addressList.addressInfos"
+      <el-table :data="addressList"
         style="width: 100%">
         <!-- 需要formatter的列 -->
         <el-table-column align="center"
@@ -201,10 +201,11 @@ export default {
       // 搜索表单
       searchForm: {
         patientName: "",
+        userId: "",
       },
       // 列表数据
       list: [],
-      addressList: {},
+      addressList: [],
       // 省市区列表
       provinceList: [],
       cityList: [],
@@ -257,6 +258,14 @@ export default {
           this.total = res.data.totalSize;
         });
     },
+    // 获取第一个弹框的表格数据
+    getEditList() {
+      httpAdminAddressPatient
+        .getAddressPatient({ userId: this.searchForm.userId })
+        .then((res) => {
+          this.addressList = res.data.elements[0].addressInfos;
+        });
+    },
     // 获取省列表
     getProvinceList() {
       httpPublicDistrictProvince.getProvince().then((res) => {
@@ -280,14 +289,13 @@ export default {
     statusChange(id) {
       httpAdminAddressPatient.putAddressDefault(id).then((res) => {
         console.log(res);
-        if (res.code != "OK") {
-          return;
-        } else {
+        if (res.code === "OK") {
           this.$notify.success({
             title: res.message,
           });
+          this.getList();
+          this.getEditList();
         }
-        this.getList();
       });
     },
     /***** 搜索区域 *****/
@@ -304,13 +312,16 @@ export default {
     // 查看收货地址按钮
     examineBtn(val) {
       console.log(val);
+
+      this.searchForm.userId = val.patientUserId;
+      this.getEditList();
       this.examineDialogVisible = true;
-      this.addressList = val;
     },
     // 选择省加载下一级数据
     selectProvince(id) {
       this.editAddForm.city = "";
       this.editAddForm.area = "";
+      this.areaList = [];
       this.getCityList(id);
     },
     selectCity(id) {
@@ -319,6 +330,7 @@ export default {
     },
     // 编辑
     editBtn(val) {
+      console.log(val);
       this.getCityList(val.province);
       this.getAreaList(val.city);
       this.editAddForm = JSON.parse(JSON.stringify(val));
@@ -338,6 +350,8 @@ export default {
                 title: "编辑成功",
               });
               this.getList();
+              this.getEditList();
+              this.editDialogVisible = false;
             }
           });
         }
