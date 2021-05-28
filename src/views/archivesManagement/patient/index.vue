@@ -88,6 +88,7 @@
             type="primary"
             @click="editBtn(scope.row)">编辑</el-button>
           <el-button size="mini"
+            @click="detailsBtn(scope.row)"
             plain>详细资料</el-button>
         </template>
       </el-table-column>
@@ -106,7 +107,6 @@
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
-      @open="openBounced"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
@@ -334,8 +334,6 @@ export default {
         }
       });
     },
-    // 弹框开启
-    openBounced() {},
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
@@ -368,7 +366,12 @@ export default {
           }
         }
       });
-    } /***** 表格格式化内容区域 *****/,
+    },
+    // 跳转详细资料
+    detailsBtn(val) {
+      this.$router.push({ path: "/archivesManagement/details?id=" + val.id });
+    },
+    /***** 表格格式化内容区域 *****/
     // 出生年月
     genderFormatter(row) {
       return formatterElement.gender[row.gender];
