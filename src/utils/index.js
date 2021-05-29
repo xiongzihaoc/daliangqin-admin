@@ -256,6 +256,57 @@ export const userStatusList = [
   { id: 3, label: "严重", value: "SERIOUS" },
 ]
 
+// 饮食习惯
+export const eatHabitsList = [
+  { id: 1, label: "清淡", value: "LIGHT" },
+  { id: 2, label: "高盐", value: "HIGH_SALT  " },
+  { id: 3, label: "高脂 ", value: "HIGH_FAT" },
+  { id: 4, label: "高糖", value: "HIGH_GLUCOSE" },
+]
+
+// 是否饮酒 抽烟
+export const isSmokeList = [
+  { id: 1, label: "从不", value: "NEVER" },
+  { id: 2, label: "偶尔", value: "HAPLY  " },
+  { id: 3, label: "经常 ", value: "OFTEN" },
+  { id: 4, label: "已戒", value: "QUIT" },
+]
+
+// 熬夜情况
+export const stayUpLateList = [
+  { id: 1, label: "从不", value: "NEVER" },
+  { id: 2, label: "偶尔", value: "HAPLY  " },
+  { id: 3, label: "经常 ", value: "OFTEN" },
+]
+
+// 运动情况
+export const exerciseList = [
+  { id: 1, label: "1-3次", value: "ONE_THREE" },
+  { id: 2, label: "4-7次", value: "FOUR_SEVEN  " },
+  { id: 3, label: "大于7次", value: "EXCEED_SEVEN" },
+  { id: 4, label: "不运动 ", value: "NONE" },
+]
+
+// 慢性病史
+export const chronicDiseaseList = [
+  { id: 1, label: "糖尿病", value: "DIABETES" },
+  { id: 2, label: "高血压", value: "HYPERTENSION" },
+  { id: 3, label: "肿瘤", value: "TUMOR" },
+  { id: 4, label: "慢性支气管炎 ", value: "CHRONIC_BRONCHITIS" },
+  { id: 5, label: "心脏病 ", value: "HEART_DISEASE" },
+  { id: 6, label: "其他 ", value: "OTHER" },
+]
+
+//  肝肾功能情况
+export const liverFunction = [
+  { id: 1, label: "异常", value: "ABNORMAL" },
+  { id: 2, label: "正常", value: "NORMAL" },
+]
+//  肝肾功能情况
+export const carotidPlaque = [
+  { id: 1, label: "有", value: "HAVE" },
+  { id: 2, label: "无", value: "NONE" },
+]
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式
