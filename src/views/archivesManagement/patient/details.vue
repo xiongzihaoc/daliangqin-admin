@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form ref="form"
+    <el-form ref="FormRef"
       :model="form"
       :rules="FormRules"
       label-width="100px">
@@ -75,8 +75,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="其他"
-            prop="other">
-            <el-input v-model="form.other"
+            prop="otherDisease">
+            <el-input v-model="form.otherDisease"
               placeholder="请输入其他慢性病史"></el-input>
           </el-form-item>
         </div>
@@ -85,12 +85,16 @@
           <el-form-item label="身高"
             prop="height">
             <el-input v-model="form.height"
+              @blur="computeBmi"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入身高"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">cm</i></el-input>
           </el-form-item>
           <el-form-item label="体重"
             prop="weight">
             <el-input v-model="form.weight"
+              @blur="computeBmi"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入体重"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">kg</i></el-input>
           </el-form-item>
@@ -102,30 +106,35 @@
           <el-form-item label="腰围"
             prop="waistline">
             <el-input v-model="form.waistline"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入腰围"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">kg</i></el-input>
           </el-form-item>
           <el-form-item label="臀围"
             prop="hips">
             <el-input v-model="form.hips"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入臀围"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">kg</i></el-input>
           </el-form-item>
           <el-form-item label="收缩压/高压"
             prop="shrinkHighPressure">
             <el-input v-model="form.shrinkHighPressure"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入收缩压/高压"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="舒张压/低压"
             prop="diastoleLowPressure">
             <el-input v-model="form.diastoleLowPressure"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入舒张压/低压"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="心率"
             prop="heartRate">
             <el-input v-model="form.heartRate"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入心率"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">bpm</i></el-input>
           </el-form-item>
@@ -140,49 +149,57 @@
           <el-form-item label="空腹血糖"
             prop="fastingBloodGlucose">
             <el-input v-model="form.fastingBloodGlucose"
-              placeholder="请选择空腹血糖"><i slot="suffix"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              placeholder="请输入空腹血糖"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="总胆固醇"
             prop="totalCholesterol">
             <el-input v-model="form.totalCholesterol"
-              placeholder="请选择总胆固醇"><i slot="suffix"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              placeholder="请输入总胆固醇"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="甘油三酯"
             prop="triglycerides">
             <el-input v-model="form.triglycerides"
-              placeholder="请选择甘油三酯"><i slot="suffix"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              placeholder="请输入甘油三酯"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="高密度脂蛋白胆固醇"
             prop="hdlCholesterol">
             <el-input v-model="form.hdlCholesterol"
-              placeholder="请选择高密度脂蛋白胆固醇"><i slot="suffix"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              placeholder="请输入高密度脂蛋白胆固醇"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="低密度脂蛋白胆固醇"
             prop="ldlCholesterol">
             <el-input v-model="form.ldlCholesterol"
-              placeholder="请选择低密度脂蛋白胆固醇"><i slot="suffix"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              placeholder="请输入低密度脂蛋白胆固醇"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="肌酐"
             prop="creatinine">
             <el-input v-model="form.creatinine"
-              placeholder="请选择肌酐"><i slot="suffix"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              placeholder="请输入肌酐"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">umol/L</i></el-input>
           </el-form-item>
           <el-form-item label="尿酸"
             prop="uricAcid">
             <el-input v-model="form.uricAcid"
-              placeholder="请选择尿酸"><i slot="suffix"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              placeholder="请输入尿酸"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">umol/L</i></el-input>
           </el-form-item>
           <el-form-item label="血钾"
             prop="serumPotassium">
             <el-input v-model="form.serumPotassium"
-              placeholder="请选择血钾"><i slot="suffix"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              placeholder="请输入血钾"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="肝功能"
@@ -238,11 +255,19 @@
         </div>
       </div>
     </el-form>
-    <div class="confirmBtn"><el-button type="primary">确定</el-button></div>
+    <div class="btn-box">
+      <el-button size="small"
+        plain
+        @click="cancel">取消</el-button>
+      <el-button size="small"
+        type="primary"
+        @click="confirm">确定</el-button>
+    </div>
   </div>
 </template>
 
 <script>
+import { httpHospitalArchives } from "@/api/hospital/httpHospitalArchives";
 import {
   eatHabitsList,
   isSmokeList,
@@ -263,38 +288,24 @@ export default {
       liverFunction,
       carotidPlaque,
       FormRules: {
-        eatHabits: [
-          { required: true, message: "请选择饮食习惯", trigger: "blur" },
-        ],
-        isSmoke: [
-          { required: true, message: "请选择是否吸烟", trigger: "blur" },
-        ],
-        isDrink: [
-          { required: true, message: "请选择是否饮酒", trigger: "blur" },
-        ],
-        stayUpLate: [
-          { required: true, message: "请选择是否熬夜", trigger: "blur" },
-        ],
-        sit: [{ required: true, message: "请选择静坐时长", trigger: "blur" }],
-        exercise: [
-          { required: true, message: "请选择运动习惯", trigger: "blur" },
-        ],
+        height: [{ required: true, message: "请输入身高", trigger: "blur" }],
+        weight: [{ required: true, message: "请输入体重", trigger: "blur" }],
       },
       form: {
         // 基本信息
-        eatHabits: "",
+        eatHabits: [],
         isSmoke: "",
         isDrink: "",
         stayUpLate: "",
         sit: "",
         exercise: "",
-        chronicDisease: "",
+        chronicDisease: [],
         stayUpLate: "",
-        other: "",
+        otherDisease: "",
         // 体格检查
         height: "",
         weight: "",
-        bmi: "",
+        bmi: 0,
         waistline: "",
         hips: "",
         shrinkHighPressure: "",
@@ -317,6 +328,34 @@ export default {
       },
     };
   },
+  created() {},
+  computed: {
+    // bmi(){
+    //   return this.form.weight / ((this.form.height / 100) * (this.form.height / 100))
+    // },
+  },
+  methods: {
+    computeBmi(){
+    if (this.form.height && this.form.weight) {
+      console.log(333);
+      this.form.bmi = (this.form.weight / ((this.form.height / 100) * (this.form.height / 100))).toFixed(2)
+    }
+    },
+    cancel() {
+      this.$router.push({ path: "/archivesManagement/patient" });
+    },
+    confirm() {
+      this.$refs.FormRef.validate((valid) => {
+        if (valid) {
+          httpHospitalArchives.postArchives(this.form).then((res) => {
+            if (res.code === "OK") {
+              this.$router.push({ path: "/archivesManagement/patient" });
+            }
+          });
+        }
+      });
+    },
+  },
 };
 </script>
 
@@ -328,7 +367,7 @@ export default {
     width: 95%;
   }
 }
-.confirmBtn {
+.btn-box {
   text-align: center;
 }
 // “体质指数（BMI）计算公式=体重（千克）除以身高（平方米）。BMI指数是用体重公斤数除以身高米数平方得出的数字
