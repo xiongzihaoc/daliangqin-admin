@@ -109,9 +109,45 @@
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             placeholder="请输入医院电话"></el-input>
         </el-form-item>
-        <el-form-item label="医院地址"
-          prop="address">
-          <el-input v-model="editAddForm.address"
+
+        <el-form-item label="省"
+          prop="province">
+          <el-select style="width:100%;"
+            v-model="editAddForm.province"
+            @change="selectProvince"
+            placeholder="请选择省">
+            <el-option v-for="item in provinceList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="市"
+          prop="city">
+          <el-select style="width:100%;"
+            v-model="editAddForm.city"
+            @change="selectCity"
+            placeholder="请选择市">
+            <el-option v-for="item in cityList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="区"
+          prop="area">
+          <el-select style="width:100%;"
+            v-model="editAddForm.area"
+            placeholder="请选择区">
+            <el-option v-for="item in areaList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="详细地址"
+          prop="detail">
+          <el-input v-model="editAddForm.detail"
             placeholder="请输入医院地址"></el-input>
         </el-form-item>
         <el-form-item label="医院等级"
@@ -144,7 +180,12 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
-import { validatePhone, hospitalClassList,formatterElement } from "@/utils/index";
+import { httpPublicDistrictProvince } from "@/api/public/httpPublicDistrictProvince";
+import {
+  validatePhone,
+  hospitalClassList,
+  formatterElement,
+} from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -161,9 +202,10 @@ export default {
         contract: [
           { required: true, message: "请输入医院电话", trigger: "blur" },
         ],
-        address: [
-          { required: true, message: "请输入医院地址", trigger: "blur" },
-        ],
+        province: [{ required: true, message: "请选择省", trigger: "blur" }],
+        city: [{ required: true, message: "请选择市", trigger: "blur" }],
+        area: [{ required: true, message: "请选择区", trigger: "blur" }],
+        detail: [{ required: true, message: "请输入详细地址", trigger: "blur" }],
         hospitalType: [
           { required: true, message: "请选择医院等级", trigger: "blur" },
         ],
@@ -175,12 +217,19 @@ export default {
       },
       // 列表数据
       list: [],
+      // 省市区列表
+      provinceList: [],
+      cityList: [],
+      areaList: [],
       // 增改表单
       editAddForm: {
         name: "",
         contract: "",
-        address: "",
         hospitalType: "",
+        provinceAdCode: "",
+        cityAdCode: "",
+        areaAdCode: "",
+        detail: "",
       },
       // 表格数据
       tableHeaderBig: [
@@ -188,10 +237,20 @@ export default {
         { prop: "name", label: "医院名称" },
         { prop: "avatarUrl", label: "医院头像" },
         { prop: "contract", label: "医院电话" },
-        { prop: "address", label: "医院地址" },
-        { prop: "hospitalType", label: "医院等级" ,formatter:(row)=>{
-          return this.hospitalTypeFormatter(row)
-        }},
+        {
+          prop: "address",
+          label: "医院地址",
+          formatter: (row) => {
+            return this.addressFormatter(row);
+          },
+        },
+        {
+          prop: "hospitalType",
+          label: "医院等级",
+          formatter: (row) => {
+            return this.hospitalTypeFormatter(row);
+          },
+        },
       ],
       // 分页区域
       pageSize: 10,
@@ -204,6 +263,9 @@ export default {
   },
   created() {
     this.getList();
+  },
+  mounted() {
+    this.getProvinceList();
   },
   methods: {
     getList() {
@@ -219,6 +281,35 @@ export default {
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
+    },
+    // 获取省列表
+    getProvinceList() {
+      httpPublicDistrictProvince.getProvince().then((res) => {
+        this.provinceList = res.data;
+      });
+    },
+    // 获取市列表
+    getCityList(id) {
+      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
+        this.cityList = res.data;
+      });
+    },
+    // 获取区列表
+    getAreaList(id) {
+      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
+        this.areaList = res.data;
+      });
+    },
+    // 选择省加载下一级数据
+    selectProvince(id) {
+      this.editAddForm.city = "";
+      this.editAddForm.area = "";
+      this.areaList = [];
+      this.getCityList(id);
+    },
+    selectCity(id) {
+      this.editAddForm.area = "";
+      this.getAreaList(id);
     },
     /***** 搜索区域 *****/
     searchBtn() {
@@ -305,6 +396,9 @@ export default {
     /***** 表格格式化内容 *****/
     hospitalTypeFormatter(row) {
       return formatterElement.hospitalType[row.hospitalType];
+    },
+    addressFormatter(row) {
+      return row.province + row.area + row.city + row.detail;
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

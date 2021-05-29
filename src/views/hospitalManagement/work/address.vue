@@ -297,13 +297,14 @@ export default {
     },
     // 获取市列表
     getCityList(id) {
-      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
+      console.log(id);
+      httpPublicDistrictProvince.getArea({ adCode: id }).then((res) => {
         this.cityList = res.data;
       });
     },
     // 获取区列表
     getAreaList(id) {
-      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
+      httpPublicDistrictProvince.getArea({ adCode: id }).then((res) => {
         this.areaList = res.data;
       });
     },
