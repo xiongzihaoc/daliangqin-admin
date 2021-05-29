@@ -174,9 +174,19 @@
         </el-form-item>
         <el-form-item label="职位"
           prop="type">
-          <el-select v-model="editAddForm.type"
+          <el-select v-if="this.infoTitle === '新增'"
+            v-model="editAddForm.type"
             placeholder="请选择职位"
-            @change="TypeChange"
+            style="width: 100%">
+            <el-option v-for="item in doctorTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+          <el-select v-else
+            disabled
+            v-model="editAddForm.type"
+            placeholder="请选择职位"
             style="width: 100%">
             <el-option v-for="item in doctorTypeList"
               :key="item.id"
@@ -418,14 +428,6 @@ export default {
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
-    },
-    TypeChange(val) {
-      if (this.infoTitle === "编辑") {
-        if (val !== "PHYSICIAN") {
-          this.editAddForm.toDoctorUserId = "";
-        } else {
-        }
-      }
     },
     // 新增编辑确定
     editPageEnter() {
