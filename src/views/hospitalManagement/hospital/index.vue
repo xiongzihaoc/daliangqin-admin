@@ -54,7 +54,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
@@ -111,38 +110,38 @@
         </el-form-item>
 
         <el-form-item label="省"
-          prop="province">
+          prop="provinceAdcode">
           <el-select style="width:100%;"
-            v-model="editAddForm.province"
+            v-model="editAddForm.provinceAdcode"
             @change="selectProvince"
             placeholder="请选择省">
             <el-option v-for="item in provinceList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item.adcode"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="市"
-          prop="city">
+          prop="cityAdcode">
           <el-select style="width:100%;"
-            v-model="editAddForm.city"
+            v-model="editAddForm.cityAdcode"
             @change="selectCity"
             placeholder="请选择市">
             <el-option v-for="item in cityList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item.adcode"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="区"
-          prop="area">
+          prop="areaAdcode">
           <el-select style="width:100%;"
-            v-model="editAddForm.area"
+            v-model="editAddForm.areaAdcode"
             placeholder="请选择区">
             <el-option v-for="item in areaList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item.adcode"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="详细地址"
@@ -202,9 +201,9 @@ export default {
         contract: [
           { required: true, message: "请输入医院电话", trigger: "blur" },
         ],
-        province: [{ required: true, message: "请选择省", trigger: "blur" }],
-        city: [{ required: true, message: "请选择市", trigger: "blur" }],
-        area: [{ required: true, message: "请选择区", trigger: "blur" }],
+        provinceAdCode: [{ required: true, message: "请选择省", trigger: "blur" }],
+        cityAdCode: [{ required: true, message: "请选择市", trigger: "blur" }],
+        areaAdCode: [{ required: true, message: "请选择区", trigger: "blur" }],
         detail: [{ required: true, message: "请输入详细地址", trigger: "blur" }],
         hospitalType: [
           { required: true, message: "请选择医院等级", trigger: "blur" },
@@ -302,13 +301,13 @@ export default {
     },
     // 选择省加载下一级数据
     selectProvince(id) {
-      this.editAddForm.city = "";
-      this.editAddForm.area = "";
+      this.editAddForm.cityAdcode = "";
+      this.editAddForm.areaAdcode = "";
       this.areaList = [];
       this.getCityList(id);
     },
     selectCity(id) {
-      this.editAddForm.area = "";
+      this.editAddForm.areaAdcode = "";
       this.getAreaList(id);
     },
     /***** 搜索区域 *****/

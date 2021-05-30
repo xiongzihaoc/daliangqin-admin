@@ -43,7 +43,7 @@
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination background
+    <!-- <el-pagination background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -51,7 +51,7 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"></el-pagination>
+      class="el-pagination-style"></el-pagination> -->
     <!-- 增改页面 -->
     <!-- 查看收货地址 -->
     <el-dialog title="收货地址"
