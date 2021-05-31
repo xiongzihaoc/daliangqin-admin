@@ -2,10 +2,7 @@
   <div>
     <el-upload action="http://daliangqing-c-user.oss-cn-hangzhou.aliyuncs.com"
       :data="dataObj"
-      list-type="picture"
       :multiple="false"
-      :show-file-list="showFileList"
-      :file-list="fileList"
       :before-upload="beforeUpload"
       :on-remove="handleRemove"
       :on-success="handleUploadSuccess">
@@ -58,22 +55,7 @@ export default {
         return null;
       }
     },
-    fileList() {
-      return [
-        {
-          name: this.imageName,
-          url: this.imageUrl,
-        },
-      ];
-    },
-    showFileList: {
-      get: function () {
-        return (
-          this.value !== null && this.value !== "" && this.value !== undefined
-        );
-      },
-      set: function (newValue) {},
-    },
+
   },
   methods: {
     emitInput(val) {
@@ -106,13 +88,12 @@ export default {
       this.imageccc =
         "http://daliangqing-c-user.oss-cn-hangzhou.aliyuncs.com/" +
         this.dataObj.key;
-      console.log(this.imageccc);
-      this.showFileList = true;
-      this.fileList.pop();
-      this.fileList.push({
-        name: file.name,
-        url: file.url,
-      });
+      // this.showFileList = true;
+      // this.fileList.pop();
+      // this.fileList.push({
+      //   name: file.name,
+      //   url: file.url,
+      // });
       this.emitInput(this.imageccc);
     },
   },
