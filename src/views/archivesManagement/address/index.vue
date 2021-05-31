@@ -43,7 +43,7 @@
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <!-- <el-pagination background
+    <el-pagination background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -51,7 +51,7 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"></el-pagination> -->
+      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
     <!-- 查看收货地址 -->
     <el-dialog title="收货地址"
@@ -125,38 +125,38 @@
             placeholder="请输入电话"></el-input>
         </el-form-item>
         <el-form-item label="省"
-          prop="province">
+          prop="provinceAdCode">
           <el-select style="width:100%;"
-            v-model="editAddForm.province"
+            v-model="editAddForm.provinceAdCode"
             @change="selectProvince"
             placeholder="请选择省">
             <el-option v-for="item in provinceList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item.adcode"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="市"
-          prop="city">
+          prop="cityAdCode">
           <el-select style="width:100%;"
-            v-model="editAddForm.city"
+            v-model="editAddForm.cityAdCode"
             @change="selectCity"
             placeholder="请选择市">
             <el-option v-for="item in cityList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item.adcode"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="区"
-          prop="area">
+          prop="areaAdCode">
           <el-select style="width:100%;"
-            v-model="editAddForm.area"
+            v-model="editAddForm.areaAdCode"
             placeholder="请选择区">
             <el-option v-for="item in areaList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item.adcode"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="详细地址"
@@ -191,9 +191,9 @@ export default {
           { required: true, message: "请输入收货人名字", trigger: "blur" },
         ],
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
-        province: [{ required: true, message: "请选择省", trigger: "blur" }],
-        city: [{ required: true, message: "请选择市", trigger: "blur" }],
-        area: [{ required: true, message: "请选择区", trigger: "blur" }],
+        provinceAdCode: [{ required: true, message: "请选择省", trigger: "blur" }],
+        cityAdCode: [{ required: true, message: "请选择市", trigger: "blur" }],
+        areaAdCode: [{ required: true, message: "请选择区", trigger: "blur" }],
         detail: [
           { required: true, message: "请输入详细地址", trigger: "blur" },
         ],
@@ -214,9 +214,9 @@ export default {
       editAddForm: {
         name: "",
         phone: "",
-        province: "",
-        city: "",
-        area: "",
+        provinceAdCode: "",
+        cityAdCode: "",
+        areaAdCode: "",
         isDefault: false,
         detail: "",
         userId: "",
@@ -311,28 +311,26 @@ export default {
     /***** CRUD *****/
     // 查看收货地址按钮
     examineBtn(val) {
-      console.log(val);
-
       this.searchForm.userId = val.patientUserId;
       this.getEditList();
       this.examineDialogVisible = true;
     },
     // 选择省加载下一级数据
     selectProvince(id) {
-      this.editAddForm.city = "";
-      this.editAddForm.area = "";
+      this.editAddForm.cityAdCode = "";
+      this.editAddForm.areaAdCode = "";
       this.areaList = [];
       this.getCityList(id);
     },
     selectCity(id) {
-      this.editAddForm.area = "";
+      this.editAddForm.areaAdCode = "";
       this.getAreaList(id);
     },
     // 编辑
     editBtn(val) {
       console.log(val);
-      this.getCityList(val.province);
-      this.getAreaList(val.city);
+      this.getCityList(val.provinceAdCode);
+      this.getAreaList(val.cityAdCode);
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
@@ -360,7 +358,7 @@ export default {
     /***** 表格格式化内容区域 *****/
     // 收货地址省市区详细地址拼接
     addressFormatter(row) {
-      return row.provinceName + row.cityName + row.areaName + row.detail;
+      return row.province + row.city + row.area + row.detail;
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

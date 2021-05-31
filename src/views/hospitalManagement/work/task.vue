@@ -40,6 +40,7 @@
             type="datetimerange"
             value-format="timestamp"
             range-separator="至"
+            @change="searchTaskTimeChange"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             align="right">
@@ -346,7 +347,9 @@ export default {
           patientUserName: this.searchForm.patientUserName,
           type: this.searchForm.type,
           taskStatus: this.searchForm.status,
-          resource: this.searchForm.resource,
+          startTime: this.searchForm.startTime,
+          endTime: this.searchForm.endTime,
+          resourceType: this.searchForm.resource,
         })
         .then((res) => {
           this.list = res.data.elements;
@@ -366,10 +369,10 @@ export default {
       });
     },
     /***** 搜索区域 *****/
-    // 选择时间
-    selectTaskTime(val) {
-      this.editAddForm.startTime = val[0];
-      this.editAddForm.endTime = val[1];
+    // 搜索选择时间
+    searchTaskTimeChange(val) {
+      this.searchForm.startTime = val[0];
+      this.searchForm.endTime = val[1];
     },
     // 搜索
     searchBtn() {
@@ -381,6 +384,11 @@ export default {
       this.getList();
     },
     /***** CRUD *****/
+    // 选择时间
+    selectTaskTime(val) {
+      this.editAddForm.startTime = val[0];
+      this.editAddForm.endTime = val[1];
+    },
     // 新增
     add() {
       this.infoTitle = "新增";
@@ -391,7 +399,7 @@ export default {
     editBtn(val) {
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.$set(this.editAddForm,'taskTime',[val.startTime,val.endTime])
+      this.$set(this.editAddForm, "taskTime", [val.startTime, val.endTime]);
       this.editDialogVisible = true;
     },
     // 删除

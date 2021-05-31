@@ -110,9 +110,9 @@
         </el-form-item>
 
         <el-form-item label="省"
-          prop="provinceAdcode">
+          prop="provinceAdCode">
           <el-select style="width:100%;"
-            v-model="editAddForm.provinceAdcode"
+            v-model="editAddForm.provinceAdCode"
             @change="selectProvince"
             placeholder="请选择省">
             <el-option v-for="item in provinceList"
@@ -122,9 +122,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="市"
-          prop="cityAdcode">
+          prop="cityAdCode">
           <el-select style="width:100%;"
-            v-model="editAddForm.cityAdcode"
+            v-model="editAddForm.cityAdCode"
             @change="selectCity"
             placeholder="请选择市">
             <el-option v-for="item in cityList"
@@ -134,9 +134,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="区"
-          prop="areaAdcode">
+          prop="areaAdCode">
           <el-select style="width:100%;"
-            v-model="editAddForm.areaAdcode"
+            v-model="editAddForm.areaAdCode"
             placeholder="请选择区">
             <el-option v-for="item in areaList"
               :key="item.id"
@@ -201,10 +201,14 @@ export default {
         contract: [
           { required: true, message: "请输入医院电话", trigger: "blur" },
         ],
-        provinceAdCode: [{ required: true, message: "请选择省", trigger: "blur" }],
+        provinceAdCode: [
+          { required: true, message: "请选择省", trigger: "blur" },
+        ],
         cityAdCode: [{ required: true, message: "请选择市", trigger: "blur" }],
         areaAdCode: [{ required: true, message: "请选择区", trigger: "blur" }],
-        detail: [{ required: true, message: "请输入详细地址", trigger: "blur" }],
+        detail: [
+          { required: true, message: "请输入详细地址", trigger: "blur" },
+        ],
         hospitalType: [
           { required: true, message: "请选择医院等级", trigger: "blur" },
         ],
@@ -301,13 +305,14 @@ export default {
     },
     // 选择省加载下一级数据
     selectProvince(id) {
-      this.editAddForm.cityAdcode = "";
-      this.editAddForm.areaAdcode = "";
+      this.editAddForm.cityAdCode = "";
+      this.editAddForm.areaAdCode = "";
       this.areaList = [];
       this.getCityList(id);
     },
     selectCity(id) {
-      this.editAddForm.areaAdcode = "";
+      console.log(id);
+      this.editAddForm.areaAdCode = "";
       this.getAreaList(id);
     },
     /***** 搜索区域 *****/
@@ -328,7 +333,8 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
+      this.getCityList(val.provinceAdCode);
+      this.getAreaList(val.cityAdCode);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
