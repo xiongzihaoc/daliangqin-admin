@@ -65,9 +65,9 @@
         slot="fixed"
         fixed="left"
         type="selection"></el-table-column>
-      <!-- <el-table-column align="center"
+      <el-table-column align="center"
         slot="fixed"
-        fixed="left"
+        fixed="right"
         prop="imageUrl"
         label="轮播图图片">
         <template slot-scope="scope">
@@ -76,7 +76,7 @@
               :src="scope.row.imageUrl" />
           </div>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
@@ -156,8 +156,9 @@
         </el-form-item>
         <el-form-item label="轮播图图片"
           prop="imageUrl">
-          <el-input v-model.trim="editAddForm.imageUrl"
-            placeholder="暂时输入图片名称"></el-input>
+          <single-upload v-model="editAddForm.imageUrl" />
+          <!-- <el-input v-model.trim="editAddForm.imageUrl"
+            placeholder="暂时输入图片名称"></el-input> -->
         </el-form-item>
         <el-form-item label="呈现位置"
           prop="appType">
@@ -205,11 +206,13 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
+import singleUpload from "@/components/testUpload";
 import { httpAdminBanner } from "@/api/admin/httpAdminBanner";
 import { appTypeList, typeList } from "@/utils/index";
 export default {
   components: {
     EleTable,
+    singleUpload,
   },
   data() {
     return {
@@ -240,7 +243,6 @@ export default {
       tableHeaderBig: [
         { type: "index", label: "序号" },
         { prop: "title", label: "轮播图名称" },
-        { prop: "imageUrl", label: "轮播图图片" },
       ],
       // 新增编辑表单
       editAddForm: {

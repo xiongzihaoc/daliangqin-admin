@@ -7,7 +7,6 @@ import operationsRouter from './modules/operationsManagement'
 import hospitalRouter from './modules/hospitalManagement'
 import archivesRouter from './modules/archivesManagement'
 import systemRouter from './modules/systemManagement'
-import testRouter from './modules/testRouter'
 
 Vue.use(Router)
 
@@ -62,7 +61,6 @@ export const constantRoutes = [
   hospitalRouter,
   archivesRouter,
   systemRouter,
-  testRouter,
   // 404页面必须在最后 !!!
   {
     path: '*',

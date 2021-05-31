@@ -288,7 +288,6 @@ export default {
     // 是否默认
     statusChange(id) {
       httpAdminAddressPatient.putAddressDefault(id).then((res) => {
-        console.log(res);
         if (res.code === "OK") {
           this.$notify.success({
             title: res.message,
