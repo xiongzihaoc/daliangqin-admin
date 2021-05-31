@@ -1,13 +1,14 @@
 <template>
   <div>
-    <el-upload action="http://daliangqing-c-user.oss-cn-hangzhou.aliyuncs.com"
+    <el-upload action="https://cdn.daliangqing.com"
       :data="dataObj"
       :multiple="false"
       :before-upload="beforeUpload"
+      :show-file-list="false"
       :on-remove="handleRemove"
       :on-success="handleUploadSuccess">
-      <img v-if="imageccc"
-        :src="imageccc"
+      <img v-if="imageUrl"
+        :src="imageUrl"
         class="avatar">
       <i v-else
         style="border:1px dashed #ccc;border-radius:10px;"
@@ -21,6 +22,7 @@ export default {
   name: "SingleUpload",
   props: {
     value: String,
+    uploadType: String,
   },
   data() {
     return {
@@ -32,15 +34,13 @@ export default {
         dir: "",
         host: "",
       },
-      imageccc: "",
       infoList: [],
     };
   },
-  created() {
+  mounted() {
     httpAdminUploadApi
-      .postAliyunSignAdmin({ adminUpload: "BANNER" })
+      .postAliyunSignAdmin({ adminUpload: this.uploadType })
       .then((res) => {
-        console.log(res.data);
         this.infoList = res.data;
       });
   },
@@ -55,7 +55,6 @@ export default {
         return null;
       }
     },
-
   },
   methods: {
     emitInput(val) {
@@ -78,32 +77,31 @@ export default {
       _self.dataObj.signature = this.infoList.signature;
       _self.dataObj.ossaccessKeyId = this.infoList.accessId;
       _self.dataObj.key = this.infoList.key + this.getUUID();
-      // _self.dataObj.dir = this.infoList.key;
       _self.dataObj.host = this.infoList.endPoint;
-      console.log(_self.dataObj.host);
+      const isJPG = file.type === "image/jpeg";
+      const isGIF = file.type === "image/gif";
+      const isPNG = file.type === "image/png";
+      const isBMP = file.type === "image/bmp";
+      const isLt10M = file.size / 1024 / 1024 < 2;
+      if (!isJPG && !isGIF && !isPNG && !isBMP) {
+        this.$message.error("上传图片必须是JPG/GIF/PNG/BMP 格式!");
+      }
+      if (!isLt10M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      return (isJPG || isBMP || isGIF || isPNG) && isLt10M;
     },
     handleUploadSuccess(response, file, fileList) {
       console.log("上传成功...");
-      console.log(file);
-      this.imageccc =
-        "http://daliangqing-c-user.oss-cn-hangzhou.aliyuncs.com/" +
-        this.dataObj.key;
-      // this.showFileList = true;
-      // this.fileList.pop();
-      // this.fileList.push({
-      //   name: file.name,
-      //   url: file.url,
-      // });
-      this.emitInput(this.imageccc);
+      this.emitInput(
+        "https://cdn.daliangqing.com/" +
+          this.dataObj.key
+      );
     },
   },
 };
 </script>
 <style scoped>
-.avatar {
-  width: 100px;
-  height: 100px;
-}
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -117,14 +115,14 @@ export default {
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
+  width: 64px;
+  height: 64px;
+  line-height: 64px;
   text-align: center;
 }
 .avatar {
-  width: 178px;
-  height: 178px;
+  width: 64px;
+  height: 64px;
   display: block;
 }
 </style>

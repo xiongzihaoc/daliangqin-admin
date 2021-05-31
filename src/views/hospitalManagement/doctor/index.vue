@@ -83,11 +83,27 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
         type="selection"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        type="index"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="name"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="avatarUrl">
+        <template slot-scope="scope">
+          <img class="tableImg"
+            :src="scope.row.avatarUrl">
+        </template>
+      </el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
@@ -148,8 +164,8 @@
         </el-form-item>
         <el-form-item label="医生头像"
           prop="avatarUrl">
-          <el-input v-model="editAddForm.avatarUrl"
-            placeholder="请上传医生头像"></el-input>
+          <single-upload v-model="editAddForm.avatarUrl"
+            uploadType="AVATAR" />
         </el-form-item>
         <!-- 编辑阻止修改医生手机号-->
         <el-form-item label="手机号"
@@ -242,6 +258,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
+import singleUpload from "@/components/Upload";
 import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
 import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
 import {
@@ -255,6 +272,7 @@ import {
 export default {
   components: {
     EleTable,
+    singleUpload,
   },
   data() {
     return {
@@ -296,9 +314,6 @@ export default {
         goodAt: "",
       },
       tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "name", label: "姓名" },
-        { prop: "avatarUrl", label: "头像" },
         { prop: "phone", label: "手机号" },
         { prop: "idCard", label: "身份证号" },
         {

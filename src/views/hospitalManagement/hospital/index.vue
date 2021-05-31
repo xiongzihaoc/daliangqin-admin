@@ -44,12 +44,6 @@
         size="small"
         plain
         icon="el-icon-plus">新增</el-button>
-      <!-- <el-button @click="deleteMultiple"
-      type="danger"
-      class="tableAdd"
-      size="small"
-      plain
-      icon="el-icon-delete">删除</el-button> -->
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
@@ -58,6 +52,26 @@
         slot="fixed"
         fixed="left"
         type="selection"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        type="index"
+        label="序号"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="name"
+        label="医院名称"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="avatarUrl"
+        label="医院头像">
+        <template slot-scope="scope">
+          <img class="tableImg"
+            :src="scope.row.avatarUrl">
+        </template>
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -97,11 +111,10 @@
             placeholder="请输入医院名称"></el-input>
         </el-form-item>
         <el-form-item label="医院头像"
-          prop="name">
-          <el-input v-model="editAddForm.avatarUrl"
-            placeholder="请上传医院头像"></el-input>
+          prop="avatarUrl">
+          <single-upload v-model="editAddForm.avatarUrl"
+            uploadType="AVATAR" />
         </el-form-item>
-
         <el-form-item label="医院电话"
           prop="contract">
           <el-input v-model="editAddForm.contract"
@@ -177,6 +190,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
+import singleUpload from "@/components/Upload";
 import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
 import { httpPublicDistrictProvince } from "@/api/public/httpPublicDistrictProvince";
 import {
@@ -187,6 +201,7 @@ import {
 export default {
   components: {
     EleTable,
+    singleUpload,
   },
   data() {
     return {
@@ -235,9 +250,6 @@ export default {
       },
       // 表格数据
       tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "name", label: "医院名称" },
-        { prop: "avatarUrl", label: "医院头像" },
         { prop: "contract", label: "医院电话" },
         {
           prop: "address",
@@ -310,7 +322,6 @@ export default {
       this.getCityList(id);
     },
     selectCity(id) {
-      console.log(id);
       this.editAddForm.areaAdCode = "";
       this.getAreaList(id);
     },
@@ -332,6 +343,7 @@ export default {
     },
     // 编辑
     editBtn(val) {
+      console.log(val);
       this.getCityList(val.provinceAdCode);
       this.getAreaList(val.cityAdCode);
       this.infoTitle = "编辑";

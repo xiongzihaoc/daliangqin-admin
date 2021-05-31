@@ -156,9 +156,7 @@
         </el-form-item>
         <el-form-item label="轮播图图片"
           prop="imageUrl">
-          <single-upload v-model="editAddForm.imageUrl" />
-          <!-- <el-input v-model.trim="editAddForm.imageUrl"
-            placeholder="暂时输入图片名称"></el-input> -->
+          <single-upload v-model="editAddForm.imageUrl" uploadType="BANNER" />
         </el-form-item>
         <el-form-item label="呈现位置"
           prop="appType">
@@ -206,10 +204,11 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import singleUpload from "@/components/testUpload";
+import singleUpload from "@/components/Upload";
 import { httpAdminBanner } from "@/api/admin/httpAdminBanner";
 import { appTypeList, typeList } from "@/utils/index";
 export default {
+  
   components: {
     EleTable,
     singleUpload,

@@ -64,6 +64,32 @@
         type="selection"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
+        fixed="left"
+        type="index"
+        label="序号"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="title"
+        label="标题"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        :formatter="contentTypeFormatter"
+        prop="contentType"
+        label="内容类型"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        prop="coverUrl"
+        label="封面图">
+        <template slot-scope="scope">
+          <img class="tableImg"
+            :src="scope.row.coverUrl">
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
         fixed="right"
         prop="appTypes"
         label="呈现位置">
@@ -152,8 +178,8 @@
         </el-form-item>
         <el-form-item label="封面图"
           prop="coverUrl">
-          <el-input v-model.trim="editAddForm.coverUrl"
-            placeholder="请上传封面图"></el-input>
+          <single-upload v-model="editAddForm.coverUrl"
+            uploadType="NEWS" />
         </el-form-item>
         <el-form-item label="详情"
           prop="content">
@@ -186,8 +212,8 @@
         </el-form-item>
         <el-form-item label="发布头像"
           prop="avatarUrl">
-          <el-input v-model.trim="editAddForm.avatarUrl"
-            placeholder="请上传发布头像"></el-input>
+          <single-upload v-model="editAddForm.avatarUrl"
+            uploadType="AVATAR" />
         </el-form-item>
         <el-form-item label="发布人职位"
           prop="position">
@@ -232,6 +258,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
+import singleUpload from "@/components/Upload";
 import { httpAdminNews } from "@/api/admin/httpAdminNews";
 import Vue from "vue";
 import VueQuillEditor from "vue-quill-editor";
@@ -254,6 +281,7 @@ import {
 export default {
   components: {
     EleTable,
+    singleUpload,
   },
   data() {
     return {
@@ -306,16 +334,6 @@ export default {
         deletedStatus: "",
       },
       tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "title", label: "标题" },
-        {
-          prop: "contentType",
-          label: "内容类型",
-          formatter: (row) => {
-            return this.contentTypeFormatter(row);
-          },
-        },
-        { prop: "coverUrl", label: "封面图" },
         { prop: "author", label: "发布人" },
         {
           prop: "createTime",
@@ -493,6 +511,9 @@ export default {
     /***** 表格格式化内容 *****/
     contentTypeFormatter(row) {
       return formatterElement.contentType[row.contentType];
+    },
+    coverUrlFormatter(row) {
+      return `<div>3333</div>`;
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
