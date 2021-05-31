@@ -249,7 +249,13 @@ export default {
             return this.diabetesFormatter(row);
           },
         },
-        { prop: "transferStatus", label: "转诊状态" },
+        {
+          prop: "transferStatus",
+          label: "转诊状态",
+          formatter: (row) => {
+            return this.transferStatusFormatter(row);
+          },
+        },
 
         {
           prop: "confirmStartTime",
@@ -401,8 +407,9 @@ export default {
       return formatterElement.resource[row.resource];
     },
     // 状态
-    statusFormatter(row) {
-      return formatterElement.status[row.status];
+    transferStatusFormatter(row) {
+      console.log(row);
+      return formatterElement.transferStatus[row.transferStatus];
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

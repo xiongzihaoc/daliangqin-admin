@@ -15,8 +15,8 @@
           <!-- 用户头像 -->
           <el-form-item label="用户头像"
             prop="photoUrl">
-            <el-input v-model="form.photoUrl"
-              placeholder="请上传用户头像"></el-input>
+            <single-upload v-model="form.photoUrl"
+              uploadType="AVATAR" />
           </el-form-item>
           <!-- 手机号 -->
           <el-form-item label="手机号"
@@ -358,6 +358,7 @@
 </template>
 
 <script>
+import singleUpload from "@/components/Upload";
 import { httpAdminArchives } from "@/api/admin/httpAdminArchives";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
 import { httpPublicDistrictProvince } from "@/api/public/httpPublicDistrictProvince";
@@ -375,6 +376,9 @@ import {
   validateIdCard,
 } from "@/utils/index";
 export default {
+  components: {
+    singleUpload,
+  },
   data() {
     return {
       eatHabitsList,
@@ -438,28 +442,28 @@ export default {
         stayUpLate: "",
         otherDisease: "",
         // 体格检查
-        height: "160",
-        weight: "60",
+        height: 160,
+        weight: 60,
         bmi: 0,
-        waistline: "60",
-        hips: "80",
+        waistline: 60,
+        hips: 80,
         bloodPressure: {
-          shrinkHighPressure: "140",
-          diastoleLowPressure: "90",
+          shrinkHighPressure: 140,
+          diastoleLowPressure: 90,
         },
-        heartRate: "60",
+        heartRate: 60,
         // 实验室检查
         bloodType: "",
-        fastingBloodGlucose: "3.9",
+        fastingBloodGlucose: 3.9,
         bloodLipids: {
-          totalCholesterol: "3.0",
-          triglycerides: "1.0",
-          hdlCholesterol: "1.0",
-          ldlCholesterol: "1.0",
+          totalCholesterol: 3.0,
+          triglycerides: 1,
+          hdlCholesterol: 1,
+          ldlCholesterol: 1,
         },
-        creatinine: "60",
-        uricAcid: "300",
-        serumPotassium: "3.5",
+        creatinine: 60,
+        uricAcid: 300,
+        serumPotassium: 3.5,
         liverFunction: "",
         kidneyFunction: "",
         carotidPlaque: "",

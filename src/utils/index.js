@@ -321,6 +321,8 @@ export const bloodTypeList = [
   { id: 2, label: "B型", value: "B" },
   { id: 3, label: "AB型", value: "AB" },
   { id: 4, label: "0型", value: "O" },
+  { id: 5, label: "RH阴性", value: "RH_N" },
+  { id: 6, label: "RH阳性", value: "RH_Y" },
 ]
 
 // 所有枚举类型转义
@@ -405,5 +407,11 @@ export const formatterElement = {
     HEALTH: "良好",
     SLIGHT: "轻微",
     SERIOUS: "严重",
+  },
+  transferStatus: {
+    WAIT: "待转诊确认",
+    ING: "转诊中",
+    END: "已转诊",
+    NONE: "未转诊",
   }
 }
