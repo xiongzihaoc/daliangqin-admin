@@ -31,7 +31,6 @@ export default {
         signature: "",
         key: "",
         ossaccessKeyId: "",
-        dir: "",
         host: "",
       },
       infoList: [],

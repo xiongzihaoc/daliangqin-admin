@@ -14,8 +14,8 @@
           </el-form-item>
           <!-- 用户头像 -->
           <el-form-item label="用户头像"
-            prop="avatarUrl">
-            <el-input v-model="form.avatarUrl"
+            prop="photoUrl">
+            <el-input v-model="form.photoUrl"
               placeholder="请上传用户头像"></el-input>
           </el-form-item>
           <!-- 手机号 -->
@@ -69,8 +69,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="详细地址"
-            prop="detail">
-            <el-input v-model="form.detail"
+            prop="address">
+            <el-input v-model="form.address"
               placeholder="请输入医院地址"></el-input>
           </el-form-item>
           <!-- 对应医师 -->
@@ -99,20 +99,20 @@
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="是否吸烟"
-            prop="isSmoke">
-            <el-select v-model="form.isSmoke"
-              placeholder="请选择是否吸烟">
+          <el-form-item label="吸烟习惯"
+            prop="smokeType">
+            <el-select v-model="form.smokeType"
+              placeholder="请选择吸烟习惯">
               <el-option v-for="item in isSmokeList"
                 :key="item.id"
                 :label="item.label"
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="是否饮酒"
-            prop="isDrink">
-            <el-select v-model="form.isDrink"
-              placeholder="请选择是否饮酒">
+          <el-form-item label="饮酒习惯"
+            prop="drinkType">
+            <el-select v-model="form.drinkType"
+              placeholder="请选择饮酒习惯">
               <el-option v-for="item in isSmokeList"
                 :key="item.id"
                 :label="item.label"
@@ -194,7 +194,7 @@
             <el-input v-model="form.waistline"
               oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入腰围"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">kg</i></el-input>
+                style="font-style:normal;margin-right: 10px;">cm</i></el-input>
           </el-form-item>
           <el-form-item label="臀围"
             prop="hips">
@@ -392,7 +392,7 @@ export default {
       areaList: [],
       FormRules: {
         name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
-        avatarUrl: [
+        photoUrl: [
           { required: true, message: "请上传用户头像", trigger: "blur" },
         ],
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
@@ -405,7 +405,7 @@ export default {
         ],
         cityAdCode: [{ required: true, message: "请选择市", trigger: "blur" }],
         areaAdCode: [{ required: true, message: "请选择区", trigger: "blur" }],
-        detail: [
+        address: [
           { required: true, message: "请输入详细地址", trigger: "blur" },
         ],
         doctorUserId: [
@@ -419,18 +419,18 @@ export default {
       form: {
         // 基本信息
         name: "",
-        avatarUrl: "",
+        photoUrl: "",
         phone: "",
         idCard: "",
         provinceAdCode: "",
         cityAdCode: "",
         areaAdCode: "",
-        detail: "",
+        address: "",
         doctorUserId: "",
         // 基本检查
         eatHabits: [],
-        isSmoke: "",
-        isDrink: "",
+        smokeType: "",
+        drinkType: "",
         stayUpLate: "",
         sit: "",
         exercise: "",
@@ -438,36 +438,38 @@ export default {
         stayUpLate: "",
         otherDisease: "",
         // 体格检查
-        height: "",
-        weight: "",
+        height: "160",
+        weight: "60",
         bmi: 0,
-        waistline: "",
-        hips: "",
+        waistline: "60",
+        hips: "80",
         bloodPressure: {
-          shrinkHighPressure: "",
-          diastoleLowPressure: "",
+          shrinkHighPressure: "140",
+          diastoleLowPressure: "90",
         },
-        heartRate: "",
+        heartRate: "60",
         // 实验室检查
         bloodType: "",
-        fastingBloodGlucose: "",
+        fastingBloodGlucose: "3.9",
         bloodLipids: {
-          totalCholesterol: "",
-          triglycerides: "",
-          hdlCholesterol: "",
-          ldlCholesterol: "",
+          totalCholesterol: "3.0",
+          triglycerides: "1.0",
+          hdlCholesterol: "1.0",
+          ldlCholesterol: "1.0",
         },
-        creatinine: "",
-        uricAcid: "",
-        serumPotassium: "",
-        uricAcid: "",
+        creatinine: "60",
+        uricAcid: "300",
+        serumPotassium: "3.5",
         liverFunction: "",
         kidneyFunction: "",
         carotidPlaque: "",
       },
     };
   },
-  created() {},
+  created() {
+    this.computeBmi();
+  },
+  computed: {},
   mounted() {
     this.getTodoctorList();
     this.getProvinceList();

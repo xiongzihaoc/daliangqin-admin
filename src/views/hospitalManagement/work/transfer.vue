@@ -10,7 +10,7 @@
         <el-form-item label="医生姓名"
           align="left"
           prop="doctorUserName">
-          <el-input v-model="searchForm.doctorUserName"
+          <el-input v-model="searchForm.toDoctorUserName"
             size="small"
             placeholder="请输入医生姓名"></el-input>
         </el-form-item>
@@ -202,7 +202,7 @@ export default {
         taskTime: [{ required: true, message: "请选择时间", trigger: "blur" }],
       },
       searchForm: {
-        doctorUserName: "",
+        toDoctorUserName: "",
         patientUserName: "",
         type: "",
         startTime: "",
