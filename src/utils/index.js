@@ -302,11 +302,27 @@ export const liverFunction = [
   { id: 1, label: "异常", value: "ABNORMAL" },
   { id: 2, label: "正常", value: "NORMAL" },
 ]
-//  肝肾功能情况
+
+//  有无情况
 export const carotidPlaque = [
   { id: 1, label: "有", value: "HAVE" },
   { id: 2, label: "无", value: "NONE" },
 ]
+
+//  静坐时长
+export const sitType = [
+  { id: 1, label: "小于八小时", value: "BEFORE_EIGHT" },
+  { id: 2, label: "大于八小时", value: "AFTER_EIGHT" },
+]
+
+// 血型类型
+export const bloodTypeList = [
+  { id: 1, label: "A型", value: "A" },
+  { id: 2, label: "B型", value: "B" },
+  { id: 3, label: "AB型", value: "AB" },
+  { id: 4, label: "0型", value: "O" },
+]
+
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式

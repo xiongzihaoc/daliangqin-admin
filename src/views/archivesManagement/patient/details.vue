@@ -6,6 +6,87 @@
       label-width="100px">
       <div class="content-box">
         <div>
+          <h3>基本资料</h3>
+          <el-form-item label="用户姓名"
+            prop="name">
+            <el-input v-model="form.name"
+              placeholder="请输入用户姓名"></el-input>
+          </el-form-item>
+          <!-- 用户头像 -->
+          <el-form-item label="用户头像"
+            prop="avatarUrl">
+            <el-input v-model="form.avatarUrl"
+              placeholder="请上传用户头像"></el-input>
+          </el-form-item>
+          <!-- 手机号 -->
+          <el-form-item label="手机号"
+            prop="phone">
+            <el-input v-model="form.phone"
+              placeholder="请输入该用户手机号"></el-input>
+          </el-form-item>
+          <!-- 身份证 -->
+          <el-form-item label="身份证号"
+            prop="idCard">
+            <el-input v-model="form.idCard"
+              placeholder="请输入该用户身份证号"></el-input>
+          </el-form-item>
+          <!-- 家庭住址 -->
+          <!-- <el-form-item label="家庭住址"
+            prop="address">
+            <el-input v-model="form.address"
+              placeholder="请输入家庭住址"></el-input>
+          </el-form-item> -->
+          <el-form-item label="省"
+            prop="provinceAdCode">
+            <el-select v-model="form.provinceAdCode"
+              @change="selectProvince"
+              placeholder="请选择省">
+              <el-option v-for="item in provinceList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.adcode"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="市"
+            prop="cityAdCode">
+            <el-select v-model="form.cityAdCode"
+              @change="selectCity"
+              placeholder="请选择市">
+              <el-option v-for="item in cityList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.adcode"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="区"
+            prop="areaAdCode">
+            <el-select v-model="form.areaAdCode"
+              placeholder="请选择区">
+              <el-option v-for="item in areaList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.adcode"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="详细地址"
+            prop="detail">
+            <el-input v-model="form.detail"
+              placeholder="请输入医院地址"></el-input>
+          </el-form-item>
+          <!-- 对应医师 -->
+          <el-form-item label="对应医师"
+            prop="doctorUserId">
+            <el-select v-model="form.doctorUserId"
+              filterable
+              placeholder="请输入内容搜索">
+              <el-option v-for="item in toDoctorList"
+                :key="item.id"
+                :value="item.id"
+                :label="item.name"></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
+        <div>
           <h3>基本检查</h3>
           <el-form-item label="饮食习惯"
             prop="eatHabits">
@@ -50,8 +131,13 @@
           </el-form-item>
           <el-form-item label="静坐时长"
             prop="sit">
-            <el-input v-model="form.sit"
-              placeholder="请选择静坐时长"></el-input>
+            <el-select v-model="form.sit"
+              placeholder="请选择静坐时长">
+              <el-option v-for="item in sitType"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="运动习惯"
             prop="exercise">
@@ -119,14 +205,14 @@
           </el-form-item>
           <el-form-item label="收缩压/高压"
             prop="shrinkHighPressure">
-            <el-input v-model="form.shrinkHighPressure"
+            <el-input v-model="form.bloodPressure.shrinkHighPressure"
               oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入收缩压/高压"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="舒张压/低压"
             prop="diastoleLowPressure">
-            <el-input v-model="form.diastoleLowPressure"
+            <el-input v-model="form.bloodPressure.diastoleLowPressure"
               oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入舒张压/低压"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
@@ -143,8 +229,13 @@
           <h3>实验室检查</h3>
           <el-form-item label="血型"
             prop="bloodType">
-            <el-input v-model="form.bloodType"
-              placeholder="请选择血型"></el-input>
+            <el-select v-model="form.bloodType"
+              placeholder="请选择血型">
+              <el-option v-for="item in bloodTypeList"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="空腹血糖"
             prop="fastingBloodGlucose">
@@ -155,28 +246,28 @@
           </el-form-item>
           <el-form-item label="总胆固醇"
             prop="totalCholesterol">
-            <el-input v-model="form.totalCholesterol"
+            <el-input v-model="form.bloodLipids.totalCholesterol"
               oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入总胆固醇"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="甘油三酯"
             prop="triglycerides">
-            <el-input v-model="form.triglycerides"
+            <el-input v-model="form.bloodLipids.triglycerides"
               oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入甘油三酯"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="高密度脂蛋白胆固醇"
             prop="hdlCholesterol">
-            <el-input v-model="form.hdlCholesterol"
+            <el-input v-model="form.bloodLipids.hdlCholesterol"
               oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入高密度脂蛋白胆固醇"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="低密度脂蛋白胆固醇"
             prop="ldlCholesterol">
-            <el-input v-model="form.ldlCholesterol"
+            <el-input v-model="form.bloodLipids.ldlCholesterol"
               oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入低密度脂蛋白胆固醇"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
@@ -267,7 +358,9 @@
 </template>
 
 <script>
-import { httpHospitalArchives } from "@/api/hospital/httpHospitalArchives";
+import { httpAdminArchives } from "@/api/admin/httpAdminArchives";
+import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
+import { httpPublicDistrictProvince } from "@/api/public/httpPublicDistrictProvince";
 import {
   eatHabitsList,
   isSmokeList,
@@ -276,6 +369,10 @@ import {
   chronicDiseaseList,
   liverFunction,
   carotidPlaque,
+  sitType,
+  bloodTypeList,
+  validatePhone,
+  validateIdCard,
 } from "@/utils/index";
 export default {
   data() {
@@ -287,12 +384,50 @@ export default {
       chronicDiseaseList,
       liverFunction,
       carotidPlaque,
+      sitType,
+      bloodTypeList,
+      // 省市区列表
+      provinceList: [],
+      cityList: [],
+      areaList: [],
       FormRules: {
+        name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
+        avatarUrl: [
+          { required: true, message: "请上传用户头像", trigger: "blur" },
+        ],
+        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
+        idCard: [
+          { required: true, trigger: "blur", validator: validateIdCard },
+        ],
+        type: [{ required: true, message: "请选择职位", trigger: "blur" }],
+        provinceAdCode: [
+          { required: true, message: "请选择省", trigger: "blur" },
+        ],
+        cityAdCode: [{ required: true, message: "请选择市", trigger: "blur" }],
+        areaAdCode: [{ required: true, message: "请选择区", trigger: "blur" }],
+        detail: [
+          { required: true, message: "请输入详细地址", trigger: "blur" },
+        ],
+        doctorUserId: [
+          { required: true, message: "请选择对应医师", trigger: "blur" },
+        ],
         height: [{ required: true, message: "请输入身高", trigger: "blur" }],
         weight: [{ required: true, message: "请输入体重", trigger: "blur" }],
       },
+      // 转诊医生列表
+      toDoctorList: [],
       form: {
         // 基本信息
+        name: "",
+        avatarUrl: "",
+        phone: "",
+        idCard: "",
+        provinceAdCode: "",
+        cityAdCode: "",
+        areaAdCode: "",
+        detail: "",
+        doctorUserId: "",
+        // 基本检查
         eatHabits: [],
         isSmoke: "",
         isDrink: "",
@@ -308,16 +443,20 @@ export default {
         bmi: 0,
         waistline: "",
         hips: "",
-        shrinkHighPressure: "",
-        diastoleLowPressure: "",
+        bloodPressure: {
+          shrinkHighPressure: "",
+          diastoleLowPressure: "",
+        },
         heartRate: "",
         // 实验室检查
         bloodType: "",
         fastingBloodGlucose: "",
-        totalCholesterol: "",
-        triglycerides: "",
-        hdlCholesterol: "",
-        ldlCholesterol: "",
+        bloodLipids: {
+          totalCholesterol: "",
+          triglycerides: "",
+          hdlCholesterol: "",
+          ldlCholesterol: "",
+        },
         creatinine: "",
         uricAcid: "",
         serumPotassium: "",
@@ -329,17 +468,55 @@ export default {
     };
   },
   created() {},
-  computed: {
-    // bmi(){
-    //   return this.form.weight / ((this.form.height / 100) * (this.form.height / 100))
-    // },
+  mounted() {
+    this.getTodoctorList();
+    this.getProvinceList();
   },
   methods: {
-    computeBmi(){
-    if (this.form.height && this.form.weight) {
-      console.log(333);
-      this.form.bmi = (this.form.weight / ((this.form.height / 100) * (this.form.height / 100))).toFixed(2)
-    }
+    // 获取省列表
+    getProvinceList() {
+      httpPublicDistrictProvince.getProvince().then((res) => {
+        this.provinceList = res.data;
+      });
+    },
+    // 获取市列表
+    getCityList(id) {
+      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
+        this.cityList = res.data;
+      });
+    },
+    // 获取区列表
+    getAreaList(id) {
+      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
+        this.areaList = res.data;
+      });
+    },
+    // 选择省加载下一级数据
+    selectProvince(id) {
+      this.form.cityAdCode = "";
+      this.form.areaAdCode = "";
+      this.areaList = [];
+      this.getCityList(id);
+    },
+    selectCity(id) {
+      this.form.areaAdCode = "";
+      this.getAreaList(id);
+    },
+    // 获取转诊医生列表
+    getTodoctorList() {
+      httpAdminPatient.getPatientTransfer().then((res) => {
+        console.log(res);
+        this.toDoctorList = res.data.elements;
+      });
+    },
+    // 根据身高体重计算BMI
+    computeBmi() {
+      if (this.form.height && this.form.weight) {
+        this.form.bmi = (
+          this.form.weight /
+          ((this.form.height / 100) * (this.form.height / 100))
+        ).toFixed(2);
+      }
     },
     cancel() {
       this.$router.push({ path: "/archivesManagement/patient" });
@@ -347,7 +524,8 @@ export default {
     confirm() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          httpHospitalArchives.postArchives(this.form).then((res) => {
+          httpAdminArchives.postArchives(this.form).then((res) => {
+            console.log(res);
             if (res.code === "OK") {
               this.$router.push({ path: "/archivesManagement/patient" });
             }
@@ -370,5 +548,4 @@ export default {
 .btn-box {
   text-align: center;
 }
-// “体质指数（BMI）计算公式=体重（千克）除以身高（平方米）。BMI指数是用体重公斤数除以身高米数平方得出的数字
 </style>

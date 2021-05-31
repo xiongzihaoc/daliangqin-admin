@@ -108,7 +108,6 @@
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             placeholder="请输入医院电话"></el-input>
         </el-form-item>
-
         <el-form-item label="省"
           prop="provinceAdCode">
           <el-select style="width:100%;"

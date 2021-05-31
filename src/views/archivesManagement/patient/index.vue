@@ -241,8 +241,6 @@ export default {
         { prop: "healthScore", label: "两慢指数" },
         { prop: "doctorUserName", label: "对应医师" },
       ],
-      // 医院列表
-      hospitalList: [],
       // 转诊医生列表
       toDoctorList: [],
       // 分页区域
