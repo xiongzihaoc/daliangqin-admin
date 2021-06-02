@@ -324,6 +324,13 @@ export const bloodTypeList = [
   { id: 5, label: "RH阴性", value: "RH_N" },
   { id: 6, label: "RH阳性", value: "RH_Y" },
 ]
+// 转诊状态列表
+export const transferStatusList = [
+  { id: 1, label: "待转诊确认", value: "WAIT" },
+  { id: 2, label: "转诊中", value: "ING" },
+  { id: 3, label: "已转诊", value: "END" },
+  { id: 4, label: "未转诊", value: "NONE" },
+]
 
 // 所有枚举类型转义
 export const formatterElement = {
