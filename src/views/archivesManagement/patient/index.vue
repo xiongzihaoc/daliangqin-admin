@@ -92,10 +92,15 @@
         prop="avatarUrl"
         label="头像">
         <template slot-scope="scope">
-          <img v-if="scope.row.avatarUrl"
+          <el-image v-if="scope.row.avatarUrl"
             :src="scope.row.avatarUrl"
             class="tableImg"
             alt="">
+            <div slot="error"
+              class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
         </template>
       </el-table-column>
       <!-- 操作 -->

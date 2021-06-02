@@ -90,12 +90,11 @@
         <li v-for="item in messageList"
           :key="item.id">
           <!-- 病人信息 -->
-          <div v-if="item.leaveContent"
+          <div v-if="!item.isSelf"
             style="display:flex">
             <div style="display:flex;">
-              <img style="width:64px;height:64px;border-radius:50%;background:red;"
-                :src="item.formAvatarUrl"
-                alt="">
+              <img style="width:64px;height:64px;border-radius:50%;"
+                :src="item.fromAvatarUrl">
             </div>
             <div style="padding-left:10px;margin-bottom:15px;">
               <div>{{item.fromUserName}}</div>
@@ -104,27 +103,28 @@
             </div>
           </div>
           <!-- 医生信息 -->
-          <div v-if="item.leaveContent"
+          <div v-else
             style="display:flex;justify-content: flex-end;">
-            <div style="padding-right:10px;margin-bottom:15px;color:blue;">
+            <div style="padding-right:10px;margin-bottom:15px;">
               <div style="text-align:right">{{item.fromUserName}}</div>
               <div style="text-align:right;margin:5px 0;">{{parseTime(item.createTime).slice(6)}}</div>
-              <div style="max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">77777777777777777777777777777777</div>
+              <div style="max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
             </div>
             <div>
-              <img style="width:64px;height:64px;border-radius:50%;background:blue;"
-                :src="item.formAvatarUrl"
+              <img style="width:64px;height:64px;border-radius:50%;"
+                :src="item.fromAvatarUrl"
                 alt="">
             </div>
           </div>
         </li>
       </ul>
       <el-form ref="FormRef"
+        :rules="FormRules"
         :model="editAddForm">
-        <el-form-item prop="contentType">
+        <el-form-item prop="leaveContent">
           <el-input type="textarea"
             :rows="5"
-            v-model="searchForm.contentType"
+            v-model="editAddForm.leaveContent"
             size="small"
             placeholder="请输入回复内容"></el-input>
         </el-form-item>
@@ -140,7 +140,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { validatePhone, parseTime } from "@/utils/index";
+import { parseTime } from "@/utils/index";
 import { httpAdminChat } from "@/api/admin/httpAdminChat";
 export default {
   components: {
@@ -151,8 +151,8 @@ export default {
       parseTime,
       // 表单验证规则
       FormRules: {
-        adminPhone: [
-          { required: true, trigger: "blur", validator: validatePhone },
+        leaveContent: [
+          { required: true, trigger: "blur", message: "请输入回复内容" },
         ],
       },
       // 搜索表单
@@ -172,7 +172,7 @@ export default {
       editAddForm: {
         contentType: "TEXT",
         doctorUserId: "",
-        leaveContent: "测试留言内容",
+        leaveContent: "",
         patientUserId: "",
       },
       // 表格数据
@@ -227,10 +227,15 @@ export default {
           this.total = res.data.totalSize;
         });
     },
-    getChatSubscribe(id) {
-      httpAdminChat.getChatSubscribe({ sessionId: id }).then((res) => {
-        this.messageList = res.data.elements;
-      });
+    getChatSubscribe(val) {
+      httpAdminChat
+        .getChatSubscribe({
+          sessionId: val.sessionId,
+          doctorUserId: val.doctorUserId,
+        })
+        .then((res) => {
+          this.messageList = res.data.elements;
+        });
     },
     // 日期控件选择事件
     selectLeaveTime(val) {
@@ -254,13 +259,14 @@ export default {
     /***** 增删改 *****/
     // 查看
     examineBtn(val) {
-      console.log(val);
-      this.getChatSubscribe(val.sessionId);
+      this.getChatSubscribe(val);
       this.editAddForm.doctorUserId = val.doctorUserId;
       this.editAddForm.patientUserId = val.patientUserId;
       this.editDialogVisible = true;
     },
-    editDialogClosed() {},
+    editDialogClosed() {
+      this.$refs.FormRef.resetFields();
+    },
     // 新增编辑确定
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
