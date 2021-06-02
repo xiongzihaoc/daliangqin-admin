@@ -1,13 +1,6 @@
 import request from '@/utils/request'
 
 export const httpAdminArchives = {
-    getArchives(data) {
-        return request({
-            url: 'archives',
-            method: 'get',
-            params: data,
-        })
-    },
     postArchives(data) {
         return request({
             url: 'archives',
@@ -16,17 +9,11 @@ export const httpAdminArchives = {
 
         })
     },
-    putArchives(data) {
-        return request({
-            url: 'archives/' + data.id,
-            method: 'put',
-            data,
-        })
-    },
-    deleteArchives(id) {
+    putArchives(data, id) {
         return request({
             url: 'archives/' + id,
-            method: 'delete',
+            method: 'put',
+            data,
         })
     },
 }

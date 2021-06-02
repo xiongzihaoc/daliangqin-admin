@@ -383,7 +383,7 @@ export default {
       this.searchForm = {};
       this.getList();
     },
-    /***** CRUD *****/
+    /***** 增删改 *****/
     // 选择时间
     selectTaskTime(val) {
       this.editAddForm.startTime = val[0];

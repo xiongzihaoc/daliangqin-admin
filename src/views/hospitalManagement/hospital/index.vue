@@ -334,7 +334,7 @@ export default {
       this.searchForm = {};
       this.getList();
     },
-    /***** CRUD *****/
+    /***** 增删改 *****/
     // 新增
     add() {
       this.infoTitle = "新增";

@@ -136,7 +136,7 @@ export default {
           this.versionList = res.data.elements;
         });
     },
-    /***** CRUD *****/
+    /***** 增删改 *****/
     // 编辑
     editBtn(val) {
       console.log(val);

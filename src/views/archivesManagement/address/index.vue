@@ -307,7 +307,7 @@ export default {
       this.searchForm = {};
       this.getList();
     },
-    /***** CRUD *****/
+    /***** 增删改 *****/
     // 查看收货地址按钮
     examineBtn(val) {
       this.searchForm.userId = val.patientUserId;

@@ -8,37 +8,31 @@
         <div>
           <h3>基本资料</h3>
           <el-form-item label="用户姓名"
-            prop="name">
-            <el-input v-model="form.name"
+            prop="basic.name">
+            <el-input v-model="form.basic.name"
               placeholder="请输入用户姓名"></el-input>
           </el-form-item>
           <!-- 用户头像 -->
           <el-form-item label="用户头像"
-            prop="photoUrl">
-            <single-upload v-model="form.photoUrl"
+            prop="basic.photoUrl">
+            <single-upload v-model="form.basic.photoUrl"
               uploadType="AVATAR" />
           </el-form-item>
           <!-- 手机号 -->
           <el-form-item label="手机号"
-            prop="phone">
-            <el-input v-model="form.phone"
+            prop="basic.phone">
+            <el-input v-model="form.basic.phone"
               placeholder="请输入该用户手机号"></el-input>
           </el-form-item>
           <!-- 身份证 -->
           <el-form-item label="身份证号"
-            prop="idCard">
-            <el-input v-model="form.idCard"
+            prop="basic.idCard">
+            <el-input v-model="form.basic.idCard"
               placeholder="请输入该用户身份证号"></el-input>
           </el-form-item>
-          <!-- 家庭住址 -->
-          <!-- <el-form-item label="家庭住址"
-            prop="address">
-            <el-input v-model="form.address"
-              placeholder="请输入家庭住址"></el-input>
-          </el-form-item> -->
           <el-form-item label="省"
-            prop="provinceAdCode">
-            <el-select v-model="form.provinceAdCode"
+            prop="basic.provinceAdCode">
+            <el-select v-model="form.basic.provinceAdCode"
               @change="selectProvince"
               placeholder="请选择省">
               <el-option v-for="item in provinceList"
@@ -48,8 +42,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="市"
-            prop="cityAdCode">
-            <el-select v-model="form.cityAdCode"
+            prop="basic.cityAdCode">
+            <el-select v-model="form.basic.cityAdCode"
               @change="selectCity"
               placeholder="请选择市">
               <el-option v-for="item in cityList"
@@ -59,8 +53,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="区"
-            prop="areaAdCode">
-            <el-select v-model="form.areaAdCode"
+            prop="basic.areaAdCode">
+            <el-select v-model="form.basic.areaAdCode"
               placeholder="请选择区">
               <el-option v-for="item in areaList"
                 :key="item.id"
@@ -69,14 +63,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="详细地址"
-            prop="address">
-            <el-input v-model="form.address"
+            prop="basic.address">
+            <el-input v-model="form.basic.address"
               placeholder="请输入医院地址"></el-input>
           </el-form-item>
           <!-- 对应医师 -->
           <el-form-item label="对应医师"
-            prop="doctorUserId">
-            <el-select v-model="form.doctorUserId"
+            prop="basic.doctorUserId">
+            <el-select v-model="form.basic.doctorUserId"
               filterable
               placeholder="请输入内容搜索">
               <el-option v-for="item in toDoctorList"
@@ -277,7 +271,7 @@
             <el-input v-model="form.creatinine"
               oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入肌酐"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">umol/L</i></el-input>
+                style="font-style:normal;margin-right: 10px;">μmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="尿酸"
             prop="uricAcid">
@@ -422,15 +416,17 @@ export default {
       toDoctorList: [],
       form: {
         // 基本信息
-        name: "",
-        photoUrl: "",
-        phone: "",
-        idCard: "",
-        provinceAdCode: "",
-        cityAdCode: "",
-        areaAdCode: "",
-        address: "",
-        doctorUserId: "",
+        basic: {
+          name: "",
+          photoUrl: "",
+          phone: "",
+          idCard: "",
+          provinceAdCode: "",
+          cityAdCode: "",
+          areaAdCode: "",
+          address: "",
+          doctorUserId: "",
+        },
         // 基本检查
         eatHabits: [],
         smokeType: "",
@@ -471,14 +467,32 @@ export default {
     };
   },
   created() {
-    this.computeBmi();
+    // 判断是编辑还是新增
+    if (this.$route.query.type === "edit") {
+      this.getList();
+    } else {
+    }
   },
-  computed: {},
   mounted() {
+    this.computeBmi();
     this.getTodoctorList();
     this.getProvinceList();
   },
   methods: {
+    getList() {
+      httpAdminPatient
+        .getPatient({ userId: this.$route.query.id })
+        .then((res) => {
+          // 回显表单数据
+          console.log(res);
+          this.form = res.data.elements[0].archivesMongo;
+          this.form.basic = res.data.elements[0];
+          this.form.basic.photoUrl = res.data.elements[0].avatarUrl;
+          // 回显市区
+          this.getCityList(res.data.elements[0].provinceAdCode);
+          this.getAreaList(res.data.elements[0].cityAdCode);
+        });
+    },
     // 获取省列表
     getProvinceList() {
       httpPublicDistrictProvince.getProvince().then((res) => {
@@ -530,12 +544,23 @@ export default {
     confirm() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          httpAdminArchives.postArchives(this.form).then((res) => {
-            console.log(res);
-            if (res.code === "OK") {
-              this.$router.push({ path: "/archivesManagement/patient" });
-            }
-          });
+          // 编辑
+          if (this.$route.query.type === "edit") {
+            httpAdminArchives
+              .putArchives(this.form, this.$route.query.id)
+              .then((res) => {
+                if (res.code === "OK") {
+                  this.$router.push({ path: "/archivesManagement/patient" });
+                }
+              });
+          } else {
+            // 新增
+            httpAdminArchives.postArchives(this.form).then((res) => {
+              if (res.code === "OK") {
+                this.$router.push({ path: "/archivesManagement/patient" });
+              }
+            });
+          }
         }
       });
     },

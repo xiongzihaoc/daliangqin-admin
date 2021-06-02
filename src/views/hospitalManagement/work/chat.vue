@@ -200,7 +200,7 @@ export default {
       this.searchForm = {};
       this.getList();
     },
-    /***** CRUD *****/
+    /***** 增删改 *****/
     // 编辑
     examineBtn(val) {
       this.editAddForm = JSON.parse(JSON.stringify(val));
