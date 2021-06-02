@@ -8,24 +8,19 @@ export const httpAdminChat = {
             params: data
         })
     },
-    // postChat(data) {
-    //     return request({
-    //         url: 'chat',
-    //         method: 'post',
-    //         data
-    //     })
-    // },
-    // putChat(data) {
-    //     return request({
-    //         url: 'chat/' + data.id,
-    //         method: 'put',
-    //         data
-    //     })
-    // },
-    deleteChat(id) {
+    getChatSubscribe(data) {
         return request({
-            url: 'chat/' + id,
-            method: 'delete',
+            url: 'chat/subscribe',
+            method: 'get',
+            params: data
+        })
+    },
+
+    postChat(data) {
+        return request({
+            url: 'chat',
+            method: 'post',
+            data
         })
     }
 }

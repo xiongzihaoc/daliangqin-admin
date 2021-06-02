@@ -86,6 +86,49 @@
       width="40%"
       @closed="editDialogClosed"
       v-dialogDrag>
+      <ul style="height:500px;overflow:auto;padding:15px">
+        <li v-for="item in messageList"
+          :key="item.id">
+          <!-- 病人信息 -->
+          <div v-if="item.leaveContent"
+            style="display:flex">
+            <div style="display:flex;">
+              <img style="width:64px;height:64px;border-radius:50%;background:red;"
+                :src="item.formAvatarUrl"
+                alt="">
+            </div>
+            <div style="padding-left:10px;margin-bottom:15px;">
+              <div>{{item.fromUserName}}</div>
+              <div style="margin:5px 0;">{{parseTime(item.createTime).slice(6)}}</div>
+              <div style="max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
+            </div>
+          </div>
+          <!-- 医生信息 -->
+          <div v-if="item.leaveContent"
+            style="display:flex;justify-content: flex-end;">
+            <div style="padding-right:10px;margin-bottom:15px;color:blue;">
+              <div style="text-align:right">{{item.fromUserName}}</div>
+              <div style="text-align:right;margin:5px 0;">{{parseTime(item.createTime).slice(6)}}</div>
+              <div style="max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">77777777777777777777777777777777</div>
+            </div>
+            <div>
+              <img style="width:64px;height:64px;border-radius:50%;background:blue;"
+                :src="item.formAvatarUrl"
+                alt="">
+            </div>
+          </div>
+        </li>
+      </ul>
+      <el-form ref="FormRef"
+        :model="editAddForm">
+        <el-form-item prop="contentType">
+          <el-input type="textarea"
+            :rows="5"
+            v-model="searchForm.contentType"
+            size="small"
+            placeholder="请输入回复内容"></el-input>
+        </el-form-item>
+      </el-form>
       <span slot="footer"
         class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
@@ -123,11 +166,14 @@ export default {
       },
       // 列表数据
       list: [],
+      // 消息列表
+      messageList: [],
       // 增改表单
       editAddForm: {
-        fromUserName: "",
-        contract: "",
-        address: "",
+        contentType: "TEXT",
+        doctorUserId: "",
+        leaveContent: "测试留言内容",
+        patientUserId: "",
       },
       // 表格数据
       tableHeaderBig: [
@@ -181,6 +227,11 @@ export default {
           this.total = res.data.totalSize;
         });
     },
+    getChatSubscribe(id) {
+      httpAdminChat.getChatSubscribe({ sessionId: id }).then((res) => {
+        this.messageList = res.data.elements;
+      });
+    },
     // 日期控件选择事件
     selectLeaveTime(val) {
       this.searchForm.leaveStartTime = val[0];
@@ -201,9 +252,12 @@ export default {
       this.getList();
     },
     /***** 增删改 *****/
-    // 编辑
+    // 查看
     examineBtn(val) {
-      this.editAddForm = JSON.parse(JSON.stringify(val));
+      console.log(val);
+      this.getChatSubscribe(val.sessionId);
+      this.editAddForm.doctorUserId = val.doctorUserId;
+      this.editAddForm.patientUserId = val.patientUserId;
       this.editDialogVisible = true;
     },
     editDialogClosed() {},
@@ -212,7 +266,8 @@ export default {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 发送请求
-          httpAdminChat.putChat(this.editAddForm).then((res) => {
+          httpAdminChat.postChat(this.editAddForm).then((res) => {
+            console.log(res);
             if (res.code === "OK") {
               this.$notify.success({
                 title: "编辑成功",
@@ -237,5 +292,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+li {
+  list-style: none;
+}
 </style>
