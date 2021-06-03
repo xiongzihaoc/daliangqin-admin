@@ -73,11 +73,17 @@ div:focus {
 .el-button-style {
   margin: 0 5px;
 }
+
 .tableImg {
   width: 40px;
   height: 40px;
   margin: 0 5px;
 }
+
+.el-select--medium {
+  vertical-align: bottom !important;
+}
+
 .el-pagination-style {
   margin-top: 10px;
   text-align: right;

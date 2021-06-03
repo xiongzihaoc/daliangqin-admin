@@ -20,6 +20,7 @@
     <el-dialog title="编辑"
       :visible.sync="editDialogVisible"
       width="40%"
+      @open="openDialog"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
@@ -110,7 +111,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getVersionList();
   },
   methods: {
     getList() {
@@ -125,11 +125,13 @@ export default {
         });
     },
     // 弹框开启事件 获取版本列表
-    getVersionList() {
+    getVersionList(appType, deviceType) {
       httpAdminUpdateVersion
         .getUpdateVersion({
           page: this.pageNum,
           pageSize: this.pageSize,
+          appType: appType,
+          deviceType: deviceType,
         })
         .then((res) => {
           console.log(res);
@@ -137,9 +139,12 @@ export default {
         });
     },
     /***** 增删改 *****/
+    // 弹框开启
+    openDialog() {
+      this.getVersionList(this.editAddForm.appType, this.editAddForm.deviceType);
+    },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
