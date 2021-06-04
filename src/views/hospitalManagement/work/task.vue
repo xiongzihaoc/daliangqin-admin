@@ -466,7 +466,7 @@ export default {
     },
     // 高血压状态
     highBloodFormatter(row) {
-      return formatterElement.highBlood[row.healthStatus];
+      return formatterElement.highBlood[row.highBloodStatus];
     },
     // 糖尿病状态
     diabetesFormatter(row) {

@@ -43,7 +43,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: 'operationsManagement/banner',
+    redirect: 'dashboard',
     hidden: true,
     children: [{
       path: 'dashboard',

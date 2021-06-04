@@ -8,31 +8,31 @@
         <div>
           <h3>基本资料</h3>
           <el-form-item label="用户姓名"
-            prop="basic.name">
-            <el-input v-model="form.basic.name"
+            prop="name">
+            <el-input v-model="form.name"
               placeholder="请输入用户姓名"></el-input>
           </el-form-item>
           <!-- 用户头像 -->
           <el-form-item label="用户头像"
-            prop="basic.photoUrl">
-            <single-upload v-model="form.basic.photoUrl"
+            prop="photoUrl">
+            <single-upload v-model="form.photoUrl"
               uploadType="AVATAR" />
           </el-form-item>
           <!-- 手机号 -->
           <el-form-item label="手机号"
-            prop="basic.phone">
-            <el-input v-model="form.basic.phone"
+            prop="phone">
+            <el-input v-model="form.phone"
               placeholder="请输入该用户手机号"></el-input>
           </el-form-item>
           <!-- 身份证 -->
           <el-form-item label="身份证号"
-            prop="basic.idCard">
-            <el-input v-model="form.basic.idCard"
+            prop="idCard">
+            <el-input v-model="form.idCard"
               placeholder="请输入该用户身份证号"></el-input>
           </el-form-item>
           <el-form-item label="省"
-            prop="basic.provinceAdCode">
-            <el-select v-model="form.basic.provinceAdCode"
+            prop="provinceAdCode">
+            <el-select v-model="form.provinceAdCode"
               @change="selectProvince"
               placeholder="请选择省">
               <el-option v-for="item in provinceList"
@@ -42,8 +42,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="市"
-            prop="basic.cityAdCode">
-            <el-select v-model="form.basic.cityAdCode"
+            prop="cityAdCode">
+            <el-select v-model="form.cityAdCode"
               @change="selectCity"
               placeholder="请选择市">
               <el-option v-for="item in cityList"
@@ -53,8 +53,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="区"
-            prop="basic.areaAdCode">
-            <el-select v-model="form.basic.areaAdCode"
+            prop="areaAdCode">
+            <el-select v-model="form.areaAdCode"
               placeholder="请选择区">
               <el-option v-for="item in areaList"
                 :key="item.id"
@@ -63,14 +63,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="详细地址"
-            prop="basic.address">
-            <el-input v-model="form.basic.address"
+            prop="address">
+            <el-input v-model="form.address"
               placeholder="请输入医院地址"></el-input>
           </el-form-item>
           <!-- 对应医师 -->
           <el-form-item label="对应医师"
-            prop="basic.doctorUserId">
-            <el-select v-model="form.basic.doctorUserId"
+            prop="doctorUserId">
+            <el-select v-model="form.doctorUserId"
               filterable
               placeholder="请输入内容搜索">
               <el-option v-for="item in toDoctorList"
@@ -416,17 +416,15 @@ export default {
       toDoctorList: [],
       form: {
         // 基本信息
-        basic: {
-          name: "",
-          photoUrl: "",
-          phone: "",
-          idCard: "",
-          provinceAdCode: "",
-          cityAdCode: "",
-          areaAdCode: "",
-          address: "",
-          doctorUserId: "",
-        },
+        name: "",
+        photoUrl: "",
+        phone: "",
+        idCard: "",
+        provinceAdCode: "",
+        cityAdCode: "",
+        areaAdCode: "",
+        address: "",
+        doctorUserId: "",
         // 基本检查
         eatHabits: [],
         smokeType: "",
@@ -484,10 +482,12 @@ export default {
         .getPatient({ userId: this.$route.query.id })
         .then((res) => {
           // 回显表单数据
-          console.log(res);
           this.form = res.data.elements[0].archivesMongo;
-          this.form.basic = res.data.elements[0];
-          this.form.basic.photoUrl = res.data.elements[0].avatarUrl;
+          this.form.photoUrl = res.data.elements[0].avatarUrl;
+          this.form.provinceAdCode = res.data.elements[0].provinceAdCode;
+          this.form.cityAdCode = res.data.elements[0].cityAdCode;
+          this.form.areaAdCode = res.data.elements[0].areaAdCode;
+          this.form.address = res.data.elements[0].address;
           // 回显市区
           this.getCityList(res.data.elements[0].provinceAdCode);
           this.getAreaList(res.data.elements[0].cityAdCode);
