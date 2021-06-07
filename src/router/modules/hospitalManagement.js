@@ -86,18 +86,18 @@ const hospitalRouter = {
                     },
                 },
                 {
-                    path: "kpiIndex",
-                    name: "kpiIndex",
-                    component: () => import('@/views/hospitalManagement/work/kpiIndex'),
+                    path: "kpiConfig",
+                    name: "kpiConfig",
+                    component: () => import('@/views/hospitalManagement/work/kpiConfig'),
                     meta: {
                         title: 'KPI指标',
                         icon: 'general'
                     },
                 },
                 {
-                    path: "kpiStatistics",
-                    name: "kpiStatistics",
-                    component: () => import('@/views/hospitalManagement/work/kpiStatistics'),
+                    path: "kpiRecord",
+                    name: "kpiRecord",
+                    component: () => import('@/views/hospitalManagement/work/kpiRecord'),
                     meta: {
                         title: 'KPI完成统计',
                         icon: 'general'

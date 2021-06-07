@@ -13,8 +13,10 @@
         color: '#515a6e',
       }"
       :border="option.border"
-      :max-height="option.maxHeight"
+      :show-summary="showSummary"
+
       stripe
+      :max-height="option.maxHeight"
       :style="{ width: parseInt(option.width) + 'px' }"
       :cell-class-name="cellClassName"
       :header-cell-class-name="headerCellClassName"
@@ -50,6 +52,16 @@ export default {
         return [];
       },
       type: Array,
+    },
+    getSummaries: {
+      default: function () {
+        return {};
+      },
+      type: Object ,
+    },
+    showSummary: {
+      type: Boolean,
+      default: false,
     },
     option: {
       default: function () {
