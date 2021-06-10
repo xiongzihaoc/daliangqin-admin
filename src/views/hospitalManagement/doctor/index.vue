@@ -94,10 +94,12 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
+        label="医生姓名"
         prop="name"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
+        label="医生头像"
         prop="avatarUrl">
         <template slot-scope="scope">
           <img class="tableImg"

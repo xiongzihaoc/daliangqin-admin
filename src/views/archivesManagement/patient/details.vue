@@ -483,11 +483,7 @@ export default {
         .then((res) => {
           // 回显表单数据
           this.form = res.data.elements[0].archivesMongo;
-          this.form.photoUrl = res.data.elements[0].avatarUrl;
-          this.form.provinceAdCode = res.data.elements[0].provinceAdCode;
-          this.form.cityAdCode = res.data.elements[0].cityAdCode;
-          this.form.areaAdCode = res.data.elements[0].areaAdCode;
-          this.form.address = res.data.elements[0].address;
+
           // 回显市区
           this.getCityList(res.data.elements[0].provinceAdCode);
           this.getAreaList(res.data.elements[0].cityAdCode);
