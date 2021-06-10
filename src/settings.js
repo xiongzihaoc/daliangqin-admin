@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'daliangqing',
+  title: '大良卿',
   topNav: true,
   tagsView: true,
   /**
