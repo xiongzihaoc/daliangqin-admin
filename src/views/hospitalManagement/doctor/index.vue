@@ -157,12 +157,9 @@
         <el-form-item label="医生姓名"
           prop="name">
           <!-- 编辑阻止修改医生姓名 -->
-          <el-input v-if="this.infoTitle === '新增'"
+          <el-input :disabled="this.infoTitle === '编辑'?true:false"
             v-model="editAddForm.name"
             placeholder="请输入医生真实姓名"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.name"></el-input>
         </el-form-item>
         <el-form-item label="医生头像"
           prop="avatarUrl">
@@ -172,11 +169,7 @@
         <!-- 编辑阻止修改医生手机号-->
         <el-form-item label="手机号"
           prop="phone">
-          <el-input v-if="this.infoTitle === '新增'"
-            v-model="editAddForm.phone"
-            placeholder="请输入该医生手机号"></el-input>
-          <el-input v-else
-            disabled
+          <el-input :disabled="this.infoTitle === '编辑'?true:false"
             v-model="editAddForm.phone"
             placeholder="请输入该医生手机号"></el-input>
         </el-form-item>
@@ -184,25 +177,12 @@
         <el-form-item label="身份证号"
           prop="idCard">
           <el-input v-model="editAddForm.idCard"
-            placeholder="请输入该医生身份证号"
-            v-if="this.infoTitle === '新增'"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.idCard"></el-input>
+            :disabled="this.infoTitle === '编辑'?true:false"
+            placeholder="请输入该医生身份证号"></el-input>
         </el-form-item>
         <el-form-item label="职位"
           prop="type">
-          <el-select v-if="this.infoTitle === '新增'"
-            v-model="editAddForm.type"
-            placeholder="请选择职位"
-            style="width: 100%">
-            <el-option v-for="item in doctorTypeList"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"></el-option>
-          </el-select>
-          <el-select v-else
-            disabled
+          <el-select :disabled="this.infoTitle === '编辑'?true:false"
             v-model="editAddForm.type"
             placeholder="请选择职位"
             style="width: 100%">

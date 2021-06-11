@@ -73,20 +73,10 @@
         size="small"
         plain
         icon="el-icon-plus">新增</el-button>
-      <el-button @click="deleteMultiple"
-        type="danger"
-        class="tableAdd"
-        size="small"
-        plain
-        icon="el-icon-delete">删除</el-button>
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="selection"></el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -117,6 +107,7 @@
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
+      @open="editDialogOpen"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
@@ -124,62 +115,32 @@
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="医生姓名"
-          prop="name">
-          <!-- 编辑阻止修改医生姓名 -->
-          <el-input v-if="this.infoTitle === '新增'"
-            v-model="editAddForm.name"
-            placeholder="请输入医生真实姓名"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.name"></el-input>
+          prop="doctorName">
+          <el-input v-model="editAddForm.doctorName"
+            :disabled="this.infoTitle=='编辑'?true:false"></el-input>
         </el-form-item>
-        <el-form-item label="医生头像"
-          prop="avatarUrl">
-          <single-upload v-model="editAddForm.avatarUrl"
-            uploadType="AVATAR" />
+        <el-form-item label="用户姓名"
+          prop="patientName">
+          <el-input v-model="editAddForm.patientName"
+            disabled></el-input>
         </el-form-item>
-        <!-- 编辑阻止修改医生手机号-->
-        <el-form-item label="手机号"
-          prop="phone">
-          <el-input v-if="this.infoTitle === '新增'"
-            v-model="editAddForm.phone"
-            placeholder="请输入该医生手机号"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.phone"
-            placeholder="请输入该医生手机号"></el-input>
-        </el-form-item>
-        <!-- 编辑阻止修改医生身份证号 -->
-        <el-form-item label="身份证号"
-          prop="idCard">
-          <el-input v-model="editAddForm.idCard"
-            placeholder="请输入该医生身份证号"
-            v-if="this.infoTitle === '新增'"></el-input>
-          <el-input v-else
-            disabled
-            v-model="editAddForm.idCard"></el-input>
-        </el-form-item>
-        <el-form-item label="职位"
-          prop="type">
-          <el-select v-if="this.infoTitle === '新增'"
-            v-model="editAddForm.type"
-            placeholder="请选择职位"
-            style="width: 100%">
-            <el-option v-for="item in doctorTypeList"
+        <el-form-item label="选择模板"
+          prop="templateName">
+          <el-select multiple
+            @change="selectTemplate"
+            value-key="name"
+            style="width:100%"
+            v-model="editAddForm.templateName">
+            <el-option v-for="item in templateList"
               :key="item.id"
-              :label="item.label"
-              :value="item.value"></el-option>
+              :label="item.name"
+              :value="item"></el-option>
           </el-select>
-          <el-select v-else
-            disabled
-            v-model="editAddForm.type"
-            placeholder="请选择职位"
-            style="width: 100%">
-            <el-option v-for="item in doctorTypeList"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"></el-option>
-          </el-select>
+        </el-form-item>
+        <el-form-item label="处方内容"
+          prop="templateContent">
+          <el-input type="textarea"
+            v-model="editAddForm.templateContent"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -195,9 +156,8 @@
 import EleTable from "@/components/Table";
 import singleUpload from "@/components/Upload";
 import { httpHospitalUserTemplate } from "@/api/hospital/httpHospitalUserTemplate";
+import { httpHospitalTemplate } from "@/api/hospital/httpHospitalTemplate";
 import {
-  validateIdCard,
-  validatePhone,
   parseTime,
   doctorTypeList,
   genderList,
@@ -214,18 +174,8 @@ export default {
       doctorTypeList,
       genderList,
       FormRules: {
-        name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
-        avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
-        idCard: [
-          { required: true, trigger: "blur", validator: validateIdCard },
-        ],
-        type: [{ required: true, message: "请选择职位", trigger: "blur" }],
-        hospitalId: [
-          { required: true, message: "请选择医院", trigger: "blur" },
-        ],
-        toDoctorUserId: [
-          { required: true, message: "请选择转诊医生  ", trigger: "blur" },
+        templateName: [
+          { required: true, message: "请选择模板", trigger: "blur" },
         ],
       },
       searchForm: {
@@ -236,18 +186,15 @@ export default {
         type: "",
       },
       list: [],
+      templateList: [],
       editAddForm: {
-        name: "",
-        avatarUrl: "",
-        phone: "",
-        idCard: "",
-        hospitalId: "",
-        toDoctorUserId: "",
-        type: "",
-        introduction: "",
-        goodAt: "",
+        doctorName: "",
+        patientName: "",
+        templateName: [],
+        templateContent: "",
       },
       tableHeaderBig: [
+        { type: "index", label: "序号" },
         { prop: "doctorName", label: "医生姓名" },
         {
           prop: "doctorType",
@@ -256,13 +203,38 @@ export default {
             return this.doctorTypeFormatter(row);
           },
         },
-
-        { prop: "age", label: "选用模板" },
-        { prop: "type", label: "处方内容" },
+        {
+          prop: "createTime",
+          label: "开具时间",
+          formatter: (row) => {
+            return parseTime(row.createTime);
+          },
+        },
+        { prop: "templateNames", label: "选用模板" },
+        { prop: "templateContents", label: "处方内容" },
         { prop: "patientName", label: "用户姓名" },
-        { prop: "highBloodStatus", label: "高血压" },
-        { prop: "diabeteStatus", label: "糖尿病" },
-        { prop: "diabeteStatus", label: "最近修改时间" },
+        {
+          prop: "highBloodStatus",
+          label: "高血压",
+          formatter: (row) => {
+            return this.highBloodStatusFormatter(row);
+          },
+        },
+        {
+          prop: "diabetesStatus",
+          label: "糖尿病",
+
+          formatter: (row) => {
+            return this.diabetesStatusFormatter(row);
+          },
+        },
+        {
+          prop: "updateTime",
+          label: "最近修改时间",
+          formatter: (row) => {
+            return parseTime(row.updateTime);
+          },
+        },
       ],
       // 分页区域
       pageSize: 10,
@@ -290,6 +262,22 @@ export default {
           this.total = res.data.totalSize;
         });
     },
+    // 获取模板列表
+    getTemplateList() {
+      httpHospitalTemplate.getTemplate().then((res) => {
+        this.templateList = res.data.elements;
+      });
+    },
+    selectTemplate(val) {
+      var arr = val.map((item) => {
+        return item.content;
+      });
+      var str = "";
+      arr.forEach((item) => {
+        str += item + "\n";
+      });
+      this.$set(this.editAddForm, "templateContent", str);
+    },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
@@ -313,8 +301,6 @@ export default {
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
     },
-    // 删除多个
-    deleteMultiple() {},
     // 删除单个
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
@@ -338,6 +324,9 @@ export default {
         }
         this.getList();
       });
+    },
+    editDialogOpen() {
+      this.getTemplateList();
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
@@ -381,8 +370,11 @@ export default {
     doctorTypeFormatter(row) {
       return formatterElement.doctorType[row.doctorType];
     },
-    typeFormatter(row) {
-      return formatterElement.doctorType[row.type];
+    highBloodStatusFormatter(row) {
+      return formatterElement.highBlood[row.highBloodStatus];
+    },
+    diabetesStatusFormatter(row) {
+      return formatterElement.diabetes[row.diabetesStatus];
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
