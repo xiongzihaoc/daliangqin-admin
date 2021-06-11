@@ -62,6 +62,11 @@
           <el-button size="small"
             type="success"
             icon="el-icon-download">导入</el-button>
+          <el-button size="small"
+            type="success"
+            @click="templateSet"
+            icon="el-icon-setting"
+            >模板配置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -115,14 +120,26 @@
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="医生姓名"
-          prop="doctorName">
-          <el-input v-model="editAddForm.doctorName"
-            :disabled="this.infoTitle=='编辑'?true:false"></el-input>
+          prop="doctorUserId">
+          <el-select v-model="editAddForm.doctorUserId"
+            :disabled="this.infoTitle=='编辑'?true:false"
+            style="width:100%">
+            <el-option v-for="item in doctorList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="用户姓名"
-          prop="patientName">
-          <el-input v-model="editAddForm.patientName"
-            disabled></el-input>
+          prop="patientUserId">
+          <el-select v-model="editAddForm.patientUserId"
+            :disabled="this.infoTitle=='编辑'?true:false"
+            style="width:100%">
+            <el-option v-for="item in patientList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="选择模板"
           prop="templateName">
@@ -140,7 +157,8 @@
         <el-form-item label="处方内容"
           prop="templateContent">
           <el-input type="textarea"
-            v-model="editAddForm.templateContent"></el-input>
+            :rows="20"
+            v-model="editAddForm.content"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -157,6 +175,8 @@ import EleTable from "@/components/Table";
 import singleUpload from "@/components/Upload";
 import { httpHospitalUserTemplate } from "@/api/hospital/httpHospitalUserTemplate";
 import { httpHospitalTemplate } from "@/api/hospital/httpHospitalTemplate";
+import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
+import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
 import {
   parseTime,
   doctorTypeList,
@@ -174,6 +194,12 @@ export default {
       doctorTypeList,
       genderList,
       FormRules: {
+        doctorUserId: [
+          { required: true, message: "请选择医生", trigger: "blur" },
+        ],
+        patientUserId: [
+          { required: true, message: "请选择用户", trigger: "blur" },
+        ],
         templateName: [
           { required: true, message: "请选择模板", trigger: "blur" },
         ],
@@ -187,11 +213,14 @@ export default {
       },
       list: [],
       templateList: [],
+      doctorList: [],
+      patientList: [],
       editAddForm: {
-        doctorName: "",
-        patientName: "",
+        doctorUserId: "",
+        patientUserId: "",
         templateName: [],
-        templateContent: "",
+        templates: [],
+        content: "",
       },
       tableHeaderBig: [
         { type: "index", label: "序号" },
@@ -257,7 +286,6 @@ export default {
           pageSize: this.pageSize,
         })
         .then((res) => {
-          console.log(res);
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
@@ -268,15 +296,32 @@ export default {
         this.templateList = res.data.elements;
       });
     },
+    // 获取医生列表
+    getDoctorList() {
+      httpAdminDoctor.getDoctor().then((res) => {
+        console.log(res);
+        this.doctorList = res.data.elements;
+      });
+    },
+    // 获取用户列表
+    getPatientList() {
+      httpAdminPatient.getPatient().then((res) => {
+        console.log(res);
+
+        this.patientList = res.data.elements;
+      });
+    },
+    // 获取用户列表
     selectTemplate(val) {
-      var arr = val.map((item) => {
-        return item.content;
+      this.editAddForm.templates = val.map((item) => {
+        return { content: item.content, name: item.name };
       });
       var str = "";
-      arr.forEach((item) => {
-        str += item + "\n";
+      this.editAddForm.templates.forEach((item) => {
+        return (str += "#" + item.name + "\n" + item.content + "\n\n");
       });
-      this.$set(this.editAddForm, "templateContent", str);
+
+      this.$set(this.editAddForm, "content", str);
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -303,6 +348,7 @@ export default {
     },
     // 删除单个
     async deleteBtn(id) {
+      console.log(id);
       const confirmResult = await this.$confirm(
         "你确定要执行此操作, 是否继续?",
         "提示",
@@ -327,6 +373,8 @@ export default {
     },
     editDialogOpen() {
       this.getTemplateList();
+      this.getDoctorList();
+      this.getPatientList();
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
@@ -345,7 +393,6 @@ export default {
                     title: "新增成功",
                   });
                   this.getList();
-                  this.getToDoctorList();
                   this.editDialogVisible = false;
                 }
               });
