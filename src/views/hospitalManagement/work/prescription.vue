@@ -65,8 +65,7 @@
           <el-button size="small"
             type="success"
             @click="templateSet"
-            icon="el-icon-setting"
-            >模板配置</el-button>
+            icon="el-icon-setting">模板配置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -306,8 +305,6 @@ export default {
     // 获取用户列表
     getPatientList() {
       httpAdminPatient.getPatient().then((res) => {
-        console.log(res);
-
         this.patientList = res.data.elements;
       });
     },
@@ -321,8 +318,10 @@ export default {
         return (str += "#" + item.name + "\n" + item.content + "\n\n");
       });
 
-      this.$set(this.editAddForm, "content", str);
+      this.$set(this.editAddForm, "content", JSON.stringify(this.editAddForm.templates));
     },
+    // 打开模板配置弹框
+    templateSet() {},
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
@@ -342,8 +341,12 @@ export default {
     },
     // 编辑
     editBtn(val) {
+      console.log(val);
       this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
+      this.editAddForm = val
+      // this.editAddForm = JSON.parse(JSON.stringify(val));
+      // var cc = val.templateNames.split(",");
+      // this.$set(this.editAddForm,'templateName',cc)
       this.editDialogVisible = true;
     },
     // 删除单个
@@ -381,6 +384,7 @@ export default {
     },
     // 新增编辑确定
     editPageEnter() {
+      console.log(this.editAddForm.content);
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           if (this.infoTitle === "新增") {
