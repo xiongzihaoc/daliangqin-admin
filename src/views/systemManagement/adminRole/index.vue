@@ -217,7 +217,6 @@ export default {
       console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editAddForm.adminRoleType = val.roleType;
       this.editDialogVisible = true;
     },
     // 删除

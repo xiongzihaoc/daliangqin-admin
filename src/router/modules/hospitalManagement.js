@@ -108,7 +108,7 @@ const hospitalRouter = {
                     name: "prescription",
                     component: () => import('@/views/hospitalManagement/work/prescription'),
                     meta: {
-                        title: '个性化处方',
+                        title: '健康教育处方',
                         icon: 'general'
                     },
                 },

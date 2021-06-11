@@ -124,40 +124,14 @@
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             placeholder="请输入电话"></el-input>
         </el-form-item>
-        <el-form-item label="省"
-          prop="provinceAdCode">
-          <el-select style="width:100%;"
-            v-model="editAddForm.provinceAdCode"
-            @change="selectProvince"
-            placeholder="请选择省">
-            <el-option v-for="item in provinceList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.adcode"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="市"
-          prop="cityAdCode">
-          <el-select style="width:100%;"
-            v-model="editAddForm.cityAdCode"
-            @change="selectCity"
-            placeholder="请选择市">
-            <el-option v-for="item in cityList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.adcode"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="区"
-          prop="areaAdCode">
-          <el-select style="width:100%;"
-            v-model="editAddForm.areaAdCode"
-            placeholder="请选择区">
-            <el-option v-for="item in areaList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.adcode"></el-option>
-          </el-select>
+        <el-form-item label="省市区"
+          prop="address">
+          <el-cascader style="width:100%"
+            v-model="editAddForm.address"
+            :options="addressJson"
+            :props="cateListProps"
+            @change="selectAddrssChange"
+            clearable></el-cascader>
         </el-form-item>
         <el-form-item label="详细地址"
           prop="detail">
@@ -176,24 +150,23 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
+import addressJson from "@/utils/address.json";
 import { validatePhone } from "@/utils/index";
 import { httpAdminAddressPatient } from "@/api/admin/httpAdminAddressPatient";
-import { httpPublicDistrictProvince } from "@/api/public/httpPublicDistrictProvince";
 export default {
   components: {
     EleTable,
   },
   data() {
     return {
+      addressJson,
       // 表单验证规则
       FormRules: {
         name: [
           { required: true, message: "请输入收货人名字", trigger: "blur" },
         ],
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
-        provinceAdCode: [{ required: true, message: "请选择省", trigger: "blur" }],
-        cityAdCode: [{ required: true, message: "请选择市", trigger: "blur" }],
-        areaAdCode: [{ required: true, message: "请选择区", trigger: "blur" }],
+        address: [{ required: true, message: "请选择省市区", trigger: "blur" }],
         detail: [
           { required: true, message: "请输入详细地址", trigger: "blur" },
         ],
@@ -206,17 +179,19 @@ export default {
       // 列表数据
       list: [],
       addressList: [],
-      // 省市区列表
-      provinceList: [],
-      cityList: [],
-      areaList: [],
+      cateListProps: {
+        value: "name", //匹配响应数据中的id
+        label: "name", //匹配响应数据中的name
+        children: "districts", //匹配响应数据中的children
+      },
       // 增改表单
       editAddForm: {
         name: "",
         phone: "",
-        provinceAdCode: "",
-        cityAdCode: "",
-        areaAdCode: "",
+        province: "",
+        city: "",
+        area: "",
+        address: [],
         isDefault: false,
         detail: "",
         userId: "",
@@ -226,7 +201,6 @@ export default {
         { type: "index", label: "序号" },
         { prop: "patientName", label: "用户姓名" },
       ],
-      addressListtableHeader: [],
       patientName: "",
       patientUserId: "",
       // 分页区域
@@ -242,7 +216,7 @@ export default {
     this.getList();
   },
   mounted() {
-    this.getProvinceList();
+    this.getTreeData(addressJson);
   },
   methods: {
     getList() {
@@ -266,25 +240,6 @@ export default {
           this.addressList = res.data.elements[0].addressInfos;
         });
     },
-    // 获取省列表
-    getProvinceList() {
-      httpPublicDistrictProvince.getProvince().then((res) => {
-        console.log(res);
-        this.provinceList = res.data;
-      });
-    },
-    // 获取市列表
-    getCityList(id) {
-      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
-        this.cityList = res.data;
-      });
-    },
-    // 获取区列表
-    getAreaList(id) {
-      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
-        this.areaList = res.data;
-      });
-    },
     // 是否默认
     statusChange(id) {
       httpAdminAddressPatient.putAddressDefault(id).then((res) => {
@@ -296,6 +251,25 @@ export default {
           this.getEditList();
         }
       });
+    },
+    selectAddrssChange(val) {
+      console.log(val);
+      this.editAddForm.province = val[0];
+      this.editAddForm.city = val[1];
+      this.editAddForm.area = val[2];
+    },
+    // 递归处理json文件的最后一级
+    getTreeData(data) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].districts.length < 1) {
+          // children若为空数组，则将children设为undefined
+          data[i].districts = undefined;
+        } else {
+          // children若不为空数组，则继续 递归调用 本方法
+          this.getTreeData(data[i].districts);
+        }
+      }
+      return data;
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -314,23 +288,15 @@ export default {
       this.getEditList();
       this.examineDialogVisible = true;
     },
-    // 选择省加载下一级数据
-    selectProvince(id) {
-      this.editAddForm.cityAdCode = "";
-      this.editAddForm.areaAdCode = "";
-      this.areaList = [];
-      this.getCityList(id);
-    },
-    selectCity(id) {
-      this.editAddForm.areaAdCode = "";
-      this.getAreaList(id);
-    },
     // 编辑
     editBtn(val) {
-      console.log(val);
-      this.getCityList(val.provinceAdCode);
-      this.getAreaList(val.cityAdCode);
       this.editAddForm = JSON.parse(JSON.stringify(val));
+      this.editAddForm.address = [
+        this.editAddForm.province,
+        this.editAddForm.city,
+        this.editAddForm.area,
+      ];
+
       this.editDialogVisible = true;
     },
     editDialogClosed() {

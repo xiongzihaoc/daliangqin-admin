@@ -121,40 +121,14 @@
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             placeholder="请输入医院电话"></el-input>
         </el-form-item>
-        <el-form-item label="省"
-          prop="provinceAdCode">
-          <el-select style="width:100%;"
-            v-model="editAddForm.provinceAdCode"
-            @change="selectProvince"
-            placeholder="请选择省">
-            <el-option v-for="item in provinceList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.adcode"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="市"
-          prop="cityAdCode">
-          <el-select style="width:100%;"
-            v-model="editAddForm.cityAdCode"
-            @change="selectCity"
-            placeholder="请选择市">
-            <el-option v-for="item in cityList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.adcode"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="区"
-          prop="areaAdCode">
-          <el-select style="width:100%;"
-            v-model="editAddForm.areaAdCode"
-            placeholder="请选择区">
-            <el-option v-for="item in areaList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.adcode"></el-option>
-          </el-select>
+        <el-form-item label="省市区"
+          prop="address">
+          <el-cascader style="width:100%"
+            v-model="editAddForm.address"
+            :options="addressJson"
+            :props="cateListProps"
+            @change="selectAddrssChange"
+            clearable></el-cascader>
         </el-form-item>
         <el-form-item label="详细地址"
           prop="detail">
@@ -191,8 +165,8 @@
 <script>
 import EleTable from "@/components/Table";
 import singleUpload from "@/components/Upload";
+import addressJson from "@/utils/address.json";
 import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
-import { httpPublicDistrictProvince } from "@/api/public/httpPublicDistrictProvince";
 import {
   validatePhone,
   hospitalClassList,
@@ -205,6 +179,7 @@ export default {
   },
   data() {
     return {
+      addressJson,
       hospitalClassList,
       // 表单验证规则
       FormRules: {
@@ -212,14 +187,10 @@ export default {
           { required: true, trigger: "blur", validator: validatePhone },
         ],
         name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
+        address: [{ required: true, message: "请选择省市区", trigger: "blur" }],
         contract: [
           { required: true, message: "请输入医院电话", trigger: "blur" },
         ],
-        provinceAdCode: [
-          { required: true, message: "请选择省", trigger: "blur" },
-        ],
-        cityAdCode: [{ required: true, message: "请选择市", trigger: "blur" }],
-        areaAdCode: [{ required: true, message: "请选择区", trigger: "blur" }],
         detail: [
           { required: true, message: "请输入详细地址", trigger: "blur" },
         ],
@@ -234,18 +205,20 @@ export default {
       },
       // 列表数据
       list: [],
-      // 省市区列表
-      provinceList: [],
-      cityList: [],
-      areaList: [],
+      cateListProps: {
+        value: "name", //匹配响应数据中的id
+        label: "name", //匹配响应数据中的name
+        children: "districts", //匹配响应数据中的children
+      },
       // 增改表单
       editAddForm: {
         name: "",
         contract: "",
         hospitalType: "",
-        provinceAdCode: "",
-        cityAdCode: "",
-        areaAdCode: "",
+        province: "",
+        city: "",
+        area: "",
+        address: [],
         detail: "",
       },
       // 表格数据
@@ -279,7 +252,7 @@ export default {
     this.getList();
   },
   mounted() {
-    this.getProvinceList();
+    this.getTreeData(addressJson);
   },
   methods: {
     getList() {
@@ -296,34 +269,24 @@ export default {
           this.total = res.data.totalSize;
         });
     },
-    // 获取省列表
-    getProvinceList() {
-      httpPublicDistrictProvince.getProvince().then((res) => {
-        this.provinceList = res.data;
-      });
+    selectAddrssChange(val) {
+      console.log(val);
+      this.editAddForm.province = val[0];
+      this.editAddForm.city = val[1];
+      this.editAddForm.area = val[2];
     },
-    // 获取市列表
-    getCityList(id) {
-      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
-        this.cityList = res.data;
-      });
-    },
-    // 获取区列表
-    getAreaList(id) {
-      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
-        this.areaList = res.data;
-      });
-    },
-    // 选择省加载下一级数据
-    selectProvince(id) {
-      this.editAddForm.cityAdCode = "";
-      this.editAddForm.areaAdCode = "";
-      this.areaList = [];
-      this.getCityList(id);
-    },
-    selectCity(id) {
-      this.editAddForm.areaAdCode = "";
-      this.getAreaList(id);
+    // 递归处理json文件的最后一级
+    getTreeData(data) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].districts.length < 1) {
+          // children若为空数组，则将children设为undefined
+          data[i].districts = undefined;
+        } else {
+          // children若不为空数组，则继续 递归调用 本方法
+          this.getTreeData(data[i].districts);
+        }
+      }
+      return data;
     },
     /***** 搜索区域 *****/
     searchBtn() {
@@ -343,11 +306,13 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
-      this.getCityList(val.provinceAdCode);
-      this.getAreaList(val.cityAdCode);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
+      this.editAddForm.address = [
+        this.editAddForm.province,
+        this.editAddForm.city,
+        this.editAddForm.area,
+      ];
       this.editDialogVisible = true;
     },
     // 删除多个
@@ -430,5 +395,4 @@ export default {
 </script>
 
 <style scope>
-
 </style>

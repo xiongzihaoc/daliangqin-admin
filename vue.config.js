@@ -33,19 +33,22 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {
           '^/api/public/': ''
-        }
+        },
+        ws: false
       }, '/api/admin': {
         target: ENV[ENV.current].admin.source,
         changeOrigin: true,
         pathRewrite: {
           '^/api/admin/': ''
-        }
+        },
+        ws: false
       }, '/api/hospital': {
         target: ENV[ENV.current].hospital.source,
         changeOrigin: true,
         pathRewrite: {
           '^/api/hospital/': ''
-        }
+        },
+        ws: false
       },
     }
     // proxy: {
