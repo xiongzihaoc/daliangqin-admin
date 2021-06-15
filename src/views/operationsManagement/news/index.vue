@@ -368,7 +368,7 @@ export default {
             // [{ script: "sub" }, { script: "super" }], // 上下标
             // [{ indent: "-1" }, { indent: "+1" }], // 缩进
             // [{ direction: "rtl" }], // 文本方向
-            [{ size: ["small", false, "large", "huge"] }], // 字体大小
+             [{ 'size': ['12px', false ,'18px', '22px', '26px', '32px', '36px'] }], // 字体大小
             // [{ header: [1, 2, 3, 4, 5, 6, false] }], //几级标题
             [{ color: [] }, { background: [] }], // 字体颜色，字体背景颜色
             // [{ font: ['Helvetica Neue', 'Helvetica', 'Arial'] }], //字体
@@ -505,7 +505,9 @@ export default {
     onEditorReady(editor) {
       // 准备编辑器
     },
-    onEditorBlur() {}, // 失去焦点事件
+    onEditorBlur(e) {
+      console.log(e);
+    }, // 失去焦点事件
     onEditorFocus() {}, // 获得焦点事件
     onEditorChange() {}, // 内容改变事件
     /***** 表格格式化内容 *****/
