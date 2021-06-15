@@ -313,10 +313,10 @@ export default {
       this.editAddForm.templates = val.map((item) => {
         return { content: item.content, name: item.name };
       });
-      var str = "";
-      this.editAddForm.templates.forEach((item) => {
-        return (str += "#" + item.name + "\n" + item.content + "\n\n");
-      });
+      // var str = "";
+      // this.editAddForm.templates.forEach((item) => {
+      //   return (str += "#" + item.name + "\n" + item.content + "\n\n");
+      // });
 
       this.$set(this.editAddForm, "content", JSON.stringify(this.editAddForm.templates));
     },
@@ -344,9 +344,6 @@ export default {
       console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = val
-      // this.editAddForm = JSON.parse(JSON.stringify(val));
-      // var cc = val.templateNames.split(",");
-      // this.$set(this.editAddForm,'templateName',cc)
       this.editDialogVisible = true;
     },
     // 删除单个

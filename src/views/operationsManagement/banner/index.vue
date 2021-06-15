@@ -231,9 +231,9 @@ export default {
         appType: [
           { required: true, message: "请选择呈现位置", trigger: "blur" },
         ],
-        linkUrl: [
-          { required: true, message: "请输入跳转地址", trigger: "blur" },
-        ],
+        // linkUrl: [
+        //   { required: true, message: "请输入跳转地址", trigger: "blur" },
+        // ],
         zOrder: [{ required: true, message: "请输入权重", trigger: "blur" }],
 
         status: [{ required: true, message: "请选择状态", trigger: "blur" }],
