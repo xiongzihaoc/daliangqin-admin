@@ -296,7 +296,6 @@ export default {
         this.editAddForm.city,
         this.editAddForm.area,
       ];
-
       this.editDialogVisible = true;
     },
     editDialogClosed() {

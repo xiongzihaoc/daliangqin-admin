@@ -22,16 +22,18 @@
           <el-form-item label="手机号"
             prop="phone">
             <el-input v-model="form.phone"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入该用户手机号"></el-input>
           </el-form-item>
           <!-- 身份证 -->
           <el-form-item label="身份证号"
             prop="idCard">
             <el-input v-model="form.idCard"
+              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
               placeholder="请输入该用户身份证号"></el-input>
           </el-form-item>
           <el-form-item label="省市区"
-            prop="address">
+            prop="addressDetail">
             <el-cascader v-model="form.addressDetail"
               :options="addressJson"
               :props="cateListProps"
@@ -383,6 +385,7 @@ export default {
         height: [{ required: true, message: "请输入身高", trigger: "blur" }],
         weight: [{ required: true, message: "请输入体重", trigger: "blur" }],
       },
+      // 级联配置
       cateListProps: {
         value: "name", //匹配响应数据中的id
         label: "name", //匹配响应数据中的name
@@ -398,9 +401,9 @@ export default {
         idCard: "",
         addressDetail: "",
         address: "",
-        province:"",
-        city:"",
-        area:"",
+        province: "",
+        city: "",
+        area: "",
         doctorUserId: "",
         // 基本检查
         eatHabits: [],
@@ -449,33 +452,47 @@ export default {
     }
   },
   mounted() {
-    this.computeBmi();
+    this.getTodoctorList();
     this.getTreeData(addressJson);
-    this.getTodoctorList()
   },
   methods: {
+    // 列表数据
     getList() {
       httpAdminPatient
         .getPatient({ userId: this.$route.query.id })
         .then((res) => {
           // 回显表单数据
           this.form = res.data.elements[0].archivesMongo;
+          this.form.province = res.data.elements[0].province;
+          this.form.city = res.data.elements[0].city;
+          this.form.area = res.data.elements[0].area;
+
+          this.$set(this.form, "address", res.data.elements[0].address);
+          this.$set(this.form, "photoUrl", res.data.elements[0].avatarUrl);
+
+          this.form.addressDetail = [
+            this.form.province,
+            this.form.city,
+            this.form.area,
+          ];
         });
     },
+    // 级联change事件
     selectAddrssChange(val) {
-      console.log(val);
-      this.form.province = val[0];
-      this.form.city = val[1];
-      this.form.area = val[2];
+      if (val) {
+        this.form.province = val[0];
+        this.form.city = val[1];
+        this.form.area = val[2];
+      }
     },
     // 递归处理json文件的最后一级
     getTreeData(data) {
       for (var i = 0; i < data.length; i++) {
         if (data[i].districts.length < 1) {
-          // children若为空数组，则将children设为undefined
+          //  将children设为undefined
           data[i].districts = undefined;
         } else {
-          // children若不为空数组，则继续 递归调用 本方法
+          // 若不为空数组，则继续 递归调用 本方法
           this.getTreeData(data[i].districts);
         }
       }

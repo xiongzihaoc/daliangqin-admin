@@ -260,7 +260,7 @@ export const userStatusList = [
 // 饮食习惯
 export const eatHabitsList = [
   { id: 1, label: "清淡", value: "LIGHT" },
-  { id: 2, label: "高盐", value: "HIGH_SALT  " },
+  { id: 2, label: "高盐", value: "HIGH_SALT" },
   { id: 3, label: "高脂 ", value: "HIGH_FAT" },
   { id: 4, label: "高糖", value: "HIGH_GLUCOSE" },
 ]
