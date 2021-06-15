@@ -30,37 +30,13 @@
             <el-input v-model="form.idCard"
               placeholder="请输入该用户身份证号"></el-input>
           </el-form-item>
-          <el-form-item label="省"
-            prop="provinceAdCode">
-            <el-select v-model="form.provinceAdCode"
-              @change="selectProvince"
-              placeholder="请选择省">
-              <el-option v-for="item in provinceList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.adcode"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="市"
-            prop="cityAdCode">
-            <el-select v-model="form.cityAdCode"
-              @change="selectCity"
-              placeholder="请选择市">
-              <el-option v-for="item in cityList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.adcode"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="区"
-            prop="areaAdCode">
-            <el-select v-model="form.areaAdCode"
-              placeholder="请选择区">
-              <el-option v-for="item in areaList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.adcode"></el-option>
-            </el-select>
+          <el-form-item label="省市区"
+            prop="address">
+            <el-cascader v-model="form.addressDetail"
+              :options="addressJson"
+              :props="cateListProps"
+              @change="selectAddrssChange"
+              clearable></el-cascader>
           </el-form-item>
           <el-form-item label="详细地址"
             prop="address">
@@ -355,7 +331,7 @@
 import singleUpload from "@/components/Upload";
 import { httpAdminArchives } from "@/api/admin/httpAdminArchives";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { httpPublicDistrictProvince } from "@/api/public/httpPublicDistrictProvince";
+import addressJson from "@/utils/address.json";
 import {
   eatHabitsList,
   isSmokeList,
@@ -375,6 +351,7 @@ export default {
   },
   data() {
     return {
+      addressJson,
       eatHabitsList,
       isSmokeList,
       stayUpLateList,
@@ -384,10 +361,6 @@ export default {
       carotidPlaque,
       sitType,
       bloodTypeList,
-      // 省市区列表
-      provinceList: [],
-      cityList: [],
-      areaList: [],
       FormRules: {
         name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
         photoUrl: [
@@ -398,11 +371,9 @@ export default {
           { required: true, trigger: "blur", validator: validateIdCard },
         ],
         type: [{ required: true, message: "请选择职位", trigger: "blur" }],
-        provinceAdCode: [
-          { required: true, message: "请选择省", trigger: "blur" },
+        addressDetail: [
+          { required: true, message: "请选择省市区", trigger: "blur" },
         ],
-        cityAdCode: [{ required: true, message: "请选择市", trigger: "blur" }],
-        areaAdCode: [{ required: true, message: "请选择区", trigger: "blur" }],
         address: [
           { required: true, message: "请输入详细地址", trigger: "blur" },
         ],
@@ -412,6 +383,11 @@ export default {
         height: [{ required: true, message: "请输入身高", trigger: "blur" }],
         weight: [{ required: true, message: "请输入体重", trigger: "blur" }],
       },
+      cateListProps: {
+        value: "name", //匹配响应数据中的id
+        label: "name", //匹配响应数据中的name
+        children: "districts", //匹配响应数据中的children
+      },
       // 转诊医生列表
       toDoctorList: [],
       form: {
@@ -420,10 +396,11 @@ export default {
         photoUrl: "",
         phone: "",
         idCard: "",
-        provinceAdCode: "",
-        cityAdCode: "",
-        areaAdCode: "",
+        addressDetail: "",
         address: "",
+        province:"",
+        city:"",
+        area:"",
         doctorUserId: "",
         // 基本检查
         eatHabits: [],
@@ -473,8 +450,8 @@ export default {
   },
   mounted() {
     this.computeBmi();
-    this.getTodoctorList();
-    this.getProvinceList();
+    this.getTreeData(addressJson);
+    this.getTodoctorList()
   },
   methods: {
     getList() {
@@ -483,40 +460,26 @@ export default {
         .then((res) => {
           // 回显表单数据
           this.form = res.data.elements[0].archivesMongo;
-
-          // 回显市区
-          this.getCityList(res.data.elements[0].provinceAdCode);
-          this.getAreaList(res.data.elements[0].cityAdCode);
         });
     },
-    // 获取省列表
-    getProvinceList() {
-      httpPublicDistrictProvince.getProvince().then((res) => {
-        this.provinceList = res.data;
-      });
+    selectAddrssChange(val) {
+      console.log(val);
+      this.form.province = val[0];
+      this.form.city = val[1];
+      this.form.area = val[2];
     },
-    // 获取市列表
-    getCityList(id) {
-      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
-        this.cityList = res.data;
-      });
-    },
-    // 获取区列表
-    getAreaList(id) {
-      httpPublicDistrictProvince.getArea({ id: id }).then((res) => {
-        this.areaList = res.data;
-      });
-    },
-    // 选择省加载下一级数据
-    selectProvince(id) {
-      this.form.cityAdCode = "";
-      this.form.areaAdCode = "";
-      this.areaList = [];
-      this.getCityList(id);
-    },
-    selectCity(id) {
-      this.form.areaAdCode = "";
-      this.getAreaList(id);
+    // 递归处理json文件的最后一级
+    getTreeData(data) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].districts.length < 1) {
+          // children若为空数组，则将children设为undefined
+          data[i].districts = undefined;
+        } else {
+          // children若不为空数组，则继续 递归调用 本方法
+          this.getTreeData(data[i].districts);
+        }
+      }
+      return data;
     },
     // 获取转诊医生列表
     getTodoctorList() {

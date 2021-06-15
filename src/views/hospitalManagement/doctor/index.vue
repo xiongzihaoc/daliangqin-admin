@@ -217,13 +217,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="个人简介"
-          prop="avatarUrl">
+          prop="introduction">
           <el-input type="textarea"
             v-model="editAddForm.introduction"
             placeholder="请输入个人简介"></el-input>
         </el-form-item>
         <el-form-item label="医生擅长"
-          prop="avatarUrl">
+          prop="goodAt">
           <el-input type="textarea"
             v-model="editAddForm.goodAt"
             placeholder="请输入医生擅长"></el-input>
