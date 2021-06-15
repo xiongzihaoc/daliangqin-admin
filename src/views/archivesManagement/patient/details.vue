@@ -516,12 +516,14 @@ export default {
       this.$router.push({ path: "/archivesManagement/patient" });
     },
     confirm() {
+      console.log(this.$route.query.id);
+      console.log(this.form.id);
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 编辑
           if (this.$route.query.type === "edit") {
             httpAdminArchives
-              .putArchives(this.form, this.$route.query.id)
+              .putArchives(this.form, this.form.id)
               .then((res) => {
                 if (res.code === "OK") {
                   this.$router.push({ path: "/archivesManagement/patient" });

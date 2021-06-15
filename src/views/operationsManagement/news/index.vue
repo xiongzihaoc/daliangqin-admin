@@ -542,7 +542,7 @@ export default {
   padding: 0;
 }
 .ql-container {
-  height: 200px;
+  height: 270px;
 }
 .ql-toolbar.ql-snow {
   background-color: #f5f5f5;
