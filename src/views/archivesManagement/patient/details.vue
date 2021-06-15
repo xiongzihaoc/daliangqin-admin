@@ -466,10 +466,8 @@ export default {
           this.form.province = res.data.elements[0].province;
           this.form.city = res.data.elements[0].city;
           this.form.area = res.data.elements[0].area;
-
           this.$set(this.form, "address", res.data.elements[0].address);
           this.$set(this.form, "photoUrl", res.data.elements[0].avatarUrl);
-
           this.form.addressDetail = [
             this.form.province,
             this.form.city,
