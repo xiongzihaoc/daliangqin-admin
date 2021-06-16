@@ -379,7 +379,7 @@ export default {
       return formatterElement.hospitalType[row.hospitalType];
     },
     addressFormatter(row) {
-      return row.province + row.area + row.city + row.detail;
+      return row.province + row.city + row.area + row.detail;
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
