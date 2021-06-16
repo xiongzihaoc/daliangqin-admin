@@ -2,103 +2,117 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form ref="searchFormRef"
+      <el-form
+        ref="searchFormRef"
         :model="searchForm"
         :inline="true"
-        class="searchForm">
-        <el-form-item label="姓名"
-          align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+        class="searchForm"
+      >
+        <el-form-item label="姓名" align="left" prop="name">
+          <el-input
+            v-model="searchForm.name"
             size="small"
-            placeholder="请输入姓名"></el-input>
+            placeholder="请输入姓名"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="手机号"
-          align="left"
-          prop="phone">
-          <el-input v-model="searchForm.phone"
+        <el-form-item label="手机号" align="left" prop="phone">
+          <el-input
+            v-model="searchForm.phone"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             size="small"
-            placeholder="请输入手机号"></el-input>
+            placeholder="请输入手机号"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="身份证"
-          align="left"
-          prop="idCard">
-          <el-input v-model="searchForm.idCard"
+        <el-form-item label="身份证" align="left" prop="idCard">
+          <el-input
+            v-model="searchForm.idCard"
             size="small"
-            placeholder="请输入身份证"></el-input>
+            placeholder="请输入身份证"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="性别"
-          align="left"
-          prop="gender">
-          <el-select v-model="searchForm.gender"
-            size="small">
-            <el-option v-for="item in genderList"
+        <el-form-item label="性别" align="left" prop="gender">
+          <el-select v-model="searchForm.gender" size="small">
+            <el-option
+              v-for="item in genderList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"></el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="职位"
-          align="left"
-          prop="type">
-          <el-select v-model="searchForm.type"
-            placeholder="请选择职位">
-            <el-option v-for="item in doctorTypeList"
+        <el-form-item label="职位" align="left" prop="type">
+          <el-select v-model="searchForm.type" placeholder="请选择职位">
+            <el-option
+              v-for="item in doctorTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"></el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn"
+          <el-button
+            @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search">搜索</el-button>
-          <el-button @click="searchReset"
+            icon="el-icon-search"
+            >搜索</el-button
+          >
+          <el-button
+            @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh">重置</el-button>
-          <el-button size="small"
-            type="success"
-            icon="el-icon-download">导入</el-button>
-          <el-button size="small"
+            icon="el-icon-refresh"
+            >重置</el-button
+          >
+          <el-button size="small" type="success" icon="el-icon-download"
+            >导入</el-button
+          >
+          <el-button
+            size="small"
             type="success"
             @click="templateSet"
-            icon="el-icon-setting">模板配置</el-button>
+            icon="el-icon-setting"
+            >模板配置</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格操作按钮 -->
     <div>
-      <el-button @click="add"
+      <el-button
+        @click="add"
         type="primary"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-plus">新增</el-button>
+        icon="el-icon-plus"
+        >新增</el-button
+      >
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list"
-      :header="tableHeaderBig">
+    <EleTable :data="list" :header="tableHeaderBig">
       <!-- 操作 -->
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220">
+        width="220"
+      >
         <template slot-scope="scope">
-          <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
-          <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button>
+          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
+            >编辑</el-button
+          >
+          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination background
+    <el-pagination
+      background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -106,65 +120,151 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"></el-pagination>
+      class="el-pagination-style"
+    ></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
+    <el-dialog
+      :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @open="editDialogOpen"
       @closed="editDialogClosed"
-      v-dialogDrag>
-      <el-form ref="FormRef"
+      v-dialogDrag
+    >
+      <el-form
+        ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px">
-        <el-form-item label="医生姓名"
-          prop="doctorUserId">
-          <el-select v-model="editAddForm.doctorUserId"
-            :disabled="this.infoTitle=='编辑'?true:false"
-            style="width:100%">
-            <el-option v-for="item in doctorList"
+        label-width="100px"
+      >
+        <el-form-item label="医生姓名" prop="doctorUserId">
+          <el-select
+            v-model="editAddForm.doctorUserId"
+            :disabled="this.infoTitle == '编辑' ? true : false"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in doctorList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户姓名"
-          prop="patientUserId">
-          <el-select v-model="editAddForm.patientUserId"
-            :disabled="this.infoTitle=='编辑'?true:false"
-            style="width:100%">
-            <el-option v-for="item in patientList"
+        <el-form-item label="用户姓名" prop="patientUserId">
+          <el-select
+            v-model="editAddForm.patientUserId"
+            :disabled="this.infoTitle == '编辑' ? true : false"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in patientList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择模板"
-          prop="templateName">
-          <el-select multiple
+        <el-form-item label="选择模板" prop="templateName">
+          <el-select
+            multiple
             @change="selectTemplate"
             value-key="name"
-            style="width:100%"
-            v-model="editAddForm.templateName">
-            <el-option v-for="item in templateList"
+            style="width: 100%"
+            v-model="editAddForm.templateName"
+          >
+            <el-option
+              v-for="item in templateList"
               :key="item.id"
               :label="item.name"
-              :value="item"></el-option>
+              :value="item"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="处方内容"
-          prop="templateContent">
-          <el-input type="textarea"
+        <el-form-item label="处方内容" prop="templateContent">
+          <el-input
+            type="textarea"
             :rows="20"
-            v-model="editAddForm.content"></el-input>
+            v-model="editAddForm.content"
+          ></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer"
-        class="dialog-footer">
+      <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
+        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 模板配置页面 -->
+    <el-dialog
+      title="模板配置"
+      :visible.sync="templateDialogVisible"
+      width="60%"
+      v-dialogDrag
+    >
+      <el-table :data="templateList" style="width: 100%">
+        <el-table-column
+          align="center"
+          label="模板标题"
+          type="index"
+          width="80"
+        >
+        </el-table-column>
+        <el-table-column align="center" label="模板标题" prop="name">
+        </el-table-column>
+        <el-table-column align="center" label="模板内容" prop="name">
+        </el-table-column>
+        <el-table-column align="center" label="添加人" prop="name">
+        </el-table-column>
+        <el-table-column align="center" label="添加时间" prop="name">
+        </el-table-column>
+        <el-table-column align="center" label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" type="primary" @click="editBtn(scope.row)"
+              >编辑</el-button
+            >
+            <el-button
+              size="mini"
+              type="danger"
+              @click="deleteTemplateBtn(scope.row)"
+              >删除</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="templateDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="templateDialogEnter">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="模板配置"
+      :visible.sync="templateSetDialogVisible"
+      width="60%"
+      v-dialogDrag
+    >
+      <el-form
+        ref="templateFormRef"
+        :rules="templateFormRules"
+        :model="templateForm"
+        label-width="100px"
+      >
+        <el-form-item label="模板标题" prop="doctorUserId">
+          <el-input v-model="templateForm.name" placeholder="请输入模板标题"></el-input>
+        </el-form-item>
+        <el-form-item label="处方内容" prop="doctorUserId">
+          <el-input
+            v-model="templateForm.content"
+            type="textarea"
+            :rows="20"
+            placeholder="请输入模处方内容"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="templateSetDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="templateSetDialogEnter"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -264,6 +364,11 @@ export default {
           },
         },
       ],
+      templateFormRules: {},
+      templateForm: {
+        name: "",
+        content: "",
+      },
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -271,12 +376,16 @@ export default {
       // 弹框区域
       editDialogVisible: false,
       infoTitle: "",
+      templateDialogVisible: false,
+      templateSetDialogVisible: false,
     };
   },
   created() {
     this.getList();
   },
-  mounted() {},
+  mounted() {
+    this.getTemplateList();
+  },
   methods: {
     getList() {
       httpHospitalUserTemplate
@@ -313,16 +422,12 @@ export default {
       this.editAddForm.templates = val.map((item) => {
         return { content: item.content, name: item.name };
       });
-      // var str = "";
-      // this.editAddForm.templates.forEach((item) => {
-      //   return (str += "#" + item.name + "\n" + item.content + "\n\n");
-      // });
-
-      this.$set(this.editAddForm, "content", JSON.stringify(this.editAddForm.templates));
+      this.$set(
+        this.editAddForm,
+        "content",
+        JSON.stringify(this.editAddForm.templates)
+      );
     },
-    // 打开模板配置弹框
-    templateSet() {},
-    /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
       this.getList();
@@ -343,7 +448,7 @@ export default {
     editBtn(val) {
       console.log(val);
       this.infoTitle = "编辑";
-      this.editAddForm = val
+      this.editAddForm = val;
       this.editDialogVisible = true;
     },
     // 删除单个
@@ -372,7 +477,6 @@ export default {
       });
     },
     editDialogOpen() {
-      this.getTemplateList();
       this.getDoctorList();
       this.getPatientList();
     },
@@ -414,6 +518,15 @@ export default {
         }
       });
     },
+    /***** 模板 *****/
+    // 打开模板配置弹框
+    templateSet() {
+      this.templateDialogVisible = true;
+    },
+    templateDialogEnter() {},
+    deleteTemplateBtn() {},
+    templateSetDialogEnter() {},
+    /***** 搜索区域 *****/
     /***** 表格格式化内容 *****/
     doctorTypeFormatter(row) {
       return formatterElement.doctorType[row.doctorType];
