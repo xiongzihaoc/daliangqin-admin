@@ -73,6 +73,7 @@
         <el-form-item label="选择身份"
           prop="adminRoleType">
           <el-select style="width: 100%"
+            placeholder="请选择身份"
             v-model="editAddForm.adminRoleType">
             <el-option v-for="item in adminRoleTypeList"
               :key="item.id"
@@ -84,6 +85,7 @@
           prop="deviceType"
           v-if="this.infoTitle === '新增'">
           <el-select style="width: 100%"
+            placeholder="请选择设备类型"
             v-model="editAddForm.deviceType">
             <el-option v-for="item in deviceTypeList"
               :key="item.id"
