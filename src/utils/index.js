@@ -5,7 +5,7 @@
  * @param {string} cFormat
  * @returns {string | null}
  */
- export function parseTime(time, cFormat) {
+export function parseTime(time, cFormat) {
   if (arguments.length === 0 || !time) {
     return null
   }
@@ -42,7 +42,7 @@
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -82,7 +82,7 @@ export function formatTime(time, option) {
       1 +
       '月' +
       d.getDate() +
-      '日' 
+      '日'
       // +
       // d.getHours() +
       // '时' +
@@ -253,7 +253,7 @@ export const healthList = [
 // 用户状态
 export const userStatusList = [
   { id: 1, label: "良好", value: "HEALTH" },
-  { id: 2, label: "轻微", value: "SLIGHT  " },
+  { id: 2, label: "轻微", value: "SLIGHT" },
   { id: 3, label: "严重", value: "SERIOUS" },
 ]
 
@@ -268,7 +268,7 @@ export const eatHabitsList = [
 // 是否饮酒 抽烟
 export const isSmokeList = [
   { id: 1, label: "从不", value: "NEVER" },
-  { id: 2, label: "偶尔", value: "HAPLY  " },
+  { id: 2, label: "偶尔", value: "HAPLY" },
   { id: 3, label: "经常 ", value: "OFTEN" },
   { id: 4, label: "已戒", value: "QUIT" },
 ]
@@ -276,14 +276,14 @@ export const isSmokeList = [
 // 熬夜情况
 export const stayUpLateList = [
   { id: 1, label: "从不", value: "NEVER" },
-  { id: 2, label: "偶尔", value: "HAPLY  " },
+  { id: 2, label: "偶尔", value: "HAPLY" },
   { id: 3, label: "经常 ", value: "OFTEN" },
 ]
 
 // 运动情况
 export const exerciseList = [
   { id: 1, label: "1-3次", value: "ONE_THREE" },
-  { id: 2, label: "4-7次", value: "FOUR_SEVEN  " },
+  { id: 2, label: "4-7次", value: "FOUR_SEVEN" },
   { id: 3, label: "大于7次", value: "EXCEED_SEVEN" },
   { id: 4, label: "不运动 ", value: "NONE" },
 ]
