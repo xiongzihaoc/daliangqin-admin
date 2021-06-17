@@ -137,6 +137,7 @@
         <el-form-item label="选择医生"
           prop="doctorUserId">
           <el-select style="width:100%;"
+            @change="selectDoctor"
             v-model.trim="editAddForm.doctorUserId"
             placeholder="请选择医生">
             <el-option v-for="item in doctorList"
@@ -363,10 +364,13 @@ export default {
       });
     },
     // 获取用户列表
-    getPatientList() {
-      httpAdminPatient.getPatient().then((res) => {
+    getPatientList(id) {
+      httpAdminPatient.getPatient({userId:id}).then((res) => {
         this.patientList = res.data.elements;
       });
+    },
+    selectDoctor(val){
+      this.getPatientList(val)
     },
     /***** 搜索区域 *****/
     // 搜索选择时间

@@ -238,6 +238,10 @@ export default {
             return this.hospitalTypeFormatter(row);
           },
         },
+        {
+          prop: "doctorCount",
+          label: "医生数量",
+        },
       ],
       // 分页区域
       pageSize: 10,

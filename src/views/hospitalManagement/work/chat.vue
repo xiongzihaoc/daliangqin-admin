@@ -179,7 +179,7 @@ export default {
       tableHeaderBig: [
         { type: "index", label: "序号" },
         { prop: "patientUserName", label: "用户姓名" },
-        { prop: "leaveCount", label: "用户姓名" },
+        { prop: "leaveCount", label: "用户留言数" },
         {
           prop: "leaveTime",
           label: "最近留言时间",

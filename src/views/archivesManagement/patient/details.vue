@@ -453,6 +453,7 @@ export default {
   },
   mounted() {
     this.getTodoctorList();
+    this.computeBmi();
     this.getTreeData(addressJson);
   },
   methods: {
@@ -488,6 +489,7 @@ export default {
             this.form.area = value.area;
             this.$set(this.form, "address", value.address);
             this.$set(this.form, "photoUrl", value.avatarUrl);
+            this.computeBmi()
             this.form.addressDetail = [
               this.form.province,
               this.form.city,
@@ -520,7 +522,6 @@ export default {
     // 获取转诊医生列表
     getTodoctorList() {
       httpAdminPatient.getPatientTransfer().then((res) => {
-        console.log(res);
         this.toDoctorList = res.data.elements;
       });
     },

@@ -3,7 +3,7 @@ import request from '@/utils/request'
 export const httpAdminPatient = {
   getPatient(data) {
     return request({
-      url: 'patient',
+      url: 'patient/' + data.userId,
       method: 'get',
       params: data
     })

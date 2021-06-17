@@ -50,6 +50,13 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="医院名称"
+          align="left"
+          prop="hospitalName">
+          <el-input v-model="searchForm.hospitalName"
+            size="small"
+            placeholder="请输入医院名称"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -282,6 +289,7 @@ export default {
         idCard: "",
         gender: "",
         type: "",
+        hospitalName:""
       },
       list: [],
       editAddForm: {
@@ -321,6 +329,7 @@ export default {
           },
         },
         { prop: "hospitalName", label: "医院名称" },
+        { prop: "patientCount", label: "用户数量" },
       ],
       // 医院列表
       hospitalList: [],
@@ -356,6 +365,7 @@ export default {
           idCard: this.searchForm.idCard,
           genderType: this.searchForm.gender,
           type: this.searchForm.type,
+          hospitalName:this.searchForm.hospitalName
         })
         .then((res) => {
           this.list = res.data.elements;

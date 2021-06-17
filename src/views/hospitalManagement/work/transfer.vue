@@ -181,7 +181,7 @@ export default {
 
         {
           prop: "confirmTime",
-          label: "确认开始时间",
+          label: "确认时间",
           formatter: (row) => {
             return parseTime(row.confirmTime);
           },
