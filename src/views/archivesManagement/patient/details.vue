@@ -463,17 +463,37 @@ export default {
         .then((res) => {
           // 回显表单数据
           let value = res.data.elements[0];
-          this.form = value.archivesMongo;
-          this.form.province = value.province;
-          this.form.city = value.city;
-          this.form.area = value.area;
-          this.$set(this.form, "address", value.address);
-          this.$set(this.form, "photoUrl", value.avatarUrl);
-          this.form.addressDetail = [
-            this.form.province,
-            this.form.city,
-            this.form.area,
-          ];
+          if (value.archivesMongo != null) {
+            if (value.archivesMongo.bloodLipids === null) {
+              value.archivesMongo.bloodLipids = this.form.bloodLipids;
+            }
+            if (value.archivesMongo.bloodPressure === null) {
+              value.archivesMongo.bloodPressure = this.form.bloodPressure;
+            }
+            if (
+              value.archivesMongo.eatHabits === null ||
+              value.archivesMongo.eatHabits === []
+            ) {
+              value.archivesMongo.eatHabits = this.form.eatHabits;
+            }
+            if (
+              value.archivesMongo.chronicDisease === null ||
+              value.archivesMongo.chronicDisease === []
+            ) {
+              value.archivesMongo.chronicDisease = this.form.chronicDisease;
+            }
+            this.form = value.archivesMongo;
+            this.form.province = value.province;
+            this.form.city = value.city;
+            this.form.area = value.area;
+            this.$set(this.form, "address", value.address);
+            this.$set(this.form, "photoUrl", value.avatarUrl);
+            this.form.addressDetail = [
+              this.form.province,
+              this.form.city,
+              this.form.area,
+            ];
+          }
         });
     },
     // 级联change事件
