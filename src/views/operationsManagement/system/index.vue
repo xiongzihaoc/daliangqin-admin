@@ -56,8 +56,7 @@
         </el-form-item>
         <el-form-item label="值"
           prop="configValue">
-          <el-input oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            v-model="editAddForm.configValue"></el-input>
+          <el-input v-model="editAddForm.configValue"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"

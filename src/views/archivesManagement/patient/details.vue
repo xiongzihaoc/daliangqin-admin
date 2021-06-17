@@ -462,12 +462,13 @@ export default {
         .getPatient({ userId: this.$route.query.id })
         .then((res) => {
           // 回显表单数据
-          this.form = res.data.elements[0].archivesMongo;
-          this.form.province = res.data.elements[0].province;
-          this.form.city = res.data.elements[0].city;
-          this.form.area = res.data.elements[0].area;
-          this.$set(this.form, "address", res.data.elements[0].address);
-          this.$set(this.form, "photoUrl", res.data.elements[0].avatarUrl);
+          let value = res.data.elements[0];
+          this.form = value.archivesMongo;
+          this.form.province = value.province;
+          this.form.city = value.city;
+          this.form.area = value.area;
+          this.$set(this.form, "address", value.address);
+          this.$set(this.form, "photoUrl", value.avatarUrl);
           this.form.addressDetail = [
             this.form.province,
             this.form.city,
