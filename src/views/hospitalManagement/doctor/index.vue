@@ -97,7 +97,7 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        type="index"></el-table-column>
+        type="index" label="序号"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
@@ -402,6 +402,7 @@ export default {
     },
     // 编辑
     editBtn(val) {
+      console.log(val);
       this.editVal = val;
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));

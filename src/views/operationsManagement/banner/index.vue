@@ -81,6 +81,12 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
+        prop="linkUrl"
+        label="跳转地址">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
         prop="appType"
         label="呈现位置">
         <template slot-scope="scope">

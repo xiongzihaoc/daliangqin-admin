@@ -149,6 +149,8 @@
         <el-form-item label="选择用户"
           prop="patientUserId">
           <el-select style="width:100%;"
+            filterable
+            clearable
             v-model.trim="editAddForm.patientUserId"
             placeholder="请选择用户">
             <el-option v-for="item in patientList"
@@ -336,7 +338,6 @@ export default {
   },
   mounted() {
     this.getDoctorList();
-    this.getPatientList();
   },
   methods: {
     getList() {
@@ -365,12 +366,14 @@ export default {
     },
     // 获取用户列表
     getPatientList(id) {
-      httpAdminPatient.getPatient({userId:id}).then((res) => {
+      console.log(res);
+      httpAdminPatient.getPatient({ userId: id }).then((res) => {
         this.patientList = res.data.elements;
       });
     },
-    selectDoctor(val){
-      this.getPatientList(val)
+    selectDoctor(val) {
+      this.getPatientList(val);
+      this.editAddForm.patientUserId = "";
     },
     /***** 搜索区域 *****/
     // 搜索选择时间
@@ -401,6 +404,7 @@ export default {
     },
     // 编辑
     editBtn(val) {
+      this.getPatientList(val.doctorUserId);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.$set(this.editAddForm, "taskTime", [val.startTime, val.endTime]);
