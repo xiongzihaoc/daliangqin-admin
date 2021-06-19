@@ -99,7 +99,7 @@
             <div style="padding-left:10px;margin-bottom:15px;">
               <div>{{item.fromUserName}}</div>
               <div style="margin:5px 0;">{{parseTime(item.createTime).slice(6)}}</div>
-              <div style="max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
+              <div style="color:#000;background:#fff;max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
             </div>
           </div>
           <!-- 医生信息 -->
@@ -108,7 +108,7 @@
             <div style="padding-right:10px;margin-bottom:15px;">
               <div style="text-align:right">{{item.fromUserName}}</div>
               <div style="text-align:right;margin:5px 0;">{{parseTime(item.createTime).slice(6)}}</div>
-              <div style="max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
+              <div style="color:#fff;background:#405C59;max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
             </div>
             <div>
               <img style="width:64px;height:64px;border-radius:50%;"
@@ -208,6 +208,7 @@ export default {
   created() {
     this.getList();
   },
+
   methods: {
     getList() {
       httpAdminChat
