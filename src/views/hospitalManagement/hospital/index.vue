@@ -51,10 +51,6 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         type="index"
         label="序号"></el-table-column>
       <el-table-column align="center"
@@ -146,6 +142,12 @@
               :label="item.label"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="管理员姓名"
+          v-if="this.infoTitle === '新增'"
+          prop="adminName">
+          <el-input v-model="editAddForm.adminName"
+            placeholder="请输入管理员姓名"></el-input>
+        </el-form-item>
         <el-form-item label="管理员手机号"
           v-if="this.infoTitle === '新增'"
           prop="adminPhone">
@@ -186,6 +188,7 @@ export default {
         adminPhone: [
           { required: true, trigger: "blur", validator: validatePhone },
         ],
+        adminName: [{ required: true, message: "请输入管理员姓名", trigger: "blur" }],
         name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
         address: [{ required: true, message: "请选择省市区", trigger: "blur" }],
         contract: [
@@ -220,6 +223,7 @@ export default {
         area: "",
         address: [],
         detail: "",
+        adminName:""
       },
       // 表格数据
       tableHeaderBig: [

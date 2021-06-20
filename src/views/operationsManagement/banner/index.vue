@@ -60,11 +60,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="selection"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="right"

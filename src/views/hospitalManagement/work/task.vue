@@ -296,7 +296,7 @@ export default {
         },
         {
           prop: "finishTime",
-          label: "添加时间",
+          label: "创建时间",
           formatter: (row) => {
             return parseTime(row.finishTime)?.slice(6);
           },
@@ -366,7 +366,6 @@ export default {
     },
     // 获取用户列表
     getPatientList(id) {
-      console.log(res);
       httpAdminPatient.getPatient({ userId: id }).then((res) => {
         this.patientList = res.data.elements;
       });

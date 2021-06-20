@@ -157,20 +157,20 @@ export default {
         { prop: "toDoctorUserName", label: "专家姓名" },
         { prop: "hospitalName", label: "转诊医院" },
         { prop: "patientUserName", label: "转诊用户" },
-        {
-          prop: "highBloodStatus",
-          label: "高血压",
-          formatter: (row) => {
-            return this.highBloodFormatter(row);
-          },
-        },
-        {
-          prop: "diabetesStatus",
-          label: "糖尿病",
-          formatter: (row) => {
-            return this.diabetesFormatter(row);
-          },
-        },
+        // {
+        //   prop: "highBloodStatus",
+        //   label: "高血压",
+        //   formatter: (row) => {
+        //     return this.highBloodFormatter(row);
+        //   },
+        // },
+        // {
+        //   prop: "diabetesStatus",
+        //   label: "糖尿病",
+        //   formatter: (row) => {
+        //     return this.diabetesFormatter(row);
+        //   },
+        // },
         {
           prop: "transferStatus",
           label: "转诊状态",

@@ -2,147 +2,171 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form ref="searchFormRef"
+      <el-form
+        ref="searchFormRef"
         :model="searchForm"
         :inline="true"
-        class="searchForm">
-        <el-form-item label="姓名"
-          align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+        class="searchForm"
+      >
+        <el-form-item label="姓名" align="left" prop="name">
+          <el-input
+            v-model="searchForm.name"
             size="small"
-            placeholder="请输入姓名"></el-input>
+            placeholder="请输入姓名"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="手机号"
-          align="left"
-          prop="phone">
-          <el-input v-model="searchForm.phone"
+        <el-form-item label="手机号" align="left" prop="phone">
+          <el-input
+            v-model="searchForm.phone"
             oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             size="small"
-            placeholder="请输入手机号"></el-input>
+            placeholder="请输入手机号"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="身份证"
-          align="left"
-          prop="idCard">
-          <el-input v-model="searchForm.idCard"
+        <el-form-item label="身份证" align="left" prop="idCard">
+          <el-input
+            v-model="searchForm.idCard"
             size="small"
-            placeholder="请输入身份证"></el-input>
+            placeholder="请输入身份证"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="性别"
-          align="left"
-          prop="gender">
-          <el-select v-model="searchForm.gender"
-            size="small">
-            <el-option v-for="item in genderList"
+        <el-form-item label="性别" align="left" prop="gender">
+          <el-select v-model="searchForm.gender" size="small">
+            <el-option
+              v-for="item in genderList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"></el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="职位"
-          align="left"
-          prop="type">
-          <el-select v-model="searchForm.type"
-            placeholder="请选择职位">
-            <el-option v-for="item in doctorTypeList"
+        <el-form-item label="职位" align="left" prop="type">
+          <el-select v-model="searchForm.type" placeholder="请选择职位">
+            <el-option
+              v-for="item in doctorTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"></el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="医院名称"
-          align="left"
-          prop="hospitalName">
-          <el-input v-model="searchForm.hospitalName"
+        <el-form-item label="医院名称" align="left" prop="hospitalName">
+          <el-input
+            v-model="searchForm.hospitalName"
             size="small"
-            placeholder="请输入医院名称"></el-input>
+            placeholder="请输入医院名称"
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn"
+          <el-button
+            @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search">搜索</el-button>
-          <el-button @click="searchReset"
+            icon="el-icon-search"
+            >搜索</el-button
+          >
+          <el-button
+            @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh">重置</el-button>
-          <el-button size="small"
-            type="success"
-            icon="el-icon-download">导入</el-button>
+            icon="el-icon-refresh"
+            >重置</el-button
+          >
+          <el-button size="small" type="success" icon="el-icon-download"
+            >导入</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格操作按钮 -->
     <div>
-      <el-button @click="add"
+      <el-button
+        @click="add"
         type="primary"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-plus">新增</el-button>
-      <el-button @click="deleteMultiple"
-        type="danger"
-        class="tableAdd"
-        size="small"
-        plain
-        icon="el-icon-delete">删除</el-button>
+        icon="el-icon-plus"
+        >新增</el-button
+      >
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list"
-      :header="tableHeaderBig">
-      <el-table-column align="center"
+    <EleTable :data="list" :header="tableHeaderBig">
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
-        type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index" label="序号"></el-table-column>
-      <el-table-column align="center"
+        type="index"
+        label="序号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
         label="医生姓名"
-        prop="name"></el-table-column>
-      <el-table-column align="center"
+        prop="name"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="left"
         label="医生头像"
-        prop="avatarUrl">
+        prop="avatarUrl"
+      >
         <template slot-scope="scope">
-          <img class="tableImg"
-            :src="scope.row.avatarUrl">
+          <img class="tableImg" :src="scope.row.avatarUrl" />
         </template>
       </el-table-column>
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         prop="toDoctorInfo"
-        label="对应转诊医生">
+        label="对应转诊医生"
+      >
         <template slot-scope="scope">
           <div v-if="scope.row.toDoctorInfo[0]">
-            <span v-for="item in scope.row.toDoctorInfo"
-              :key="item.id">{{item.name + '  '}}</span>
+            <span v-for="item in scope.row.toDoctorInfo" :key="item.id">{{
+              item.name + "  "
+            }}</span>
           </div>
         </template>
       </el-table-column>
+      <el-table-column
+        align="center"
+        slot="fixed"
+        fixed="right"
+        label="创建人"
+        prop="createName"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        slot="fixed"
+        fixed="right"
+        label="创建时间"
+        prop="createTime"
+      ></el-table-column>
       <!-- 操作 -->
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220">
+        width="220"
+      >
         <template slot-scope="scope">
-          <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
-          <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button>
+          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
+            >编辑</el-button
+          >
+          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination background
+    <el-pagination
+      background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -150,97 +174,115 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"></el-pagination>
+      class="el-pagination-style"
+    ></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
+    <el-dialog
+      :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
-      v-dialogDrag>
-      <el-form ref="FormRef"
+      v-dialogDrag
+    >
+      <el-form
+        ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px">
-        <el-form-item label="医生姓名"
-          prop="name">
+        label-width="100px"
+      >
+        <el-form-item label="医生姓名" prop="name">
           <!-- 编辑阻止修改医生姓名 -->
-          <el-input :disabled="this.infoTitle === '编辑'?true:false"
+          <el-input
+            :disabled="this.infoTitle === '编辑' ? true : false"
             v-model="editAddForm.name"
-            placeholder="请输入医生真实姓名"></el-input>
+            placeholder="请输入医生真实姓名"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医生头像"
-          prop="avatarUrl">
-          <single-upload v-model="editAddForm.avatarUrl"
-            uploadType="AVATAR" />
+        <el-form-item label="医生头像" prop="avatarUrl">
+          <single-upload v-model="editAddForm.avatarUrl" uploadType="AVATAR" />
         </el-form-item>
         <!-- 编辑阻止修改医生手机号-->
-        <el-form-item label="手机号"
-          prop="phone">
-          <el-input :disabled="this.infoTitle === '编辑'?true:false"
+        <el-form-item label="手机号" prop="phone">
+          <el-input
+            :disabled="this.infoTitle === '编辑' ? true : false"
             v-model="editAddForm.phone"
-            placeholder="请输入该医生手机号"></el-input>
+            placeholder="请输入该医生手机号"
+          ></el-input>
         </el-form-item>
         <!-- 编辑阻止修改医生身份证号 -->
-        <el-form-item label="身份证号"
-          prop="idCard">
-          <el-input v-model="editAddForm.idCard"
-            :disabled="this.infoTitle === '编辑'?true:false"
-            placeholder="请输入该医生身份证号"></el-input>
+        <el-form-item label="身份证号" prop="idCard">
+          <el-input
+            v-model="editAddForm.idCard"
+            :disabled="this.infoTitle === '编辑' ? true : false"
+            placeholder="请输入该医生身份证号"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="职位"
-          prop="type">
-          <el-select :disabled="this.infoTitle === '编辑'?true:false"
+        <el-form-item label="职位" prop="type">
+          <el-select
+            :disabled="this.infoTitle === '编辑' ? true : false"
             v-model="editAddForm.type"
             placeholder="请选择职位"
-            style="width: 100%">
-            <el-option v-for="item in doctorTypeList"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in doctorTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"></el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="医院名称"
-          prop="hospitalId">
-          <el-select v-model="editAddForm.hospitalId"
+        <el-form-item label="医院名称" prop="hospitalId">
+          <el-select
+            v-model="editAddForm.hospitalId"
             placeholder="请选择医院"
-            style="width: 100%">
-            <el-option v-for="item in hospitalList"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in hospitalList"
               :key="item.id"
               :value="item.id"
-              :label="item.name"></el-option>
+              :label="item.name"
+            ></el-option>
           </el-select>
         </el-form-item>
         <!-- PHYSICIAN 医师的枚举值 只有职位选中医师 才能选择转诊医生 -->
-        <el-form-item v-if="editAddForm.type === 'PHYSICIAN'"
+        <el-form-item
+          v-if="editAddForm.type === 'PHYSICIAN'"
           label="转诊医生"
-          prop="toDoctorUserId">
-          <el-select v-model="editAddForm.toDoctorUserId"
+          prop="toDoctorUserId"
+        >
+          <el-select
+            v-model="editAddForm.toDoctorUserId"
             placeholder="请选择转诊医生"
-            style="width: 100%">
-            <el-option v-for="item in toDoctorList"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in toDoctorList"
               :key="item.id"
               :value="item.id"
-              :label="item.name"></el-option>
+              :label="item.name"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="个人简介"
-          prop="introduction">
-          <el-input type="textarea"
+        <el-form-item label="个人简介" prop="introduction">
+          <el-input
+            type="textarea"
             v-model="editAddForm.introduction"
-            placeholder="请输入个人简介"></el-input>
+            placeholder="请输入个人简介"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医生擅长"
-          prop="goodAt">
-          <el-input type="textarea"
+        <el-form-item label="医生擅长" prop="goodAt">
+          <el-input
+            type="textarea"
             v-model="editAddForm.goodAt"
-            placeholder="请输入医生擅长"></el-input>
+            placeholder="请输入医生擅长"
+          ></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer"
-        class="dialog-footer">
+      <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
+        <el-button type="primary" @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -289,7 +331,7 @@ export default {
         idCard: "",
         gender: "",
         type: "",
-        hospitalName:""
+        hospitalName: "",
       },
       list: [],
       editAddForm: {
@@ -365,7 +407,7 @@ export default {
           idCard: this.searchForm.idCard,
           genderType: this.searchForm.gender,
           type: this.searchForm.type,
-          hospitalName:this.searchForm.hospitalName
+          hospitalName: this.searchForm.hospitalName,
         })
         .then((res) => {
           this.list = res.data.elements;

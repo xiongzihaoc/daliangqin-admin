@@ -57,11 +57,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="selection"></el-table-column>
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
@@ -129,7 +124,7 @@
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220">
+        width="320">
         <template slot-scope="scope">
           <el-button size="mini"
             type="primary"
@@ -137,6 +132,14 @@
           <el-button size="mini"
             type="danger"
             @click="deleteBtn(scope.row.id)">删除</el-button>
+          <el-button size="mini"
+            plain
+            icon="el-icon-top"
+            @click="sortTop(scope.row.id)"></el-button>
+          <el-button size="mini"
+            plain
+            icon="el-icon-bottom"
+            @click="sortBottom(scope.row.id)"></el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -337,7 +340,7 @@ export default {
         { prop: "author", label: "发布人" },
         {
           prop: "createTime",
-          label: "添加时间",
+          label: "创建时间",
           formatter: (row) => {
             return parseTime(row.createTime);
           },
@@ -498,6 +501,27 @@ export default {
               }
             });
           }
+        }
+      });
+    },
+        // 排序
+    sortTop(id) {
+      httpAdminNews.postNewsSort({ id: id, status: "UP" }).then((res) => {
+        if (res.code === "OK") {
+          this.getList();
+          return this.$notify.success({
+            title: res.message,
+          });
+        }
+      });
+    },
+    sortBottom(id) {
+      httpAdminNews.postNewsSort({ id: id, status: "DOWN" }).then((res) => {
+        if (res.code === "OK") {
+          this.getList();
+          return this.$notify.success({
+            title: res.message,
+          });
         }
       });
     },

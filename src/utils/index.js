@@ -331,6 +331,9 @@ export const transferStatusList = [
   { id: 2, label: "转诊中", value: "ING" },
   { id: 3, label: "已转诊", value: "END" },
   { id: 4, label: "未转诊", value: "NONE" },
+  { id: 5, label: "向上转诊", value: "UP" },
+  { id: 6, label: "向下转诊", value: "DOWN" },
+  { id: 7, label: "转诊拒绝", value: "REFUSE" },
 ]
 
 // 所有枚举类型转义
@@ -421,5 +424,8 @@ export const formatterElement = {
     ING: "转诊中",
     END: "已转诊",
     NONE: "未转诊",
+    UP: "向上转诊",
+    DOWN: "向下转诊",
+    REFUSE: "转诊拒绝",
   }
 }

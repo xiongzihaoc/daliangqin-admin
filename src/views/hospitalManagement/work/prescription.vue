@@ -196,11 +196,11 @@
           prop="name">
         </el-table-column>
         <el-table-column align="center"
-          label="添加人"
+          label="创建人"
           prop="name">
         </el-table-column>
         <el-table-column align="center"
-          label="添加时间"
+          label="创建时间"
           prop="name">
         </el-table-column>
         <el-table-column align="center"

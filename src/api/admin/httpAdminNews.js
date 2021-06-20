@@ -27,5 +27,12 @@ export const httpAdminNews = {
             url: 'news/' + data,
             method: 'delete',
         })
+    },
+    postNewsSort(data) {
+        return request({
+            url: 'news/' + data.id,
+            method: 'post',
+            params: data
+        })
     }
 }
