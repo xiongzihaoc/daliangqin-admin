@@ -36,21 +36,33 @@ const systemRouter = {
     }
   },
   {
-    path: 'updateControl',
-    name: 'updateControl',
-    component: () => import('@/views/systemManagement/updateVersion/updateControl'),
+    path: 'update',
+    name: 'update',
+    component: () => import('@/views/systemManagement/updateLog/update'),
+    redirect: "/systemManagement/updateLog/updateControl",
     meta: {
-      title: '更新控制',
-      icon: 'kongzhi'
-    }
-  }, {
-    path: 'updateVersion',
-    name: 'updateVersion',
-    component: () => import('@/views/systemManagement/updateVersion/updateVersion'),
-    meta: {
-      title: '更新记录',
-      icon: 'jilu'
-    }
+      title: '更新管理',
+      icon: 'gengxinmana'
+    },
+    children: [
+      {
+        path: 'updateControl',
+        name: 'updateControl',
+        component: () => import('@/views/systemManagement/updateLog/updateControl'),
+        meta: {
+          title: '更新控制',
+          icon: 'kongzhi'
+        }
+      }, {
+        path: 'updateVersion',
+        name: 'updateVersion',
+        component: () => import('@/views/systemManagement/updateLog/updateVersion'),
+        meta: {
+          title: '更新记录',
+          icon: 'jilu'
+        }
+      },
+    ],
   },
   ]
 }
