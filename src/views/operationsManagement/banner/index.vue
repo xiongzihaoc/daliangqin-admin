@@ -181,7 +181,7 @@
         <el-form-item label="权重"
           prop="zOrder">
           <el-input v-model.trim="editAddForm.zOrder"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            v-Int
             placeholder="请输入权重"></el-input>
         </el-form-item>
         <el-form-item label="状态"

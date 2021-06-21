@@ -17,7 +17,7 @@
           align="left"
           prop="doctorPhone">
           <el-input v-model="searchForm.doctorPhone"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            v-Int
             size="small"
             placeholder="请输入医生手机号"></el-input>
         </el-form-item>
@@ -142,7 +142,7 @@
         <el-form-item label="电话"
           prop="phone">
           <el-input v-model="editAddForm.phone"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            v-Int
             placeholder="请输入电话"></el-input>
         </el-form-item>
         <el-form-item label="省市区"

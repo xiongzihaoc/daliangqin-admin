@@ -17,7 +17,7 @@
           align="left"
           prop="phone">
           <el-input v-model="searchForm.phone"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            v-Int
             size="small"
             placeholder="请输入手机号"></el-input>
         </el-form-item>

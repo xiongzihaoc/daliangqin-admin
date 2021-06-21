@@ -18,7 +18,7 @@
         <el-form-item label="手机号" align="left" prop="phone">
           <el-input
             v-model="searchForm.phone"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            v-Int
             size="small"
             placeholder="请输入手机号"
           ></el-input>
@@ -119,7 +119,7 @@
           v-if="this.infoTitle === '新增'"
         >
           <el-input
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            v-Int
             v-model="editAddForm.phone"
           ></el-input>
         </el-form-item>

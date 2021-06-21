@@ -114,7 +114,7 @@
         <el-form-item label="医院电话"
           prop="contract">
           <el-input v-model="editAddForm.contract"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            v-Int
             placeholder="请输入医院电话"></el-input>
         </el-form-item>
         <el-form-item label="省市区"
@@ -152,7 +152,7 @@
           v-if="this.infoTitle === '新增'"
           prop="adminPhone">
           <el-input v-model="editAddForm.adminPhone"
-          oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+          v-Int
             placeholder="请输入管理员手机号"></el-input>
         </el-form-item>
       </el-form>

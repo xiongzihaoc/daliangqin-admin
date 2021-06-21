@@ -18,7 +18,7 @@
           v-model.trim="loginForm.phone"
           placeholder="手机号"
           name="phone"
-          oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+          v-Int
           tabindex="1"
           auto-complete="on" />
         <el-button v-show="show"
@@ -43,7 +43,7 @@
           placeholder="验证码"
           name="code"
           auto-complete="on"
-          oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+           v-Int
           @keyup.enter.native="handleLogin" />
       </el-form-item>
       <!-- 登录按钮 -->

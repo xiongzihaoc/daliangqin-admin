@@ -117,7 +117,7 @@
         </el-form-item>
         <el-form-item label="版本code"
           prop="versionCode">
-          <el-input v-model="editAddForm.versionCode" oninput="value=value.replace(/^\.+|[^\d.]/g,'')"></el-input>
+          <el-input v-model="editAddForm.versionCode" v-Int></el-input>
         </el-form-item>
         <el-form-item label="版本日志"
           prop="updateLog">

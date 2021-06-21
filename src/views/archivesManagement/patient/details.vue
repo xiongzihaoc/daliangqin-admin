@@ -22,14 +22,14 @@
           <el-form-item label="手机号"
             prop="phone">
             <el-input v-model="form.phone"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+               v-Int
               placeholder="请输入该用户手机号"></el-input>
           </el-form-item>
           <!-- 身份证 -->
           <el-form-item label="身份证号"
             prop="idCard">
             <el-input v-model="form.idCard"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+               v-Int
               placeholder="请输入该用户身份证号"></el-input>
           </el-form-item>
           <el-form-item label="省市区"
@@ -144,7 +144,7 @@
             prop="height">
             <el-input v-model="form.height"
               @blur="computeBmi"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+               v-Int
               placeholder="请输入身高"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">cm</i></el-input>
           </el-form-item>
@@ -152,7 +152,7 @@
             prop="weight">
             <el-input v-model="form.weight"
               @blur="computeBmi"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+               v-Int
               placeholder="请输入体重"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">kg</i></el-input>
           </el-form-item>
@@ -164,35 +164,35 @@
           <el-form-item label="腰围"
             prop="waistline">
             <el-input v-model="form.waistline"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+               v-Int
               placeholder="请输入腰围"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">cm</i></el-input>
           </el-form-item>
           <el-form-item label="臀围"
             prop="hips">
             <el-input v-model="form.hips"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Int
               placeholder="请输入臀围"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">kg</i></el-input>
           </el-form-item>
           <el-form-item label="收缩压/高压"
             prop="shrinkHighPressure">
             <el-input v-model="form.bloodPressure.shrinkHighPressure"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Int
               placeholder="请输入收缩压/高压"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="舒张压/低压"
             prop="diastoleLowPressure">
             <el-input v-model="form.bloodPressure.diastoleLowPressure"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Int
               placeholder="请输入舒张压/低压"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="心率"
             prop="heartRate">
             <el-input v-model="form.heartRate"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Intv-Int
               placeholder="请输入心率"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">bpm</i></el-input>
           </el-form-item>
@@ -212,56 +212,56 @@
           <el-form-item label="空腹血糖"
             prop="fastingBloodGlucose">
             <el-input v-model="form.fastingBloodGlucose"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Int
               placeholder="请输入空腹血糖"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="总胆固醇"
             prop="totalCholesterol">
             <el-input v-model="form.bloodLipids.totalCholesterol"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Int
               placeholder="请输入总胆固醇"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="甘油三酯"
             prop="triglycerides">
             <el-input v-model="form.bloodLipids.triglycerides"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Int
               placeholder="请输入甘油三酯"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="高密度脂蛋白胆固醇"
             prop="hdlCholesterol">
             <el-input v-model="form.bloodLipids.hdlCholesterol"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Int
               placeholder="请输入高密度脂蛋白胆固醇"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="低密度脂蛋白胆固醇"
             prop="ldlCholesterol">
             <el-input v-model="form.bloodLipids.ldlCholesterol"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Int
               placeholder="请输入低密度脂蛋白胆固醇"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="肌酐"
             prop="creatinine">
             <el-input v-model="form.creatinine"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Int
               placeholder="请输入肌酐"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">μmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="尿酸"
             prop="uricAcid">
             <el-input v-model="form.uricAcid"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Int
               placeholder="请输入尿酸"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">umol/L</i></el-input>
           </el-form-item>
           <el-form-item label="血钾"
             prop="serumPotassium">
             <el-input v-model="form.serumPotassium"
-              oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+              v-Int
               placeholder="请输入血钾"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
