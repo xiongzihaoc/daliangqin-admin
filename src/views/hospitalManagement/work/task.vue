@@ -14,12 +14,12 @@
             size="small"
             placeholder="请输入医生姓名"></el-input>
         </el-form-item>
-        <!-- 用户姓名 -->
-        <el-form-item label="用户姓名"
-          prop="patientUserName">
-          <el-input v-model="searchForm.patientUserName"
+        <el-form-item label="医院名称"
+          align="left"
+          prop="hospitalName">
+          <el-input v-model="searchForm.hospitalName"
             size="small"
-            placeholder="请输入用户姓名"></el-input>
+            placeholder="请输入医院名称"></el-input>
         </el-form-item>
         <!-- 随访方式 -->
         <el-form-item label="随访方式"
@@ -31,6 +31,13 @@
               :label="item.label"
               :value="item.value"></el-option>
           </el-select>
+        </el-form-item>
+        <!-- 用户姓名 -->
+        <el-form-item label="随访用户"
+          prop="patientUserName">
+          <el-input v-model="searchForm.patientUserName"
+            size="small"
+            placeholder="请输入随访用户"></el-input>
         </el-form-item>
         <!-- 随访时间 -->
         <el-form-item label="随访时间"
@@ -190,6 +197,8 @@
         <el-form-item label="随访内容"
           prop="content">
           <el-input v-model.trim="editAddForm.content"
+            type="textarea"
+            :rows="5"
             placeholder="请输入随访内容"></el-input>
         </el-form-item>
         <el-form-item label="随访时间"
@@ -258,6 +267,7 @@ export default {
       searchForm: {
         doctorUserName: "",
         patientUserName: "",
+        hospitalName: "",
         type: "",
         startTime: "",
         endTime: "",
@@ -281,6 +291,7 @@ export default {
       tableHeaderBig: [
         { type: "index", label: "序号" },
         { prop: "doctorUserName", label: "医生姓名" },
+        { prop: "hospitalName", label: "医院名称" },
         {
           prop: "type",
           label: "随访方式",
@@ -305,24 +316,31 @@ export default {
           },
         },
         {
-          prop: "startTime",
-          label: "随访开始时间",
+          prop: "heartRateStatus",
+          label: "心率",
           formatter: (row) => {
-            return parseTime(row.startTime)?.slice(6);
+            return this.heartRateFormatter(row);
+          },
+        },
+        {
+          prop: "startTime",
+          label: "预计开始时间",
+          formatter: (row) => {
+            return parseTime(row.startTime);
           },
         },
         {
           prop: "endTime",
-          label: "随访结束时间",
+          label: "预计结束时间",
           formatter: (row) => {
-            return parseTime(row.endTime)?.slice(6);
+            return parseTime(row.endTime);
           },
         },
         {
-          prop: "finishTime",
+          prop: "createTime",
           label: "创建时间",
           formatter: (row) => {
-            return parseTime(row.finishTime)?.slice(6);
+            return parseTime(row.createTime);
           },
         },
         {
@@ -371,6 +389,7 @@ export default {
           pageSize: this.pageSize,
           doctorUserName: this.searchForm.doctorUserName,
           patientUserName: this.searchForm.patientUserName,
+          hospitalName: this.searchForm.hospitalName,
           type: this.searchForm.type,
           taskStatus: this.searchForm.status,
           startTime: this.searchForm.startTime,
@@ -407,12 +426,12 @@ export default {
     },
     selectDoctor(val) {
       console.log(val);
-      this.$forceUpdate()
+      this.$forceUpdate();
       this.getPatientList(val);
       this.editAddForm.patientUserId = "";
     },
-    selectPatient(){
-      this.$forceUpdate() 
+    selectPatient() {
+      this.$forceUpdate();
     },
     /***** 搜索区域 *****/
     // 搜索选择时间
@@ -443,7 +462,9 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      // this.getPatientList(val.doctorUserId);
+      console.log(val);
+      this.getDoctorList(val.hospitalId);
+      this.getPatientList(val.doctorUserId);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.$set(this.editAddForm, "taskTime", [val.startTime, val.endTime]);
@@ -518,6 +539,10 @@ export default {
     // 糖尿病状态
     diabetesFormatter(row) {
       return formatterElement.diabetes[row.diabetesStatus];
+    },
+    // 心率状态
+    heartRateFormatter(row) {
+      return formatterElement.heart[row.heartRateStatus];
     },
     // 加入方式
     resourceFormatter(row) {

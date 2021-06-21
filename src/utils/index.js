@@ -349,21 +349,22 @@ export const formatterElement = {
   highBlood: {
     HEALTH: "健康",
     SERIOUS: "严重",
-    MEDIUM: "中等",
+    MEDIUM: "中度",
     SLIGHT: "轻微",
-    SLOW: "稍慢",
-    FAST: "稍快",
-    NORMAL: "正常",
+
   },
   // 糖尿病状态
   diabetes: {
     HEALTH: "健康",
     SERIOUS: "严重",
-    MEDIUM: "中等",
+    MEDIUM: "中度",
     SLIGHT: "轻微",
+  },
+  // 心率状态
+  heart: {
+    NORMAL: "正常",
     SLOW: "稍慢",
     FAST: "稍快",
-    NORMAL: "正常",
   },
   // 加入方式
   resource: {
