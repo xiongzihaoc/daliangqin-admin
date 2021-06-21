@@ -5,7 +5,7 @@ const archivesRouter = {
     component: Layout,
     redirect: 'noRedirect',
     meta: {
-        title: '档案管理',
+        title: '用户管理',
         icon: 'banben'
     },
     children: [{
@@ -13,7 +13,7 @@ const archivesRouter = {
         name: 'patient',
         component: () => import('@/views/archivesManagement/patient'),
         meta: {
-            title: '用户管理',
+            title: '档案管理',
             icon: 'user'
         }
     },
