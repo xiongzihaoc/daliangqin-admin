@@ -206,6 +206,7 @@ export default {
           page: this.pageNum,
           pageSize: this.pageSize,
           name: this.searchForm.name,
+          phone: this.searchForm.phone,
         })
         .then((res) => {
           console.log(res);
