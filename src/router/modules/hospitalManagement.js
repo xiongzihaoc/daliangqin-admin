@@ -57,6 +57,16 @@ const hospitalRouter = {
                         title: '随访记录',
                         icon: 'general'
                     },
+                }, 
+                {
+                    path: "followDetail",
+                    name: "followDetail",
+                    hidden: true,
+                    component: () => import('@/views/hospitalManagement/work/followDetail'),
+                    meta: {
+                        title: '随访详情',
+                        icon: 'general'
+                    },
                 },
                 {
                     path: "transfer",

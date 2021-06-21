@@ -158,12 +158,17 @@ export const doctorTypeList = [
 
 // 随访方式列表
 export const followTypeList = [
-  { id: 1, label: "诊间随访", value: "CLINIC" },
-  { id: 2, label: "上门随访", value: "DOOR" },
-  { id: 3, label: "视频随访", value: "VIDEO" },
-  { id: 4, label: "语音随访", value: "VOICE" },
+  { id: 1, label: "门诊随访", value: "OUTPATIENT" },
+  { id: 2, label: "家庭随访", value: "FAMILY" },
+  { id: 3, label: "电话随访", value: "PHONE" },
+  { id: 4, label: "视频随访", value: "VIDEO" },
+  { id: 5, label: "集体随访", value: "COLLECTIVE" },
 ]
-
+// 随访类型
+export const followType = [
+  { id: 1, label: "高血压", value: "HIGH_BLOOD" },
+  { id: 2, label: "糖尿病", value: "DIABETES" },
+]
 // 角色类型
 export const adminRoleTypeList = [
   { id: 1, label: "管理员", value: "ADMIN" },
@@ -196,7 +201,6 @@ export const newsStatusList = [
   { id: 1, label: "上架", value: "SHOW" },
   { id: 2, label: "下架", value: "DELETE" },
 ]
-
 // 新闻类型
 export const newsTypeList = [
   { id: 1, label: "资讯", value: "NEWS" },
@@ -243,11 +247,11 @@ export const statusList = [
 export const healthList = [
   { id: 1, label: "健康", value: "HEALTH" },
   { id: 2, label: "严重", value: "SERIOUS" },
-  { id: 3, label: "中等", value: "MEDIUM" },
+  { id: 3, label: "中度", value: "MEDIUM" },
   { id: 4, label: "轻微", value: "SLIGHT" },
-  { id: 5, label: "稍慢", value: "SLOW" },
-  { id: 6, label: "稍快", value: "FAST" },
-  { id: 7, label: "正常", value: "NORMAL" },
+  // { id: 5, label: "稍慢", value: "SLOW" },
+  // { id: 6, label: "稍快", value: "FAST" },
+  // { id: 7, label: "正常", value: "NORMAL" },
 ]
 
 // 用户状态
@@ -340,10 +344,16 @@ export const transferStatusList = [
 export const formatterElement = {
   // 随访方式
   followType: {
-    CLINIC: "诊间随访",
-    VOICE: "语音随访",
-    DOOR: "上门随访",
-    VIDEO: "视频随访"
+    OUTPATIENT: "门诊随访",
+    FAMILY: "家庭随访",
+    PHONE: "电话随访",
+    VIDEO: "视频随访",
+    COLLECTIVE: "集体随访",
+  },
+  // 随访类型
+  followTypeList: {
+    HIGH_BLOOD: "高血压",
+    DIABETES: "糖尿病",
   },
   // 高血压状态
   highBlood: {

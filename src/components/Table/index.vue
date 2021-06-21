@@ -4,6 +4,7 @@
     ref="wTable">
     <el-table :data="data"
       @row-click="rowClick"
+      @cell-click="cellClick"
       @row-dblclick="rowDblClick"
       @select="rowSelect"
       @select-all="selectAll"
@@ -14,7 +15,6 @@
       }"
       :border="option.border"
       :show-summary="showSummary"
-
       stripe
       :max-height="option.maxHeight"
       :style="{ width: parseInt(option.width) + 'px' }"
@@ -57,7 +57,7 @@ export default {
       default: function () {
         return {};
       },
-      type: Object ,
+      type: Object,
     },
     showSummary: {
       type: Boolean,
@@ -245,6 +245,9 @@ export default {
     },
     rowClick(row) {
       this.$emit("row-click", row);
+    },
+    cellClick(row, column, cell, event) {
+      this.$emit("cell-click", row, column,cell,event);
     },
     rowDblClick(row) {
       this.$emit("row-dblclick", row);

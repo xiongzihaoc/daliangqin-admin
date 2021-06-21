@@ -23,11 +23,10 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户姓名"
-          prop="patientUserName">
-          <el-input v-model="searchForm.patientUserName"
-            size="small"
-            placeholder="请输入用户姓名"></el-input>
+        <el-form-item label="医院名称"
+          prop="doctorType">
+          <el-input placeholder="请输入医院名称"
+            v-model="searchForm.hoslitalName"></el-input>
         </el-form-item>
         <el-form-item label="随访方式"
           prop="type">
@@ -35,6 +34,23 @@
             size="small"
             placeholder="请选择随访方式">
             <el-option v-for="item in followTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="随访用户"
+          prop="patientUserName">
+          <el-input v-model="searchForm.patientUserName"
+            size="small"
+            placeholder="请输入随访用户"></el-input>
+        </el-form-item>
+        <el-form-item label="随访类型"
+          prop="diseaseType">
+          <el-select v-model="searchForm.diseaseType"
+            size="small"
+            placeholder="请选择随访类型">
+            <el-option v-for="item in followType"
               :key="item.id"
               :label="item.label"
               :value="item.value"></el-option>
@@ -101,13 +117,135 @@
         </el-form-item>
       </el-form>
     </div>
+    <div>
+      <el-button @click="addHighBlood"
+        type="primary"
+        class="tableAdd"
+        size="small"
+        plain
+        icon="el-icon-plus">高血压随访</el-button>
+      <el-button @click="adddiabetes"
+        type="primary"
+        class="tableAdd"
+        size="small"
+        plain
+        icon="el-icon-plus">糖尿病随访</el-button>
+    </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        type="selection"></el-table-column>
+        type="index">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="医生姓名"
+        prop="doctorUserName">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="职位"
+        :formatter="doctorTypeFormatter"
+        prop="doctorType">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="医院名称"
+        prop="hospitalName">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="随访方式"
+        :formatter="typeFormatter"
+        prop="type">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="随访备注"
+        prop="content">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="随访用户"
+        prop="patientUserName">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="随访类型"
+        :formatter="diseaseTypeFormatter"
+        prop="diseaseType">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="高血压"
+        :formatter="highBloodStatusFormatter"
+        prop="highBloodStatus">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        :formatter="diabetesStatusFormatter"
+        label="糖尿病"
+        prop="diabetesStatus">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="心率"
+        prop="heartRateStatus">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="随访开始时间"
+        :formatter="(row)=>{return parseTime(row.startTime)}"
+        prop="startTime">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="随访结束时间"
+        :formatter="(row)=>{return parseTime(row.endTime)}"
+        prop="endTime">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="用户状态"
+        :formatter="userStatusFormatter"
+        prop="userStatus">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="left"
+        label="操作时间"
+        :formatter="(row)=>{return parseTime(row.updateTime)}"
+        prop="updateTime">
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        label="操作"
+        width="220">
+        <template slot-scope="scope">
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
+          <el-button size="mini"
+            type="danger"
+            @click="deleteBtn(scope.row.id)">删除</el-button>
+        </template>
+      </el-table-column>
     </EleTable>
     <!-- 分页 -->
     <el-pagination background
@@ -127,6 +265,7 @@ import { httpHospitalFollow } from "@/api/hospital/httpHospitalFollow";
 import {
   doctorTypeList,
   followTypeList,
+  followType,
   healthList,
   userStatusList,
   parseTime,
@@ -143,13 +282,16 @@ export default {
       doctorTypeList,
       // 随访方式列表
       followTypeList,
+      followType,
       healthList,
       userStatusList,
       // 搜索表单
       searchForm: {
         doctorUserName: "",
         doctorType: "",
+        hospitalName: "",
         patientUserName: "",
+        diseaseType: "",
         type: "",
         highBloodStatus: "",
         diabetesStatus: "",
@@ -166,68 +308,7 @@ export default {
         address: "",
       },
       // 表格数据
-      tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "doctorUserName", label: "医生姓名" },
-        {
-          prop: "doctorType",
-          label: "职位",
-          formatter: (row) => {
-            return this.doctorTypeFormatter(row);
-          },
-        },
-        {
-          prop: "type",
-          label: "随访方式",
-          formatter: (row) => {
-            return this.typeFormatter(row);
-          },
-        },
-        { prop: "content", label: "随访内容" },
-        { prop: "patientUserName", label: "随访用户" },
-        {
-          prop: "highBloodStatus",
-          label: "高血压",
-          formatter: (row) => {
-            return this.highBloodStatusFormatter(row);
-          },
-        },
-        {
-          prop: "diabetesStatus",
-          label: "糖尿病",
-          formatter: (row) => {
-            return this.diabetesStatusFormatter(row);
-          },
-        },
-        {
-          prop: "startTime",
-          label: "随访开始时间",
-          formatter: (row) => {
-            return parseTime(row.startTime)?.slice(6);
-          },
-        },
-        {
-          prop: "endTime",
-          label: "随访结束时间",
-          formatter: (row) => {
-            return parseTime(row.endTime)?.slice(6);
-          },
-        },
-        {
-          prop: "userStatus",
-          label: "用户状态",
-          formatter: (row) => {
-            return this.userStatusFormatter(row);
-          },
-        },
-        {
-          prop: "updateTime",
-          label: "操作时间",
-          formatter: (row) => {
-            return parseTime(row.updateTime);
-          },
-        },
-      ],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -249,7 +330,9 @@ export default {
           doctorName: this.searchForm.doctorUserName,
           doctorType: this.searchForm.doctorType,
           patientName: this.searchForm.patientUserName,
+          hospitalName: this.searchForm.hospitalName,
           type: this.searchForm.type,
+          diseaseType: this.searchForm.diseaseType,
           highBloodStatus: this.searchForm.highBloodStatus,
           diabetesStatus: this.searchForm.diabetesStatus,
           startTime: this.searchForm.startTime,
@@ -268,6 +351,22 @@ export default {
       this.searchForm.endTime = val[1];
       console.log(this.searchForm);
     },
+    addHighBlood() {
+      this.$router.push({
+        path: "/hospitalManagement/work/followDetail",
+        query: { type: "addHighBlood" },
+      });
+    },
+    adddiabetes() {
+      this.$router.push({
+        path: "/hospitalManagement/work/followDetail",
+        query: { type: "adddiabetes" },
+      });
+    },
+    editBtn(val) {
+      console.log(val);
+    },
+    deleteBtn() {},
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
@@ -286,10 +385,17 @@ export default {
       return formatterElement.followType[row.type];
     },
     highBloodStatusFormatter(row) {
+      console.log(row);
       return formatterElement.highBlood[row.highBloodStatus];
     },
     diabetesStatusFormatter(row) {
       return formatterElement.diabetes[row.diabetesStatus];
+    },
+    diseaseTypeFormatter(row) {
+      return formatterElement.followTypeList[row.diseaseType];
+    },
+    heartRateStatus(row) {
+      return formatterElement.heart[row.heartRateStatus];
     },
     userStatusFormatter(row) {
       return formatterElement.userStatus[row.userStatus];

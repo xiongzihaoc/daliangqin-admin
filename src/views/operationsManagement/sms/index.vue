@@ -46,7 +46,8 @@
         label-width="100px">
         <el-form-item prop="phone"
           label="手机号">
-          <el-input v-model="editAddForm.phone"></el-input>
+          <el-input v-model="editAddForm.phone"
+            v-Int></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
