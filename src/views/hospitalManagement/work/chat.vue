@@ -86,7 +86,8 @@
       width="40%"
       @closed="editDialogClosed"
       v-dialogDrag>
-      <ul style="height:500px;overflow:auto;padding:15px">
+      <ul class="ul"
+        style="height:500px;overflow:auto;padding:15px">
         <li v-for="item in messageList"
           :key="item.id">
           <!-- 病人信息 -->
@@ -208,8 +209,19 @@ export default {
   created() {
     this.getList();
   },
-
+  mounted() {
+    this.scrollToBottom();
+  },
+  updated() {
+    this.scrollToBottom();
+  },
   methods: {
+    scrollToBottom() {
+      this.$nextTick(() => {
+        var container = this.$el.querySelector(".ul");
+        container.scrollTop = container.scrollHeight;
+      });
+    },
     getList() {
       httpAdminChat
         .getChat({
@@ -235,7 +247,7 @@ export default {
           doctorUserId: val.doctorUserId,
         })
         .then((res) => {
-          this.messageList = res.data.elements;
+          this.messageList = res.data.elements.reverse();
         });
     },
     // 日期控件选择事件
@@ -260,6 +272,7 @@ export default {
     /***** 增删改 *****/
     // 查看
     examineBtn(val) {
+      this.val = val;
       this.getChatSubscribe(val);
       this.editAddForm.doctorUserId = val.doctorUserId;
       this.editAddForm.patientUserId = val.patientUserId;
@@ -280,7 +293,7 @@ export default {
                 title: "编辑成功",
               });
               this.getList();
-              this.editDialogVisible = false;
+              this.getChatSubscribe(this.val);
             }
           });
         }

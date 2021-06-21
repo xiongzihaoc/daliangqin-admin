@@ -134,11 +134,27 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
+        <el-form-item label="选择医院"
+          prop="hospitalId">
+          <el-select style="width:100%;"
+            filterable
+            clearable
+            @change="selecthospital"
+            v-model.trim="editAddForm.hospitalId"
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="选择医生"
           prop="doctorUserId">
           <el-select style="width:100%;"
+            filterable
+            clearable
             @change="selectDoctor"
-            v-model.trim="editAddForm.doctorUserId"
+            v-model="editAddForm.doctorUserId"
             placeholder="请选择医生">
             <el-option v-for="item in doctorList"
               :key="item.id"
@@ -151,7 +167,8 @@
           <el-select style="width:100%;"
             filterable
             clearable
-            v-model.trim="editAddForm.patientUserId"
+            @change="selectPatient"
+            v-model="editAddForm.patientUserId"
             placeholder="请选择用户">
             <el-option v-for="item in patientList"
               :key="item.id"
@@ -204,6 +221,7 @@ import EleTable from "@/components/Table";
 import { httpHospitalTask } from "@/api/hospital/httpHospitalTask";
 import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
 import {
   followTypeList,
   parseTime,
@@ -224,11 +242,14 @@ export default {
       resourceTypeList,
       statusList,
       FormRules: {
+        hospitalId: [
+          { required: true, message: "请选择医院", trigger: "blur" },
+        ],
         doctorUserId: [
-          { required: true, message: "请选择医生名称", trigger: "blur" },
+          { required: true, message: "请选择医生", trigger: "blur" },
         ],
         patientUserId: [
-          { required: true, message: "请选择用户名称", trigger: "blur" },
+          { required: true, message: "请选择用户", trigger: "blur" },
         ],
         type: [{ required: true, message: "请选择随访方式", trigger: "blur" }],
         content: [{ required: true, message: "请输入内容", trigger: "blur" }],
@@ -243,9 +264,12 @@ export default {
         status: "",
       },
       list: [],
+      hospitalList: [],
       doctorList: [],
       patientList: [],
+
       editAddForm: {
+        hospitalId: "",
         doctorUserId: "",
         patientUserId: "",
         type: "",
@@ -337,7 +361,7 @@ export default {
     this.getList();
   },
   mounted() {
-    this.getDoctorList();
+    this.getHospitalList();
   },
   methods: {
     getList() {
@@ -358,21 +382,37 @@ export default {
           this.total = res.data.totalSize;
         });
     },
+    // 获取医院列表
+    getHospitalList() {
+      httpAdminHospital.getHospital().then((res) => {
+        this.hospitalList = res.data.elements;
+      });
+    },
     // 获取医生列表
-    getDoctorList() {
-      httpAdminDoctor.getDoctor().then((res) => {
+    getDoctorList(val) {
+      httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
         this.doctorList = res.data.elements;
       });
     },
     // 获取用户列表
     getPatientList(id) {
-      httpAdminPatient.getPatient({ userId: id }).then((res) => {
+      httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
         this.patientList = res.data.elements;
       });
     },
+    selecthospital(val) {
+      this.getDoctorList(val);
+      this.editAddForm.doctorUserId = "";
+      this.editAddForm.patientUserId = "";
+    },
     selectDoctor(val) {
+      console.log(val);
+      this.$forceUpdate()
       this.getPatientList(val);
       this.editAddForm.patientUserId = "";
+    },
+    selectPatient(){
+      this.$forceUpdate() 
     },
     /***** 搜索区域 *****/
     // 搜索选择时间
@@ -403,7 +443,7 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      this.getPatientList(val.doctorUserId);
+      // this.getPatientList(val.doctorUserId);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.$set(this.editAddForm, "taskTime", [val.startTime, val.endTime]);

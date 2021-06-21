@@ -269,12 +269,14 @@
           <el-input
             type="textarea"
             v-model="editAddForm.introduction"
+            :rows="5"
             placeholder="请输入个人简介"
           ></el-input>
         </el-form-item>
         <el-form-item label="医生擅长" prop="goodAt">
           <el-input
             type="textarea"
+            :rows="5"
             v-model="editAddForm.goodAt"
             placeholder="请输入医生擅长"
           ></el-input>
