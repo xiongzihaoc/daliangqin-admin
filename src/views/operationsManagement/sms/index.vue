@@ -6,6 +6,7 @@
         class="el-input-style"
         type="text"
         size="small"
+        oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
         placeholder="请输入手机号"
         @keyup.enter.native="searchBtn"></el-input>
       <el-button @click="searchBtn"

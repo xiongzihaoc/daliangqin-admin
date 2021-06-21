@@ -13,12 +13,20 @@
             size="small"
             placeholder="请输入医生姓名"></el-input>
         </el-form-item>
+        <el-form-item label="医生手机号"
+          align="left"
+          prop="doctorPhone">
+          <el-input v-model="searchForm.doctorPhone"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            size="small"
+            placeholder="请输入医生手机号"></el-input>
+        </el-form-item>
         <el-form-item label="职位"
           align="left"
           prop="doctorType">
           <el-select v-model="searchForm.doctorType"
             size="small"
-            placeholder="请输入医生姓名">
+            placeholder="请选择职位">
             <el-option v-for="item in doctorTypeList"
               :key="item.id"
               :label="item.label"
@@ -48,7 +56,7 @@
         prop="addressInfos">
         <template slot-scope="scope">
           <el-button size="mini"
-            type="primary"
+            type="info"
             plain
             @click="examineBtn(scope.row)">查看收货地址</el-button>
         </template>
@@ -189,6 +197,7 @@ export default {
       searchForm: {
         doctorName: "",
         doctorType: "",
+        doctorPhone: "",
         userId: "",
       },
       // 列表数据
@@ -216,6 +225,7 @@ export default {
       tableHeaderBig: [
         { type: "index", label: "序号" },
         { prop: "doctorName", label: "医生姓名" },
+        { prop: "doctorPhone", label: "医生手机号" },
         {
           prop: "doctorType",
           label: "职位",
@@ -249,6 +259,7 @@ export default {
           pageSize: this.pageSize,
           doctorName: this.searchForm.doctorName,
           doctorType: this.searchForm.doctorType,
+          doctorPhone: this.searchForm.doctorPhone,
         })
         .then((res) => {
           console.log(res);

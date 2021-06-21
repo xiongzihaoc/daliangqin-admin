@@ -206,6 +206,7 @@
           <el-input
             :disabled="this.infoTitle === '编辑' ? true : false"
             v-model="editAddForm.phone"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             placeholder="请输入该医生手机号"
           ></el-input>
         </el-form-item>

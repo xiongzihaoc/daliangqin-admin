@@ -152,6 +152,7 @@
           v-if="this.infoTitle === '新增'"
           prop="adminPhone">
           <el-input v-model="editAddForm.adminPhone"
+          oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
             placeholder="请输入管理员手机号"></el-input>
         </el-form-item>
       </el-form>

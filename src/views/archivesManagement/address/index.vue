@@ -13,6 +13,14 @@
             size="small"
             placeholder="请输入用户姓名"></el-input>
         </el-form-item>
+        <el-form-item label="用户手机号"
+          align="left"
+          prop="patientPhone">
+          <el-input v-model="searchForm.patientPhone"
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            size="small"
+            placeholder="请输入用户手机号"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -36,7 +44,7 @@
         prop="addressInfos">
         <template slot-scope="scope">
           <el-button size="mini"
-            type="primary"
+            type="info"
             plain
             @click="examineBtn(scope.row)">查看收货地址</el-button>
         </template>
@@ -174,6 +182,7 @@ export default {
       // 搜索表单
       searchForm: {
         patientName: "",
+        patientPhone: "",
         userId: "",
       },
       // 列表数据
@@ -200,6 +209,7 @@ export default {
       tableHeaderBig: [
         { type: "index", label: "序号" },
         { prop: "patientName", label: "用户姓名" },
+        { prop: "patientPhone", label: "用户手机号" },
       ],
       patientName: "",
       patientUserId: "",
@@ -225,6 +235,7 @@ export default {
           page: this.pageNum,
           pageSize: this.pageSize,
           patientName: this.searchForm.patientName,
+          patientPhone: this.searchForm.patientPhone,
         })
         .then((res) => {
           console.log(res);
