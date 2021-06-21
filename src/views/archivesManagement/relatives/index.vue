@@ -13,12 +13,13 @@
             size="small"
             placeholder="请输入用户姓名"></el-input>
         </el-form-item>
-        <el-form-item label="亲属姓名"
+        <el-form-item label="用户手机号"
           align="left"
           prop="userName">
-          <el-input v-model="searchForm.name"
+          <el-input v-model="searchForm.userPhone"
             size="small"
-            placeholder="请输入亲属姓名"></el-input>
+            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
+            placeholder="请输入用户手机号"></el-input>
         </el-form-item>
         <el-form-item label="身份"
           prop="relationship">
@@ -31,14 +32,6 @@
               :label="item.label"
               :value="item.value"></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="手机号"
-          align="left"
-          prop="userName">
-          <el-input v-model="searchForm.phone"
-            size="small"
-            oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -88,8 +81,9 @@ export default {
       tableHeaderBig: [
         { label: "序号", type: "index" },
         { prop: "userName", label: "用户姓名" },
+        { prop: "userPhone", label: "用户手机号" },
         { prop: "name", label: "亲属姓名" },
-        { prop: "phone", label: "手机号" },
+        { prop: "phone", label: "亲属手机号" },
         {
           prop: "relationship",
           label: "身份",
@@ -131,8 +125,7 @@ export default {
           page: this.pageNum,
           pageSize: this.pageSize,
           userName: this.searchForm.userName,
-          name: this.searchForm.name,
-          phone: this.searchForm.phone,
+          userPhone: this.searchForm.userPhone,
           relationship: this.searchForm.relationship,
         })
         .then((res) => {
