@@ -184,8 +184,24 @@
           <single-upload v-model="editAddForm.coverUrl"
             uploadType="NEWS" />
         </el-form-item>
+        <el-form-item label="类型"
+          prop="type">
+          <el-select style="width: 100%"
+            v-model.trim="editAddForm.type"
+            placeholder="请选择类型">
+            <el-option label="富文本"
+              value="LONG_TEXT"></el-option>
+            <el-option label="url地址"
+              value="URL"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="url地址"
+          prop="content" v-if="editAddForm.type === 'URL'">
+          <el-input v-model.trim="editAddForm.content"
+            placeholder="请输入url地址"></el-input>
+        </el-form-item>
         <el-form-item label="详情"
-          prop="content">
+          prop="content" v-if="editAddForm.type === 'LONG_TEXT'" >
           <quill-editor v-model="editAddForm.content"
             ref="myQuillEditor"
             class="ql-editor"
@@ -208,21 +224,6 @@
           </el-select>
         </el-form-item>
         <!-- 问卷选择暂时搁置 -->
-        <el-form-item label="发布人"
-          prop="author">
-          <el-input v-model.trim="editAddForm.author"
-            placeholder="请输入发布人"></el-input>
-        </el-form-item>
-        <el-form-item label="发布头像"
-          prop="avatarUrl">
-          <single-upload v-model="editAddForm.avatarUrl"
-            uploadType="AVATAR" />
-        </el-form-item>
-        <el-form-item label="发布人职位"
-          prop="position">
-          <el-input v-model.trim="editAddForm.position"
-            placeholder="请输入发布人职位"></el-input>
-        </el-form-item>
         <el-form-item label="发布时间"
           prop="publishTime">
           <el-date-picker v-model="editAddForm.publishTime"
@@ -235,7 +236,7 @@
         </el-form-item>
         <el-form-item label="权重"
           prop="zOrder">
-          <el-input v-model.trim="editAddForm.zOrder"
+          <el-input v-Int v-model.trim="editAddForm.zOrder"
             placeholder="请输入权重"></el-input>
         </el-form-item>
         <el-form-item label="状态"
@@ -297,6 +298,7 @@ export default {
           { required: true, message: "请选择内容类型", trigger: "blur" },
         ],
         title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+        type: [{ required: true, message: "请选择类型", trigger: "blur" }],
         coverUrl: [
           { required: true, message: "请上传封面图", trigger: "blur" },
         ],
@@ -304,11 +306,7 @@ export default {
         appTypes: [
           { required: true, message: "请选择呈现位置", trigger: "blur" },
         ],
-        content: [{ required: true, message: "请输入详情", trigger: "blur" }],
-        author: [{ required: true, message: "请输入发布人", trigger: "blur" }],
-        position: [
-          { required: true, message: "请输入发布人职位", trigger: "blur" },
-        ],
+        content: [{ required: true, message: "请输入", trigger: "blur" }],
         publishTime: [
           { required: true, message: "请选择发布时间", trigger: "blur" },
         ],
@@ -326,6 +324,7 @@ export default {
       editAddForm: {
         contentType: "",
         title: "",
+        type: "",
         coverUrl: "",
         content: "",
         appTypes: [],
@@ -337,7 +336,6 @@ export default {
         deletedStatus: "",
       },
       tableHeaderBig: [
-        { prop: "author", label: "发布人" },
         {
           prop: "createTime",
           label: "创建时间",
@@ -371,7 +369,7 @@ export default {
             // [{ script: "sub" }, { script: "super" }], // 上下标
             // [{ indent: "-1" }, { indent: "+1" }], // 缩进
             // [{ direction: "rtl" }], // 文本方向
-             [{ 'size': ['12px', false ,'18px', '22px', '26px', '32px', '36px'] }], // 字体大小
+            [{ size: ["12px", false, "18px", "22px", "26px", "32px", "36px"] }], // 字体大小
             // [{ header: [1, 2, 3, 4, 5, 6, false] }], //几级标题
             [{ color: [] }, { background: [] }], // 字体颜色，字体背景颜色
             // [{ font: ['Helvetica Neue', 'Helvetica', 'Arial'] }], //字体
@@ -504,7 +502,7 @@ export default {
         }
       });
     },
-        // 排序
+    // 排序
     sortTop(id) {
       httpAdminNews.postNewsSort({ id: id, status: "UP" }).then((res) => {
         if (res.code === "OK") {
