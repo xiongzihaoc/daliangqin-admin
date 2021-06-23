@@ -196,12 +196,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="url地址"
-          prop="content" v-if="editAddForm.type === 'URL'">
+          prop="content"
+          v-if="editAddForm.type === 'URL'">
           <el-input v-model.trim="editAddForm.content"
             placeholder="请输入url地址"></el-input>
         </el-form-item>
         <el-form-item label="详情"
-          prop="content" v-if="editAddForm.type === 'LONG_TEXT'" >
+          prop="content"
+          v-if="editAddForm.type === 'LONG_TEXT'">
           <quill-editor v-model="editAddForm.content"
             ref="myQuillEditor"
             class="ql-editor"
@@ -223,6 +225,15 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="发布人"
+          prop="author" v-if="editAddForm.type === 'LONG_TEXT'">
+          <el-input v-model="editAddForm.author" placeholder="请输入发布人"></el-input>
+        </el-form-item>
+        <el-form-item label="发布头像"
+          prop="avatarUrl" v-if="editAddForm.type === 'LONG_TEXT'">
+          <single-upload v-model="editAddForm.avatarUrl"
+            uploadType="AVATAR" />
+        </el-form-item>
         <!-- 问卷选择暂时搁置 -->
         <el-form-item label="发布时间"
           prop="publishTime">
@@ -236,7 +247,8 @@
         </el-form-item>
         <el-form-item label="权重"
           prop="zOrder">
-          <el-input v-Int v-model.trim="editAddForm.zOrder"
+          <el-input v-Int
+            v-model.trim="editAddForm.zOrder"
             placeholder="请输入权重"></el-input>
         </el-form-item>
         <el-form-item label="状态"
