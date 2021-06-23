@@ -226,13 +226,23 @@
           </el-select>
         </el-form-item>
         <el-form-item label="发布人"
-          prop="author" v-if="editAddForm.type === 'LONG_TEXT'">
-          <el-input v-model="editAddForm.author" placeholder="请输入发布人"></el-input>
+          prop="author"
+          v-if="editAddForm.type === 'LONG_TEXT'">
+          <el-input v-model="editAddForm.author"
+            placeholder="请输入发布人"></el-input>
         </el-form-item>
         <el-form-item label="发布头像"
-          prop="avatarUrl" v-if="editAddForm.type === 'LONG_TEXT'">
+          prop="avatarUrl"
+          v-if="editAddForm.type === 'LONG_TEXT'">
           <single-upload v-model="editAddForm.avatarUrl"
             uploadType="AVATAR" />
+        </el-form-item>
+
+        <el-form-item label="发布职位"
+          prop="position"
+          v-if="editAddForm.type === 'LONG_TEXT'">
+          <el-input v-model="editAddForm.position"
+            placeholder="请输入发布职位"></el-input>
         </el-form-item>
         <!-- 问卷选择暂时搁置 -->
         <el-form-item label="发布时间"
@@ -318,9 +328,13 @@ export default {
         appTypes: [
           { required: true, message: "请选择呈现位置", trigger: "blur" },
         ],
-        content: [{ required: true, message: "请输入", trigger: "blur" }],
+        content: [{ required: true, message: "请输入内容", trigger: "blur" }],
+
         publishTime: [
           { required: true, message: "请选择发布时间", trigger: "blur" },
+        ],
+        position: [
+          { required: true, message: "请输入发布人", trigger: "blur" },
         ],
         zOrder: [{ required: true, message: "请输入权重", trigger: "blur" }],
         deletedStatus: [
