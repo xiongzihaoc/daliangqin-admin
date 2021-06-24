@@ -292,6 +292,7 @@ export default {
               this.$notify.success({
                 title: "编辑成功",
               });
+              this.editAddForm.leaveContent = ""
               this.getList();
               this.getChatSubscribe(this.val);
             }

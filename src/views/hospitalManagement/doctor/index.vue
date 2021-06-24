@@ -121,6 +121,17 @@
         align="center"
         slot="fixed"
         fixed="right"
+        label="用户数量"
+        prop="patientCount"
+      >
+        <template slot-scope="scope">
+          <span @click="skipPatient(scope.row)" style="color: #1890ff">{{ scope.row.patientCount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        slot="fixed"
+        fixed="right"
         prop="toDoctorInfo"
         label="对应转诊医生"
       >
@@ -137,7 +148,7 @@
         slot="fixed"
         fixed="right"
         label="创建人"
-        prop="createName"
+        prop="createUserName"
       ></el-table-column>
       <el-table-column
         align="center"
@@ -145,7 +156,11 @@
         fixed="right"
         label="创建时间"
         prop="createTime"
-      ></el-table-column>
+      >
+        <template slot-scope="scope">
+          {{ parseTime(scope.row.createTime) }}
+        </template></el-table-column
+      >
       <!-- 操作 -->
       <el-table-column
         align="center"
@@ -374,7 +389,6 @@ export default {
           },
         },
         { prop: "hospitalName", label: "医院名称" },
-        { prop: "patientCount", label: "用户数量" },
       ],
       // 医院列表
       hospitalList: [],
@@ -437,6 +451,10 @@ export default {
     searchReset() {
       this.searchForm = {};
       this.getList();
+    },
+    // 点击用户跳转
+    skipPatient(){
+      
     },
     /***** 增删改 *****/
     // 新增

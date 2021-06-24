@@ -75,10 +75,6 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         type="index"
         label="序号"></el-table-column>
       <el-table-column align="center"

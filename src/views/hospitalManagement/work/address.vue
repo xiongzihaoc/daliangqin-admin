@@ -92,6 +92,7 @@
         </el-table-column>
         <el-table-column align="center"
           label="收货地址"
+          show-overflow-tooltip
           :formatter="addressInfosFormatter"
           prop="addressInfos">
         </el-table-column>
