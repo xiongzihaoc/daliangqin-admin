@@ -101,10 +101,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="selection"></el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"

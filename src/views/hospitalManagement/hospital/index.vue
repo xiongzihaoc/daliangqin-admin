@@ -193,7 +193,7 @@ export default {
         name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
         address: [{ required: true, message: "请选择省市区", trigger: "blur" }],
         contract: [
-          { required: true, message: "请输入医院电话", trigger: "blur" },
+          { required: true, message: "请输入医院电话", trigger: "blur",validator: validatePhone },
         ],
         detail: [
           { required: true, message: "请输入详细地址", trigger: "blur" },
