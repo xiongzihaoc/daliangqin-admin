@@ -125,7 +125,11 @@
         prop="patientCount"
       >
         <template slot-scope="scope">
-          <span @click="skipPatient(scope.row)" style="color: #1890ff">{{ scope.row.patientCount }}</span>
+          <span
+            @click="skipPatient(scope.row)"
+            style="color: #1890ff; text-decoration: underline"
+            >{{ scope.row.patientCount }}</span
+          >
         </template>
       </el-table-column>
       <el-table-column
@@ -453,8 +457,9 @@ export default {
       this.getList();
     },
     // 点击用户跳转
-    skipPatient(){
-      
+    skipPatient() {
+      this.$router.push("/archivesManagement/patient");
+      window.location.reload()
     },
     /***** 增删改 *****/
     // 新增

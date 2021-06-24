@@ -68,6 +68,15 @@
             :src="scope.row.avatarUrl">
         </template>
       </el-table-column>
+            <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        prop="doctorCount"
+        label="医生数量">
+        <template slot-scope="scope">
+         <span @click="skipDoctor(scope.row)" style="color:#1890FF;text-decoration:underline">{{scope.row.doctorCount}}</span>
+        </template>
+      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -243,10 +252,6 @@ export default {
             return this.hospitalTypeFormatter(row);
           },
         },
-        {
-          prop: "doctorCount",
-          label: "医生数量",
-        },
       ],
       // 分页区域
       pageSize: 10,
@@ -305,6 +310,10 @@ export default {
     searchReset() {
       this.searchForm = {};
       this.getList();
+    },
+    // 跳转医生列表
+    skipDoctor(){
+      this.$router.push('/hospitalManagement/doctor')
     },
     /***** 增删改 *****/
     // 新增

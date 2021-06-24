@@ -195,6 +195,10 @@ export default {
   created() {
     this.getList();
   },
+  mounted(){
+      
+
+  },
   methods: {
     getList() {
       httpAdminPatient
