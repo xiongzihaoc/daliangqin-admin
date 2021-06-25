@@ -266,7 +266,8 @@ export default {
     this.getList();
   },
   mounted() {
-    this.getTreeData(addressJson);
+    // this.getTreeData(addressJson);
+
   },
   methods: {
     getList() {
@@ -325,6 +326,7 @@ export default {
     // 编辑
     editBtn(val) {
       this.infoTitle = "编辑";
+    this.getTreeData(addressJson);
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editAddForm.address = [
         this.editAddForm.province,

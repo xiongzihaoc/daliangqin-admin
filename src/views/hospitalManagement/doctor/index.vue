@@ -451,15 +451,18 @@ export default {
     searchBtn() {
       this.getList();
     },
+    mounted(){
+      localStorage.getItem('doctorName')
+    },
     // 重置
     searchReset() {
       this.searchForm = {};
       this.getList();
     },
     // 点击用户跳转
-    skipPatient() {
+    skipPatient(val) {
+      localStorage.setItem('doctorName',val.name)
       this.$router.push("/archivesManagement/patient");
-      window.location.reload()
     },
     /***** 增删改 *****/
     // 新增

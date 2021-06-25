@@ -3,7 +3,7 @@ import Layout from '@/layout'
 const hospitalRouter = {
     path: '/hospitalManagement',
     component: Layout,
-    redirect: 'noRedirect',
+    redirect:"/hospitalManagement/hospital",
     meta: {
         title: '医院管理',
         icon: 'banben'

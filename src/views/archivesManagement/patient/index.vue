@@ -168,7 +168,7 @@ export default {
           prop: "birthday",
           label: "出生日期",
           formatter: (row) => {
-            return parseTime(row.birthday).slice(0, 10);
+            return parseTime(row.birthday)?.slice(0, 10);
           },
         },
         { prop: "age", label: "年龄" },
@@ -193,12 +193,10 @@ export default {
     };
   },
   created() {
+    localStorage.getItem('doctorName')
     this.getList();
   },
-  mounted(){
-      
-
-  },
+  mounted(){},
   methods: {
     getList() {
       httpAdminPatient

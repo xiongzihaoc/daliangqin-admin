@@ -3,7 +3,6 @@ import Layout from '@/layout'
 const systemRouter = {
   path: '/systemManagement',
   component: Layout,
-  redirect: 'noRedirect',
   meta: {
     title: '系统管理',
     icon: 'banben'

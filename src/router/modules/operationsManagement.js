@@ -3,7 +3,6 @@ import Layout from '@/layout'
 const operationsRouter = {
   path: '/operationsManagement',
   component: Layout,
-  redirect: 'noRedirect',
   meta: {
     title: '运营管理',
     icon: 'banben'

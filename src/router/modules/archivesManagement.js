@@ -3,7 +3,7 @@ import Layout from '@/layout'
 const archivesRouter = {
     path: '/archivesManagement',
     component: Layout,
-    redirect: 'noRedirect',
+    redirect:"/archivesManagement/patient",
     meta: {
         title: '用户管理',
         icon: 'banben'
