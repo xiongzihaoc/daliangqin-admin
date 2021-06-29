@@ -374,7 +374,7 @@ export default {
           prop: "birthday",
           label: "出生日期",
           formatter: (row) => {
-            return parseTime(row.birthday).slice(0, 10);
+            return parseTime(row.birthday);
           },
         },
         { prop: "age", label: "年龄" },
