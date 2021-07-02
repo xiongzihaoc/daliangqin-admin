@@ -78,11 +78,11 @@ export default {
         { label: "序号", type: "index" },
         { prop: "phone", label: "手机号" },
         {
-          prop: "type",
+          prop: "content",
           label: "内容",
-          formatter: (row) => {
-            return this.typeFormatter(row);
-          },
+          // formatter: (row) => {
+          //   return this.typeFormatter(row);
+          // },
         },
         { prop: "howMany", label: "剩余次数" },
         {

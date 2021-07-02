@@ -3,7 +3,7 @@ import Layout from '@/layout'
 const archivesRouter = {
     path: '/archivesManagement',
     component: Layout,
-    redirect:"/archivesManagement/patient",
+    redirect: "/archivesManagement/patient",
     meta: {
         title: '用户管理',
         icon: 'banben'
@@ -45,11 +45,20 @@ const archivesRouter = {
             },
         },
         {
-            path: "demo",
-            name: "demo",
-            component: () => import('@/views/archivesManagement/record/demo'),
+            path: "glucose",
+            name: "glucose",
+            component: () => import('@/views/archivesManagement/record/glucose'),
             meta: {
-                title: 'DEMO',
+                title: '血糖检测',
+                icon: 'general'
+            },
+        },
+        {
+            path: "heart",
+            name: "heart",
+            component: () => import('@/views/archivesManagement/record/heart'),
+            meta: {
+                title: '心率检测',
                 icon: 'general'
             },
         },

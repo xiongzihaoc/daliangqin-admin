@@ -23,6 +23,7 @@
         </el-form-item>
         <el-form-item label="身份证"
           align="left"
+          
           prop="idCard">
           <el-input v-model.trim="searchForm.idCard"
             size="small"

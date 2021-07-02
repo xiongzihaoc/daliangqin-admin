@@ -13,54 +13,6 @@
             size="small"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="病症"
-          prop="diseaseType">
-          <el-select style="width: 100%"
-            size="small"
-            v-model="searchForm.diseaseType"
-            placeholder="请选择病症">
-            <el-option v-for="item in diseaseList"
-              :key="item.id"
-              :label="item.label"
-              :value="item.vlaue"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="录入方式"
-          prop="resource">
-          <el-select style="width: 100%"
-            size="small"
-            v-model="searchForm.resource"
-            placeholder="请选择录入方式">
-            <el-option value="MANUAL"
-              label="手动录入"></el-option>
-            <el-option value="DETECTION"
-              label="设备检测"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="检测结果"
-          prop="resultType">
-          <el-select style="width: 100%"
-            size="small"
-            v-model="searchForm.resultType"
-            placeholder="请选择检测结果">
-            <el-option v-for="item in diseaseTypeList"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="检测日期"
-          prop="resultType">
-          <el-date-picker v-model="searchForm.chatTime"
-            size="small"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            align="right">
-          </el-date-picker>
-        </el-form-item>
-
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -85,102 +37,62 @@
       <!-- 需要formatter的列 -->
       <el-table-column align="center"
         slot="fixed"
-        fixed="left"
-        type="selection"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="patientUserName"
-        label="姓名"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="deviceName"
-        label="设备名称">
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="diseaseType"
-        label="病症">
+        fixed="right"
+        label="检测类型"
+        prop="diseaseType">
         <template slot-scope="scope">
           <span v-if="scope.row.diseaseType === 'HIGH_BLOOD'">高血压</span>
-          <span v-else-if="scope.row.diseaseType === 'DIABETES'">糖尿病</span>
+          <span v-if="scope.row.diseaseType === 'DIABIETS'">糖尿病</span>
+          <span v-if="scope.row.diseaseType === 'HEART_RATE'">心率</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
-        fixed="left"
-        prop="healthScoreList"
-        label="指数">
+        fixed="right"
+        label="收缩压"
+        prop="shrinkHighPressure">
         <template slot-scope="scope">
-          <div v-if="scope.row.diseaseType === 'HEART_RATE'">
-            <span v-for="item in scope.row.healthScoreList"
-              :key="item.id">{{item + 'bpm'}}</span>
-          </div>
-          <div v-else-if="scope.row.diseaseType === 'DIABETES'">
-            <span v-for="item in scope.row.healthScoreList"
-              :key="item.id">{{item + 'mmol/L'}}</span>
-          </div>
-          <div v-else>
-            <span style="display:block;">{{'收缩压(高压) ' + scope.row.healthScoreList[0] + 'mmHg'}}</span>
-            <span style="display:block;">{{'舒张压(低压) ' + scope.row.healthScoreList[1] + 'mmHg'}}</span>
-          </div>
+          {{scope.row.shrinkHighPressure + 'mmHg'}}
         </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
-        fixed="left"
-        prop="resource"
-        label="录入方式">
+        fixed="right"
+        label="舒张压"
+        prop="diastoleLowPressure">
         <template slot-scope="scope">
-          <span v-if="scope.row.resource === 'MANUAL'">手动录入</span>
+          {{scope.row.diastoleLowPressure + 'mmHg'}}
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        label="录入方式"
+        prop="name">
+        <template slot-scope="scope">
+          <span v-if="scope.row.equipmentResourceType === 'MANUAL'">手动录入</span>
           <span v-else>设备检测</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
         slot="fixed"
-        fixed="left"
-        prop="resultType"
-        label="检测结果">
+        fixed="right"
+        label="检测结果"
+        prop="diseaseStatus">
         <template slot-scope="scope">
-          <span style="color:#67C23A"
-            v-if="scope.row.resultType === 'HEALTH'">健康</span>
-          <span style="color:#909399"
-            v-else-if="scope.row.resultType === 'SLIGHT'">轻微</span>
-          <span style="color:#E6A23C"
-            v-else-if="scope.row.resultType === 'MEDIUM'">中度</span>
-          <span style="color:#F56C6C"
-            v-else-if="scope.row.resultType === 'SERIOUS'">重度</span>
-          <span v-else-if="scope.row.resultType === 'NORMAL'"> 正常</span>
-          <span v-else-if="scope.row.resultType === 'SLOW'">稍慢</span>
-          <span v-else>稍快</span>
+          <span v-if="scope.row.diseaseStatus === 'SERIOUS'">重度</span>
+          <span v-if="scope.row.diseaseStatus === 'HEALTH'">健康</span>
+          <span v-if="scope.row.diseaseStatus === 'SLIGHT'">轻度</span>
+          <span v-if="scope.row.diseaseStatus === 'MEDIUM'">中度</span>
         </template>
       </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="createTime"
-        label="检测日期">
-        <template slot-scope="scope">
-          <span>{{parseTime(scope.row.createTime)}}</span>
-        </template>
-      </el-table-column>
-      <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
-        label="操作"
-        width="220">
+        label="检测日期"
+        prop="inspectionTime">
         <template slot-scope="scope">
-          <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
+          {{parseTime(scope.row.inspectionTime)}}
         </template>
       </el-table-column>
     </EleTable>
@@ -273,7 +185,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { httpDetectRecord } from "@/api/admin/httpDetectRecord";
+import { httpAdminBloodPressure } from "@/api/admin/httpAdminBloodPressure";
 import { parseTime } from "@/utils/index";
 export default {
   components: {
@@ -316,7 +228,13 @@ export default {
         shrinkHighPressure: "",
         diastoleLowPressure: "",
       },
-      tableHeaderBig: [],
+      tableHeaderBig: [
+        { label: "序号", type: "index" },
+        { label: "姓名", prop: "patientUserName" },
+        { label: "手机号", prop: "patientUserPhone" },
+        { label: "设备名称", prop: "name" },
+        { label: "设备号", prop: "serialNumber" },
+      ],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -331,8 +249,8 @@ export default {
   },
   methods: {
     getList() {
-      httpDetectRecord
-        .getDetectRecord({
+      httpAdminBloodPressure
+        .getBloodPressure({
           page: this.pageNum,
           pageSize: this.pageSize,
           title: this.searchForm.title,
@@ -340,6 +258,7 @@ export default {
           status: this.searchForm.status,
         })
         .then((res) => {
+          console.log(res);
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });

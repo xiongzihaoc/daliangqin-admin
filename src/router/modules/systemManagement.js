@@ -25,15 +25,15 @@ const systemRouter = {
       icon: 'log'
     }
   },
-  {
-    path: 'loginRecord',
-    name: 'loginRecord',
-    component: () => import('@/views/systemManagement/loginRecord'),
-    meta: {
-      title: '登录记录',
-      icon: 'loginRecord'
-    }
-  },
+  // {
+  //   path: 'loginRecord',
+  //   name: 'loginRecord',
+  //   component: () => import('@/views/systemManagement/loginRecord'),
+  //   meta: {
+  //     title: '登录记录',
+  //     icon: 'loginRecord'
+  //   }
+  // },
   {
     path: 'update',
     name: 'update',

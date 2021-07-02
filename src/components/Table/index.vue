@@ -33,7 +33,8 @@
         :header-align="col.headerAlign"
         :column-key="index.toString()"
         :formatter="col.formatter"
-        show-overflow-tooltip></el-table-column>
+        ></el-table-column>
+        <!-- show-overflow-tooltip -->
     </el-table>
   </div>
 </template>

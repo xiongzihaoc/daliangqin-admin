@@ -95,24 +95,24 @@ const hospitalRouter = {
                         icon: 'general'
                     },
                 },
-                {
-                    path: "kpiConfig",
-                    name: "kpiConfig",
-                    component: () => import('@/views/hospitalManagement/work/kpiConfig'),
-                    meta: {
-                        title: 'KPI指标',
-                        icon: 'general'
-                    },
-                },
-                {
-                    path: "kpiRecord",
-                    name: "kpiRecord",
-                    component: () => import('@/views/hospitalManagement/work/kpiRecord'),
-                    meta: {
-                        title: 'KPI完成统计',
-                        icon: 'general'
-                    },
-                },
+                // {
+                //     path: "kpiConfig",
+                //     name: "kpiConfig",
+                //     component: () => import('@/views/hospitalManagement/work/kpiConfig'),
+                //     meta: {
+                //         title: 'KPI指标',
+                //         icon: 'general'
+                //     },
+                // },
+                // {
+                //     path: "kpiRecord",
+                //     name: "kpiRecord",
+                //     component: () => import('@/views/hospitalManagement/work/kpiRecord'),
+                //     meta: {
+                //         title: 'KPI完成统计',
+                //         icon: 'general'
+                //     },
+                // },
                 {
                     path: "prescription",
                     name: "prescription",
