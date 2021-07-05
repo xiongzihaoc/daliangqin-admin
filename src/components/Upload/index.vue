@@ -70,7 +70,6 @@ export default {
       });
     },
     beforeUpload(file) {
-      console.log(file);
       const _self = this;
       _self.dataObj.policy = this.infoList.policy;
       _self.dataObj.signature = this.infoList.signature;
@@ -82,18 +81,15 @@ export default {
       const isPNG = file.type === "image/png";
       const isBMP = file.type === "image/bmp";
       const isLt10M = file.size / 1024 / 1024 < 2;
-      // if (!isJPG && !isGIF && !isPNG && !isBMP) {
-      //   this.$message.error("上传图片必须是JPG/GIF/PNG/BMP 格式!");
-      // }
-      // if (!isLt10M) {
-      //   this.$message.error("上传图片大小不能超过 2MB!");
-      // }
-      // return (isJPG || isBMP || isGIF || isPNG) && isLt10M;
+      if (!isJPG && !isGIF && !isPNG && !isBMP) {
+        this.$message.error("上传图片必须是JPG/GIF/PNG/BMP 格式!");
+      }
+      if (!isLt10M) {
+        this.$message.error("上传图片大小不能超过 2MB!");
+      }
+      return (isJPG || isBMP || isGIF || isPNG) && isLt10M;
     },
     handleUploadSuccess(response, file, fileList) {
-      console.log(response);
-      console.log(file);
-      console.log(fileList);
       this.emitInput("https://cdn.daliangqing.com/" + this.dataObj.key);
     },
   },

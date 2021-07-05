@@ -126,15 +126,22 @@
           <el-input v-model="editAddForm.updateLog"></el-input>
         </el-form-item>
         <el-form-item label="url"
+          v-if="editAddForm.deviceType === 'IOS'"
           prop="url">
-          <el-input v-model="editAddForm.url"
-            @blur="strcatUrl">
+          <el-input v-model="editAddForm.url">
           </el-input>
         </el-form-item>
         <el-form-item label="上传"
-          prop="upload">
+          prop="upload"
+          v-if="editAddForm.deviceType === 'ANDROID'">
           <single-upload v-model="editAddForm.upload"
-            uploadType="AVATAR" />
+            @uploadFinish="uploadFinish"
+            @uploadProgress="uploadProgress"
+            uploadType="ANDROID" />
+          <el-progress style="margin-top:20px"
+            :text-inside="true"
+            :stroke-width="26"
+            :percentage="percentage"></el-progress>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -148,7 +155,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import singleUpload from "@/components/Upload";
+import singleUpload from "@/components/UploadFile";
 import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion";
 import {
   parseTime,
@@ -196,7 +203,7 @@ export default {
         versionCode: "",
         updateLog: "",
         url: "",
-        upload:"",
+        upload: "",
       },
       tableHeaderBig: [
         { type: "index", label: "序号" },
@@ -230,6 +237,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
+      percentage:0,
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
@@ -263,6 +271,12 @@ export default {
       this.searchForm = {};
       this.getList();
     },
+    uploadFinish(url) {
+      this.editAddForm.url = url;
+    },
+    uploadProgress(percentage){
+      this.percentage = percentage
+    },
     /***** 增删改 *****/
     // 新增
     add() {
@@ -272,7 +286,6 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
@@ -305,9 +318,6 @@ export default {
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
-    },
-    strcatUrl() {
-      this.editAddForm.url = `http://${this.editAddForm.url}.com`;
     },
     // 新增编辑确定
     editPageEnter() {

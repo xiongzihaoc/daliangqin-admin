@@ -118,60 +118,38 @@
         label-width="100px">
         <!-- 用户 -->
         <el-form-item label="选择用户"
-          prop="patientId">
-          <el-input v-model.trim="editAddForm.patientId"
-            placeholder="请输入内容搜索"></el-input>
+          prop="userId">
+          <el-input v-model.trim="editAddForm.userId"
+            placeholder="请选择用户"></el-input>
         </el-form-item>
-        <!-- 设备 -->
         <el-form-item label="设备"
-          prop="deviceId">
-          <el-input v-model.trim="editAddForm.deviceId"
-            placeholder="请选择设备"></el-input>
+          prop="name">
+          <el-input v-model.trim="editAddForm.name"
+            placeholder="请输入设备"></el-input>
         </el-form-item>
-        <!-- 病症 -->
-        <el-form-item label="病症"
-          prop="diseaseType">
-          <el-select style="width: 100%"
-            v-model="editAddForm.diseaseType"
-            placeholder="请选择病症">
-            <el-option v-for="item in diseaseList"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"></el-option>
-          </el-select>
-        </el-form-item>
-        <!-- 血压 -->
         <!-- 高压 -->
-        <el-form-item v-if="this.editAddForm.diseaseType === 'HIGH_BLOOD'"
-          label="收缩压 / 高压"
+        <el-form-item label="收缩压 / 高压"
           prop="shrinkHighPressure">
           <el-input v-model="editAddForm.shrinkHighPressure"
+            v-Int
             placeholder="请输入收缩压 / 高压"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
         </el-form-item>
         <!-- 低压 -->
-        <el-form-item v-if="this.editAddForm.diseaseType === 'HIGH_BLOOD'"
-          label="舒张压 / 低压"
+        <el-form-item label="舒张压 / 低压"
           prop="diastoleLowPressure">
           <el-input v-model="editAddForm.diastoleLowPressure"
+            v-Int
             placeholder="请输入舒张压 / 低压"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
         </el-form-item>
-        <!-- 血糖 -->
-        <el-form-item v-if="this.editAddForm.diseaseType === 'DIABETES'"
-          label="空腹血糖"
-          prop="diastoleLowPressure">
-          <el-input v-model="editAddForm.diastoleLowPressure"
-            placeholder="请输入空腹血糖"><i slot="suffix"
-              style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
-        </el-form-item>
-        <!-- 心率 -->
-        <el-form-item v-if="this.editAddForm.diseaseType === 'HEART_RATE'"
-          label="心率"
-          prop="diastoleLowPressure">
-          <el-input v-model="editAddForm.diastoleLowPressure"
-            placeholder="请输入心率"><i slot="suffix"
-              style="font-style:normal;margin-right: 10px;">bpm</i></el-input>
+        <el-form-item label="检测日期"
+          prop="patientId">
+          <el-date-picker v-model="editAddForm.inspectionTime" style="width:100%"
+            type="date"
+            value-format="timestamp"
+            placeholder="选择日期">
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -200,10 +178,8 @@ export default {
         ],
       },
       searchForm: {
-        patientUserName: "",
-        diseaseType: "",
-        resource: "",
-        resultType: "",
+        userId: "",
+
       },
       list: [],
       // 检测结果列表
@@ -212,9 +188,9 @@ export default {
         { id: 2, label: "轻微", value: "SLIGHT" },
         { id: 3, label: "中度", value: "MEDIUM" },
         { id: 4, label: "重度", value: "SERIOUS" },
-        { id: 5, label: "正常", value: "NORMAL" },
-        { id: 6, label: "稍慢", value: "SLOW" },
-        { id: 7, label: "稍快", value: "FAST" },
+        // { id: 5, label: "正常", value: "NORMAL" },
+        // { id: 6, label: "稍慢", value: "SLOW" },
+        // { id: 7, label: "稍快", value: "FAST" },
       ],
       diseaseList: [
         { id: 1, label: "高血压", value: "HIGH_BLOOD" },
@@ -222,9 +198,9 @@ export default {
         { id: 3, label: "心率", value: "HEART_RATE" },
       ],
       editAddForm: {
-        patientId: "",
-        deviceId: "",
-        diseaseType: "",
+        userId: "",
+        name: "",
+        inspectionTime: "",
         shrinkHighPressure: "",
         diastoleLowPressure: "",
       },

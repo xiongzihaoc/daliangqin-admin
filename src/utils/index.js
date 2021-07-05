@@ -180,8 +180,8 @@ export const adminRoleTypeList = [
 export const deviceTypeList = [
   { id: 1, label: "苹果", value: "IOS" },
   { id: 2, label: "安卓", value: "ANDROID" },
-  { id: 3, label: "H5", value: "H5" },
-  { id: 4, label: "PC", value: "PC_WEB" },
+  // { id: 3, label: "H5", value: "H5" },
+  // { id: 4, label: "PC", value: "PC_WEB" },
 ]
 
 // app类型列表
