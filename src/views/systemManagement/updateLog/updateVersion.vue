@@ -126,8 +126,6 @@
         <el-form-item label="url"
           prop="url">
           <el-input v-model="editAddForm.url" @blur="strcatUrl">
-            <template slot="prepend">http://</template>
-            <template slot="append">.com</template>
           </el-input>
         </el-form-item>
       </el-form>
