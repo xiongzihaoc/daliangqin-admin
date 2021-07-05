@@ -91,7 +91,8 @@
         <el-form-item v-if="this.infoTitle === '新增'"
           label="app类型"
           prop="appType">
-          <el-select placeholder="请选择app类型" style="width: 100%"
+          <el-select placeholder="请选择app类型"
+            style="width: 100%"
             v-model="editAddForm.appType">
             <el-option v-for="item in appTypeList"
               :key="item.id"
@@ -103,7 +104,7 @@
           label="设备类型"
           prop="deviceType">
           <el-select style="width: 100%"
-          placeholder="请选择设备类型"
+            placeholder="请选择设备类型"
             v-model="editAddForm.deviceType">
             <el-option v-for="item in deviceTypeList"
               :key="item.id"
@@ -117,7 +118,8 @@
         </el-form-item>
         <el-form-item label="版本code"
           prop="versionCode">
-          <el-input v-model="editAddForm.versionCode" v-Int></el-input>
+          <el-input v-model="editAddForm.versionCode"
+            v-Int></el-input>
         </el-form-item>
         <el-form-item label="版本日志"
           prop="updateLog">
@@ -125,8 +127,14 @@
         </el-form-item>
         <el-form-item label="url"
           prop="url">
-          <el-input v-model="editAddForm.url" @blur="strcatUrl">
+          <el-input v-model="editAddForm.url"
+            @blur="strcatUrl">
           </el-input>
+        </el-form-item>
+        <el-form-item label="上传"
+          prop="upload">
+          <single-upload v-model="editAddForm.upload"
+            uploadType="AVATAR" />
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -140,6 +148,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
+import singleUpload from "@/components/Upload";
 import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion";
 import {
   parseTime,
@@ -150,6 +159,7 @@ import {
 export default {
   components: {
     EleTable,
+    singleUpload,
   },
   data() {
     return {
@@ -186,6 +196,7 @@ export default {
         versionCode: "",
         updateLog: "",
         url: "",
+        upload:"",
       },
       tableHeaderBig: [
         { type: "index", label: "序号" },
@@ -207,9 +218,13 @@ export default {
         { prop: "versionCode", label: "版本code" },
         { prop: "updateLog", label: "版本日志" },
         { prop: "url", label: "链接" },
-        { prop: "updateTime", label: "更新时间",formatter:row=>{
-          return parseTime(row.updateTime)
-        } },
+        {
+          prop: "updateTime",
+          label: "更新时间",
+          formatter: (row) => {
+            return parseTime(row.updateTime);
+          },
+        },
       ],
       // 分页区域
       pageSize: 10,
@@ -291,8 +306,8 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
-    strcatUrl(){
-      this.editAddForm.url = `http://${this.editAddForm.url}.com`
+    strcatUrl() {
+      this.editAddForm.url = `http://${this.editAddForm.url}.com`;
     },
     // 新增编辑确定
     editPageEnter() {
