@@ -171,7 +171,7 @@ export default {
   data() {
     return {
       parseTime,
-      appTypeList,
+      appTypeList, 
       deviceTypeList,
       FormRules: {
         appType: [
