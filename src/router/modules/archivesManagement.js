@@ -64,15 +64,15 @@ const archivesRouter = {
         },
         ],
     },
-    {
-        path: 'archivesAddress',
-        name: 'archivesAddress',
-        component: () => import('@/views/archivesManagement/address'),
-        meta: {
-            title: '收货地址',
-            icon: "address"
-        }
-    },
+    // {
+    //     path: 'archivesAddress',
+    //     name: 'archivesAddress',
+    //     component: () => import('@/views/archivesManagement/address'),
+    //     meta: {
+    //         title: '收货地址',
+    //         icon: "address"
+    //     }
+    // },
     {
         path: 'details',
         name: 'details',

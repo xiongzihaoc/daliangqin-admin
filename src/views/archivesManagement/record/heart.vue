@@ -99,9 +99,9 @@
         width="120">
         <template slot-scope="scope">
           <el-button size="mini"
-            @click="detailsBtn(scope.row)"
+            @click="editBtn(scope.row)"
             type="primary"
-            v-if="scope.row">查看</el-button>
+            v-if="scope.row">编辑</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -272,7 +272,7 @@ export default {
       httpAdminPatient
         .getPatient({
           page: 1,
-          pageSize: 10,
+          pageSize: 100,
         })
         .then((res) => {
           this.patientList = res.data.elements;
@@ -308,6 +308,7 @@ export default {
       console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
+      this.editAddForm.userId = val.patientUserId
       this.editDialogVisible = true;
     },
     editDialogClosed() {

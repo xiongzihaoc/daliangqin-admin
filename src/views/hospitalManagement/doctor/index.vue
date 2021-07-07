@@ -330,7 +330,9 @@ export default {
           prop: "birthday",
           label: "出生日期",
           formatter: (row) => {
-            return Boolean(row.birthday) ? parseTime( row.birthday ).slice(0,10) : ""
+            return Boolean(row.birthday)
+              ? parseTime(row.birthday).slice(0, 10)
+              : "";
           },
         },
         { prop: "age", label: "年龄" },
@@ -372,6 +374,7 @@ export default {
     // 获取医院  转诊医生列表
     this.getHospitalList();
     this.getToDoctorList();
+    this.getTreeData(addressJson);
   },
   methods: {
     getList() {

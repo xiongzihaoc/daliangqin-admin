@@ -14,8 +14,8 @@
           </el-form-item>
           <!-- 用户头像 -->
           <el-form-item label="用户头像"
-            prop="photoUrl">
-            <single-upload v-model="form.photoUrl"
+            prop="avatarUrl">
+            <single-upload v-model="form.avatarUrl"
               uploadType="AVATAR" />
           </el-form-item>
           <!-- 手机号 -->
@@ -29,7 +29,7 @@
           <el-form-item label="身份证号"
             prop="idCard">
             <el-input v-model="form.idCard"
-               v-Int
+            maxlength="18"
               placeholder="请输入该用户身份证号"></el-input>
           </el-form-item>
           <el-form-item label="省市区"
@@ -365,7 +365,7 @@ export default {
       bloodTypeList,
       FormRules: {
         name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
-        photoUrl: [
+        avatarUrl: [
           { required: true, message: "请上传用户头像", trigger: "blur" },
         ],
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
@@ -392,11 +392,11 @@ export default {
         children: "districts", //匹配响应数据中的children
       },
       // 转诊医生列表
-      toDoctorList: [],
+      toDoctorList: [],	
       form: {
         // 基本信息
         name: "",
-        photoUrl: "",
+        avatarUrl: "",
         phone: "",
         idCard: "",
         addressDetail: "",
@@ -488,7 +488,7 @@ export default {
             this.form.city = value.city;
             this.form.area = value.area;
             this.$set(this.form, "address", value.address);
-            this.$set(this.form, "photoUrl", value.avatarUrl);
+            this.$set(this.form, "avatarUrl", value.avatarUrl);
             this.computeBmi()
             this.form.addressDetail = [
               this.form.province,

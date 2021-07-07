@@ -274,7 +274,7 @@ export default {
       httpAdminPatient
         .getPatient({
           page: 1,
-          pageSize: 10,
+          pageSize: 100,
         })
         .then((res) => {
           console.log(res);
