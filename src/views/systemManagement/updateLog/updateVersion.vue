@@ -131,7 +131,7 @@
           <el-input v-model="editAddForm.url">
           </el-input>
         </el-form-item>
-        <el-form-item label="上传"
+        <el-form-item label="上传apk"
           prop="upload"
           v-if="editAddForm.deviceType === 'ANDROID'">
           <single-upload v-model="editAddForm.upload"
@@ -141,6 +141,8 @@
           <el-progress style="margin-top:20px"
             :text-inside="true"
             :stroke-width="26"
+            status="success"
+            v-show="percentage > 0 && percentage < 100"
             :percentage="percentage"></el-progress>
         </el-form-item>
       </el-form>
@@ -148,7 +150,7 @@
         class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
         <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
+          @click="editPageEnter" :disabled="percentage > 0 && percentage < 100">确 定</el-button>
       </span>
     </el-dialog>
   </div>

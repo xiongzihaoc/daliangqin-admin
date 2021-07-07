@@ -1,20 +1,25 @@
 <template>
-  <div>
+  <div class="container">
     <el-upload action="https://cdn.daliangqing.com"
       :data="dataObj"
       :multiple="false"
       :before-upload="beforeUpload"
       :show-file-list="false"
       :on-remove="handleRemove"
+      class="w100"
       :on-progress="handleUploadProgress"
       :on-success="handleUploadSuccess">
-      <img v-if="imageUrl"
-        :src="imageUrl"
-        class="avatar">
-      <i v-else
+      <el-input class="w100"
+        readonly
+        v-model="uploadValue"></el-input>
+      <!-- <el-button v-else  type="info" size="mini" plain >点击上传</el-button> -->
+      <!-- <i v-else
         style="border:1px dashed #ccc;border-radius:10px;"
-        class="el-icon-plus avatar-uploader-icon"></i>
+        class="el-icon-plus avatar-uploader-icon"></i> -->
     </el-upload>
+    <el-progress v-show="percentage < 100 && percentage > 0"
+      :percentage="percentage"
+      status="success"></el-progress>
   </div>
 </template>
 <script>
@@ -34,6 +39,8 @@ export default {
         ossaccessKeyId: "",
         host: "",
       },
+      percentage: 0,
+      uploadValue: "",
       infoList: [],
     };
   },
@@ -75,38 +82,19 @@ export default {
       _self.dataObj.key = this.infoList.key + file.name;
       _self.dataObj.host = this.infoList.endPoint;
     },
-    handleUploadProgress(event,file,fileList) {
+    handleUploadProgress(event, file, fileList) {
       this.$emit("uploadProgress", event.percent);
     },
     handleUploadSuccess(response, file, fileList) {
       let value = "https://cdn.daliangqing.com/" + this.dataObj.key;
+      this.uploadValue = "https://cdn.daliangqing.com/" + this.dataObj.key;
       this.$emit("uploadFinish", value);
     },
   },
 };
 </script>
-<style scoped>
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 64px;
-  height: 64px;
-  line-height: 64px;
-  text-align: center;
-}
-.avatar {
-  width: 64px;
-  height: 64px;
-  display: block;
+<style>
+.container .el-upload--text {
+  width: 100%;
 }
 </style>

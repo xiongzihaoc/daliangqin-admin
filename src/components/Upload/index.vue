@@ -6,6 +6,7 @@
       :before-upload="beforeUpload"
       :show-file-list="false"
       :on-remove="handleRemove"
+      :on-progress="handleProgress"
       :on-success="handleUploadSuccess">
       <img v-if="imageUrl"
         :src="imageUrl"
@@ -14,6 +15,8 @@
         style="border:1px dashed #ccc;border-radius:10px;"
         class="el-icon-plus avatar-uploader-icon"></i>
     </el-upload>
+    <el-progress v-show="percentage < 100 && percentage > 0" :percentage="percentage"
+      status="success"></el-progress>
   </div>
 </template>
 <script>
@@ -33,6 +36,7 @@ export default {
         ossaccessKeyId: "",
         host: "",
       },
+      percentage: 0,
       infoList: [],
     };
   },
@@ -68,6 +72,9 @@ export default {
           c === "x" ? (Math.random() * 16) | 0 : "r&0x3" | "0x8"
         ).toString(16);
       });
+    },
+    handleProgress(event) {
+      this.percentage = event.percent
     },
     beforeUpload(file) {
       const _self = this;
