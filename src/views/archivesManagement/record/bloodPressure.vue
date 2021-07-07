@@ -95,6 +95,20 @@
           {{parseTime(scope.row.inspectionTime)}}
         </template>
       </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        label="操作"
+        width="120">
+        <template slot-scope="scope">
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
+          <!-- <el-button size="mini"
+            type="danger"
+            @click="deleteBtn(scope.row.id)">删除</el-button> -->
+        </template>
+      </el-table-column>
     </EleTable>
     <!-- 分页 -->
     <el-pagination background
@@ -115,12 +129,18 @@
       <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px">
+        label-width="120px">
         <!-- 用户 -->
         <el-form-item label="选择用户"
           prop="userId">
-          <el-input v-model.trim="editAddForm.userId"
-            placeholder="请选择用户"></el-input>
+          <el-select class="w100"
+           @change="selectPatient"
+            v-model="editAddForm.userId">
+            <el-option v-for="item in patientList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="设备"
           prop="name">
@@ -130,7 +150,8 @@
         <!-- 高压 -->
         <el-form-item label="收缩压 / 高压"
           prop="shrinkHighPressure">
-          <el-input v-model="editAddForm.shrinkHighPressure"
+          <el-input maxlength="3"
+            v-model="editAddForm.shrinkHighPressure"
             v-Int
             placeholder="请输入收缩压 / 高压"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
@@ -138,15 +159,17 @@
         <!-- 低压 -->
         <el-form-item label="舒张压 / 低压"
           prop="diastoleLowPressure">
-          <el-input v-model="editAddForm.diastoleLowPressure"
+          <el-input maxlength="3"
+            v-model="editAddForm.diastoleLowPressure"
             v-Int
             placeholder="请输入舒张压 / 低压"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
         </el-form-item>
         <el-form-item label="检测日期"
-          prop="patientId">
-          <el-date-picker v-model="editAddForm.inspectionTime" style="width:100%"
-            type="date"
+          prop="inspectionTime">
+          <el-date-picker v-model="editAddForm.inspectionTime"
+            style="width:100%"
+            type="datetime"
             value-format="timestamp"
             placeholder="选择日期">
           </el-date-picker>
@@ -164,6 +187,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminBloodPressure } from "@/api/admin/httpAdminBloodPressure";
+import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
 import { parseTime } from "@/utils/index";
 export default {
   components: {
@@ -173,24 +197,28 @@ export default {
     return {
       parseTime,
       FormRules: {
-        title: [
-          { required: true, message: "请输入轮播图名称", trigger: "blur" },
+        userId: [{ required: true, message: "请选择用户", trigger: "blur" }],
+        inspectionTime: [
+          { required: true, message: "请选择检测日期", trigger: "blur" },
+        ],
+        shrinkHighPressure: [
+          { required: true, message: "请输入收缩压 / 高压", trigger: "blur" },
+        ],
+        diastoleLowPressure: [
+          { required: true, message: "请输入舒张压 / 低压", trigger: "blur" },
         ],
       },
       searchForm: {
         userId: "",
-
       },
       list: [],
+      patientList: [],
       // 检测结果列表
       diseaseTypeList: [
         { id: 1, label: "健康", value: "HEALTH" },
         { id: 2, label: "轻微", value: "SLIGHT" },
         { id: 3, label: "中度", value: "MEDIUM" },
         { id: 4, label: "重度", value: "SERIOUS" },
-        // { id: 5, label: "正常", value: "NORMAL" },
-        // { id: 6, label: "稍慢", value: "SLOW" },
-        // { id: 7, label: "稍快", value: "FAST" },
       ],
       diseaseList: [
         { id: 1, label: "高血压", value: "HIGH_BLOOD" },
@@ -223,6 +251,9 @@ export default {
   created() {
     this.getList();
   },
+  mounted(){
+    this.getPatientList();
+  },
   methods: {
     getList() {
       httpAdminBloodPressure
@@ -238,6 +269,20 @@ export default {
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
+    },
+    getPatientList() {
+      httpAdminPatient
+        .getPatient({
+          page: 1,
+          pageSize: 10,
+        })
+        .then((res) => {
+          console.log(res);
+          this.patientList = res.data.elements;
+        });
+    },
+    selectPatient(){
+      this.$forceUpdate()
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -258,9 +303,9 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
+      this.editAddForm.userId = val.patientUserId
       this.editDialogVisible = true;
     },
     editDialogClosed() {
@@ -272,30 +317,34 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpDetectRecord.postDetectRecord(this.editAddForm).then((res) => {
-              if (res.code !== "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "新增成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
-              }
-            });
+            httpAdminBloodPressure
+              .postBloodPressure(this.editAddForm)
+              .then((res) => {
+                if (res.code !== "OK") {
+                  return;
+                } else {
+                  this.$notify.success({
+                    title: "新增成功",
+                  });
+                  this.getList();
+                  this.editDialogVisible = false;
+                }
+              });
           } else {
             // 发送请求
-            httpDetectRecord.putDetectRecord(this.editAddForm).then((res) => {
-              if (res.code !== "OK") {
-                return;
-              } else {
-                this.$notify.success({
-                  title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
-              }
-            });
+            httpAdminBloodPressure
+              .putBloodPressurer(this.editAddForm)
+              .then((res) => {
+                if (res.code !== "OK") {
+                  return;
+                } else {
+                  this.$notify.success({
+                    title: "编辑成功",
+                  });
+                  this.getList();
+                  this.editDialogVisible = false;
+                }
+              });
           }
         }
       });

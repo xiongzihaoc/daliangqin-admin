@@ -43,14 +43,14 @@
           <el-form-item label="详细地址"
             prop="address">
             <el-input v-model="form.address"
-              placeholder="请输入医院地址"></el-input>
+              placeholder="请输入医院详细地址"></el-input>
           </el-form-item>
           <!-- 对应医师 -->
           <el-form-item label="对应医师"
             prop="doctorUserId">
             <el-select v-model="form.doctorUserId"
               filterable
-              placeholder="请输入内容搜索">
+              placeholder="请选择对应医师">
               <el-option v-for="item in toDoctorList"
                 :key="item.id"
                 :value="item.id"
@@ -192,7 +192,7 @@
           <el-form-item label="心率"
             prop="heartRate">
             <el-input v-model="form.heartRate"
-              v-Intv-Int
+              v-Int
               placeholder="请输入心率"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">bpm</i></el-input>
           </el-form-item>

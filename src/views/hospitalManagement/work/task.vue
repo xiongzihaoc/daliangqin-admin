@@ -421,7 +421,6 @@ export default {
       this.editAddForm.patientUserId = "";
     },
     selectDoctor(val) {
-      console.log(val);
       this.$forceUpdate();
       this.getPatientList(val);
       this.editAddForm.patientUserId = "";
