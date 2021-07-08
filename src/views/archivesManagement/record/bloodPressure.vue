@@ -134,7 +134,8 @@
         <el-form-item label="选择用户"
           prop="userId">
           <el-select class="w100"
-           @change="selectPatient"
+          filterable
+            @change="selectPatient"
             v-model="editAddForm.userId">
             <el-option v-for="item in patientList"
               :key="item.id"
@@ -251,7 +252,7 @@ export default {
   created() {
     this.getList();
   },
-  mounted(){
+  mounted() {
     this.getPatientList();
   },
   methods: {
@@ -281,8 +282,8 @@ export default {
           this.patientList = res.data.elements;
         });
     },
-    selectPatient(){
-      this.$forceUpdate()
+    selectPatient() {
+      this.$forceUpdate();
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -305,7 +306,7 @@ export default {
     editBtn(val) {
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editAddForm.userId = val.patientUserId
+      this.editAddForm.userId = val.patientUserId;
       this.editDialogVisible = true;
     },
     editDialogClosed() {

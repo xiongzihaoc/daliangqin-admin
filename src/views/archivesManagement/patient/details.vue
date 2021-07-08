@@ -462,6 +462,8 @@ export default {
       httpAdminPatient
         .getPatient({ userId: this.$route.query.id })
         .then((res) => {
+          console.log(3333);
+          console.log(res);
           // 回显表单数据
           let value = res.data.elements[0];
           if (value.archivesMongo != null) {

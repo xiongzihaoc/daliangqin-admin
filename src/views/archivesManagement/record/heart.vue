@@ -129,6 +129,7 @@
         <el-form-item label="选择用户"
           prop="userId">
           <el-select class="w100"
+            filterable
             @change="selectPatient"
             v-model="editAddForm.userId">
             <el-option v-for="item in patientList"
@@ -308,7 +309,7 @@ export default {
       console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editAddForm.userId = val.patientUserId
+      this.editAddForm.userId = val.patientUserId;
       this.editDialogVisible = true;
     },
     editDialogClosed() {

@@ -65,7 +65,7 @@ export default {
       // 表单验证
       loginRules: {
         phone: [
-          { required: true, trigger: "change", validator: validatePhone },
+          { required: true, trigger: "blur", validator: validatePhone },
         ],
         code: [{ required: true, trigger: "blur", validator: validateCode }],
       },

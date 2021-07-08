@@ -126,6 +126,7 @@
           prop="userId">
           <el-select class="w100"
             @change="selectPatient"
+            filterable
             v-model="editAddForm.userId">
             <el-option v-for="item in patientList"
               :key="item.id"
