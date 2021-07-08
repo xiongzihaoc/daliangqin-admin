@@ -3,34 +3,28 @@
     <el-form ref="FormRef"
       :model="form"
       :rules="FormRules"
-      label-width="100px">
+      label-width="120px">
       <div class="content-box">
         <div>
           <h3>基本资料</h3>
-          <el-form-item label="用户姓名"
+          <el-form-item label="姓名"
             prop="name">
             <el-input v-model="form.name"
-              placeholder="请输入用户姓名"></el-input>
+              placeholder="请输入姓名"></el-input>
           </el-form-item>
           <!-- 用户头像 -->
-          <el-form-item label="用户头像"
+          <el-form-item label="照片"
             prop="avatarUrl">
             <single-upload v-model="form.avatarUrl"
               uploadType="AVATAR" />
-          </el-form-item>
-          <!-- 手机号 -->
-          <el-form-item label="手机号"
-            prop="phone">
-            <el-input v-model="form.phone"
-               v-Int
-              placeholder="请输入该用户手机号"></el-input>
           </el-form-item>
           <!-- 身份证 -->
           <el-form-item label="身份证号"
             prop="idCard">
             <el-input v-model="form.idCard"
-            maxlength="18"
-              placeholder="请输入该用户身份证号"></el-input>
+              type="number"
+              maxlength="18"
+              placeholder="请输入身份证号"></el-input>
           </el-form-item>
           <el-form-item label="省市区"
             prop="addressDetail">
@@ -43,108 +37,13 @@
           <el-form-item label="详细地址"
             prop="address">
             <el-input v-model="form.address"
-              placeholder="请输入医院详细地址"></el-input>
+              placeholder="请输入详细地址"></el-input>
           </el-form-item>
-          <!-- 对应医师 -->
-          <el-form-item label="对应医师"
-            prop="doctorUserId">
-            <el-select v-model="form.doctorUserId"
-              filterable
-              placeholder="请选择对应医师">
-              <el-option v-for="item in toDoctorList"
-                :key="item.id"
-                :value="item.id"
-                :label="item.name"></el-option>
-            </el-select>
-          </el-form-item>
-        </div>
-        <div>
-          <h3>基本检查</h3>
-          <el-form-item label="饮食习惯"
-            prop="eatHabits">
-            <el-select multiple
-              v-model="form.eatHabits"
-              placeholder="请选择饮食习惯">
-              <el-option v-for="item in eatHabitsList"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="吸烟习惯"
-            prop="smokeType">
-            <el-select v-model="form.smokeType"
-              placeholder="请选择吸烟习惯">
-              <el-option v-for="item in isSmokeList"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="饮酒习惯"
-            prop="drinkType">
-            <el-select v-model="form.drinkType"
-              placeholder="请选择饮酒习惯">
-              <el-option v-for="item in isSmokeList"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="熬夜情况"
-            prop="stayUpLate">
-            <el-select v-model="form.stayUpLate"
-              placeholder="请选择熬夜情况">
-              <el-option v-for="item in stayUpLateList"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="静坐时长"
-            prop="sit">
-            <el-select v-model="form.sit"
-              placeholder="请选择静坐时长">
-              <el-option v-for="item in sitType"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="运动习惯"
-            prop="exercise">
-            <el-select v-model="form.exercise"
-              placeholder="请选择运动习惯">
-              <el-option v-for="item in exerciseList"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="慢性病史"
-            prop="chronicDisease">
-            <el-select multiple
-              v-model="form.chronicDisease"
-              placeholder="请选择慢性病史">
-              <el-option v-for="item in chronicDiseaseList"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="其他"
-            prop="otherDisease">
-            <el-input v-model="form.otherDisease"
-              placeholder="请输入其他慢性病史"></el-input>
-          </el-form-item>
-        </div>
-        <div>
-          <h3>体格检查</h3>
           <el-form-item label="身高"
             prop="height">
             <el-input v-model="form.height"
               @blur="computeBmi"
-               v-Int
+              v-Int
               placeholder="请输入身高"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">cm</i></el-input>
           </el-form-item>
@@ -152,7 +51,7 @@
             prop="weight">
             <el-input v-model="form.weight"
               @blur="computeBmi"
-               v-Int
+              v-Int
               placeholder="请输入体重"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">kg</i></el-input>
           </el-form-item>
@@ -161,160 +60,139 @@
             <el-input v-model="form.bmi"
               disabled></el-input>
           </el-form-item>
-          <el-form-item label="腰围"
-            prop="waistline">
-            <el-input v-model="form.waistline"
-               v-Int
-              placeholder="请输入腰围"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">cm</i></el-input>
-          </el-form-item>
-          <el-form-item label="臀围"
-            prop="hips">
-            <el-input v-model="form.hips"
+          <!-- 手机号 -->
+          <el-form-item label="手机"
+            prop="phone">
+            <el-input v-model="form.phone"
+              maxlength="11"
               v-Int
-              placeholder="请输入臀围"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">kg</i></el-input>
+              placeholder="请输入手机号"></el-input>
           </el-form-item>
-          <el-form-item label="收缩压/高压"
-            prop="shrinkHighPressure">
-            <el-input v-model="form.bloodPressure.shrinkHighPressure"
-              v-Int
-              placeholder="请输入收缩压/高压"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
+          <el-form-item label="常住类型"
+            prop="liveType">
+            <el-select v-model="form.liveType">
+              <el-option label="户籍"
+                value="DOMICILE"></el-option>
+              <el-option label="非户籍"
+                value="NO_DOMICILE"></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="舒张压/低压"
-            prop="diastoleLowPressure">
-            <el-input v-model="form.bloodPressure.diastoleLowPressure"
-              v-Int
-              placeholder="请输入舒张压/低压"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
+          <el-form-item label="民族"
+            prop="ethnic">
+            <el-input v-model="form.ethnic"></el-input>
           </el-form-item>
-          <el-form-item label="心率"
-            prop="heartRate">
-            <el-input v-model="form.heartRate"
-              v-Int
-              placeholder="请输入心率"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">bpm</i></el-input>
-          </el-form-item>
-        </div>
-        <div>
-          <h3>实验室检查</h3>
           <el-form-item label="血型"
             prop="bloodType">
-            <el-select v-model="form.bloodType"
-              placeholder="请选择血型">
+            <el-select v-model="form.bloodType">
               <el-option v-for="item in bloodTypeList"
                 :key="item.id"
                 :label="item.label"
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="空腹血糖"
-            prop="fastingBloodGlucose">
-            <el-input v-model="form.fastingBloodGlucose"
-              v-Int
-              placeholder="请输入空腹血糖"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
-          </el-form-item>
-          <el-form-item label="总胆固醇"
-            prop="totalCholesterol">
-            <el-input v-model="form.bloodLipids.totalCholesterol"
-              v-Int
-              placeholder="请输入总胆固醇"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
-          </el-form-item>
-          <el-form-item label="甘油三酯"
-            prop="triglycerides">
-            <el-input v-model="form.bloodLipids.triglycerides"
-              v-Int
-              placeholder="请输入甘油三酯"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
-          </el-form-item>
-          <el-form-item label="高密度脂蛋白胆固醇"
-            prop="hdlCholesterol">
-            <el-input v-model="form.bloodLipids.hdlCholesterol"
-              v-Int
-              placeholder="请输入高密度脂蛋白胆固醇"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
-          </el-form-item>
-          <el-form-item label="低密度脂蛋白胆固醇"
-            prop="ldlCholesterol">
-            <el-input v-model="form.bloodLipids.ldlCholesterol"
-              v-Int
-              placeholder="请输入低密度脂蛋白胆固醇"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
-          </el-form-item>
-          <el-form-item label="肌酐"
-            prop="creatinine">
-            <el-input v-model="form.creatinine"
-              v-Int
-              placeholder="请输入肌酐"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">μmol/L</i></el-input>
-          </el-form-item>
-          <el-form-item label="尿酸"
-            prop="uricAcid">
-            <el-input v-model="form.uricAcid"
-              v-Int
-              placeholder="请输入尿酸"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">umol/L</i></el-input>
-          </el-form-item>
-          <el-form-item label="血钾"
-            prop="serumPotassium">
-            <el-input v-model="form.serumPotassium"
-              v-Int
-              placeholder="请输入血钾"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
-          </el-form-item>
-          <el-form-item label="肝功能"
-            prop="liverFunction">
-            <el-select v-model="form.liverFunction"
-              placeholder="请选择肝功能情况">
-              <el-option v-for="item in liverFunction"
+
+          <el-form-item label="文化程度"
+            prop="educationType">
+            <el-select v-model="form.educationType">
+              <el-option v-for="item in educationType"
                 :key="item.id"
                 :label="item.label"
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="肾功能"
-            prop="kidneyFunction">
-            <el-select v-model="form.kidneyFunction"
-              placeholder="请选择肾功能情况">
-              <el-option v-for="item in liverFunction"
+          <el-form-item label="职业"
+            prop="job">
+            <el-input v-model="form.job"></el-input>
+          </el-form-item>
+          <el-form-item label="婚姻情况"
+            prop="marriageStatus">
+            <el-select v-model="form.marriageStatus">
+              <el-option v-for="item in marriageList"
                 :key="item.id"
                 :label="item.label"
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="颈动脉斑块"
-            prop="carotidPlaque">
-            <el-select v-model="form.carotidPlaque"
-              placeholder="请选择颈动脉斑块情况">
-              <el-option v-for="item in carotidPlaque"
+          <el-form-item label="工作单位"
+            prop="employer">
+            <el-input v-model="form.employer"></el-input>
+          </el-form-item>
+          <el-form-item label="对应医师医院"
+            prop="hospitalId">
+            <el-select v-model="form.hospitalId"
+              filterable
+              @change="selectHospital"
+              placeholder="请选择对应医师医院">
+              <el-option v-for="item in hospitalList"
                 :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
+                :value="item.id"
+                :label="item.name"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="心电图"
-            prop="electrocardiogram">
-            <el-select v-model="form.electrocardiogram"
-              placeholder="请选择心电图情况">
-              <el-option v-for="item in liverFunction"
+          <!-- 对应医师 -->
+          <el-form-item label="对应医师"
+            prop="doctorUserId">
+            <el-select v-model="form.doctorUserId"
+              @change="selectDoctor"
+              filterable
+              placeholder="请选择对应医师">
+              <el-option v-for="item in doctorList"
                 :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
+                :value="item.id"
+                :label="item.name"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="眼底检查"
-            prop="fundusExamination">
-            <el-select v-model="form.fundusExamination"
-              placeholder="请选择眼底检查情况">
-              <el-option v-for="item in liverFunction"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
-            </el-select>
+        </div>
+
+        <div>
+          <h3>行为习惯</h3>
+          <el-form-item label="日饮酒量"
+            prop="otherDisease">
+            <el-input maxlength="3"
+              v-model="form.otherDisease"
+              placeholder="请输入日饮酒量"></el-input>
           </el-form-item>
+          <el-form-item label="日吸烟量"
+            prop="otherDisease">
+            <el-input maxlength="3"
+              v-model="form.otherDisease"
+              placeholder="请输入日吸烟量"></el-input>
+          </el-form-item>
+          <el-form-item label="运动次数/周"
+            prop="exercise">
+            <el-input maxlength="3"
+              v-model="form.otherDisease"
+              placeholder="请输入运动次数/周"></el-input>
+          </el-form-item>
+          <el-form-item label="运动分钟/次"
+            prop="chronicDisease">
+            <el-input maxlength="3"
+              v-model="form.otherDisease"
+              placeholder="请输入运动分钟/次"></el-input>
+          </el-form-item>
+          <el-form-item label="日主食量"
+            prop="otherDisease">
+            <el-input v-model="form.otherDisease"
+              placeholder="请输入日主食量"></el-input>
+          </el-form-item>
+          <el-form-item label="日摄盐量"
+            prop="otherDisease">
+            <el-input v-model="form.otherDisease"
+              placeholder="请输入日摄盐量"></el-input>
+          </el-form-item>
+          <el-form-item label="心理调整"
+            prop="otherDisease">
+            <el-input v-model="form.otherDisease"
+              placeholder="请选择心理调整"></el-input>
+          </el-form-item>
+          <el-form-item label="遵医行为"
+            prop="otherDisease">
+            <el-input v-model="form.otherDisease"
+              placeholder="请选择遵医行为"></el-input>
+          </el-form-item>
+        </div>
+        <div>
+          <h3>健康信息</h3>
         </div>
       </div>
     </el-form>
@@ -332,18 +210,16 @@
 <script>
 import singleUpload from "@/components/Upload";
 import { httpAdminArchives } from "@/api/admin/httpAdminArchives";
+import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
 import addressJson from "@/utils/address.json";
 import {
-  eatHabitsList,
-  isSmokeList,
-  stayUpLateList,
-  exerciseList,
-  chronicDiseaseList,
-  liverFunction,
-  carotidPlaque,
-  sitType,
+  GetBirthday,
+  Getsex,
+  educationType,
   bloodTypeList,
+  marriageList,
   validatePhone,
   validateIdCard,
 } from "@/utils/index";
@@ -353,31 +229,26 @@ export default {
   },
   data() {
     return {
-      addressJson,
-      eatHabitsList,
-      isSmokeList,
-      stayUpLateList,
-      exerciseList,
-      chronicDiseaseList,
-      liverFunction,
-      carotidPlaque,
-      sitType,
+      GetBirthday,
+      Getsex,
+      educationType,
       bloodTypeList,
+      marriageList,
+      addressJson,
       FormRules: {
         name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
-        avatarUrl: [
-          { required: true, message: "请上传用户头像", trigger: "blur" },
-        ],
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
         idCard: [
           { required: true, trigger: "blur", validator: validateIdCard },
         ],
-        type: [{ required: true, message: "请选择职位", trigger: "blur" }],
         addressDetail: [
           { required: true, message: "请选择省市区", trigger: "blur" },
         ],
         address: [
           { required: true, message: "请输入详细地址", trigger: "blur" },
+        ],
+        hospitalId: [
+          { required: true, message: "请选择对应医院", trigger: "blur" },
         ],
         doctorUserId: [
           { required: true, message: "请选择对应医师", trigger: "blur" },
@@ -391,8 +262,9 @@ export default {
         label: "name", //匹配响应数据中的name
         children: "districts", //匹配响应数据中的children
       },
-      // 转诊医生列表
-      toDoctorList: [],	
+      // 医生列表
+      doctorList: [],
+      hospitalList: [],
       form: {
         // 基本信息
         name: "",
@@ -401,46 +273,22 @@ export default {
         idCard: "",
         addressDetail: "",
         address: "",
+        liveType: "",
         province: "",
         city: "",
         area: "",
-        doctorUserId: "",
-        // 基本检查
-        eatHabits: [],
-        smokeType: "",
-        drinkType: "",
-        stayUpLate: "",
-        sit: "",
-        exercise: "",
-        chronicDisease: [],
-        stayUpLate: "",
-        otherDisease: "",
-        // 体格检查
-        height: 160,
-        weight: 60,
+        ethnic: "",
+        height: "160",
+        weight: "60",
         bmi: 0,
-        waistline: 60,
-        hips: 80,
-        bloodPressure: {
-          shrinkHighPressure: 140,
-          diastoleLowPressure: 90,
-        },
-        heartRate: 60,
-        // 实验室检查
         bloodType: "",
-        fastingBloodGlucose: 3.9,
-        bloodLipids: {
-          totalCholesterol: 3.0,
-          triglycerides: 1,
-          hdlCholesterol: 1,
-          ldlCholesterol: 1,
-        },
-        creatinine: 60,
-        uricAcid: 300,
-        serumPotassium: 3.5,
-        liverFunction: "",
-        kidneyFunction: "",
-        carotidPlaque: "",
+        educationType: "",
+        job: "",
+        marriageStatus: "",
+        employer: "",
+        createUserName: "",
+        hospitalId: "",
+        doctorUserId: "",
       },
     };
   },
@@ -452,7 +300,8 @@ export default {
     }
   },
   mounted() {
-    this.getTodoctorList();
+    this.getHospitalList();
+    this.getDoctorList();
     this.computeBmi();
     this.getTreeData(addressJson);
   },
@@ -462,42 +311,22 @@ export default {
       httpAdminPatient
         .getPatient({ userId: this.$route.query.id })
         .then((res) => {
-          console.log(3333);
           console.log(res);
           // 回显表单数据
           let value = res.data.elements[0];
-          if (value.archivesMongo != null) {
-            if (value.archivesMongo.bloodLipids === null) {
-              value.archivesMongo.bloodLipids = this.form.bloodLipids;
-            }
-            if (value.archivesMongo.bloodPressure === null) {
-              value.archivesMongo.bloodPressure = this.form.bloodPressure;
-            }
-            if (
-              value.archivesMongo.eatHabits === null ||
-              value.archivesMongo.eatHabits === []
-            ) {
-              value.archivesMongo.eatHabits = this.form.eatHabits;
-            }
-            if (
-              value.archivesMongo.chronicDisease === null ||
-              value.archivesMongo.chronicDisease === []
-            ) {
-              value.archivesMongo.chronicDisease = this.form.chronicDisease;
-            }
-            this.form = value.archivesMongo;
-            this.form.province = value.province;
-            this.form.city = value.city;
-            this.form.area = value.area;
-            this.$set(this.form, "address", value.address);
-            this.$set(this.form, "avatarUrl", value.avatarUrl);
-            this.computeBmi()
-            this.form.addressDetail = [
-              this.form.province,
-              this.form.city,
-              this.form.area,
-            ];
-          }
+          this.form = value.archivesMongo;
+          this.form.province = value.province;
+          this.form.city = value.city;
+          this.form.area = value.area;
+          this.form.area = value.area;
+          this.$set(this.form, "address", value.address);
+          this.$set(this.form, "avatarUrl", value.avatarUrl);
+          this.computeBmi();
+          this.form.addressDetail = [
+            this.form.province,
+            this.form.city,
+            this.form.area,
+          ];
         });
     },
     // 级联change事件
@@ -521,11 +350,24 @@ export default {
       }
       return data;
     },
-    // 获取转诊医生列表
-    getTodoctorList() {
-      httpAdminPatient.getPatientTransfer().then((res) => {
-        this.toDoctorList = res.data.elements;
+    // 获取医院列表
+    getHospitalList() {
+      httpAdminHospital.getHospital().then((res) => {
+        this.hospitalList = res.data.elements;
       });
+    },
+    // 获取医生列表
+    getDoctorList(val) {
+      httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
+        this.doctorList = res.data.elements;
+      });
+    },
+    selectHospital(val) {
+      this.getDoctorList(val);
+      this.form.doctorUserId = "";
+    },
+    selectDoctor(val) {
+      this.$forceUpdate();
     },
     // 根据身高体重计算BMI
     computeBmi() {
@@ -546,13 +388,11 @@ export default {
         if (valid) {
           // 编辑
           if (this.$route.query.type === "edit") {
-            httpAdminArchives
-              .putArchives(this.form, this.form.id)
-              .then((res) => {
-                if (res.code === "OK") {
-                  this.$router.push({ path: "/archivesManagement/patient" });
-                }
-              });
+            httpAdminArchives.putArchives(this.form).then((res) => {
+              if (res.code === "OK") {
+                this.$router.push({ path: "/archivesManagement/patient" });
+              }
+            });
           } else {
             // 新增
             httpAdminArchives.postArchives(this.form).then((res) => {

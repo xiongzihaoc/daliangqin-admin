@@ -113,7 +113,49 @@ export function param2Obj(url) {
   })
   return obj
 }
+/**
+ * 根据身份证获取出生日期（yyyy-MM-dd）
+ * @param psidno
+ * @returns {birthday:yyyy-MM-dd}
+ * @constructor
+ */
+function GetBirthday(psidno) {
+  var birthdayno, birthdaytemp
+  if (psidno.length == 18) {
+    birthdayno = psidno.substring(6, 14)
+  } else if (psidno.length == 15) {
+    birthdaytemp = psidno.substring(6, 12)
+    birthdayno = "19" + birthdaytemp
+  } else {
+    return "";
+  }
+  var birthday = birthdayno.substring(0, 4) + "-" + birthdayno.substring(4, 6) + "-" + birthdayno.substring(6, 8)
+  return birthday
+}
 
+/**
+ *根据输入的身份证获取性别代码
+ * @param psidno
+ * @returns {sex}
+ * @constructor
+ */
+function Getsex(psidno) {
+  var sexno, sex
+  if (psidno.length == 18) {
+    sexno = psidno.substring(16, 17)
+  } else if (psidno.length == 15) {
+    sexno = psidno.substring(14, 15)
+  } else {
+    return "";
+  }
+  var tempid = sexno % 2;
+  if (tempid == 0) {
+    sex = 'F'
+  } else {
+    sex = 'M'
+  }
+  return sex
+}
 // 手机号验证规则
 export function validatePhone(rule, value, callback) {
   const reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
@@ -147,7 +189,20 @@ export function validateIdCard(rule, value, callback) {
     callback();
   }
 }
+// 文化程度
+export const educationType = [
+  { id: 1, label: "研究生", value: "POSTGRADUATE" },
+  { id: 2, label: "大学本科", value: "UNDERGRADUATE" },
+  { id: 3, label: "大学专科和专科", value: "SPECIALIST" },
+  { id: 4, label: "中专", value: "TECHNICAL_SECONDARY" },
+  { id: 5, label: "技工学校", value: "MECHANIC" },
+  { id: 6, label: "高中", value: "SENIOR_MIDDLE" },
+  { id: 7, label: "初中", value: "JUNIOR_HIGH" },
+  { id: 8, label: "小学", value: "PRIMARY_SCHOOL" },
+  { id: 9, label: "文盲或半文盲", value: "ILLITERATE_OR_SEMI_LITERATE" },
+  { id: 10, label: "其他", value: "OTHER" },
 
+]
 // 医生类型列表
 export const doctorTypeList = [
   { id: 1, label: "医师", value: "PHYSICIAN" },
@@ -324,10 +379,19 @@ export const sitType = [
 export const bloodTypeList = [
   { id: 1, label: "A型", value: "A" },
   { id: 2, label: "B型", value: "B" },
-  { id: 3, label: "AB型", value: "AB" },
-  { id: 4, label: "0型", value: "O" },
-  { id: 5, label: "RH阴性", value: "RH_N" },
-  { id: 6, label: "RH阳性", value: "RH_Y" },
+  { id: 3, label: "0型", value: "O" },
+  { id: 4, label: "AB型", value: "AB" },
+  { id: 5, label: "AB型RH阳性", value: "RH_Y" },
+  { id: 6, label: "AB型RH阴性", value: "RH_N" },
+  { id: 7, label: "不详", value: "UNKNOWN" },
+]
+// 血型类型
+export const marriageList	 = [
+  { id: 1, label: "未婚", value: "UNMARRIED" },
+  { id: 2, label: "已婚", value: "MARRIED" },
+  { id: 3, label: "丧偶", value: "WIDOWED" },
+  { id: 4, label: "离婚", value: "DIVORCE" },
+  { id: 5, label: "其他", value: "OTHER" },
 ]
 // 转诊状态列表
 export const transferStatusList = [

@@ -11,7 +11,7 @@ export const httpAdminArchives = {
     },
     putArchives(data, id) {
         return request({
-            url: 'archives/' + id,
+            url: 'archives',
             method: 'put',
             data,
         })

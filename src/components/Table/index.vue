@@ -1,7 +1,7 @@
 <template>
   <div class="w-table"
     :class="{ 'w-table_moving': dragState.dragging }"
-    ref="wTable">
+    ref="wTable" >
     <el-table :data="data"
       @row-click="rowClick"
       @cell-click="cellClick"

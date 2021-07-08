@@ -23,7 +23,6 @@
         </el-form-item>
         <el-form-item label="身份证"
           align="left"
-          
           prop="idCard">
           <el-input v-model.trim="searchForm.idCard"
             size="small"
@@ -72,7 +71,8 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
+      :header="tableHeaderBig"
+      >
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
@@ -184,6 +184,7 @@ export default {
         { prop: "healthScore", label: "两慢指数" },
         { prop: "doctorUserName", label: "对应医师" },
       ],
+      loading: true,
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -194,10 +195,10 @@ export default {
     };
   },
   created() {
-    localStorage.getItem('doctorName')
+    localStorage.getItem("doctorName");
     this.getList();
   },
-  mounted(){},
+  mounted() {},
   methods: {
     getList() {
       httpAdminPatient
@@ -213,6 +214,7 @@ export default {
         .then((res) => {
           this.list = res.data.elements;
           this.total = res.data.totalSize;
+          this.loading = false;
         });
     },
     /***** 搜索区域 *****/

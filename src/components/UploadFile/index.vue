@@ -12,10 +12,6 @@
       <el-input class="w100"
         readonly
         v-model="uploadValue"></el-input>
-      <!-- <el-button v-else  type="info" size="mini" plain >点击上传</el-button> -->
-      <!-- <i v-else
-        style="border:1px dashed #ccc;border-radius:10px;"
-        class="el-icon-plus avatar-uploader-icon"></i> -->
     </el-upload>
     <el-progress v-show="percentage < 100 && percentage > 0"
       :percentage="percentage"
@@ -75,6 +71,7 @@ export default {
       });
     },
     beforeUpload(file) {
+      console.log(file);
       const _self = this;
       _self.dataObj.policy = this.infoList.policy;
       _self.dataObj.signature = this.infoList.signature;
