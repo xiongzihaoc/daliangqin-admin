@@ -34,7 +34,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
       <el-table-column align="center"
         slot="fixed"
         label="检测类型"
@@ -96,12 +95,17 @@
         slot="fixed"
         fixed="right"
         label="操作"
-        width="120">
+        width="220">
         <template slot-scope="scope">
           <el-button size="mini"
             @click="editBtn(scope.row)"
             type="primary"
             v-if="scope.row">编辑</el-button>
+          <el-button size="mini"
+            @click="examineBtn(scope.row)"
+            type="primary"
+            plain
+            v-if="scope.row">查看</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -312,6 +316,8 @@ export default {
       this.editAddForm.userId = val.patientUserId;
       this.editDialogVisible = true;
     },
+    // 查看
+    examineBtn() {},
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },
