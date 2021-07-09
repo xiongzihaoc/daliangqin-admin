@@ -15,7 +15,8 @@ import '@/permission' // permission control
 
 import 'default-passive-events'  // Passive Event Listeners——让页面滑动更加流畅的新特性
 Vue.use(ElementUI)
-Vue.prototype.$
+import Print from 'vue-print-nb'
+Vue.use(Print);
 Vue.config.productionTip = false
 // 弹框拖拽功能
 import './utils/directives'

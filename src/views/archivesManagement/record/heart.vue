@@ -317,7 +317,10 @@ export default {
       this.editDialogVisible = true;
     },
     // 查看
-    examineBtn() {},
+    examineBtn() {
+      console.log(this.$router);
+      this.$router.push("/archivesManagement/record/heartDetail");
+    },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
     },

@@ -32,36 +32,47 @@ const archivesRouter = {
         component: () => import('@/views/archivesManagement/record/record'),
         redirect: "/archivesManagement/record/bloodPressure",
         meta: {
-            title: '设备检测记录',
+            title: '设备检测',
             icon: 'shebei'
         },
-        children: [{
-            path: "bloodPressure",
-            name: "bloodPressure",
-            component: () => import('@/views/archivesManagement/record/bloodPressure'),
-            meta: {
-                title: '血压检测',
-                icon: 'general'
+        children: [
+            {
+                path: "heart",
+                name: "heart",
+                component: () => import('@/views/archivesManagement/record/heart'),
+                meta: {
+                    title: '心率检测',
+                    icon: 'general'
+                },
             },
-        },
-        {
-            path: "glucose",
-            name: "glucose",
-            component: () => import('@/views/archivesManagement/record/glucose'),
-            meta: {
-                title: '血糖检测',
-                icon: 'general'
+            {
+                path: "bloodPressure",
+                name: "bloodPressure",
+                component: () => import('@/views/archivesManagement/record/bloodPressure'),
+                meta: {
+                    title: '血压检测',
+                    icon: 'general'
+                },
             },
-        },
-        {
-            path: "heart",
-            name: "heart",
-            component: () => import('@/views/archivesManagement/record/heart'),
-            meta: {
-                title: '心率检测',
-                icon: 'general'
+            {
+                path: "glucose",
+                name: "glucose",
+                component: () => import('@/views/archivesManagement/record/glucose'),
+                meta: {
+                    title: '血糖检测',
+                    icon: 'general'
+                },
             },
-        },
+            {
+                path: "heartDetail",
+                name: "heartDetail",
+                hidden: true,
+                component: () => import('@/views/archivesManagement/record/heartDetail'),
+                meta: {
+                    title: '检测报告',
+                    icon: 'general'
+                },
+            },
         ],
     },
     // {
