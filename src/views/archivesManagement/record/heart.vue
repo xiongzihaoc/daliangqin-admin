@@ -100,12 +100,12 @@
           <el-button size="mini"
             @click="editBtn(scope.row)"
             type="primary"
-            v-if="scope.row">编辑</el-button>
+             v-if="scope.row.equipmentResourceType === 'MANUAL'">编辑</el-button>
           <el-button size="mini"
             @click="examineBtn(scope.row)"
             type="primary"
             plain
-            v-if="scope.row">查看</el-button>
+            v-else>查看</el-button>
         </template>
       </el-table-column>
     </EleTable>
