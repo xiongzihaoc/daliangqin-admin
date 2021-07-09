@@ -68,7 +68,6 @@
       v-dialogDrag>
       <el-table :data="addressList"
         style="width: 100%">
-        <!-- 需要formatter的列 -->
         <el-table-column align="center"
           label="收货人姓名"
           prop="name">

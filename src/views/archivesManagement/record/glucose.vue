@@ -25,7 +25,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-button @click="add"
+    <el-button @click="addBtn"
       type="primary"
       class="tableAdd"
       size="small"
@@ -278,7 +278,7 @@ export default {
     },
     /***** 增删改 *****/
     // 新增
-    add() {
+    addBtn() {
       this.infoTitle = "新增";
       this.editAddForm = {};
       this.editDialogVisible = true;

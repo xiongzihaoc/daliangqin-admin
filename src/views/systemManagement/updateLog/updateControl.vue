@@ -75,9 +75,7 @@ export default {
   },
   data() {
     return {
-      FormRules: {
-        name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
-      },
+      FormRules: {},
       list: [],
       versionList: [],
       editAddForm: {
@@ -120,7 +118,6 @@ export default {
           pageSize: this.pageSize,
         })
         .then((res) => {
-          console.log(res);
           this.list = res.data;
         });
     },

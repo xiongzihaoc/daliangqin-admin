@@ -50,7 +50,7 @@
     </div>
     <!-- 表格上方操作按钮 -->
     <div>
-      <el-button @click="add"
+      <el-button @click="addBtn"
         type="primary"
         class="tableAdd"
         size="small"
@@ -311,14 +311,13 @@ export default {
     },
     /***** 增删改 *****/
     // 新增
-    add() {
+    addBtn() {
       this.infoTitle = "新增";
       this.editAddForm = {};
       this.editDialogVisible = true;
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;

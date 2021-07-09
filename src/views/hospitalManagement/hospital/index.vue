@@ -36,9 +36,9 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- 表格上方CRUD按钮 -->
+    <!-- 表格上方按钮 -->
     <div>
-      <el-button @click="add"
+      <el-button @click="addBtn"
         type="primary"
         class="tableAdd"
         size="small"
@@ -318,7 +318,7 @@ export default {
     },
     /***** 增删改 *****/
     // 新增
-    add() {
+    addBtn() {
       this.infoTitle = "新增";
       this.editAddForm = {};
       this.editDialogVisible = true;

@@ -10,7 +10,7 @@ const name = defaultSettings.title || 'daliangqin' // page title
 
 const port = process.env.port || process.env.npm_config_port || 8088 // dev port
 
-const ENV = require('./env')
+const ENV = require('./src/utils/env')
 
 module.exports = {
   publicPath: '/',

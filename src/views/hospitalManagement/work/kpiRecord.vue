@@ -43,7 +43,7 @@
     <!-- 表格上方操作按钮 -->
     <div>
       <el-button
-        @click="add"
+        @click="addBtn"
         type="primary"
         class="tableAdd"
         size="small"
@@ -144,9 +144,7 @@ export default {
       this.searchForm = {};
       this.getList();
     },
-    add(){
-      
-    },
+    addBtn(){},
     getSummaries(param) {},
     // 分页
     handleSizeChange(newSize) {

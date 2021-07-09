@@ -1,20 +1,19 @@
 import request from '@/utils/request'
 
 export const httpAdminArchives = {
-    postArchives(data) {
-        return request({
-            url: 'archives',
-            method: 'post',
-            data,
+  postArchives(data) {
+    return request({
+      url: 'archives',
+      method: 'post',
+      data,
 
-        })
-    },
-    putArchives(data, id) {
-        return request({
-            url: 'archives',
-            method: 'put',
-            data,
-        })
-    },
+    })
+  },
+  putArchives(data, id) {
+    return request({
+      url: 'archives',
+      method: 'put',
+      data,
+    })
+  },
 }
-

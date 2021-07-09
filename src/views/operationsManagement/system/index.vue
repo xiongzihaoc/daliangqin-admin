@@ -9,7 +9,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -142,7 +141,6 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;
