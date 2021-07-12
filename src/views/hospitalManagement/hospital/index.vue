@@ -68,13 +68,14 @@
             :src="scope.row.avatarUrl">
         </template>
       </el-table-column>
-            <el-table-column align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         prop="doctorCount"
         label="医生数量">
         <template slot-scope="scope">
-         <span @click="skipDoctor(scope.row)" style="color:#1890FF;text-decoration:underline">{{scope.row.doctorCount}}</span>
+          <span @click="skipDoctor(scope.row)"
+            style="color:#1890FF;text-decoration:underline">{{scope.row.doctorCount}}</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
@@ -161,7 +162,7 @@
           v-if="this.infoTitle === '新增'"
           prop="adminPhone">
           <el-input v-model="editAddForm.adminPhone"
-          v-Int
+            v-Int
             placeholder="请输入管理员手机号"></el-input>
         </el-form-item>
       </el-form>
@@ -198,11 +199,18 @@ export default {
         adminPhone: [
           { required: true, trigger: "blur", validator: validatePhone },
         ],
-        adminName: [{ required: true, message: "请输入管理员姓名", trigger: "blur" }],
+        adminName: [
+          { required: true, message: "请输入管理员姓名", trigger: "blur" },
+        ],
         name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
         address: [{ required: true, message: "请选择省市区", trigger: "blur" }],
         contract: [
-          { required: true, message: "请输入医院电话", trigger: "blur",validator: validatePhone },
+          {
+            required: true,
+            message: "请输入医院电话",
+            trigger: "blur",
+            validator: validatePhone,
+          },
         ],
         detail: [
           { required: true, message: "请输入详细地址", trigger: "blur" },
@@ -233,7 +241,7 @@ export default {
         area: "",
         address: [],
         detail: "",
-        adminName:""
+        adminName: "",
       },
       // 表格数据
       tableHeaderBig: [
@@ -267,7 +275,6 @@ export default {
   },
   mounted() {
     this.getTreeData(addressJson);
-
   },
   methods: {
     getList() {
@@ -279,29 +286,27 @@ export default {
           hospitalType: this.searchForm.hospitalType,
         })
         .then((res) => {
-          console.log(res);
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
     },
     selectAddrssChange(val) {
-      console.log(val);
       this.editAddForm.province = val[0];
       this.editAddForm.city = val[1];
       this.editAddForm.area = val[2];
     },
     // 递归处理json文件的最后一级
     getTreeData(data) {
-        for (var i = 0; i < data.length; i++) {
-          if (data[i].districts.length < 1) {
-            // children若为空数组，则将children设为undefined
-            data[i].districts = undefined;
-          } else {
-            // children若不为空数组，则继续 递归调用 本方法
-            this.getTreeData(data[i].districts);
-          }
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].districts.length < 1) {
+          // children若为空数组，则将children设为undefined
+          data[i].districts = undefined;
+        } else {
+          // children若不为空数组，则继续 递归调用 本方法
+          this.getTreeData(data[i].districts);
         }
-        return data;
+      }
+      return data;
     },
     /***** 搜索区域 *****/
     searchBtn() {
@@ -313,8 +318,10 @@ export default {
       this.getList();
     },
     // 跳转医生列表
-    skipDoctor(){
-      this.$router.push('/hospitalManagement/doctor')
+    skipDoctor(val) {
+      console.log(val);
+      this.$router.push("/hospitalManagement/doctor");
+      localStorage.setItem('hospitalId',val.id)
     },
     /***** 增删改 *****/
     // 新增

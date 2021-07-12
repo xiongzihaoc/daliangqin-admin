@@ -71,8 +71,7 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig"
-      >
+      :header="tableHeaderBig">
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
@@ -151,9 +150,6 @@ export default {
         address: [
           { required: true, message: "请输入家庭地址", trigger: "blur" },
         ],
-        doctorUserId: [
-          { required: true, message: "请选择对应医师", trigger: "blur" },
-        ],
       },
       searchForm: {
         name: "",
@@ -185,6 +181,8 @@ export default {
         { prop: "doctorUserName", label: "对应医师" },
       ],
       loading: true,
+      // 医生列表跳转用户列表携带参数
+      doctorId: "",
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -195,14 +193,17 @@ export default {
     };
   },
   created() {
-    localStorage.getItem("doctorName");
+    this.doctorId = localStorage.getItem("doctorId");
+    console.log(localStorage.getItem("doctorId"));
     this.getList();
   },
-  mounted() {},
+  destroyed(){
+    localStorage.removeItem("doctorId");
+  },
   methods: {
     getList() {
-      httpAdminPatient
-        .getPatient({
+      console.log(this.doctorId);
+      httpAdminPatient.getPatient({
           page: this.pageNum,
           pageSize: this.pageSize,
           name: this.searchForm.name,
@@ -210,6 +211,7 @@ export default {
           idCard: this.searchForm.idCard,
           gender: this.searchForm.gender,
           doctorName: this.searchForm.doctorName,
+          doctorUserId: this.doctorId,
         })
         .then((res) => {
           this.list = res.data.elements;

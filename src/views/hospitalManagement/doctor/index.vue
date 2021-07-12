@@ -278,6 +278,7 @@ import {
   genderList,
   formatterElement,
 } from "@/utils/index";
+import addressJson from "@/utils/address.json";
 export default {
   components: {
     EleTable,
@@ -354,6 +355,8 @@ export default {
       ],
       // 医院列表
       hospitalList: [],
+      // 医院跳转医生携带医院id
+      hospitalId: "",
       // 医生类型列表
       editVal: {},
       // 转诊医生列表
@@ -368,13 +371,17 @@ export default {
     };
   },
   created() {
+    this.hospitalId = localStorage.getItem("hospitalId");
     this.getList();
   },
   mounted() {
     // 获取医院  转诊医生列表
     this.getHospitalList();
     this.getToDoctorList();
-    this.getTreeData(addressJson);
+  },
+  //离开当前页面后执行
+  destroyed() {
+    localStorage.removeItem("hospitalId");
   },
   methods: {
     getList() {
@@ -388,6 +395,7 @@ export default {
           genderType: this.searchForm.gender,
           type: this.searchForm.type,
           hospitalName: this.searchForm.hospitalName,
+          hospitalId: this.hospitalId,
         })
         .then((res) => {
           this.list = res.data.elements;
@@ -410,9 +418,6 @@ export default {
     searchBtn() {
       this.getList();
     },
-    mounted() {
-      localStorage.getItem("doctorName");
-    },
     // 重置
     searchReset() {
       this.searchForm = {};
@@ -420,8 +425,21 @@ export default {
     },
     // 点击用户跳转
     skipPatient(val) {
-      localStorage.setItem("doctorName", val.name);
       this.$router.push("/archivesManagement/patient");
+      localStorage.setItem("doctorId", val.id);
+    },
+    // 递归处理json文件的最后一级
+    getTreeData(data) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].districts.length < 1) {
+          // children若为空数组，则将children设为undefined
+          data[i].districts = undefined;
+        } else {
+          // children若不为空数组，则继续 递归调用 本方法
+          this.getTreeData(data[i].districts);
+        }
+      }
+      return data;
     },
     /***** 增删改 *****/
     // 新增
