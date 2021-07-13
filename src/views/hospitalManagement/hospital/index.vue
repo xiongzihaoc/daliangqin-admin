@@ -114,6 +114,7 @@
         <el-form-item label="医院名称"
           prop="name">
           <el-input v-model="editAddForm.name"
+           
             placeholder="请输入医院名称"></el-input>
         </el-form-item>
         <el-form-item label="医院头像"
@@ -321,7 +322,7 @@ export default {
     skipDoctor(val) {
       console.log(val);
       this.$router.push("/hospitalManagement/doctor");
-      localStorage.setItem('hospitalId',val.id)
+      localStorage.setItem("hospitalId", val.id);
     },
     /***** 增删改 *****/
     // 新增

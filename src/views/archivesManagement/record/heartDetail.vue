@@ -123,10 +123,10 @@
         <!-- 底部 -->
         <div class="footer">
           <div class="left">
-            <span class="fz14 date">签名日期：</span>
+            <!-- <span class="fz14 date">签名日期：</span>
             <span class="fz14">年</span>
             <span class="fz14">月</span>
-            <span class="fz14">日</span>
+            <span class="fz14">日</span> -->
           </div>
           <div class="right">
             <span class="fz14">医生签名：</span>

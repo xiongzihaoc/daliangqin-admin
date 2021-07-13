@@ -257,7 +257,7 @@ export const relationshipList = [
 
 // 加入方式
 export const resourceTypeList = [
-  { id: 1, label: "后台派发", value: "ADMIN" },
+  { id: 1, label: "医院派发", value: "ADMIN" },
   { id: 2, label: "主动加入", value: "INITIATIVE" },
 ]
 // 性别列表
@@ -418,7 +418,7 @@ export const formatterElement = {
   },
   // 加入方式
   resource: {
-    ADMIN: "后台派发",
+    ADMIN: "医院派发",
     INITIATIVE: "主动加入",
   },
   doctorType: {
