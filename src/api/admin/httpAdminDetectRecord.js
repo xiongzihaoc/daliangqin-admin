@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export const httpDetectRecord = {
+export const httpAdminDetectRecord = {
   getDetectRecord(data) {
     return request({
       url: 'detect/record',

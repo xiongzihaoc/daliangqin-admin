@@ -261,7 +261,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { httpHospitalFollow } from "@/api/hospital/httpHospitalFollow";
+import { httpAdminFollow } from "@/api/admin/httpAdminFollow";
 import {
   doctorTypeList,
   followTypeList,
@@ -323,7 +323,7 @@ export default {
   },
   methods: {
     getList() {
-      httpHospitalFollow
+      httpAdminFollow
         .getFollowList({
           page: this.pageNum,
           pageSize: this.pageSize,

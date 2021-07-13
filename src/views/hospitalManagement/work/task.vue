@@ -223,7 +223,7 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { httpHospitalTask } from "@/api/hospital/httpHospitalTask";
+import { httpAdminTask } from "@/api/admin/httpAdminTask";
 import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
 import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
@@ -379,7 +379,7 @@ export default {
   },
   methods: {
     getList() {
-      httpHospitalTask
+      httpAdminTask
         .getTask({
           page: this.pageNum,
           pageSize: this.pageSize,
@@ -480,7 +480,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpHospitalTask.deleteTask(id).then((res) => {
+      httpAdminTask.deleteTask(id).then((res) => {
         if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
@@ -498,7 +498,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpHospitalTask.postTask(this.editAddForm).then((res) => {
+            httpAdminTask.postTask(this.editAddForm).then((res) => {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
@@ -509,7 +509,7 @@ export default {
             });
           } else {
             // 发送请求
-            httpHospitalTask.putTask(this.editAddForm).then((res) => {
+            httpAdminTask.putTask(this.editAddForm).then((res) => {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
