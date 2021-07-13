@@ -36,7 +36,6 @@ export default {
   computed: {
     activeMenu() {
       const route = this.$route;
-      console.log(route);
       const { meta, path } = route;
       // if set path, the sidebar will highlight the path you set
       if (meta.activeMenu) {
@@ -132,7 +131,6 @@ export default {
     },
     // 设置侧边栏的显示和隐藏
     setSidebarHide(route) {
-      console.log(route);
       if (!route.children || route.children.length === 1) {
         this.$store.dispatch("app/toggleSideBarHide", true);
       } else {

@@ -10,15 +10,8 @@ export const httpAdminHospitalRole = {
     },
     postRole(data) {
         return request({
-            url: 'hospital/role',
+            url: 'hospital/role/' + data.hospitalId,
             method: 'post',
-            data
-        })
-    },
-    putRole(data) {
-        return request({
-            url: 'hospital/role/' + data.id,
-            method: 'put',
             data
         })
     },

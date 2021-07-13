@@ -6,12 +6,26 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
-        <el-form-item label="登录名称"
+        <el-form-item label="姓名"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.userName"
+            size="small"
+            placeholder="请输入姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.userPhone"
+            size="small"
+            placeholder="请输入手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="医院名称"
           align="left"
           prop="name">
           <el-input v-model="searchForm.name"
             size="small"
-            placeholder="请输入登录名称"></el-input>
+            placeholder="请选择医院"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -70,15 +84,25 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
+        <el-form-item label="选择医院"
+          prop="hospitalId">
+          <el-select v-model="editAddForm.hospitalId"
+            @change="selectChange"
+            class="w100">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="姓名"
-          prop="name">
-          <el-input v-model="editAddForm.name"></el-input>
+          prop="userName">
+          <el-input v-model="editAddForm.userName"></el-input>
         </el-form-item>
         <el-form-item label="手机号"
-          prop="phone"
-          v-if="this.infoTitle === '新增'">
+          prop="userPhone">
           <el-input oninput="value=value.replace(/^\.+|[^\d.]/g,'')"
-            v-model="editAddForm.phone"></el-input>
+            v-model="editAddForm.userPhone"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -93,10 +117,8 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminHospitalRole } from "@/api/admin/httpAdminHospitalRole";
-import {
-  parseTime,
-  validatePhone,
-} from "@/utils/index";
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
+import { parseTime, validatePhone } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -105,22 +127,24 @@ export default {
     return {
       parseTime,
       FormRules: {
-        adminRoleType: [
-          { required: true, message: "请选择身份", trigger: "blur" },
+        userName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        hospitalId: [
+          { required: true, message: "请选择医院", trigger: "blur" },
         ],
-
-        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-        phone: [{ required: true, validator: validatePhone }],
+        userPhone: [{ required: true, validator: validatePhone }],
       },
       searchForm: {
-        name: "",
+        userName: "",
+        userPhone: "",
+        hospitalId: "",
       },
       list: [],
+      hospitalList: [],
       editAddForm: {
-        adminRoleType: "",
-        deviceType: "",
-        name: "",
-        phone: "",
+        userName: "",
+        userPhone: "",
+        type: "ADMIN",
+        hospitalId: "",
       },
       tableHeaderBig: [
         { label: "序号", type: "index" },
@@ -135,10 +159,10 @@ export default {
           },
         },
         {
-          prop: "lastLoginTime",
+          prop: "updateTime",
           label: "最后登录时间",
           formatter: (row) => {
-            return parseTime(row.lastLoginTime);
+            return parseTime(row.updateTime);
           },
         },
       ],
@@ -154,6 +178,9 @@ export default {
   created() {
     this.getList();
   },
+  mounted() {
+    this.getHospitalList();
+  },
   methods: {
     getList() {
       httpAdminHospitalRole
@@ -163,10 +190,17 @@ export default {
           name: this.searchForm.name,
         })
         .then((res) => {
-          console.log(res);
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
+    },
+    getHospitalList() {
+      httpAdminHospital.getHospital().then((res) => {
+        this.hospitalList = res.data.elements;
+      });
+    },
+    selectChange(val){
+      this.hospitalId = val
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -187,10 +221,8 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editAddForm.adminRoleType = val.roleType;
       this.editDialogVisible = true;
     },
     // 删除
@@ -224,29 +256,30 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
-            // 发送请求
-            httpAdminHospitalRole.postRole(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
-                this.$notify.success({
-                  title: "新增成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
-              }
-            });
-          } else {
-            // 发送请求
-            httpAdminHospitalRole.putRole(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
-                this.$notify.success({
-                  title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
-              }
-            });
-          }
+          // 发送请求
+          httpAdminHospitalRole.postRole(this.editAddForm).then((res) => {
+            if (res.code === "OK") {
+              this.$notify.success({
+                title: "新增成功",
+              });
+              this.getList();
+              this.editDialogVisible = false;
+            }
+          });
+          // if (this.infoTitle === "新增") {
+
+          // } else {
+          //   // 发送请求
+          //   httpAdminHospitalRole.putRole(this.editAddForm).then((res) => {
+          //     if (res.code === "OK") {
+          //       this.$notify.success({
+          //         title: "编辑成功",
+          //       });
+          //       this.getList();
+          //       this.editDialogVisible = false;
+          //     }
+          //   });
+          // }
         }
       });
     },
