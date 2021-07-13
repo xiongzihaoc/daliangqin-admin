@@ -17,6 +17,15 @@ const systemRouter = {
     }
   },
   {
+    path: 'hospitalRole',
+    name: 'hospitalRole',
+    component: () => import('@/views/systemManagement/hospitalRole'),
+    meta: {
+      title: '医院管理员管理',
+      icon: 'yiyuanRole'
+    }
+  },
+  {
     path: 'log',
     name: 'log',
     component: () => import('@/views/systemManagement/operationLog'),

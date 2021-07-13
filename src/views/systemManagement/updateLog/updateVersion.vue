@@ -134,7 +134,7 @@
         <el-form-item label="上传apk"
           prop="upload"
           v-if="editAddForm.deviceType === 'ANDROID'">
-          <single-upload v-model="editAddForm.upload"
+          <single-upload v-model="editAddForm.url"
             @uploadFinish="uploadFinish"
             @uploadProgress="uploadProgress"
             uploadType="ANDROID" />
@@ -205,7 +205,6 @@ export default {
         versionCode: "",
         updateLog: "",
         url: "",
-        upload: "",
       },
       tableHeaderBig: [
         { type: "index", label: "序号" },
@@ -288,6 +287,7 @@ export default {
     },
     // 编辑
     editBtn(val) {
+      console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
       this.editDialogVisible = true;

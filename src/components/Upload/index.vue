@@ -49,6 +49,7 @@ export default {
   },
   computed: {
     imageUrl() {
+      console.log(this.value);
       return this.value;
     },
     imageName() {
