@@ -19,6 +19,7 @@
           placeholder="手机号"
           name="phone"
           v-Int
+          maxlength="11"
           tabindex="1"
           auto-complete="on" />
         <el-button v-show="show"
@@ -42,6 +43,7 @@
           v-model.trim="loginForm.code"
           placeholder="验证码"
           name="code"
+          maxlength="6"
           auto-complete="on"
            v-Int
           @keyup.enter.native="handleLogin" />

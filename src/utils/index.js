@@ -257,7 +257,7 @@ export const relationshipList = [
 
 // 加入方式
 export const resourceTypeList = [
-  { id: 1, label: "后台派发", value: "ADMIN" },
+  { id: 1, label: "医院派发", value: "ADMIN" },
   { id: 2, label: "主动加入", value: "INITIATIVE" },
 ]
 // 性别列表
@@ -277,9 +277,9 @@ export const statusList = [
 // 高血压糖尿病结果列表
 export const healthList = [
   { id: 1, label: "健康", value: "HEALTH" },
-  { id: 2, label: "严重", value: "SERIOUS" },
+  { id: 2, label: "重度", value: "SERIOUS" },
   { id: 3, label: "中度", value: "MEDIUM" },
-  { id: 4, label: "轻微", value: "SLIGHT" },
+  { id: 4, label: "轻度", value: "SLIGHT" },
   // { id: 5, label: "稍慢", value: "SLOW" },
   // { id: 6, label: "稍快", value: "FAST" },
   // { id: 7, label: "正常", value: "NORMAL" },
@@ -418,7 +418,7 @@ export const formatterElement = {
   },
   // 加入方式
   resource: {
-    ADMIN: "后台派发",
+    ADMIN: "医院派发",
     INITIATIVE: "主动加入",
   },
   doctorType: {
