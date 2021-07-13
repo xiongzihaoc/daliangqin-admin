@@ -1,10 +1,4 @@
-
-/**
- * Parse the time to string
- * @param {(Object|string|number)} time
- * @param {string} cFormat
- * @returns {string | null}
- */
+// 时间转换
 export function parseTime(time, cFormat) {
   if (arguments.length === 0 || !time) {
     return null
@@ -47,12 +41,7 @@ export function parseTime(time, cFormat) {
   })
   return time_str
 }
-
-/**
- * @param {number} time
- * @param {string} option
- * @returns {string}
- */
+// 格式化时间
 export function formatTime(time, option) {
   if (('' + time).length === 10) {
     time = parseInt(time) * 1000
@@ -92,10 +81,6 @@ export function formatTime(time, option) {
   }
 }
 
-/**
- * @param {string} url
- * @returns {Object}
- */
 export function param2Obj(url) {
   const search = decodeURIComponent(url.split('?')[1]).replace(/\+/g, ' ')
   if (!search) {
@@ -113,13 +98,9 @@ export function param2Obj(url) {
   })
   return obj
 }
-/**
- * 根据身份证获取出生日期（yyyy-MM-dd）
- * @param psidno
- * @returns {birthday:yyyy-MM-dd}
- * @constructor
- */
-function GetBirthday(psidno) {
+
+//  根据身份证获取出生日期（yyyy-MM-dd）
+export function GetBirthday(psidno) {
   var birthdayno, birthdaytemp
   if (psidno.length == 18) {
     birthdayno = psidno.substring(6, 14)
@@ -133,13 +114,8 @@ function GetBirthday(psidno) {
   return birthday
 }
 
-/**
- *根据输入的身份证获取性别代码
- * @param psidno
- * @returns {sex}
- * @constructor
- */
-function Getsex(psidno) {
+//  根据输入的身份证获取性别代码
+export function Getsex(psidno) {
   var sexno, sex
   if (psidno.length == 18) {
     sexno = psidno.substring(16, 17)
@@ -386,7 +362,7 @@ export const bloodTypeList = [
   { id: 7, label: "不详", value: "UNKNOWN" },
 ]
 // 血型类型
-export const marriageList	 = [
+export const marriageList = [
   { id: 1, label: "未婚", value: "UNMARRIED" },
   { id: 2, label: "已婚", value: "MARRIED" },
   { id: 3, label: "丧偶", value: "WIDOWED" },
