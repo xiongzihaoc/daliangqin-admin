@@ -255,8 +255,8 @@
 <script>
 import EleTable from "@/components/Table";
 import singleUpload from "@/components/Upload";
-import { httpHospitalUserTemplate } from "@/api/hospital/httpHospitalUserTemplate";
-import { httpHospitalTemplate } from "@/api/hospital/httpHospitalTemplate";
+import { httpAdminUserTemplate } from "@/api/admin/httpAdminUserTemplate";
+import { httpAdminTemplate } from "@/api/admin/httpAdminTemplate";
 import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
 import {
@@ -371,7 +371,7 @@ export default {
   },
   methods: {
     getList() {
-      httpHospitalUserTemplate
+      httpAdminUserTemplate
         .getUserTemplate({
           page: this.pageNum,
           pageSize: this.pageSize,
@@ -383,7 +383,7 @@ export default {
     },
     // 获取模板列表
     getTemplateList() {
-      httpHospitalTemplate.getTemplate().then((res) => {
+      httpAdminTemplate.getTemplate().then((res) => {
         this.templateList = res.data.elements;
       });
     },
@@ -450,7 +450,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpHospitalUserTemplate.deleteUserTemplate(id).then((res) => {
+      httpAdminUserTemplate.deleteUserTemplate(id).then((res) => {
         if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
@@ -473,7 +473,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpHospitalUserTemplate
+            httpAdminUserTemplate
               .postUserTemplate(this.editAddForm)
               .then((res) => {
                 if (res.code === "OK") {
@@ -486,7 +486,7 @@ export default {
               });
           } else {
             // 发送请求
-            httpHospitalUserTemplate
+            httpAdminUserTemplate
               .putUserTemplate(this.editAddForm)
               .then((res) => {
                 if (res.code === "OK") {
@@ -506,8 +506,8 @@ export default {
     templateSet() {
       this.templateDialogVisible = true;
     },
-    templateAdd(){
-      this.templateSetDialogVisible = true
+    templateAdd() {
+      this.templateSetDialogVisible = true;
     },
     templateDialogEnter() {},
     deleteTemplateBtn() {},

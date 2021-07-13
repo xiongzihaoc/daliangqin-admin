@@ -1,12 +1,11 @@
 import request from '@/utils/request'
 
-export const httpHospitalTask = {
+export const httpAdminTask = {
   getTask(data) {
     return request({
       url: 'task',
       method: 'get',
       params: data,
-      baseURL: '/api/hospital',
     })
   },
   postTask(data) {
@@ -14,7 +13,6 @@ export const httpHospitalTask = {
       url: 'task',
       method: 'post',
       data,
-      baseURL: '/api/hospital',
     })
   },
   putTask(data) {
@@ -22,14 +20,12 @@ export const httpHospitalTask = {
       url: 'task/' + data.id,
       method: 'put',
       data,
-      baseURL: '/api/hospital',
     })
   },
   deleteTask(id) {
     return request({
       url: 'task/' + id,
       method: 'delete',
-      baseURL: '/api/hospital',
     })
   },
 }

@@ -1,12 +1,11 @@
 import request from '@/utils/request'
 
-export const httpHospitalUserTemplate = {
+export const httpAdminUserTemplate = {
   getUserTemplate(data) {
     return request({
       url: 'user/template',
       method: 'get',
       params: data,
-      baseURL: '/api/hospital',
     })
   },
   postUserTemplate(data) {
@@ -14,7 +13,6 @@ export const httpHospitalUserTemplate = {
       url: 'user/template',
       method: 'post',
       data,
-      baseURL: '/api/hospital',
     })
   },
   putUserTemplate(data) {
@@ -22,14 +20,12 @@ export const httpHospitalUserTemplate = {
       url: 'user/template/' + data.id,
       method: 'put',
       data,
-      baseURL: '/api/hospital',
     })
   },
   deleteUserTemplate(id) {
     return request({
       url: 'user/template/' + id,
       method: 'delete',
-      baseURL: '/api/hospital',
     })
   },
 }
