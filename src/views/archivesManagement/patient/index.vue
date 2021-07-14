@@ -296,6 +296,7 @@ export default {
           diabetesStatus: this.searchForm.diabetesStatus,
           heartRateStatus: this.searchForm.heartRateStatus,
           doctorUserName: this.searchForm.doctorUserName,
+          doctorUserPhone: this.searchForm.doctorUserPhone,
           beginAge: this.searchForm.beginAge,
           endAge: this.searchForm.endAge,
         })
