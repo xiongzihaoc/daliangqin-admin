@@ -36,7 +36,6 @@ export default {
         host: "",
       },
       percentage: 0,
-      uploadValue: "",
       infoList: [],
     };
   },
@@ -48,15 +47,8 @@ export default {
       });
   },
   computed: {
-    imageUrl() {
+    uploadValue() {
       return this.value;
-    },
-    imageName() {
-      if (this.value != null && this.value !== "") {
-        return this.value.substr(this.value.lastIndexOf("/") + 1);
-      } else {
-        return null;
-      }
     },
   },
   methods: {

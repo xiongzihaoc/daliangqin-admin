@@ -25,6 +25,7 @@
           prop="userName">
           <el-input v-model="searchForm.phone"
             size="small"
+            maxlength="11"
             v-Int
             placeholder="请输入手机号"></el-input>
         </el-form-item>

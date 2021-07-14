@@ -8,29 +8,30 @@
         :inline="true">
         <el-form-item label="姓名"
           align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+          prop="userName">
+          <el-input v-model="searchForm.userName"
             size="small"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="手机号"
           align="left"
-          prop="phone">
-          <el-input v-model="searchForm.phone"
-            v-Int
+          prop="userPhone">
+          <el-input v-Int
+            maxlength="11"
+            v-model="searchForm.userPhone"
             size="small"
             placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item label="身份"
+        <el-form-item label="医院名称"
           align="left"
-          prop="adminRoleType">
-          <el-select style="width: 100%"
-            placeholder="请选择身份"
-            v-model="searchForm.adminRoleType">
-            <el-option v-for="item in adminRoleTypeList"
+          prop="hospitalId">
+          <el-select v-model="searchForm.hospitalId"
+            @change="selectChange"
+            class="w100">
+            <el-option v-for="item in hospitalList"
               :key="item.id"
-              :label="item.label"
-              :value="item.value"></el-option>
+              :label="item.name"
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -90,26 +91,27 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
-        <el-form-item label="选择身份"
-          prop="adminRoleType">
-          <el-select style="width: 100%"
-            placeholder="请选择身份"
-            v-model="editAddForm.adminRoleType">
-            <el-option v-for="item in adminRoleTypeList"
+        <el-form-item label="选择医院"
+          prop="hospitalId">
+          <el-select v-model="editAddForm.hospitalId"
+            @change="selectChange"
+            :disabled="this.infoTitle === '编辑' ? true : false"
+            class="w100">
+            <el-option v-for="item in hospitalList"
               :key="item.id"
-              :label="item.label"
-              :value="item.value"></el-option>
+              :label="item.name"
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="姓名"
-          prop="name">
-          <el-input v-model="editAddForm.name"></el-input>
+          prop="userName">
+          <el-input v-model="editAddForm.userName"></el-input>
         </el-form-item>
         <el-form-item label="手机号"
-          prop="phone"
-          v-if="this.infoTitle === '新增'">
-          <el-input v-Int
-            v-model="editAddForm.phone"></el-input>
+          prop="userPhone">
+          <el-input maxlength="11"
+            v-Int
+            v-model="editAddForm.userPhone"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -123,13 +125,9 @@
 </template>
 <script>
 import EleTable from "@/components/Table";
-import { httpAdminRole } from "@/api/admin/httpAdminRole";
-import {
-  parseTime,
-  validatePhone,
-  adminRoleTypeList,
-  deviceTypeList,
-} from "@/utils/index";
+import { httpAdminHospitalRole } from "@/api/admin/httpAdminHospitalRole";
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
+import { parseTime, validatePhone } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -137,44 +135,44 @@ export default {
   data() {
     return {
       parseTime,
-      adminRoleTypeList,
-      deviceTypeList,
       FormRules: {
-        adminRoleType: [
-          { required: true, message: "请选择身份", trigger: "blur" },
+        userName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        hospitalId: [
+          { required: true, message: "请选择医院", trigger: "blur" },
         ],
-        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
-        phone: [{ required: true, validator: validatePhone }],
+        userPhone: [{ required: true, validator: validatePhone }],
       },
       searchForm: {
-        adminRoleType: "",
-        name: "",
-        phone: "",
+        userName: "",
+        userPhone: "",
+        hospitalId: "",
+        hospitalRoleType: "ADMIN",
       },
       list: [],
+      hospitalList: [],
       editAddForm: {
-        adminRoleType: "",
-        deviceType: "",
-        name: "",
-        phone: "",
+        userName: "",
+        userPhone: "",
+        hospitalRoleType: "ADMIN",
+        hospitalId: "",
       },
       tableHeaderBig: [
         { label: "序号", type: "index" },
-        { prop: "name", label: "姓名" },
-        { prop: "phone", label: "手机号" },
-        { prop: "roleName", label: "身份" },
+        { prop: "userName", label: "姓名" },
+        { prop: "userPhone", label: "手机号" },
+        { prop: "hospitalName", label: "医院名称" },
         {
           prop: "createTime",
-          label: "创建时间",
+          label: "添加时间",
           formatter: (row) => {
             return parseTime(row.createTime);
           },
         },
         {
-          prop: "loginTime",
+          prop: "updateTime",
           label: "最后登录时间",
           formatter: (row) => {
-            return parseTime(row.loginTime);
+            return parseTime(row.updateTime);
           },
         },
       ],
@@ -190,21 +188,31 @@ export default {
   created() {
     this.getList();
   },
+  mounted() {
+    this.getHospitalList();
+  },
   methods: {
     getList() {
-      httpAdminRole
-        .getAdminRole({
+      httpAdminHospitalRole
+        .getRole({
           page: this.pageNum,
           pageSize: this.pageSize,
-          name: this.searchForm.name,
-          phone: this.searchForm.phone,
-          adminRoleType: this.searchForm.adminRoleType,
+          userName: this.searchForm.userName,
+          userPhone: this.searchForm.userPhone,
+          hospitalId: this.searchForm.hospitalId,
         })
         .then((res) => {
-          console.log(res);
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
+    },
+    getHospitalList() {
+      httpAdminHospital.getHospital().then((res) => {
+        this.hospitalList = res.data.elements;
+      });
+    },
+    selectChange(val) {
+      this.hospitalId = val;
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -221,13 +229,14 @@ export default {
     addBtn() {
       this.infoTitle = "新增";
       this.editAddForm = {};
+      this.editAddForm.hospitalRoleType = "ADMIN"
       this.editDialogVisible = true;
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
+      console.log(this.editAddForm);
       this.editDialogVisible = true;
     },
     // 删除
@@ -245,7 +254,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpAdminRole.deleteAdminRole(id).then((res) => {
+      httpAdminHospitalRole.deleteRole(id).then((res) => {
         if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
@@ -263,7 +272,7 @@ export default {
         if (valid) {
           if (this.infoTitle === "新增") {
             // 发送请求
-            httpAdminRole.postAdminRole(this.editAddForm).then((res) => {
+            httpAdminHospitalRole.postRole(this.editAddForm).then((res) => {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
@@ -274,7 +283,7 @@ export default {
             });
           } else {
             // 发送请求
-            httpAdminRole.putAdminRole(this.editAddForm).then((res) => {
+            httpAdminHospitalRole.putRole(this.editAddForm).then((res) => {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",

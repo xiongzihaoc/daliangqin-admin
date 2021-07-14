@@ -13,6 +13,29 @@
             size="small"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
+        <el-form-item label="手机号"
+          align="left"
+          prop="patientUserPhone">
+          <el-input v-model="searchForm.patientUserPhone"
+            size="small"
+            maxlength="11"
+            v-Int
+            placeholder="请输入手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="录入方式"
+          align="left"
+          prop="patientUserName">
+          <el-input v-model="searchForm.patientUserName"
+            size="small"
+            placeholder="请选择录入方式"></el-input>
+        </el-form-item>
+        <el-form-item label="检测结果"
+          align="left"
+          prop="patientUserName">
+          <el-input v-model="searchForm.patientUserName"
+            size="small"
+            placeholder="请选择检测结果"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -100,7 +123,7 @@
           <el-button size="mini"
             @click="editBtn(scope.row)"
             type="primary"
-             v-if="scope.row.equipmentResourceType === 'MANUAL'">编辑</el-button>
+            v-if="scope.row.equipmentResourceType === 'MANUAL'">编辑</el-button>
           <el-button size="mini"
             @click="examineBtn(scope.row)"
             type="primary"
@@ -172,6 +195,7 @@
           <el-date-picker v-model="editAddForm.inspectionTime"
             style="width:100%"
             type="datetime"
+            :picker-options="pickerOptions"
             value-format="timestamp"
             placeholder="选择日期">
           </el-date-picker>
@@ -212,9 +236,10 @@ export default {
       },
       searchForm: {
         patientUserName: "",
-        diseaseType: "",
-        resource: "",
-        resultType: "",
+        userId: "",
+        inspectionTime: "",
+        heartRateScore: "",
+        detectType: "",
       },
       patientList: [],
       list: [],
@@ -243,6 +268,14 @@ export default {
         { label: "设备名称", prop: "name" },
         { label: "设备号", prop: "serialNumber" },
       ],
+      pickerOptions: {
+        disabledDate(time) {
+          //此条为设置禁止用户选择今天之前的日期，包含今天。
+          // return time.getTime() <= (Date.now());
+          //此条为设置禁止用户选择今天之前的日期，不包含今天。
+          return time.getTime() >= new Date().getTime();
+        },
+      },
       // 分页区域
       pageSize: 10,
       pageNum: 1,

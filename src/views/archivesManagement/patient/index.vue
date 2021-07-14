@@ -13,20 +13,13 @@
             size="small"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="手机号"
-          align="left"
-          prop="phone">
-          <el-input v-model.trim="searchForm.phone"
-            size="small"
-            v-Int
-            placeholder="请输入手机号"></el-input>
-        </el-form-item>
-        <el-form-item label="身份证"
+        <el-form-item label="身份证号"
           align="left"
           prop="idCard">
           <el-input v-model.trim="searchForm.idCard"
+            maxlength="18"
             size="small"
-            placeholder="请输入身份证"></el-input>
+            placeholder="请输入身份证号"></el-input>
         </el-form-item>
         <el-form-item label="性别"
           align="left"
@@ -39,11 +32,77 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="年龄"
+          align="left"
+          prop="age">
+          <el-input-number v-model="searchForm.beginAge"
+            @change="selectBeginAgeChange"
+            :min="1"
+            :max="120"
+            size="small"></el-input-number> —
+          <el-input-number v-model="searchForm.endAge"
+            @change="selectEndAgeChange"
+            :min="1"
+            :max="120"
+            size="small"></el-input-number>
+        </el-form-item>
+        <el-form-item label="本人电话"
+          align="left"
+          prop="phone">
+          <el-input v-model.trim="searchForm.phone"
+            size="small"
+            v-Int
+            placeholder="请输入本人电话"></el-input>
+        </el-form-item>
+        <el-form-item label="高血压"
+          align="left"
+          prop="highBloodStatus">
+          <el-select v-model="searchForm.highBloodStatus"
+            size="small"
+            placeholder="请选择状态">
+            <el-option v-for="item in healthList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="糖尿病"
+          align="left"
+          prop="diabetesStatus">
+          <el-select v-model="searchForm.diabetesStatus"
+            size="small"
+            placeholder="请选择状态">
+            <el-option v-for="item in healthList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="心率"
+          align="left"
+          prop="heartRateStatus">
+          <el-select v-model="searchForm.heartRateStatus"
+            size="small"
+            placeholder="请选择状态">
+            <el-option v-for="item in heartList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="对应医师"
           align="left"
-          prop="doctorName">
+          prop="doctorUserName">
           <el-input placeholder="请输入对应医师"
-            v-model.trim="searchForm.doctorName"></el-input>
+            v-model.trim="searchForm.doctorUserName"></el-input>
+        </el-form-item>
+        <el-form-item label="医师手机号"
+          align="left"
+          prop="doctorUserPhone">
+          <el-input placeholder="请输入医师手机号"
+            v-Int
+            maxlength="11"
+            v-model.trim="searchForm.doctorUserPhone"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -86,7 +145,7 @@
         slot="fixed"
         fixed="left"
         prop="avatarUrl"
-        label="头像">
+        label="照片">
         <template slot-scope="scope">
           <img v-if="scope.row.avatarUrl"
             :src="scope.row.avatarUrl"
@@ -103,7 +162,7 @@
         <template slot-scope="scope">
           <el-button size="mini"
             @click="detailsBtn(scope.row)"
-            type="primary">编辑</el-button>
+            type="primary">详细资料</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -127,6 +186,8 @@ import {
   validatePhone,
   parseTime,
   genderList,
+  healthList,
+  heartList,
   formatterElement,
 } from "@/utils/index";
 export default {
@@ -137,30 +198,29 @@ export default {
     return {
       parseTime,
       genderList,
-      FormRules: {
-        name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
-        avatarUrl: [
-          { required: true, message: "请上传用户头像", trigger: "blur" },
-        ],
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
-        idCard: [
-          { required: true, trigger: "blur", validator: validateIdCard },
-        ],
-        type: [{ required: true, message: "请选择职位", trigger: "blur" }],
-        address: [
-          { required: true, message: "请输入家庭地址", trigger: "blur" },
-        ],
-      },
+      healthList,
+      heartList,
       searchForm: {
         name: "",
         phone: "",
         idCard: "",
         gender: "",
+        highBloodStatus: "",
+        diabetesStatus: "",
+        heartRateStatus: "",
+        beginAge: 1,
+        endAge: 120,
       },
       list: [],
       tableHeaderBig: [
-        { prop: "phone", label: "手机号" },
         { prop: "idCard", label: "身份证号" },
+        {
+          prop: "gender",
+          label: "性别",
+          formatter: (row) => {
+            return this.genderFormatter(row);
+          },
+        },
         {
           prop: "birthday",
           label: "出生日期",
@@ -169,16 +229,39 @@ export default {
           },
         },
         { prop: "age", label: "年龄" },
+        { prop: "phone", label: "本人电话" },
         {
-          prop: "gender",
-          label: "性别",
+          prop: "highBloodStatus",
+          label: "高血压",
           formatter: (row) => {
-            return this.genderFormatter(row);
+            return this.highBloodFormatter(row);
           },
         },
-        { prop: "address", label: "家庭住址" },
+        {
+          prop: "diabetesStatus",
+          label: "糖尿病",
+          formatter: (row) => {
+            return this.diabetesFormatter(row);
+          },
+        },
+        {
+          prop: "heartRateStatus",
+          label: "心率",
+          formatter: (row) => {
+            return this.heartRateFormatter(row);
+          },
+        },
         { prop: "healthScore", label: "两慢指数" },
         { prop: "doctorUserName", label: "对应医师" },
+        { prop: "doctorUserPhone", label: "医师手机号" },
+        {
+          prop: "archivesMongo.createTime",
+          label: "创建时间",
+          formatter: (row) => {
+            return parseTime(row.archivesMongo?.createTime);
+          },
+        },
+        { prop: "archivesMongo.createUserName", label: "创建人" },
       ],
       loading: true,
       // 医生列表跳转用户列表携带参数
@@ -197,21 +280,27 @@ export default {
     console.log(localStorage.getItem("doctorId"));
     this.getList();
   },
-  destroyed(){
+  destroyed() {
     localStorage.removeItem("doctorId");
   },
   methods: {
     getList() {
-      console.log(this.doctorId);
-      httpAdminPatient.getPatient({
+      console.log(this.searchForm.doctorUserName);
+      httpAdminPatient
+        .getPatient({
           page: this.pageNum,
           pageSize: this.pageSize,
           name: this.searchForm.name,
           phone: this.searchForm.phone,
           idCard: this.searchForm.idCard,
           gender: this.searchForm.gender,
-          doctorName: this.searchForm.doctorName,
-          doctorUserId: this.doctorId,
+          highBloodStatus: this.searchForm.highBloodStatus,
+          diabetesStatus: this.searchForm.diabetesStatus,
+          heartRateStatus: this.searchForm.heartRateStatus,
+          doctorUserName: this.searchForm.doctorUserName,
+          doctorUserPhone: this.searchForm.doctorUserPhone,
+          beginAge: this.searchForm.beginAge,
+          endAge: this.searchForm.endAge,
         })
         .then((res) => {
           this.list = res.data.elements;
@@ -219,6 +308,8 @@ export default {
           this.loading = false;
         });
     },
+    selectBeginAgeChange(val) {},
+    selectEndAgeChange(val) {},
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
@@ -249,6 +340,18 @@ export default {
     // 出生年月
     genderFormatter(row) {
       return formatterElement.gender[row.gender];
+    },
+    // 高血压状态
+    highBloodFormatter(row) {
+      return formatterElement.highBlood[row.highBloodStatus];
+    },
+    // 糖尿病状态
+    diabetesFormatter(row) {
+      return formatterElement.diabetes[row.diabetesStatus];
+    },
+    // 心率状态
+    heartRateFormatter(row) {
+      return formatterElement.heart[row.heartRateStatus];
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
