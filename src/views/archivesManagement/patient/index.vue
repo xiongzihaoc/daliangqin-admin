@@ -84,7 +84,7 @@
           <el-select v-model="searchForm.heartRateStatus"
             size="small"
             placeholder="请选择状态">
-            <el-option v-for="item in healthList"
+            <el-option v-for="item in heartList"
               :key="item.id"
               :label="item.label"
               :value="item.value"></el-option>
@@ -187,6 +187,7 @@ import {
   parseTime,
   genderList,
   healthList,
+  heartList,
   formatterElement,
 } from "@/utils/index";
 export default {
@@ -198,6 +199,7 @@ export default {
       parseTime,
       genderList,
       healthList,
+      heartList,
       searchForm: {
         name: "",
         phone: "",

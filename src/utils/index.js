@@ -280,10 +280,16 @@ export const healthList = [
   { id: 2, label: "重度", value: "SERIOUS" },
   { id: 3, label: "中度", value: "MEDIUM" },
   { id: 4, label: "轻度", value: "SLIGHT" },
-  // { id: 5, label: "稍慢", value: "SLOW" },
-  // { id: 6, label: "稍快", value: "FAST" },
-  // { id: 7, label: "正常", value: "NORMAL" },
 ]
+
+// 心率枚举
+
+export const heartList = [
+  { id: 1, label: "稍慢", value: "SLOW" },
+  { id: 2, label: "稍快", value: "FAST" },
+  { id: 3, label: "正常", value: "NORMAL" },
+]
+
 
 // 用户状态
 export const userStatusList = [

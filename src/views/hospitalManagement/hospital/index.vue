@@ -9,14 +9,10 @@
         <el-form-item label="医院名称"
           align="left"
           prop="hospitalName">
-          <el-select v-model="searchForm.hospitalName"
+          <el-input v-model="searchForm.hospitalName"
             size="small"
             class="w100">
-            <el-option v-for="item in list"
-              :key="item.id"
-              :label="item.name"
-              :value="item.name"></el-option>
-          </el-select>
+          </el-input>
         </el-form-item>
         <el-form-item label="医院等级"
           prop="hospitalType">
