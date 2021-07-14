@@ -32,6 +32,20 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="年龄"
+          align="left"
+          prop="age">
+          <el-input-number v-model="searchForm.beginAge"
+            @change="selectBeginAgeChange"
+            :min="1"
+            :max="120"
+            size="small"></el-input-number> —
+          <el-input-number v-model="searchForm.endAge"
+            @change="selectEndAgeChange"
+            :min="1"
+            :max="120"
+            size="small"></el-input-number>
+        </el-form-item>
         <el-form-item label="本人电话"
           align="left"
           prop="phone">
@@ -79,8 +93,7 @@
         <el-form-item label="对应医师"
           align="left"
           prop="doctorUserName">
-          <el-input maxlength="20"
-            placeholder="请输入对应医师"
+          <el-input placeholder="请输入对应医师"
             v-model.trim="searchForm.doctorUserName"></el-input>
         </el-form-item>
         <el-form-item label="医师手机号"
@@ -193,6 +206,8 @@ export default {
         highBloodStatus: "",
         diabetesStatus: "",
         heartRateStatus: "",
+        beginAge: 1,
+        endAge: 120,
       },
       list: [],
       tableHeaderBig: [
@@ -268,6 +283,7 @@ export default {
   },
   methods: {
     getList() {
+      console.log(this.searchForm.doctorUserName);
       httpAdminPatient
         .getPatient({
           page: this.pageNum,
@@ -280,6 +296,8 @@ export default {
           diabetesStatus: this.searchForm.diabetesStatus,
           heartRateStatus: this.searchForm.heartRateStatus,
           doctorUserName: this.searchForm.doctorUserName,
+          beginAge: this.searchForm.beginAge,
+          endAge: this.searchForm.endAge,
         })
         .then((res) => {
           this.list = res.data.elements;
@@ -287,6 +305,8 @@ export default {
           this.loading = false;
         });
     },
+    selectBeginAgeChange(val) {},
+    selectEndAgeChange(val) {},
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {

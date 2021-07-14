@@ -8,8 +8,8 @@
         :inline="true">
         <el-form-item label="医院名称"
           align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+          prop="hospitalName">
+          <el-input v-model="searchForm.hospitalName"
             size="small"
             placeholder="请输入医院名称"></el-input>
         </el-form-item>
@@ -222,7 +222,7 @@ export default {
       },
       // 搜索表单
       searchForm: {
-        name: "",
+        hospitalName: "",
         hospitalType: "",
       },
       // 列表数据
@@ -283,7 +283,7 @@ export default {
         .getHospital({
           page: this.pageNum,
           pageSize: this.pageSize,
-          name: this.searchForm.name,
+          hospitalName: this.searchForm.hospitalName,
           hospitalType: this.searchForm.hospitalType,
         })
         .then((res) => {
