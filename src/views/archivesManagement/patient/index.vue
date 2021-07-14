@@ -13,20 +13,13 @@
             size="small"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="手机号"
-          align="left"
-          prop="phone">
-          <el-input v-model.trim="searchForm.phone"
-            size="small"
-            v-Int
-            placeholder="请输入手机号"></el-input>
-        </el-form-item>
-        <el-form-item label="身份证"
+        <el-form-item label="身份证号"
           align="left"
           prop="idCard">
           <el-input v-model.trim="searchForm.idCard"
+            maxlength="18"
             size="small"
-            placeholder="请输入身份证"></el-input>
+            placeholder="请输入身份证号"></el-input>
         </el-form-item>
         <el-form-item label="性别"
           align="left"
@@ -39,11 +32,64 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="本人电话"
+          align="left"
+          prop="phone">
+          <el-input v-model.trim="searchForm.phone"
+            size="small"
+            v-Int
+            placeholder="请输入本人电话"></el-input>
+        </el-form-item>
+        <el-form-item label="高血压"
+          align="left"
+          prop="highBloodStatus">
+          <el-select v-model="searchForm.highBloodStatus"
+            size="small"
+            placeholder="请选择状态">
+            <el-option v-for="item in healthList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="糖尿病"
+          align="left"
+          prop="diabetesStatus">
+          <el-select v-model="searchForm.diabetesStatus"
+            size="small"
+            placeholder="请选择状态">
+            <el-option v-for="item in healthList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="心率"
+          align="left"
+          prop="heartRateStatus">
+          <el-select v-model="searchForm.heartRateStatus"
+            size="small"
+            placeholder="请选择状态">
+            <el-option v-for="item in healthList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="对应医师"
           align="left"
-          prop="doctorName">
-          <el-input placeholder="请输入对应医师"
-            v-model.trim="searchForm.doctorName"></el-input>
+          prop="doctorUserName">
+          <el-input maxlength="20"
+            placeholder="请输入对应医师"
+            v-model.trim="searchForm.doctorUserName"></el-input>
+        </el-form-item>
+        <el-form-item label="医师手机号"
+          align="left"
+          prop="doctorUserPhone">
+          <el-input placeholder="请输入医师手机号"
+            v-Int
+            maxlength="11"
+            v-model.trim="searchForm.doctorUserPhone"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -127,6 +173,7 @@ import {
   validatePhone,
   parseTime,
   genderList,
+  healthList,
   formatterElement,
 } from "@/utils/index";
 export default {
@@ -137,25 +184,15 @@ export default {
     return {
       parseTime,
       genderList,
-      FormRules: {
-        name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
-        avatarUrl: [
-          { required: true, message: "请上传用户头像", trigger: "blur" },
-        ],
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
-        idCard: [
-          { required: true, trigger: "blur", validator: validateIdCard },
-        ],
-        type: [{ required: true, message: "请选择职位", trigger: "blur" }],
-        address: [
-          { required: true, message: "请输入家庭地址", trigger: "blur" },
-        ],
-      },
+      healthList,
       searchForm: {
         name: "",
         phone: "",
         idCard: "",
         gender: "",
+        highBloodStatus: "",
+        diabetesStatus: "",
+        heartRateStatus: "",
       },
       list: [],
       tableHeaderBig: [
@@ -185,7 +222,7 @@ export default {
         },
         {
           prop: "diabetesStatus",
-          label:"血糖",
+          label: "糖尿病",
           formatter: (row) => {
             return this.diabetesFormatter(row);
           },
@@ -199,7 +236,7 @@ export default {
         },
         { prop: "healthScore", label: "两慢指数" },
         { prop: "doctorUserName", label: "对应医师" },
-        { prop: "doctorUserName", label: "医师手机号" },
+        { prop: "doctorUserPhone", label: "医师手机号" },
         {
           prop: "archivesMongo.createTime",
           label: "创建时间",
@@ -231,7 +268,6 @@ export default {
   },
   methods: {
     getList() {
-      console.log(this.doctorId);
       httpAdminPatient
         .getPatient({
           page: this.pageNum,
@@ -240,8 +276,10 @@ export default {
           phone: this.searchForm.phone,
           idCard: this.searchForm.idCard,
           gender: this.searchForm.gender,
-          doctorName: this.searchForm.doctorName,
-          doctorUserId: this.doctorId,
+          highBloodStatus: this.searchForm.highBloodStatus,
+          diabetesStatus: this.searchForm.diabetesStatus,
+          heartRateStatus: this.searchForm.heartRateStatus,
+          doctorUserName: this.searchForm.doctorUserName,
         })
         .then((res) => {
           this.list = res.data.elements;
