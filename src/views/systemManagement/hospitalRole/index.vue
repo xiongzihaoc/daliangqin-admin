@@ -233,7 +233,6 @@ export default {
     editBtn(val) {
       this.infoTitle = "编辑";
       this.editAddForm = JSON.parse(JSON.stringify(val));
-    
       console.log(this.editAddForm);
       this.editDialogVisible = true;
     },

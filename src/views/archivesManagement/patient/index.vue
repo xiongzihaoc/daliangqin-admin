@@ -177,14 +177,26 @@ export default {
         { prop: "age", label: "年龄" },
         { prop: "phone", label: "本人电话" },
         {
-          prop: "phone",
+          prop: "highBloodStatus",
           label: "高血压",
           formatter: (row) => {
-            return parseTime(row.birthday)?.slice(0, 10);
+            return this.highBloodFormatter(row);
           },
         },
-        { prop: "phone", label: "糖尿病" },
-        { prop: "phone", label: "心率" },
+        {
+          prop: "diabetesStatus",
+          label: "糖尿病",
+          formatter: (row) => {
+            return this.diabetesFormatter(row);
+          },
+        },
+        {
+          prop: "heartRateStatus",
+          label: "心率",
+          formatter: (row) => {
+            return this.heartRateFormatter(row);
+          },
+        },
         { prop: "healthScore", label: "两慢指数" },
         { prop: "doctorUserName", label: "对应医师" },
         { prop: "doctorUserName", label: "医师手机号" },
@@ -263,8 +275,17 @@ export default {
     genderFormatter(row) {
       return formatterElement.gender[row.gender];
     },
-    genderFormatter(row) {
-      return formatterElement.gender[row.gender];
+    // 高血压状态
+    highBloodFormatter(row) {
+      return formatterElement.highBlood[row.highBloodStatus];
+    },
+    // 糖尿病状态
+    diabetesFormatter(row) {
+      return formatterElement.diabetes[row.diabetesStatus];
+    },
+    // 心率状态
+    heartRateFormatter(row) {
+      return formatterElement.heart[row.heartRateStatus];
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
