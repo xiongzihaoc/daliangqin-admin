@@ -142,9 +142,9 @@
         <!-- 高压 -->
         <el-form-item label="空腹血糖"
           prop="glucoseScore">
-          <el-input maxlength="2"
+          <el-input maxlength="4"
             v-model="editAddForm.glucoseScore"
-            v-Int
+            oninput="value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入空腹血糖"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
         </el-form-item>

@@ -199,8 +199,8 @@ export default {
         this.hospitalList = res.data.elements;
       });
     },
-    selectChange(val){
-      this.hospitalId = val
+    selectChange(val) {
+      this.hospitalId = val;
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -216,7 +216,6 @@ export default {
     // 新增
     add() {
       this.infoTitle = "新增";
-      this.editAddForm = {};
       this.editDialogVisible = true;
     },
     // 编辑
@@ -240,7 +239,7 @@ export default {
         return this.$message.info("取消删除");
       }
       // 发送请求
-      httpHospitalRole.deleteRole(id).then((res) => {
+      httpAdminHospitalRole.deleteRole(id).then((res) => {
         if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
@@ -254,13 +253,14 @@ export default {
     },
     // 新增编辑确定
     editPageEnter() {
+      console.log(this.editAddForm);
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 发送请求
           httpAdminHospitalRole.postRole(this.editAddForm).then((res) => {
             if (res.code === "OK") {
               this.$notify.success({
-                title: "新增成功",
+                title: "操作成功",
               });
               this.getList();
               this.editDialogVisible = false;

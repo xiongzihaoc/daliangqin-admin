@@ -288,7 +288,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item
-          label="发布头像"
+          label="发布人头像"
           prop="avatarUrl"
           v-if="editAddForm.type === 'LONG_TEXT'"
         >
@@ -296,7 +296,7 @@
         </el-form-item>
 
         <el-form-item
-          label="发布职位"
+          label="发布人职位"
           prop="position"
           v-if="editAddForm.type === 'LONG_TEXT'"
         >
