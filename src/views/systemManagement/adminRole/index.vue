@@ -2,77 +2,76 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        ref="searchFormRef"
+      <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true"
-      >
-        <el-form-item label="姓名" align="left" prop="name">
-          <el-input
-            v-model="searchForm.name"
+        :inline="true">
+        <el-form-item label="姓名"
+          align="left"
+          prop="name">
+          <el-input v-model="searchForm.name"
             size="small"
-            placeholder="请输入姓名"
-          ></el-input>
+            placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="手机号" align="left" prop="phone">
-          <el-input
-            v-model="searchForm.phone"
+        <el-form-item label="手机号"
+          align="left"
+          prop="phone">
+          <el-input v-model="searchForm.phone"
             v-Int
             size="small"
-            placeholder="请输入手机号"
-          ></el-input>
+            placeholder="请输入手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="身份"
+          align="left"
+          prop="adminRoleType">
+          <el-select style="width: 100%"
+            placeholder="请选择身份"
+            v-model="searchForm.adminRoleType">
+            <el-option v-for="item in adminRoleTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <el-button
-      @click="addBtn"
+    <el-button @click="addBtn"
       type="primary"
       class="tableAdd"
       size="small"
       plain
-      icon="el-icon-plus"
-      >新增</el-button
-    >
+      icon="el-icon-plus">新增</el-button>
     <!-- 表格区域 -->
-    <EleTable :data="list" :header="tableHeaderBig">
+    <EleTable :data="list"
+      :header="tableHeaderBig">
       <!-- 操作 -->
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         slot="fixed"
         fixed="right"
         label="操作"
-        width="220"
-      >
+        width="220">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
-            >编辑</el-button
-          >
-          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
-            >删除</el-button
-          >
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
+          <el-button size="mini"
+            type="danger"
+            @click="deleteBtn(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 分页 -->
-    <el-pagination
-      background
+    <el-pagination background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -80,53 +79,44 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"
-    ></el-pagination>
+      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog
-      :title="infoTitle"
+    <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
-      v-dialogDrag
-    >
-      <el-form
-        ref="FormRef"
+      v-dialogDrag>
+      <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px"
-      >
-        <el-form-item label="选择身份" prop="adminRoleType">
-          <el-select
-            style="width: 100%"
+        label-width="100px">
+        <el-form-item label="选择身份"
+          prop="adminRoleType">
+          <el-select style="width: 100%"
             placeholder="请选择身份"
-            v-model="editAddForm.adminRoleType"
-          >
-            <el-option
-              v-for="item in adminRoleTypeList"
+            v-model="editAddForm.adminRoleType">
+            <el-option v-for="item in adminRoleTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
+        <el-form-item label="姓名"
+          prop="name">
           <el-input v-model="editAddForm.name"></el-input>
         </el-form-item>
-        <el-form-item
-          label="手机号"
+        <el-form-item label="手机号"
           prop="phone"
-          v-if="this.infoTitle === '新增'"
-        >
-          <el-input
-            v-Int
-            v-model="editAddForm.phone"
-          ></el-input>
+          v-if="this.infoTitle === '新增'">
+          <el-input v-Int
+            v-model="editAddForm.phone"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -157,8 +147,9 @@ export default {
         phone: [{ required: true, validator: validatePhone }],
       },
       searchForm: {
+        adminRoleType: "",
         name: "",
-        phone:"",
+        phone: "",
       },
       list: [],
       editAddForm: {
@@ -207,6 +198,7 @@ export default {
           pageSize: this.pageSize,
           name: this.searchForm.name,
           phone: this.searchForm.phone,
+          adminRoleType: this.searchForm.adminRoleType,
         })
         .then((res) => {
           console.log(res);
