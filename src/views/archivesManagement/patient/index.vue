@@ -185,7 +185,7 @@ export default {
         },
         {
           prop: "diabetesStatus",
-          label: "糖尿病",
+          label:"血糖",
           formatter: (row) => {
             return this.diabetesFormatter(row);
           },
@@ -200,9 +200,14 @@ export default {
         { prop: "healthScore", label: "两慢指数" },
         { prop: "doctorUserName", label: "对应医师" },
         { prop: "doctorUserName", label: "医师手机号" },
-        { prop: "doctorUserName", label: "创建时间" },
-        { prop: "doctorUserName", label: "创建人" },
-        // { prop: "address", label: "家庭住址" },
+        {
+          prop: "archivesMongo.createTime",
+          label: "创建时间",
+          formatter: (row) => {
+            return parseTime(row.archivesMongo?.createTime);
+          },
+        },
+        { prop: "archivesMongo.createUserName", label: "创建人" },
       ],
       loading: true,
       // 医生列表跳转用户列表携带参数

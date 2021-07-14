@@ -8,15 +8,15 @@
         :inline="true">
         <el-form-item label="姓名"
           align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+          prop="patientUserName">
+          <el-input v-model="searchForm.patientUserName"
             size="small"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="手机号"
           align="left"
-          prop="patientUserName">
-          <el-input v-model="searchForm.patientUserName"
+          prop="patientUserPhone">
+          <el-input v-model="searchForm.patientUserPhone"
             size="small"
             maxlength="11"
             v-Int
@@ -235,7 +235,7 @@ export default {
         ],
       },
       searchForm: {
-        name: "",
+        patientUserName: "",
         userId: "",
         inspectionTime: "",
         heartRateScore: "",
