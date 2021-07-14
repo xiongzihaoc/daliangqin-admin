@@ -8,10 +8,33 @@
         :inline="true">
         <el-form-item label="姓名"
           align="left"
+          prop="name">
+          <el-input v-model="searchForm.name"
+            size="small"
+            placeholder="请输入姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号"
+          align="left"
           prop="patientUserName">
           <el-input v-model="searchForm.patientUserName"
             size="small"
-            placeholder="请输入姓名"></el-input>
+            maxlength="11"
+            v-Int
+            placeholder="请输入手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="录入方式"
+          align="left"
+          prop="patientUserName">
+          <el-input v-model="searchForm.patientUserName"
+            size="small"
+            placeholder="请选择录入方式"></el-input>
+        </el-form-item>
+        <el-form-item label="检测结果"
+          align="left"
+          prop="patientUserName">
+          <el-input v-model="searchForm.patientUserName"
+            size="small"
+            placeholder="请选择检测结果"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -212,10 +235,11 @@ export default {
         ],
       },
       searchForm: {
-        patientUserName: "",
-        diseaseType: "",
-        resource: "",
-        resultType: "",
+        name: "",
+        userId: "",
+        inspectionTime: "",
+        heartRateScore: "",
+        detectType: "",
       },
       patientList: [],
       list: [],

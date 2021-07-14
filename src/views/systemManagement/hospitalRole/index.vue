@@ -46,7 +46,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-button @click="add"
+    <el-button @click="addBtn"
       type="primary"
       class="tableAdd"
       size="small"
@@ -145,6 +145,7 @@ export default {
         userName: "",
         userPhone: "",
         hospitalId: "",
+        hospitalRoleType: "ADMIN",
       },
       list: [],
       hospitalList: [],
@@ -224,9 +225,10 @@ export default {
     },
     /***** 增删改 *****/
     // 新增
-    add() {
+    addBtn() {
       this.infoTitle = "新增";
       this.editAddForm = {};
+      this.editAddForm.hospitalRoleType = "ADMIN"
       this.editDialogVisible = true;
     },
     // 编辑
