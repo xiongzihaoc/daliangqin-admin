@@ -15,6 +15,13 @@ export const httpAdminHospitalRole = {
             data
         })
     },
+    putRole(data) {
+        return request({
+            url: 'hospital/role/' + data.hospitalId + '/' + data.id,
+            method: 'put',
+            data
+        })
+    },
     deleteRole(data) {
         return request({
             url: 'hospital/role/' + data,

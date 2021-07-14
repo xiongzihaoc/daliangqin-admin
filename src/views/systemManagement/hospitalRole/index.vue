@@ -95,6 +95,7 @@
           prop="hospitalId">
           <el-select v-model="editAddForm.hospitalId"
             @change="selectChange"
+            :disabled="this.infoTitle === '编辑' ? true : false"
             class="w100">
             <el-option v-for="item in hospitalList"
               :key="item.id"
@@ -267,19 +268,31 @@ export default {
     },
     // 新增编辑确定
     editPageEnter() {
-      console.log(this.editAddForm);
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          // 发送请求
-          httpAdminHospitalRole.postRole(this.editAddForm).then((res) => {
-            if (res.code === "OK") {
-              this.$notify.success({
-                title: "操作成功",
-              });
-              this.getList();
-              this.editDialogVisible = false;
-            }
-          });
+          if (this.infoTitle === "新增") {
+            // 发送请求
+            httpAdminHospitalRole.postRole(this.editAddForm).then((res) => {
+              if (res.code === "OK") {
+                this.$notify.success({
+                  title: "新增成功",
+                });
+                this.getList();
+                this.editDialogVisible = false;
+              }
+            });
+          } else {
+            // 发送请求
+            httpAdminHospitalRole.putRole(this.editAddForm).then((res) => {
+              if (res.code === "OK") {
+                this.$notify.success({
+                  title: "编辑成功",
+                });
+                this.getList();
+                this.editDialogVisible = false;
+              }
+            });
+          }
         }
       });
     },

@@ -9,9 +9,14 @@
         <el-form-item label="医院名称"
           align="left"
           prop="hospitalName">
-          <el-input v-model="searchForm.hospitalName"
+          <el-select v-model="searchForm.hospitalName"
             size="small"
-            placeholder="请输入医院名称"></el-input>
+            class="w100">
+            <el-option v-for="item in list"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="医院等级"
           prop="hospitalType">
@@ -114,7 +119,6 @@
         <el-form-item label="医院名称"
           prop="name">
           <el-input v-model="editAddForm.name"
-           
             placeholder="请输入医院名称"></el-input>
         </el-form-item>
         <el-form-item label="医院头像"

@@ -53,9 +53,17 @@
         <el-form-item label="医院名称"
           align="left"
           prop="hospitalName">
-          <el-input v-model="searchForm.hospitalName"
+          <!-- <el-input v-model="searchForm.hospitalName"
             size="small"
-            placeholder="请输入医院名称"></el-input>
+            placeholder="请输入医院名称"></el-input> -->
+          <el-select v-model="searchForm.hospitalName"
+            size="small"
+            class="w100">
+            <el-option v-for="item in list"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
