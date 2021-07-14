@@ -86,7 +86,7 @@
         slot="fixed"
         fixed="left"
         prop="avatarUrl"
-        label="头像">
+        label="照片">
         <template slot-scope="scope">
           <img v-if="scope.row.avatarUrl"
             :src="scope.row.avatarUrl"
@@ -103,7 +103,7 @@
         <template slot-scope="scope">
           <el-button size="mini"
             @click="detailsBtn(scope.row)"
-            type="primary">编辑</el-button>
+            type="primary">详细资料</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -159,8 +159,14 @@ export default {
       },
       list: [],
       tableHeaderBig: [
-        { prop: "phone", label: "手机号" },
         { prop: "idCard", label: "身份证号" },
+        {
+          prop: "gender",
+          label: "性别",
+          formatter: (row) => {
+            return this.genderFormatter(row);
+          },
+        },
         {
           prop: "birthday",
           label: "出生日期",
@@ -169,16 +175,22 @@ export default {
           },
         },
         { prop: "age", label: "年龄" },
+        { prop: "phone", label: "本人电话" },
         {
-          prop: "gender",
-          label: "性别",
+          prop: "phone",
+          label: "高血压",
           formatter: (row) => {
-            return this.genderFormatter(row);
+            return parseTime(row.birthday)?.slice(0, 10);
           },
         },
-        { prop: "address", label: "家庭住址" },
+        { prop: "phone", label: "糖尿病" },
+        { prop: "phone", label: "心率" },
         { prop: "healthScore", label: "两慢指数" },
         { prop: "doctorUserName", label: "对应医师" },
+        { prop: "doctorUserName", label: "医师手机号" },
+        { prop: "doctorUserName", label: "创建时间" },
+        { prop: "doctorUserName", label: "创建人" },
+        // { prop: "address", label: "家庭住址" },
       ],
       loading: true,
       // 医生列表跳转用户列表携带参数
@@ -197,13 +209,14 @@ export default {
     console.log(localStorage.getItem("doctorId"));
     this.getList();
   },
-  destroyed(){
+  destroyed() {
     localStorage.removeItem("doctorId");
   },
   methods: {
     getList() {
       console.log(this.doctorId);
-      httpAdminPatient.getPatient({
+      httpAdminPatient
+        .getPatient({
           page: this.pageNum,
           pageSize: this.pageSize,
           name: this.searchForm.name,
@@ -247,6 +260,9 @@ export default {
     },
     /***** 表格格式化内容区域 *****/
     // 出生年月
+    genderFormatter(row) {
+      return formatterElement.gender[row.gender];
+    },
     genderFormatter(row) {
       return formatterElement.gender[row.gender];
     },
