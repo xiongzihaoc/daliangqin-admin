@@ -1,5 +1,7 @@
 import { httpPublicLogin } from '@/api/public/httpPublicLogin'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { Message } from 'element-ui'
+
 
 const user = {
   state: {
@@ -36,11 +38,15 @@ const user = {
       return new Promise((resolve, reject) => {
         httpPublicLogin.login(userInfo).then(res => {
           if (res.code !== 'OK') {
-            return
+            return Message.error('用户信息不存在')
           } else {
-            commit('SET_TOKEN', "xzh")
-            setToken("xzh")
-            resolve()
+            if (res.data.adminRoleType) {
+              commit('SET_TOKEN', "xzh")
+              setToken("xzh")
+              resolve()
+            } else {
+              return Message.error('用户信息不存在')
+            }
           }
         }).catch(error => {
           reject(error)

@@ -277,11 +277,15 @@ export default {
   },
   created() {
     this.doctorId = localStorage.getItem("doctorId");
-    console.log(localStorage.getItem("doctorId"));
+    let pageNum = localStorage.getItem("patientNum");
+    if (pageNum) {
+      this.pageNum = pageNum
+    }
     this.getList();
   },
   destroyed() {
     localStorage.removeItem("doctorId");
+    localStorage.removeItem("patientNum");
   },
   methods: {
     getList() {
@@ -298,6 +302,7 @@ export default {
           diabetesStatus: this.searchForm.diabetesStatus,
           heartRateStatus: this.searchForm.heartRateStatus,
           doctorUserName: this.searchForm.doctorUserName,
+          doctorUserId:this.doctorId,
           doctorUserPhone: this.searchForm.doctorUserPhone,
           beginAge: this.searchForm.beginAge,
           endAge: this.searchForm.endAge,
@@ -330,11 +335,11 @@ export default {
     },
     // 跳转详细资料
     detailsBtn(val) {
-      console.log(val);
       this.$router.push({
         path: "/archivesManagement/details",
         query: { id: val.id, type: "edit" },
       });
+      localStorage.setItem("patientNum", this.pageNum);
     },
     /***** 表格格式化内容区域 *****/
     // 出生年月

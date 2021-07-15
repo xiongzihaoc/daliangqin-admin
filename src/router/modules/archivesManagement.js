@@ -33,7 +33,8 @@ const archivesRouter = {
         redirect: "/archivesManagement/record/bloodPressure",
         meta: {
             title: '设备检测',
-            icon: 'shebei'
+            icon: 'equipment'
+
         },
         children: [
             {
@@ -74,6 +75,15 @@ const archivesRouter = {
                 },
             },
         ],
+    },
+    {
+        path: 'equipment',
+        name: 'equipment',
+        component: () => import('@/views/archivesManagement/equipment'),
+        meta: {
+            title: '设备管理',
+            icon: 'shebei'
+        }
     },
     // {
     //     path: 'archivesAddress',

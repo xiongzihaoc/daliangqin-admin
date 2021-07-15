@@ -3,7 +3,7 @@ export function parseTime(time, cFormat) {
   if (arguments.length === 0 || !time) {
     return null
   }
-  const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+  const format = cFormat || '{y}-{m}-{d} {h}:{i}'
   let date
   if (typeof time === 'object') {
     date = time
@@ -165,6 +165,29 @@ export function validateIdCard(rule, value, callback) {
     callback();
   }
 }
+// 时间验证规则
+export function validateTime(rule, value, callback) {
+  let time = new Date().valueOf()
+  if (!value) {
+    return callback(new Error("请选择时间"));
+  } else if (value > time) {
+    return callback(new Error("检测时间不能大于现在时间"));
+  } else {
+    callback();
+  }
+}
+// 血糖保留一位小数
+export function validateGlucoseScore(rule, value, callback) {
+  if (!value) {
+    callback(new Error("请输入空腹血糖"));
+  } else if (value.indexOf(".") != -1 && value.split(".").length > 2) {
+    callback(new Error("请输入正确格式的血糖")); //防止输入多个小数点
+  } else if (value.indexOf(".") != -1 && value.split(".")[1].length > 1) {
+    callback(new Error("请输入正确的小数位数")); //小数点后两位
+  } else {
+    callback();
+  }
+};
 // 文化程度
 export const educationType = [
   { id: 1, label: "研究生", value: "POSTGRADUATE" },
@@ -252,7 +275,7 @@ export const hospitalClassList = [
 export const relationshipList = [
   { id: 1, label: "家人", value: "FAMILY" },
   { id: 2, label: "朋友", value: "FRIENDS" },
-  { id: 3, label: "亲戚", value: "RELATIVE" },
+  { id: 3, label: "亲人", value: "RELATIVE" },
 ]
 
 // 加入方式
@@ -283,7 +306,6 @@ export const healthList = [
 ]
 
 // 心率枚举
-
 export const heartList = [
   { id: 1, label: "稍慢", value: "SLOW" },
   { id: 2, label: "稍快", value: "FAST" },
@@ -386,6 +408,11 @@ export const transferStatusList = [
   { id: 7, label: "转诊拒绝", value: "REFUSE" },
 ]
 
+export const equipmentResourceTypeList = [
+  { id: 1, label: "手动录入", value: "MANUAL" },
+  { id: 2, label: "设备检测", value: "DETECTION" }
+]
+
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式
@@ -459,7 +486,7 @@ export const formatterElement = {
   relationship: {
     FAMILY: "家人",
     FRIENDS: "朋友",
-    RELATIVE: "亲戚"
+    RELATIVE: "亲人"
   },
   appType: {
     DOCTOR: "医生端",
@@ -484,5 +511,28 @@ export const formatterElement = {
     UP: "向上转诊",
     DOWN: "向下转诊",
     REFUSE: "转诊拒绝",
+  },
+  transferStatus: {
+    WAIT: "待转诊确认",
+    ING: "转诊中",
+    END: "已转诊",
+    NONE: "未转诊",
+    UP: "向上转诊",
+    DOWN: "向下转诊",
+    REFUSE: "转诊拒绝",
+  },
+  diseaseType: {
+    HIGH_BLOOD: "高血压",
+    DIABETES: "糖尿病",
+    HEART_RATE: "心率",
+    CORONARY_HEART_DISEASE: "冠心病",
+    CHRONIC_OBSTRUCTIVE_PULMONARY: "慢性阻塞性肺疾病",
+    MALIGNANT_TUMOR: "恶性肿瘤",
+    STROKE: "脑卒中",
+    SEVERE_MENTAL_ILLNESS: "重性精神疾病",
+    TUBERCULOSIS: "结核病",
+    HEPATITIS: "肝炎",
+    CONGENITAL_MALFORMATIONS: "先天畸形",
+    OTHER: "其他",
   }
 }

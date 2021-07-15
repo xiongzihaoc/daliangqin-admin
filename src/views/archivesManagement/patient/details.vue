@@ -22,8 +22,8 @@
           <el-form-item label="身份证号"
             prop="idCard">
             <el-input v-model="form.idCard"
-              type="number"
               maxlength="18"
+              oninput="value=value.replace(/[^0-9Xx]/g,'')"
               placeholder="请输入身份证号"></el-input>
           </el-form-item>
           <el-form-item label="省市区"
@@ -79,7 +79,8 @@
           </el-form-item>
           <el-form-item label="民族"
             prop="ethnic">
-            <el-input v-model="form.ethnic"></el-input>
+            <el-input v-model="form.ethnic"
+              placeholder="（ 例:汉族 ）"></el-input>
           </el-form-item>
           <el-form-item label="血型"
             prop="bloodType">
@@ -102,7 +103,8 @@
           </el-form-item>
           <el-form-item label="职业"
             prop="job">
-            <el-input v-model="form.job"></el-input>
+            <el-input v-model="form.job"
+              placeholder="请输入"></el-input>
           </el-form-item>
           <el-form-item label="婚姻情况"
             prop="marriageStatus">
@@ -115,7 +117,8 @@
           </el-form-item>
           <el-form-item label="工作单位"
             prop="employer">
-            <el-input v-model="form.employer"></el-input>
+            <el-input v-model="form.employer"
+              placeholder="请输入"></el-input>
           </el-form-item>
           <el-form-item label="对应医师医院"
             prop="hospitalId">

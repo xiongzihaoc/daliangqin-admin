@@ -45,7 +45,7 @@
           name="code"
           maxlength="6"
           auto-complete="on"
-           v-Int
+          v-Int
           @keyup.enter.native="handleLogin" />
       </el-form-item>
       <!-- 登录按钮 -->
@@ -66,9 +66,7 @@ export default {
     return {
       // 表单验证
       loginRules: {
-        phone: [
-          { required: true, trigger: "blur", validator: validatePhone },
-        ],
+        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
         code: [{ required: true, trigger: "blur", validator: validateCode }],
       },
       loginForm: {
@@ -134,7 +132,7 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          this.loading = true;
+          // this.loading = true;
           this.$store
             .dispatch("Login", this.loginForm)
             .then((res) => {

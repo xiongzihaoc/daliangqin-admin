@@ -80,6 +80,7 @@
             prop="phone">
             <el-date-picker v-model="highBloodForm.startTime"
               type="datetime"
+              format="yyyy-MM-dd HH:mm"
               value-format="timestamp"
               placeholder="选择日期时间">
             </el-date-picker>
@@ -88,6 +89,7 @@
             prop="phone">
             <el-date-picker v-model="highBloodForm.endTime"
               type="datetime"
+              format="yyyy-MM-dd HH:mm"
               value-format="timestamp"
               placeholder="选择日期时间">
             </el-date-picker>
