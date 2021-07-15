@@ -134,7 +134,7 @@
         <el-form-item label="选择用户"
           prop="userId">
           <el-select class="w100"
-          filterable
+            filterable
             @change="selectPatient"
             v-model="editAddForm.userId">
             <el-option v-for="item in patientList"
@@ -171,6 +171,7 @@
           <el-date-picker v-model="editAddForm.inspectionTime"
             style="width:100%"
             type="datetime"
+            format="yyyy-MM-dd HH:mm"
             value-format="timestamp"
             placeholder="选择日期">
           </el-date-picker>
@@ -189,7 +190,7 @@
 import EleTable from "@/components/Table";
 import { httpAdminBloodPressure } from "@/api/admin/httpAdminBloodPressure";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { parseTime,validateTime } from "@/utils/index";
+import { parseTime, validateTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -200,7 +201,7 @@ export default {
       FormRules: {
         userId: [{ required: true, message: "请选择用户", trigger: "blur" }],
         inspectionTime: [
-          { required: true,trigger: "blur",validator: validateTime },
+          { required: true, trigger: "blur", validator: validateTime },
         ],
         shrinkHighPressure: [
           { required: true, message: "请输入收缩压", trigger: "blur" },

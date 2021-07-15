@@ -194,6 +194,7 @@
           prop="inspectionTime">
           <el-date-picker v-model="editAddForm.inspectionTime"
             style="width:100%"
+            format="yyyy-MM-dd HH:mm"
             type="datetime"
             value-format="timestamp"
             placeholder="选择日期">
