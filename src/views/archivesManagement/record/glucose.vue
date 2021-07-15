@@ -13,6 +13,37 @@
             size="small"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
+        <el-form-item label="手机号"
+          align="left"
+          prop="patientUserPhone">
+          <el-input v-model="searchForm.patientUserPhone"
+            size="small"
+            maxlength="11"
+            v-Int
+            placeholder="请输入手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="录入方式"
+          align="left"
+          prop="equipmentResourceType">
+          <el-select class="w100"
+            v-model="searchForm.equipmentResourceType">
+            <el-option v-for="item in equipmentResourceTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="检测结果"
+          align="left"
+          prop="diabetesStatus">
+          <el-select class="w100"
+            v-model="searchForm.diabetesStatus">
+            <el-option v-for="item in healthList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -71,10 +102,10 @@
         label="检测结果"
         prop="diseaseStatus">
         <template slot-scope="scope">
-          <span v-if="scope.row.diseaseStatus === 'SERIOUS'">重度</span>
-          <span v-if="scope.row.diseaseStatus === 'HEALTH'">健康</span>
-          <span v-if="scope.row.diseaseStatus === 'SLIGHT'">轻度</span>
-          <span v-if="scope.row.diseaseStatus === 'MEDIUM'">中度</span>
+          <span v-if="scope.row.diabetesStatus === 'SERIOUS'">重度</span>
+          <span v-if="scope.row.diabetesStatus === 'HEALTH'">健康</span>
+          <span v-if="scope.row.diabetesStatus === 'SLIGHT'">轻度</span>
+          <span v-if="scope.row.diabetesStatus === 'MEDIUM'">中度</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -172,7 +203,13 @@
 import EleTable from "@/components/Table";
 import { httpAdminGlucose } from "@/api/admin/httpAdminGlucose";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { parseTime, validateTime, validateGlucoseScore } from "@/utils/index";
+import {
+  parseTime,
+  validateTime,
+  validateGlucoseScore,
+  equipmentResourceTypeList,
+  healthList,
+} from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -180,6 +217,8 @@ export default {
   data() {
     return {
       parseTime,
+      equipmentResourceTypeList,
+      healthList,
       FormRules: {
         userId: [{ required: true, message: "请选择用户", trigger: "blur" }],
         inspectionTime: [
@@ -191,24 +230,12 @@ export default {
       },
       searchForm: {
         patientUserName: "",
-        diseaseType: "",
-        resource: "",
-        resultType: "",
+        patientUserPhone: "",
+        equipmentResourceType: "",
+        diabetesStatus: "",
       },
       patientList: [],
       list: [],
-      // 检测结果列表
-      diseaseTypeList: [
-        { id: 1, label: "健康", value: "HEALTH" },
-        { id: 2, label: "轻微", value: "SLIGHT" },
-        { id: 3, label: "中度", value: "MEDIUM" },
-        { id: 4, label: "重度", value: "SERIOUS" },
-      ],
-      diseaseList: [
-        { id: 1, label: "高血压", value: "HIGH_BLOOD" },
-        { id: 2, label: "糖尿病", value: "DIABETES" },
-        { id: 3, label: "心率", value: "HEART_RATE" },
-      ],
       editAddForm: {
         name: "",
         userId: "",
@@ -243,9 +270,10 @@ export default {
         .getGlucose({
           page: this.pageNum,
           pageSize: this.pageSize,
-          title: this.searchForm.title,
-          type: this.searchForm.type,
-          status: this.searchForm.status,
+          patientUserName: this.searchForm.patientUserName,
+          patientUserPhone: this.searchForm.patientUserPhone,
+          equipmentResourceType: this.searchForm.equipmentResourceType,
+          diabetesStatus: this.searchForm.diabetesStatus,
         })
         .then((res) => {
           console.log(res);

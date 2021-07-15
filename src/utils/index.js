@@ -275,7 +275,7 @@ export const hospitalClassList = [
 export const relationshipList = [
   { id: 1, label: "家人", value: "FAMILY" },
   { id: 2, label: "朋友", value: "FRIENDS" },
-  { id: 3, label: "亲戚", value: "RELATIVE" },
+  { id: 3, label: "亲人", value: "RELATIVE" },
 ]
 
 // 加入方式
@@ -408,6 +408,11 @@ export const transferStatusList = [
   { id: 7, label: "转诊拒绝", value: "REFUSE" },
 ]
 
+export const equipmentResourceTypeList = [
+  {id:1,label:"手动录入",value:"MANUAL"},
+  {id:2,label:"设备检测",value:"DETECTION"}
+]
+
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式
@@ -481,7 +486,7 @@ export const formatterElement = {
   relationship: {
     FAMILY: "家人",
     FRIENDS: "朋友",
-    RELATIVE: "亲戚"
+    RELATIVE: "亲人"
   },
   appType: {
     DOCTOR: "医生端",

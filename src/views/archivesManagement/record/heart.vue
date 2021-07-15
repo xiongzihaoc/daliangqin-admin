@@ -24,17 +24,25 @@
         </el-form-item>
         <el-form-item label="录入方式"
           align="left"
-          prop="patientUserName">
-          <el-input v-model="searchForm.patientUserName"
-            size="small"
-            placeholder="请选择录入方式"></el-input>
+          prop="equipmentResourceType">
+          <el-select class="w100"
+            v-model="searchForm.equipmentResourceType">
+            <el-option v-for="item in equipmentResourceTypeList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="检测结果"
           align="left"
-          prop="patientUserName">
-          <el-input v-model="searchForm.patientUserName"
-            size="small"
-            placeholder="请选择检测结果"></el-input>
+          prop="heartRateStatus">
+          <el-select class="w100"
+            v-model="searchForm.heartRateStatus">
+            <el-option v-for="item in heartList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -93,9 +101,9 @@
         label="检测结果"
         prop="diseaseStatus">
         <template slot-scope="scope">
-          <span v-if="scope.row.diseaseStatus === 'FAST'">稍快</span>
-          <span v-if="scope.row.diseaseStatus === 'NORMAL'">正常</span>
-          <span v-if="scope.row.diseaseStatus === 'SLOW'">稍慢</span>
+          <span v-if="scope.row.heartRateStatus === 'FAST'">稍快</span>
+          <span v-if="scope.row.heartRateStatus === 'NORMAL'">正常</span>
+          <span v-if="scope.row.heartRateStatus === 'SLOW'">稍慢</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -214,7 +222,12 @@
 import EleTable from "@/components/Table";
 import { httpAdminHeartRate } from "@/api/admin/httpAdminHeartRate";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { parseTime,validateTime } from "@/utils/index";
+import {
+  parseTime,
+  validateTime,
+  equipmentResourceTypeList,
+  heartList,
+} from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -222,10 +235,12 @@ export default {
   data() {
     return {
       parseTime,
+      equipmentResourceTypeList,
+      heartList,
       FormRules: {
         userId: [{ required: true, message: "请选择用户", trigger: "blur" }],
         inspectionTime: [
-          { required: true,trigger: "blur",validator: validateTime },
+          { required: true, trigger: "blur", validator: validateTime },
         ],
         glucoseScore: [
           { required: true, message: "请输入心率", trigger: "blur" },
@@ -236,24 +251,12 @@ export default {
       },
       searchForm: {
         patientUserName: "",
-        userId: "",
-        inspectionTime: "",
-        heartRateScore: "",
-        detectType: "",
+        patientUserPhone: "",
+        equipmentResourceType: "",
+        heartRateStatus: "",
       },
       patientList: [],
       list: [],
-      // 检测结果列表
-      diseaseTypeList: [
-        { id: 5, label: "正常", value: "NORMAL" },
-        { id: 6, label: "稍慢", value: "SLOW" },
-        { id: 7, label: "稍快", value: "FAST" },
-      ],
-      diseaseList: [
-        { id: 1, label: "高血压", value: "HIGH_BLOOD" },
-        { id: 2, label: "糖尿病", value: "DIABETES" },
-        { id: 3, label: "心率", value: "HEART_RATE" },
-      ],
       editAddForm: {
         name: "",
         userId: "",
@@ -289,9 +292,10 @@ export default {
         .getHeartRate({
           page: this.pageNum,
           pageSize: this.pageSize,
-          title: this.searchForm.title,
-          type: this.searchForm.type,
-          status: this.searchForm.status,
+          patientUserName: this.searchForm.patientUserName,
+          patientUserPhone: this.searchForm.patientUserPhone,
+          equipmentResourceType: this.searchForm.equipmentResourceType,
+          heartRateStatus: this.searchForm.heartRateStatus,
         })
         .then((res) => {
           this.list = res.data.elements;
