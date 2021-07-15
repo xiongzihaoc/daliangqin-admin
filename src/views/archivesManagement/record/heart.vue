@@ -326,11 +326,6 @@ export default {
       this.getList();
     },
     /***** 增删改 *****/
-    // 查看详情
-    detailsBtn() {
-      this.infoTitle = "心率详情";
-      this.editDialogVisible = true;
-    },
     // 新增
     addBtn() {
       this.infoTitle = "新增";
@@ -346,9 +341,9 @@ export default {
       this.editDialogVisible = true;
     },
     // 查看
-    examineBtn() {
-      console.log(this.$router);
-      this.$router.push("/archivesManagement/record/heartDetail");
+    examineBtn(val) {
+      console.log(val);
+      this.$router.push("/archivesManagement/record/heartDetail?id=" + val.id);
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();

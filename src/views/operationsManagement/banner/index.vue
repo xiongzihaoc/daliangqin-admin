@@ -67,8 +67,7 @@
         label="轮播图图片">
         <template slot-scope="scope">
           <div v-if="scope.row.imageUrl">
-            <img fit
-              class="tableImg"
+            <img class="tableImg"
               :src="scope.row.imageUrl" />
           </div>
         </template>

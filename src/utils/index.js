@@ -409,8 +409,8 @@ export const transferStatusList = [
 ]
 
 export const equipmentResourceTypeList = [
-  {id:1,label:"手动录入",value:"MANUAL"},
-  {id:2,label:"设备检测",value:"DETECTION"}
+  { id: 1, label: "手动录入", value: "MANUAL" },
+  { id: 2, label: "设备检测", value: "DETECTION" }
 ]
 
 // 所有枚举类型转义
@@ -511,5 +511,28 @@ export const formatterElement = {
     UP: "向上转诊",
     DOWN: "向下转诊",
     REFUSE: "转诊拒绝",
+  },
+  transferStatus: {
+    WAIT: "待转诊确认",
+    ING: "转诊中",
+    END: "已转诊",
+    NONE: "未转诊",
+    UP: "向上转诊",
+    DOWN: "向下转诊",
+    REFUSE: "转诊拒绝",
+  },
+  diseaseType: {
+    HIGH_BLOOD: "高血压",
+    DIABETES: "糖尿病",
+    HEART_RATE: "心率",
+    CORONARY_HEART_DISEASE: "冠心病",
+    CHRONIC_OBSTRUCTIVE_PULMONARY: "慢性阻塞性肺疾病",
+    MALIGNANT_TUMOR: "恶性肿瘤",
+    STROKE: "脑卒中",
+    SEVERE_MENTAL_ILLNESS: "重性精神疾病",
+    TUBERCULOSIS: "结核病",
+    HEPATITIS: "肝炎",
+    CONGENITAL_MALFORMATIONS: "先天畸形",
+    OTHER: "其他",
   }
 }
