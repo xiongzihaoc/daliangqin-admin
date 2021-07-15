@@ -285,6 +285,7 @@ export default {
   },
   destroyed() {
     localStorage.removeItem("doctorId");
+    localStorage.removeItem("patientNum");
   },
   methods: {
     getList() {
@@ -301,6 +302,7 @@ export default {
           diabetesStatus: this.searchForm.diabetesStatus,
           heartRateStatus: this.searchForm.heartRateStatus,
           doctorUserName: this.searchForm.doctorUserName,
+          doctorUserId:this.doctorId,
           doctorUserPhone: this.searchForm.doctorUserPhone,
           beginAge: this.searchForm.beginAge,
           endAge: this.searchForm.endAge,
