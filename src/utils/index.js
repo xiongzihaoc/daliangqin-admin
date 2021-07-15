@@ -176,6 +176,18 @@ export function validateTime(rule, value, callback) {
     callback();
   }
 }
+// 血糖保留一位小数
+export function validateGlucoseScore(rule, value, callback) {
+  if (!value) {
+    callback(new Error("请输入空腹血糖"));
+  } else if (value.indexOf(".") != -1 && value.split(".").length > 2) {
+    callback(new Error("请输入正确格式的血糖")); //防止输入多个小数点
+  } else if (value.indexOf(".") != -1 && value.split(".")[1].length > 1) {
+    callback(new Error("请输入正确的小数位数")); //小数点后两位
+  } else {
+    callback();
+  }
+};
 // 文化程度
 export const educationType = [
   { id: 1, label: "研究生", value: "POSTGRADUATE" },

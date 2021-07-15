@@ -149,21 +149,21 @@
             placeholder="请输入设备"></el-input>
         </el-form-item>
         <!-- 高压 -->
-        <el-form-item label="收缩压 / 高压"
+        <el-form-item label="收缩压"
           prop="shrinkHighPressure">
           <el-input maxlength="3"
             v-model="editAddForm.shrinkHighPressure"
             v-Int
-            placeholder="请输入收缩压 / 高压"><i slot="suffix"
+            placeholder="请输入收缩压"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
         </el-form-item>
         <!-- 低压 -->
-        <el-form-item label="舒张压 / 低压"
+        <el-form-item label="舒张压"
           prop="diastoleLowPressure">
           <el-input maxlength="3"
             v-model="editAddForm.diastoleLowPressure"
             v-Int
-            placeholder="请输入舒张压 / 低压"><i slot="suffix"
+            placeholder="请输入舒张压"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
         </el-form-item>
         <el-form-item label="检测日期"
@@ -203,10 +203,10 @@ export default {
           { required: true,trigger: "blur",validator: validateTime },
         ],
         shrinkHighPressure: [
-          { required: true, message: "请输入收缩压 / 高压", trigger: "blur" },
+          { required: true, message: "请输入收缩压", trigger: "blur" },
         ],
         diastoleLowPressure: [
-          { required: true, message: "请输入舒张压 / 低压", trigger: "blur" },
+          { required: true, message: "请输入舒张压", trigger: "blur" },
         ],
       },
       searchForm: {
