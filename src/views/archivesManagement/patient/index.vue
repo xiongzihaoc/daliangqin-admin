@@ -277,7 +277,10 @@ export default {
   },
   created() {
     this.doctorId = localStorage.getItem("doctorId");
-    console.log(localStorage.getItem("doctorId"));
+    let pageNum = localStorage.getItem("patientNum");
+    if (pageNum) {
+      this.pageNum = pageNum
+    }
     this.getList();
   },
   destroyed() {
@@ -330,11 +333,11 @@ export default {
     },
     // 跳转详细资料
     detailsBtn(val) {
-      console.log(val);
       this.$router.push({
         path: "/archivesManagement/details",
         query: { id: val.id, type: "edit" },
       });
+      localStorage.setItem("patientNum", this.pageNum);
     },
     /***** 表格格式化内容区域 *****/
     // 出生年月

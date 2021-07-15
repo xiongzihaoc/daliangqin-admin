@@ -172,7 +172,7 @@
 import EleTable from "@/components/Table";
 import { httpAdminGlucose } from "@/api/admin/httpAdminGlucose";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { parseTime } from "@/utils/index";
+import { parseTime,validateTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -183,7 +183,7 @@ export default {
       FormRules: {
         userId: [{ required: true, message: "请选择用户", trigger: "blur" }],
         inspectionTime: [
-          { required: true, message: "请选择检测日期", trigger: "blur" },
+          { required: true,trigger: "blur",validator: validateTime },
         ],
         glucoseScore: [
           { required: true, message: "请输入血糖", trigger: "blur" },

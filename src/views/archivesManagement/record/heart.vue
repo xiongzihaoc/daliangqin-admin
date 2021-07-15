@@ -195,7 +195,6 @@
           <el-date-picker v-model="editAddForm.inspectionTime"
             style="width:100%"
             type="datetime"
-            :picker-options="pickerOptions"
             value-format="timestamp"
             placeholder="选择日期">
           </el-date-picker>
@@ -214,7 +213,7 @@
 import EleTable from "@/components/Table";
 import { httpAdminHeartRate } from "@/api/admin/httpAdminHeartRate";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { parseTime } from "@/utils/index";
+import { parseTime,validateTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -225,7 +224,7 @@ export default {
       FormRules: {
         userId: [{ required: true, message: "请选择用户", trigger: "blur" }],
         inspectionTime: [
-          { required: true, message: "请选择检测日期", trigger: "blur" },
+          { required: true,trigger: "blur",validator: validateTime },
         ],
         glucoseScore: [
           { required: true, message: "请输入心率", trigger: "blur" },
@@ -268,14 +267,6 @@ export default {
         { label: "设备名称", prop: "name" },
         { label: "设备号", prop: "serialNumber" },
       ],
-      pickerOptions: {
-        disabledDate(time) {
-          //此条为设置禁止用户选择今天之前的日期，包含今天。
-          // return time.getTime() <= (Date.now());
-          //此条为设置禁止用户选择今天之前的日期，不包含今天。
-          return time.getTime() >= new Date().getTime();
-        },
-      },
       // 分页区域
       pageSize: 10,
       pageNum: 1,

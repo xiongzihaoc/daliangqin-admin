@@ -189,7 +189,7 @@
 import EleTable from "@/components/Table";
 import { httpAdminBloodPressure } from "@/api/admin/httpAdminBloodPressure";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { parseTime } from "@/utils/index";
+import { parseTime,validateTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -200,7 +200,7 @@ export default {
       FormRules: {
         userId: [{ required: true, message: "请选择用户", trigger: "blur" }],
         inspectionTime: [
-          { required: true, message: "请选择检测日期", trigger: "blur" },
+          { required: true,trigger: "blur",validator: validateTime },
         ],
         shrinkHighPressure: [
           { required: true, message: "请输入收缩压 / 高压", trigger: "blur" },

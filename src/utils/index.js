@@ -165,6 +165,17 @@ export function validateIdCard(rule, value, callback) {
     callback();
   }
 }
+// 时间验证规则
+export function validateTime(rule, value, callback) {
+  let time = new Date().valueOf()
+  if (!value) {
+    return callback(new Error("请选择时间"));
+  } else if (value > time) {
+    return callback(new Error("检测时间不能大于现在时间"));
+  } else {
+    callback();
+  }
+}
 // 文化程度
 export const educationType = [
   { id: 1, label: "研究生", value: "POSTGRADUATE" },
@@ -283,7 +294,6 @@ export const healthList = [
 ]
 
 // 心率枚举
-
 export const heartList = [
   { id: 1, label: "稍慢", value: "SLOW" },
   { id: 2, label: "稍快", value: "FAST" },
