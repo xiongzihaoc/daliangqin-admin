@@ -32,7 +32,7 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="年龄"
+        <!-- <el-form-item label="年龄"
           align="left"
           prop="age">
           <el-input-number v-model="searchForm.beginAge"
@@ -45,7 +45,7 @@
             :min="1"
             :max="120"
             size="small"></el-input-number>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="本人电话"
           align="left"
           prop="phone">
@@ -304,8 +304,8 @@ export default {
           doctorUserName: this.searchForm.doctorUserName,
           doctorUserId:this.doctorId,
           doctorUserPhone: this.searchForm.doctorUserPhone,
-          beginAge: this.searchForm.beginAge,
-          endAge: this.searchForm.endAge,
+          // beginAge: this.searchForm.beginAge,
+          // endAge: this.searchForm.endAge,
         })
         .then((res) => {
           this.list = res.data.elements;
