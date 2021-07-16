@@ -292,6 +292,7 @@ export default {
         createUserName: "",
         hospitalId: "",
         doctorUserId: "",
+        patientUserId: "",
       },
     };
   },
@@ -301,6 +302,7 @@ export default {
       this.getList();
     } else {
     }
+    this.form.patientUserId = this.$route.query.id;
   },
   mounted() {
     this.getHospitalList();
@@ -317,10 +319,13 @@ export default {
           console.log(res);
           // 回显表单数据
           let value = res.data.elements[0];
-          this.form = value.archivesMongo;
+          if (value.archivesMongo) {
+            this.form = value.archivesMongo;
+          } else {
+            this.form.phone = value.phone;
+          }
           this.form.province = value.province;
           this.form.city = value.city;
-          this.form.area = value.area;
           this.form.area = value.area;
           this.$set(this.form, "address", value.address);
           this.$set(this.form, "avatarUrl", value.avatarUrl);
@@ -385,12 +390,10 @@ export default {
       this.$router.push({ path: "/archivesManagement/patient" });
     },
     confirm() {
-      console.log(this.$route.query.id);
-      console.log(this.form.id);
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 编辑
-          if (this.$route.query.type === "edit") {
+          if (this.$route.query.isArchives == true) {
             httpAdminArchives.putArchives(this.form).then((res) => {
               if (res.code === "OK") {
                 this.$router.push({ path: "/archivesManagement/patient" });

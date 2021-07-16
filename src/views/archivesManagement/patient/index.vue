@@ -289,7 +289,6 @@ export default {
   },
   methods: {
     getList() {
-      console.log(this.searchForm.doctorUserName);
       httpAdminPatient
         .getPatient({
           page: this.pageNum,
@@ -337,7 +336,7 @@ export default {
     detailsBtn(val) {
       this.$router.push({
         path: "/archivesManagement/details",
-        query: { id: val.id, type: "edit" },
+        query: { id: val.id, type: "edit",isArchives:val.isArchives},
       });
       localStorage.setItem("patientNum", this.pageNum);
     },
