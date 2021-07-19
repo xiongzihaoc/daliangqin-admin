@@ -49,36 +49,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="name"
-        label="医院名称"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="avatarUrl"
-        label="医院头像">
-        <template slot-scope="scope">
-          <img class="tableImg"
-            :src="scope.row.avatarUrl">
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="doctorCount"
-        label="医生数量">
-        <template slot-scope="scope">
-          <span @click="skipDoctor(scope.row)"
-            style="color:#1890FF;text-decoration:underline">{{scope.row.doctorCount}}</span>
-        </template>
-      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -246,6 +216,9 @@ export default {
       },
       // 表格数据
       tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "name", label: "医院名称" },
+        { prop: "avatarUrl", label: "医院头像", isImg: true },
         { prop: "contract", label: "医院电话" },
         {
           prop: "address",
@@ -261,6 +234,7 @@ export default {
             return this.hospitalTypeFormatter(row);
           },
         },
+        { prop: "doctorCount", label: "医生数量" },
       ],
       // 分页区域
       pageSize: 10,

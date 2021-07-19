@@ -151,7 +151,7 @@
       :total="total"
       class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
+    <el-dialog title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
@@ -216,6 +216,27 @@
           @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="提示"
+      :visible.sync="hospitalDialogVisible"
+      width="30%"
+      v-dialogDrag>
+      <el-form ref="hospitalFormRef"
+        :rules="hospitalFormRules"
+        :model="hospitalForm"
+        label-width="120px">
+        <el-form-item label="医院名称"
+          prop="hospitalName">
+          <el-input v-model.trim="hospitalForm.hospitalName"
+            placeholder="请输入医院名称"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer"
+        class="dialog-footer">
+        <el-button @click="hospitalDialogVisible = false">取 消</el-button>
+        <el-button type="primary"
+          @click="edithospitalNameEnter">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -249,6 +270,11 @@ export default {
           { required: true, message: "请选择检测模式", trigger: "blur" },
         ],
       },
+      hospitalFormRules: {
+        hospitalName: [
+          { required: true, message: "请输入医院名称", trigger: "blur" },
+        ],
+      },
       searchForm: {
         patientUserName: "",
         patientUserPhone: "",
@@ -264,6 +290,10 @@ export default {
         heartRateScore: "",
         detectType: "",
       },
+      hospitalForm: {
+        recordId: "",
+        hospitalName: "",
+      },
       tableHeaderBig: [
         { label: "序号", type: "index" },
         { label: "姓名", prop: "patientUserName" },
@@ -277,6 +307,7 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
+      hospitalDialogVisible: false,
       infoTitle: "",
     };
   },
@@ -343,7 +374,24 @@ export default {
     // 查看
     examineBtn(val) {
       console.log(val);
-      this.$router.push("/archivesManagement/record/heartDetail?id=" + val.id);
+      this.hospitalForm.hospitalName = val.hospitalName;
+      this.hospitalForm.recordId = val.id;
+      this.hospitalDialogVisible = true;
+    },
+    // 修改医院名称
+    edithospitalNameEnter() {
+      this.$refs.hospitalFormRef.validate((valid) => {
+        if (valid) {
+          httpAdminHeartRate.putHospitalName(this.hospitalForm).then((res) => {
+            this.hospitalDialogVisible = false;
+            this.getList();
+            this.$router.push(
+              "/archivesManagement/record/heartDetail?id=" +
+                this.hospitalForm.recordId
+            );
+          });
+        }
+      });
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();

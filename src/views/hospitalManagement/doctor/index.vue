@@ -84,64 +84,6 @@
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig">
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        label="医生姓名"
-        prop="name"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        label="医生头像"
-        prop="avatarUrl">
-        <template slot-scope="scope">
-          <img class="tableImg"
-            :src="scope.row.avatarUrl" />
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        label="用户数量"
-        prop="patientCount">
-        <template slot-scope="scope">
-          <span @click="skipPatient(scope.row)"
-            style="color: #1890ff; text-decoration: underline">{{ scope.row.patientCount }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="toDoctorInfo"
-        label="对应转诊医生">
-        <template slot-scope="scope">
-          <div v-if="scope.row.toDoctorInfo[0]">
-            <span v-for="item in scope.row.toDoctorInfo"
-              :key="item.id">{{
-              item.name + "  "
-            }}</span>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        label="创建人"
-        prop="createUserName"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        label="创建时间"
-        prop="createTime">
-        <template slot-scope="scope">
-          {{ parseTime(scope.row.createTime) }}
-        </template>
-      </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -278,7 +220,6 @@ import {
   genderList,
   formatterElement,
 } from "@/utils/index";
-import addressJson from "@/utils/address.json";
 export default {
   components: {
     EleTable,
@@ -325,6 +266,9 @@ export default {
         goodAt: "",
       },
       tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "name", label: "姓名" },
+        { prop: "avatarUrl", label: "头像", isImg: true },
         { prop: "phone", label: "手机号" },
         { prop: "idCard", label: "身份证号" },
         {
@@ -352,6 +296,8 @@ export default {
           },
         },
         { prop: "hospitalName", label: "医院名称" },
+        { prop: "patientCount", label: "用户数量" },
+        { prop: "patientCount", label: "用户数量" },
       ],
       // 医院列表
       hospitalList: [],
@@ -523,6 +469,7 @@ export default {
     typeFormatter(row) {
       return formatterElement.doctorType[row.type];
     },
+    birthdayFormatter(row) {},
     /***** 分页 *****/
     handleSizeChange(newSize) {
       this.pageSize = newSize;

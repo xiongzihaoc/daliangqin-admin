@@ -47,8 +47,13 @@ export default {
       });
   },
   computed: {
-    uploadValue() {
-      return this.value;
+    uploadValue: {
+      get() {
+        return this.value;
+      },
+      set(val) {
+        return val;
+      },
     },
   },
   methods: {
