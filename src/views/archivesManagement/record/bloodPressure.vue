@@ -72,8 +72,8 @@
         label="检测类型"
         prop="diseaseType">
         <template slot-scope="scope">
-          <span v-if="scope.row.diseaseType === 'HIGH_BLOOD'">高血压</span>
-          <span v-if="scope.row.diseaseType === 'DIABIETS'">糖尿病</span>
+          <span v-if="scope.row.diseaseType === 'HIGH_BLOOD'">血压</span>
+          <span v-if="scope.row.diseaseType === 'DIABIETS'">血糖</span>
           <span v-if="scope.row.diseaseType === 'HEART_RATE'">心率</span>
         </template>
       </el-table-column>
