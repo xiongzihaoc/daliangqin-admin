@@ -201,7 +201,7 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="left"
-        :formatter="heartRateStatusFormatter"
+        :formatter="heartRateStatus"
         label="心率"
         prop="heartRateStatus">
       </el-table-column>
