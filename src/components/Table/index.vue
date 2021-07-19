@@ -1,8 +1,11 @@
 <template>
-  <div class="w-table"
+  <div
+    class="w-table"
     :class="{ 'w-table_moving': dragState.dragging }"
-    ref="wTable" >
-    <el-table :data="data"
+    ref="wTable"
+  >
+    <el-table
+      :data="data"
       @row-click="rowClick"
       @cell-click="cellClick"
       @row-dblclick="rowDblClick"
@@ -20,9 +23,11 @@
       :style="{ width: parseInt(option.width) + 'px' }"
       :cell-class-name="cellClassName"
       :header-cell-class-name="headerCellClassName"
-      :row-class-name="tableRowClassName">
+      :row-class-name="tableRowClassName"
+    >
       <slot name="fixed"></slot>
-      <el-table-column v-for="(col, index) in tableHeader"
+      <el-table-column
+        v-for="(col, index) in tableHeader"
         :key="index"
         align="center"
         :prop="col.prop"
@@ -33,9 +38,21 @@
         :header-align="col.headerAlign"
         :column-key="index.toString()"
         :formatter="col.formatter"
-        ></el-table-column>
-        <!-- show-overflow-tooltip -->
+      ></el-table-column>
+      <!-- show-overflow-tooltip -->
     </el-table>
+    <!-- 分页 -->
+    <el-pagination
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pageNum"
+      :page-sizes="[10, 20, 50]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      class="el-pagination-style"
+    ></el-pagination>
   </div>
 </template>
 
@@ -79,6 +96,15 @@ export default {
     showSelect: {
       type: Boolean,
       default: false,
+    },
+    pageNum: {
+      type: Number,
+    },
+    pageSize: {
+      type: Number,
+    },
+    total: {
+      type: Number,
     },
   },
   data() {
@@ -138,6 +164,12 @@ export default {
     });
   },
   methods: {
+    handleSizeChange(newSize) {
+      this.$emit("handleSizeChange", newSize);
+    },
+    handleCurrentChange(newPage) {
+      this.$emit("handleCurrentChange", newPage);
+    },
     tableRowClassName({ row, rowIndex }) {
       if (row.profitAmount && row.profitAmount < 0) {
         return "warning-row";
@@ -248,7 +280,7 @@ export default {
       this.$emit("row-click", row);
     },
     cellClick(row, column, cell, event) {
-      this.$emit("cell-click", row, column,cell,event);
+      this.$emit("cell-click", row, column, cell, event);
     },
     rowDblClick(row) {
       this.$emit("row-dblclick", row);

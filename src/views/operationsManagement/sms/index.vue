@@ -26,7 +26,7 @@
       :header="tableHeaderBig">
     </EleTable>
     <!-- 分页 -->
-    <el-pagination @size-change="handleSizeChange"
+    <el-pagination background @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
       :page-sizes="[10, 20, 50]"

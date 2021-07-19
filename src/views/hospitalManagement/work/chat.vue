@@ -87,7 +87,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <ul class="ul"
-        style="height:500px;overflow:auto;padding:15px">
+        style="height:500px;overflow:auto;padding:15px;box-sizing:border-box;background:#f5f5f5">
         <li v-for="item in messageList"
           :key="item.id">
           <!-- 病人信息 -->
@@ -100,7 +100,7 @@
             <div style="padding-left:10px;margin-bottom:15px;">
               <div>{{toInfo.userName}}</div>
               <div style="margin:5px 0;">{{parseTime(item.createTime).slice(6)}}</div>
-              <div style="color:#000;background:#fff;max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
+              <div style="color:#000;background:#fff;max-width:300px;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
             </div>
           </div>
           <!-- 医生信息 -->
@@ -109,7 +109,7 @@
             <div style="padding-right:10px;margin-bottom:15px;">
               <div style="text-align:right">{{selfInfo.userName}}</div>
               <div style="text-align:right;margin:5px 0;">{{parseTime(item.createTime).slice(6)}}</div>
-              <div style="color:#fff;background:#405C59;max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
+              <div style="color:#fff;background:#405C59;max-width:300px;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
             </div>
             <div>
               <img style="width:64px;height:64px;border-radius:50%;"
@@ -292,9 +292,6 @@ export default {
           httpAdminChat.postChat(this.editAddForm).then((res) => {
             console.log(res);
             if (res.code === "OK") {
-              this.$notify.success({
-                title: "编辑成功",
-              });
               this.editAddForm.leaveContent = "";
               this.getList();
               this.getChatSubscribe(this.val);
