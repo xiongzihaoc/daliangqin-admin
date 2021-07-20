@@ -47,7 +47,12 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
       <!-- 需要formatter的列 -->
       <el-table-column align="center"
         slot="fixed"
@@ -62,16 +67,6 @@
         </template>
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <el-pagination background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
     <!-- 查看收货地址 -->
     <el-dialog title="收货地址"

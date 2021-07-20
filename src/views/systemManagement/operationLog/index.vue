@@ -43,17 +43,13 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
-    </EleTable>
-    <!-- 分页 -->
-    <el-pagination @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
       :total="total"
-      class="el-pagination-style"></el-pagination>
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
+    </EleTable>
   </div>
 </template>
 <script>
@@ -77,7 +73,13 @@ export default {
         { prop: "phone", label: "手机号" },
         { prop: "idCard", label: "身份证号" },
         { prop: "ip", label: "ip" },
-        { prop: "createTime", label: "操作时间",formatter:(row)=>{return parseTime(row.createTime)} },
+        {
+          prop: "createTime",
+          label: "操作时间",
+          formatter: (row) => {
+            return parseTime(row.createTime);
+          },
+        },
       ],
       FormRules: {
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
@@ -98,7 +100,7 @@ export default {
       searchForm: {
         name: "",
         phone: "",
-        description:"",
+        description: "",
       },
       // 分页数据
       pageSize: 10,

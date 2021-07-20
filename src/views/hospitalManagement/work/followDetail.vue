@@ -559,8 +559,8 @@ export default {
       this.highBloodForm.patientName = "";
     },
     selectDoctor(val) {
-        console.log(val);
-        this.getPatientList(val.id)
+      console.log(val);
+      this.getPatientList(val.id);
       this.highBloodForm.doctorIdcard = val.idCard;
       this.highBloodForm.patientName = "";
     },

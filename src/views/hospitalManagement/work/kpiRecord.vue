@@ -2,75 +2,56 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        ref="searchFormRef"
+      <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true"
-      >
-        <el-form-item label="日期" align="left" prop="userName">
-          <el-input
-            v-model="searchForm.userName"
+        :inline="true">
+        <el-form-item label="日期"
+          align="left"
+          prop="userName">
+          <el-input v-model="searchForm.userName"
             size="small"
-            placeholder="请选择日期"
-          ></el-input>
+            placeholder="请选择日期"></el-input>
         </el-form-item>
-        <el-form-item label="医院" align="left" prop="userName">
-          <el-input
-            v-model="searchForm.phone"
+        <el-form-item label="医院"
+          align="left"
+          prop="userName">
+          <el-input v-model="searchForm.phone"
             size="small"
-            placeholder="请输入医院"
-          ></el-input>
+            placeholder="请输入医院"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格上方操作按钮 -->
     <div>
-      <el-button
-        @click="addBtn"
+      <el-button @click="addBtn"
         type="primary"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-plus"
-        >新增</el-button
-      >
+        icon="el-icon-plus">新增</el-button>
     </div>
     <!-- 表格区域 -->
-    <EleTable
-      :data="list"
+    <EleTable :data="list"
       :showSummary="true"
       :summary-method="getSummaries"
       :header="tableHeaderBig"
-    >
-    </EleTable>
-    <!-- 分页 -->
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
       :total="total"
-      class="el-pagination-style"
-    ></el-pagination>
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
+    </EleTable>
   </div>
 </template>
 <script>
@@ -144,7 +125,7 @@ export default {
       this.searchForm = {};
       this.getList();
     },
-    addBtn(){},
+    addBtn() {},
     getSummaries(param) {},
     // 分页
     handleSizeChange(newSize) {

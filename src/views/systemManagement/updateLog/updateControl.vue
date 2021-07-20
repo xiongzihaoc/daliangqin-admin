@@ -2,7 +2,12 @@
   <div class="app-container">
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -138,7 +143,10 @@ export default {
     /***** 增删改 *****/
     // 弹框开启
     openDialog() {
-      this.getVersionList(this.editAddForm.appType, this.editAddForm.deviceType);
+      this.getVersionList(
+        this.editAddForm.appType,
+        this.editAddForm.deviceType
+      );
     },
     // 编辑
     editBtn(val) {

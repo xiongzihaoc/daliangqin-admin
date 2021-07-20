@@ -23,17 +23,13 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
-    </EleTable>
-    <!-- 分页 -->
-    <el-pagination background @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
       :total="total"
-      class="el-pagination-style"></el-pagination>
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
+    </EleTable>
     <!-- 增改页面 -->
     <el-dialog title="短信重置"
       :visible.sync="editDialogVisible"

@@ -50,8 +50,12 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
@@ -73,22 +77,12 @@
         prop="createTime">
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <el-pagination background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"></el-pagination>
   </div>
 </template>
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminNote } from "@/api/admin/httpAdminNote";
-import { parseTime, doctorTypeList,formatterElement } from "@/utils/index";
+import { parseTime, doctorTypeList, formatterElement } from "@/utils/index";
 export default {
   components: {
     EleTable,
