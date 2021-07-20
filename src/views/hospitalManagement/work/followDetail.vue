@@ -693,6 +693,8 @@ export default {
       hospitalList: [],
       doctorList: [],
       patientList: [],
+      // 单条详情
+      editObj: {},
       form: {
         // 基本信息
         hospitalId: "",
@@ -791,11 +793,14 @@ export default {
   methods: {
     // 列表数据
     getList() {
-      httpAdminFollow.getFollow({}).then((res) => {
-        console.log(res);
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+      httpAdminFollow
+        .getFollowDetail({ id: this.$route.query.id })
+        .then((res) => {
+          this.form = res.data;
+          console.log(res.data);
+          this.diabetesForm = res.data.followDiabetesMongo
+          this.highBloodForm = res.data.followBloodMongo
+        });
     },
     // 根据身高体重计算BMI
     computeBmi() {
@@ -844,7 +849,6 @@ export default {
       form.followBloodDTO = this.highBloodForm;
       form.followDiabetesDTO = this.diabetesForm;
       console.log(form);
-
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 编辑
@@ -852,16 +856,16 @@ export default {
             httpAdminFollow
               .putFollow(form, this.$route.query.id)
               .then((res) => {
-                // if (res.code === "OK") {
-                //   this.$router.push({ path: "/archivesManagement/patient" });
-                // }
+                if (res.code === "OK") {
+                  this.$router.push({ path: "/hospitalManagement/work/follow" });
+                }
               });
           } else {
             // 新增
             httpAdminFollow.postFollow(form).then((res) => {
-              // if (res.code === "OK") {
-              //   this.$router.push({ path: "/archivesManagement/patient" });
-              // }
+                if (res.code === "OK") {
+                  this.$router.push({ path: "/hospitalManagement/work/follow" });
+                }
             });
           }
         }

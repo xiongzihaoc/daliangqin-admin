@@ -8,6 +8,14 @@ export const httpAdminFollow = {
       params: data,
     })
   },
+  // 单条详情
+  getFollowDetail(data) {
+    return request({
+      url: 'follow/' + data.id,
+      method: 'get',
+      params: data,
+    })
+  },
   postFollow(data) {
     return request({
       url: 'follow',
