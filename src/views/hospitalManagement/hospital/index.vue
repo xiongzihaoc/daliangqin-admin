@@ -55,18 +55,12 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         type="index"
         label="序号"></el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         prop="name"
         label="医院名称"></el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         prop="avatarUrl"
         label="医院头像">
         <template slot-scope="scope">
@@ -75,8 +69,17 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
+        prop="contract"
+        label="医院电话"></el-table-column>
+      <el-table-column align="center"
+        prop="address"
+        label="医院地址"
+        :formatter="addressFormatter"></el-table-column>
+      <el-table-column align="center"
+        prop="hospitalType"
+        label="医院等级"
+        :formatter="hospitalTypeFormatter"></el-table-column>
+      <el-table-column align="center"
         prop="doctorCount"
         label="医生数量">
         <template slot-scope="scope">
@@ -86,8 +89,6 @@
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="操作"
         width="220">
         <template slot-scope="scope">
@@ -97,16 +98,6 @@
         </template>
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <!-- <el-pagination background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"></el-pagination> -->
     <!-- 增改页面 -->
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
@@ -250,23 +241,7 @@ export default {
         adminName: "",
       },
       // 表格数据
-      tableHeaderBig: [
-        { prop: "contract", label: "医院电话" },
-        {
-          prop: "address",
-          label: "医院地址",
-          formatter: (row) => {
-            return this.addressFormatter(row);
-          },
-        },
-        {
-          prop: "hospitalType",
-          label: "医院等级",
-          formatter: (row) => {
-            return this.hospitalTypeFormatter(row);
-          },
-        },
-      ],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,

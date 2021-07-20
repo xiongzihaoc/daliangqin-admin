@@ -70,7 +70,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { httpAdminUpdateControl } from "@/api/admin/httpAdminUpdateControl";
 import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion";
 import { formatterElement } from "@/utils/index";

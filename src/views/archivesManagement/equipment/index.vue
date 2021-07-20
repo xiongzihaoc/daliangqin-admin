@@ -9,27 +9,19 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        slot="fixed"
         label="序号"
-        fixed="left"
         type="index">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
         label="设备名称"
-        fixed="left"
         prop="name">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
         label="型号"
-        fixed="left"
         prop="serialNumber">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
         label="设备图片"
-        fixed="left"
         prop="equipmentImageUrl">
         <template slot-scope="scope">
           <img :src="scope.row.equipmentImageUrl"
@@ -37,16 +29,12 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
         label="支持检测的类型"
-        fixed="left"
         :formatter="diseaseTypeFormatter"
         prop="diseaseType">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
         label="厂商logo"
-        fixed="left"
         prop="brandLogo">
         <template slot-scope="scope">
           <img :src="scope.row.brandLogo"
@@ -54,36 +42,26 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
         label="品牌名"
-        fixed="left"
         prop="brandName">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
         label="厂商地址"
-        fixed="left"
-        prop="index">
+        prop="detail">
         <template slot-scope="scope">
           {{scope.row.province + scope.row.city + scope.row.area + scope.row.detail}}
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
         label="官网"
-        fixed="left"
         prop="brandUrl">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
         label="检测人数"
-        fixed="left"
         prop="countPeople">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
         label="检测次数"
-        fixed="left"
         prop="countNumber">
       </el-table-column>
     </EleTable>

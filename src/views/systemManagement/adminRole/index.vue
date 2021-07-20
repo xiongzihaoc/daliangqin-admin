@@ -117,7 +117,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { httpAdminRole } from "@/api/admin/httpAdminRole";
 import {
   parseTime,

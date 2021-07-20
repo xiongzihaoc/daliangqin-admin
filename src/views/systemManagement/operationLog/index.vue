@@ -53,7 +53,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { httpAdminLog } from "@/api/admin/httpAdminLog";
 import { validatePhone, parseTime } from "@/utils/index";
 export default {

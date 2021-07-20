@@ -135,7 +135,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { parseTime } from "@/utils/index";
 import { httpAdminChat } from "@/api/admin/httpAdminChat";
 export default {

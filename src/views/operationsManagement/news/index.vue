@@ -63,24 +63,16 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         type="index"
         label="序号"></el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         prop="title"
         label="标题"></el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         :formatter="contentTypeFormatter"
         prop="contentType"
         label="内容类型"></el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         prop="coverUrl"
         label="封面图">
         <template slot-scope="scope">
@@ -89,8 +81,16 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
+        prop="createTime"
+        label="创建时间"
+        :formatter="createTimeFormatter">
+      </el-table-column>
+      <el-table-column align="center"
+        prop="publishTime"
+        label="发布时间"
+        :formatter="publishTimeFormatter">
+      </el-table-column>
+      <el-table-column align="center"
         prop="appTypes"
         label="呈现位置">
         <template slot-scope="scope">
@@ -101,17 +101,8 @@
           </span>
         </template>
       </el-table-column>
-      <!-- 推荐暂时搁置 -->
-      <!-- <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="type"
-        label="推荐">
-      </el-table-column> -->
       <!-- 状态 -->
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         prop="deletedStatus"
         label="状态">
         <template slot-scope="scope">
@@ -126,8 +117,6 @@
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="操作"
         width="320">
         <template slot-scope="scope">
@@ -356,22 +345,7 @@ export default {
         zOrder: "",
         deletedStatus: "",
       },
-      tableHeaderBig: [
-        {
-          prop: "createTime",
-          label: "创建时间",
-          formatter: (row) => {
-            return parseTime(row.createTime);
-          },
-        },
-        {
-          prop: "publishTime",
-          label: "发布时间",
-          formatter: (row) => {
-            return parseTime(row.publishTime).slice(0, 10);
-          },
-        },
-      ],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -562,6 +536,13 @@ export default {
     },
     coverUrlFormatter(row) {
       return `<div>3333</div>`;
+    },
+    /***** 格式化表格 *****/
+    createTimeFormatter(row) {
+      return parseTime(row.createTime).slice(0, 10);
+    },
+    publishTimeFormatter(row) {
+      return parseTime(row.publishTime).slice(0, 10);
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

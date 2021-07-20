@@ -119,7 +119,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { httpAdminHospitalRole } from "@/api/admin/httpAdminHospitalRole";
 import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
 import { parseTime, validatePhone } from "@/utils/index";

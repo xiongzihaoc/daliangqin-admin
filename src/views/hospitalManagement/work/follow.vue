@@ -140,107 +140,75 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         type="index">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="医生姓名"
         prop="doctorUserName">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="职位"
         :formatter="doctorTypeFormatter"
         prop="doctorType">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="医院名称"
         prop="hospitalName">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访方式"
         :formatter="typeFormatter"
         prop="type">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访备注"
         prop="content">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访用户"
         prop="patientUserName">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访类型"
         :formatter="diseaseTypeFormatter"
         prop="diseaseType">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="高血压"
         :formatter="highBloodStatusFormatter"
         prop="highBloodStatus">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         :formatter="diabetesStatusFormatter"
         label="糖尿病"
         prop="diabetesStatus">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         :formatter="heartRateStatus"
         label="心率"
         prop="heartRateStatus">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访开始时间"
         :formatter="(row)=>{return parseTime(row.startTime)}"
         prop="startTime">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访结束时间"
         :formatter="(row)=>{return parseTime(row.endTime)}"
         prop="endTime">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="用户状态"
         :formatter="userStatusFormatter"
         prop="userStatus">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="操作时间"
         :formatter="(row)=>{return parseTime(row.updateTime)}"
         prop="updateTime">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="操作"
         width="220">
         <template slot-scope="scope">

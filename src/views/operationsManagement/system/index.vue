@@ -63,7 +63,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { httpAdminSystem } from "@/api/admin/httpAdminSystem";
 export default {
   components: {

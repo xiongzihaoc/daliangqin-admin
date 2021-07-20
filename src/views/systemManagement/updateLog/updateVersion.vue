@@ -152,7 +152,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import singleUpload from "@/components/UploadFile";
 import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion";
 import {

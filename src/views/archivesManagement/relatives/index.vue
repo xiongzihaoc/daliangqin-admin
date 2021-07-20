@@ -57,7 +57,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { httpAdminRelatives } from "@/api/admin/httpAdminRelatives";
 import {
   validatePhone,

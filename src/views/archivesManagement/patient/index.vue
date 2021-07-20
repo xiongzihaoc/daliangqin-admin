@@ -174,7 +174,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
 import {
   validateIdCard,

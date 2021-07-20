@@ -56,7 +56,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { httpAdminSms } from "@/api/admin/httpAdminSms";
 import { validatePhone, parseTime } from "@/utils/index";
 export default {

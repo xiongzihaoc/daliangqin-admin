@@ -166,7 +166,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import addressJson from "@/utils/address.json";
 import { httpAdminAddressDoctor } from "@/api/admin/httpAdminAddressDoctor";
 import { validatePhone, doctorTypeList, formatterElement } from "@/utils/index";

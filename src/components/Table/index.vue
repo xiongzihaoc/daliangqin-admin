@@ -1,11 +1,8 @@
 <template>
-  <div
-    class="w-table"
+  <div class="w-table"
     :class="{ 'w-table_moving': dragState.dragging }"
-    ref="wTable"
-  >
-    <el-table
-      :data="data"
+    ref="wTable">
+    <el-table :data="data"
       @row-click="rowClick"
       @cell-click="cellClick"
       @row-dblclick="rowDblClick"
@@ -23,11 +20,9 @@
       :style="{ width: parseInt(option.width) + 'px' }"
       :cell-class-name="cellClassName"
       :header-cell-class-name="headerCellClassName"
-      :row-class-name="tableRowClassName"
-    >
-      <slot name="fixed"></slot>
-      <el-table-column
-        v-for="(col, index) in tableHeader"
+      :row-class-name="tableRowClassName">
+      <slot></slot>
+      <el-table-column v-for="(col, index) in tableHeader"
         :key="index"
         align="center"
         :prop="col.prop"
@@ -37,13 +32,10 @@
         :type="col.type"
         :header-align="col.headerAlign"
         :column-key="index.toString()"
-        :formatter="col.formatter"
-      ></el-table-column>
-      <!-- show-overflow-tooltip -->
+        :formatter="col.formatter"></el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination
-      background
+    <el-pagination background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="pageNum"
@@ -51,8 +43,7 @@
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      class="el-pagination-style"
-    ></el-pagination>
+      class="el-pagination-style"></el-pagination>
   </div>
 </template>
 

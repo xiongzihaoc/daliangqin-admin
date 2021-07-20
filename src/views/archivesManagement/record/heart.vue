@@ -71,9 +71,27 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        slot="fixed"
+        label="序号"
+        type="index">
+      </el-table-column>
+      <el-table-column align="center"
+        label="姓名"
+        prop="patientUserName">
+      </el-table-column>
+      <el-table-column align="center"
+        label="手机号"
+        prop="patientUserPhone">
+      </el-table-column>
+      <el-table-column align="center"
+        label="设备名称"
+        prop="name">
+      </el-table-column>
+      <el-table-column align="center"
+        label="设备号"
+        prop="serialNumber">
+      </el-table-column>
+      <el-table-column align="center"
         label="检测类型"
-        fixed="right"
         prop="diseaseType">
         <template slot-scope="scope">
           <span v-if="scope.row.diseaseType === 'HIGH_BLOOD'">血压</span>
@@ -82,8 +100,6 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="心率值"
         prop="heartRateScore">
         <template slot-scope="scope">
@@ -91,8 +107,6 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="录入方式"
         prop="name">
         <template slot-scope="scope">
@@ -101,8 +115,6 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="检测结果"
         prop="diseaseStatus">
         <template slot-scope="scope">
@@ -112,14 +124,10 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="测量结果"
         prop="title">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="检测日期"
         prop="inspectionTime">
         <template slot-scope="scope">
@@ -128,8 +136,6 @@
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="操作"
         width="220">
         <template slot-scope="scope">
@@ -289,13 +295,7 @@ export default {
         recordId: "",
         hospitalName: "",
       },
-      tableHeaderBig: [
-        { label: "序号", type: "index" },
-        { label: "姓名", prop: "patientUserName" },
-        { label: "手机号", prop: "patientUserPhone" },
-        { label: "设备名称", prop: "name" },
-        { label: "设备号", prop: "serialNumber" },
-      ],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
