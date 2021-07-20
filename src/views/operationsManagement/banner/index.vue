@@ -59,10 +59,21 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
+        type="index"
+        label="序号">
+      </el-table-column>
+      <el-table-column align="center"
+        prop="title"
+        label="轮播图名称">
+      </el-table-column>
+      <el-table-column align="center"
         prop="imageUrl"
         label="轮播图图片">
         <template slot-scope="scope">
@@ -73,8 +84,6 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         prop="linkUrl"
         label="跳转地址">
       </el-table-column>
@@ -92,8 +101,6 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         prop="status"
         label="状态">
         <template slot-scope="scope">
@@ -108,8 +115,6 @@
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="操作"
         width="320">
         <template slot-scope="scope">
@@ -130,16 +135,6 @@
         </template>
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <el-pagination background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
@@ -240,10 +235,7 @@ export default {
       },
       // 表格数据
       list: [],
-      tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "title", label: "轮播图名称" },
-      ],
+      tableHeaderBig: [],
       // 新增编辑表单
       editAddForm: {
         title: "",

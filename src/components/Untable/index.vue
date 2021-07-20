@@ -21,18 +21,36 @@
       :cell-class-name="cellClassName"
       :header-cell-class-name="headerCellClassName"
       :row-class-name="tableRowClassName">
-      <slot></slot>
+      <slot name="fixed"></slot>
       <el-table-column v-for="(col, index) in tableHeader"
         :key="index"
         align="center"
         :prop="col.prop"
+        :isImg="col.isImg"
         :label="col.label"
         :width="col.width"
         :min-width="col.minWidth"
         :type="col.type"
         :header-align="col.headerAlign"
         :column-key="index.toString()"
-        :formatter="col.formatter"></el-table-column>
+        :formatter="col.formatter">
+        <template slot-scope="scope">
+          <div v-if="col.isImg">
+            <img class="tableImg"
+              :src="scope.row[col.prop]"
+              alt="">
+          </div>
+          <div v-else-if="col.type">
+            <div>{{scope.$index + 1}}</div>
+          </div>
+          <div v-else-if="col.formatter">
+            <div v-html="col.formatter(scope.row)"></div>
+          </div>
+          <div v-else>
+            <div>{{scope.row[col.prop]}}</div>
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 分页 -->
     <el-pagination background

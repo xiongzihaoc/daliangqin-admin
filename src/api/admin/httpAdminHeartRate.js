@@ -22,6 +22,13 @@ export const httpAdminHeartRate = {
       data
     })
   },
+  putHospitalName(data) {
+    return request({
+      url: 'equipment/heartRate/hospital/' + data.recordId,
+      method: 'put',
+      data
+    })
+  },
   deleteHeartRate(id) {
     return request({
       url: 'equipment/heartRate/' + id,

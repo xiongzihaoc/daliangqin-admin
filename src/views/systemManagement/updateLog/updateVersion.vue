@@ -51,7 +51,12 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -68,16 +73,6 @@
         </template>
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <el-pagination background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
@@ -150,13 +145,14 @@
         class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
         <el-button type="primary"
-          @click="editPageEnter" :disabled="percentage > 0 && percentage < 100">确 定</el-button>
+          @click="editPageEnter"
+          :disabled="percentage > 0 && percentage < 100">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import singleUpload from "@/components/UploadFile";
 import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion";
 import {
@@ -173,7 +169,7 @@ export default {
   data() {
     return {
       parseTime,
-      appTypeList, 
+      appTypeList,
       deviceTypeList,
       FormRules: {
         appType: [
@@ -238,7 +234,7 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-      percentage:0,
+      percentage: 0,
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
@@ -275,8 +271,8 @@ export default {
     uploadFinish(url) {
       this.editAddForm.url = url;
     },
-    uploadProgress(percentage){
-      this.percentage = percentage
+    uploadProgress(percentage) {
+      this.percentage = percentage;
     },
     /***** 增删改 *****/
     // 新增

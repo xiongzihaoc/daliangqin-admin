@@ -64,21 +64,42 @@
       icon="el-icon-plus">新增</el-button>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        slot="fixed"
+        label="序号"
+        type="index">
+      </el-table-column>
+      <el-table-column align="center"
+        label="姓名"
+        prop="patientUserName">
+      </el-table-column>
+      <el-table-column align="center"
+        label="手机号"
+        prop="patientUserPhone">
+      </el-table-column>
+      <el-table-column align="center"
+        label="设备名称"
+        prop="name">
+      </el-table-column>
+      <el-table-column align="center"
+        label="设备号"
+        prop="serialNumber">
+      </el-table-column>
+      <el-table-column align="center"
         label="检测类型"
-        fixed="right"
         prop="diseaseType">
         <template slot-scope="scope">
-          <span v-if="scope.row.diseaseType === 'HIGH_BLOOD'">高血压</span>
-          <span v-if="scope.row.diseaseType === 'DIABIETS'">糖尿病</span>
+          <span v-if="scope.row.diseaseType === 'HIGH_BLOOD'">血压</span>
+          <span v-if="scope.row.diseaseType === 'DIABIETS'">血糖</span>
           <span v-if="scope.row.diseaseType === 'HEART_RATE'">心率</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="心率值"
         prop="heartRateScore">
         <template slot-scope="scope">
@@ -86,8 +107,6 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="录入方式"
         prop="name">
         <template slot-scope="scope">
@@ -96,8 +115,6 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="检测结果"
         prop="diseaseStatus">
         <template slot-scope="scope">
@@ -107,14 +124,10 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="测量结果"
         prop="title">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="检测日期"
         prop="inspectionTime">
         <template slot-scope="scope">
@@ -123,8 +136,6 @@
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="操作"
         width="220">
         <template slot-scope="scope">
@@ -140,18 +151,8 @@
         </template>
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <el-pagination background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
+    <el-dialog title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
@@ -216,6 +217,27 @@
           @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="提示"
+      :visible.sync="hospitalDialogVisible"
+      width="30%"
+      v-dialogDrag>
+      <el-form ref="hospitalFormRef"
+        :rules="hospitalFormRules"
+        :model="hospitalForm"
+        label-width="120px">
+        <el-form-item label="医院名称"
+          prop="hospitalName">
+          <el-input v-model.trim="hospitalForm.hospitalName"
+            placeholder="请输入医院名称"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer"
+        class="dialog-footer">
+        <el-button @click="hospitalDialogVisible = false">取 消</el-button>
+        <el-button type="primary"
+          @click="edithospitalNameEnter">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -249,6 +271,11 @@ export default {
           { required: true, message: "请选择检测模式", trigger: "blur" },
         ],
       },
+      hospitalFormRules: {
+        hospitalName: [
+          { required: true, message: "请输入医院名称", trigger: "blur" },
+        ],
+      },
       searchForm: {
         patientUserName: "",
         patientUserPhone: "",
@@ -264,19 +291,18 @@ export default {
         heartRateScore: "",
         detectType: "",
       },
-      tableHeaderBig: [
-        { label: "序号", type: "index" },
-        { label: "姓名", prop: "patientUserName" },
-        { label: "手机号", prop: "patientUserPhone" },
-        { label: "设备名称", prop: "name" },
-        { label: "设备号", prop: "serialNumber" },
-      ],
+      hospitalForm: {
+        recordId: "",
+        hospitalName: "",
+      },
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
       total: 0,
       //   弹框区域
       editDialogVisible: false,
+      hospitalDialogVisible: false,
       infoTitle: "",
     };
   },
@@ -343,7 +369,24 @@ export default {
     // 查看
     examineBtn(val) {
       console.log(val);
-      this.$router.push("/archivesManagement/record/heartDetail?id=" + val.id);
+      this.hospitalForm.hospitalName = val.hospitalName;
+      this.hospitalForm.recordId = val.id;
+      this.hospitalDialogVisible = true;
+    },
+    // 修改医院名称
+    edithospitalNameEnter() {
+      this.$refs.hospitalFormRef.validate((valid) => {
+        if (valid) {
+          httpAdminHeartRate.putHospitalName(this.hospitalForm).then((res) => {
+            this.hospitalDialogVisible = false;
+            this.getList();
+            this.$router.push(
+              "/archivesManagement/record/heartDetail?id=" +
+                this.hospitalForm.recordId
+            );
+          });
+        }
+      });
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();

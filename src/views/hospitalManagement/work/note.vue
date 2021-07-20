@@ -50,11 +50,34 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
-      <!-- 需要formatter的列 -->
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
+        label="序号"
+        type="index">
+      </el-table-column>
+      <el-table-column align="center"
+        label="医生姓名"
+        prop="userName">
+      </el-table-column>
+      <el-table-column align="center"
+        label="职位"
+        prop="type"
+        :formatter="typeFormatter">
+      </el-table-column>
+      <el-table-column align="center"
+        label="笔记标题"
+        prop="title">
+      </el-table-column>
+      <el-table-column align="center"
+        label="笔记内容"
+        prop="content">
+      </el-table-column>
+      <el-table-column align="center"
         label="笔记图集">
         <template slot-scope="scope">
           <div v-if="scope.row.imageUrlList.length > 0">
@@ -66,29 +89,17 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="发布时间"
         :formatter="(row)=>{return parseTime(row.createTime)}"
         prop="createTime">
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <el-pagination background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"></el-pagination>
   </div>
 </template>
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminNote } from "@/api/admin/httpAdminNote";
-import { parseTime, doctorTypeList,formatterElement } from "@/utils/index";
+import { parseTime, doctorTypeList, formatterElement } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -111,19 +122,7 @@ export default {
         type: "",
         status: "",
       },
-      tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "userName", label: "医生姓名" },
-        {
-          prop: "type",
-          label: "职位",
-          formatter: (row) => {
-            return this.typeFormatter(row);
-          },
-        },
-        { prop: "title", label: "笔记标题" },
-        { prop: "content", label: "笔记内容" },
-      ],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,

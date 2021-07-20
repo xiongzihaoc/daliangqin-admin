@@ -56,7 +56,12 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -70,16 +75,6 @@
         </template>
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <el-pagination background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
     <el-dialog title="查看"
       :visible.sync="editDialogVisible"
@@ -87,7 +82,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <ul class="ul"
-        style="height:500px;overflow:auto;padding:15px">
+        style="height:500px;overflow:auto;padding:15px;box-sizing:border-box;background:#f5f5f5">
         <li v-for="item in messageList"
           :key="item.id">
           <!-- 病人信息 -->
@@ -95,25 +90,25 @@
             style="display:flex">
             <div style="display:flex;">
               <img style="width:64px;height:64px;border-radius:50%;"
-                :src="item.fromAvatarUrl">
+                :src="toInfo.avatarUrl">
             </div>
             <div style="padding-left:10px;margin-bottom:15px;">
-              <div>{{item.fromUserName}}</div>
+              <div>{{toInfo.userName}}</div>
               <div style="margin:5px 0;">{{parseTime(item.createTime).slice(6)}}</div>
-              <div style="color:#000;background:#fff;max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
+              <div style="color:#000;background:#fff;max-width:300px;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
             </div>
           </div>
           <!-- 医生信息 -->
           <div v-else
             style="display:flex;justify-content: flex-end;">
             <div style="padding-right:10px;margin-bottom:15px;">
-              <div style="text-align:right">{{item.fromUserName}}</div>
+              <div style="text-align:right">{{selfInfo.userName}}</div>
               <div style="text-align:right;margin:5px 0;">{{parseTime(item.createTime).slice(6)}}</div>
-              <div style="color:#fff;background:#405C59;max-width:300px;border:1px solid #ccc;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
+              <div style="color:#fff;background:#405C59;max-width:300px;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
             </div>
             <div>
               <img style="width:64px;height:64px;border-radius:50%;"
-                :src="item.fromAvatarUrl"
+                :src="selfInfo.avatarUrl"
                 alt="">
             </div>
           </div>
@@ -140,7 +135,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { parseTime } from "@/utils/index";
 import { httpAdminChat } from "@/api/admin/httpAdminChat";
 export default {
@@ -176,6 +171,8 @@ export default {
         leaveContent: "",
         patientUserId: "",
       },
+      selfInfo: {},
+      toInfo: {},
       // 表格数据
       tableHeaderBig: [
         { type: "index", label: "序号" },
@@ -235,7 +232,6 @@ export default {
           replayEndTime: this.searchForm.replayEndTime,
         })
         .then((res) => {
-          console.log(res);
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
@@ -248,6 +244,8 @@ export default {
         })
         .then((res) => {
           this.messageList = res.data.elements.reverse();
+          this.selfInfo = res.data.expand.selfInfo;
+          this.toInfo = res.data.expand.toInfo;
         });
     },
     // 日期控件选择事件
@@ -289,10 +287,7 @@ export default {
           httpAdminChat.postChat(this.editAddForm).then((res) => {
             console.log(res);
             if (res.code === "OK") {
-              this.$notify.success({
-                title: "编辑成功",
-              });
-              this.editAddForm.leaveContent = ""
+              this.editAddForm.leaveContent = "";
               this.getList();
               this.getChatSubscribe(this.val);
             }

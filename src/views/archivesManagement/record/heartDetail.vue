@@ -1,7 +1,5 @@
 <template>
-
   <div>
-
     <div class="print-box">
       <div class="container"
         id="printMe">
@@ -9,28 +7,28 @@
         <div class="userInfo">
           <div class="hospital">
             <span class="title fw">检测医院：</span>
-            <span class="content">浙江省杭州市滨江第二附属医院</span>
+            <span class="content">{{userInfo.hospitalName}}</span>
           </div>
           <div class="userName flex margin">
             <div class="box"><span class="fw">用户姓名：</span>
-              <span>胡进刚</span>
+              <span>{{userInfo.patientUserName}}</span>
             </div>
             <div class="box"><span class="fw">检测日期：</span>
-              <span>2021/6/17 15:30:00</span>
+              <span>{{parseTime(userInfo.inspectionTime)}}</span>
             </div>
             <div class="box"><span class="fw">设备：</span>
-              <span>动态心电仪</span>
+              <span>{{userInfo.name}}</span>
             </div>
           </div>
           <div class="userName flex margin">
             <div class="box"><span class="fw">检测模式：</span>
               <span>日常检测</span>
             </div>
-            <div class="box"><span class="fw">检测时常：</span>
-              <span>29秒</span>
+            <div class="box"><span class="fw">检测时长：</span>
+              <span>{{heartDetail.length}}秒</span>
             </div>
             <div class="box"><span class="fw">心率：</span>
-              <span>76bpm</span>
+              <span>{{userInfo.heartRateScore}}bpm</span>
             </div>
           </div>
           <div class="userName flex">
@@ -38,7 +36,7 @@
               <span>正常</span>
             </div>
             <div class="box"><span class="fw">测量结果：</span>
-              <span>窦性心律</span>
+              <span>{{userInfo.title}}</span>
             </div>
             <!-- 占位符 -->
             <div class="over box"><span class="fw">测量结果：</span>
@@ -49,35 +47,37 @@
 
         <div class="analyse">
           <img class="analyse-img"
-            src="https://api.995120.cn/ecgdata/other/2021-07-07/4299720210707192719.png"
+            :src="heartDetail.fileImagePath"
             alt="">
           <div class="fz14 analyse-title">心率分析：</div>
           <div class="flex margin">
             <div>
               <span class="fw">平均心率：</span>
-              <span>76bpm</span>
+              <span>{{heartDetail.avg}}bpm</span>
             </div>
             <div>
               <span class="fw">最高心率：</span>
-              <span>76bpm</span>
+              <span>{{heartDetail.max}}bpm</span>
             </div>
             <div>
               <span class="fw">最低心率：</span>
-              <span>76bpm</span>
+              <span>{{heartDetail.min}}bpm</span>
             </div>
           </div>
           <div class="flex">
             <div>
               <span class="fw">正常心率：</span>
-              <span>76bpm</span>
+              <span>{{heartDetail.normalRate}}%</span>
             </div>
             <div>
               <span class="fw">心率偏快：</span>
-              <span>76bpm</span>
+              <span>{{heartDetail.heartbeatRate}}%</span>
+
             </div>
             <div>
               <span class="fw">心率偏慢：</span>
-              <span>76bpm</span>
+              <span>{{heartDetail.slowRate}}%</span>
+
             </div>
           </div>
         </div>
@@ -139,25 +139,46 @@
       <el-button type="primary"
         v-print="printObj"
         size="mini"
-        style="marin:0 auto">打印</el-button>
+        style="marin:0 auto;margin-top:30px">打印</el-button>
     </div>
   </div>
 
 </template>
 
 <script>
+import { httpAdminHeartRate } from "@/api/admin/httpAdminHeartRate";
+import { parseTime } from "@/utils/index";
 export default {
   data() {
     return {
+      parseTime,
       printObj: {
         id: "printMe",
         popTitle: "good print",
         extraCss: "https://www.google.com,https://www.google.com",
         extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
       },
+      heartDetail: {},
+      userInfo:{},
     };
   },
-  methods: {},
+  created() {
+    this.getList();
+  },
+  methods: {
+    getList() {
+      httpAdminHeartRate
+        .getHeartRate({ id: this.$route.query.id })
+        .then((res) => {
+          this.userInfo = res.data.elements[0];
+          console.log(this.userInfo);
+          this.heartDetail = JSON.parse(
+            res.data.elements[0].reportResult
+          ).body.data;
+          console.log(this.heartDetail);
+        });
+    },
+  },
 };
 </script>
 
@@ -166,6 +187,10 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+#printMe {
+  border: 1px solid #ccc;
+  margin-top: 100px;
 }
 .container {
   width: 595px;

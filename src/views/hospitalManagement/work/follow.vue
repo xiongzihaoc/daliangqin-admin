@@ -118,124 +118,98 @@
       </el-form>
     </div>
     <div>
-      <el-button @click="addHighBlood"
+      <el-button @click="addBtn"
         type="primary"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-plus">高血压随访</el-button>
-      <el-button @click="adddiabetes"
-        type="primary"
-        class="tableAdd"
-        size="small"
-        plain
-        icon="el-icon-plus">糖尿病随访</el-button>
+        icon="el-icon-plus">新增</el-button>
+
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index">
+        type="index"
+        label="序号">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="医生姓名"
         prop="doctorUserName">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="职位"
         :formatter="doctorTypeFormatter"
         prop="doctorType">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="医院名称"
         prop="hospitalName">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访方式"
         :formatter="typeFormatter"
         prop="type">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访备注"
         prop="content">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访用户"
         prop="patientUserName">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访类型"
         :formatter="diseaseTypeFormatter"
         prop="diseaseType">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="高血压"
         :formatter="highBloodStatusFormatter"
         prop="highBloodStatus">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         :formatter="diabetesStatusFormatter"
         label="糖尿病"
         prop="diabetesStatus">
       </el-table-column>
       <el-table-column align="center"
+<<<<<<< HEAD
+=======
         slot="fixed"
         fixed="left"
+>>>>>>> master
         :formatter="heartRateStatus"
         label="心率"
         prop="heartRateStatus">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访开始时间"
         :formatter="(row)=>{return parseTime(row.startTime)}"
         prop="startTime">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="随访结束时间"
         :formatter="(row)=>{return parseTime(row.endTime)}"
         prop="endTime">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="用户状态"
         :formatter="userStatusFormatter"
         prop="userStatus">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         label="操作时间"
         :formatter="(row)=>{return parseTime(row.updateTime)}"
         prop="updateTime">
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="操作"
         width="220">
         <template slot-scope="scope">
@@ -248,16 +222,6 @@
         </template>
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <el-pagination background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"></el-pagination>
   </div>
 </template>
 <script>
@@ -325,7 +289,7 @@ export default {
   methods: {
     getList() {
       httpAdminFollow
-        .getFollowList({
+        .getFollow({
           page: this.pageNum,
           pageSize: this.pageSize,
           doctorName: this.searchForm.doctorUserName,
@@ -352,22 +316,74 @@ export default {
       this.searchForm.endTime = val[1];
       console.log(this.searchForm);
     },
-    addHighBlood() {
+    addBtn() {
       this.$router.push({
         path: "/hospitalManagement/work/followDetail",
-        query: { type: "addHighBlood" },
       });
     },
-    adddiabetes() {
-      this.$router.push({
-        path: "/hospitalManagement/work/followDetail",
-        query: { type: "adddiabetes" },
-      });
-    },
+    // 编辑
     editBtn(val) {
-      console.log(val);
+      this.$router.push({
+        path: "/hospitalManagement/work/followDetail?id=" + val.id + '&type=edit',
+      });
     },
-    deleteBtn() {},
+    // 删除
+    async deleteBtn(id) {
+      const confirmResult = await this.$confirm(
+        "你确定要执行此操作, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => console.log(err));
+      if (confirmResult != "confirm") {
+        return this.$message.info("取消删除");
+      }
+      // 发送请求
+      httpAdminFollow.deleteFollow(id).then((res) => {
+        if (res.code === "OK") {
+          this.$notify.success({
+            title: "删除成功",
+          });
+          this.getList();
+        }
+      });
+    },
+    editDialogClosed() {
+      this.$refs.FormRef.resetFields();
+    },
+    // 新增编辑确定
+    editPageEnter() {
+      this.$refs.FormRef.validate((valid) => {
+        if (valid) {
+          if (this.infoTitle === "新增") {
+            // 发送请求
+            httpAdminFollow.postFollow(this.editAddForm).then((res) => {
+              if (res.code === "OK") {
+                this.$notify.success({
+                  title: "新增成功",
+                });
+                this.getList();
+                this.editDialogVisible = false;
+              }
+            });
+          } else {
+            // 发送请求
+            httpAdminFollow.putFollow(this.editAddForm).then((res) => {
+              if (res.code === "OK") {
+                this.$notify.success({
+                  title: "编辑成功",
+                });
+                this.getList();
+                this.editDialogVisible = false;
+              }
+            });
+          }
+        }
+      });
+    },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {

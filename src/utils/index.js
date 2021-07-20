@@ -412,6 +412,144 @@ export const equipmentResourceTypeList = [
   { id: 1, label: "手动录入", value: "MANUAL" },
   { id: 2, label: "设备检测", value: "DETECTION" }
 ]
+// 心里调整 遵医行为
+export const complianceList = [
+  { id: 1, label: "非常好", value: "VERY_GOOD" },
+  { id: 2, label: "良好", value: "GOOD" },
+  { id: 3, label: "一般", value: "GENERAL" },
+  { id: 4, label: "差", value: "DIFF" }
+]
+// 随访分类
+export const FollowClassStatusList = [
+  { id: 1, label: "控制满意", value: "SATISFACTION" },
+  { id: 2, label: "控制不满意", value: "NO_SATISFACTION" },
+  { id: 3, label: "不良反应", value: "ADVERSE_REACTIONS" },
+  { id: 4, label: "并发症", value: "COMPLICATION" }
+]
+// 糖尿病症状类型
+export const symptomTypeList = [
+  { id: 1, label: "多饮", value: "MANY_DRINK" },
+  { id: 2, label: "多食", value: "MANY_EAT" },
+  { id: 3, label: "多尿", value: "MANY_PEE" },
+  { id: 8, label: "体重减轻", value: "WEIGHT_LOSS" },
+  { id: 9, label: "头晕", value: "DIZZINESS" },
+  { id: 6, label: "四肢麻木", value: "NUMBNESS_IN_HANDS_AND_FEET" },
+  { id: 7, label: "乏力", value: "FATIGUE" },
+  { id: 4, label: "视力模糊", value: "BLURRED_VISION" },
+  { id: 5, label: "皮肤感染", value: "SKIN_INFECTION" },
+  { id: 15, label: "其他", value: "OTHER" },
+]
+// 高血压症状类型
+export const bloodSymptomTypeList = [
+  { id: 9, label: "头晕", value: "DIZZINESS" },
+  { id: 10, label: "头痛", value: "HEADACHE" },
+  { id: 11, label: "心悸", value: "PALPITATIONS" },
+  { id: 12, label: "胸闷", value: "CHEST_TIGHTNESS" },
+  { id: 13, label: "胸痛", value: "CHEST_PAIN" },
+  { id: 14, label: "下肢浮肿", value: "SWELLING_OF_LOWER_EXTREMITIES" },
+  { id: 15, label: "其他", value: "OTHER" },
+]
+// 足动脉
+export const dorsalArteryStatusList = [
+  { id: 1, label: "触及", value: "TOUCH" },
+  { id: 2, label: "未触及", value: "NONE_TOUCH" },
+]
+// 并发症症状
+export const complicationTypeList = [
+  { id: 1, label: "糖尿病足", value: "DIABETIC_FOOT" },
+  { id: 2, label: "糖尿病眼病", value: "DIABETIC_EYE_DISEASE" },
+  { id: 3, label: "糖尿病肾病", value: "DIABETIC_NEPHROPATHY" },
+  { id: 4, label: "心脑血管病变", value: "CARDIOVASCULAR_AND_CEREBROVASCULAR_DISEASE" },
+  { id: 5, label: "各类感染", value: "VARIOUS_INFECTIONS" },
+  { id: 6, label: "糖尿病酮症酸中毒", value: "DIABETIC_KETOACIDOSIS" },
+  { id: 7, label: "高渗性昏迷", value: "HYPERTONIC_COMA" },
+  { id: 8, label: "低血糖", value: "HYPOGLYCEMIA" },
+  { id: 18, label: "其他", value: "OTHER" },
+]
+// 高血压并发症症状
+export const bloodComplicationTypeList = [
+  { id: 9, label: "冠心病", value: "CORONARY_HEART_DISEASE" },
+  { id: 10, label: "心律失常", value: "ARRHYTHMIA" },
+  { id: 11, label: "房颤", value: "ATRIAL_FIBRILLATION" },
+  { id: 12, label: "心肌梗塞", value: "MYOCARDIAL_INFARCTION" },
+  { id: 13, label: "脑溢血", value: "CEREBRAL_HEMORRHAGE" },
+  { id: 14, label: "脑梗塞", value: "CEREBRAL_INFARCTION" },
+  { id: 15, label: "视力减退", value: "VISION_LOSS" },
+  { id: 16, label: "眼底出血", value: "FUNDUS_BLEEDING" },
+  { id: 17, label: "肢动脉硬化（间歇性跛行）", value: "LIMB_ARTERIOSCLEROSIS" },
+  { id: 18, label: "其他", value: "OTHER" },
+]
+// 转诊原因
+export const referralReasonStatusesList = [
+  { id: 1, label: "空腹血糖≥16.7mmol", value: "FASTING_BLOOD_GLUCOSE" },
+  { id: 2, label: "收缩压≥180mmHg和（或）舒张压≥110mmHg", value: "SHRINK_HIGH_PRESSURE_OR_DIASTOLE_LOW_PRESSURE" },
+  { id: 3, label: "意识或行为改变、呼吸有烂苹果丙酮味、心悸、出汗、食欲减退、恶心、呕吐、多饮、多尿、腹痛、有深大呼吸、皮肤潮红", value: "BEHAVIOR_CHANGE" },
+  { id: 4, label: "持续性心动过速（心率超过100次/分钟）", value: "PERSISTENT_TACHYCARDIA" },
+  { id: 5, label: "体温超过39摄氏度", value: "TEMPERATURE_EXCEEDS" },
+  { id: 6, label: "其他的突发异常情况（如市里突然骤降、妊娠期及哺乳期血糖高于正常等危险情况之一）", value: "OTHER_ABNORMALITIES" },
+  { id: 7, label: "存在不能处理的其他疾病", value: "CANT_HANDLE_DISEASE" },
+  { id: 8, label: "连续两次血糖控制不满意", value: "CONTINUOUS_TWO_BLOOD_SUGAR_CONTROL_NO_SATISFACTION" },
+  { id: 9, label: "药物不良反应难以控制", value: "DRUG_ADVERSE_REACTIONS_CANT_CONTROL" },
+  { id: 10, label: "出现新的并发症或原有并发症加重", value: "NEW_COMPLICATION" },
+]
+// 高血压转诊原因
+export const BloodReferralReasonStatusesList = [
+  { id: 2, label: "收缩压≥180mmHg和（或）舒张压≥110mmHg", value: "SHRINK_HIGH_PRESSURE_OR_DIASTOLE_LOW_PRESSURE" },
+  { id: 11, label: "意识改变、剧烈头痛或头晕、恶心呕吐、视力模糊、眼痛、心悸、胸闷、喘憋不能平卧、心前区疼痛", value: "CHANGE_OF_CONSCIOUSNESS" },
+  { id: 7, label: "存在不能处理的其他疾病", value: "CANT_HANDLE_DISEASE" },
+  { id: 12, label: "处于妊娠期或哺乳期同时血压高于正常等危急情况", value: "ARE_PREGNANT_OR_BREASTFEEDING" },
+  { id: 13, label: "连续两次血压控制不满意", value: "UNSATISFACTORY_BLOOD_PRESSURE_CONTROL" },
+  { id: 14, label: "连续两次出现药物不良反应没改善", value: "ADVERSE_DRUG_REACTIONS_HAVE_NOT_IMPROVED" },
+  { id: 10, label: "出现新的并发症或原有并发症加重", value: "NEW_COMPLICATION" },
+]
+// 胰岛素品种
+export const insulinVarietiesTypeList = [
+  { id: 1, label: "动物胰岛素", value: "ANIMAL" },
+  { id: 2, label: "人胰岛素和胰岛素类似物", value: "HUMAN" },
+  { id: 3, label: "短效胰岛素", value: "SHORT_TERM" },
+  { id: 4, label: "中效胰岛素", value: "DURING_TERM" },
+  { id: 5, label: "长效胰岛素", value: "LONG_TERM" },
+  { id: 6, label: "混合胰岛素", value: "MIXING_TERM" },
+]
+// 胰岛素用法
+export const insulinUsingsList = [
+  { id: 1, label: "餐前", value: "BEFORE_MEAL" },
+  { id: 2, label: "皮下", value: "SUBCUTANEOUS" },
+]
+// 服药依从性
+export const medicationStatusList = [
+  { id: 1, label: "规律服药", value: "LAW" },
+  { id: 2, label: "间断服药", value: "INTERMITTENT" },
+  { id: 3, label: "不服药", value: "NONE" },
+]
+// 药物不良反应
+export const drugReactionList = [
+  { id: 1, label: "有", value: "HAVE" },
+  { id: 2, label: "无", value: "NONE" },
+]
+export const hypoglycemiaReactionList = [
+  { id: 1, label: "有", value: "HAVE" },
+  { id: 2, label: "无", value: "NONE" },
+  { id: 3, label: "偶尔", value: "OCCASIONALLY" },
+  { id: 4, label: "频繁", value: "FREQUENTLY" },
+]
+// 个性化健康教育
+export const healthEducationTypesList = [
+  { id: 2, label: "限盐", value: "LIMIT_SALT" },
+  { id: 3, label: "限烟或戒烟", value: "LIMIT_SMOKE" },
+  { id: 4, label: "限酒或戒酒", value: "LIMIT_LIQUEUR" },
+  { id: 5, label: "减少甜食", value: "LIMIT_SWEETS" },
+  { id: 6, label: "减少膳食脂肪", value: "LIMIT_DIETARY_FAT" },
+  { id: 7, label: "平衡膳食", value: "BALANCED_DIET" },
+  { id: 8, label: "适当运动", value: "PROPER_EXERCISE" },
+  { id: 9, label: "定期监测血糖", value: "MONITOR_BLOOD_SUGAR_REGULARLY" },
+  { id: 10, label: "定期测量血压", value: "REGULAR_BLOOD_PRESSURE_MEASUREMENT" },
+  { id: 11, label: "放松情绪", value: "RELAX_EMOTIONS" },
+  { id: 12, label: "适当用药", value: "APPROPRIATE_MEDICATION" },
+  { id: 13, label: "预防低血糖", value: "PREVENT_HYPOGLYCEMIA" },
+  { id: 14, label: "用药指导", value: "MEDICATION_GUIDANCE" },
+  { id: 15, label: "其他措施", value: "OTHER_MEASURES" },
+]
 
 // 所有枚举类型转义
 export const formatterElement = {

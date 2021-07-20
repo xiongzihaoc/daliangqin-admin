@@ -83,21 +83,20 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
         type="index"
         label="序号"></el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        label="医生姓名"
+        label="姓名"
         prop="name"></el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        label="医生头像"
+        label="头像"
         prop="avatarUrl">
         <template slot-scope="scope">
           <img class="tableImg"
@@ -105,8 +104,30 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
+        label="手机号"
+        prop="phone"></el-table-column>
+      <el-table-column align="center"
+        label="身份证号"
+        prop="idCard"></el-table-column>
+      <el-table-column align="center"
+        label="出生日期"
+        prop="birthday"
+        :formatter="birthdayFormatter"></el-table-column>
+      <el-table-column align="center"
+        label="年龄"
+        prop="age"></el-table-column>
+      <el-table-column align="center"
+        label="性别"
+        prop="gender"
+        :formatter="genderFormatter"></el-table-column>
+      <el-table-column align="center"
+        label="职位"
+        prop="type"
+        :formatter="typeFormatter"></el-table-column>
+      <el-table-column align="center"
+        label="医院名称"
+        prop="hospitalName"></el-table-column>
+      <el-table-column align="center"
         label="用户数量"
         prop="patientCount">
         <template slot-scope="scope">
@@ -115,8 +136,6 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         prop="toDoctorInfo"
         label="对应转诊医生">
         <template slot-scope="scope">
@@ -129,13 +148,9 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="创建人"
         prop="createUserName"></el-table-column>
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="创建时间"
         prop="createTime">
         <template slot-scope="scope">
@@ -144,8 +159,6 @@
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
         label="操作"
         width="220">
         <template slot-scope="scope">
@@ -158,16 +171,6 @@
         </template>
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <el-pagination background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"></el-pagination>
     <!-- 增改页面 -->
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
@@ -278,7 +281,6 @@ import {
   genderList,
   formatterElement,
 } from "@/utils/index";
-import addressJson from "@/utils/address.json";
 export default {
   components: {
     EleTable,
@@ -324,35 +326,7 @@ export default {
         introduction: "",
         goodAt: "",
       },
-      tableHeaderBig: [
-        { prop: "phone", label: "手机号" },
-        { prop: "idCard", label: "身份证号" },
-        {
-          prop: "birthday",
-          label: "出生日期",
-          formatter: (row) => {
-            return Boolean(row.birthday)
-              ? parseTime(row.birthday).slice(0, 10)
-              : "";
-          },
-        },
-        { prop: "age", label: "年龄" },
-        {
-          prop: "gender",
-          label: "性别",
-          formatter: (row) => {
-            return this.genderFormatter(row);
-          },
-        },
-        {
-          prop: "type",
-          label: "职位",
-          formatter: (row) => {
-            return this.typeFormatter(row);
-          },
-        },
-        { prop: "hospitalName", label: "医院名称" },
-      ],
+      tableHeaderBig: [],
       // 医院列表
       hospitalList: [],
       // 医院跳转医生携带医院id
@@ -522,6 +496,9 @@ export default {
     },
     typeFormatter(row) {
       return formatterElement.doctorType[row.type];
+    },
+    birthdayFormatter(row) {
+      return Boolean(row.birthday) ? parseTime(row.birthday).slice(0, 10) : "";
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

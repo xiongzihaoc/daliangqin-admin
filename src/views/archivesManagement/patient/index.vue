@@ -130,29 +130,13 @@
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
-      :header="tableHeaderBig">
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="name"
-        label="姓名"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="avatarUrl"
-        label="照片">
-        <template slot-scope="scope">
-          <img v-if="scope.row.avatarUrl"
-            :src="scope.row.avatarUrl"
-            class="tableImg"
-            alt="" />
-        </template>
-      </el-table-column>
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
+
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -166,20 +150,10 @@
         </template>
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <el-pagination background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"></el-pagination>
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
 import {
   validateIdCard,
@@ -213,6 +187,9 @@ export default {
       },
       list: [],
       tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "name", label: "姓名" },
+        { prop: "avatarUrl", label: "照片", isImg: true },
         { prop: "idCard", label: "身份证号" },
         {
           prop: "gender",
@@ -279,7 +256,7 @@ export default {
     this.doctorId = localStorage.getItem("doctorId");
     let pageNum = localStorage.getItem("patientNum");
     if (pageNum) {
-      this.pageNum = pageNum
+      this.pageNum = pageNum;
     }
     this.getList();
   },
@@ -301,7 +278,7 @@ export default {
           diabetesStatus: this.searchForm.diabetesStatus,
           heartRateStatus: this.searchForm.heartRateStatus,
           doctorUserName: this.searchForm.doctorUserName,
-          doctorUserId:this.doctorId,
+          doctorUserId: this.doctorId,
           doctorUserPhone: this.searchForm.doctorUserPhone,
           // beginAge: this.searchForm.beginAge,
           // endAge: this.searchForm.endAge,
@@ -336,7 +313,7 @@ export default {
     detailsBtn(val) {
       this.$router.push({
         path: "/archivesManagement/details",
-        query: { id: val.id, type: "edit",isArchives:val.isArchives},
+        query: { id: val.id, type: "edit", isArchives: val.isArchives },
       });
       localStorage.setItem("patientNum", this.pageNum);
     },

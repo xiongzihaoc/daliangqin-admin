@@ -43,7 +43,8 @@ const archivesRouter = {
                 component: () => import('@/views/archivesManagement/record/heart'),
                 meta: {
                     title: '心率检测',
-                    icon: 'general'
+                    icon: 'general',
+                    noCache: true
                 },
             },
             {
@@ -52,7 +53,8 @@ const archivesRouter = {
                 component: () => import('@/views/archivesManagement/record/bloodPressure'),
                 meta: {
                     title: '血压检测',
-                    icon: 'general'
+                    icon: 'general',
+                    noCache: true
                 },
             },
             {

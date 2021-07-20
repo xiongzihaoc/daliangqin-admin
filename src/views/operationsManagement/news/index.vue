@@ -2,346 +2,266 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        ref="searchFormRef"
+      <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true"
-      >
-        <el-form-item label="标题" align="left" prop="title">
-          <el-input
-            v-model="searchForm.title"
+        :inline="true">
+        <el-form-item label="标题"
+          align="left"
+          prop="title">
+          <el-input v-model="searchForm.title"
             size="small"
-            placeholder="请输入标题"
-          ></el-input>
+            placeholder="请输入标题"></el-input>
         </el-form-item>
-        <el-form-item label="内容类型" prop="contentType">
-          <el-select
-            v-model="searchForm.contentType"
+        <el-form-item label="内容类型"
+          prop="contentType">
+          <el-select v-model="searchForm.contentType"
             size="small"
-            placeholder="请选择内容类型"
-          >
-            <el-option
-              v-for="item in newsTypeList"
+            placeholder="请选择内容类型">
+            <el-option v-for="item in newsTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="状态" prop="deletedStatus">
-          <el-select
-            style="width: 100%"
+        <el-form-item label="状态"
+          prop="deletedStatus">
+          <el-select style="width: 100%"
             v-model="searchForm.deletedStatus"
             size="small"
-            placeholder="请选择状态"
-          >
-            <el-option
-              v-for="item in newsStatusList"
+            placeholder="请选择状态">
+            <el-option v-for="item in newsStatusList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <el-button
-      @click="addBtn"
+    <el-button @click="addBtn"
       type="primary"
       class="tableAdd"
       size="small"
       plain
-      icon="el-icon-plus"
-      >新增</el-button
-    >
+      icon="el-icon-plus">新增</el-button>
     <!-- 表格区域 -->
-    <EleTable :data="list" :header="tableHeaderBig">
-      <el-table-column
-        align="center"
-        slot="fixed"
-        fixed="left"
+    <EleTable :data="list"
+      :header="tableHeaderBig"
+      :pageNum="pageNum"
+      :pageSize="pageSize"
+      :total="total"
+      @handleSizeChange="handleSizeChange"
+      @handleCurrentChange="handleCurrentChange">
+      <el-table-column align="center"
         type="index"
-        label="序号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        slot="fixed"
-        fixed="left"
+        label="序号"></el-table-column>
+      <el-table-column align="center"
         prop="title"
-        label="标题"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        slot="fixed"
-        fixed="left"
+        label="标题"></el-table-column>
+      <el-table-column align="center"
         :formatter="contentTypeFormatter"
         prop="contentType"
-        label="内容类型"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        slot="fixed"
-        fixed="left"
+        label="内容类型"></el-table-column>
+      <el-table-column align="center"
         prop="coverUrl"
-        label="封面图"
-      >
+        label="封面图">
         <template slot-scope="scope">
-          <img class="tableImg" :src="scope.row.coverUrl" />
+          <img class="tableImg"
+            :src="scope.row.coverUrl" />
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        slot="fixed"
-        fixed="right"
+      <el-table-column align="center"
+        prop="createTime"
+        label="创建时间"
+        :formatter="createTimeFormatter">
+      </el-table-column>
+      <el-table-column align="center"
+        prop="publishTime"
+        label="发布时间"
+        :formatter="publishTimeFormatter">
+      </el-table-column>
+      <el-table-column align="center"
         prop="appTypes"
-        label="呈现位置"
-      >
+        label="呈现位置">
         <template slot-scope="scope">
-          <span v-for="(item, index) in scope.row.appTypes" :key="index">
+          <span v-for="(item, index) in scope.row.appTypes"
+            :key="index">
             <span v-if="item === 'PATIENT'">用户端 </span>
             <span v-else>医生端 </span>
           </span>
         </template>
       </el-table-column>
-      <!-- 推荐暂时搁置 -->
-      <!-- <el-table-column align="center"
-        slot="fixed"
-        fixed="right"
-        prop="type"
-        label="推荐">
-      </el-table-column> -->
       <!-- 状态 -->
-      <el-table-column
-        align="center"
-        slot="fixed"
-        fixed="right"
+      <el-table-column align="center"
         prop="deletedStatus"
-        label="状态"
-      >
+        label="状态">
         <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.deletedStatus"
+          <el-switch v-model="scope.row.deletedStatus"
             @change="statusChange(scope.row)"
             active-value="SHOW"
             inactive-value="DELETE"
             active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
+            inactive-color="#ff4949">
           </el-switch>
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column
-        align="center"
-        slot="fixed"
-        fixed="right"
+      <el-table-column align="center"
         label="操作"
-        width="320"
-      >
+        width="320">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
-            >编辑</el-button
-          >
-          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
-            >删除</el-button
-          >
-          <el-button
-            size="mini"
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
+          <el-button size="mini"
+            type="danger"
+            @click="deleteBtn(scope.row.id)">删除</el-button>
+          <el-button size="mini"
             plain
             icon="el-icon-top"
-            @click="sortTop(scope.row.id)"
-          ></el-button>
-          <el-button
-            size="mini"
+            @click="sortTop(scope.row.id)"></el-button>
+          <el-button size="mini"
             plain
             icon="el-icon-bottom"
-            @click="sortBottom(scope.row.id)"
-          ></el-button>
+            @click="sortBottom(scope.row.id)"></el-button>
         </template>
       </el-table-column>
     </EleTable>
-    <!-- 分页 -->
-    <el-pagination
-      background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageNum"
-      :page-sizes="[10, 20, 50]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      class="el-pagination-style"
-    ></el-pagination>
     <!-- 增改页面 -->
-    <el-dialog
-      :title="infoTitle"
+    <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
-      v-dialogDrag
-    >
-      <el-form
-        ref="FormRef"
+      v-dialogDrag>
+      <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        label-width="100px"
-      >
-        <el-form-item label="内容类型" prop="contentType">
-          <el-select
-            style="width: 100%"
+        label-width="100px">
+        <el-form-item label="内容类型"
+          prop="contentType">
+          <el-select style="width: 100%"
             v-model="editAddForm.contentType"
-            placeholder="请选择内容类型"
-          >
-            <el-option
-              v-for="item in newsTypeList"
+            placeholder="请选择内容类型">
+            <el-option v-for="item in newsTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="标题" prop="title">
-          <el-input
-            v-model.trim="editAddForm.title"
-            placeholder="请输入标题"
-          ></el-input>
+        <el-form-item label="标题"
+          prop="title">
+          <el-input v-model.trim="editAddForm.title"
+            placeholder="请输入标题"></el-input>
         </el-form-item>
-        <el-form-item label="封面图" prop="coverUrl">
-          <single-upload v-model="editAddForm.coverUrl" uploadType="NEWS" />
+        <el-form-item label="封面图"
+          prop="coverUrl">
+          <single-upload v-model="editAddForm.coverUrl"
+            uploadType="NEWS" />
         </el-form-item>
-        <el-form-item label="类型" prop="type">
-          <el-select
-            style="width: 100%"
+        <el-form-item label="类型"
+          prop="type">
+          <el-select style="width: 100%"
             v-model.trim="editAddForm.type"
-            placeholder="请选择类型"
-          >
-            <el-option label="富文本" value="LONG_TEXT"></el-option>
-            <el-option label="url地址" value="URL"></el-option>
+            placeholder="请选择类型">
+            <el-option label="富文本"
+              value="LONG_TEXT"></el-option>
+            <el-option label="url地址"
+              value="URL"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="url地址"
+        <el-form-item label="url地址"
           prop="content"
-          v-if="editAddForm.type === 'URL'"
-        >
-          <el-input
-            v-model.trim="editAddForm.content"
-            placeholder="请输入url地址"
-          ></el-input>
+          v-if="editAddForm.type === 'URL'">
+          <el-input v-model.trim="editAddForm.content"
+            placeholder="请输入url地址"></el-input>
         </el-form-item>
-        <el-form-item
-          label="详情"
+        <el-form-item label="详情"
           prop="content"
-          v-if="editAddForm.type === 'LONG_TEXT'"
-        >
-          <quill-editor
-            v-model="editAddForm.content"
+          v-if="editAddForm.type === 'LONG_TEXT'">
+          <quill-editor v-model="editAddForm.content"
             ref="myQuillEditor"
             class="ql-editor"
             :options="editorOption"
             @blur="onEditorBlur($event)"
             @focus="onEditorFocus($event)"
-            @change="onEditorChange($event)"
-          >
+            @change="onEditorChange($event)">
           </quill-editor>
         </el-form-item>
-        <el-form-item label="呈现位置" prop="appTypes">
-          <el-select
-            style="width: 100%"
+        <el-form-item label="呈现位置"
+          prop="appTypes">
+          <el-select style="width: 100%"
             multiple
             v-model="editAddForm.appTypes"
-            placeholder="请选择呈现位置"
-          >
-            <el-option
-              v-for="item in appTypeList"
+            placeholder="请选择呈现位置">
+            <el-option v-for="item in appTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="发布人"
+        <el-form-item label="发布人"
           prop="author"
-          v-if="editAddForm.type === 'LONG_TEXT'"
-        >
-          <el-input
-            v-model="editAddForm.author"
-            placeholder="请输入发布人"
-          ></el-input>
+          v-if="editAddForm.type === 'LONG_TEXT'">
+          <el-input v-model="editAddForm.author"
+            placeholder="请输入发布人"></el-input>
         </el-form-item>
-        <el-form-item
-          label="发布人头像"
+        <el-form-item label="发布人头像"
           prop="avatarUrl"
-          v-if="editAddForm.type === 'LONG_TEXT'"
-        >
-          <single-upload v-model="editAddForm.avatarUrl" uploadType="AVATAR" />
+          v-if="editAddForm.type === 'LONG_TEXT'">
+          <single-upload v-model="editAddForm.avatarUrl"
+            uploadType="AVATAR" />
         </el-form-item>
 
-        <el-form-item
-          label="发布人职位"
+        <el-form-item label="发布人职位"
           prop="position"
-          v-if="editAddForm.type === 'LONG_TEXT'"
-        >
-          <el-input
-            v-model="editAddForm.position"
-            placeholder="请输入发布职位"
-          ></el-input>
+          v-if="editAddForm.type === 'LONG_TEXT'">
+          <el-input v-model="editAddForm.position"
+            placeholder="请输入发布职位"></el-input>
         </el-form-item>
         <!-- 问卷选择暂时搁置 -->
-        <el-form-item label="发布时间" prop="publishTime">
-          <el-date-picker
-            v-model="editAddForm.publishTime"
+        <el-form-item label="发布时间"
+          prop="publishTime">
+          <el-date-picker v-model="editAddForm.publishTime"
             style="width: 100%"
             type="date"
             placeholder="选择日期时间"
             value-format="timestamp"
-            align="right"
-          >
+            align="right">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="权重" prop="zOrder">
-          <el-input
-            v-Int
+        <el-form-item label="权重"
+          prop="zOrder">
+          <el-input v-Int
             v-model.trim="editAddForm.zOrder"
-            placeholder="请输入权重"
-          ></el-input>
+            placeholder="请输入权重"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="deletedStatus">
-          <el-select
-            style="width: 100%"
+        <el-form-item label="状态"
+          prop="deletedStatus">
+          <el-select style="width: 100%"
             v-model="editAddForm.deletedStatus"
-            placeholder="请选择状态"
-          >
-            <el-option
-              v-for="item in newsStatusList"
+            placeholder="请选择状态">
+            <el-option v-for="item in newsStatusList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -425,22 +345,7 @@ export default {
         zOrder: "",
         deletedStatus: "",
       },
-      tableHeaderBig: [
-        {
-          prop: "createTime",
-          label: "创建时间",
-          formatter: (row) => {
-            return parseTime(row.createTime);
-          },
-        },
-        {
-          prop: "publishTime",
-          label: "发布时间",
-          formatter: (row) => {
-            return parseTime(row.publishTime).slice(0, 10);
-          },
-        },
-      ],
+      tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -631,6 +536,13 @@ export default {
     },
     coverUrlFormatter(row) {
       return `<div>3333</div>`;
+    },
+    /***** 格式化表格 *****/
+    createTimeFormatter(row) {
+      return parseTime(row.createTime).slice(0, 10);
+    },
+    publishTimeFormatter(row) {
+      return parseTime(row.publishTime).slice(0, 10);
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
