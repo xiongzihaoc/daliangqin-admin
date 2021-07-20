@@ -118,18 +118,13 @@
       </el-form>
     </div>
     <div>
-      <el-button @click="addHighBlood"
+      <el-button @click="addBtn"
         type="primary"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-plus">高血压随访</el-button>
-      <el-button @click="adddiabetes"
-        type="primary"
-        class="tableAdd"
-        size="small"
-        plain
-        icon="el-icon-plus">糖尿病随访</el-button>
+        icon="el-icon-plus">新增</el-button>
+
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
@@ -140,7 +135,8 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        type="index">
+        type="index"
+        label="序号">
       </el-table-column>
       <el-table-column align="center"
         label="医生姓名"
@@ -288,7 +284,7 @@ export default {
   methods: {
     getList() {
       httpAdminFollow
-        .getFollowList({
+        .getFollow({
           page: this.pageNum,
           pageSize: this.pageSize,
           doctorName: this.searchForm.doctorUserName,
@@ -315,22 +311,74 @@ export default {
       this.searchForm.endTime = val[1];
       console.log(this.searchForm);
     },
-    addHighBlood() {
+    addBtn() {
       this.$router.push({
         path: "/hospitalManagement/work/followDetail",
-        query: { type: "addHighBlood" },
       });
     },
-    adddiabetes() {
-      this.$router.push({
-        path: "/hospitalManagement/work/followDetail",
-        query: { type: "adddiabetes" },
-      });
-    },
+    // 编辑
     editBtn(val) {
-      console.log(val);
+      this.$router.push({
+        path: "/hospitalManagement/work/followDetail?id=" + val.id + '&type=edit',
+      });
     },
-    deleteBtn() {},
+    // 删除
+    async deleteBtn(id) {
+      const confirmResult = await this.$confirm(
+        "你确定要执行此操作, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => console.log(err));
+      if (confirmResult != "confirm") {
+        return this.$message.info("取消删除");
+      }
+      // 发送请求
+      httpAdminFollow.deleteFollow(id).then((res) => {
+        if (res.code === "OK") {
+          this.$notify.success({
+            title: "删除成功",
+          });
+          this.getList();
+        }
+      });
+    },
+    editDialogClosed() {
+      this.$refs.FormRef.resetFields();
+    },
+    // 新增编辑确定
+    editPageEnter() {
+      this.$refs.FormRef.validate((valid) => {
+        if (valid) {
+          if (this.infoTitle === "新增") {
+            // 发送请求
+            httpAdminFollow.postFollow(this.editAddForm).then((res) => {
+              if (res.code === "OK") {
+                this.$notify.success({
+                  title: "新增成功",
+                });
+                this.getList();
+                this.editDialogVisible = false;
+              }
+            });
+          } else {
+            // 发送请求
+            httpAdminFollow.putFollow(this.editAddForm).then((res) => {
+              if (res.code === "OK") {
+                this.$notify.success({
+                  title: "编辑成功",
+                });
+                this.getList();
+                this.editDialogVisible = false;
+              }
+            });
+          }
+        }
+      });
+    },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
