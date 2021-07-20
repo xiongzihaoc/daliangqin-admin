@@ -136,28 +136,7 @@
       :total="total"
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="name"
-        label="姓名"></el-table-column>
-      <el-table-column align="center"
-        slot="fixed"
-        fixed="left"
-        prop="avatarUrl"
-        label="照片">
-        <template slot-scope="scope">
-          <img v-if="scope.row.avatarUrl"
-            :src="scope.row.avatarUrl"
-            class="tableImg"
-            alt="" />
-        </template>
-      </el-table-column>
+
       <!-- 操作 -->
       <el-table-column align="center"
         slot="fixed"
@@ -208,6 +187,9 @@ export default {
       },
       list: [],
       tableHeaderBig: [
+        { type: "index", label: "序号" },
+        { prop: "name", label: "姓名" },
+        { prop: "avatarUrl", label: "照片", isImg: true },
         { prop: "idCard", label: "身份证号" },
         {
           prop: "gender",
