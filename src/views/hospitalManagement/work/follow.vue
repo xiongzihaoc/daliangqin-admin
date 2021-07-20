@@ -180,6 +180,11 @@
         prop="diabetesStatus">
       </el-table-column>
       <el-table-column align="center"
+<<<<<<< HEAD
+=======
+        slot="fixed"
+        fixed="left"
+>>>>>>> master
         :formatter="heartRateStatus"
         label="心率"
         prop="heartRateStatus">
