@@ -13,6 +13,15 @@
             size="small"
             placeholder="请输入医生姓名"></el-input>
         </el-form-item>
+        <el-form-item label="医生手机号"
+          align="left"
+          prop="userPhone">
+          <el-input v-model="searchForm.userPhone"
+            size="small"
+            v-Int
+            maxlength="11"
+            placeholder="请输入医生手机号"></el-input>
+        </el-form-item>
         <el-form-item label="职位"
           prop="type">
           <el-select v-model="searchForm.type"
@@ -23,6 +32,13 @@
               :label="item.label"
               :value="item.value"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="医院名称"
+          align="left"
+          prop="userName">
+          <el-input v-model="searchForm.hospitalName"
+            size="small"
+            placeholder="请输入医院名称"></el-input>
         </el-form-item>
         <el-form-item label="发布时间"
           prop="status">
@@ -63,6 +79,14 @@
       <el-table-column align="center"
         label="医生姓名"
         prop="userName">
+      </el-table-column>
+      <el-table-column align="center"
+        label="医生手机号"
+        prop="userPhone">
+      </el-table-column>
+      <el-table-column align="center"
+        label="医院名称"
+        prop="hospitalName">
       </el-table-column>
       <el-table-column align="center"
         label="职位"
@@ -110,7 +134,9 @@ export default {
       doctorTypeList,
       searchForm: {
         userName: "",
+        userPhone: "",
         type: "",
+        hospitalName: "",
         startTime: "",
         endTime: "",
       },
@@ -142,6 +168,8 @@ export default {
           page: this.pageNum,
           pageSize: this.pageSize,
           userName: this.searchForm.userName,
+          userPhone: this.searchForm.userPhone,
+          hospitalName: this.searchForm.hospitalName,
           type: this.searchForm.type,
           startTime: this.searchForm.startTime,
           endTime: this.searchForm.endTime,

@@ -437,7 +437,6 @@ export const symptomTypeList = [
   { id: 7, label: "乏力", value: "FATIGUE" },
   { id: 4, label: "视力模糊", value: "BLURRED_VISION" },
   { id: 5, label: "皮肤感染", value: "SKIN_INFECTION" },
-  { id: 15, label: "其他", value: "OTHER" },
 ]
 // 高血压症状类型
 export const bloodSymptomTypeList = [
@@ -447,7 +446,6 @@ export const bloodSymptomTypeList = [
   { id: 12, label: "胸闷", value: "CHEST_TIGHTNESS" },
   { id: 13, label: "胸痛", value: "CHEST_PAIN" },
   { id: 14, label: "下肢浮肿", value: "SWELLING_OF_LOWER_EXTREMITIES" },
-  { id: 15, label: "其他", value: "OTHER" },
 ]
 // 足动脉
 export const dorsalArteryStatusList = [
@@ -464,7 +462,6 @@ export const complicationTypeList = [
   { id: 6, label: "糖尿病酮症酸中毒", value: "DIABETIC_KETOACIDOSIS" },
   { id: 7, label: "高渗性昏迷", value: "HYPERTONIC_COMA" },
   { id: 8, label: "低血糖", value: "HYPOGLYCEMIA" },
-  { id: 18, label: "其他", value: "OTHER" },
 ]
 // 高血压并发症症状
 export const bloodComplicationTypeList = [
@@ -477,7 +474,6 @@ export const bloodComplicationTypeList = [
   { id: 15, label: "视力减退", value: "VISION_LOSS" },
   { id: 16, label: "眼底出血", value: "FUNDUS_BLEEDING" },
   { id: 17, label: "肢动脉硬化（间歇性跛行）", value: "LIMB_ARTERIOSCLEROSIS" },
-  { id: 18, label: "其他", value: "OTHER" },
 ]
 // 转诊原因
 export const referralReasonStatusesList = [
@@ -548,7 +544,6 @@ export const healthEducationTypesList = [
   { id: 12, label: "适当用药", value: "APPROPRIATE_MEDICATION" },
   { id: 13, label: "预防低血糖", value: "PREVENT_HYPOGLYCEMIA" },
   { id: 14, label: "用药指导", value: "MEDICATION_GUIDANCE" },
-  { id: 15, label: "其他措施", value: "OTHER_MEASURES" },
 ]
 
 // 所有枚举类型转义

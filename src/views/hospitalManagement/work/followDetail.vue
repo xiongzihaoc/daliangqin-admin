@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
-    <div class="content-box">
+    <div class="content-box"
+      v-loading="loading">
       <!-- 基本信息 -->
       <div>
         <el-form ref="FormRef"
@@ -289,6 +290,11 @@
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="其他并发症症状">
+            <el-input type="textarea"
+              v-model="diabetesForm.otherComplication"
+              placeholder="请输入并发症症状"></el-input>
+          </el-form-item>
           <el-form-item label="转诊原因">
             <el-select v-model="diabetesForm.referralReasonStatuses"
               multiple
@@ -434,7 +440,7 @@
       <div style="padding-top:20px;">
         <el-checkbox v-model="bloodChecked">添加高血压随访</el-checkbox>
         <el-form v-if="bloodChecked === true"
-          ref="diabetesFormRef"
+          ref="bloddFormRef"
           :model="highBloodForm"
           :rules="highBloodFormRules"
           label-width="130px">
@@ -491,6 +497,11 @@
                 :label="item.label"
                 :value="item.value"></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="其他并发症症状">
+            <el-input type="textarea"
+              v-model="highBloodForm.otherComplication"
+              placeholder="请输入并发症症状"></el-input>
           </el-form-item>
           <el-form-item label="转诊原因">
             <el-select v-model="highBloodForm.referralReasonStatuses"
@@ -697,6 +708,7 @@ export default {
       patientList: [],
       diabetesChecked: false,
       bloodChecked: false,
+      loading: true,
       form: {
         // 基本信息
         hospitalId: "",
@@ -734,6 +746,7 @@ export default {
         glycosylatedHemoglobin: "",
         otherInspection: "",
         complicationType: [],
+        otherComplication: "",
         referralReasonStatuses: [],
         otherReferralReason: "",
         referralAgency: "",
@@ -764,6 +777,7 @@ export default {
         physicalSignsOther: "",
         otherInspection: "",
         complicationType: [],
+        otherComplication: "",
         referralReasonStatuses: [],
         otherReferralReason: "",
         referralAgency: "",
@@ -782,10 +796,12 @@ export default {
     };
   },
   created() {
+    // 判断是编辑还是新增
     if (this.$route.query.type === "edit") {
       this.getList();
+    } else {
+      this.loading = false
     }
-    // 判断是编辑还是新增
   },
   mounted() {
     this.getHospitalList();
@@ -799,9 +815,15 @@ export default {
         .getFollowDetail({ id: this.$route.query.id })
         .then((res) => {
           this.form = res.data;
-          console.log(res.data);
-          this.diabetesForm = res.data.followDiabetesMongo;
-          this.highBloodForm = res.data.followBloodMongo;
+          if (Boolean(res.data.followDiabetesMongo)) {
+            this.diabetesChecked = true;
+            this.diabetesForm = res?.data?.followDiabetesMongo;
+          }
+          if (Boolean(res.data.followBloodMongo)) {
+            this.bloodChecked = true;
+            this.highBloodForm = res?.data?.followBloodMongo;
+          }
+          this.loading = false;
         });
     },
     // 根据身高体重计算BMI
@@ -848,33 +870,51 @@ export default {
     },
     confirm() {
       let form = this.form;
-      if (this.diabetesChecked === true) {
-        form.followDiabetesDTO = this.diabetesForm;
-      }
-      if (this.bloodChecked === true) {
-        form.followBloodDTO = this.highBloodForm;
+      // 必须选一个随访类型
+      if (this.diabetesChecked === false && this.bloodChecked === false) {
+        return this.$notify.error({
+          title: "未添加随访",
+        });
+      } else {
+        if (this.diabetesChecked === true) {
+          form.followDiabetesDTO = this.diabetesForm;
+        }
+        if (this.bloodChecked === true) {
+          form.followBloodDTO = this.highBloodForm;
+        }
       }
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          // 编辑
-          if (this.$route.query.type === "edit") {
-            httpAdminFollow
-              .putFollow(form, this.$route.query.id)
-              .then((res) => {
-                if (res.code === "OK") {
-                  this.$router.push({
-                    path: "/hospitalManagement/work/follow",
-                  });
-                }
-              });
-          } else {
-            // 新增
-            httpAdminFollow.postFollow(form).then((res) => {
-              if (res.code === "OK") {
-                this.$router.push({ path: "/hospitalManagement/work/follow" });
+          if (this.diabetesChecked === true) {
+            this.$refs.diabetesFormRef.validate((diabetesValid) => {
+              if (diabetesValid) {
+                next()
               }
             });
           }
+          console.log(3333);
+          // if (this.bloodChecked === true) {
+          //   this.$refs.bloddFormRef.validate((bloodValid) => {});
+          // }
+          // 编辑
+          // if (this.$route.query.type === "edit") {
+          //   httpAdminFollow
+          //     .putFollow(form, this.$route.query.id)
+          //     .then((res) => {
+          //       if (res.code === "OK") {
+          //         this.$router.push({
+          //           path: "/hospitalManagement/work/follow",
+          //         });
+          //       }
+          //     });
+          // } else {
+          //   // 新增
+          //   httpAdminFollow.postFollow(form).then((res) => {
+          //     if (res.code === "OK") {
+          //       this.$router.push({ path: "/hospitalManagement/work/follow" });
+          //     }
+          //   });
+          // }
         }
       });
     },
