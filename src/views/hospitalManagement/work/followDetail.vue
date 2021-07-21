@@ -62,6 +62,7 @@
             <el-form-item label="随访开始时间"
               prop="startTime">
               <el-date-picker v-model="form.startTime"
+                @blur="startTimeBlur"
                 type="datetime"
                 format="yyyy-MM-dd HH:mm"
                 value-format="timestamp"
@@ -70,7 +71,8 @@
             </el-form-item>
             <el-form-item label="随访结束时间"
               prop="endTime">
-              <el-date-picker v-model="form.endTime"
+              <el-date-picker @blur="endTimeBlur"
+                v-model="form.endTime"
                 type="datetime"
                 format="yyyy-MM-dd HH:mm"
                 value-format="timestamp"
@@ -110,7 +112,8 @@
           <div>
             <h3>行为方式</h3>
             <el-form-item label="日吸烟量">
-              <el-input oninput="if (value > 60) value = 60" v-model="form.daySmoking"
+              <el-input oninput="if (value > 60) value = 60"
+                v-model="form.daySmoking"
                 v-Int
                 maxlength="2"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">支</i></el-input>
@@ -122,7 +125,8 @@
                   style="font-style:normal;margin-right: 10px;">支</i></el-input>
             </el-form-item>
             <el-form-item label="日饮酒量">
-              <el-input oninput="if (value > 30) value = 30" v-model="form.dayDrink"
+              <el-input oninput="if (value > 30) value = 30"
+                v-model="form.dayDrink"
                 v-Int
                 maxlength="2"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">两</i></el-input>
@@ -134,19 +138,22 @@
                   style="font-style:normal;margin-right: 10px;">两</i></el-input>
             </el-form-item>
             <el-form-item label="运动次/周">
-              <el-input oninput="if (value > 20) value = 20" v-model="form.weekMovement"
+              <el-input oninput="if (value > 20) value = 20"
+                v-model="form.weekMovement"
                 v-Int
                 maxlength="3"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">次</i></el-input>
             </el-form-item>
             <el-form-item label="运动分钟/次">
-              <el-input oninput="if (value > 500) value = 500" v-model="form.minuteMovement"
+              <el-input oninput="if (value > 500) value = 500"
+                v-model="form.minuteMovement"
                 v-Int
                 maxlength="3"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">分钟</i></el-input>
             </el-form-item>
             <el-form-item label="日主食量">
-              <el-input oninput="if (value > 5000) value = 5000" v-model="form.dayFood"
+              <el-input oninput="if (value > 5000) value = 5000"
+                v-model="form.dayFood"
                 v-Int
                 maxlength="4"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">克</i></el-input>
@@ -239,7 +246,8 @@
           </el-form-item>
           <el-form-item label="收缩压"
             prop="shrinkHighPressure">
-            <el-input oninput="if (value > 300) value = 300" v-model="diabetesForm.shrinkHighPressure"
+            <el-input oninput="if (value > 300) value = 300"
+              v-model="diabetesForm.shrinkHighPressure"
               v-Int
               maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
@@ -461,14 +469,16 @@
           </el-form-item>
           <el-form-item label="收缩压"
             prop="shrinkHighPressure">
-            <el-input oninput="if (value > 300) value = 300" v-model="highBloodForm.shrinkHighPressure"
+            <el-input oninput="if (value > 300) value = 300"
+              v-model="highBloodForm.shrinkHighPressure"
               v-Int
               maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="舒张压"
             prop="diastoleLowPressure">
-            <el-input oninput="if (value > 200) value = 200" v-model="highBloodForm.diastoleLowPressure"
+            <el-input oninput="if (value > 200) value = 200"
+              v-model="highBloodForm.diastoleLowPressure"
               v-Int
               maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
@@ -832,6 +842,27 @@ export default {
           this.form.nowWeight /
           ((this.form.nowHeight / 100) * (this.form.nowHeight / 100))
         ).toFixed(2);
+      }
+    },
+    startTimeBlur() {
+      if (this.form.endTime != '') {
+        if (this.form.endTime <= this.form.startTime) {
+          this.form.endTime = "";
+          return this.$notify.error({
+            title: "结束时间不能小于或等于开始时间",
+          });
+        }
+      }
+    },
+    // 结束时间失去焦点
+    endTimeBlur() {
+      if (this.form.startTime != '') {
+        if (this.form.endTime <= this.form.startTime) {
+          this.form.endTime = "";
+          return this.$notify.error({
+            title: "结束时间不能小于或等于开始时间",
+          });
+        }
       }
     },
     getHospitalList() {
