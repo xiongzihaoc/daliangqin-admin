@@ -524,7 +524,7 @@ export const drugReactionList = [
   { id: 2, label: "无", value: "NONE" },
 ]
 export const hypoglycemiaReactionList = [
-  { id: 1, label: "有", value: "HAVE" },
+  // { id: 1, label: "有", value: "HAVE" },
   { id: 2, label: "无", value: "NONE" },
   { id: 3, label: "偶尔", value: "OCCASIONALLY" },
   { id: 4, label: "频繁", value: "FREQUENTLY" },

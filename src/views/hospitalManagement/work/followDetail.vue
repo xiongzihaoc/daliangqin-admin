@@ -888,7 +888,7 @@ export default {
           if (this.diabetesChecked === true) {
             this.$refs.diabetesFormRef.validate((diabetesValid) => {
               if (diabetesValid) {
-                next()
+                // next()
               }
             });
           }
