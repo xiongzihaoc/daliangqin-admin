@@ -206,9 +206,10 @@
         </el-form>
       </div>
       <!-- 糖尿病随访 -->
-      <div>
-        <h3>添加糖尿病随访</h3>
-        <el-form ref="diabetesFormRef"
+      <div style="padding-top:20px;">
+        <el-checkbox v-model="diabetesChecked">添加糖尿病随访</el-checkbox>
+        <el-form v-if="diabetesChecked === true"
+          ref="diabetesFormRef"
           :model="diabetesForm"
           :rules="diabetesFormRules"
           label-width="130px">
@@ -430,9 +431,10 @@
         </el-form>
       </div>
       <!-- 高血压随访 -->
-      <div>
-        <h3>添加高血压随访</h3>
-        <el-form ref="diabetesFormRef"
+      <div style="padding-top:20px;">
+        <el-checkbox v-model="bloodChecked">添加高血压随访</el-checkbox>
+        <el-form v-if="bloodChecked === true"
+          ref="diabetesFormRef"
           :model="highBloodForm"
           :rules="highBloodFormRules"
           label-width="130px">
@@ -693,8 +695,8 @@ export default {
       hospitalList: [],
       doctorList: [],
       patientList: [],
-      // 单条详情
-      editObj: {},
+      diabetesChecked: false,
+      bloodChecked: false,
       form: {
         // 基本信息
         hospitalId: "",
@@ -798,8 +800,8 @@ export default {
         .then((res) => {
           this.form = res.data;
           console.log(res.data);
-          this.diabetesForm = res.data.followDiabetesMongo
-          this.highBloodForm = res.data.followBloodMongo
+          this.diabetesForm = res.data.followDiabetesMongo;
+          this.highBloodForm = res.data.followBloodMongo;
         });
     },
     // 根据身高体重计算BMI
@@ -845,10 +847,13 @@ export default {
       this.$router.push({ path: "/hospitalManagement/follow" });
     },
     confirm() {
-      var form = this.form;
-      form.followBloodDTO = this.highBloodForm;
-      form.followDiabetesDTO = this.diabetesForm;
-      console.log(form);
+      let form = this.form;
+      if (this.diabetesChecked === true) {
+        form.followDiabetesDTO = this.diabetesForm;
+      }
+      if (this.bloodChecked === true) {
+        form.followBloodDTO = this.highBloodForm;
+      }
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 编辑
@@ -857,15 +862,17 @@ export default {
               .putFollow(form, this.$route.query.id)
               .then((res) => {
                 if (res.code === "OK") {
-                  this.$router.push({ path: "/hospitalManagement/work/follow" });
+                  this.$router.push({
+                    path: "/hospitalManagement/work/follow",
+                  });
                 }
               });
           } else {
             // 新增
             httpAdminFollow.postFollow(form).then((res) => {
-                if (res.code === "OK") {
-                  this.$router.push({ path: "/hospitalManagement/work/follow" });
-                }
+              if (res.code === "OK") {
+                this.$router.push({ path: "/hospitalManagement/work/follow" });
+              }
             });
           }
         }
@@ -874,7 +881,16 @@ export default {
   },
 };
 </script>
-
+<style>
+.el-checkbox {
+  margin-bottom: 18px;
+}
+.el-checkbox__label {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+</style>
 <style lang="scss" scoped>
 .content-box {
   display: flex;
@@ -883,6 +899,7 @@ export default {
     width: 95%;
   }
 }
+
 .btn-box {
   text-align: center;
 }
