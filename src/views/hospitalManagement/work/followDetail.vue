@@ -36,12 +36,11 @@
               prop="patientUserId">
               <el-select v-model="form.patientUserId"
                 placeholder="请选择用户"
-                value-key="id"
                 @change="selectPatient">
                 <el-option v-for="item in patientList"
                   :key="item.id"
                   :label="item.name"
-                  :value="item"></el-option>
+                  :value="item.id"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="用户身份证号"
@@ -178,8 +177,6 @@
             </el-form-item>
             <el-form-item label="此次随访分类">
               <el-select v-model="form.FollowClassStatus"
-                multiple
-                clearable
                 placeholder="请选择此次随访分类">
                 <el-option v-for="item in FollowClassStatusList"
                   :key="item.id"
@@ -733,7 +730,7 @@ export default {
         minuteMovement: "",
         adjustMentality: "",
         compliance: "",
-        FollowClassStatus: [],
+        FollowClassStatus: "",
         userStatus: "",
         content: "",
       },
@@ -807,8 +804,6 @@ export default {
   },
   mounted() {
     this.getHospitalList();
-    this.getDoctorList();
-    this.getPatientList();
   },
   methods: {
     // 列表数据
@@ -825,6 +820,8 @@ export default {
             this.bloodChecked = true;
             this.highBloodForm = res?.data?.followBloodMongo;
           }
+          this.getDoctorList(res.data.hospitalId);
+          this.getPatientList(res.data.doctorUserIdd);
           this.loading = false;
         });
     },
@@ -864,8 +861,9 @@ export default {
       this.form.patientIdCard = "";
     },
     selectPatient(val) {
-      this.form.patientUserId = val.id;
-      this.form.patientIdCard = val.idCard;
+      httpAdminPatient.getPatient({ userId: val }).then((res) => {
+        this.form.patientIdCard = res.data.elements[0].idCard;
+      });
     },
     cancel() {
       this.$router.push({ path: "/hospitalManagement/follow" });

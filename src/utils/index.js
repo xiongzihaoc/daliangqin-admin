@@ -482,7 +482,7 @@ export const referralReasonStatusesList = [
   { id: 3, label: "意识或行为改变、呼吸有烂苹果丙酮味、心悸、出汗、食欲减退、恶心、呕吐、多饮、多尿、腹痛、有深大呼吸、皮肤潮红", value: "BEHAVIOR_CHANGE" },
   { id: 4, label: "持续性心动过速（心率超过100次/分钟）", value: "PERSISTENT_TACHYCARDIA" },
   { id: 5, label: "体温超过39摄氏度", value: "TEMPERATURE_EXCEEDS" },
-  { id: 6, label: "其他的突发异常情况（如市里突然骤降、妊娠期及哺乳期血糖高于正常等危险情况之一）", value: "OTHER_ABNORMALITIES" },
+  { id: 6, label: "其他的突发异常情况（如视力突然骤降、妊娠期及哺乳期血糖高于正常等危险情况之一）", value: "OTHER_ABNORMALITIES" },
   { id: 7, label: "存在不能处理的其他疾病", value: "CANT_HANDLE_DISEASE" },
   { id: 8, label: "连续两次血糖控制不满意", value: "CONTINUOUS_TWO_BLOOD_SUGAR_CONTROL_NO_SATISFACTION" },
   { id: 9, label: "药物不良反应难以控制", value: "DRUG_ADVERSE_REACTIONS_CANT_CONTROL" },
