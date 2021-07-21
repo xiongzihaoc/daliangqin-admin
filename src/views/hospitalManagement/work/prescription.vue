@@ -506,7 +506,11 @@ export default {
     },
     templateDialogEnter() {},
     deleteTemplateBtn() {},
-    templateSetDialogEnter() {},
+    templateSetDialogEnter() {
+      httpAdminTemplate.postTemplate(this.templateForm).then(res=>{
+        console.log(res);
+      })
+    },
     /***** 搜索区域 *****/
     /***** 表格格式化内容 *****/
     doctorTypeFormatter(row) {
