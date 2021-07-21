@@ -650,22 +650,22 @@ export default {
       BloodReferralReasonStatusesList,
       FormRules: {
         hospitalId: [
-          { required: true, message: "请选择医院", trigger: "blur" },
+          { required: true, message: "请选择医院", trigger: "change" },
         ],
         doctorUserId: [
-          { required: true, message: "请选择医生", trigger: "blur" },
+          { required: true, message: "请选择医生", trigger: "change" },
         ],
         patientUserId: [
-          { required: true, message: "请选择用户", trigger: "blur" },
+          { required: true, message: "请选择用户", trigger: "change" },
         ],
         patientIdCard: [
-          { required: true, message: "请输入用户身份证号", trigger: "blur" },
+          { required: true, message: "请输入用户身份证号", trigger: "change" },
         ],
         startTime: [
-          { required: true, message: "请选择随访开始时间", trigger: "blur" },
+          { required: true, message: "请选择随访开始时间", trigger: "change" },
         ],
         endTime: [
-          { required: true, message: "请选择随访结束时间", trigger: "blur" },
+          { required: true, message: "请选择随访结束时间", trigger: "change" },
         ],
         nowHeight: [
           { required: true, message: "请输入本次身高", trigger: "blur" },
@@ -673,15 +673,17 @@ export default {
         nowWeight: [
           { required: true, message: "请输入本次体重", trigger: "blur" },
         ],
-        type: [{ required: true, message: "请选择随访方式", trigger: "blur" }],
+        type: [
+          { required: true, message: "请选择随访方式", trigger: "change" },
+        ],
         weightSuggest: [
           { required: true, message: "请输入体重建议", trigger: "blur" },
         ],
         userStatus: [
-          { required: true, message: "请选择用户状态", trigger: "blur" },
+          { required: true, message: "请选择用户状态", trigger: "change" },
         ],
         content: [
-          { required: true, message: "请输入随访备注", trigger: "blur" },
+          { required: true, message: "请输入随访备注", trigger: "change" },
         ],
       },
       diabetesFormRules: {
@@ -800,7 +802,7 @@ export default {
     if (this.$route.query.type === "edit") {
       this.getList();
     } else {
-      this.loading = false
+      this.loading = false;
     }
   },
   mounted() {
@@ -883,38 +885,52 @@ export default {
           form.followBloodDTO = this.highBloodForm;
         }
       }
-      this.$refs.FormRef.validate((valid) => {
-        if (valid) {
-          if (this.diabetesChecked === true) {
-            this.$refs.diabetesFormRef.validate((diabetesValid) => {
-              if (diabetesValid) {
-                // next()
-              }
-            });
+
+      let FormRef = new Promise((resolve, reject) => {
+        this.$refs.FormRef.validate((valid) => {
+          if (valid) {
+            resolve();
           }
-          console.log(3333);
-          // if (this.bloodChecked === true) {
-          //   this.$refs.bloddFormRef.validate((bloodValid) => {});
-          // }
-          // 编辑
-          // if (this.$route.query.type === "edit") {
-          //   httpAdminFollow
-          //     .putFollow(form, this.$route.query.id)
-          //     .then((res) => {
-          //       if (res.code === "OK") {
-          //         this.$router.push({
-          //           path: "/hospitalManagement/work/follow",
-          //         });
-          //       }
-          //     });
-          // } else {
-          //   // 新增
-          //   httpAdminFollow.postFollow(form).then((res) => {
-          //     if (res.code === "OK") {
-          //       this.$router.push({ path: "/hospitalManagement/work/follow" });
-          //     }
-          //   });
-          // }
+        });
+      });
+      let refArr = [FormRef];
+      if (this.diabetesChecked === true) {
+        let diabetesFormRef = new Promise((resolve, reject) => {
+          this.$refs.diabetesFormRef.validate((valid) => {
+            if (valid) {
+              resolve();
+            }
+          });
+        });
+        refArr.push(diabetesFormRef);
+      }
+      if (this.bloodChecked === true) {
+        let bloddFormRef = new Promise((resolve, reject) => {
+          this.$refs.bloddFormRef.validate((valid) => {
+            if (valid) {
+              resolve();
+            }
+          });
+        });
+        refArr.push(bloddFormRef);
+      }
+      Promise.all(refArr).then(() => {
+        // 编辑
+        if (this.$route.query.type === "edit") {
+          httpAdminFollow.putFollow(form, this.$route.query.id).then((res) => {
+            if (res.code === "OK") {
+              this.$router.push({
+                path: "/hospitalManagement/work/follow",
+              });
+            }
+          });
+        } else {
+          // 新增
+          httpAdminFollow.postFollow(form).then((res) => {
+            if (res.code === "OK") {
+              this.$router.push({ path: "/hospitalManagement/work/follow" });
+            }
+          });
         }
       });
     },
@@ -929,6 +945,17 @@ export default {
   font-size: 18px;
   font-weight: 700;
   color: #000;
+}
+.el-select__tags-text {
+  display: inline-block;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.el-select .el-tag__close.el-icon-close {
+  top: -7px;
+  right: -4px;
 }
 </style>
 <style lang="scss" scoped>

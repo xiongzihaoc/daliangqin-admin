@@ -473,7 +473,7 @@ export const bloodComplicationTypeList = [
   { id: 14, label: "脑梗塞", value: "CEREBRAL_INFARCTION" },
   { id: 15, label: "视力减退", value: "VISION_LOSS" },
   { id: 16, label: "眼底出血", value: "FUNDUS_BLEEDING" },
-  { id: 17, label: "肢动脉硬化（间歇性跛行）", value: "LIMB_ARTERIOSCLEROSIS" },
+  { id: 17, label: "下肢动脉硬化（间歇性跛行）", value: "LIMB_ARTERIOSCLEROSIS" },
 ]
 // 转诊原因
 export const referralReasonStatusesList = [

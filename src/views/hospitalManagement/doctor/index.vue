@@ -21,12 +21,12 @@
             size="small"
             placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item label="身份证"
+        <el-form-item label="身份证号"
           align="left"
           prop="idCard">
           <el-input v-model="searchForm.idCard"
             size="small"
-            placeholder="请输入身份证"></el-input>
+            placeholder="请输入身份证号"></el-input>
         </el-form-item>
         <el-form-item label="性别"
           align="left"

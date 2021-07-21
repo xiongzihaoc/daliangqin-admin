@@ -86,6 +86,10 @@
         :formatter="createTimeFormatter">
       </el-table-column>
       <el-table-column align="center"
+        prop="userName"
+        label="创建人">
+      </el-table-column>
+      <el-table-column align="center"
         prop="publishTime"
         label="发布时间"
         :formatter="publishTimeFormatter">
