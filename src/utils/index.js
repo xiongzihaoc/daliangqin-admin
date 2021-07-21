@@ -176,6 +176,16 @@ export function validateTime(rule, value, callback) {
     callback();
   }
 }
+// 收缩压 舒张压 输入限制
+export function validateDiastoleLowPressure(rule, value, callback) {
+  if (!value) {
+    return callback(new Error('舒张压不能为空'))
+  } else if (value > 200) {
+    return callback(new Error('舒张压不能超过200'))
+  } else {
+    callback();
+  }
+}
 // 血糖保留一位小数
 export function validateGlucoseScore(rule, value, callback) {
   if (!value) {

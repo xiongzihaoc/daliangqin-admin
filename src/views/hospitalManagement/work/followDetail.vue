@@ -110,7 +110,7 @@
           <div>
             <h3>行为方式</h3>
             <el-form-item label="日吸烟量">
-              <el-input v-model="form.daySmoking"
+              <el-input oninput="if (value > 60) value = 60" v-model="form.daySmoking"
                 v-Int
                 maxlength="2"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">支</i></el-input>
@@ -122,7 +122,7 @@
                   style="font-style:normal;margin-right: 10px;">支</i></el-input>
             </el-form-item>
             <el-form-item label="日饮酒量">
-              <el-input v-model="form.dayDrink"
+              <el-input oninput="if (value > 30) value = 30" v-model="form.dayDrink"
                 v-Int
                 maxlength="2"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">两</i></el-input>
@@ -134,19 +134,19 @@
                   style="font-style:normal;margin-right: 10px;">两</i></el-input>
             </el-form-item>
             <el-form-item label="运动次/周">
-              <el-input v-model="form.weekMovement"
+              <el-input oninput="if (value > 20) value = 20" v-model="form.weekMovement"
                 v-Int
                 maxlength="3"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">次</i></el-input>
             </el-form-item>
             <el-form-item label="运动分钟/次">
-              <el-input v-model="form.minuteMovement"
+              <el-input oninput="if (value > 500) value = 500" v-model="form.minuteMovement"
                 v-Int
                 maxlength="3"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">分钟</i></el-input>
             </el-form-item>
             <el-form-item label="日主食量">
-              <el-input v-model="form.dayFood"
+              <el-input oninput="if (value > 5000) value = 5000" v-model="form.dayFood"
                 v-Int
                 maxlength="4"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">克</i></el-input>
@@ -239,14 +239,15 @@
           </el-form-item>
           <el-form-item label="收缩压"
             prop="shrinkHighPressure">
-            <el-input v-model="diabetesForm.shrinkHighPressure"
+            <el-input oninput="if (value > 300) value = 300" v-model="diabetesForm.shrinkHighPressure"
               v-Int
               maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="舒张压"
             prop="diastoleLowPressure">
-            <el-input v-model="diabetesForm.diastoleLowPressure"
+            <el-input oninput="if (value > 200) value = 200"
+              v-model="diabetesForm.diastoleLowPressure"
               v-Int
               maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
@@ -255,13 +256,13 @@
             prop="fastingBloodGlucose">
             <el-input v-model="diabetesForm.fastingBloodGlucose"
               maxlength="4"
-              oninput="value=value.replace(/[^0-9.]/g,'')"><i slot="suffix"
+              oninput="if (value > 36) {value = 36;return} value=value.replace(/[^0-9.]/g,'')"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="血糖随机">
             <el-input v-model="diabetesForm.bloodGlucoseRandom"
               maxlength="4"
-              oninput="value=value.replace(/[^0-9.]/g,'')"><i slot="suffix"
+              oninput="if (value > 36) {value = 36;return} value=value.replace(/[^0-9.]/g,'')"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="糖化血红蛋白"
@@ -460,14 +461,14 @@
           </el-form-item>
           <el-form-item label="收缩压"
             prop="shrinkHighPressure">
-            <el-input v-model="highBloodForm.shrinkHighPressure"
+            <el-input oninput="if (value > 300) value = 300" v-model="highBloodForm.shrinkHighPressure"
               v-Int
               maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="舒张压"
             prop="diastoleLowPressure">
-            <el-input v-model="highBloodForm.diastoleLowPressure"
+            <el-input oninput="if (value > 200) value = 200" v-model="highBloodForm.diastoleLowPressure"
               v-Int
               maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
