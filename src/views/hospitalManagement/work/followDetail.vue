@@ -822,7 +822,6 @@ export default {
           }
           this.getDoctorList(res.data.hospitalId);
           this.getPatientList(res.data.doctorUserIdd);
-          this.loading = false;
         });
     },
     // 根据身高体重计算BMI
@@ -847,6 +846,7 @@ export default {
     getPatientList(val) {
       httpAdminPatient.getPatient({ doctorUserId: val }).then((res) => {
         this.patientList = res.data.elements;
+        this.loading = false;
       });
     },
     selectHospital(val) {
