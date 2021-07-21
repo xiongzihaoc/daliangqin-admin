@@ -827,10 +827,10 @@ export default {
     },
     // 根据身高体重计算BMI
     computeBmi() {
-      if (this.form.height && this.form.weight) {
-        this.form.bmi = (
-          this.form.weight /
-          ((this.form.height / 100) * (this.form.height / 100))
+      if (this.form.nowHeight.length > 0 && this.form.nowWeight.length > 0) {
+        this.form.BMI = (
+          this.form.nowWeight /
+          ((this.form.nowHeight / 100) * (this.form.nowHeight / 100))
         ).toFixed(2);
       }
     },
