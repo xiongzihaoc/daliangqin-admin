@@ -11,7 +11,7 @@
           prop="description">
           <el-input v-model="searchForm.description"
             size="small"
-            placeholder="请输入姓名"></el-input>
+            placeholder="请输入目录"></el-input>
         </el-form-item>
         <el-form-item label="姓名"
           align="left"

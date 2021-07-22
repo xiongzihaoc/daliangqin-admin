@@ -41,6 +41,7 @@ const user = {
             return Message.error('用户信息不存在')
           } else {
             if (res.data.adminRoleType) {
+              window.localStorage.setItem('userId',res.data.userId)
               commit('SET_TOKEN', "xzh")
               setToken("xzh")
               resolve()

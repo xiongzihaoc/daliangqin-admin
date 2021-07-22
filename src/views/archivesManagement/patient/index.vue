@@ -135,7 +135,8 @@
       :pageSize="pageSize"
       :total="total"
       @handleSizeChange="handleSizeChange"
-      @handleCurrentChange="handleCurrentChange">
+      @handleCurrentChange="handleCurrentChange"
+      v-loading="loading">
 
       <!-- 操作 -->
       <el-table-column align="center"

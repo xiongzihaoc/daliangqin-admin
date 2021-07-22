@@ -113,9 +113,22 @@
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
+        <el-form-item label="医院名称"
+          prop="doctorUserId">
+          <el-select v-model="editAddForm.hospitalId"
+            @change="selectHospital"
+            :disabled="this.infoTitle == '编辑' ? true : false"
+            style="width: 100%">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="医生姓名"
           prop="doctorUserId">
           <el-select v-model="editAddForm.doctorUserId"
+            @change="selectDoctor"
             :disabled="this.infoTitle == '编辑' ? true : false"
             style="width: 100%">
             <el-option v-for="item in doctorList"
@@ -127,6 +140,7 @@
         <el-form-item label="用户姓名"
           prop="patientUserId">
           <el-select v-model="editAddForm.patientUserId"
+            @change="selectPatient"
             :disabled="this.infoTitle == '编辑' ? true : false"
             style="width: 100%">
             <el-option v-for="item in patientList"
@@ -137,13 +151,13 @@
         </el-form-item>
         <el-form-item label="选择模板"
           prop="templateName">
-          <el-select multiple
+          <el-select multiple clearable
             @change="selectTemplate"
             value-key="name"
             style="width: 100%"
             v-model="editAddForm.templateName">
             <el-option v-for="item in templateList"
-              :key="item.id"
+              :key="item.name"
               :label="item.name"
               :value="item"></el-option>
           </el-select>
@@ -166,6 +180,7 @@
     <el-dialog title="模板配置"
       :visible.sync="templateDialogVisible"
       width="60%"
+      ref="templateDialogRef"
       v-dialogDrag>
       <div>
         <el-button @click="templateAdd"
@@ -178,7 +193,7 @@
       <el-table :data="templateList"
         style="width: 100%">
         <el-table-column align="center"
-          label="模板标题"
+          label="序号"
           type="index"
           width="80">
         </el-table-column>
@@ -188,28 +203,39 @@
         </el-table-column>
         <el-table-column align="center"
           label="模板内容"
-          prop="name">
+          prop="content">
         </el-table-column>
         <el-table-column align="center"
           label="创建人"
-          prop="name">
+          prop="userName">
         </el-table-column>
         <el-table-column align="center"
           label="创建时间"
-          prop="name">
+          :formatter="(row)=>{ return parseTime(row.createTime)}"
+          prop="createTime">
         </el-table-column>
         <el-table-column align="center"
           label="操作">
           <template slot-scope="scope">
             <el-button size="mini"
               type="primary"
-              @click="editBtn(scope.row)">编辑</el-button>
+              @click="editTemplateBtn(scope.row)">编辑</el-button>
             <el-button size="mini"
               type="danger"
-              @click="deleteTemplateBtn(scope.row)">删除</el-button>
+              @click="deleteTemplateBtn(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <!-- 模板配置分页 -->
+      <el-pagination background
+        @size-change="templateSizeChange"
+        @current-change="templateCurrentChange"
+        :current-page="templatePageNum"
+        :page-sizes="[10, 20, 50]"
+        :page-size="templatePageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="templateTotal"
+        class="el-pagination-style"></el-pagination>
       <span slot="footer"
         class="dialog-footer">
         <el-button @click="templateDialogVisible = false">取 消</el-button>
@@ -217,7 +243,7 @@
           @click="templateDialogEnter">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="模板配置"
+    <el-dialog :title="templateSetTitle"
       :visible.sync="templateSetDialogVisible"
       width="60%"
       v-dialogDrag>
@@ -248,10 +274,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import singleUpload from "@/components/Upload";
+import EleTable from "@/components/Untable";
 import { httpAdminUserTemplate } from "@/api/admin/httpAdminUserTemplate";
 import { httpAdminTemplate } from "@/api/admin/httpAdminTemplate";
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
 import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
 import {
@@ -263,7 +289,6 @@ import {
 export default {
   components: {
     EleTable,
-    singleUpload,
   },
   data() {
     return {
@@ -290,9 +315,12 @@ export default {
       },
       list: [],
       templateList: [],
+      hospitalList: [],
       doctorList: [],
       patientList: [],
+      userId: "",
       editAddForm: {
+        hospitalId: "",
         doctorUserId: "",
         patientUserId: "",
         templateName: [],
@@ -347,10 +375,14 @@ export default {
         name: "",
         content: "",
       },
+      templateSetTitle: "",
       // 分页区域
       pageSize: 10,
       pageNum: 1,
       total: 0,
+      templatePageSize: 10,
+      templatePageNum: 1,
+      templateTotal: 0,
       // 弹框区域
       editDialogVisible: false,
       infoTitle: "",
@@ -359,10 +391,12 @@ export default {
     };
   },
   created() {
+    this.userId = window.localStorage.getItem("userId");
     this.getList();
   },
   mounted() {
     this.getTemplateList();
+    this.getHospitalList();
   },
   methods: {
     getList() {
@@ -380,31 +414,51 @@ export default {
     getTemplateList() {
       httpAdminTemplate.getTemplate().then((res) => {
         this.templateList = res.data.elements;
+        this.templateTotal = res.data.totalSize;
+      });
+    },
+    // 获取医院列表
+    getHospitalList() {
+      httpAdminHospital.getHospital().then((res) => {
+        this.hospitalList = res.data.elements;
       });
     },
     // 获取医生列表
-    getDoctorList() {
-      httpAdminDoctor.getDoctor().then((res) => {
-        console.log(res);
+    getDoctorList(val) {
+      httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
         this.doctorList = res.data.elements;
       });
     },
     // 获取用户列表
-    getPatientList() {
-      httpAdminPatient.getPatient().then((res) => {
+    getPatientList(val) {
+      httpAdminPatient.getPatient({ doctorUserId: val }).then((res) => {
         this.patientList = res.data.elements;
       });
     },
     // 获取用户列表
     selectTemplate(val) {
-      this.editAddForm.templates = val.map((item) => {
-        return { content: item.content, name: item.name };
-      });
+      console.log(this.editAddForm.templateName);
+      // this.editAddForm.templates = val.map((item) => {
+      //   return { content: item.content, name: item.name };
+      // });
       this.$set(
         this.editAddForm,
         "content",
         JSON.stringify(this.editAddForm.templates)
       );
+    },
+    selectHospital(val) {
+      this.getDoctorList(val);
+      this.editAddForm.doctorUserId = "";
+      this.editAddForm.patientUserId = "";
+    },
+    selectDoctor(val) {
+      this.$forceUpdate();
+      this.getPatientList(val);
+      this.editAddForm.patientUserId = "";
+    },
+    selectPatient() {
+      this.$forceUpdate();
     },
     // 搜索
     searchBtn() {
@@ -431,7 +485,6 @@ export default {
     },
     // 删除单个
     async deleteBtn(id) {
-      console.log(id);
       const confirmResult = await this.$confirm(
         "你确定要执行此操作, 是否继续?",
         "提示",
@@ -463,7 +516,6 @@ export default {
     },
     // 新增编辑确定
     editPageEnter() {
-      console.log(this.editAddForm.content);
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           if (this.infoTitle === "新增") {
@@ -502,11 +554,66 @@ export default {
       this.templateDialogVisible = true;
     },
     templateAdd() {
+      this.templateSetTitle = "新增";
+      this.templateForm = {};
       this.templateSetDialogVisible = true;
     },
     templateDialogEnter() {},
-    deleteTemplateBtn() {},
-    templateSetDialogEnter() {},
+    editTemplateBtn(val) {
+      this.templateSetTitle = "编辑";
+      this.templateSetDialogVisible = true;
+      this.templateForm = JSON.parse(JSON.stringify(val));
+    },
+    async deleteTemplateBtn(id) {
+      const confirmResult = await this.$confirm(
+        "你确定要执行此操作, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => console.log(err));
+      if (confirmResult != "confirm") {
+        return this.$message.info("取消删除");
+      }
+      // 发送请求
+      httpAdminTemplate.deleteTemplate(id).then((res) => {
+        if (res.code === "OK") {
+          this.$notify.success({
+            title: "删除成功",
+          });
+        }
+        this.getTemplateList();
+        this.templateSetDialogVisible = false;
+      });
+    },
+    templateSetDialogEnter() {
+      this.templateForm.userId = this.userId;
+      if (this.templateSetTitle === "新增") {
+        // 发送请求
+        httpAdminTemplate.postTemplate(this.templateForm).then((res) => {
+          if (res.code === "OK") {
+            this.$notify.success({
+              title: "新增成功",
+            });
+            this.getTemplateList();
+            this.templateSetDialogVisible = false;
+          }
+        });
+      } else {
+        // 发送请求
+        httpAdminTemplate.putTemplate(this.templateForm).then((res) => {
+          if (res.code === "OK") {
+            this.$notify.success({
+              title: "编辑成功",
+            });
+            this.getTemplateList();
+            this.templateSetDialogVisible = false;
+          }
+        });
+      }
+    },
     /***** 搜索区域 *****/
     /***** 表格格式化内容 *****/
     doctorTypeFormatter(row) {
@@ -524,9 +631,15 @@ export default {
       this.getList();
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.templatePageNum = newPage;
+      this.getTemplateList();
     },
+    // 模板配置分页
+    templateSizeChange(newSize) {
+      this.templatePageSize = newSize;
+      this.getTemplateList();
+    },
+    templateCurrentChange() {},
   },
 };
 </script>

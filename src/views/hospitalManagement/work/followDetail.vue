@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
-    <div class="content-box">
+    <div class="content-box"
+      v-loading="loading">
       <!-- 基本信息 -->
       <div>
         <el-form ref="FormRef"
@@ -35,12 +36,11 @@
               prop="patientUserId">
               <el-select v-model="form.patientUserId"
                 placeholder="请选择用户"
-                value-key="id"
                 @change="selectPatient">
                 <el-option v-for="item in patientList"
                   :key="item.id"
                   :label="item.name"
-                  :value="item"></el-option>
+                  :value="item.id"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="用户身份证号"
@@ -62,6 +62,7 @@
             <el-form-item label="随访开始时间"
               prop="startTime">
               <el-date-picker v-model="form.startTime"
+                @blur="startTimeBlur"
                 type="datetime"
                 format="yyyy-MM-dd HH:mm"
                 value-format="timestamp"
@@ -70,7 +71,8 @@
             </el-form-item>
             <el-form-item label="随访结束时间"
               prop="endTime">
-              <el-date-picker v-model="form.endTime"
+              <el-date-picker @blur="endTimeBlur"
+                v-model="form.endTime"
                 type="datetime"
                 format="yyyy-MM-dd HH:mm"
                 value-format="timestamp"
@@ -110,7 +112,8 @@
           <div>
             <h3>行为方式</h3>
             <el-form-item label="日吸烟量">
-              <el-input v-model="form.daySmoking"
+              <el-input oninput="if (value > 60) value = 60"
+                v-model="form.daySmoking"
                 v-Int
                 maxlength="2"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">支</i></el-input>
@@ -122,7 +125,8 @@
                   style="font-style:normal;margin-right: 10px;">支</i></el-input>
             </el-form-item>
             <el-form-item label="日饮酒量">
-              <el-input v-model="form.dayDrink"
+              <el-input oninput="if (value > 30) value = 30"
+                v-model="form.dayDrink"
                 v-Int
                 maxlength="2"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">两</i></el-input>
@@ -134,25 +138,40 @@
                   style="font-style:normal;margin-right: 10px;">两</i></el-input>
             </el-form-item>
             <el-form-item label="运动次/周">
-              <el-input v-model="form.weekMovement"
+              <el-input oninput="if (value > 20) value = 20"
+                v-model="form.weekMovement"
                 v-Int
                 maxlength="3"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">次</i></el-input>
             </el-form-item>
             <el-form-item label="运动分钟/次">
-              <el-input v-model="form.minuteMovement"
+              <el-input oninput="if (value > 500) value = 500"
+                v-model="form.minuteMovement"
                 v-Int
                 maxlength="3"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">分钟</i></el-input>
             </el-form-item>
             <el-form-item label="日主食量">
-              <el-input v-model="form.dayFood"
+              <el-input oninput="if (value > 5000) value = 5000"
+                v-model="form.dayFood"
                 v-Int
                 maxlength="4"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">克</i></el-input>
             </el-form-item>
             <el-form-item label="日主食量建议">
               <el-input v-model="form.dayFoodSuggest"
+                v-Int
+                maxlength="4"><i slot="suffix"
+                  style="font-style:normal;margin-right: 10px;">克</i></el-input>
+            </el-form-item>
+            <el-form-item label="摄盐情况">
+              <el-input v-model="form.saltIntake"
+                v-Int oninput="if (value > 99) value = 99"
+                maxlength="3"><i slot="suffix"
+                  style="font-style:normal;margin-right: 10px;">克</i></el-input>
+            </el-form-item>
+            <el-form-item label="摄盐情况建议">
+              <el-input oninput="if (value > 99) value = 99" v-model="form.saltIntakeSuggest"
                 v-Int
                 maxlength="4"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">克</i></el-input>
@@ -177,8 +196,6 @@
             </el-form-item>
             <el-form-item label="此次随访分类">
               <el-select v-model="form.FollowClassStatus"
-                multiple
-                clearable
                 placeholder="请选择此次随访分类">
                 <el-option v-for="item in FollowClassStatusList"
                   :key="item.id"
@@ -206,9 +223,10 @@
         </el-form>
       </div>
       <!-- 糖尿病随访 -->
-      <div>
-        <h3>添加糖尿病随访</h3>
-        <el-form ref="diabetesFormRef"
+      <div style="padding-top:20px;">
+        <el-checkbox v-model="diabetesChecked">糖尿病随访</el-checkbox>
+        <el-form v-if="diabetesChecked === true"
+          ref="diabetesFormRef"
           :model="diabetesForm"
           :rules="diabetesFormRules"
           label-width="130px">
@@ -240,14 +258,16 @@
           </el-form-item>
           <el-form-item label="收缩压"
             prop="shrinkHighPressure">
-            <el-input v-model="diabetesForm.shrinkHighPressure"
+            <el-input oninput="if (value > 300) value = 300"
+              v-model="diabetesForm.shrinkHighPressure"
               v-Int
               maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="舒张压"
             prop="diastoleLowPressure">
-            <el-input v-model="diabetesForm.diastoleLowPressure"
+            <el-input oninput="if (value > 200) value = 200"
+              v-model="diabetesForm.diastoleLowPressure"
               v-Int
               maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
@@ -256,19 +276,18 @@
             prop="fastingBloodGlucose">
             <el-input v-model="diabetesForm.fastingBloodGlucose"
               maxlength="4"
-              oninput="value=value.replace(/[^0-9.]/g,'')"><i slot="suffix"
+              oninput="if (value > 36) {value = 36;return} value=value.replace(/[^0-9.]/g,'')"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="血糖随机">
             <el-input v-model="diabetesForm.bloodGlucoseRandom"
               maxlength="4"
-              oninput="value=value.replace(/[^0-9.]/g,'')"><i slot="suffix"
+              oninput="if (value > 36) {value = 36;return} value=value.replace(/[^0-9.]/g,'')"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
-          <el-form-item label="糖化血红蛋白"
-            prop="weight">
+          <el-form-item label="糖化血红蛋白">
             <el-input v-model="diabetesForm.glycosylatedHemoglobin"
-              v-Int><i slot="suffix"
+              v-Int oninput="if (value > 100) value = 100" maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">%</i></el-input>
           </el-form-item>
           <el-form-item label="其他辅助检查">
@@ -287,6 +306,11 @@
                 :label="item.label"
                 :value="item.value"></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="其他并发症症状">
+            <el-input type="textarea"
+              v-model="diabetesForm.otherComplication"
+              placeholder="请输入并发症症状"></el-input>
           </el-form-item>
           <el-form-item label="转诊原因">
             <el-select v-model="diabetesForm.referralReasonStatuses"
@@ -395,7 +419,7 @@
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="不良反应情况">
+          <el-form-item label="不良反应情况" v-if="this.diabetesForm.drugReaction === 'HAVE'">
             <el-input v-model="diabetesForm.reactionRemark"
               type="textarea"
               maxlength="140"
@@ -430,9 +454,10 @@
         </el-form>
       </div>
       <!-- 高血压随访 -->
-      <div>
-        <h3>添加高血压随访</h3>
-        <el-form ref="diabetesFormRef"
+      <div style="padding-top:20px;">
+        <el-checkbox v-model="bloodChecked">高血压随访</el-checkbox>
+        <el-form v-if="bloodChecked === true"
+          ref="bloddFormRef"
           :model="highBloodForm"
           :rules="highBloodFormRules"
           label-width="130px">
@@ -455,14 +480,16 @@
           </el-form-item>
           <el-form-item label="收缩压"
             prop="shrinkHighPressure">
-            <el-input v-model="highBloodForm.shrinkHighPressure"
+            <el-input oninput="if (value > 300) value = 300"
+              v-model="highBloodForm.shrinkHighPressure"
               v-Int
               maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="舒张压"
             prop="diastoleLowPressure">
-            <el-input v-model="highBloodForm.diastoleLowPressure"
+            <el-input oninput="if (value > 200) value = 200"
+              v-model="highBloodForm.diastoleLowPressure"
               v-Int
               maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
@@ -489,6 +516,11 @@
                 :label="item.label"
                 :value="item.value"></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="其他并发症症状">
+            <el-input type="textarea"
+              v-model="highBloodForm.otherComplication"
+              placeholder="请输入并发症症状"></el-input>
           </el-form-item>
           <el-form-item label="转诊原因">
             <el-select v-model="highBloodForm.referralReasonStatuses"
@@ -552,7 +584,7 @@
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="不良反应情况">
+          <el-form-item label="不良反应情况" v-if="this.highBloodForm.drugReaction === 'HAVE'">
             <el-input v-model="highBloodForm.reactionRemark"
               type="textarea"
               maxlength="140"
@@ -637,22 +669,22 @@ export default {
       BloodReferralReasonStatusesList,
       FormRules: {
         hospitalId: [
-          { required: true, message: "请选择医院", trigger: "blur" },
+          { required: true, message: "请选择医院", trigger: "change" },
         ],
         doctorUserId: [
-          { required: true, message: "请选择医生", trigger: "blur" },
+          { required: true, message: "请选择医生", trigger: "change" },
         ],
         patientUserId: [
-          { required: true, message: "请选择用户", trigger: "blur" },
+          { required: true, message: "请选择用户", trigger: "change" },
         ],
         patientIdCard: [
-          { required: true, message: "请输入用户身份证号", trigger: "blur" },
+          { required: true, message: "请输入用户身份证号", trigger: "change" },
         ],
         startTime: [
-          { required: true, message: "请选择随访开始时间", trigger: "blur" },
+          { required: true, message: "请选择随访开始时间", trigger: "change" },
         ],
         endTime: [
-          { required: true, message: "请选择随访结束时间", trigger: "blur" },
+          { required: true, message: "请选择随访结束时间", trigger: "change" },
         ],
         nowHeight: [
           { required: true, message: "请输入本次身高", trigger: "blur" },
@@ -660,15 +692,17 @@ export default {
         nowWeight: [
           { required: true, message: "请输入本次体重", trigger: "blur" },
         ],
-        type: [{ required: true, message: "请选择随访方式", trigger: "blur" }],
+        type: [
+          { required: true, message: "请选择随访方式", trigger: "change" },
+        ],
         weightSuggest: [
           { required: true, message: "请输入体重建议", trigger: "blur" },
         ],
         userStatus: [
-          { required: true, message: "请选择用户状态", trigger: "blur" },
+          { required: true, message: "请选择用户状态", trigger: "change" },
         ],
         content: [
-          { required: true, message: "请输入随访备注", trigger: "blur" },
+          { required: true, message: "请输入随访备注", trigger: "change" },
         ],
       },
       diabetesFormRules: {
@@ -693,8 +727,9 @@ export default {
       hospitalList: [],
       doctorList: [],
       patientList: [],
-      // 单条详情
-      editObj: {},
+      diabetesChecked: false,
+      bloodChecked: false,
+      loading: true,
       form: {
         // 基本信息
         hospitalId: "",
@@ -715,9 +750,13 @@ export default {
         dayDrinkSuggest: "",
         weekMovement: "",
         minuteMovement: "",
+        dayFood:"",
+        dayFoodSuggest:"",
+        saltIntake:"",
+        saltIntakeSuggest:"",
         adjustMentality: "",
         compliance: "",
-        FollowClassStatus: [],
+        FollowClassStatus: "",
         userStatus: "",
         content: "",
       },
@@ -732,6 +771,7 @@ export default {
         glycosylatedHemoglobin: "",
         otherInspection: "",
         complicationType: [],
+        otherComplication: "",
         referralReasonStatuses: [],
         otherReferralReason: "",
         referralAgency: "",
@@ -762,6 +802,7 @@ export default {
         physicalSignsOther: "",
         otherInspection: "",
         complicationType: [],
+        otherComplication: "",
         referralReasonStatuses: [],
         otherReferralReason: "",
         referralAgency: "",
@@ -780,15 +821,16 @@ export default {
     };
   },
   created() {
+    // 判断是编辑还是新增
     if (this.$route.query.type === "edit") {
       this.getList();
+    } else {
+      this.loading = false;
     }
-    // 判断是编辑还是新增
   },
   mounted() {
     this.getHospitalList();
-    this.getDoctorList();
-    this.getPatientList();
+    this.computeBmi()
   },
   methods: {
     // 列表数据
@@ -797,18 +839,47 @@ export default {
         .getFollowDetail({ id: this.$route.query.id })
         .then((res) => {
           this.form = res.data;
-          console.log(res.data);
-          this.diabetesForm = res.data.followDiabetesMongo
-          this.highBloodForm = res.data.followBloodMongo
+          if (Boolean(res.data.followDiabetesMongo)) {
+            this.diabetesChecked = true;
+            this.diabetesForm = res?.data?.followDiabetesMongo;
+          }
+          if (Boolean(res.data.followBloodMongo)) {
+            this.bloodChecked = true;
+            this.highBloodForm = res?.data?.followBloodMongo;
+          }
+          this.getDoctorList(res.data.hospitalId);
+          this.getPatientList(res.data.doctorUserIdd);
+          this.computeBmi()
         });
     },
     // 根据身高体重计算BMI
     computeBmi() {
-      if (this.form.height && this.form.weight) {
-        this.form.bmi = (
-          this.form.weight /
-          ((this.form.height / 100) * (this.form.height / 100))
+      if (this.form.nowHeight.length > 0 && this.form.nowWeight.length > 0) {
+        this.form.BMI = (
+          this.form.nowWeight /
+          ((this.form.nowHeight / 100) * (this.form.nowHeight / 100))
         ).toFixed(2);
+      }
+    },
+    startTimeBlur() {
+      if (this.form.endTime != "") {
+        if (this.form.endTime <= this.form.startTime) {
+          this.form.endTime = "";
+          return this.$notify.error({
+            title: "结束时间不能小于或等于开始时间",
+          });
+        }
+      }
+    },
+    // 结束时间失去焦点
+    endTimeBlur() {
+      if (this.form.startTime != "") {
+        if (this.form.endTime <= this.form.startTime) {
+          this.form.endTime = "";
+          return this.$notify.error({
+            title: "结束时间不能小于或等于开始时间",
+          });
+        }
       }
     },
     getHospitalList() {
@@ -824,6 +895,7 @@ export default {
     getPatientList(val) {
       httpAdminPatient.getPatient({ doctorUserId: val }).then((res) => {
         this.patientList = res.data.elements;
+        this.loading = false;
       });
     },
     selectHospital(val) {
@@ -838,43 +910,101 @@ export default {
       this.form.patientIdCard = "";
     },
     selectPatient(val) {
-      this.form.patientUserId = val.id;
-      this.form.patientIdCard = val.idCard;
+      httpAdminPatient.getPatient({ userId: val }).then((res) => {
+        this.form.patientIdCard = res.data.elements[0].idCard;
+      });
     },
     cancel() {
       this.$router.push({ path: "/hospitalManagement/follow" });
     },
     confirm() {
-      var form = this.form;
-      form.followBloodDTO = this.highBloodForm;
-      form.followDiabetesDTO = this.diabetesForm;
-      console.log(form);
-      this.$refs.FormRef.validate((valid) => {
-        if (valid) {
-          // 编辑
-          if (this.$route.query.type === "edit") {
-            httpAdminFollow
-              .putFollow(form, this.$route.query.id)
-              .then((res) => {
-                if (res.code === "OK") {
-                  this.$router.push({ path: "/hospitalManagement/work/follow" });
-                }
-              });
-          } else {
-            // 新增
-            httpAdminFollow.postFollow(form).then((res) => {
-                if (res.code === "OK") {
-                  this.$router.push({ path: "/hospitalManagement/work/follow" });
-                }
-            });
+      let form = this.form;
+      // 必须选一个随访类型
+      if (this.diabetesChecked === false && this.bloodChecked === false) {
+        return this.$notify.error({
+          title: "未添加随访",
+        });
+      } else {
+        if (this.diabetesChecked === true) {
+          form.followDiabetesDTO = this.diabetesForm;
+        }
+        if (this.bloodChecked === true) {
+          form.followBloodDTO = this.highBloodForm;
+        }
+      }
+
+      let FormRef = new Promise((resolve, reject) => {
+        this.$refs.FormRef.validate((valid) => {
+          if (valid) {
+            resolve();
           }
+        });
+      });
+      let refArr = [FormRef];
+      if (this.diabetesChecked === true) {
+        let diabetesFormRef = new Promise((resolve, reject) => {
+          this.$refs.diabetesFormRef.validate((valid) => {
+            if (valid) {
+              resolve();
+            }
+          });
+        });
+        refArr.push(diabetesFormRef);
+      }
+      if (this.bloodChecked === true) {
+        let bloddFormRef = new Promise((resolve, reject) => {
+          this.$refs.bloddFormRef.validate((valid) => {
+            if (valid) {
+              resolve();
+            }
+          });
+        });
+        refArr.push(bloddFormRef);
+      }
+      Promise.all(refArr).then(() => {
+        // 编辑
+        if (this.$route.query.type === "edit") {
+          httpAdminFollow.putFollow(form, this.$route.query.id).then((res) => {
+            if (res.code === "OK") {
+              this.$router.push({
+                path: "/hospitalManagement/work/follow",
+              });
+            }
+          });
+        } else {
+          // 新增
+          httpAdminFollow.postFollow(form).then((res) => {
+            if (res.code === "OK") {
+              this.$router.push({ path: "/hospitalManagement/work/follow" });
+            }
+          });
         }
       });
     },
   },
 };
 </script>
-
+<style>
+.el-checkbox {
+  margin-bottom: 18px;
+}
+.el-checkbox__label {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+}
+.el-select__tags-text {
+  display: inline-block;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.el-select .el-tag__close.el-icon-close {
+  top: -7px;
+  right: -4px;
+}
+</style>
 <style lang="scss" scoped>
 .content-box {
   display: flex;
@@ -883,6 +1013,7 @@ export default {
     width: 95%;
   }
 }
+
 .btn-box {
   text-align: center;
 }

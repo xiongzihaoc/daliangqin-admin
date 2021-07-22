@@ -219,7 +219,7 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
+import EleTable from "@/components/Untable";
 import { httpAdminTask } from "@/api/admin/httpAdminTask";
 import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
@@ -454,7 +454,6 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.getDoctorList(val.hospitalId);
       this.getPatientList(val.doctorUserId);
       this.infoTitle = "编辑";

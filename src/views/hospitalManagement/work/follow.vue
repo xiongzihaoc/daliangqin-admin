@@ -124,7 +124,6 @@
         size="small"
         plain
         icon="el-icon-plus">新增</el-button>
-
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
@@ -180,11 +179,6 @@
         prop="diabetesStatus">
       </el-table-column>
       <el-table-column align="center"
-<<<<<<< HEAD
-=======
-        slot="fixed"
-        fixed="left"
->>>>>>> master
         :formatter="heartRateStatus"
         label="心率"
         prop="heartRateStatus">
@@ -305,7 +299,6 @@ export default {
           userStatus: this.searchForm.userStatus,
         })
         .then((res) => {
-          console.log(res);
           this.list = res.data.elements;
           this.total = res.data.totalSize;
         });
@@ -402,7 +395,6 @@ export default {
       return formatterElement.followType[row.type];
     },
     highBloodStatusFormatter(row) {
-      console.log(row);
       return formatterElement.highBlood[row.highBloodStatus];
     },
     diabetesStatusFormatter(row) {

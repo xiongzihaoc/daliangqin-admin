@@ -176,6 +176,16 @@ export function validateTime(rule, value, callback) {
     callback();
   }
 }
+// 收缩压 舒张压 输入限制
+export function validateDiastoleLowPressure(rule, value, callback) {
+  if (!value) {
+    return callback(new Error('舒张压不能为空'))
+  } else if (value > 200) {
+    return callback(new Error('舒张压不能超过200'))
+  } else {
+    callback();
+  }
+}
 // 血糖保留一位小数
 export function validateGlucoseScore(rule, value, callback) {
   if (!value) {
@@ -437,7 +447,6 @@ export const symptomTypeList = [
   { id: 7, label: "乏力", value: "FATIGUE" },
   { id: 4, label: "视力模糊", value: "BLURRED_VISION" },
   { id: 5, label: "皮肤感染", value: "SKIN_INFECTION" },
-  { id: 15, label: "其他", value: "OTHER" },
 ]
 // 高血压症状类型
 export const bloodSymptomTypeList = [
@@ -447,7 +456,6 @@ export const bloodSymptomTypeList = [
   { id: 12, label: "胸闷", value: "CHEST_TIGHTNESS" },
   { id: 13, label: "胸痛", value: "CHEST_PAIN" },
   { id: 14, label: "下肢浮肿", value: "SWELLING_OF_LOWER_EXTREMITIES" },
-  { id: 15, label: "其他", value: "OTHER" },
 ]
 // 足动脉
 export const dorsalArteryStatusList = [
@@ -464,7 +472,6 @@ export const complicationTypeList = [
   { id: 6, label: "糖尿病酮症酸中毒", value: "DIABETIC_KETOACIDOSIS" },
   { id: 7, label: "高渗性昏迷", value: "HYPERTONIC_COMA" },
   { id: 8, label: "低血糖", value: "HYPOGLYCEMIA" },
-  { id: 18, label: "其他", value: "OTHER" },
 ]
 // 高血压并发症症状
 export const bloodComplicationTypeList = [
@@ -476,8 +483,7 @@ export const bloodComplicationTypeList = [
   { id: 14, label: "脑梗塞", value: "CEREBRAL_INFARCTION" },
   { id: 15, label: "视力减退", value: "VISION_LOSS" },
   { id: 16, label: "眼底出血", value: "FUNDUS_BLEEDING" },
-  { id: 17, label: "肢动脉硬化（间歇性跛行）", value: "LIMB_ARTERIOSCLEROSIS" },
-  { id: 18, label: "其他", value: "OTHER" },
+  { id: 17, label: "下肢动脉硬化（间歇性跛行）", value: "LIMB_ARTERIOSCLEROSIS" },
 ]
 // 转诊原因
 export const referralReasonStatusesList = [
@@ -486,7 +492,7 @@ export const referralReasonStatusesList = [
   { id: 3, label: "意识或行为改变、呼吸有烂苹果丙酮味、心悸、出汗、食欲减退、恶心、呕吐、多饮、多尿、腹痛、有深大呼吸、皮肤潮红", value: "BEHAVIOR_CHANGE" },
   { id: 4, label: "持续性心动过速（心率超过100次/分钟）", value: "PERSISTENT_TACHYCARDIA" },
   { id: 5, label: "体温超过39摄氏度", value: "TEMPERATURE_EXCEEDS" },
-  { id: 6, label: "其他的突发异常情况（如市里突然骤降、妊娠期及哺乳期血糖高于正常等危险情况之一）", value: "OTHER_ABNORMALITIES" },
+  { id: 6, label: "其他的突发异常情况（如视力突然骤降、妊娠期及哺乳期血糖高于正常等危险情况之一）", value: "OTHER_ABNORMALITIES" },
   { id: 7, label: "存在不能处理的其他疾病", value: "CANT_HANDLE_DISEASE" },
   { id: 8, label: "连续两次血糖控制不满意", value: "CONTINUOUS_TWO_BLOOD_SUGAR_CONTROL_NO_SATISFACTION" },
   { id: 9, label: "药物不良反应难以控制", value: "DRUG_ADVERSE_REACTIONS_CANT_CONTROL" },
@@ -528,7 +534,7 @@ export const drugReactionList = [
   { id: 2, label: "无", value: "NONE" },
 ]
 export const hypoglycemiaReactionList = [
-  { id: 1, label: "有", value: "HAVE" },
+  // { id: 1, label: "有", value: "HAVE" },
   { id: 2, label: "无", value: "NONE" },
   { id: 3, label: "偶尔", value: "OCCASIONALLY" },
   { id: 4, label: "频繁", value: "FREQUENTLY" },
@@ -548,9 +554,19 @@ export const healthEducationTypesList = [
   { id: 12, label: "适当用药", value: "APPROPRIATE_MEDICATION" },
   { id: 13, label: "预防低血糖", value: "PREVENT_HYPOGLYCEMIA" },
   { id: 14, label: "用药指导", value: "MEDICATION_GUIDANCE" },
-  { id: 15, label: "其他措施", value: "OTHER_MEASURES" },
 ]
-
+// 药品过敏
+export const allergyTypesList = [
+  { id: 1, label: "非药品过敏", value: "NO_DRUG_ALLERGY" },
+  { id: 2, label: "药品过敏", value: "DRUG_ALLERGY" },
+]
+// 既往史疾病
+export const pastHistoryTypeList = [
+  { id: 1, label: "疾病", value: "DISEASE" },
+  { id: 2, label: "手术", value: "SURGERY" },
+  { id: 3, label: "外伤", value: "TRAUMA" },
+  { id: 4, label: "输血", value: "BLOOD_TRANSFUSION" },
+]
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式

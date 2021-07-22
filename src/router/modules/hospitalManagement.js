@@ -68,15 +68,15 @@ const hospitalRouter = {
                         icon: 'general'
                     },
                 },
-                {
-                    path: "transfer",
-                    name: "transfer",
-                    component: () => import('@/views/hospitalManagement/work/transfer'),
-                    meta: {
-                        title: '转诊记录',
-                        icon: 'general'
-                    },
-                },
+                // {
+                //     path: "transfer",
+                //     name: "transfer",
+                //     component: () => import('@/views/hospitalManagement/work/transfer'),
+                //     meta: {
+                //         title: '转诊记录',
+                //         icon: 'general'
+                //     },
+                // },
                 {
                     path: "chat",
                     name: "chat",
