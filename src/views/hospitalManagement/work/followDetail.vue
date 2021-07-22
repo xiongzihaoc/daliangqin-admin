@@ -224,7 +224,7 @@
       </div>
       <!-- 糖尿病随访 -->
       <div style="padding-top:20px;">
-        <el-checkbox v-model="diabetesChecked">添加糖尿病随访</el-checkbox>
+        <el-checkbox v-model="diabetesChecked">糖尿病随访</el-checkbox>
         <el-form v-if="diabetesChecked === true"
           ref="diabetesFormRef"
           :model="diabetesForm"
@@ -455,7 +455,7 @@
       </div>
       <!-- 高血压随访 -->
       <div style="padding-top:20px;">
-        <el-checkbox v-model="bloodChecked">添加高血压随访</el-checkbox>
+        <el-checkbox v-model="bloodChecked">高血压随访</el-checkbox>
         <el-form v-if="bloodChecked === true"
           ref="bloddFormRef"
           :model="highBloodForm"
