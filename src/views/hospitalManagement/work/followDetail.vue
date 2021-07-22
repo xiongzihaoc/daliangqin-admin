@@ -166,12 +166,12 @@
             </el-form-item>
             <el-form-item label="摄盐情况">
               <el-input v-model="form.saltIntake"
-                v-Int oninput="if (value > 99) value = 00"
+                v-Int oninput="if (value > 99) value = 99"
                 maxlength="3"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">克</i></el-input>
             </el-form-item>
             <el-form-item label="摄盐情况建议">
-              <el-input v-model="form.saltIntakeSuggest"
+              <el-input oninput="if (value > 99) value = 99" v-model="form.saltIntakeSuggest"
                 v-Int
                 maxlength="4"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">克</i></el-input>
