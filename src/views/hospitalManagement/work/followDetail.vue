@@ -419,7 +419,7 @@
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="不良反应情况">
+          <el-form-item label="不良反应情况" v-if="this.diabetesForm.drugReaction === 'HAVE'">
             <el-input v-model="diabetesForm.reactionRemark"
               type="textarea"
               maxlength="140"
@@ -584,7 +584,7 @@
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="不良反应情况">
+          <el-form-item label="不良反应情况" v-if="this.highBloodForm.drugReaction === 'HAVE'">
             <el-input v-model="highBloodForm.reactionRemark"
               type="textarea"
               maxlength="140"
@@ -830,6 +830,7 @@ export default {
   },
   mounted() {
     this.getHospitalList();
+    this.computeBmi()
   },
   methods: {
     // 列表数据
@@ -848,6 +849,7 @@ export default {
           }
           this.getDoctorList(res.data.hospitalId);
           this.getPatientList(res.data.doctorUserIdd);
+          this.computeBmi()
         });
     },
     // 根据身高体重计算BMI
