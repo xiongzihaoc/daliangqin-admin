@@ -52,7 +52,7 @@ export default {
         return this.value;
       },
       set(val) {
-        this.value = val
+        this.value = val;
       },
     },
   },
