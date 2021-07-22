@@ -454,7 +454,6 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
       this.getDoctorList(val.hospitalId);
       this.getPatientList(val.doctorUserId);
       this.infoTitle = "编辑";

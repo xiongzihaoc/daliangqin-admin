@@ -555,7 +555,18 @@ export const healthEducationTypesList = [
   { id: 13, label: "预防低血糖", value: "PREVENT_HYPOGLYCEMIA" },
   { id: 14, label: "用药指导", value: "MEDICATION_GUIDANCE" },
 ]
-
+// 药品过敏
+export const allergyTypesList = [
+  { id: 1, label: "非药品过敏", value: "NO_DRUG_ALLERGY" },
+  { id: 2, label: "药品过敏", value: "DRUG_ALLERGY" },
+]
+// 既往史疾病
+export const pastHistoryTypeList = [
+  { id: 1, label: "疾病", value: "DISEASE" },
+  { id: 2, label: "手术", value: "SURGERY" },
+  { id: 3, label: "外伤", value: "TRAUMA" },
+  { id: 4, label: "输血", value: "BLOOD_TRANSFUSION" },
+]
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式
