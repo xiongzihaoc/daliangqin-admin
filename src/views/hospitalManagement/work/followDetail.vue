@@ -164,6 +164,18 @@
                 maxlength="4"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">克</i></el-input>
             </el-form-item>
+            <el-form-item label="摄盐情况">
+              <el-input v-model="form.saltIntake"
+                v-Int oninput="if (value > 99) value = 00"
+                maxlength="3"><i slot="suffix"
+                  style="font-style:normal;margin-right: 10px;">克</i></el-input>
+            </el-form-item>
+            <el-form-item label="摄盐情况建议">
+              <el-input v-model="form.saltIntakeSuggest"
+                v-Int
+                maxlength="4"><i slot="suffix"
+                  style="font-style:normal;margin-right: 10px;">克</i></el-input>
+            </el-form-item>
             <el-form-item label="心理调整">
               <el-select v-model="form.adjustMentality"
                 placeholder="请选择心理调整">
@@ -273,10 +285,9 @@
               oninput="if (value > 36) {value = 36;return} value=value.replace(/[^0-9.]/g,'')"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
           </el-form-item>
-          <el-form-item label="糖化血红蛋白"
-            prop="weight">
+          <el-form-item label="糖化血红蛋白">
             <el-input v-model="diabetesForm.glycosylatedHemoglobin"
-              v-Int><i slot="suffix"
+              v-Int oninput="if (value > 100) value = 100" maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">%</i></el-input>
           </el-form-item>
           <el-form-item label="其他辅助检查">
@@ -739,6 +750,10 @@ export default {
         dayDrinkSuggest: "",
         weekMovement: "",
         minuteMovement: "",
+        dayFood:"",
+        dayFoodSuggest:"",
+        saltIntake:"",
+        saltIntakeSuggest:"",
         adjustMentality: "",
         compliance: "",
         FollowClassStatus: "",
@@ -845,7 +860,7 @@ export default {
       }
     },
     startTimeBlur() {
-      if (this.form.endTime != '') {
+      if (this.form.endTime != "") {
         if (this.form.endTime <= this.form.startTime) {
           this.form.endTime = "";
           return this.$notify.error({
@@ -856,7 +871,7 @@ export default {
     },
     // 结束时间失去焦点
     endTimeBlur() {
-      if (this.form.startTime != '') {
+      if (this.form.startTime != "") {
         if (this.form.endTime <= this.form.startTime) {
           this.form.endTime = "";
           return this.$notify.error({
