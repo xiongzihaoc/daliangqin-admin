@@ -88,9 +88,11 @@ div:focus {
   margin-top: 10px;
   text-align: right;
 }
+
 .w100 {
-  width: 100%;
+  width: 100% !important;
 }
+
 .tableAdd {
   margin-bottom: 10px;
 }
