@@ -28,7 +28,7 @@
           </el-form-item>
           <el-form-item label="省市区"
             prop="addressDetail">
-            <el-cascader v-model="form.addressDetail"
+            <el-cascader class="w100" v-model="form.addressDetail"
               :options="addressJson"
               :props="cateListProps"
               @change="selectAddrssChange"
@@ -278,7 +278,8 @@
           <!-- 动态既往史 -->
           <div v-for="(item, index) in form.pastHistories"
             :key="index">
-            <div style="margin-left:50px">
+            <div style="margin-left:50px"
+              v-if="form.pastHistories.length > 1">
               <el-button type="danger"
                 size="mini"
                 @click="deletePastHistories(item,index)">删除</el-button>
@@ -613,16 +614,9 @@ export default {
           let value = res.data.elements[0];
           if (value.archivesMongo) {
             this.form = value?.archivesMongo;
-            this.archivesFamily.father =
-              value?.archivesMongo?.archivesFamily?.father;
-            this.archivesFamily.mother =
-              value?.archivesMongo?.archivesFamily?.mother;
-            this.archivesFamily.brothers =
-              value?.archivesMongo?.archivesFamily?.brothers;
-            this.archivesFamily.child =
-              value?.archivesMongo?.archivesFamily?.child;
-            this.archivesFamily.other =
-              value?.archivesMongo?.archivesFamily?.other;
+            if (value?.archivesMongo?.archivesFamily) {
+              this.archivesFamily = value?.archivesMongo?.archivesFamily;
+            }
           } else {
             this.form.phone = value?.phone;
           }
@@ -719,7 +713,11 @@ export default {
     },
     // 删除既往史
     deletePastHistories(val, index) {
-      this.form.pastHistories.splice(index, 1);
+      if (this.form.pastHistories.length <= 1) {
+        return;
+      } else {
+        this.form.pastHistories.splice(index, 1);
+      }
     },
     cancel() {
       this.$router.push({ path: "/archivesManagement/patient" });

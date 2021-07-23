@@ -151,23 +151,30 @@
         </el-form-item>
         <el-form-item label="选择模板"
           prop="templateName">
-          <el-select multiple clearable
+          <el-select multiple
+            clearable
             @change="selectTemplate"
-            value-key="name"
             style="width: 100%"
             v-model="editAddForm.templateName">
             <el-option v-for="item in templateList"
-              :key="item.name"
+              :key="item.id"
               :label="item.name"
-              :value="item"></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="处方内容"
-          prop="templateContent">
-          <el-input type="textarea"
-            :rows="20"
-            v-model="editAddForm.content"></el-input>
-        </el-form-item>
+        <div v-for="(item,index) in editAddForm.templates"
+          :key="index">
+          <div>处方内容</div>
+          <el-form-item label="名称"
+            prop="templateContent">
+            <el-input v-model="item.name"></el-input>
+          </el-form-item>
+          <el-form-item label="内容"
+            prop="templateContent">
+            <el-input type="textarea"
+              v-model="item.content"></el-input>
+          </el-form-item>
+        </div>
       </el-form>
       <span slot="footer"
         class="dialog-footer">
@@ -324,7 +331,12 @@ export default {
         doctorUserId: "",
         patientUserId: "",
         templateName: [],
-        templates: [],
+        templates: [
+          {
+            content: "111",
+            name: "222",
+          },
+        ],
         content: "",
       },
       tableHeaderBig: [
@@ -412,10 +424,15 @@ export default {
     },
     // 获取模板列表
     getTemplateList() {
-      httpAdminTemplate.getTemplate().then((res) => {
-        this.templateList = res.data.elements;
-        this.templateTotal = res.data.totalSize;
-      });
+      httpAdminTemplate
+        .getTemplate({
+          page: this.templatePageNum,
+          pageSize: this.templatePageSize,
+        })
+        .then((res) => {
+          this.templateList = res.data.elements;
+          this.templateTotal = res.data.totalSize;
+        });
     },
     // 获取医院列表
     getHospitalList() {
@@ -437,6 +454,7 @@ export default {
     },
     // 获取用户列表
     selectTemplate(val) {
+      console.log(val);
       console.log(this.editAddForm.templateName);
       // this.editAddForm.templates = val.map((item) => {
       //   return { content: item.content, name: item.name };
@@ -474,6 +492,12 @@ export default {
     addBtn() {
       this.infoTitle = "新增";
       this.editAddForm = {};
+      this.editAddForm.templates = [
+        {
+          content: "",
+          name: "",
+        },
+      ];
       this.editDialogVisible = true;
     },
     // 编辑
@@ -508,8 +532,8 @@ export default {
       });
     },
     editDialogOpen() {
-      this.getDoctorList();
-      this.getPatientList();
+      // this.getDoctorList();
+      // this.getPatientList();
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
@@ -639,7 +663,10 @@ export default {
       this.templatePageSize = newSize;
       this.getTemplateList();
     },
-    templateCurrentChange() {},
+    templateCurrentChange(newPage) {
+      this.templatePageNum = newPage;
+      this.getTemplateList();
+    },
   },
 };
 </script>
