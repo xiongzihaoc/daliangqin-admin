@@ -134,7 +134,7 @@ const hospitalRouter = {
                 {
                     path: "collect",
                     name: "collect",
-                    component: () => import('@/views/hospitalManagement/work/prescription'),
+                    component: () => import('@/views/hospitalManagement/work/collect'),
                     meta: {
                         title: '收藏管理',
                         icon: 'general'

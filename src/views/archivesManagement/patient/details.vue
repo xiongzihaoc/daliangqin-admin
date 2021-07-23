@@ -613,16 +613,9 @@ export default {
           let value = res.data.elements[0];
           if (value.archivesMongo) {
             this.form = value?.archivesMongo;
-            this.archivesFamily.father =
-              value?.archivesMongo?.archivesFamily?.father;
-            this.archivesFamily.mother =
-              value?.archivesMongo?.archivesFamily?.mother;
-            this.archivesFamily.brothers =
-              value?.archivesMongo?.archivesFamily?.brothers;
-            this.archivesFamily.child =
-              value?.archivesMongo?.archivesFamily?.child;
-            this.archivesFamily.other =
-              value?.archivesMongo?.archivesFamily?.other;
+            if (value?.archivesMongo?.archivesFamily) {
+              this.archivesFamily = value?.archivesMongo?.archivesFamily;
+            }
           } else {
             this.form.phone = value?.phone;
           }
