@@ -45,7 +45,7 @@
               @blur="computeBmi"
               v-Int
               placeholder="请输入身高"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">cm</i></el-input>
+                style="font-style: normal; margin-right: 10px">cm</i></el-input>
           </el-form-item>
           <el-form-item label="体重"
             prop="weight">
@@ -53,7 +53,7 @@
               @blur="computeBmi"
               v-Int
               placeholder="请输入体重"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">kg</i></el-input>
+                style="font-style: normal; margin-right: 10px">kg</i></el-input>
           </el-form-item>
           <el-form-item label="BMI"
             prop="bmi">
@@ -160,7 +160,7 @@
               oninput="if (value > 30) value = 30"
               v-model="form.dayDrink"
               placeholder="请输入日饮酒量"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">两</i></el-input>
+                style="font-style: normal; margin-right: 10px">两</i></el-input>
           </el-form-item>
           <el-form-item label="日吸烟量">
             <el-input v-Int
@@ -168,7 +168,7 @@
               oninput="if (value > 60) value = 60"
               v-model="form.daySmoking"
               placeholder="请输入日吸烟量"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">支</i></el-input>
+                style="font-style: normal; margin-right: 10px">支</i></el-input>
           </el-form-item>
           <el-form-item label="运动次数/周">
             <el-input v-Int
@@ -176,7 +176,7 @@
               oninput="if (value > 20) value = 20"
               v-model="form.weekMovement"
               placeholder="请输入运动次数/周"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">次</i></el-input>
+                style="font-style: normal; margin-right: 10px">次</i></el-input>
           </el-form-item>
           <el-form-item label="运动分钟/次">
             <el-input v-Int
@@ -184,7 +184,7 @@
               oninput="if (value > 500) value = 500"
               v-model="form.minuteMovement"
               placeholder="请输入运动分钟/次"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">分钟</i></el-input>
+                style="font-style: normal; margin-right: 10px">分钟</i></el-input>
           </el-form-item>
           <el-form-item label="日主食量">
             <el-input v-Int
@@ -192,7 +192,7 @@
               maxlength="4"
               oninput="if (value > 5000) value = 5000"
               placeholder="请输入日主食量"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">克</i></el-input>
+                style="font-style: normal; margin-right: 10px">克</i></el-input>
           </el-form-item>
           <el-form-item label="日摄盐量">
             <el-input v-Int
@@ -200,7 +200,7 @@
               v-model="form.daySalt"
               oninput="if (value > 99) value = 99"
               placeholder="请输入日摄盐量"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">克</i></el-input>
+                style="font-style: normal; margin-right: 10px">克</i></el-input>
           </el-form-item>
           <el-form-item label="心理调整">
             <el-select class="w100"
@@ -231,7 +231,7 @@
               oninput="if (value > 36) value = 36"
               maxlength="2"
               placeholder="请输入空腹血糖"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
+                style="font-style: normal; margin-right: 10px">mmol/L</i></el-input>
           </el-form-item>
           <el-form-item label="心率">
             <el-input v-Int
@@ -239,7 +239,7 @@
               oninput="if (value > 200) value = 200"
               maxlength="3"
               placeholder="请输入心率"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">bpm</i></el-input>
+                style="font-style: normal; margin-right: 10px">bpm</i></el-input>
           </el-form-item>
           <el-form-item label="收缩压">
             <el-input v-Int
@@ -247,7 +247,7 @@
               oninput="if (value > 300) value = 300"
               maxlength="3"
               placeholder="请输入收缩压"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
+                style="font-style: normal; margin-right: 10px">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="舒张压">
             <el-input v-Int
@@ -255,7 +255,7 @@
               oninput="if (value > 200) value = 200"
               maxlength="3"
               placeholder="请输入舒张压"><i slot="suffix"
-                style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
+                style="font-style: normal; margin-right: 10px">mmHg</i></el-input>
           </el-form-item>
           <el-form-item label="过敏物质">
             <el-select class="w100"
@@ -278,8 +278,14 @@
           <!-- 动态既往史 -->
           <div v-for="(item, index) in form.pastHistories"
             :key="index">
-            <el-form-item label="既往史" style="display:flex">
+            <div style="margin-left:50px">
+              <el-button type="danger"
+                size="mini"
+                @click="deletePastHistories(item,index)">删除</el-button>
+            </div>
+            <el-form-item label="既往史">
               <el-select class="w100"
+                @change="pastHistoryTypeVChange"
                 v-model="item.pastHistoryType"
                 placeholder="请选择既往史">
                 <el-option v-for="subItem in pastHistoryTypeList"
@@ -288,13 +294,144 @@
                   :value="subItem.value"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item :label="nameLabel">
+              <el-input v-model="item.name"
+                :placeholder="namePlaceholder"></el-input>
+            </el-form-item>
+            <el-form-item label="详细"
+              v-if="item.pastHistoryType === 'DISEASE'">
+              <el-input type="textarea"
+                v-model="item.remark"
+                placeholder="请输入详细"></el-input>
+            </el-form-item>
+            <el-form-item label="日期">
+              <el-date-picker class="w100"
+                v-model="item.dateTime"
+                type="datetime"
+                format="yyyy-MM-dd HH:mm"
+                value-format="timestamp"
+                placeholder="请选择日期">
+              </el-date-picker>
+            </el-form-item>
           </div>
           <!-- 按钮 -->
-          <el-button type="primary"
-            plain
-            size="small"
-            @click="addPastHistories">添加既往史</el-button>
+          <div style="margin:0 0 20px 50px">
+            <el-button type="info"
+              plain
+              size="mini"
+              @click="addPastHistories">添加既往史</el-button>
+          </div>
+          <el-form-item label="暴露史">
+            <el-select class="w100"
+              v-model="form.exposureTypes"
+              placeholder="请选择暴露史"
+              multiple
+              clearable>
+              <el-option v-for="item in exposureTypesList"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 家族史 -->
+          <div class="family">
+            <div style="margin:0 0 10px 60px;font-weight:700">家族史</div>
+            <el-form-item label="父亲">
+              <el-select class="w100"
+                v-model="archivesFamily.father"
+                placeholder="请选择"
+                multiple
+                clearable>
+                <el-option v-for="item in diseaseTypeList"
+                  :key="item.id"
+                  :label="item.label"
+                  :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="母亲">
+              <el-select class="w100"
+                v-model="archivesFamily.mother"
+                placeholder="请选择"
+                multiple
+                clearable>
+                <el-option v-for="item in diseaseTypeList"
+                  :key="item.id"
+                  :label="item.label"
+                  :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="兄弟">
+              <el-select class="w100"
+                v-model="archivesFamily.brothers"
+                placeholder="请选择"
+                multiple
+                clearable>
+                <el-option v-for="item in diseaseTypeList"
+                  :key="item.id"
+                  :label="item.label"
+                  :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="子女">
+              <el-select class="w100"
+                v-model="archivesFamily.child"
+                placeholder="请选择"
+                multiple
+                clearable>
+                <el-option v-for="item in diseaseTypeList"
+                  :key="item.id"
+                  :label="item.label"
+                  :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="其他">
+              <el-select class="w100"
+                v-model="archivesFamily.other"
+                placeholder="请选择"
+                multiple
+                clearable>
+                <el-option v-for="item in diseaseTypeList"
+                  :key="item.id"
+                  :label="item.label"
+                  :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+
+          </div>
+          <el-form-item label="遗传病史">
+            <el-select class="w100"
+              v-model="form.geneticHistory"
+              placeholder="请选择遗传病史">
+              <el-option v-for="item in drugReactionList"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="遗传病史其他">
+            <el-input v-model="form.otherGeneticHistory"
+              type="textarea"
+              placeholder="请输入收缩压"></el-input>
+          </el-form-item>
+          <el-form-item label="残疾情况">
+            <el-select class="w100"
+              multiple
+              clearable
+              v-model="form.disabilityTypes"
+              placeholder="请选择残疾情况">
+              <el-option v-for="item in disabilityTypesList"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="残疾其他">
+            <el-input v-model="form.disabilityOther"
+              type="textarea"
+              placeholder="请输入残疾其他"></el-input>
+          </el-form-item>
         </div>
+
       </div>
     </el-form>
     <div class="btn-box">
@@ -326,6 +463,10 @@ import {
   complianceList,
   allergyTypesList,
   pastHistoryTypeList,
+  exposureTypesList,
+  diseaseTypeList,
+  drugReactionList,
+  disabilityTypesList,
 } from "@/utils/index";
 export default {
   components: {
@@ -342,6 +483,10 @@ export default {
       complianceList,
       allergyTypesList,
       pastHistoryTypeList,
+      exposureTypesList,
+      diseaseTypeList,
+      drugReactionList,
+      disabilityTypesList,
       FormRules: {
         name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
         phone: [{ required: true, trigger: "blur", validator: validatePhone }],
@@ -415,11 +560,32 @@ export default {
           {
             dateTime: "",
             name: "",
-            pastHistoryType: "",
+            pastHistoryType: "DISEASE",
             remark: "",
           },
         ],
+        exposureTypes: [],
+        archivesFamily: {
+          father: [],
+          mother: [],
+          brothers: [],
+          child: [],
+          other: [],
+        },
+        geneticHistory: "",
+        otherGeneticHistory: "",
+        disabilityTypes: [],
+        disabilityOther: "",
       },
+      archivesFamily: {
+        father: [],
+        mother: [],
+        brothers: [],
+        child: [],
+        other: [],
+      },
+      nameLabel: "疾病",
+      namePlaceholder: "请输入疾病",
     };
   },
   created() {
@@ -446,15 +612,25 @@ export default {
           // 回显表单数据
           let value = res.data.elements[0];
           if (value.archivesMongo) {
-            this.form = value.archivesMongo;
+            this.form = value?.archivesMongo;
+            this.archivesFamily.father =
+              value?.archivesMongo?.archivesFamily?.father;
+            this.archivesFamily.mother =
+              value?.archivesMongo?.archivesFamily?.mother;
+            this.archivesFamily.brothers =
+              value?.archivesMongo?.archivesFamily?.brothers;
+            this.archivesFamily.child =
+              value?.archivesMongo?.archivesFamily?.child;
+            this.archivesFamily.other =
+              value?.archivesMongo?.archivesFamily?.other;
           } else {
-            this.form.phone = value.phone;
+            this.form.phone = value?.phone;
           }
-          this.form.province = value.province;
-          this.form.city = value.city;
-          this.form.area = value.area;
-          this.$set(this.form, "address", value.address);
-          this.$set(this.form, "avatarUrl", value.avatarUrl);
+          this.form.province = value?.province;
+          this.form.city = value?.city;
+          this.form.area = value?.area;
+          this.$set(this.form, "address", value?.address);
+          this.$set(this.form, "avatarUrl", value?.avatarUrl);
           this.computeBmi();
           this.form.addressDetail = [
             this.form.province,
@@ -517,14 +693,39 @@ export default {
       this.form.pastHistories.push({
         dateTime: "",
         name: "",
-        pastHistoryType: "",
+        pastHistoryType: "DISEASE",
         remark: "",
       });
+    },
+    pastHistoryTypeVChange(val) {
+      switch (val) {
+        case "SURGERY":
+          this.nameLabel = "手术名称";
+          this.namePlaceholder = "请输入手术名称";
+          break;
+        case "TRAUMA":
+          this.nameLabel = "外伤名称";
+          this.namePlaceholder = "请输入外伤名称";
+          break;
+        case "BLOOD_TRANSFUSION":
+          this.nameLabel = "输血原因";
+          this.namePlaceholder = "请输入输血原因";
+          break;
+        default:
+          this.nameLabel = "疾病";
+          this.namePlaceholder = "请输入疾病";
+          break;
+      }
+    },
+    // 删除既往史
+    deletePastHistories(val, index) {
+      this.form.pastHistories.splice(index, 1);
     },
     cancel() {
       this.$router.push({ path: "/archivesManagement/patient" });
     },
     confirm() {
+      this.form.archivesFamily = this.archivesFamily;
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 编辑

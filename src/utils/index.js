@@ -567,6 +567,37 @@ export const pastHistoryTypeList = [
   { id: 3, label: "外伤", value: "TRAUMA" },
   { id: 4, label: "输血", value: "BLOOD_TRANSFUSION" },
 ]
+// 暴露史
+export const exposureTypesList = [
+  { id: 1, label: "化学品", value: "CHEMICALS" },
+  { id: 2, label: "毒物", value: "POISON" },
+  { id: 3, label: "射线", value: "RAYS" },
+  { id: 4, label: "针刺伤", value: "NEEDLE_STICK_INJURY" },
+]
+// 家族史
+export const diseaseTypeList = [
+  { id: 1, label: "高血压", value: "HIGH_BLOOD" },
+  { id: 2, label: "糖尿病", value: "DIABETES" },
+  { id: 3, label: "心率", value: "HEART_RATE" },
+  { id: 4, label: "冠心病", value: "CORONARY_HEART_DISEASE" },
+  { id: 5, label: "慢性阻塞性肺疾病", value: "CHRONIC_OBSTRUCTIVE_PULMONARY" },
+  { id: 6, label: "恶性肿瘤", value: "MALIGNANT_TUMOR" },
+  { id: 7, label: "脑卒中", value: "STROKE" },
+  { id: 8, label: "重性精神疾病", value: "SEVERE_MENTAL_ILLNESS" },
+  { id: 9, label: "结核病", value: "TUBERCULOSIS" },
+  { id: 10, label: "肝炎", value: "HEPATITIS" },
+  { id: 11, label: "先天畸形", value: "CONGENITAL_MALFORMATIONS" },
+  { id: 12, label: "其他", value: "OTHER" },
+]
+// 残疾情况
+export const disabilityTypesList = [
+  { id: 1, label: "视力残疾", value: "VISION" },
+  { id: 2, label: "听力残疾", value: "HEARING" },
+  { id: 3, label: "言语残疾", value: "SPEECH" },
+  { id: 4, label: "智力残疾", value: "INTELLECT" },
+  { id: 5, label: "精神残疾", value: "SPIRIT" },
+  { id: 6, label: "其他残疾", value: "OTHER" },
+]
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式
