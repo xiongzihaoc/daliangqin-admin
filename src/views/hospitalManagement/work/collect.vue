@@ -82,7 +82,7 @@
         label="收藏人数"
         prop="collectionCount">
         <template slot-scope="scope">
-          <div @click="skiPatient(scope.row)">{{scope.row.collectionCount}}</div>
+          <span  style="color: #1890ff; text-decoration: underline" @click="skiPatient(scope.row)">{{scope.row.collectionCount}}</span>
         </template>
       </el-table-column>
     </EleTable>
@@ -148,7 +148,7 @@ export default {
     skiPatient(val) {
       console.log(val);
       this.$router.push("/archivesManagement/patient");
-      localStorage.setItem("doctorId", val.doctorUserId);
+      localStorage.setItem("collectionDoctorUserId", val.doctorUserId);
     },
     // 格式化表格
     doctorTypeFormatter(row) {

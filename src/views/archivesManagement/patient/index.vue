@@ -244,6 +244,7 @@ export default {
       loading: true,
       // 医生列表跳转用户列表携带参数
       doctorId: "",
+      collectionDoctorUserId:"",
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -255,6 +256,7 @@ export default {
   },
   created() {
     this.doctorId = localStorage.getItem("doctorId");
+    this.collectionDoctorUserId = localStorage.getItem("collectionDoctorUserId");
     let pageNum = localStorage.getItem("patientNum");
     if (pageNum) {
       this.pageNum = pageNum;
@@ -263,6 +265,7 @@ export default {
   },
   destroyed() {
     localStorage.removeItem("doctorId");
+    localStorage.removeItem("collectionDoctorUserId");
     localStorage.removeItem("patientNum");
   },
   methods: {
@@ -280,6 +283,7 @@ export default {
           heartRateStatus: this.searchForm.heartRateStatus,
           doctorUserName: this.searchForm.doctorUserName,
           doctorUserId: this.doctorId,
+          collectionDoctorUserId: this.collectionDoctorUserId,
           doctorUserPhone: this.searchForm.doctorUserPhone,
           // beginAge: this.searchForm.beginAge,
           // endAge: this.searchForm.endAge,
