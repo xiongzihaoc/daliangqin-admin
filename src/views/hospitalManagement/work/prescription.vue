@@ -153,25 +153,29 @@
           prop="templateName">
           <el-select multiple
             clearable
+            class="w100"
             @change="selectTemplate"
-            style="width: 100%"
+            @remove-tag="removeTag"
+            value-key="id"
             v-model="editAddForm.templateName">
             <el-option v-for="item in templateList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item"></el-option>
           </el-select>
         </el-form-item>
         <div v-for="(item,index) in editAddForm.templates"
           :key="index">
-          <div>处方内容</div>
-          <el-form-item label="名称"
+          <div style="margin-left:30px;color:#ccc"
+            class="fw">处方内容{{index + 1}}</div>
+          <el-form-item label="标题"
             prop="templateContent">
             <el-input v-model="item.name"></el-input>
           </el-form-item>
           <el-form-item label="内容"
             prop="templateContent">
             <el-input type="textarea"
+              :rows="10"
               v-model="item.content"></el-input>
           </el-form-item>
         </div>
@@ -267,7 +271,7 @@
           prop="doctorUserId">
           <el-input v-model="templateForm.content"
             type="textarea"
-            :rows="20"
+            :rows="10"
             placeholder="请输入模处方内容"></el-input>
         </el-form-item>
       </el-form>
@@ -452,10 +456,10 @@ export default {
         this.patientList = res.data.elements;
       });
     },
-    // 获取用户列表
+    // 选择模板
     selectTemplate(val) {
       console.log(val);
-      console.log(this.editAddForm.templateName);
+      this.editAddForm.templates = val;
       // this.editAddForm.templates = val.map((item) => {
       //   return { content: item.content, name: item.name };
       // });
@@ -464,6 +468,9 @@ export default {
         "content",
         JSON.stringify(this.editAddForm.templates)
       );
+    },
+    removeTag(val) {
+      console.log(val);
     },
     selectHospital(val) {
       this.getDoctorList(val);
@@ -492,12 +499,6 @@ export default {
     addBtn() {
       this.infoTitle = "新增";
       this.editAddForm = {};
-      this.editAddForm.templates = [
-        {
-          content: "",
-          name: "",
-        },
-      ];
       this.editDialogVisible = true;
     },
     // 编辑
@@ -505,6 +506,8 @@ export default {
       console.log(val);
       this.infoTitle = "编辑";
       this.editAddForm = val;
+      // let template = val.templateIds.split(",");
+      // this.editAddForm.templateName = template;
       this.editDialogVisible = true;
     },
     // 删除单个
@@ -532,8 +535,8 @@ export default {
       });
     },
     editDialogOpen() {
-      // this.getDoctorList();
-      // this.getPatientList();
+      this.getDoctorList();
+      this.getPatientList();
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields();
@@ -638,7 +641,6 @@ export default {
         });
       }
     },
-    /***** 搜索区域 *****/
     /***** 表格格式化内容 *****/
     doctorTypeFormatter(row) {
       return formatterElement.doctorType[row.doctorType];
