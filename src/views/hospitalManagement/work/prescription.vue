@@ -151,7 +151,8 @@
         </el-form-item>
         <el-form-item label="选择模板"
           prop="templateName">
-          <el-select multiple clearable
+          <el-select multiple
+            clearable
             @change="selectTemplate"
             value-key="name"
             style="width: 100%"
@@ -412,10 +413,15 @@ export default {
     },
     // 获取模板列表
     getTemplateList() {
-      httpAdminTemplate.getTemplate().then((res) => {
-        this.templateList = res.data.elements;
-        this.templateTotal = res.data.totalSize;
-      });
+      httpAdminTemplate
+        .getTemplate({
+          page: this.templatePageNum,
+          pageSize: this.templatePageSize,
+        })
+        .then((res) => {
+          this.templateList = res.data.elements;
+          this.templateTotal = res.data.totalSize;
+        });
     },
     // 获取医院列表
     getHospitalList() {
@@ -639,7 +645,10 @@ export default {
       this.templatePageSize = newSize;
       this.getTemplateList();
     },
-    templateCurrentChange() {},
+    templateCurrentChange(newPage) {
+      this.templatePageNum = newPage;
+      this.getTemplateList();
+    },
   },
 };
 </script>

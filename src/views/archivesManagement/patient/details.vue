@@ -28,7 +28,7 @@
           </el-form-item>
           <el-form-item label="省市区"
             prop="addressDetail">
-            <el-cascader v-model="form.addressDetail"
+            <el-cascader class="w100" v-model="form.addressDetail"
               :options="addressJson"
               :props="cateListProps"
               @change="selectAddrssChange"
@@ -278,7 +278,8 @@
           <!-- 动态既往史 -->
           <div v-for="(item, index) in form.pastHistories"
             :key="index">
-            <div style="margin-left:50px">
+            <div style="margin-left:50px"
+              v-if="form.pastHistories.length > 1">
               <el-button type="danger"
                 size="mini"
                 @click="deletePastHistories(item,index)">删除</el-button>
@@ -712,7 +713,11 @@ export default {
     },
     // 删除既往史
     deletePastHistories(val, index) {
-      this.form.pastHistories.splice(index, 1);
+      if (this.form.pastHistories.length <= 1) {
+        return;
+      } else {
+        this.form.pastHistories.splice(index, 1);
+      }
     },
     cancel() {
       this.$router.push({ path: "/archivesManagement/patient" });

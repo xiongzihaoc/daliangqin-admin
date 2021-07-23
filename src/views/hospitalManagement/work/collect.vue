@@ -81,6 +81,9 @@
       <el-table-column align="center"
         label="收藏人数"
         prop="collectionCount">
+        <template slot-scope="scope">
+          <div @click="skiPatient(scope.row)">{{scope.row.collectionCount}}</div>
+        </template>
       </el-table-column>
     </EleTable>
   </div>
@@ -88,7 +91,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminCollection } from "@/api/admin/httpAdminCollection";
-import { formatterElement,doctorTypeList } from "@/utils/index";
+import { formatterElement, doctorTypeList } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -140,6 +143,12 @@ export default {
     searchReset() {
       this.searchForm = {};
       this.getList();
+    },
+    // 跳转用户列表
+    skiPatient(val) {
+      console.log(val);
+      this.$router.push("/archivesManagement/patient");
+      localStorage.setItem("doctorId", val.doctorUserId);
     },
     // 格式化表格
     doctorTypeFormatter(row) {
