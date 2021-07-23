@@ -278,9 +278,11 @@
           <!-- 动态既往史 -->
           <div v-for="(item, index) in form.pastHistories"
             :key="index">
-            <el-button type="danger"
-              size="mini"
-              @click="deletePastHistories(item,index)">删除</el-button>
+            <div style="margin-left:50px">
+              <el-button type="danger"
+                size="mini"
+                @click="deletePastHistories(item,index)">删除</el-button>
+            </div>
             <el-form-item label="既往史">
               <el-select class="w100"
                 @change="pastHistoryTypeVChange"
@@ -313,10 +315,12 @@
             </el-form-item>
           </div>
           <!-- 按钮 -->
-          <el-button type="primary"
-            plain
-            size="small"
-            @click="addPastHistories">添加既往史</el-button>
+          <div style="margin:0 0 20px 50px">
+            <el-button type="info"
+              plain
+              size="mini"
+              @click="addPastHistories">添加既往史</el-button>
+          </div>
           <el-form-item label="暴露史">
             <el-select class="w100"
               v-model="form.exposureTypes"
@@ -331,7 +335,7 @@
           </el-form-item>
           <!-- 家族史 -->
           <div class="family">
-            <div>家族史</div>
+            <div style="margin:0 0 10px 60px;font-weight:700">家族史</div>
             <el-form-item label="父亲">
               <el-select class="w100"
                 v-model="archivesFamily.father"
@@ -609,11 +613,16 @@ export default {
           let value = res.data.elements[0];
           if (value.archivesMongo) {
             this.form = value?.archivesMongo;
-            this.archivesFamily.father = value?.archivesMongo?.archivesFamily?.father;
-            this.archivesFamily.mother = value?.archivesMongo?.archivesFamily?.mother;
-            this.archivesFamily.brothers = value?.archivesMongo?.archivesFamily?.brothers;
-            this.archivesFamily.child = value?.archivesMongo?.archivesFamily?.child;
-            this.archivesFamily.other = value?.archivesMongo?.archivesFamily?.other;
+            this.archivesFamily.father =
+              value?.archivesMongo?.archivesFamily?.father;
+            this.archivesFamily.mother =
+              value?.archivesMongo?.archivesFamily?.mother;
+            this.archivesFamily.brothers =
+              value?.archivesMongo?.archivesFamily?.brothers;
+            this.archivesFamily.child =
+              value?.archivesMongo?.archivesFamily?.child;
+            this.archivesFamily.other =
+              value?.archivesMongo?.archivesFamily?.other;
           } else {
             this.form.phone = value?.phone;
           }
