@@ -8,11 +8,16 @@
         :inline="true">
         <!-- 医生姓名 -->
         <el-form-item label="医生姓名"
-          align="left"
-          prop="doctorUserName">
+          align="left">
           <el-input v-model="searchForm.doctorUserName"
             size="small"
             placeholder="请输入医生姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="医生手机号"
+          align="left">
+          <el-input v-model="searchForm.doctorUserPhone"
+            size="small"
+            placeholder="请输入医生手机号"></el-input>
         </el-form-item>
         <el-form-item label="医院名称"
           align="left"
@@ -33,15 +38,18 @@
           </el-select>
         </el-form-item>
         <!-- 用户姓名 -->
-        <el-form-item label="随访用户"
-          prop="patientUserName">
+        <el-form-item label="随访用户">
           <el-input v-model="searchForm.patientUserName"
             size="small"
             placeholder="请输入随访用户"></el-input>
         </el-form-item>
+        <!-- <el-form-item label="用户手机号">
+          <el-input v-model="searchForm.patientPhone"
+            size="small"
+            placeholder="请输入用户手机号"></el-input>
+        </el-form-item> -->
         <!-- 随访时间 -->
-        <el-form-item label="随访时间"
-          prop="chatTime">
+        <el-form-item label="随访时间">
           <el-date-picker v-model="searchForm.taskTime"
             size="small"
             type="datetimerange"
@@ -55,8 +63,7 @@
           </el-date-picker>
         </el-form-item>
         <!-- 加入方式 -->
-        <el-form-item label="加入方式"
-          prop="resource">
+        <el-form-item label="加入方式">
           <el-select v-model="searchForm.resource"
             placeholder="请选择加入方式">
             <el-option v-for="item in resourceTypeList"
@@ -66,8 +73,7 @@
           </el-select>
         </el-form-item>
         <!-- 状态 -->
-        <el-form-item label="状态"
-          prop="status">
+        <el-form-item label="状态">
           <el-select v-model="searchForm.status"
             placeholder="请选择状态">
             <el-option v-for="item in statusList"
@@ -127,6 +133,7 @@
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
+      v-loading="loading"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
@@ -243,6 +250,7 @@ export default {
       // 加入方式
       resourceTypeList,
       statusList,
+      loading: true,
       FormRules: {
         hospitalId: [
           { required: true, message: "请选择医院", trigger: "blur" },
@@ -259,7 +267,9 @@ export default {
       },
       searchForm: {
         doctorUserName: "",
+        doctorUserPhone: "",
         patientUserName: "",
+        patientPhone: "",
         hospitalName: "",
         type: "",
         startTime: "",
@@ -284,6 +294,7 @@ export default {
       tableHeaderBig: [
         { type: "index", label: "序号" },
         { prop: "doctorUserName", label: "医生姓名" },
+        { prop: "doctorUserPhone", label: "医生手机号" },
         { prop: "hospitalName", label: "医院名称" },
         {
           prop: "type",
@@ -294,6 +305,7 @@ export default {
         },
         { prop: "content", label: "随访内容" },
         { prop: "patientUserName", label: "随访用户" },
+        { prop: "patientPhone", label: "用户手机号" },
         {
           prop: "highBloodStatus",
           label: "高血压",
@@ -381,7 +393,9 @@ export default {
           page: this.pageNum,
           pageSize: this.pageSize,
           doctorUserName: this.searchForm.doctorUserName,
+          doctorUserPhone: this.searchForm.doctorUserPhone,
           patientUserName: this.searchForm.patientUserName,
+          patientPhone: this.searchForm.patientPhone,
           hospitalName: this.searchForm.hospitalName,
           type: this.searchForm.type,
           taskStatus: this.searchForm.status,
@@ -410,6 +424,7 @@ export default {
     getPatientList(id) {
       httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
         this.patientList = res.data.elements;
+        this.loading = false;
       });
     },
     selecthospital(val) {

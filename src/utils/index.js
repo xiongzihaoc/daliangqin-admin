@@ -197,17 +197,13 @@ export function validateGlucoseScore(rule, value, callback) {
 };
 // 文化程度
 export const educationType = [
-  { id: 1, label: "研究生", value: "POSTGRADUATE" },
+  { id: 1, label: "研究生及以上", value: "POSTGRADUATE" },
   { id: 2, label: "大学本科", value: "UNDERGRADUATE" },
-  { id: 3, label: "大学专科和专科", value: "SPECIALIST" },
+  { id: 3, label: "大学专科和专科学校", value: "SPECIALIST" },
   { id: 4, label: "中专", value: "TECHNICAL_SECONDARY" },
   { id: 5, label: "技工学校", value: "MECHANIC" },
   { id: 6, label: "高中", value: "SENIOR_MIDDLE" },
-  { id: 7, label: "初中", value: "JUNIOR_HIGH" },
-  { id: 8, label: "小学", value: "PRIMARY_SCHOOL" },
-  { id: 9, label: "文盲或半文盲", value: "ILLITERATE_OR_SEMI_LITERATE" },
-  { id: 10, label: "其他", value: "OTHER" },
-
+  { id: 7, label: "初中及以下", value: "JUNIOR_HIGH" },
 ]
 // 医生类型列表
 export const doctorTypeList = [

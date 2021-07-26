@@ -6,14 +6,17 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
-        <el-form-item label="医生姓名"
-          prop="doctorUserName">
+        <el-form-item label="医生姓名">
           <el-input v-model="searchForm.doctorUserName"
             size="small"
             placeholder="请输入医生姓名"></el-input>
         </el-form-item>
-        <el-form-item label="职位"
-          prop="doctorType">
+        <el-form-item label="医生手机号">
+          <el-input v-model="searchForm.doctorPhone"
+            size="small"
+            placeholder="请输入医生手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="职位">
           <el-select v-model="searchForm.doctorType"
             size="small"
             placeholder="请选择职位">
@@ -23,13 +26,11 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="医院名称"
-          prop="doctorType">
+        <el-form-item label="医院名称">
           <el-input placeholder="请输入医院名称"
             v-model="searchForm.hoslitalName"></el-input>
         </el-form-item>
-        <el-form-item label="随访方式"
-          prop="type">
+        <el-form-item label="随访方式">
           <el-select v-model="searchForm.type"
             size="small"
             placeholder="请选择随访方式">
@@ -39,25 +40,17 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="随访用户"
-          prop="patientUserName">
+        <el-form-item label="随访用户">
           <el-input v-model="searchForm.patientUserName"
             size="small"
             placeholder="请输入随访用户"></el-input>
         </el-form-item>
-        <el-form-item label="随访类型"
-          prop="diseaseType">
-          <el-select v-model="searchForm.diseaseType"
+        <el-form-item label="用户手机号">
+          <el-input v-model="searchForm.patientPhone"
             size="small"
-            placeholder="请选择随访类型">
-            <el-option v-for="item in followType"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"></el-option>
-          </el-select>
+            placeholder="请输入用户手机号"></el-input>
         </el-form-item>
-        <el-form-item label="高血压"
-          prop="highBloodStatus">
+        <el-form-item label="高血压">
           <el-select v-model="searchForm.highBloodStatus"
             size="small"
             placeholder="请选择">
@@ -67,8 +60,7 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="糖尿病"
-          prop="diabetesStatus">
+        <el-form-item label="糖尿病">
           <el-select v-model="searchForm.diabetesStatus"
             size="small"
             placeholder="请选择">
@@ -78,8 +70,7 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="随访时间"
-          prop="chatTime">
+        <el-form-item label="随访时间">
           <el-date-picker v-model="searchForm.followTime"
             size="small"
             @change="selectFollowTime"
@@ -91,8 +82,7 @@
             align="right">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="用户状态"
-          prop="userStatus">
+        <el-form-item label="用户状态">
           <el-select size="small"
             v-model="searchForm.userStatus"
             placeholder="请选择用户状态">
@@ -142,6 +132,10 @@
         prop="doctorUserName">
       </el-table-column>
       <el-table-column align="center"
+        label="医生手机号"
+        prop="doctorPhone">
+      </el-table-column>
+      <el-table-column align="center"
         label="职位"
         :formatter="doctorTypeFormatter"
         prop="doctorType">
@@ -164,9 +158,8 @@
         prop="patientUserName">
       </el-table-column>
       <el-table-column align="center"
-        label="随访类型"
-        :formatter="diseaseTypeFormatter"
-        prop="diseaseType">
+        label="用户手机号"
+        prop="patientPhone">
       </el-table-column>
       <el-table-column align="center"
         label="高血压"
@@ -248,9 +241,10 @@ export default {
       searchForm: {
         doctorUserName: "",
         doctorType: "",
+        doctorPhone: "",
         hospitalName: "",
         patientUserName: "",
-        diseaseType: "",
+        patientPhone: "",
         type: "",
         highBloodStatus: "",
         diabetesStatus: "",
@@ -288,7 +282,9 @@ export default {
           pageSize: this.pageSize,
           doctorName: this.searchForm.doctorUserName,
           doctorType: this.searchForm.doctorType,
+          doctorPhone: this.searchForm.doctorPhone,
           patientName: this.searchForm.patientUserName,
+          patientPhone: this.searchForm.patientPhone,
           hospitalName: this.searchForm.hospitalName,
           type: this.searchForm.type,
           diseaseType: this.searchForm.diseaseType,
@@ -317,7 +313,8 @@ export default {
     // 编辑
     editBtn(val) {
       this.$router.push({
-        path: "/hospitalManagement/work/followDetail?id=" + val.id + '&type=edit',
+        path:
+          "/hospitalManagement/work/followDetail?id=" + val.id + "&type=edit",
       });
     },
     // 删除
