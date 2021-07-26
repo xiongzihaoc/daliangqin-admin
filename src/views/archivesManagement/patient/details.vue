@@ -28,7 +28,8 @@
           </el-form-item>
           <el-form-item label="省市区"
             prop="addressDetail">
-            <el-cascader class="w100" v-model="form.addressDetail"
+            <el-cascader class="w100"
+              v-model="form.addressDetail"
               :options="addressJson"
               :props="cateListProps"
               @change="selectAddrssChange"
@@ -61,12 +62,17 @@
               disabled></el-input>
           </el-form-item>
           <!-- 手机号 -->
-          <el-form-item label="手机"
-            prop="phone">
+          <el-form-item label="手机">
             <el-input v-model="form.phone"
               maxlength="11"
               v-Int
               placeholder="请输入手机号"></el-input>
+          </el-form-item>
+          <el-form-item label="座机">
+            <el-input v-model="form.contact"
+              maxlength="11"
+              v-Int
+              placeholder="请输入座机"></el-input>
           </el-form-item>
           <el-form-item label="常住类型"
             prop="liveType">
@@ -490,7 +496,7 @@ export default {
       disabilityTypesList,
       FormRules: {
         name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
+        // phone: [{ required: true, trigger: "blur", validator: validatePhone }],
         idCard: [
           { required: true, trigger: "blur", validator: validateIdCard },
         ],
@@ -523,6 +529,7 @@ export default {
         name: "",
         avatarUrl: "",
         phone: "",
+        contact:"",
         idCard: "",
         addressDetail: "",
         address: "",

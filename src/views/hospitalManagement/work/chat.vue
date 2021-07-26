@@ -12,6 +12,12 @@
             size="small"
             placeholder="请输入用户姓名"></el-input>
         </el-form-item>
+        <el-form-item label="用户手机号"
+          prop="patientPhone">
+          <el-input v-model="searchForm.patientPhone"
+            size="small"
+            placeholder="请输入用户手机号"></el-input>
+        </el-form-item>
         <el-form-item label="留言时间"
           prop="leaveTime">
           <el-date-picker v-model="searchForm.leaveTime"
@@ -29,6 +35,12 @@
           <el-input v-model="searchForm.doctorUserName"
             size="small"
             placeholder="请输入医生姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="医生手机号"
+          prop="doctorPhone">
+          <el-input v-model="searchForm.doctorPhone"
+            size="small"
+            placeholder="请输入医生手机号"></el-input>
         </el-form-item>
         <el-form-item label="回复时间"
           prop="replyTime">
@@ -177,6 +189,7 @@ export default {
       tableHeaderBig: [
         { type: "index", label: "序号" },
         { prop: "patientUserName", label: "用户姓名" },
+        { prop: "patientPhone", label: "用户手机号" },
         { prop: "leaveCount", label: "用户留言数" },
         {
           prop: "leaveTime",
@@ -186,6 +199,7 @@ export default {
           },
         },
         { prop: "doctorUserName", label: "医生姓名" },
+        { prop: "doctorPhone", label: "医生手机号" },
         { prop: "replyCount", label: "医生回复数" },
         {
           prop: "replyTime",
@@ -230,6 +244,8 @@ export default {
           leaveEndTime: this.searchForm.leaveEndTime,
           replyStartTime: this.searchForm.replyStartTime,
           replayEndTime: this.searchForm.replayEndTime,
+          patientPhone: this.searchForm.patientPhone,
+          doctorPhone: this.searchForm.doctorPhone,
         })
         .then((res) => {
           this.list = res.data.elements;

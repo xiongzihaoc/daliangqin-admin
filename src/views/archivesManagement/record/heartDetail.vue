@@ -2,7 +2,8 @@
   <div>
     <div class="print-box">
       <div class="container"
-        id="printMe" :loading="loading">
+        id="printMe"
+         v-loading="loading">
         <h3 class="fz18">动态心电仪检测报告</h3>
         <div class="userInfo">
           <div class="hospital">
@@ -53,74 +54,77 @@
             :src="heartDetail.fileImagePath"
             alt="">
           <div class="fz14 analyse-title">心率分析：</div>
-          <div class="flex margin">
+          <div class="flex margin resultWidth">
             <div>
               <span class="fw">平均心率：</span>
-              <span>{{heartDetail.avg}}bpm</span>
+              <span class="fw fz16">{{heartDetail.avg}}</span>
+              <span>bpm</span>
             </div>
             <div>
               <span class="fw">最高心率：</span>
-              <span>{{heartDetail.max}}bpm</span>
+              <span class="fw fz16">{{heartDetail.max}}</span>
+              <span>bpm</span>
             </div>
             <div>
               <span class="fw">最低心率：</span>
-              <span>{{heartDetail.min}}bpm</span>
+              <span class="fw fz16">{{heartDetail.min}}</span>
+              <span>bpm</span>
             </div>
           </div>
-          <div class="flex">
+          <div class="flex resultWidth">
             <div>
               <span class="fw">正常心率：</span>
-              <span>{{heartDetail.normalRate}}%</span>
+              <span class="fw fz16">{{heartDetail.normalRate}}%</span>
             </div>
             <div>
               <span class="fw">心率偏快：</span>
-              <span>{{heartDetail.heartbeatRate}}%</span>
+              <span class="fw fz16">{{heartDetail.heartbeatRate}}%</span>
 
             </div>
             <div>
               <span class="fw">心率偏慢：</span>
-              <span>{{heartDetail.slowRate}}%</span>
+              <span class="fw fz16">{{heartDetail.slowRate}}%</span>
 
             </div>
           </div>
         </div>
         <div class="impression">
           <div class="fz14 impression-title">心电分析印象：</div>
-          <div>P波规律出现且直立圆顿，本次心电监测未发现明显的心电波形异常</div>
+          <div>{{heartDetail.ecgResultTz}}</div>
         </div>
         <div class="result">
           <div class="fz14">心电分析结果：</div>
-          <div class="fz11 result-text">窦性心律，本次心电监测未见明显异常</div>
+          <div class="fz11 result-text">{{heartDetail.ecgResult}}</div>
           <div class="result-option">
             <div class="fw result-title">原因分析：</div>
-            <div class="content">由心脏中的窦房结每隔一定时间发出的电激动所产生的心电图叫做窦性心律，是人体的正常的心现象，也是维持人体心脏正常工作的主要电生理活动</div>
+            <div class="content">{{heartDetail.abnorAnalysis}}</div>
           </div>
           <div class="result-option middle">
             <div class="fw result-title">处置建议：</div>
-            <div class="content">由心脏中的窦房结每隔一定时间发出的电激动所产生的心电图叫做窦性心律，是人体的正常的心现象，也是维持人体心脏正常工作的主要电生理活动</div>
+            <div class="content">{{heartDetail.suggestion}}</div>
           </div>
           <div class="result-option">
             <div class="fw result-title">保健建议：</div>
-            <div class="content">由心脏中的窦房结每隔一定时间发出的电激动所产生的心电图叫做窦性心律，是人体的正常的心现象，也是维持人体心脏正常工作的主要电生理活动</div>
+            <div class="content">{{heartDetail.healthCareAdvice}}</div>
           </div>
         </div>
         <div class="variation-box">
           <div class="fz14 impression-title">心率变异性分析：</div>
           <div>
             <div class="fz11 variation">心率变异性指数：</div>
-            <div class="variation-text">您的心率变异性指数正常，请保持目前良好的生活习惯，坚持定期做心电监测，随时关注心率变异性情况。</div>
+            <div class="variation-text">{{heartDetail.hrv}}</div>
           </div>
           <div>
             <div class="fz11 variation">心脏疾病风险评估：</div>
-            <div class="variation-text">您的心率变异性指数正常，请保持目前良好的生活习惯，坚持定期做心电监测，随时关注心率变异性情况。</div>
+            <div class="variation-text">{{heartDetail.hdrisk}}</div>
           </div>
           <div>
             <div class="fz11 variation">精神压力指数：</div>
-            <div class="variation-text">您的心率变异性指数正常，请保持目前良好的生活习惯，坚持定期做心电监测，随时关注心率变异性情况。</div>
+            <div class="variation-text">{{heartDetail.mentalPressure}}</div>
           </div>
           <div>
             <div class="fz11 variation">身体疲劳指数：</div>
-            <div class="variation-text">您的心率变异性指数正常，请保持目前良好的生活习惯，坚持定期做心电监测，随时关注心率变异性情况。</div>
+            <div class="variation-text">{{heartDetail.fatigue}}</div>
           </div>
         </div>
         <!-- 底部 -->
@@ -158,10 +162,10 @@ export default {
       printObj: {
         id: "printMe",
         popTitle: "good print",
-        extraCss: "https://www.google.com,https://www.google.com",
+        // extraCss: "https://www.google.com,https://www.google.com",
         extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
       },
-      loading:true,
+      loading: true,
       heartDetail: {},
       userInfo: {},
     };
@@ -178,7 +182,7 @@ export default {
           this.heartDetail = JSON.parse(
             res.data.elements[0].reportResult
           ).body.data;
-          this.loading =false
+          this.loading = false;
         });
     },
   },
@@ -193,7 +197,7 @@ export default {
 }
 #printMe {
   border: 1px solid #ccc;
-  margin-top: 100px;
+  // margin-top: 100px;
 }
 .container {
   width: 595px;
@@ -291,6 +295,9 @@ export default {
         min-width: 120px;
       }
     }
+  }
+  .resultWidth div {
+    min-width: 110px;
   }
 }
 .flex {
