@@ -98,7 +98,7 @@
                   style="font-style:normal;margin-right: 10px;">kg</i></el-input>
             </el-form-item>
             <el-form-item label="BMI">
-              <el-input v-model="form.BMI"
+              <el-input v-model="form.bmi"
                 disabled></el-input>
             </el-form-item>
             <el-form-item label="体重建议"
@@ -166,12 +166,14 @@
             </el-form-item>
             <el-form-item label="摄盐情况">
               <el-input v-model="form.saltIntake"
-                v-Int oninput="if (value > 99) value = 99"
+                v-Int
+                oninput="if (value > 99) value = 99"
                 maxlength="3"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">克</i></el-input>
             </el-form-item>
             <el-form-item label="摄盐情况建议">
-              <el-input oninput="if (value > 99) value = 99" v-model="form.saltIntakeSuggest"
+              <el-input oninput="if (value > 99) value = 99"
+                v-model="form.saltIntakeSuggest"
                 v-Int
                 maxlength="4"><i slot="suffix"
                   style="font-style:normal;margin-right: 10px;">克</i></el-input>
@@ -287,7 +289,9 @@
           </el-form-item>
           <el-form-item label="糖化血红蛋白">
             <el-input v-model="diabetesForm.glycosylatedHemoglobin"
-              v-Int oninput="if (value > 100) value = 100" maxlength="3"><i slot="suffix"
+              v-Int
+              oninput="if (value > 100) value = 100"
+              maxlength="3"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">%</i></el-input>
           </el-form-item>
           <el-form-item label="其他辅助检查">
@@ -419,7 +423,8 @@
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="不良反应情况" v-if="this.diabetesForm.drugReaction === 'HAVE'">
+          <el-form-item label="不良反应情况"
+            v-if="this.diabetesForm.drugReaction === 'HAVE'">
             <el-input v-model="diabetesForm.reactionRemark"
               type="textarea"
               maxlength="140"
@@ -584,7 +589,8 @@
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="不良反应情况" v-if="this.highBloodForm.drugReaction === 'HAVE'">
+          <el-form-item label="不良反应情况"
+            v-if="this.highBloodForm.drugReaction === 'HAVE'">
             <el-input v-model="highBloodForm.reactionRemark"
               type="textarea"
               maxlength="140"
@@ -739,9 +745,9 @@ export default {
         type: "",
         startTime: "",
         endTime: "",
-        nowHeight: "",
-        nowWeight: "",
-        BMI: "",
+        nowHeight: "170",
+        nowWeight: "60",
+        bmi: "",
         weightSuggest: "",
         // 行为方式
         daySmoking: "",
@@ -750,10 +756,10 @@ export default {
         dayDrinkSuggest: "",
         weekMovement: "",
         minuteMovement: "",
-        dayFood:"",
-        dayFoodSuggest:"",
-        saltIntake:"",
-        saltIntakeSuggest:"",
+        dayFood: "",
+        dayFoodSuggest: "",
+        saltIntake: "",
+        saltIntakeSuggest: "",
         adjustMentality: "",
         compliance: "",
         FollowClassStatus: "",
@@ -830,7 +836,7 @@ export default {
   },
   mounted() {
     this.getHospitalList();
-    this.computeBmi()
+    this.computeBmi();
   },
   methods: {
     // 列表数据
@@ -849,16 +855,19 @@ export default {
           }
           this.getDoctorList(res.data.hospitalId);
           this.getPatientList(res.data.doctorUserIdd);
-          this.computeBmi()
+          this.computeBmi();
         });
     },
     // 根据身高体重计算BMI
     computeBmi() {
-      if (this.form.nowHeight.length > 0 && this.form.nowWeight.length > 0) {
-        this.form.BMI = (
+      if (this.form.nowHeight && this.form.nowWeight) {
+        let bmi = (
           this.form.nowWeight /
           ((this.form.nowHeight / 100) * (this.form.nowHeight / 100))
         ).toFixed(2);
+        this.$set(this.form, "bmi", bmi);
+      } else {
+        this.$set(this.form, "bmi", "");
       }
     },
     startTimeBlur() {

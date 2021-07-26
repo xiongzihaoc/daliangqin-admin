@@ -42,7 +42,8 @@
           </el-form-item>
           <el-form-item label="身高"
             prop="height">
-            <el-input v-model="form.height"
+            <el-input oninput="if (value > 240) value = 240"
+              v-model="form.height"
               @blur="computeBmi"
               v-Int
               placeholder="请输入身高"><i slot="suffix"
@@ -50,7 +51,8 @@
           </el-form-item>
           <el-form-item label="体重"
             prop="weight">
-            <el-input v-model="form.weight"
+            <el-input oninput="if (value > 300) value = 300"
+              v-model="form.weight"
               @blur="computeBmi"
               v-Int
               placeholder="请输入体重"><i slot="suffix"
@@ -529,7 +531,7 @@ export default {
         name: "",
         avatarUrl: "",
         phone: "",
-        contact:"",
+        contact: "",
         idCard: "",
         addressDetail: "",
         address: "",
@@ -538,7 +540,7 @@ export default {
         city: "",
         area: "",
         ethnic: "",
-        height: "160",
+        height: "170",
         weight: "60",
         bmi: 0,
         bloodType: "",
@@ -683,10 +685,13 @@ export default {
     // 根据身高体重计算BMI
     computeBmi() {
       if (this.form.height && this.form.weight) {
-        this.form.bmi = (
+        let bmi = (
           this.form.weight /
           ((this.form.height / 100) * (this.form.height / 100))
         ).toFixed(2);
+        this.$set(this.form, "bmi", bmi);
+      } else {
+        this.$set(this.form, "bmi", "");
       }
     },
     // 动态添加既往史
