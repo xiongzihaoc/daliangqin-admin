@@ -150,14 +150,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="选择模板"
-          prop="templateName">
+          prop="templates">
           <el-select multiple
             clearable
             class="w100"
             @change="selectTemplate"
             @remove-tag="removeTag"
             value-key="id"
-            v-model="editAddForm.templateName">
+            v-model="editAddForm.templates">
             <el-option v-for="item in templateList"
               :key="item.id"
               :label="item.name"
@@ -585,7 +585,9 @@ export default {
       this.templateForm = {};
       this.templateSetDialogVisible = true;
     },
+    // 确定
     templateDialogEnter() {},
+    // 修改
     editTemplateBtn(val) {
       this.templateSetTitle = "编辑";
       this.templateSetDialogVisible = true;
