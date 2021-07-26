@@ -32,6 +32,7 @@
         :min-width="col.minWidth"
         :type="col.type"
         :header-align="col.headerAlign"
+        :show-overflow-tooltip="col.isTooltip"
         :column-key="index.toString()"
         :formatter="col.formatter">
         <template slot-scope="scope">

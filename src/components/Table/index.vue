@@ -31,6 +31,7 @@
         :min-width="col.minWidth"
         :type="col.type"
         :header-align="col.headerAlign"
+        :show-overflow-tooltip="col.isTooltip"
         :column-key="index.toString()"
         :formatter="col.formatter"></el-table-column>
     </el-table>
