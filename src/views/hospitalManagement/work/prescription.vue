@@ -6,45 +6,77 @@
         :model="searchForm"
         :inline="true"
         class="searchForm">
-        <el-form-item label="姓名"
-          align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+        <el-form-item label="医生姓名"
+          align="left">
+          <el-input v-model="searchForm.doctorName"
             size="small"
-            placeholder="请输入姓名"></el-input>
+            placeholder="请输入医生姓名"></el-input>
         </el-form-item>
-        <el-form-item label="手机号"
-          align="left"
-          prop="phone">
-          <el-input v-model="searchForm.phone"
+        <el-form-item label="医生手机号"
+          align="left">
+          <el-input v-model="searchForm.doctorPhone"
             v-Int
+            maxlength="11"
             size="small"
-            placeholder="请输入手机号"></el-input>
+            placeholder="请输入医生手机号"></el-input>
         </el-form-item>
-        <el-form-item label="身份证"
-          align="left"
-          prop="idCard">
-          <el-input v-model="searchForm.idCard"
+        <el-form-item label="医院名称"
+          align="left">
+          <el-input v-model="searchForm.hospitalName"
             size="small"
-            placeholder="请输入身份证"></el-input>
+            placeholder="请输入医院名称"></el-input>
         </el-form-item>
-        <el-form-item label="性别"
+        <el-form-item label="职位"
           align="left"
-          prop="gender">
-          <el-select v-model="searchForm.gender"
-            size="small">
-            <el-option v-for="item in genderList"
+          prop="type">
+          <el-select v-model="searchForm.doctorType"
+            placeholder="请选择职位">
+            <el-option v-for="item in doctorTypeList"
               :key="item.id"
               :label="item.label"
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="职位"
-          align="left"
-          prop="type">
-          <el-select v-model="searchForm.type"
-            placeholder="请选择职位">
-            <el-option v-for="item in doctorTypeList"
+        <el-form-item label="用户姓名"
+          align="left">
+          <el-input v-model="searchForm.patientName"
+            size="small"
+            placeholder="请输入用户姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="用户手机号"
+          align="left">
+          <el-input v-model="searchForm.patientPhone"
+            v-Int
+            maxlength="11"
+            size="small"
+            placeholder="请输入医生手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="高血压">
+          <el-select v-model="searchForm.highBloodStatus"
+            size="small"
+            placeholder="请选择">
+            <el-option v-for="item in healthList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="糖尿病">
+          <el-select v-model="searchForm.diabetesStatus"
+            size="small"
+            placeholder="请选择">
+            <el-option v-for="item in healthList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="心率">
+          <el-select v-model="searchForm.heartRateStatus"
+            size="small"
+            placeholder="请选择">
+            <el-option v-for="item in heartList"
               :key="item.id"
               :label="item.label"
               :value="item.value"></el-option>
@@ -166,11 +198,11 @@
         </el-form-item>
         <div v-for="(item,index) in editAddForm.templates"
           :key="index">
-          <div style="margin-left:30px;color:#ccc"
+          <div style="margin: 0 0 20px 30px;color:#1890FF"
             class="fw">处方内容{{index + 1}}</div>
           <el-form-item label="标题"
             prop="templateContent">
-            <el-input v-model="item.name"></el-input>
+            <el-input disabled v-model="item.name"></el-input>
           </el-form-item>
           <el-form-item label="内容"
             prop="templateContent">
@@ -214,7 +246,7 @@
         </el-table-column>
         <el-table-column align="center"
           label="模板内容"
-          prop="content">
+          prop="content" show-overflow-tooltip>
         </el-table-column>
         <el-table-column align="center"
           label="创建人"
@@ -295,6 +327,8 @@ import {
   parseTime,
   doctorTypeList,
   genderList,
+  healthList,
+  heartList,
   formatterElement,
 } from "@/utils/index";
 export default {
@@ -305,6 +339,8 @@ export default {
     return {
       parseTime,
       doctorTypeList,
+      healthList,
+      heartList,
       genderList,
       FormRules: {
         doctorUserId: [
@@ -313,16 +349,18 @@ export default {
         patientUserId: [
           { required: true, message: "请选择用户", trigger: "blur" },
         ],
-        templateName: [
-          { required: true, message: "请选择模板", trigger: "blur" },
-        ],
+        templates: [{ required: true, message: "请选择模板", trigger: "blur" }],
       },
       searchForm: {
-        name: "",
-        phone: "",
-        idCard: "",
-        gender: "",
-        type: "",
+        doctorName: "",
+        doctorPhone: "",
+        doctorType: "",
+        hospitalName: "",
+        patientName: "",
+        patientPhone: "",
+        highBloodStatus: "",
+        diabetesStatus: "",
+        heartRateStatus: "",
       },
       list: [],
       templateList: [],
@@ -334,18 +372,14 @@ export default {
         hospitalId: "",
         doctorUserId: "",
         patientUserId: "",
-        templateName: [],
-        templates: [
-          {
-            content: "111",
-            name: "222",
-          },
-        ],
+        templates: [],
         content: "",
       },
       tableHeaderBig: [
         { type: "index", label: "序号" },
         { prop: "doctorName", label: "医生姓名" },
+        { prop: "doctorPhone", label: "医生手机号" },
+        { prop: "hospitalName", label: "医院名称" },
         {
           prop: "doctorType",
           label: "职位",
@@ -363,6 +397,7 @@ export default {
         { prop: "templateNames", label: "选用模板" },
         { prop: "templateContents", label: "处方内容" },
         { prop: "patientName", label: "用户姓名" },
+        { prop: "patientPhone", label: "用户手机号" },
         {
           prop: "highBloodStatus",
           label: "高血压",
@@ -376,6 +411,14 @@ export default {
 
           formatter: (row) => {
             return this.diabetesStatusFormatter(row);
+          },
+        },
+        {
+          prop: "heartRateStatus",
+          label: "心率",
+
+          formatter: (row) => {
+            return this.heartRateStatusFormatter(row);
           },
         },
         {
@@ -420,6 +463,15 @@ export default {
         .getUserTemplate({
           page: this.pageNum,
           pageSize: this.pageSize,
+          highBloodStatus: this.searchForm.highBloodStatus,
+          diabetesStatus: this.searchForm.diabetesStatus,
+          heartRateStatus: this.searchForm.heartRateStatus,
+          doctorName: this.searchForm.doctorName,
+          doctorPhone: this.searchForm.doctorPhone,
+          doctorType: this.searchForm.doctorType,
+          hospitalName: this.searchForm.hospitalName,
+          patientName: this.searchForm.patientName,
+          patientPhone: this.searchForm.patientPhone,
         })
         .then((res) => {
           this.list = res.data.elements;
@@ -652,6 +704,9 @@ export default {
     },
     diabetesStatusFormatter(row) {
       return formatterElement.diabetes[row.diabetesStatus];
+    },
+    heartRateStatusFormatter(row) {
+      return formatterElement.heart[row.heartRateStatus];
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
