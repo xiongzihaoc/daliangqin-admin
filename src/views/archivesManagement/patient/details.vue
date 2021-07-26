@@ -321,6 +321,8 @@
             <el-form-item v-if="item.pastHistoryType === 'BLOOD_TRANSFUSION'"
               label="输血量">
               <el-input v-model="item.name"
+                v-Int
+                maxlength="4"
                 placeholder="请输入输血量"><i slot="suffix"
                   style="font-style: normal; margin-right: 10px">cc</i></el-input>
             </el-form-item>
