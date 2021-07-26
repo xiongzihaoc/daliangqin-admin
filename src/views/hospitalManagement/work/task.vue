@@ -133,11 +133,11 @@
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
-      v-loading="loading"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
         :rules="FormRules"
+        v-loading="loading"
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="选择医院"

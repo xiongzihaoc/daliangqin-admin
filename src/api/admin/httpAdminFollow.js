@@ -13,7 +13,6 @@ export const httpAdminFollow = {
     return request({
       url: 'follow/' + data.id,
       method: 'get',
-      params: data,
     })
   },
   postFollow(data) {
@@ -24,7 +23,7 @@ export const httpAdminFollow = {
     })
   },
 
-  putFollow(data,id) {
+  putFollow(data, id) {
     return request({
       url: 'follow/' + id,
       method: 'put',

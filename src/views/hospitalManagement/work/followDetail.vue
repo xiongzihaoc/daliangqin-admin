@@ -277,6 +277,7 @@
           <el-form-item label="空腹血糖"
             prop="fastingBloodGlucose">
             <el-input v-model="diabetesForm.fastingBloodGlucose"
+            v-Int
               maxlength="4"
               oninput="if (value > 36) {value = 36;return} value=value.replace(/[^0-9.]/g,'')"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>

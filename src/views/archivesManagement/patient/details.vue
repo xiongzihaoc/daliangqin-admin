@@ -178,12 +178,12 @@
               placeholder="请输入日吸烟量"><i slot="suffix"
                 style="font-style: normal; margin-right: 10px">支</i></el-input>
           </el-form-item>
-          <el-form-item label="运动次数/周">
+          <el-form-item label="运动次/周">
             <el-input v-Int
               maxlength="3"
               oninput="if (value > 20) value = 20"
               v-model="form.weekMovement"
-              placeholder="请输入运动次数/周"><i slot="suffix"
+              placeholder="请输入运动次/周"><i slot="suffix"
                 style="font-style: normal; margin-right: 10px">次</i></el-input>
           </el-form-item>
           <el-form-item label="运动分钟/次">
@@ -236,8 +236,8 @@
           <el-form-item label="空腹血糖">
             <el-input v-Int
               v-model="form.fastingBloodGlucose"
-              oninput="if (value > 36) value = 36"
-              maxlength="2"
+              maxlength="4"
+              oninput="if (value > 36) {value = 36;return} value=value.replace(/[^0-9.]/g,'')"
               placeholder="请输入空腹血糖"><i slot="suffix"
                 style="font-style: normal; margin-right: 10px">mmol/L</i></el-input>
           </el-form-item>
@@ -420,7 +420,7 @@
           <el-form-item label="遗传病史其他">
             <el-input v-model="form.otherGeneticHistory"
               type="textarea"
-              placeholder="请输入收缩压"></el-input>
+              placeholder="请输入遗传病史其他"></el-input>
           </el-form-item>
           <el-form-item label="残疾情况">
             <el-select class="w100"
@@ -714,7 +714,7 @@ export default {
           this.namePlaceholder = "请输入外伤名称";
           break;
         case "BLOOD_TRANSFUSION":
-          this.nameLabel = "输血原因";
+          this.nameLabel = "输血量";
           this.namePlaceholder = "请输入输血原因";
           break;
         default:
