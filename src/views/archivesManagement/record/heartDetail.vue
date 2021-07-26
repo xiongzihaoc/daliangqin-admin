@@ -2,7 +2,7 @@
   <div>
     <div class="print-box">
       <div class="container"
-        id="printMe">
+        id="printMe" :loading="loading">
         <h3 class="fz18">动态心电仪检测报告</h3>
         <div class="userInfo">
           <div class="hospital">
@@ -22,7 +22,8 @@
           </div>
           <div class="userName flex margin">
             <div class="box"><span class="fw">检测模式：</span>
-              <span>日常检测</span>
+              <span v-if="userInfo.detecType === 'DAILY'">日常检测</span>
+              <span v-else>24小时检测</span>
             </div>
             <div class="box"><span class="fw">检测时长：</span>
               <span>{{heartDetail.length}}秒</span>
@@ -33,7 +34,9 @@
           </div>
           <div class="userName flex">
             <div class="box"><span class="fw">检测结果：</span>
-              <span>正常</span>
+              <span v-if="userInfo.heartRateStatus ==='NORMAL'">正常</span>
+              <span v-else-if="userInfo.heartRateStatus ==='FAST'">稍快</span>
+              <span v-else>稍慢</span>
             </div>
             <div class="box"><span class="fw">测量结果：</span>
               <span>{{userInfo.title}}</span>
@@ -158,8 +161,9 @@ export default {
         extraCss: "https://www.google.com,https://www.google.com",
         extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
       },
+      loading:true,
       heartDetail: {},
-      userInfo:{},
+      userInfo: {},
     };
   },
   created() {
@@ -171,11 +175,10 @@ export default {
         .getHeartRate({ id: this.$route.query.id })
         .then((res) => {
           this.userInfo = res.data.elements[0];
-          console.log(this.userInfo);
           this.heartDetail = JSON.parse(
             res.data.elements[0].reportResult
           ).body.data;
-          console.log(this.heartDetail);
+          this.loading =false
         });
     },
   },
