@@ -60,11 +60,22 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
+        
         <el-form-item label="糖尿病">
           <el-select v-model="searchForm.diabetesStatus"
             size="small"
             placeholder="请选择">
             <el-option v-for="item in healthList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="心率">
+          <el-select v-model="searchForm.heartRateStatus"
+            size="small"
+            placeholder="请选择">
+            <el-option v-for="item in heartList"
               :key="item.id"
               :label="item.label"
               :value="item.value"></el-option>
@@ -220,6 +231,7 @@ import {
   followType,
   healthList,
   userStatusList,
+  heartList,
   parseTime,
   formatterElement,
 } from "@/utils/index";
@@ -237,6 +249,7 @@ export default {
       followType,
       healthList,
       userStatusList,
+      heartList,
       // 搜索表单
       searchForm: {
         doctorUserName: "",
@@ -248,6 +261,7 @@ export default {
         type: "",
         highBloodStatus: "",
         diabetesStatus: "",
+        heartRateStatus:"",
         startTime: "",
         endTime: "",
         userStatus: "",
@@ -290,6 +304,7 @@ export default {
           diseaseType: this.searchForm.diseaseType,
           highBloodStatus: this.searchForm.highBloodStatus,
           diabetesStatus: this.searchForm.diabetesStatus,
+          heartRateStatus: this.searchForm.heartRateStatus,
           startTime: this.searchForm.startTime,
           endTime: this.searchForm.endTime,
           userStatus: this.searchForm.userStatus,
