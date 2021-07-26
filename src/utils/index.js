@@ -571,7 +571,7 @@ export const exposureTypesList = [
 export const diseaseTypeList = [
   { id: 1, label: "高血压", value: "HIGH_BLOOD" },
   { id: 2, label: "糖尿病", value: "DIABETES" },
-  { id: 3, label: "心率", value: "HEART_RATE" },
+  // { id: 3, label: "心率", value: "HEART_RATE" },
   { id: 4, label: "冠心病", value: "CORONARY_HEART_DISEASE" },
   { id: 5, label: "慢性阻塞性肺疾病", value: "CHRONIC_OBSTRUCTIVE_PULMONARY" },
   { id: 6, label: "恶性肿瘤", value: "MALIGNANT_TUMOR" },
@@ -587,9 +587,10 @@ export const disabilityTypesList = [
   { id: 1, label: "视力残疾", value: "VISION" },
   { id: 2, label: "听力残疾", value: "HEARING" },
   { id: 3, label: "言语残疾", value: "SPEECH" },
-  { id: 4, label: "智力残疾", value: "INTELLECT" },
-  { id: 5, label: "精神残疾", value: "SPIRIT" },
-  { id: 6, label: "其他残疾", value: "OTHER" },
+  { id: 4, label: "肢体残疾", value: "LIMB" },
+  { id: 5, label: "智力残疾", value: "INTELLECT" },
+  { id: 6, label: "精神残疾", value: "SPIRIT" },
+  { id: 7, label: "其他残疾", value: "OTHER" },
 ]
 // 所有枚举类型转义
 export const formatterElement = {
@@ -611,7 +612,7 @@ export const formatterElement = {
     HEALTH: "健康",
     SERIOUS: "严重",
     MEDIUM: "中度",
-    SLIGHT: "轻微",
+    SLIGHT: "轻度",
 
   },
   // 糖尿病状态
@@ -619,7 +620,7 @@ export const formatterElement = {
     HEALTH: "健康",
     SERIOUS: "严重",
     MEDIUM: "中度",
-    SLIGHT: "轻微",
+    SLIGHT: "轻度",
   },
   // 心率状态
   heart: {

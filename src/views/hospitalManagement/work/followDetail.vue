@@ -854,7 +854,7 @@ export default {
             this.highBloodForm = res?.data?.followBloodMongo;
           }
           this.getDoctorList(res.data.hospitalId);
-          this.getPatientList(res.data.doctorUserIdd);
+          this.getPatientList(res.data.doctorUserId);
           this.computeBmi();
         });
     },
