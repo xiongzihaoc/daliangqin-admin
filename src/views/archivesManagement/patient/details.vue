@@ -234,8 +234,7 @@
         <div class="test">
           <h3>健康信息</h3>
           <el-form-item label="空腹血糖">
-            <el-input v-Int
-              v-model="form.fastingBloodGlucose"
+            <el-input v-model="form.fastingBloodGlucose"
               maxlength="4"
               oninput="if (value > 36) {value = 36;return} value=value.replace(/[^0-9.]/g,'')"
               placeholder="请输入空腹血糖"><i slot="suffix"
@@ -303,23 +302,78 @@
                   :value="subItem.value"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="nameLabel">
+
+            <el-form-item v-if="item.pastHistoryType === 'DISEASE'"
+              label="疾病名称">
               <el-input v-model="item.name"
-                :placeholder="namePlaceholder"></el-input>
+                placeholder="请输入疾病名称"></el-input>
             </el-form-item>
+            <el-form-item v-if="item.pastHistoryType === 'SURGERY'"
+              label="手术名称">
+              <el-input v-model="item.name"
+                placeholder="请输入手术名称"></el-input>
+            </el-form-item>
+            <el-form-item v-if="item.pastHistoryType === 'TRAUMA'"
+              label="外伤名称">
+              <el-input v-model="item.name"
+                placeholder="请输入外伤名称"></el-input>
+            </el-form-item>
+            <el-form-item v-if="item.pastHistoryType === 'BLOOD_TRANSFUSION'"
+              label="输血量">
+              <el-input v-model="item.name"
+                placeholder="请输入输血量"><i slot="suffix"
+                  style="font-style: normal; margin-right: 10px">cc</i></el-input>
+            </el-form-item>
+
             <el-form-item label="详细"
               v-if="item.pastHistoryType === 'DISEASE'">
               <el-input type="textarea"
                 v-model="item.remark"
                 placeholder="请输入详细"></el-input>
             </el-form-item>
-            <el-form-item label="日期">
+
+            <el-form-item v-if="item.pastHistoryType === 'DISEASE'"
+              label="确诊日期">
               <el-date-picker class="w100"
                 v-model="item.dateTime"
-                type="datetime"
-                format="yyyy-MM-dd HH:mm"
+                :picker-options="pickerOptions"
+                type="date"
+                format="yyyy-MM-dd"
                 value-format="timestamp"
-                placeholder="请选择日期">
+                placeholder="请选择确诊日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item v-if="item.pastHistoryType === 'SURGERY'"
+              label="手术日期">
+              <el-date-picker class="w100"
+                v-model="item.dateTime"
+                :picker-options="pickerOptions"
+                type="date"
+                format="yyyy-MM-dd"
+                value-format="timestamp"
+                placeholder="请选择手术日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item v-if="item.pastHistoryType === 'TRAUMA'"
+              label="外伤日期">
+              <el-date-picker class="w100"
+                v-model="item.dateTime"
+                :picker-options="pickerOptions"
+                type="date"
+                format="yyyy-MM-dd"
+                value-format="timestamp"
+                placeholder="请选择外伤日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item v-if="item.pastHistoryType === 'BLOOD_TRANSFUSION'"
+              label="输血日期">
+              <el-date-picker class="w100"
+                v-model="item.dateTime"
+                :picker-options="pickerOptions"
+                type="date"
+                format="yyyy-MM-dd"
+                value-format="timestamp"
+                placeholder="请选择输血日期">
               </el-date-picker>
             </el-form-item>
           </div>
@@ -523,6 +577,11 @@ export default {
         label: "name", //匹配响应数据中的name
         children: "districts", //匹配响应数据中的children
       },
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e6;
+        },
+      },
       // 医生列表
       doctorList: [],
       hospitalList: [],
@@ -703,26 +762,10 @@ export default {
         remark: "",
       });
     },
-    pastHistoryTypeVChange(val) {
-      switch (val) {
-        case "SURGERY":
-          this.nameLabel = "手术名称";
-          this.namePlaceholder = "请输入手术名称";
-          break;
-        case "TRAUMA":
-          this.nameLabel = "外伤名称";
-          this.namePlaceholder = "请输入外伤名称";
-          break;
-        case "BLOOD_TRANSFUSION":
-          this.nameLabel = "输血量";
-          this.namePlaceholder = "请输入输血原因";
-          break;
-        default:
-          this.nameLabel = "疾病";
-          this.namePlaceholder = "请输入疾病";
-          break;
-      }
-    },
+    // pickerOptions() {
+
+    // },
+    pastHistoryTypeVChange() {},
     // 删除既往史
     deletePastHistories(val, index) {
       if (this.form.pastHistories.length <= 1) {

@@ -136,8 +136,8 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
         v-loading="loading"
+        :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="选择医院"
@@ -422,6 +422,7 @@ export default {
     },
     // 获取用户列表
     getPatientList(id) {
+      this.loading = true
       httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
         this.patientList = res.data.elements;
         this.loading = false;
@@ -466,6 +467,7 @@ export default {
       this.infoTitle = "新增";
       this.editAddForm = {};
       this.editDialogVisible = true;
+      this.loading = false;
     },
     // 编辑
     editBtn(val) {
