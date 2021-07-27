@@ -523,7 +523,6 @@ import {
   educationType,
   bloodTypeList,
   marriageList,
-  validatePhone,
   validateIdCard,
   complianceList,
   allergyTypesList,
@@ -554,7 +553,6 @@ export default {
       disabilityTypesList,
       FormRules: {
         name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
-        // phone: [{ required: true, trigger: "blur", validator: validatePhone }],
         idCard: [
           { required: true, trigger: "blur", validator: validateIdCard },
         ],

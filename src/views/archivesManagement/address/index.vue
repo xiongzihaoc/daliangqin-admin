@@ -51,7 +51,7 @@
           <el-button size="mini"
             type="info"
             plain
-            @click="examineBtn(scope.row)">查看收货地址</el-button>
+            @click="detailAddressBtn(scope.row)">查看收货地址</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -82,7 +82,7 @@
           label="是否默认">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.isDefault"
-              @change="statusChange(scope.row)"
+              @change="changeStatus(scope.row)"
               :active-value="true"
               :inactive-value="false"
               active-color="#13ce66"
@@ -247,7 +247,7 @@ export default {
         });
     },
     // 是否默认
-    statusChange(id) {
+    changeStatus(id) {
       httpAdminAddressPatient.putAddressDefault(id).then((res) => {
         if (res.code === "OK") {
           this.$notify.success({
@@ -259,7 +259,6 @@ export default {
       });
     },
     selectAddrssChange(val) {
-      console.log(val);
       this.editAddForm.province = val[0];
       this.editAddForm.city = val[1];
       this.editAddForm.area = val[2];
@@ -289,7 +288,7 @@ export default {
     },
     /***** 增删改 *****/
     // 查看收货地址按钮
-    examineBtn(val) {
+    detailAddressBtn(val) {
       this.searchForm.userId = val.patientUserId;
       this.getEditList();
       this.examineDialogVisible = true;
