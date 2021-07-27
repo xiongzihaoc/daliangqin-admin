@@ -184,7 +184,6 @@ export default {
     selectNoteTime(val) {
       this.searchForm.startTime = val[0];
       this.searchForm.endTime = val[1];
-      console.log(this.searchForm.startTime);
     },
     /***** 搜索区域 *****/
     // 搜索
