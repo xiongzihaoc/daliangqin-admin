@@ -157,8 +157,6 @@
 import EleTable from "@/components/Untable";
 import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
 import {
-  validateIdCard,
-  validatePhone,
   parseTime,
   genderList,
   healthList,

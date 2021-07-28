@@ -505,7 +505,7 @@
         @click="cancel">取消</el-button>
       <el-button size="small"
         type="primary"
-        @click="confirm">确定</el-button>
+        @click="confirm" v-debounce="[confirm]">确定</el-button>
     </div>
   </div>
 </template>

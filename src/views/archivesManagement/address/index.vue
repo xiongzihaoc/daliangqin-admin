@@ -22,7 +22,7 @@
             placeholder="请输入用户手机号"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn"
+          <el-button v-debounce="[searchBtn]"
             type="primary"
             size="small"
             icon="el-icon-search">搜索</el-button>
@@ -41,7 +41,6 @@
       :total="total"
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
-      <!-- 需要formatter的列 -->
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
@@ -146,7 +145,7 @@
         class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
         <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
+          v-debounce="[editPageEnter]">确 定</el-button>
       </span>
     </el-dialog>
   </div>
