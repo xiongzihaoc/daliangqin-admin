@@ -44,14 +44,6 @@
             icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
-      <el-button @click="searchBtn"
-        type="primary"
-        size="small"
-        icon="el-icon-search">搜索</el-button>
-      <el-button @click="searchReset"
-        size="small"
-        plain
-        icon="el-icon-refresh">重置</el-button>
     </div>
     <!-- 表格区域 -->
     <EleTable :data="list"
