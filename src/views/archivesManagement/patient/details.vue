@@ -505,7 +505,7 @@
         @click="cancel">取消</el-button>
       <el-button size="small"
         type="primary"
-        @click="confirm">确定</el-button>
+        @click="confirm" v-debounce="[confirm]">确定</el-button>
     </div>
   </div>
 </template>
@@ -523,7 +523,6 @@ import {
   educationType,
   bloodTypeList,
   marriageList,
-  validatePhone,
   validateIdCard,
   complianceList,
   allergyTypesList,
@@ -554,7 +553,6 @@ export default {
       disabilityTypesList,
       FormRules: {
         name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
-        // phone: [{ required: true, trigger: "blur", validator: validatePhone }],
         idCard: [
           { required: true, trigger: "blur", validator: validateIdCard },
         ],

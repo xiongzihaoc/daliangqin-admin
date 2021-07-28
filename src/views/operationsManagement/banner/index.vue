@@ -37,7 +37,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn"
+          <el-button v-debounce="[searchBtn]"
             type="primary"
             size="small"
             icon="el-icon-search">搜索</el-button>
@@ -192,7 +192,7 @@
         class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
         <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
+          v-debounce="[editPageEnter]">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -224,9 +224,6 @@ export default {
         appType: [
           { required: true, message: "请选择呈现位置", trigger: "blur" },
         ],
-        // linkUrl: [
-        //   { required: true, message: "请输入跳转地址", trigger: "blur" },
-        // ],
         zOrder: [{ required: true, message: "请输入权重", trigger: "blur" }],
 
         status: [{ required: true, message: "请选择状态", trigger: "blur" }],
@@ -244,6 +241,7 @@ export default {
         type: "",
         status: "",
       },
+      // 搜索表单
       searchForm: {
         title: "",
         type: "",

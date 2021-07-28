@@ -202,7 +202,8 @@
             class="fw">处方内容{{index + 1}}</div>
           <el-form-item label="标题"
             prop="templateContent">
-            <el-input disabled v-model="item.name"></el-input>
+            <el-input disabled
+              v-model="item.name"></el-input>
           </el-form-item>
           <el-form-item label="内容"
             prop="templateContent">
@@ -246,7 +247,8 @@
         </el-table-column>
         <el-table-column align="center"
           label="模板内容"
-          prop="content" show-overflow-tooltip>
+          prop="content"
+          show-overflow-tooltip>
         </el-table-column>
         <el-table-column align="center"
           label="创建人"
@@ -395,7 +397,7 @@ export default {
           },
         },
         { prop: "templateNames", label: "选用模板" },
-        { prop: "templateContents", label: "处方内容" },
+        { prop: "templateContents", label: "处方内容", isTooltip: true },
         { prop: "patientName", label: "用户姓名" },
         { prop: "patientPhone", label: "用户手机号" },
         {

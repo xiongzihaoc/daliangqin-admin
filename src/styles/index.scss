@@ -52,7 +52,10 @@ a:hover {
 div:focus {
   outline: none;
 }
+.el-tooltip__popper {
+  max-width: 800px;
 
+}
 .clearfix {
   &:after {
     visibility: hidden;

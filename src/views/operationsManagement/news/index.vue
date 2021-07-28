@@ -37,7 +37,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn"
+          <el-button v-debounce="[searchBtn]"
             type="primary"
             size="small"
             icon="el-icon-search">搜索</el-button>
