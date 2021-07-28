@@ -505,19 +505,18 @@
         @click="cancel">取消</el-button>
       <el-button size="small"
         type="primary"
-        @click="confirm"
         v-debounce="[confirm]">确定</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import singleUpload from "@/components/Upload"
-import { httpAdminArchives } from "@/api/admin/httpAdminArchives"
-import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor"
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
-import addressJson from "@/utils/address.json"
+import singleUpload from '@/components/Upload'
+import { httpAdminArchives } from '@/api/admin/httpAdminArchives'
+import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import addressJson from '@/utils/address.json'
 import {
   GetBirthday,
   Getsex,
@@ -532,7 +531,7 @@ import {
   diseaseTypeList,
   drugReactionList,
   disabilityTypesList,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     singleUpload,
@@ -553,30 +552,30 @@ export default {
       drugReactionList,
       disabilityTypesList,
       FormRules: {
-        name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
+        name: [{ required: true, message: '请输入用户姓名', trigger: 'blur' }],
         idCard: [
-          { required: true, trigger: "blur", validator: validateIdCard },
+          { required: true, trigger: 'blur', validator: validateIdCard },
         ],
         addressDetail: [
-          { required: true, message: "请选择省市区", trigger: "blur" },
+          { required: true, message: '请选择省市区', trigger: 'blur' },
         ],
         address: [
-          { required: true, message: "请输入详细地址", trigger: "blur" },
+          { required: true, message: '请输入详细地址', trigger: 'blur' },
         ],
         hospitalId: [
-          { required: true, message: "请选择对应医院", trigger: "blur" },
+          { required: true, message: '请选择对应医院', trigger: 'blur' },
         ],
         doctorUserId: [
-          { required: true, message: "请选择对应医师", trigger: "blur" },
+          { required: true, message: '请选择对应医师', trigger: 'blur' },
         ],
-        height: [{ required: true, message: "请输入身高", trigger: "blur" }],
-        weight: [{ required: true, message: "请输入体重", trigger: "blur" }],
+        height: [{ required: true, message: '请输入身高', trigger: 'blur' }],
+        weight: [{ required: true, message: '请输入体重', trigger: 'blur' }],
       },
       // 级联配置
       cateListProps: {
-        value: "name", //匹配响应数据中的id
-        label: "name", //匹配响应数据中的name
-        children: "districts", //匹配响应数据中的children
+        value: 'name', //匹配响应数据中的id
+        label: 'name', //匹配响应数据中的name
+        children: 'districts', //匹配响应数据中的children
       },
       pickerOptions: {
         disabledDate(time) {
@@ -588,50 +587,50 @@ export default {
       hospitalList: [],
       form: {
         // 基本信息
-        name: "",
-        avatarUrl: "",
-        phone: "",
-        contact: "",
-        idCard: "",
-        addressDetail: "",
-        address: "",
-        liveType: "",
-        province: "",
-        city: "",
-        area: "",
-        ethnic: "",
-        height: "",
-        weight: "",
+        name: '',
+        avatarUrl: '',
+        phone: '',
+        contact: '',
+        idCard: '',
+        addressDetail: '',
+        address: '',
+        liveType: '',
+        province: '',
+        city: '',
+        area: '',
+        ethnic: '',
+        height: '',
+        weight: '',
         bmi: 0,
-        bloodType: "",
-        educationType: "",
-        job: "",
-        marriageStatus: "",
-        employer: "",
-        createUserName: "",
-        hospitalId: "",
-        doctorUserId: "",
-        patientUserId: "",
-        dayDrink: "",
-        daySmoking: "",
-        weekMovement: "",
-        minuteMovement: "",
-        dayFood: "",
-        daySalt: "",
-        adjustMentality: "",
-        compliance: "",
-        fastingBloodGlucose: "",
-        heartRate: "",
-        shrinkHighPressure: "",
-        diastoleLowPressure: "",
+        bloodType: '',
+        educationType: '',
+        job: '',
+        marriageStatus: '',
+        employer: '',
+        createUserName: '',
+        hospitalId: '',
+        doctorUserId: '',
+        patientUserId: '',
+        dayDrink: '',
+        daySmoking: '',
+        weekMovement: '',
+        minuteMovement: '',
+        dayFood: '',
+        daySalt: '',
+        adjustMentality: '',
+        compliance: '',
+        fastingBloodGlucose: '',
+        heartRate: '',
+        shrinkHighPressure: '',
+        diastoleLowPressure: '',
         allergyTypes: [],
-        allergyName: "",
+        allergyName: '',
         pastHistories: [
           {
-            dateTime: "",
-            name: "",
-            pastHistoryType: "DISEASE",
-            remark: "",
+            dateTime: '',
+            name: '',
+            pastHistoryType: 'DISEASE',
+            remark: '',
           },
         ],
         exposureTypes: [],
@@ -642,10 +641,10 @@ export default {
           child: [],
           other: [],
         },
-        geneticHistory: "",
-        otherGeneticHistory: "",
+        geneticHistory: '',
+        otherGeneticHistory: '',
         disabilityTypes: [],
-        disabilityOther: "",
+        disabilityOther: '',
       },
       archivesFamily: {
         father: [],
@@ -654,13 +653,13 @@ export default {
         child: [],
         other: [],
       },
-      nameLabel: "疾病",
-      namePlaceholder: "请输入疾病",
+      nameLabel: '疾病',
+      namePlaceholder: '请输入疾病',
     }
   },
   created() {
     // 判断是编辑还是新增
-    if (this.$route.query.type === "edit") {
+    if (this.$route.query.type === 'edit') {
       this.getList()
     } else {
     }
@@ -692,8 +691,8 @@ export default {
           this.form.province = value?.province
           this.form.city = value?.city
           this.form.area = value?.area
-          this.$set(this.form, "address", value?.address)
-          this.$set(this.form, "avatarUrl", value?.avatarUrl)
+          this.$set(this.form, 'address', value?.address)
+          this.$set(this.form, 'avatarUrl', value?.avatarUrl)
           this.computeBmi()
           this.form.addressDetail = [
             this.form.province,
@@ -737,7 +736,7 @@ export default {
     },
     selectHospital(val) {
       this.getDoctorList(val)
-      this.form.doctorUserId = ""
+      this.form.doctorUserId = ''
     },
     selectDoctor(val) {
       this.$forceUpdate()
@@ -749,18 +748,18 @@ export default {
           this.form.weight /
           ((this.form.height / 100) * (this.form.height / 100))
         ).toFixed(2)
-        this.$set(this.form, "bmi", bmi)
+        this.$set(this.form, 'bmi', bmi)
       } else {
-        this.$set(this.form, "bmi", "")
+        this.$set(this.form, 'bmi', '')
       }
     },
     // 动态添加既往史
     addPastHistories() {
       this.form.pastHistories.push({
-        dateTime: "",
-        name: "",
-        pastHistoryType: "DISEASE",
-        remark: "",
+        dateTime: '',
+        name: '',
+        pastHistoryType: 'DISEASE',
+        remark: '',
       })
     },
     // pickerOptions() {
@@ -776,7 +775,7 @@ export default {
       }
     },
     cancel() {
-      this.$router.push({ path: "/archivesManagement/patient" })
+      this.$router.push({ path: '/archivesManagement/patient' })
     },
     confirm() {
       this.form.archivesFamily = this.archivesFamily
@@ -785,15 +784,15 @@ export default {
           // 编辑
           if (this.$route.query.isArchives == true) {
             httpAdminArchives.putArchives(this.form).then((res) => {
-              if (res.code === "OK") {
-                this.$router.push({ path: "/archivesManagement/patient" })
+              if (res.code === 'OK') {
+                this.$router.push({ path: '/archivesManagement/patient' })
               }
             })
           } else {
             // 新增
             httpAdminArchives.postArchives(this.form).then((res) => {
-              if (res.code === "OK") {
-                this.$router.push({ path: "/archivesManagement/patient" })
+              if (res.code === 'OK') {
+                this.$router.push({ path: '/archivesManagement/patient' })
               }
             })
           }
