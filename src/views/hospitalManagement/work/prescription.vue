@@ -208,7 +208,7 @@
           <el-form-item label="内容"
             prop="templateContent">
             <el-input type="textarea"
-              :rows="10"
+              :rows="5"
               v-model="item.content"></el-input>
           </el-form-item>
         </div>

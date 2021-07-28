@@ -303,9 +303,9 @@ export const statusList = [
 // 高血压糖尿病结果列表
 export const healthList = [
   { id: 1, label: "健康", value: "HEALTH" },
-  { id: 2, label: "重度", value: "SERIOUS" },
-  { id: 3, label: "中度", value: "MEDIUM" },
   { id: 4, label: "轻度", value: "SLIGHT" },
+  { id: 3, label: "中度", value: "MEDIUM" },
+  { id: 2, label: "重度", value: "SERIOUS" },
 ]
 
 // 心率枚举
@@ -610,17 +610,17 @@ export const formatterElement = {
   // 高血压状态
   highBlood: {
     HEALTH: "健康",
-    SERIOUS: "严重",
-    MEDIUM: "中度",
     SLIGHT: "轻度",
+    MEDIUM: "中度",
+    SERIOUS: "重度",
 
   },
   // 糖尿病状态
   diabetes: {
     HEALTH: "健康",
-    SERIOUS: "严重",
-    MEDIUM: "中度",
     SLIGHT: "轻度",
+    MEDIUM: "中度",
+    SERIOUS: "重度",
   },
   // 心率状态
   heart: {
