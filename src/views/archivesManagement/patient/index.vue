@@ -154,15 +154,15 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable";
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
+import EleTable from "@/components/Untable"
+import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
 import {
   parseTime,
   genderList,
   healthList,
   heartList,
   formatterElement,
-} from "@/utils/index";
+} from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -194,14 +194,14 @@ export default {
           prop: "gender",
           label: "性别",
           formatter: (row) => {
-            return this.genderFormatter(row);
+            return this.genderFormatter(row)
           },
         },
         {
           prop: "birthday",
           label: "出生日期",
           formatter: (row) => {
-            return parseTime(row.birthday)?.slice(0, 10);
+            return parseTime(row.birthday)?.slice(0, 10)
           },
         },
         { prop: "age", label: "年龄" },
@@ -210,21 +210,21 @@ export default {
           prop: "highBloodStatus",
           label: "高血压",
           formatter: (row) => {
-            return this.highBloodFormatter(row);
+            return this.highBloodFormatter(row)
           },
         },
         {
           prop: "diabetesStatus",
           label: "糖尿病",
           formatter: (row) => {
-            return this.diabetesFormatter(row);
+            return this.diabetesFormatter(row)
           },
         },
         {
           prop: "heartRateStatus",
           label: "心率",
           formatter: (row) => {
-            return this.heartRateFormatter(row);
+            return this.heartRateFormatter(row)
           },
         },
         { prop: "healthScore", label: "两慢指数" },
@@ -234,7 +234,7 @@ export default {
           prop: "archivesMongo.createTime",
           label: "创建时间",
           formatter: (row) => {
-            return parseTime(row.archivesMongo?.createTime);
+            return parseTime(row.archivesMongo?.createTime)
           },
         },
         { prop: "archivesMongo.createUserName", label: "创建人" },
@@ -242,7 +242,7 @@ export default {
       loading: true,
       // 医生列表跳转用户列表携带参数
       doctorId: "",
-      collectionDoctorUserId:"",
+      collectionDoctorUserId: "",
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -250,21 +250,21 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
-    };
+    }
   },
   created() {
-    this.doctorId = localStorage.getItem("doctorId");
-    this.collectionDoctorUserId = localStorage.getItem("collectionDoctorUserId");
-    let pageNum = localStorage.getItem("patientNum");
+    this.doctorId = localStorage.getItem("doctorId")
+    this.collectionDoctorUserId = localStorage.getItem("collectionDoctorUserId")
+    let pageNum = localStorage.getItem("patientNum")
     if (pageNum) {
-      this.pageNum = pageNum;
+      this.pageNum = pageNum
     }
-    this.getList();
+    this.getList()
   },
   destroyed() {
-    localStorage.removeItem("doctorId");
-    localStorage.removeItem("collectionDoctorUserId");
-    localStorage.removeItem("patientNum");
+    localStorage.removeItem("doctorId")
+    localStorage.removeItem("collectionDoctorUserId")
+    localStorage.removeItem("patientNum")
   },
   methods: {
     getList() {
@@ -287,22 +287,22 @@ export default {
           // endAge: this.searchForm.endAge,
         })
         .then((res) => {
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-          this.loading = false;
-        });
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+          this.loading = false
+        })
     },
     selectBeginAgeChange(val) {},
     selectEndAgeChange(val) {},
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 增删改 *****/
     // 新增
@@ -310,44 +310,44 @@ export default {
       this.$router.push({
         path: "/archivesManagement/details",
         query: { type: "add" },
-      });
+      })
     },
     // 跳转详细资料
     detailsBtn(val) {
       this.$router.push({
         path: "/archivesManagement/details",
         query: { id: val.id, type: "edit", isArchives: val.isArchives },
-      });
-      localStorage.setItem("patientNum", this.pageNum);
+      })
+      localStorage.setItem("patientNum", this.pageNum)
     },
     /***** 表格格式化内容区域 *****/
     // 出生年月
     genderFormatter(row) {
-      return formatterElement.gender[row.gender];
+      return formatterElement.gender[row.gender]
     },
     // 高血压状态
     highBloodFormatter(row) {
-      return formatterElement.highBlood[row.highBloodStatus];
+      return formatterElement.highBlood[row.highBloodStatus]
     },
     // 糖尿病状态
     diabetesFormatter(row) {
-      return formatterElement.diabetes[row.diabetesStatus];
+      return formatterElement.diabetes[row.diabetesStatus]
     },
     // 心率状态
     heartRateFormatter(row) {
-      return formatterElement.heart[row.heartRateStatus];
+      return formatterElement.heart[row.heartRateStatus]
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style>

@@ -505,18 +505,19 @@
         @click="cancel">取消</el-button>
       <el-button size="small"
         type="primary"
-        @click="confirm" v-debounce="[confirm]">确定</el-button>
+        @click="confirm"
+        v-debounce="[confirm]">确定</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import singleUpload from "@/components/Upload";
-import { httpAdminArchives } from "@/api/admin/httpAdminArchives";
-import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
-import addressJson from "@/utils/address.json";
+import singleUpload from "@/components/Upload"
+import { httpAdminArchives } from "@/api/admin/httpAdminArchives"
+import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor"
+import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
+import addressJson from "@/utils/address.json"
 import {
   GetBirthday,
   Getsex,
@@ -531,7 +532,7 @@ import {
   diseaseTypeList,
   drugReactionList,
   disabilityTypesList,
-} from "@/utils/index";
+} from "@/utils/index"
 export default {
   components: {
     singleUpload,
@@ -579,7 +580,7 @@ export default {
       },
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() > Date.now() - 8.64e6;
+          return time.getTime() > Date.now() - 8.64e6
         },
       },
       // 医生列表
@@ -655,21 +656,21 @@ export default {
       },
       nameLabel: "疾病",
       namePlaceholder: "请输入疾病",
-    };
+    }
   },
   created() {
     // 判断是编辑还是新增
     if (this.$route.query.type === "edit") {
-      this.getList();
+      this.getList()
     } else {
     }
-    this.form.patientUserId = this.$route.query.id;
+    this.form.patientUserId = this.$route.query.id
   },
   mounted() {
-    this.getHospitalList();
-    this.getDoctorList();
-    this.computeBmi();
-    this.getTreeData(addressJson);
+    this.getHospitalList()
+    this.getDoctorList()
+    this.computeBmi()
+    this.getTreeData(addressJson)
   },
   methods: {
     // 列表数据
@@ -677,36 +678,36 @@ export default {
       httpAdminPatient
         .getPatient({ userId: this.$route.query.id })
         .then((res) => {
-          console.log(res);
+          console.log(res)
           // 回显表单数据
-          let value = res.data.elements[0];
+          let value = res.data.elements[0]
           if (value.archivesMongo) {
-            this.form = value?.archivesMongo;
+            this.form = value?.archivesMongo
             if (value?.archivesMongo?.archivesFamily) {
-              this.archivesFamily = value?.archivesMongo?.archivesFamily;
+              this.archivesFamily = value?.archivesMongo?.archivesFamily
             }
           } else {
-            this.form.phone = value?.phone;
+            this.form.phone = value?.phone
           }
-          this.form.province = value?.province;
-          this.form.city = value?.city;
-          this.form.area = value?.area;
-          this.$set(this.form, "address", value?.address);
-          this.$set(this.form, "avatarUrl", value?.avatarUrl);
-          this.computeBmi();
+          this.form.province = value?.province
+          this.form.city = value?.city
+          this.form.area = value?.area
+          this.$set(this.form, "address", value?.address)
+          this.$set(this.form, "avatarUrl", value?.avatarUrl)
+          this.computeBmi()
           this.form.addressDetail = [
             this.form.province,
             this.form.city,
             this.form.area,
-          ];
-        });
+          ]
+        })
     },
     // 级联change事件
     selectAddrssChange(val) {
       if (val) {
-        this.form.province = val[0];
-        this.form.city = val[1];
-        this.form.area = val[2];
+        this.form.province = val[0]
+        this.form.city = val[1]
+        this.form.area = val[2]
       }
     },
     // 递归处理json文件的最后一级
@@ -714,32 +715,32 @@ export default {
       for (var i = 0; i < data.length; i++) {
         if (data[i].districts.length < 1) {
           //  将children设为undefined
-          data[i].districts = undefined;
+          data[i].districts = undefined
         } else {
           // 若不为空数组，则继续 递归调用 本方法
-          this.getTreeData(data[i].districts);
+          this.getTreeData(data[i].districts)
         }
       }
-      return data;
+      return data
     },
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital().then((res) => {
-        this.hospitalList = res.data.elements;
-      });
+        this.hospitalList = res.data.elements
+      })
     },
     // 获取医生列表
     getDoctorList(val) {
       httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
-        this.doctorList = res.data.elements;
-      });
+        this.doctorList = res.data.elements
+      })
     },
     selectHospital(val) {
-      this.getDoctorList(val);
-      this.form.doctorUserId = "";
+      this.getDoctorList(val)
+      this.form.doctorUserId = ""
     },
     selectDoctor(val) {
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
     // 根据身高体重计算BMI
     computeBmi() {
@@ -747,10 +748,10 @@ export default {
         let bmi = (
           this.form.weight /
           ((this.form.height / 100) * (this.form.height / 100))
-        ).toFixed(2);
-        this.$set(this.form, "bmi", bmi);
+        ).toFixed(2)
+        this.$set(this.form, "bmi", bmi)
       } else {
-        this.$set(this.form, "bmi", "");
+        this.$set(this.form, "bmi", "")
       }
     },
     // 动态添加既往史
@@ -760,7 +761,7 @@ export default {
         name: "",
         pastHistoryType: "DISEASE",
         remark: "",
-      });
+      })
     },
     // pickerOptions() {
 
@@ -769,38 +770,38 @@ export default {
     // 删除既往史
     deletePastHistories(val, index) {
       if (this.form.pastHistories.length <= 1) {
-        return;
+        return
       } else {
-        this.form.pastHistories.splice(index, 1);
+        this.form.pastHistories.splice(index, 1)
       }
     },
     cancel() {
-      this.$router.push({ path: "/archivesManagement/patient" });
+      this.$router.push({ path: "/archivesManagement/patient" })
     },
     confirm() {
-      this.form.archivesFamily = this.archivesFamily;
+      this.form.archivesFamily = this.archivesFamily
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 编辑
           if (this.$route.query.isArchives == true) {
             httpAdminArchives.putArchives(this.form).then((res) => {
               if (res.code === "OK") {
-                this.$router.push({ path: "/archivesManagement/patient" });
+                this.$router.push({ path: "/archivesManagement/patient" })
               }
-            });
+            })
           } else {
             // 新增
             httpAdminArchives.postArchives(this.form).then((res) => {
               if (res.code === "OK") {
-                this.$router.push({ path: "/archivesManagement/patient" });
+                this.$router.push({ path: "/archivesManagement/patient" })
               }
-            });
+            })
           }
         }
-      });
+      })
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -53,9 +53,9 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable";
-import { httpAdminLog } from "@/api/admin/httpAdminLog";
-import { validatePhone, parseTime } from "@/utils/index";
+import EleTable from "@/components/Untable"
+import { httpAdminLog } from "@/api/admin/httpAdminLog"
+import { validatePhone, parseTime } from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -77,7 +77,7 @@ export default {
           prop: "createTime",
           label: "操作时间",
           formatter: (row) => {
-            return parseTime(row.createTime);
+            return parseTime(row.createTime)
           },
         },
       ],
@@ -106,10 +106,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
@@ -122,31 +122,31 @@ export default {
           description: this.searchForm.description,
         })
         .then((res) => {
-          console.log(res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log(res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 搜索
     searchBtn(val) {
-      this.getList();
+      this.getList()
     },
     // 搜索条件重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     // 分页
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style scoped>

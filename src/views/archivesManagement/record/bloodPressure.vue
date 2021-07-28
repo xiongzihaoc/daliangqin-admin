@@ -218,15 +218,15 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import { httpAdminBloodPressure } from "@/api/admin/httpAdminBloodPressure";
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
+import EleTable from "@/components/Table"
+import { httpAdminBloodPressure } from "@/api/admin/httpAdminBloodPressure"
+import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
 import {
   parseTime,
   validateTime,
   equipmentResourceTypeList,
   healthList,
-} from "@/utils/index";
+} from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -271,13 +271,13 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   mounted() {
-    this.getPatientList();
+    this.getPatientList()
   },
   methods: {
     getList() {
@@ -291,10 +291,10 @@ export default {
           highBloodStatus: this.searchForm.highBloodStatus,
         })
         .then((res) => {
-          console.log(res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log(res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     getPatientList() {
       httpAdminPatient
@@ -303,39 +303,39 @@ export default {
           pageSize: 100,
         })
         .then((res) => {
-          console.log(res);
-          this.patientList = res.data.elements;
-        });
+          console.log(res)
+          this.patientList = res.data.elements
+        })
     },
     selectPatient() {
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
+      this.infoTitle = "新增"
+      this.editAddForm = {}
+      this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editAddForm.userId = val.patientUserId;
-      this.editDialogVisible = true;
+      this.infoTitle = "编辑"
+      this.editAddForm = JSON.parse(JSON.stringify(val))
+      this.editAddForm.userId = val.patientUserId
+      this.editDialogVisible = true
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 新增编辑确定
     editPageEnter() {
@@ -347,45 +347,45 @@ export default {
               .postBloodPressure(this.editAddForm)
               .then((res) => {
                 if (res.code !== "OK") {
-                  return;
+                  return
                 } else {
                   this.$notify.success({
                     title: "新增成功",
-                  });
-                  this.getList();
-                  this.editDialogVisible = false;
+                  })
+                  this.getList()
+                  this.editDialogVisible = false
                 }
-              });
+              })
           } else {
             // 发送请求
             httpAdminBloodPressure
               .putBloodPressurer(this.editAddForm)
               .then((res) => {
                 if (res.code !== "OK") {
-                  return;
+                  return
                 } else {
                   this.$notify.success({
                     title: "编辑成功",
-                  });
-                  this.getList();
-                  this.editDialogVisible = false;
+                  })
+                  this.getList()
+                  this.editDialogVisible = false
                 }
-              });
+              })
           }
         }
-      });
+      })
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style>

@@ -166,10 +166,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable";
-import addressJson from "@/utils/address.json";
-import { httpAdminAddressDoctor } from "@/api/admin/httpAdminAddressDoctor";
-import { validatePhone, doctorTypeList, formatterElement } from "@/utils/index";
+import EleTable from "@/components/Untable"
+import addressJson from "@/utils/address.json"
+import { httpAdminAddressDoctor } from "@/api/admin/httpAdminAddressDoctor"
+import { validatePhone, doctorTypeList, formatterElement } from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -226,7 +226,7 @@ export default {
           prop: "doctorType",
           label: "职位",
           formatter: (row) => {
-            return this.doctorTypeFormatter(row);
+            return this.doctorTypeFormatter(row)
           },
         },
       ],
@@ -239,13 +239,13 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       examineDialogVisible: false,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   mounted() {
-    this.getTreeData(addressJson);
+    this.getTreeData(addressJson)
   },
   methods: {
     getList() {
@@ -258,80 +258,80 @@ export default {
           doctorPhone: this.searchForm.doctorPhone,
         })
         .then((res) => {
-          console.log(res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log(res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 获取第一个弹框的表格数据
     getEditList() {
       httpAdminAddressDoctor
         .getAddressDoctor({ userId: this.searchForm.userId })
         .then((res) => {
-          this.addressList = res.data.elements[0].addressInfos;
-        });
+          this.addressList = res.data.elements[0].addressInfos
+        })
     },
     // 是否默认
     statusChange(id) {
       httpAdminAddressDoctor.putAddressDefault(id).then((res) => {
-        console.log(res);
+        console.log(res)
         if (res.code === "OK") {
           this.$notify.success({
             title: res.message,
-          });
-          this.getEditList();
-          this.getList();
+          })
+          this.getEditList()
+          this.getList()
         }
-      });
+      })
     },
     selectAddrssChange(val) {
-      console.log(val);
-      this.editAddForm.province = val[0];
-      this.editAddForm.city = val[1];
-      this.editAddForm.area = val[2];
+      console.log(val)
+      this.editAddForm.province = val[0]
+      this.editAddForm.city = val[1]
+      this.editAddForm.area = val[2]
     },
     // 递归处理json文件的最后一级
     getTreeData(data) {
       for (var i = 0; i < data.length; i++) {
         if (data[i].districts.length < 1) {
           // children若为空数组，则将children设为undefined
-          data[i].districts = undefined;
+          data[i].districts = undefined
         } else {
           // children若不为空数组，则继续 递归调用 本方法
-          this.getTreeData(data[i].districts);
+          this.getTreeData(data[i].districts)
         }
       }
-      return data;
+      return data
     },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 增删改 *****/
     // 查看收货地址按钮
     examineBtn(val) {
-      this.searchForm.userId = val.userId;
-      this.getEditList();
-      this.examineDialogVisible = true;
+      this.searchForm.userId = val.userId
+      this.getEditList()
+      this.examineDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      this.editAddForm = JSON.parse(JSON.stringify(val));
+      this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editAddForm.address = [
         this.editAddForm.province,
         this.editAddForm.city,
         this.editAddForm.area,
-      ];
-      this.editDialogVisible = true;
+      ]
+      this.editDialogVisible = true
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 编辑确定
     editPageEnter() {
@@ -342,33 +342,33 @@ export default {
             if (res.code === "OK") {
               this.$notify.success({
                 title: "编辑成功",
-              });
-              this.getList();
-              this.getEditList();
-              this.editDialogVisible = false;
+              })
+              this.getList()
+              this.getEditList()
+              this.editDialogVisible = false
             }
-          });
+          })
         }
-      });
+      })
     },
     /***** 表格格式化内容 *****/
     doctorTypeFormatter(row) {
-      return formatterElement.doctorType[row.doctorType];
+      return formatterElement.doctorType[row.doctorType]
     },
     addressInfosFormatter(row) {
-      return row.province + row.city + row.area + row.detail;
+      return row.province + row.city + row.area + row.detail
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

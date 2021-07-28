@@ -93,15 +93,15 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import { httpAdminTransfer } from "@/api/admin/httpAdminTransfer";
+import EleTable from "@/components/Table"
+import { httpAdminTransfer } from "@/api/admin/httpAdminTransfer"
 import {
   followTypeList,
   parseTime,
   resourceTypeList,
   transferStatusList,
   formatterElement,
-} from "@/utils/index";
+} from "@/utils/index"
 
 export default {
   components: {
@@ -145,7 +145,7 @@ export default {
           prop: "transferTime",
           label: "转诊时间",
           formatter: (row) => {
-            return parseTime(row.transferTime);
+            return parseTime(row.transferTime)
           },
         },
         { prop: "toDoctorUserName", label: "专家姓名" },
@@ -169,7 +169,7 @@ export default {
           prop: "transferStatus",
           label: "转诊状态",
           formatter: (row) => {
-            return this.transferStatusFormatter(row);
+            return this.transferStatusFormatter(row)
           },
         },
 
@@ -177,7 +177,7 @@ export default {
           prop: "confirmTime",
           label: "确认时间",
           formatter: (row) => {
-            return parseTime(row.confirmTime);
+            return parseTime(row.confirmTime)
           },
         },
         { prop: "cancelReason", label: "拒绝原因" },
@@ -186,10 +186,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
@@ -207,63 +207,63 @@ export default {
           transferStatus: this.searchForm.transferStatus,
         })
         .then((res) => {
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     /***** 搜索区域 *****/
     // 选择转诊时间
     selectTransferTime(val) {
-      console.log(val);
-      this.searchForm.transferStartTime = val[0];
-      this.searchForm.transferEndTime = val[1];
+      console.log(val)
+      this.searchForm.transferStartTime = val[0]
+      this.searchForm.transferEndTime = val[1]
     },
     // 选择确认时间
     selectconfirmTime(val) {
-      this.searchForm.confirmStartTime = val[0];
-      this.searchForm.confirmEndTime = val[1];
+      this.searchForm.confirmStartTime = val[0]
+      this.searchForm.confirmEndTime = val[1]
     },
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 表格格式化内容区域 *****/
     // 随访方式
     typeFormatter(row) {
-      return formatterElement.followType[row.type];
+      return formatterElement.followType[row.type]
     },
     // 高血压状态
     highBloodFormatter(row) {
-      return formatterElement.highBlood[row.highBloodStatus];
+      return formatterElement.highBlood[row.highBloodStatus]
     },
     // 糖尿病状态
     diabetesFormatter(row) {
-      return formatterElement.diabetes[row.diabetesStatus];
+      return formatterElement.diabetes[row.diabetesStatus]
     },
     // 加入方式
     resourceFormatter(row) {
-      return formatterElement.resource[row.resource];
+      return formatterElement.resource[row.resource]
     },
     // 状态
     transferStatusFormatter(row) {
-      return formatterElement.transferStatus[row.transferStatus];
+      return formatterElement.transferStatus[row.transferStatus]
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style>

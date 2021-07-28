@@ -56,9 +56,9 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable";
-import { httpAdminSms } from "@/api/admin/httpAdminSms";
-import { validatePhone, parseTime } from "@/utils/index";
+import EleTable from "@/components/Untable"
+import { httpAdminSms } from "@/api/admin/httpAdminSms"
+import { validatePhone, parseTime } from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -85,7 +85,7 @@ export default {
           prop: "createTime",
           label: "发送时间",
           formatter: (row) => {
-            return parseTime(row.createTime);
+            return parseTime(row.createTime)
           },
         },
       ],
@@ -99,10 +99,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
@@ -113,26 +113,26 @@ export default {
           phone: this.searchInput,
         })
         .then((res) => {
-          console.log(res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log(res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 搜索
     searchBtn(val) {
-      this.getList();
+      this.getList()
     },
     // 搜索条件重置
     searchReset() {
-      this.searchInput = "";
-      this.getList();
+      this.searchInput = ""
+      this.getList()
     },
     // 短信重置
     resetBtn() {
-      this.editDialogVisible = true;
+      this.editDialogVisible = true
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
@@ -143,33 +143,33 @@ export default {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "重置成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
         }
-      });
+      })
     },
     /***** 表格格式化内容 *****/
     typeFormatter(row) {
       if (row.type === "LOGIN") {
-        return "登录";
+        return "登录"
       } else {
-        return "其他";
+        return "其他"
       }
     },
     // 分页
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style scoped>

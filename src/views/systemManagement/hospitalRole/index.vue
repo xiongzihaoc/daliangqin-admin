@@ -119,10 +119,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable";
-import { httpAdminHospitalRole } from "@/api/admin/httpAdminHospitalRole";
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
-import { parseTime, validatePhone } from "@/utils/index";
+import EleTable from "@/components/Untable"
+import { httpAdminHospitalRole } from "@/api/admin/httpAdminHospitalRole"
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
+import { parseTime, validatePhone } from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -160,14 +160,14 @@ export default {
           prop: "createTime",
           label: "添加时间",
           formatter: (row) => {
-            return parseTime(row.createTime);
+            return parseTime(row.createTime)
           },
         },
         {
           prop: "updateTime",
           label: "最后登录时间",
           formatter: (row) => {
-            return parseTime(row.updateTime);
+            return parseTime(row.updateTime)
           },
         },
       ],
@@ -178,13 +178,13 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   mounted() {
-    this.getHospitalList();
+    this.getHospitalList()
   },
   methods: {
     getList() {
@@ -197,42 +197,42 @@ export default {
           hospitalId: this.searchForm.hospitalId,
         })
         .then((res) => {
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     getHospitalList() {
       httpAdminHospital.getHospital().then((res) => {
-        this.hospitalList = res.data.elements;
-      });
+        this.hospitalList = res.data.elements
+      })
     },
     selectChange(val) {
-      this.hospitalId = val;
+      this.hospitalId = val
     },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editAddForm.hospitalRoleType = "ADMIN";
-      this.editDialogVisible = true;
+      this.infoTitle = "新增"
+      this.editAddForm = {}
+      this.editAddForm.hospitalRoleType = "ADMIN"
+      this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
-      console.log(this.editAddForm);
-      this.editDialogVisible = true;
+      this.infoTitle = "编辑"
+      this.editAddForm = JSON.parse(JSON.stringify(val))
+      console.log(this.editAddForm)
+      this.editDialogVisible = true
     },
     // 删除
     async deleteBtn(id) {
@@ -244,22 +244,22 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }
-      ).catch((err) => console.log(err));
+      ).catch((err) => console.log(err))
       if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
+        return this.$message.info("取消删除")
       }
       // 发送请求
       httpAdminHospitalRole.deleteRole(id).then((res) => {
         if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
-          });
-          this.getList();
+          })
+          this.getList()
         }
-      });
+      })
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 新增编辑确定
     editPageEnter() {
@@ -271,37 +271,37 @@ export default {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           } else {
             // 发送请求
             httpAdminHospitalRole.putRole(this.editAddForm).then((res) => {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           }
         }
-      });
+      })
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style>

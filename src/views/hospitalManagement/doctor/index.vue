@@ -271,10 +271,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import singleUpload from "@/components/Upload";
-import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
+import EleTable from "@/components/Table"
+import singleUpload from "@/components/Upload"
+import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor"
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
 import {
   validateIdCard,
   validatePhone,
@@ -282,7 +282,7 @@ import {
   doctorTypeList,
   genderList,
   formatterElement,
-} from "@/utils/index";
+} from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -344,20 +344,20 @@ export default {
       // 弹框区域
       editDialogVisible: false,
       infoTitle: "",
-    };
+    }
   },
   created() {
-    this.hospitalId = localStorage.getItem("hospitalId");
-    this.getList();
+    this.hospitalId = localStorage.getItem("hospitalId")
+    this.getList()
   },
   mounted() {
     // 获取医院  转诊医生列表
-    this.getHospitalList();
-    this.getToDoctorList();
+    this.getHospitalList()
+    this.getToDoctorList()
   },
   //离开当前页面后执行
   destroyed() {
-    localStorage.removeItem("hospitalId");
+    localStorage.removeItem("hospitalId")
   },
   methods: {
     getList() {
@@ -374,63 +374,63 @@ export default {
           hospitalId: this.hospitalId,
         })
         .then((res) => {
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     getToDoctorList() {
       httpAdminDoctor.getDoctoTransfer().then((res) => {
-        this.toDoctorList = res.data.elements;
-      });
+        this.toDoctorList = res.data.elements
+      })
     },
     getHospitalList() {
       httpAdminHospital.getHospital().then((res) => {
-        console.log(res);
-        this.hospitalList = res.data.elements;
-      });
+        console.log(res)
+        this.hospitalList = res.data.elements
+      })
     },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     // 点击用户跳转
     skipPatient(val) {
-      this.$router.push("/archivesManagement/patient");
-      localStorage.setItem("doctorId", val.id);
+      this.$router.push("/archivesManagement/patient")
+      localStorage.setItem("doctorId", val.id)
     },
     // 递归处理json文件的最后一级
     getTreeData(data) {
       for (var i = 0; i < data.length; i++) {
         if (data[i].districts.length < 1) {
           // children若为空数组，则将children设为undefined
-          data[i].districts = undefined;
+          data[i].districts = undefined
         } else {
           // children若不为空数组，则继续 递归调用 本方法
-          this.getTreeData(data[i].districts);
+          this.getTreeData(data[i].districts)
         }
       }
-      return data;
+      return data
     },
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
+      this.infoTitle = "新增"
+      this.editAddForm = {}
+      this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
-      this.editVal = val;
-      this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editDialogVisible = true;
+      console.log(val)
+      this.editVal = val
+      this.infoTitle = "编辑"
+      this.editAddForm = JSON.parse(JSON.stringify(val))
+      this.editDialogVisible = true
     },
     // 删除多个
     deleteMultiple() {},
@@ -444,22 +444,22 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }
-      ).catch((err) => console.log(err));
+      ).catch((err) => console.log(err))
       if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
+        return this.$message.info("取消删除")
       }
       // 发送请求
       httpAdminDoctor.deleteDoctor(id).then((res) => {
         if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
-          });
+          })
         }
-        this.getList();
-      });
+        this.getList()
+      })
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 新增编辑确定
     editPageEnter() {
@@ -471,48 +471,48 @@ export default {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
-                });
-                this.getList();
-                this.getToDoctorList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.getToDoctorList()
+                this.editDialogVisible = false
               }
-            });
+            })
           } else {
             // 发送请求
             httpAdminDoctor.putDoctor(this.editAddForm).then((res) => {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           }
         }
-      });
+      })
     },
     /***** 表格格式化内容 *****/
     genderFormatter(row) {
-      return formatterElement.gender[row.gender];
+      return formatterElement.gender[row.gender]
     },
     typeFormatter(row) {
-      return formatterElement.doctorType[row.type];
+      return formatterElement.doctorType[row.type]
     },
     birthdayFormatter(row) {
-      return Boolean(row.birthday) ? parseTime(row.birthday).slice(0, 10) : "";
+      return Boolean(row.birthday) ? parseTime(row.birthday).slice(0, 10) : ""
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style>

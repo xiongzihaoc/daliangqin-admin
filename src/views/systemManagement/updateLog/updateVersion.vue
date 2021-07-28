@@ -152,15 +152,15 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable";
-import singleUpload from "@/components/UploadFile";
-import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion";
+import EleTable from "@/components/Untable"
+import singleUpload from "@/components/UploadFile"
+import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion"
 import {
   parseTime,
   deviceTypeList,
   appTypeList,
   formatterElement,
-} from "@/utils/index";
+} from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -208,14 +208,14 @@ export default {
           prop: "appType",
           label: "app类型",
           formatter: (row) => {
-            return this.appTypeFormatter(row);
+            return this.appTypeFormatter(row)
           },
         },
         {
           prop: "deviceType",
           label: "设备类型",
           formatter: (row) => {
-            return this.deviceTypeFormatter(row);
+            return this.deviceTypeFormatter(row)
           },
         },
         { prop: "versionString", label: "版本号" },
@@ -226,7 +226,7 @@ export default {
           prop: "updateTime",
           label: "更新时间",
           formatter: (row) => {
-            return parseTime(row.updateTime);
+            return parseTime(row.updateTime)
           },
         },
       ],
@@ -238,10 +238,10 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
@@ -253,40 +253,40 @@ export default {
           deviceType: this.searchForm.deviceType,
         })
         .then((res) => {
-          console.log(res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log(res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     uploadFinish(url) {
-      this.editAddForm.url = url;
+      this.editAddForm.url = url
     },
     uploadProgress(percentage) {
-      this.percentage = percentage;
+      this.percentage = percentage
     },
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
+      this.infoTitle = "新增"
+      this.editAddForm = {}
+      this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
-      this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editDialogVisible = true;
+      console.log(val)
+      this.infoTitle = "编辑"
+      this.editAddForm = JSON.parse(JSON.stringify(val))
+      this.editDialogVisible = true
     },
     // 删除多个
     deleteMultiple() {},
@@ -300,22 +300,22 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }
-      ).catch((err) => console.log(err));
+      ).catch((err) => console.log(err))
       if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
+        return this.$message.info("取消删除")
       }
       // 发送请求
       httpAdminUpdateVersion.deleteUpdateVersion(id).then((res) => {
         if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
-          });
-          this.getList();
+          })
+          this.getList()
         }
-      });
+      })
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 新增编辑确定
     editPageEnter() {
@@ -329,11 +329,11 @@ export default {
                 if (res.code === "OK") {
                   this.$notify.success({
                     title: "新增成功",
-                  });
-                  this.getList();
-                  this.editDialogVisible = false;
+                  })
+                  this.getList()
+                  this.editDialogVisible = false
                 }
-              });
+              })
           } else {
             // 发送请求
             httpAdminUpdateVersion
@@ -342,33 +342,33 @@ export default {
                 if (res.code === "OK") {
                   this.$notify.success({
                     title: "编辑成功",
-                  });
-                  this.getList();
-                  this.editDialogVisible = false;
+                  })
+                  this.getList()
+                  this.editDialogVisible = false
                 }
-              });
+              })
           }
         }
-      });
+      })
     },
     /***** 表格格式化内容 *****/
     appTypeFormatter(row) {
-      return formatterElement.appType[row.appType];
+      return formatterElement.appType[row.appType]
     },
     deviceTypeFormatter(row) {
-      return formatterElement.deviceType[row.deviceType];
+      return formatterElement.deviceType[row.deviceType]
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style>

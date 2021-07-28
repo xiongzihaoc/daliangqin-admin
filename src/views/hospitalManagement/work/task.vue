@@ -226,18 +226,18 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable";
-import { httpAdminTask } from "@/api/admin/httpAdminTask";
-import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
+import EleTable from "@/components/Untable"
+import { httpAdminTask } from "@/api/admin/httpAdminTask"
+import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor"
+import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
 import {
   followTypeList,
   parseTime,
   resourceTypeList,
   statusList,
   formatterElement,
-} from "@/utils/index";
+} from "@/utils/index"
 
 export default {
   components: {
@@ -300,7 +300,7 @@ export default {
           prop: "type",
           label: "随访方式",
           formatter: (row) => {
-            return this.typeFormatter(row);
+            return this.typeFormatter(row)
           },
         },
         { prop: "content", label: "随访内容" },
@@ -310,63 +310,63 @@ export default {
           prop: "highBloodStatus",
           label: "高血压",
           formatter: (row) => {
-            return this.highBloodFormatter(row);
+            return this.highBloodFormatter(row)
           },
         },
         {
           prop: "diabetesStatus",
           label: "糖尿病",
           formatter: (row) => {
-            return this.diabetesFormatter(row);
+            return this.diabetesFormatter(row)
           },
         },
         {
           prop: "heartRateStatus",
           label: "心率",
           formatter: (row) => {
-            return this.heartRateFormatter(row);
+            return this.heartRateFormatter(row)
           },
         },
         {
           prop: "startTime",
           label: "预计开始时间",
           formatter: (row) => {
-            return parseTime(row.startTime);
+            return parseTime(row.startTime)
           },
         },
         {
           prop: "endTime",
           label: "预计结束时间",
           formatter: (row) => {
-            return parseTime(row.endTime);
+            return parseTime(row.endTime)
           },
         },
         {
           prop: "createTime",
           label: "创建时间",
           formatter: (row) => {
-            return parseTime(row.createTime);
+            return parseTime(row.createTime)
           },
         },
         {
           prop: "resource",
           label: "加入方式",
           formatter: (row) => {
-            return this.resourceFormatter(row);
+            return this.resourceFormatter(row)
           },
         },
         {
           prop: "status",
           label: "状态",
           formatter: (row) => {
-            return this.statusFormatter(row);
+            return this.statusFormatter(row)
           },
         },
         {
           prop: "cancelTime",
           label: "取消时间",
           formatter: (row) => {
-            return parseTime(row.cancelTime);
+            return parseTime(row.cancelTime)
           },
         },
         { prop: "cancelReason", label: "取消原因" },
@@ -378,13 +378,13 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   mounted() {
-    this.getHospitalList();
+    this.getHospitalList()
   },
   methods: {
     getList() {
@@ -404,79 +404,79 @@ export default {
           resourceType: this.searchForm.resource,
         })
         .then((res) => {
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital().then((res) => {
-        this.hospitalList = res.data.elements;
-      });
+        this.hospitalList = res.data.elements
+      })
     },
     // 获取医生列表
     getDoctorList(val) {
       httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
-        this.doctorList = res.data.elements;
-      });
+        this.doctorList = res.data.elements
+      })
     },
     // 获取用户列表
     getPatientList(id) {
       this.loading = true
       httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
-        this.patientList = res.data.elements;
-        this.loading = false;
-      });
+        this.patientList = res.data.elements
+        this.loading = false
+      })
     },
     selecthospital(val) {
-      this.getDoctorList(val);
-      this.editAddForm.doctorUserId = "";
-      this.editAddForm.patientUserId = "";
+      this.getDoctorList(val)
+      this.editAddForm.doctorUserId = ""
+      this.editAddForm.patientUserId = ""
     },
     selectDoctor(val) {
-      this.$forceUpdate();
-      this.getPatientList(val);
-      this.editAddForm.patientUserId = "";
+      this.$forceUpdate()
+      this.getPatientList(val)
+      this.editAddForm.patientUserId = ""
     },
     selectPatient() {
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
     /***** 搜索区域 *****/
     // 搜索选择时间
     searchTaskTimeChange(val) {
-      this.searchForm.startTime = val[0];
-      this.searchForm.endTime = val[1];
+      this.searchForm.startTime = val[0]
+      this.searchForm.endTime = val[1]
     },
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 增删改 *****/
     // 选择时间
     selectTaskTime(val) {
-      this.editAddForm.startTime = val[0];
-      this.editAddForm.endTime = val[1];
+      this.editAddForm.startTime = val[0]
+      this.editAddForm.endTime = val[1]
     },
     // 新增
     addBtn() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
-      this.loading = false;
+      this.infoTitle = "新增"
+      this.editAddForm = {}
+      this.editDialogVisible = true
+      this.loading = false
     },
     // 编辑
     editBtn(val) {
-      this.getDoctorList(val.hospitalId);
-      this.getPatientList(val.doctorUserId);
-      this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.$set(this.editAddForm, "taskTime", [val.startTime, val.endTime]);
-      this.editDialogVisible = true;
+      this.getDoctorList(val.hospitalId)
+      this.getPatientList(val.doctorUserId)
+      this.infoTitle = "编辑"
+      this.editAddForm = JSON.parse(JSON.stringify(val))
+      this.$set(this.editAddForm, "taskTime", [val.startTime, val.endTime])
+      this.editDialogVisible = true
     },
     // 删除
     async deleteBtn(id) {
@@ -488,22 +488,22 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }
-      ).catch((err) => console.log(err));
+      ).catch((err) => console.log(err))
       if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
+        return this.$message.info("取消删除")
       }
       // 发送请求
       httpAdminTask.deleteTask(id).then((res) => {
         if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
-          });
-          this.getList();
+          })
+          this.getList()
         }
-      });
+      })
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 新增编辑确定
     editPageEnter() {
@@ -515,62 +515,62 @@ export default {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           } else {
             // 发送请求
             httpAdminTask.putTask(this.editAddForm).then((res) => {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           }
         }
-      });
+      })
     },
     /***** 表格格式化内容区域 *****/
     // 随访方式
     typeFormatter(row) {
-      return formatterElement.followType[row.type];
+      return formatterElement.followType[row.type]
     },
     // 高血压状态
     highBloodFormatter(row) {
-      return formatterElement.highBlood[row.highBloodStatus];
+      return formatterElement.highBlood[row.highBloodStatus]
     },
     // 糖尿病状态
     diabetesFormatter(row) {
-      return formatterElement.diabetes[row.diabetesStatus];
+      return formatterElement.diabetes[row.diabetesStatus]
     },
     // 心率状态
     heartRateFormatter(row) {
-      return formatterElement.heart[row.heartRateStatus];
+      return formatterElement.heart[row.heartRateStatus]
     },
     // 加入方式
     resourceFormatter(row) {
-      return formatterElement.resource[row.resource];
+      return formatterElement.resource[row.resource]
     },
     // 状态
     statusFormatter(row) {
-      return formatterElement.status[row.status];
+      return formatterElement.status[row.status]
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style>

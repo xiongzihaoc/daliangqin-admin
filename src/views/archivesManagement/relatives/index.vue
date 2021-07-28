@@ -57,14 +57,14 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable";
-import { httpAdminRelatives } from "@/api/admin/httpAdminRelatives";
+import EleTable from "@/components/Untable"
+import { httpAdminRelatives } from "@/api/admin/httpAdminRelatives"
 import {
   validatePhone,
   parseTime,
   relationshipList,
   formatterElement,
-} from "@/utils/index";
+} from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -84,7 +84,7 @@ export default {
           prop: "relationship",
           label: "身份",
           formatter: (row) => {
-            return this.relationshipFormatter(row);
+            return this.relationshipFormatter(row)
           },
         },
       ],
@@ -109,10 +109,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
@@ -125,35 +125,35 @@ export default {
           relationship: this.searchForm.relationship,
         })
         .then((res) => {
-          console.log(res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log(res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 搜索
     searchBtn(val) {
-      this.getList();
+      this.getList()
     },
     // 搜索条件重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 表格格式化内容区域 *****/
     relationshipFormatter(row) {
-      return formatterElement.relationship[row.relationship];
+      return formatterElement.relationship[row.relationship]
     },
     // 分页
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style scoped>

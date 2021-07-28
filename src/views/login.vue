@@ -58,8 +58,8 @@
 </template>
 
 <script>
-import { getCode } from "@/api/public/httpPublicSms";
-import { validatePhone, validateCode } from "@/utils/index";
+import { getCode } from "@/api/public/httpPublicSms"
+import { validatePhone, validateCode } from "@/utils/index"
 export default {
   name: "Login",
   data() {
@@ -82,12 +82,12 @@ export default {
       show: true,
       count: "",
       timer: null,
-    };
+    }
   },
   watch: {
     $route: {
       handler: function (route) {
-        this.redirect = route.query && route.query.redirect;
+        this.redirect = route.query && route.query.redirect
       },
       immediate: true,
     },
@@ -95,37 +95,37 @@ export default {
   methods: {
     // 获取验证码按钮
     getCodeBtn() {
-      const reg = /^1[3|4|5|6|7|8|9]\d{9}$/;
+      const reg = /^1[3|4|5|6|7|8|9]\d{9}$/
       if (this.loginForm.phone.length <= 0) {
-        return this.$message.error("请填写手机号码！");
+        return this.$message.error("请填写手机号码！")
       } else if (!reg.test(this.loginForm.phone)) {
-        return this.$message.error("请填写正确的手机号码！");
+        return this.$message.error("请填写正确的手机号码！")
       } else {
         // 发送请求
         getCode({ phone: Number(this.loginForm.phone), smsType: "LOGIN" }).then(
           (res) => {
             if (res.code !== "OK") {
-              return;
+              return
             } else {
               // 定时器60s
-              const TIME_COUNT = 60;
+              const TIME_COUNT = 60
               if (!this.timer) {
-                this.count = TIME_COUNT;
-                this.show = false;
+                this.count = TIME_COUNT
+                this.show = false
                 this.timer = setInterval(() => {
                   if (this.count > 0 && this.count <= TIME_COUNT) {
-                    this.count--;
+                    this.count--
                   } else {
-                    this.show = true;
+                    this.show = true
                     // 清除定时器
-                    clearInterval(this.timer);
-                    this.timer = null;
+                    clearInterval(this.timer)
+                    this.timer = null
                   }
-                }, 1000);
+                }, 1000)
               }
             }
           }
-        );
+        )
       }
     },
     // 登录按钮
@@ -136,25 +136,25 @@ export default {
           this.$store
             .dispatch("Login", this.loginForm)
             .then((res) => {
-              this.$router.push({ path: "operationsManagement/banner" });
+              this.$router.push({ path: "operationsManagement/banner" })
               // this.$router.push({ path: this.redirect || "/" });
-              this.loading = false;
+              this.loading = false
             })
             .catch(() => {
-              this.loading = false;
-            });
+              this.loading = false
+            })
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log("error submit!!")
+          return false
         }
-      });
+      })
     },
   },
   // 清除定时器
   beforeDestroy() {
-    clearInterval(this.timer);
+    clearInterval(this.timer)
   },
-};
+}
 </script>
 
 <style lang="scss">

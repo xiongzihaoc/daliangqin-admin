@@ -173,15 +173,15 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import singleUpload from "@/components/Upload";
-import addressJson from "@/utils/address.json";
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
+import EleTable from "@/components/Table"
+import singleUpload from "@/components/Upload"
+import addressJson from "@/utils/address.json"
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
 import {
   validatePhone,
   hospitalClassList,
   formatterElement,
-} from "@/utils/index";
+} from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -249,13 +249,13 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   mounted() {
-    this.getTreeData(addressJson);
+    this.getTreeData(addressJson)
   },
   methods: {
     getList() {
@@ -267,60 +267,60 @@ export default {
           hospitalType: this.searchForm.hospitalType,
         })
         .then((res) => {
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     selectAddrssChange(val) {
-      this.editAddForm.province = val[0];
-      this.editAddForm.city = val[1];
-      this.editAddForm.area = val[2];
+      this.editAddForm.province = val[0]
+      this.editAddForm.city = val[1]
+      this.editAddForm.area = val[2]
     },
     // 递归处理json文件的最后一级
     getTreeData(data) {
       for (var i = 0; i < data.length; i++) {
         if (data[i].districts.length < 1) {
           // children若为空数组，则将children设为undefined
-          data[i].districts = undefined;
+          data[i].districts = undefined
         } else {
           // children若不为空数组，则继续 递归调用 本方法
-          this.getTreeData(data[i].districts);
+          this.getTreeData(data[i].districts)
         }
       }
-      return data;
+      return data
     },
     /***** 搜索区域 *****/
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     // 跳转医生列表
     skipDoctor(val) {
-      console.log(val);
-      this.$router.push("/hospitalManagement/doctor");
-      localStorage.setItem("hospitalId", val.id);
+      console.log(val)
+      this.$router.push("/hospitalManagement/doctor")
+      localStorage.setItem("hospitalId", val.id)
     },
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
+      this.infoTitle = "新增"
+      this.editAddForm = {}
+      this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
+      this.infoTitle = "编辑"
+      this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editAddForm.address = [
         this.editAddForm.province,
         this.editAddForm.city,
         this.editAddForm.area,
-      ];
-      this.editDialogVisible = true;
+      ]
+      this.editDialogVisible = true
     },
     // 删除多个
     deleteMultiple() {},
@@ -334,22 +334,22 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }
-      ).catch((err) => console.log(err));
+      ).catch((err) => console.log(err))
       if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
+        return this.$message.info("取消删除")
       }
       // 发送请求
       httpAdminHospital.deleteHospital(id).then((res) => {
         if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
-          });
-          this.getList();
+          })
+          this.getList()
         }
-      });
+      })
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 新增编辑确定
     editPageEnter() {
@@ -361,44 +361,44 @@ export default {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           } else {
             // 发送请求
             httpAdminHospital.putHospital(this.editAddForm).then((res) => {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           }
         }
-      });
+      })
     },
     /***** 表格格式化内容 *****/
     hospitalTypeFormatter(row) {
-      return formatterElement.hospitalType[row.hospitalType];
+      return formatterElement.hospitalType[row.hospitalType]
     },
     addressFormatter(row) {
-      return row.province + row.city + row.area + row.detail;
+      return row.province + row.city + row.area + row.detail
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style scope>

@@ -60,7 +60,7 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        
+
         <el-form-item label="糖尿病">
           <el-select v-model="searchForm.diabetesStatus"
             size="small"
@@ -223,8 +223,8 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import { httpAdminFollow } from "@/api/admin/httpAdminFollow";
+import EleTable from "@/components/Table"
+import { httpAdminFollow } from "@/api/admin/httpAdminFollow"
 import {
   doctorTypeList,
   followTypeList,
@@ -234,7 +234,7 @@ import {
   heartList,
   parseTime,
   formatterElement,
-} from "@/utils/index";
+} from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -261,7 +261,7 @@ export default {
         type: "",
         highBloodStatus: "",
         diabetesStatus: "",
-        heartRateStatus:"",
+        heartRateStatus: "",
         startTime: "",
         endTime: "",
         userStatus: "",
@@ -283,10 +283,10 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
@@ -310,27 +310,27 @@ export default {
           userStatus: this.searchForm.userStatus,
         })
         .then((res) => {
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 日期控件选择事件
     selectFollowTime(val) {
-      this.searchForm.startTime = val[0];
-      this.searchForm.endTime = val[1];
-      console.log(this.searchForm);
+      this.searchForm.startTime = val[0]
+      this.searchForm.endTime = val[1]
+      console.log(this.searchForm)
     },
     addBtn() {
       this.$router.push({
         path: "/hospitalManagement/work/followDetail",
-      });
+      })
     },
     // 编辑
     editBtn(val) {
       this.$router.push({
         path:
           "/hospitalManagement/work/followDetail?id=" + val.id + "&type=edit",
-      });
+      })
     },
     // 删除
     async deleteBtn(id) {
@@ -342,22 +342,22 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }
-      ).catch((err) => console.log(err));
+      ).catch((err) => console.log(err))
       if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
+        return this.$message.info("取消删除")
       }
       // 发送请求
       httpAdminFollow.deleteFollow(id).then((res) => {
         if (res.code === "OK") {
           this.$notify.success({
             title: "删除成功",
-          });
-          this.getList();
+          })
+          this.getList()
         }
-      });
+      })
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 新增编辑确定
     editPageEnter() {
@@ -369,69 +369,69 @@ export default {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           } else {
             // 发送请求
             httpAdminFollow.putFollow(this.editAddForm).then((res) => {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           }
         }
-      });
+      })
     },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 表格格式化内容 *****/
     doctorTypeFormatter(row) {
-      return formatterElement.doctorType[row.doctorType];
+      return formatterElement.doctorType[row.doctorType]
     },
     typeFormatter(row) {
-      return formatterElement.followType[row.type];
+      return formatterElement.followType[row.type]
     },
     highBloodStatusFormatter(row) {
-      return formatterElement.highBlood[row.highBloodStatus];
+      return formatterElement.highBlood[row.highBloodStatus]
     },
     diabetesStatusFormatter(row) {
-      return formatterElement.diabetes[row.diabetesStatus];
+      return formatterElement.diabetes[row.diabetesStatus]
     },
     diseaseTypeFormatter(row) {
-      return formatterElement.followTypeList[row.diseaseType];
+      return formatterElement.followTypeList[row.diseaseType]
     },
     heartRateStatus(row) {
-      return formatterElement.heart[row.heartRateStatus];
+      return formatterElement.heart[row.heartRateStatus]
     },
     userStatusFormatter(row) {
-      return formatterElement.userStatus[row.userStatus];
+      return formatterElement.userStatus[row.userStatus]
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style>

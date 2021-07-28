@@ -82,16 +82,17 @@
         label="收藏人数"
         prop="collectionCount">
         <template slot-scope="scope">
-          <span  style="color: #1890ff; text-decoration: underline" @click="skiPatient(scope.row)">{{scope.row.collectionCount}}</span>
+          <span style="color: #1890ff; text-decoration: underline"
+            @click="skiPatient(scope.row)">{{scope.row.collectionCount}}</span>
         </template>
       </el-table-column>
     </EleTable>
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import { httpAdminCollection } from "@/api/admin/httpAdminCollection";
-import { formatterElement, doctorTypeList } from "@/utils/index";
+import EleTable from "@/components/Table"
+import { httpAdminCollection } from "@/api/admin/httpAdminCollection"
+import { formatterElement, doctorTypeList } from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -115,10 +116,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
@@ -131,40 +132,40 @@ export default {
           doctorPhone: this.searchForm.doctorPhone,
         })
         .then((res) => {
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 搜索
     searchBtn(val) {
-      this.getList();
+      this.getList()
     },
     // 搜索条件重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     // 跳转用户列表
     skiPatient(val) {
-      console.log(val);
-      this.$router.push("/archivesManagement/patient");
-      localStorage.setItem("collectionDoctorUserId", val.doctorUserId);
+      console.log(val)
+      this.$router.push("/archivesManagement/patient")
+      localStorage.setItem("collectionDoctorUserId", val.doctorUserId)
     },
     // 格式化表格
     doctorTypeFormatter(row) {
-      return formatterElement.doctorType[row.doctorType];
+      return formatterElement.doctorType[row.doctorType]
     },
     // 分页
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style scoped>

@@ -70,10 +70,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable";
-import { httpAdminUpdateControl } from "@/api/admin/httpAdminUpdateControl";
-import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion";
-import { formatterElement } from "@/utils/index";
+import EleTable from '@/components/Untable'
+import { httpAdminUpdateControl } from '@/api/admin/httpAdminUpdateControl'
+import { httpAdminUpdateVersion } from '@/api/admin/httpAdminUpdateVersion'
+import { formatterElement } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -84,36 +84,36 @@ export default {
       list: [],
       versionList: [],
       editAddForm: {
-        recommendUpdateAppId: "",
-        forceUpdateAppId: "",
-        newestUpdateAppId: "",
+        recommendUpdateAppId: '',
+        forceUpdateAppId: '',
+        newestUpdateAppId: '',
       },
       tableHeaderBig: [
-        { prop: "newestVersionString", label: "最新版本" },
-        { prop: "recommendVersionString", label: "推荐更新版本" },
-        { prop: "forceVersionString", label: "强制更新版本" },
+        { prop: 'newestVersionString', label: '最新版本' },
+        { prop: 'recommendVersionString', label: '推荐更新版本' },
+        { prop: 'forceVersionString', label: '强制更新版本' },
         {
-          prop: "appType",
-          label: "app类型",
+          prop: 'appType',
+          label: 'app类型',
           formatter: (row) => {
-            return this.appTypeFormatter(row);
+            return this.appTypeFormatter(row)
           },
         },
         {
-          prop: "deviceType",
-          label: "设备类型",
+          prop: 'deviceType',
+          label: '设备类型',
           formatter: (row) => {
-            return this.deviceTypeFormatter(row);
+            return this.deviceTypeFormatter(row)
           },
         },
       ],
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
-    };
+      infoTitle: '',
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
@@ -123,8 +123,8 @@ export default {
           pageSize: this.pageSize,
         })
         .then((res) => {
-          this.list = res.data;
-        });
+          this.list = res.data
+        })
     },
     // 弹框开启事件 获取版本列表
     getVersionList(appType, deviceType) {
@@ -136,26 +136,22 @@ export default {
           deviceType: deviceType,
         })
         .then((res) => {
-          console.log(res);
-          this.versionList = res.data.elements;
-        });
+          this.versionList = res.data.elements
+        })
     },
     /***** 增删改 *****/
     // 弹框开启
     openDialog() {
-      this.getVersionList(
-        this.editAddForm.appType,
-        this.editAddForm.deviceType
-      );
+      this.getVersionList(this.editAddForm.appType, this.editAddForm.deviceType)
     },
     // 编辑
     editBtn(val) {
-      this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editDialogVisible = true;
+      this.infoTitle = '编辑'
+      this.editAddForm = JSON.parse(JSON.stringify(val))
+      this.editDialogVisible = true
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 编辑确定
     editPageEnter() {
@@ -165,28 +161,28 @@ export default {
           httpAdminUpdateControl
             .putUpdateControl(this.editAddForm)
             .then((res) => {
-              if (res.code != "OK") {
-                return;
+              if (res.code != 'OK') {
+                return
               } else {
                 this.$notify.success({
-                  title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                  title: '编辑成功',
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
         }
-      });
+      })
     },
     /***** 表格格式化内容 *****/
     appTypeFormatter(row) {
-      return formatterElement.appType[row.appType];
+      return formatterElement.appType[row.appType]
     },
     deviceTypeFormatter(row) {
-      return formatterElement.deviceType[row.deviceType];
+      return formatterElement.deviceType[row.deviceType]
     },
   },
-};
+}
 </script>
 
 <style>

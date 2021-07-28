@@ -121,9 +121,9 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import { httpAdminNote } from "@/api/admin/httpAdminNote";
-import { parseTime, doctorTypeList, formatterElement } from "@/utils/index";
+import EleTable from "@/components/Table"
+import { httpAdminNote } from "@/api/admin/httpAdminNote"
+import { parseTime, doctorTypeList, formatterElement } from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -156,10 +156,10 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: "",
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
@@ -175,41 +175,41 @@ export default {
           endTime: this.searchForm.endTime,
         })
         .then((res) => {
-          console.log(res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log(res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 日期选择事件
     selectNoteTime(val) {
-      this.searchForm.startTime = val[0];
-      this.searchForm.endTime = val[1];
+      this.searchForm.startTime = val[0]
+      this.searchForm.endTime = val[1]
     },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 表格格式化内容 *****/
     typeFormatter(row) {
-      return formatterElement.doctorType[row.type];
+      return formatterElement.doctorType[row.type]
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style>

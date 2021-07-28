@@ -628,10 +628,10 @@
 </template>
 
 <script>
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
-import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor";
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient";
-import { httpAdminFollow } from "@/api/admin/httpAdminFollow";
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
+import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor"
+import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
+import { httpAdminFollow } from "@/api/admin/httpAdminFollow"
 import {
   followType,
   followTypeList,
@@ -651,7 +651,7 @@ import {
   bloodSymptomTypeList,
   bloodComplicationTypeList,
   BloodReferralReasonStatusesList,
-} from "@/utils/index";
+} from "@/utils/index"
 export default {
   data() {
     return {
@@ -824,19 +824,19 @@ export default {
         healthEducationTypes: [],
         otherHealthEducation: "",
       },
-    };
+    }
   },
   created() {
     // 判断是编辑还是新增
     if (this.$route.query.type === "edit") {
-      this.getList();
+      this.getList()
     } else {
-      this.loading = false;
+      this.loading = false
     }
   },
   mounted() {
-    this.getHospitalList();
-    this.computeBmi();
+    this.getHospitalList()
+    this.computeBmi()
   },
   methods: {
     // 列表数据
@@ -844,19 +844,19 @@ export default {
       httpAdminFollow
         .getFollowDetail({ id: this.$route.query.id })
         .then((res) => {
-          this.form = res.data;
+          this.form = res.data
           if (Boolean(res.data.followDiabetesMongo)) {
-            this.diabetesChecked = true;
-            this.diabetesForm = res?.data?.followDiabetesMongo;
+            this.diabetesChecked = true
+            this.diabetesForm = res?.data?.followDiabetesMongo
           }
           if (Boolean(res.data.followBloodMongo)) {
-            this.bloodChecked = true;
-            this.highBloodForm = res?.data?.followBloodMongo;
+            this.bloodChecked = true
+            this.highBloodForm = res?.data?.followBloodMongo
           }
-          this.getDoctorList(res.data.hospitalId);
-          this.getPatientList(res.data.doctorUserId);
-          this.computeBmi();
-        });
+          this.getDoctorList(res.data.hospitalId)
+          this.getPatientList(res.data.doctorUserId)
+          this.computeBmi()
+        })
     },
     // 根据身高体重计算BMI
     computeBmi() {
@@ -864,19 +864,19 @@ export default {
         let bmi = (
           this.form.nowWeight /
           ((this.form.nowHeight / 100) * (this.form.nowHeight / 100))
-        ).toFixed(2);
-        this.$set(this.form, "bmi", bmi);
+        ).toFixed(2)
+        this.$set(this.form, "bmi", bmi)
       } else {
-        this.$set(this.form, "bmi", "");
+        this.$set(this.form, "bmi", "")
       }
     },
     startTimeBlur() {
       if (this.form.endTime != "") {
         if (this.form.endTime <= this.form.startTime) {
-          this.form.endTime = "";
+          this.form.endTime = ""
           return this.$notify.error({
             title: "结束时间不能小于或等于开始时间",
-          });
+          })
         }
       }
     },
@@ -884,91 +884,91 @@ export default {
     endTimeBlur() {
       if (this.form.startTime != "") {
         if (this.form.endTime <= this.form.startTime) {
-          this.form.endTime = "";
+          this.form.endTime = ""
           return this.$notify.error({
             title: "结束时间不能小于或等于开始时间",
-          });
+          })
         }
       }
     },
     getHospitalList() {
       httpAdminHospital.getHospital().then((res) => {
-        this.hospitalList = res.data.elements;
-      });
+        this.hospitalList = res.data.elements
+      })
     },
     getDoctorList(val) {
       httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
-        this.doctorList = res.data.elements;
-      });
+        this.doctorList = res.data.elements
+      })
     },
     getPatientList(val) {
       httpAdminPatient.getPatient({ doctorUserId: val }).then((res) => {
-        this.patientList = res.data.elements;
-        this.loading = false;
-      });
+        this.patientList = res.data.elements
+        this.loading = false
+      })
     },
     selectHospital(val) {
-      this.getDoctorList(val);
-      this.form.doctorUserId = "";
-      this.form.patientUserId = "";
-      this.form.patientIdCard = "";
+      this.getDoctorList(val)
+      this.form.doctorUserId = ""
+      this.form.patientUserId = ""
+      this.form.patientIdCard = ""
     },
     selectDoctor(val) {
-      this.getPatientList(val);
-      this.form.patientUserId = "";
-      this.form.patientIdCard = "";
+      this.getPatientList(val)
+      this.form.patientUserId = ""
+      this.form.patientIdCard = ""
     },
     selectPatient(val) {
       httpAdminPatient.getPatient({ userId: val }).then((res) => {
-        this.form.patientIdCard = res.data.elements[0].idCard;
-      });
+        this.form.patientIdCard = res.data.elements[0].idCard
+      })
     },
     cancel() {
-      this.$router.push({ path: "/hospitalManagement/follow" });
+      this.$router.push({ path: "/hospitalManagement/follow" })
     },
     confirm() {
-      let form = this.form;
+      let form = this.form
       // 必须选一个随访类型
       if (this.diabetesChecked === false && this.bloodChecked === false) {
         return this.$notify.error({
           title: "未添加随访",
-        });
+        })
       } else {
         if (this.diabetesChecked === true) {
-          form.followDiabetesDTO = this.diabetesForm;
+          form.followDiabetesDTO = this.diabetesForm
         }
         if (this.bloodChecked === true) {
-          form.followBloodDTO = this.highBloodForm;
+          form.followBloodDTO = this.highBloodForm
         }
       }
 
       let FormRef = new Promise((resolve, reject) => {
         this.$refs.FormRef.validate((valid) => {
           if (valid) {
-            resolve();
+            resolve()
           }
-        });
-      });
-      let refArr = [FormRef];
+        })
+      })
+      let refArr = [FormRef]
       if (this.diabetesChecked === true) {
         let diabetesFormRef = new Promise((resolve, reject) => {
           this.$refs.diabetesFormRef.validate((valid) => {
             if (valid) {
-              resolve();
+              resolve()
             }
-          });
-        });
-        refArr.push(diabetesFormRef);
+          })
+        })
+        refArr.push(diabetesFormRef)
       }
       if (this.bloodChecked === true) {
         let bloddFormRef = new Promise((resolve, reject) => {
           this.$refs.bloddFormRef.validate((valid) => {
             if (valid) {
-              resolve();
+              resolve()
             }
-          });
-        });
-        refArr.push(bloddFormRef);
+          })
+        })
+        refArr.push(bloddFormRef)
       }
       Promise.all(refArr).then(() => {
         // 编辑
@@ -977,21 +977,21 @@ export default {
             if (res.code === "OK") {
               this.$router.push({
                 path: "/hospitalManagement/work/follow",
-              });
+              })
             }
-          });
+          })
         } else {
           // 新增
           httpAdminFollow.postFollow(form).then((res) => {
             if (res.code === "OK") {
-              this.$router.push({ path: "/hospitalManagement/work/follow" });
+              this.$router.push({ path: "/hospitalManagement/work/follow" })
             }
-          });
+          })
         }
-      });
+      })
     },
   },
-};
+}
 </script>
 <style>
 .el-checkbox {

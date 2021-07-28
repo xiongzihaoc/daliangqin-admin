@@ -3,7 +3,7 @@
     <div class="print-box">
       <div class="container"
         id="printMe"
-         v-loading="loading">
+        v-loading="loading">
         <h3 class="fz18">动态心电仪检测报告</h3>
         <div class="userInfo">
           <div class="hospital">
@@ -153,8 +153,8 @@
 </template>
 
 <script>
-import { httpAdminHeartRate } from "@/api/admin/httpAdminHeartRate";
-import { parseTime } from "@/utils/index";
+import { httpAdminHeartRate } from "@/api/admin/httpAdminHeartRate"
+import { parseTime } from "@/utils/index"
 export default {
   data() {
     return {
@@ -168,25 +168,25 @@ export default {
       loading: true,
       heartDetail: {},
       userInfo: {},
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
       httpAdminHeartRate
         .getHeartRate({ id: this.$route.query.id })
         .then((res) => {
-          this.userInfo = res.data.elements[0];
+          this.userInfo = res.data.elements[0]
           this.heartDetail = JSON.parse(
             res.data.elements[0].reportResult
-          ).body.data;
-          this.loading = false;
-        });
+          ).body.data
+          this.loading = false
+        })
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

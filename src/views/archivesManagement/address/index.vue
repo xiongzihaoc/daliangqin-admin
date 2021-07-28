@@ -151,10 +151,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import addressJson from "@/utils/address.json";
-import { validatePhone } from "@/utils/index";
-import { httpAdminAddressPatient } from "@/api/admin/httpAdminAddressPatient";
+import EleTable from "@/components/Table"
+import addressJson from "@/utils/address.json"
+import { validatePhone } from "@/utils/index"
+import { httpAdminAddressPatient } from "@/api/admin/httpAdminAddressPatient"
 export default {
   components: {
     EleTable,
@@ -214,13 +214,13 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       examineDialogVisible: false,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   mounted() {
-    this.getTreeData(addressJson);
+    this.getTreeData(addressJson)
   },
   methods: {
     getList() {
@@ -232,18 +232,18 @@ export default {
           patientPhone: this.searchForm.patientPhone,
         })
         .then((res) => {
-          console.log(res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log(res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 获取第一个弹框的表格数据
     getEditList() {
       httpAdminAddressPatient
         .getAddressPatient({ userId: this.searchForm.userId })
         .then((res) => {
-          this.addressList = res.data.elements[0].addressInfos;
-        });
+          this.addressList = res.data.elements[0].addressInfos
+        })
     },
     // 是否默认
     changeStatus(id) {
@@ -251,59 +251,59 @@ export default {
         if (res.code === "OK") {
           this.$notify.success({
             title: res.message,
-          });
-          this.getList();
-          this.getEditList();
+          })
+          this.getList()
+          this.getEditList()
         }
-      });
+      })
     },
     selectAddrssChange(val) {
-      this.editAddForm.province = val[0];
-      this.editAddForm.city = val[1];
-      this.editAddForm.area = val[2];
+      this.editAddForm.province = val[0]
+      this.editAddForm.city = val[1]
+      this.editAddForm.area = val[2]
     },
     // 递归处理json文件的最后一级
     getTreeData(data) {
       for (var i = 0; i < data.length; i++) {
         if (data[i].districts.length < 1) {
           // children若为空数组，则将children设为undefined
-          data[i].districts = undefined;
+          data[i].districts = undefined
         } else {
           // children若不为空数组，则继续 递归调用 本方法
-          this.getTreeData(data[i].districts);
+          this.getTreeData(data[i].districts)
         }
       }
-      return data;
+      return data
     },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 增删改 *****/
     // 查看收货地址按钮
     detailAddressBtn(val) {
-      this.searchForm.userId = val.patientUserId;
-      this.getEditList();
-      this.examineDialogVisible = true;
+      this.searchForm.userId = val.patientUserId
+      this.getEditList()
+      this.examineDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      this.editAddForm = JSON.parse(JSON.stringify(val));
+      this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editAddForm.address = [
         this.editAddForm.province,
         this.editAddForm.city,
         this.editAddForm.area,
-      ];
-      this.editDialogVisible = true;
+      ]
+      this.editDialogVisible = true
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 编辑确定
     editPageEnter() {
@@ -314,31 +314,31 @@ export default {
             if (res.code === "OK") {
               this.$notify.success({
                 title: "编辑成功",
-              });
-              this.getList();
-              this.getEditList();
-              this.editDialogVisible = false;
+              })
+              this.getList()
+              this.getEditList()
+              this.editDialogVisible = false
             }
-          });
+          })
         }
-      });
+      })
     },
     /***** 表格格式化内容区域 *****/
     // 收货地址省市区详细地址拼接
     addressFormatter(row) {
-      return row.province + row.city + row.area + row.detail;
+      return row.province + row.city + row.area + row.detail
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -68,9 +68,9 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import { httpAdminEquipmentFirm } from "@/api/admin/httpAdminEquipmentFirm";
-import { parseTime, formatterElement } from "@/utils/index";
+import EleTable from "@/components/Table"
+import { httpAdminEquipmentFirm } from "@/api/admin/httpAdminEquipmentFirm"
+import { parseTime, formatterElement } from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -92,10 +92,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   mounted() {},
   methods: {
@@ -106,25 +106,25 @@ export default {
           pageSize: this.pageSize,
         })
         .then((res) => {
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 格式化表格
     diseaseTypeFormatter(row) {
-      return formatterElement.diseaseType[row.diseaseType];
+      return formatterElement.diseaseType[row.diseaseType]
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style>

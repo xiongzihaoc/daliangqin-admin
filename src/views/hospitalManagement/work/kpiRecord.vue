@@ -55,9 +55,9 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import { httpAdminKpiRecord } from "@/api/admin/httpAdminKpiRecord";
-import { parseTime } from "@/utils";
+import EleTable from "@/components/Table"
+import { httpAdminKpiRecord } from "@/api/admin/httpAdminKpiRecord"
+import { parseTime } from "@/utils"
 export default {
   components: {
     EleTable,
@@ -72,7 +72,7 @@ export default {
           prop: "createTime",
           label: "日期",
           formatter: (row) => {
-            return parseTime(row.createTime).slice(0, 7);
+            return parseTime(row.createTime).slice(0, 7)
           },
         },
         { prop: "finishCount", label: "完成总次数" },
@@ -98,10 +98,10 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
@@ -111,33 +111,33 @@ export default {
           pageSize: this.pageSize,
         })
         .then((res) => {
-          console.log(res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log(res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 搜索
     searchBtn(val) {
-      this.getList();
+      this.getList()
     },
     // 搜索条件重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     addBtn() {},
     getSummaries(param) {},
     // 分页
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style scoped>

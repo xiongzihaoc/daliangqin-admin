@@ -271,27 +271,27 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table";
-import singleUpload from "@/components/Upload";
-import { httpAdminNews } from "@/api/admin/httpAdminNews";
-import Vue from "vue";
-import VueQuillEditor from "vue-quill-editor";
-import * as Quill from "quill"; //引入编辑器
-import resizeImage from "quill-image-resize-module"; // 图片缩放组件。
-import { ImageDrop } from "quill-image-drop-module"; // 图片拖动组件。
-Quill.register("modules/imageDrop", ImageDrop);
-Quill.register("modules/resizeImage ", resizeImage);
-import "quill/dist/quill.core.css";
-import "quill/dist/quill.snow.css";
-import "quill/dist/quill.bubble.css";
-Vue.use(VueQuillEditor);
+import EleTable from "@/components/Table"
+import singleUpload from "@/components/Upload"
+import { httpAdminNews } from "@/api/admin/httpAdminNews"
+import Vue from "vue"
+import VueQuillEditor from "vue-quill-editor"
+import * as Quill from "quill" //引入编辑器
+import resizeImage from "quill-image-resize-module" // 图片缩放组件。
+import { ImageDrop } from "quill-image-drop-module" // 图片拖动组件。
+Quill.register("modules/imageDrop", ImageDrop)
+Quill.register("modules/resizeImage ", resizeImage)
+import "quill/dist/quill.core.css"
+import "quill/dist/quill.snow.css"
+import "quill/dist/quill.bubble.css"
+Vue.use(VueQuillEditor)
 import {
   parseTime,
   formatterElement,
   newsTypeList,
   newsStatusList,
   appTypeList,
-} from "@/utils/index";
+} from "@/utils/index"
 export default {
   components: {
     EleTable,
@@ -387,10 +387,10 @@ export default {
           },
         },
       },
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     getList() {
@@ -403,47 +403,47 @@ export default {
           deletedStatus: this.searchForm.deletedStatus,
         })
         .then((res) => {
-          console.log(res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log(res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 开关change事件
     statusChange(val) {
       httpAdminNews.putNews(val).then((res) => {
         if (res.code != "OK") {
-          return;
+          return
         } else {
           this.$notify.success({
             title: "状态更改成功",
-          });
-          this.getList();
+          })
+          this.getList()
         }
-      });
+      })
     },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增";
-      this.editAddForm = {};
-      this.editDialogVisible = true;
+      this.infoTitle = "新增"
+      this.editAddForm = {}
+      this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      console.log(val);
-      this.infoTitle = "编辑";
-      this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.editDialogVisible = true;
+      console.log(val)
+      this.infoTitle = "编辑"
+      this.editAddForm = JSON.parse(JSON.stringify(val))
+      this.editDialogVisible = true
     },
     // 删除
     async deleteBtn(id) {
@@ -455,21 +455,21 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }
-      ).catch((err) => console.log(err));
+      ).catch((err) => console.log(err))
       if (confirmResult != "confirm") {
-        return this.$message.info("取消删除");
+        return this.$message.info("取消删除")
       }
       // 发送请求
       httpAdminNews.deleteNews(id).then((res) => {
-        console.log(res);
+        console.log(res)
         this.$notify.success({
           title: "删除成功",
-        });
-        this.getList();
-      });
+        })
+        this.getList()
+      })
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 新增编辑确定
     editPageEnter() {
@@ -481,46 +481,46 @@ export default {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "新增成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           } else {
             // 发送请求
             httpAdminNews.putNews(this.editAddForm).then((res) => {
               if (res.code === "OK") {
                 this.$notify.success({
                   title: "编辑成功",
-                });
-                this.getList();
-                this.editDialogVisible = false;
+                })
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           }
         }
-      });
+      })
     },
     // 排序
     sortTop(id) {
       httpAdminNews.postNewsSort({ id: id, status: "UP" }).then((res) => {
         if (res.code === "OK") {
-          this.getList();
+          this.getList()
           return this.$notify.success({
             title: res.message,
-          });
+          })
         }
-      });
+      })
     },
     sortBottom(id) {
       httpAdminNews.postNewsSort({ id: id, status: "DOWN" }).then((res) => {
         if (res.code === "OK") {
-          this.getList();
+          this.getList()
           return this.$notify.success({
             title: res.message,
-          });
+          })
         }
-      });
+      })
     },
     // 富文本
     onEditorReady(editor) {
@@ -528,7 +528,7 @@ export default {
     },
     // 失去焦点事件
     onEditorBlur(e) {
-      console.log(e);
+      console.log(e)
     },
     // 获得焦点事件
     onEditorFocus() {},
@@ -536,34 +536,34 @@ export default {
     onEditorChange() {},
     /***** 表格格式化内容 *****/
     contentTypeFormatter(row) {
-      return formatterElement.contentType[row.contentType];
+      return formatterElement.contentType[row.contentType]
     },
     coverUrlFormatter(row) {
-      return `<div>3333</div>`;
+      return `<div>3333</div>`
     },
     /***** 格式化表格 *****/
     createTimeFormatter(row) {
-      return parseTime(row.createTime).slice(0, 10);
+      return parseTime(row.createTime).slice(0, 10)
     },
     publishTimeFormatter(row) {
-      return parseTime(row.publishTime).slice(0, 10);
+      return parseTime(row.publishTime).slice(0, 10)
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
   computed: {
     editor() {
-      return this.$refs.myQuillEditor.quill;
+      return this.$refs.myQuillEditor.quill
     },
   },
-};
+}
 </script>
 
 

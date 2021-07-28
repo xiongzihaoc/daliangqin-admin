@@ -147,9 +147,9 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable";
-import { parseTime } from "@/utils/index";
-import { httpAdminChat } from "@/api/admin/httpAdminChat";
+import EleTable from "@/components/Untable"
+import { parseTime } from "@/utils/index"
+import { httpAdminChat } from "@/api/admin/httpAdminChat"
 export default {
   components: {
     EleTable,
@@ -195,7 +195,7 @@ export default {
           prop: "leaveTime",
           label: "最近留言时间",
           formatter: (row) => {
-            return parseTime(row.leaveTime);
+            return parseTime(row.leaveTime)
           },
         },
         { prop: "doctorUserName", label: "医生姓名" },
@@ -205,7 +205,7 @@ export default {
           prop: "replyTime",
           label: "最近回复时间",
           formatter: (row) => {
-            return parseTime(row.replyTime);
+            return parseTime(row.replyTime)
           },
         },
       ],
@@ -215,23 +215,23 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   mounted() {
-    this.scrollToBottom();
+    this.scrollToBottom()
   },
   updated() {
-    this.scrollToBottom();
+    this.scrollToBottom()
   },
   methods: {
     scrollToBottom() {
       this.$nextTick(() => {
-        var container = this.$el.querySelector(".ul");
-        container.scrollTop = container.scrollHeight;
-      });
+        var container = this.$el.querySelector(".ul")
+        container.scrollTop = container.scrollHeight
+      })
     },
     getList() {
       httpAdminChat
@@ -248,9 +248,9 @@ export default {
           doctorPhone: this.searchForm.doctorPhone,
         })
         .then((res) => {
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     getChatSubscribe(val) {
       httpAdminChat
@@ -259,41 +259,41 @@ export default {
           doctorUserId: val.doctorUserId,
         })
         .then((res) => {
-          this.messageList = res.data.elements.reverse();
-          this.selfInfo = res.data.expand.selfInfo;
-          this.toInfo = res.data.expand.toInfo;
-        });
+          this.messageList = res.data.elements.reverse()
+          this.selfInfo = res.data.expand.selfInfo
+          this.toInfo = res.data.expand.toInfo
+        })
     },
     // 日期控件选择事件
     selectLeaveTime(val) {
-      this.searchForm.leaveStartTime = val[0];
-      this.searchForm.leaveEndTime = val[1];
+      this.searchForm.leaveStartTime = val[0]
+      this.searchForm.leaveEndTime = val[1]
     },
     selectReplyTime(val) {
-      this.searchForm.replyStartTime = val[0];
-      this.searchForm.replayEndTime = val[1];
+      this.searchForm.replyStartTime = val[0]
+      this.searchForm.replayEndTime = val[1]
     },
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
-      this.getList();
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.searchForm = {};
-      this.getList();
+      this.searchForm = {}
+      this.getList()
     },
     /***** 增删改 *****/
     // 查看
     examineBtn(val) {
-      this.val = val;
-      this.getChatSubscribe(val);
-      this.editAddForm.doctorUserId = val.doctorUserId;
-      this.editAddForm.patientUserId = val.patientUserId;
-      this.editDialogVisible = true;
+      this.val = val
+      this.getChatSubscribe(val)
+      this.editAddForm.doctorUserId = val.doctorUserId
+      this.editAddForm.patientUserId = val.patientUserId
+      this.editDialogVisible = true
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 新增编辑确定
     editPageEnter() {
@@ -301,27 +301,27 @@ export default {
         if (valid) {
           // 发送请求
           httpAdminChat.postChat(this.editAddForm).then((res) => {
-            console.log(res);
+            console.log(res)
             if (res.code === "OK") {
-              this.editAddForm.leaveContent = "";
-              this.getList();
-              this.getChatSubscribe(this.val);
+              this.editAddForm.leaveContent = ""
+              this.getList()
+              this.getChatSubscribe(this.val)
             }
-          });
+          })
         }
-      });
+      })
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style scoped>
