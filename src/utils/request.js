@@ -56,10 +56,10 @@ service.interceptors.request.use(config => {
 
 // 响应拦截器
 service.interceptors.response.use(res => {
-  console.groupCollapsed('%c' + res.config.method.toUpperCase() + '%c ' + res.request.responseURL, 'background:#FF6958;color:white', 'color:#000')
-  console.log(res.config.data ? JSON.parse(res.config.data) : '<null>')
-  console.log(res.data ? res.data : '<null>')
-  console.groupEnd()
+  // console.groupCollapsed('%c' + res.config.method.toUpperCase() + '%c ' + res.request.responseURL, 'background:#FF6958;color:white', 'color:#000')
+  // console.log(res.config.data ? JSON.parse(res.config.data) : '<null>')
+  // console.log(res.data ? res.data : '<null>')
+  // console.groupEnd()
 
   // 未设置状态码则默认成功状态
   const code = res.data.code || 'OK';
