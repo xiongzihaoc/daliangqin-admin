@@ -184,6 +184,7 @@
           prop="shrinkHighPressure">
           <el-input maxlength="3"
             v-model="editAddForm.shrinkHighPressure"
+            oninput="if (value > 300) value = 300"
             v-Int
             placeholder="请输入收缩压"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
@@ -194,6 +195,7 @@
           <el-input maxlength="3"
             v-model="editAddForm.diastoleLowPressure"
             v-Int
+            oninput="if (value > 200) value = 200"
             placeholder="请输入舒张压"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
         </el-form-item>
@@ -218,15 +220,15 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import { httpAdminBloodPressure } from "@/api/admin/httpAdminBloodPressure"
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
+import EleTable from '@/components/Table'
+import { httpAdminBloodPressure } from '@/api/admin/httpAdminBloodPressure'
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
 import {
   parseTime,
   validateTime,
   equipmentResourceTypeList,
   healthList,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -237,31 +239,31 @@ export default {
       equipmentResourceTypeList,
       healthList,
       FormRules: {
-        userId: [{ required: true, message: "请选择用户", trigger: "blur" }],
+        userId: [{ required: true, message: '请选择用户', trigger: 'blur' }],
         inspectionTime: [
-          { required: true, trigger: "blur", validator: validateTime },
+          { required: true, trigger: 'blur', validator: validateTime },
         ],
         shrinkHighPressure: [
-          { required: true, message: "请输入收缩压", trigger: "blur" },
+          { required: true, message: '请输入收缩压', trigger: 'blur' },
         ],
         diastoleLowPressure: [
-          { required: true, message: "请输入舒张压", trigger: "blur" },
+          { required: true, message: '请输入舒张压', trigger: 'blur' },
         ],
       },
       searchForm: {
-        patientUserName: "",
-        patientUserPhone: "",
-        equipmentResourceType: "",
-        highBloodStatus: "",
+        patientUserName: '',
+        patientUserPhone: '',
+        equipmentResourceType: '',
+        highBloodStatus: '',
       },
       list: [],
       patientList: [],
       editAddForm: {
-        userId: "",
-        name: "",
-        inspectionTime: "",
-        shrinkHighPressure: "",
-        diastoleLowPressure: "",
+        userId: '',
+        name: '',
+        inspectionTime: '',
+        shrinkHighPressure: '',
+        diastoleLowPressure: '',
       },
       tableHeaderBig: [],
       // 分页区域
@@ -270,7 +272,7 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
@@ -323,13 +325,13 @@ export default {
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editAddForm.userId = val.patientUserId
       this.editDialogVisible = true
@@ -341,16 +343,16 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminBloodPressure
               .postBloodPressure(this.editAddForm)
               .then((res) => {
-                if (res.code !== "OK") {
+                if (res.code !== 'OK') {
                   return
                 } else {
                   this.$notify.success({
-                    title: "新增成功",
+                    title: '新增成功',
                   })
                   this.getList()
                   this.editDialogVisible = false
@@ -361,11 +363,11 @@ export default {
             httpAdminBloodPressure
               .putBloodPressurer(this.editAddForm)
               .then((res) => {
-                if (res.code !== "OK") {
+                if (res.code !== 'OK') {
                   return
                 } else {
                   this.$notify.success({
-                    title: "编辑成功",
+                    title: '编辑成功',
                   })
                   this.getList()
                   this.editDialogVisible = false

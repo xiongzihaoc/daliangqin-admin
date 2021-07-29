@@ -226,18 +226,18 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import { httpAdminTask } from "@/api/admin/httpAdminTask"
-import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor"
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
+import EleTable from '@/components/Untable'
+import { httpAdminTask } from '@/api/admin/httpAdminTask'
+import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import {
   followTypeList,
   parseTime,
   resourceTypeList,
   statusList,
   formatterElement,
-} from "@/utils/index"
+} from '@/utils/index'
 
 export default {
   components: {
@@ -253,28 +253,28 @@ export default {
       loading: true,
       FormRules: {
         hospitalId: [
-          { required: true, message: "请选择医院", trigger: "blur" },
+          { required: true, message: '请选择医院', trigger: 'blur' },
         ],
         doctorUserId: [
-          { required: true, message: "请选择医生", trigger: "blur" },
+          { required: true, message: '请选择医生', trigger: 'blur' },
         ],
         patientUserId: [
-          { required: true, message: "请选择用户", trigger: "blur" },
+          { required: true, message: '请选择用户', trigger: 'blur' },
         ],
-        type: [{ required: true, message: "请选择随访方式", trigger: "blur" }],
-        content: [{ required: true, message: "请输入内容", trigger: "blur" }],
-        taskTime: [{ required: true, message: "请选择时间", trigger: "blur" }],
+        type: [{ required: true, message: '请选择随访方式', trigger: 'blur' }],
+        content: [{ required: true, message: '请输入内容', trigger: 'blur' }],
+        taskTime: [{ required: true, message: '请选择时间', trigger: 'blur' }],
       },
       searchForm: {
-        doctorUserName: "",
-        doctorUserPhone: "",
-        patientUserName: "",
-        patientPhone: "",
-        hospitalName: "",
-        type: "",
-        startTime: "",
-        endTime: "",
-        status: "",
+        doctorUserName: '',
+        doctorUserPhone: '',
+        patientUserName: '',
+        patientPhone: '',
+        hospitalName: '',
+        type: '',
+        startTime: '',
+        endTime: '',
+        status: '',
       },
       list: [],
       hospitalList: [],
@@ -282,94 +282,94 @@ export default {
       patientList: [],
 
       editAddForm: {
-        hospitalId: "",
-        doctorUserId: "",
-        patientUserId: "",
-        type: "",
-        startTime: "",
-        taskTime: "",
-        endTime: "",
-        status: "",
+        hospitalId: '',
+        doctorUserId: '',
+        patientUserId: '',
+        type: '',
+        startTime: '',
+        taskTime: '',
+        endTime: '',
+        status: '',
       },
       tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "doctorUserName", label: "医生姓名" },
-        { prop: "doctorUserPhone", label: "医生手机号" },
-        { prop: "hospitalName", label: "医院名称" },
+        { type: 'index', label: '序号' },
+        { prop: 'doctorUserName', label: '医生姓名' },
+        { prop: 'doctorUserPhone', label: '医生手机号' },
+        { prop: 'hospitalName', label: '医院名称' },
         {
-          prop: "type",
-          label: "随访方式",
+          prop: 'type',
+          label: '随访方式',
           formatter: (row) => {
             return this.typeFormatter(row)
           },
         },
-        { prop: "content", label: "随访内容" },
-        { prop: "patientUserName", label: "随访用户" },
-        { prop: "patientPhone", label: "用户手机号" },
+        { prop: 'content', label: '随访内容', isTooltip: true },
+        { prop: 'patientUserName', label: '随访用户' },
+        { prop: 'patientPhone', label: '用户手机号' },
         {
-          prop: "highBloodStatus",
-          label: "高血压",
+          prop: 'highBloodStatus',
+          label: '高血压',
           formatter: (row) => {
             return this.highBloodFormatter(row)
           },
         },
         {
-          prop: "diabetesStatus",
-          label: "糖尿病",
+          prop: 'diabetesStatus',
+          label: '糖尿病',
           formatter: (row) => {
             return this.diabetesFormatter(row)
           },
         },
         {
-          prop: "heartRateStatus",
-          label: "心率",
+          prop: 'heartRateStatus',
+          label: '心率',
           formatter: (row) => {
             return this.heartRateFormatter(row)
           },
         },
         {
-          prop: "startTime",
-          label: "预计开始时间",
+          prop: 'startTime',
+          label: '预计开始时间',
           formatter: (row) => {
             return parseTime(row.startTime)
           },
         },
         {
-          prop: "endTime",
-          label: "预计结束时间",
+          prop: 'endTime',
+          label: '预计结束时间',
           formatter: (row) => {
             return parseTime(row.endTime)
           },
         },
         {
-          prop: "createTime",
-          label: "创建时间",
+          prop: 'createTime',
+          label: '创建时间',
           formatter: (row) => {
             return parseTime(row.createTime)
           },
         },
         {
-          prop: "resource",
-          label: "加入方式",
+          prop: 'resource',
+          label: '加入方式',
           formatter: (row) => {
             return this.resourceFormatter(row)
           },
         },
         {
-          prop: "status",
-          label: "状态",
+          prop: 'status',
+          label: '状态',
           formatter: (row) => {
             return this.statusFormatter(row)
           },
         },
         {
-          prop: "cancelTime",
-          label: "取消时间",
+          prop: 'cancelTime',
+          label: '取消时间',
           formatter: (row) => {
             return parseTime(row.cancelTime)
           },
         },
-        { prop: "cancelReason", label: "取消原因" },
+        { prop: 'cancelReason', label: '取消原因' },
       ],
       // 分页区域
       pageSize: 10,
@@ -377,7 +377,7 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
@@ -430,13 +430,13 @@ export default {
     },
     selecthospital(val) {
       this.getDoctorList(val)
-      this.editAddForm.doctorUserId = ""
-      this.editAddForm.patientUserId = ""
+      this.editAddForm.doctorUserId = ''
+      this.editAddForm.patientUserId = ''
     },
     selectDoctor(val) {
       this.$forceUpdate()
       this.getPatientList(val)
-      this.editAddForm.patientUserId = ""
+      this.editAddForm.patientUserId = ''
     },
     selectPatient() {
       this.$forceUpdate()
@@ -464,7 +464,7 @@ export default {
     },
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
       this.editDialogVisible = true
       this.loading = false
@@ -473,30 +473,30 @@ export default {
     editBtn(val) {
       this.getDoctorList(val.hospitalId)
       this.getPatientList(val.doctorUserId)
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
-      this.$set(this.editAddForm, "taskTime", [val.startTime, val.endTime])
+      this.$set(this.editAddForm, 'taskTime', [val.startTime, val.endTime])
       this.editDialogVisible = true
     },
     // 删除
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminTask.deleteTask(id).then((res) => {
-        if (res.code === "OK") {
+        if (res.code === 'OK') {
           this.$notify.success({
-            title: "删除成功",
+            title: '删除成功',
           })
           this.getList()
         }
@@ -509,12 +509,12 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminTask.postTask(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$notify.success({
-                  title: "新增成功",
+                  title: '新增成功',
                 })
                 this.getList()
                 this.editDialogVisible = false
@@ -523,9 +523,9 @@ export default {
           } else {
             // 发送请求
             httpAdminTask.putTask(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$notify.success({
-                  title: "编辑成功",
+                  title: '编辑成功',
                 })
                 this.getList()
                 this.editDialogVisible = false

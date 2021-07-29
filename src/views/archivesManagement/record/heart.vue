@@ -152,7 +152,7 @@
       </el-table-column>
     </EleTable>
     <!-- 增改页面 -->
-    <el-dialog title="infoTitle"
+    <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
@@ -185,6 +185,7 @@
           <el-input maxlength="3"
             v-model="editAddForm.heartRateScore"
             v-Int
+            oninput="if (value > 200) value = 200"
             placeholder="请输入心率"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">bpm</i></el-input>
         </el-form-item>
@@ -241,15 +242,15 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import { httpAdminHeartRate } from "@/api/admin/httpAdminHeartRate"
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
+import EleTable from '@/components/Table'
+import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
 import {
   parseTime,
   validateTime,
   equipmentResourceTypeList,
   heartList,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -260,40 +261,40 @@ export default {
       equipmentResourceTypeList,
       heartList,
       FormRules: {
-        userId: [{ required: true, message: "请选择用户", trigger: "blur" }],
+        userId: [{ required: true, message: '请选择用户', trigger: 'blur' }],
         inspectionTime: [
-          { required: true, trigger: "blur", validator: validateTime },
+          { required: true, trigger: 'blur', validator: validateTime },
         ],
         glucoseScore: [
-          { required: true, message: "请输入心率", trigger: "blur" },
+          { required: true, message: '请输入心率', trigger: 'blur' },
         ],
         detectType: [
-          { required: true, message: "请选择检测模式", trigger: "blur" },
+          { required: true, message: '请选择检测模式', trigger: 'blur' },
         ],
       },
       hospitalFormRules: {
         hospitalName: [
-          { required: true, message: "请输入医院名称", trigger: "blur" },
+          { required: true, message: '请输入医院名称', trigger: 'blur' },
         ],
       },
       searchForm: {
-        patientUserName: "",
-        patientUserPhone: "",
-        equipmentResourceType: "",
-        heartRateStatus: "",
+        patientUserName: '',
+        patientUserPhone: '',
+        equipmentResourceType: '',
+        heartRateStatus: '',
       },
       patientList: [],
       list: [],
       editAddForm: {
-        name: "",
-        userId: "",
-        inspectionTime: "",
-        heartRateScore: "",
-        detectType: "",
+        name: '',
+        userId: '',
+        inspectionTime: '',
+        heartRateScore: '',
+        detectType: '',
       },
       hospitalForm: {
-        recordId: "",
-        hospitalName: "",
+        recordId: '',
+        hospitalName: '',
       },
       tableHeaderBig: [],
       // 分页区域
@@ -303,7 +304,7 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       hospitalDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
@@ -354,14 +355,14 @@ export default {
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
       console.log(val)
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editAddForm.userId = val.patientUserId
       this.editDialogVisible = true
@@ -381,7 +382,7 @@ export default {
             this.hospitalDialogVisible = false
             this.getList()
             this.$router.push(
-              "/archivesManagement/record/heartDetail?id=" +
+              '/archivesManagement/record/heartDetail?id=' +
                 this.hospitalForm.recordId
             )
           })
@@ -395,14 +396,14 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminHeartRate.postHeartRate(this.editAddForm).then((res) => {
-              if (res.code !== "OK") {
+              if (res.code !== 'OK') {
                 return
               } else {
                 this.$notify.success({
-                  title: "新增成功",
+                  title: '新增成功',
                 })
                 this.getList()
                 this.editDialogVisible = false
@@ -411,11 +412,11 @@ export default {
           } else {
             // 发送请求
             httpAdminHeartRate.putHeartRate(this.editAddForm).then((res) => {
-              if (res.code !== "OK") {
+              if (res.code !== 'OK') {
                 return
               } else {
                 this.$notify.success({
-                  title: "编辑成功",
+                  title: '编辑成功',
                 })
                 this.getList()
                 this.editDialogVisible = false

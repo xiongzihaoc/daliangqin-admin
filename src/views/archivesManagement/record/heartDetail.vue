@@ -153,15 +153,15 @@
 </template>
 
 <script>
-import { httpAdminHeartRate } from "@/api/admin/httpAdminHeartRate"
-import { parseTime } from "@/utils/index"
+import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
+import { parseTime } from '@/utils/index'
 export default {
   data() {
     return {
       parseTime,
       printObj: {
-        id: "printMe",
-        popTitle: "good print",
+        id: 'printMe',
+        popTitle: 'good print',
         // extraCss: "https://www.google.com,https://www.google.com",
         extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
       },

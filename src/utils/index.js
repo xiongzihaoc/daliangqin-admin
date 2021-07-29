@@ -592,6 +592,18 @@ export const disabilityTypesList = [
   { id: 6, label: "精神残疾", value: "SPIRIT" },
   { id: 7, label: "其他残疾", value: "OTHER" },
 ]
+// 血糖检测类型
+export const glucoseDetectType = [
+  { id: 1, label: "凌晨", value: "EARLYMORNING" },
+  { id: 2, label: "空腹", value: "LIMOSIS" },
+  { id: 3, label: "早餐后", value: "AFTERBREAKFAST" },
+  { id: 4, label: "午餐前", value: "BEFORELUNCH" },
+  { id: 5, label: "午餐后", value: "AFTERLUNCH" },
+  { id: 6, label: "晚餐前", value: "BEFOREDINNER" },
+  { id: 7, label: "晚餐后", value: "AFTERDINNER" },
+  { id: 8, label: "睡前", value: "BEFOREGOINGTOBED" },
+  { id: 9, label: "随机", value: "RANDOM" },
+]
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式
@@ -713,5 +725,16 @@ export const formatterElement = {
     HEPATITIS: "肝炎",
     CONGENITAL_MALFORMATIONS: "先天畸形",
     OTHER: "其他",
-  }
+  },
+  glucoseDetectType: {
+    EARLYMORNING: "凌晨",
+    LIMOSIS: "空腹",
+    AFTERBREAKFAST: "早餐后",
+    BEFORELUNCH: "午餐前",
+    AFTERLUNCH: "午餐后",
+    BEFOREDINNER: "晚餐前",
+    AFTERDINNER: "晚餐后",
+    BEFOREGOINGTOBED: "睡前",
+    RANDOM: "随机",
+  },
 }

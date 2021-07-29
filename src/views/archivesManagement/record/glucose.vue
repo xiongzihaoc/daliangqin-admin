@@ -22,6 +22,16 @@
             v-Int
             placeholder="请输入手机号"></el-input>
         </el-form-item>
+        <el-form-item label="检测模式"
+          align="left">
+          <el-select class="w100"
+            v-model="searchForm.detectType">
+            <el-option v-for="item in glucoseDetectType"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="录入方式"
           align="left"
           prop="equipmentResourceType">
@@ -91,13 +101,9 @@
         prop="serialNumber">
       </el-table-column>
       <el-table-column align="center"
-        label="检测类型"
-        prop="diseaseType">
-        <template slot-scope="scope">
-          <span v-if="scope.row.diseaseType === 'HIGH_BLOOD'">血压</span>
-          <span v-if="scope.row.diseaseType === 'DIABIETS'">血糖</span>
-          <span v-if="scope.row.diseaseType === 'HEART_RATE'">心率</span>
-        </template>
+        label="检测模式"
+        prop="detectType"
+        :formatter="detectTypeFormatter">
       </el-table-column>
       <el-table-column align="center"
         label="血糖值"
@@ -177,9 +183,19 @@
           prop="glucoseScore">
           <el-input maxlength="4"
             v-model="editAddForm.glucoseScore"
-            oninput="value=value.replace(/[^0-9.]/g,'')"
+            oninput="if (value > 36) {value = 36;return} value=value.replace(/[^0-9.]/g,'')"
             placeholder="请输入空腹血糖"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
+        </el-form-item>
+        <el-form-item label="检测模式"
+          prop="userId">
+          <el-select class="w100"
+            v-model="editAddForm.detectType">
+            <el-option v-for="item in glucoseDetectType"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="检测日期"
           prop="inspectionTime">
@@ -202,16 +218,18 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import { httpAdminGlucose } from "@/api/admin/httpAdminGlucose"
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
+import EleTable from '@/components/Table'
+import { httpAdminGlucose } from '@/api/admin/httpAdminGlucose'
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
 import {
   parseTime,
   validateTime,
   validateGlucoseScore,
   equipmentResourceTypeList,
   healthList,
-} from "@/utils/index"
+  glucoseDetectType,
+  formatterElement,
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -221,28 +239,32 @@ export default {
       parseTime,
       equipmentResourceTypeList,
       healthList,
+      glucoseDetectType,
+      formatterElement,
       FormRules: {
-        userId: [{ required: true, message: "请选择用户", trigger: "blur" }],
+        userId: [{ required: true, message: '请选择用户', trigger: 'blur' }],
         inspectionTime: [
-          { required: true, trigger: "blur", validator: validateTime },
+          { required: true, trigger: 'blur', validator: validateTime },
         ],
         glucoseScore: [
-          { required: true, trigger: "blur", validator: validateGlucoseScore },
+          { required: true, trigger: 'blur', validator: validateGlucoseScore },
         ],
       },
       searchForm: {
-        patientUserName: "",
-        patientUserPhone: "",
-        equipmentResourceType: "",
-        diabetesStatus: "",
+        patientUserName: '',
+        patientUserPhone: '',
+        equipmentResourceType: '',
+        diabetesStatus: '',
+        detectType: '',
       },
       patientList: [],
       list: [],
       editAddForm: {
-        name: "",
-        userId: "",
-        inspectionTime: "",
-        glucoseScore: "",
+        name: '',
+        userId: '',
+        inspectionTime: '',
+        glucoseScore: '',
+        detectType: '',
       },
       tableHeaderBig: [],
       // 分页区域
@@ -251,7 +273,7 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
@@ -270,6 +292,7 @@ export default {
           patientUserPhone: this.searchForm.patientUserPhone,
           equipmentResourceType: this.searchForm.equipmentResourceType,
           diabetesStatus: this.searchForm.diabetesStatus,
+          detectType: this.searchForm.detectType,
         })
         .then((res) => {
           console.log(res)
@@ -303,14 +326,14 @@ export default {
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
       console.log(val)
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editAddForm.userId = val.patientUserId
       this.editDialogVisible = true
@@ -322,14 +345,14 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminGlucose.postGlucose(this.editAddForm).then((res) => {
-              if (res.code !== "OK") {
+              if (res.code !== 'OK') {
                 return
               } else {
                 this.$notify.success({
-                  title: "新增成功",
+                  title: '新增成功',
                 })
                 this.getList()
                 this.editDialogVisible = false
@@ -338,11 +361,11 @@ export default {
           } else {
             // 发送请求
             httpAdminGlucose.putGlucose(this.editAddForm).then((res) => {
-              if (res.code !== "OK") {
+              if (res.code !== 'OK') {
                 return
               } else {
                 this.$notify.success({
-                  title: "编辑成功",
+                  title: '编辑成功',
                 })
                 this.getList()
                 this.editDialogVisible = false
@@ -351,6 +374,11 @@ export default {
           }
         }
       })
+    },
+    /***** 表格格式化内容区域 *****/
+    // 出生年月
+    detectTypeFormatter(row) {
+      return formatterElement.glucoseDetectType[row.detectType]
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
