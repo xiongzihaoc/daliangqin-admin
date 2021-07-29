@@ -74,7 +74,7 @@
         label="收藏人数"
         prop="collectionCount">
         <template slot-scope="scope">
-          <span style="color: #1890ff; text-decoration: underline"
+          <span class="collectionCount"
             @click="skiPatient(scope.row)">{{scope.row.collectionCount}}</span>
         </template>
       </el-table-column>
@@ -82,9 +82,9 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import { httpAdminCollection } from "@/api/admin/httpAdminCollection"
-import { formatterElement, doctorTypeList } from "@/utils/index"
+import EleTable from '@/components/Table'
+import { httpAdminCollection } from '@/api/admin/httpAdminCollection'
+import { formatterElement, doctorTypeList } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -96,10 +96,10 @@ export default {
       editDialogVisible: false,
       // 搜索表单
       searchForm: {
-        doctorName: "",
-        doctorType: "",
-        doctorPhone: "",
-        userId: "",
+        doctorName: '',
+        doctorType: '',
+        doctorPhone: '',
+        userId: '',
       },
       // 列表数据
       list: [],
@@ -140,8 +140,8 @@ export default {
     // 跳转用户列表
     skiPatient(val) {
       console.log(val)
-      this.$router.push("/archivesManagement/patient")
-      localStorage.setItem("collectionDoctorUserId", val.doctorUserId)
+      this.$router.push('/archivesManagement/patient')
+      localStorage.setItem('collectionDoctorUserId', val.doctorUserId)
     },
     // 格式化表格
     doctorTypeFormatter(row) {
@@ -166,5 +166,10 @@ export default {
 }
 .el-input-style {
   margin-right: 10px;
+}
+.collectionCount {
+  color: #1890ff;
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>
