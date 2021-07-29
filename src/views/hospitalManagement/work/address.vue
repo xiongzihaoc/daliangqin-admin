@@ -166,10 +166,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import addressJson from "@/utils/address.json"
-import { httpAdminAddressDoctor } from "@/api/admin/httpAdminAddressDoctor"
-import { validatePhone, doctorTypeList, formatterElement } from "@/utils/index"
+import EleTable from '@/components/Untable'
+import addressJson from '@/utils/address.json'
+import { httpAdminAddressDoctor } from '@/api/admin/httpAdminAddressDoctor'
+import { validatePhone, doctorTypeList, formatterElement } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -181,57 +181,57 @@ export default {
       // 表单验证规则
       FormRules: {
         name: [
-          { required: true, message: "请输入收货人名字", trigger: "blur" },
+          { required: true, message: '请输入收货人名字', trigger: 'blur' },
         ],
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
-        address: [{ required: true, message: "请选择省市区", trigger: "blur" }],
+        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
+        address: [{ required: true, message: '请选择省市区', trigger: 'blur' }],
         detail: [
-          { required: true, message: "请输入详细地址", trigger: "blur" },
+          { required: true, message: '请输入详细地址', trigger: 'blur' },
         ],
       },
       // 搜索表单
       searchForm: {
-        doctorName: "",
-        doctorType: "",
-        doctorPhone: "",
-        userId: "",
+        doctorName: '',
+        doctorType: '',
+        doctorPhone: '',
       },
+      userId: '',
       // 列表数据
       list: [],
       addressList: [],
       // 级联配置
       cateListProps: {
-        value: "name", //匹配响应数据中的id
-        label: "name", //匹配响应数据中的name
-        children: "districts", //匹配响应数据中的children
+        value: 'name', //匹配响应数据中的id
+        label: 'name', //匹配响应数据中的name
+        children: 'districts', //匹配响应数据中的children
       },
       // 增改表单
       editAddForm: {
-        name: "",
-        phone: "",
-        province: "",
-        city: "",
-        area: "",
+        name: '',
+        phone: '',
+        province: '',
+        city: '',
+        area: '',
         address: [],
         isDefault: false,
-        detail: "",
-        userId: "",
+        detail: '',
+        userId: '',
       },
       // 表格数据
       tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "doctorName", label: "医生姓名" },
-        { prop: "doctorPhone", label: "医生手机号" },
+        { type: 'index', label: '序号' },
+        { prop: 'doctorName', label: '医生姓名' },
+        { prop: 'doctorPhone', label: '医生手机号' },
         {
-          prop: "doctorType",
-          label: "职位",
+          prop: 'doctorType',
+          label: '职位',
           formatter: (row) => {
             return this.doctorTypeFormatter(row)
           },
         },
       ],
-      patientName: "",
-      patientUserId: "",
+      patientName: '',
+      patientUserId: '',
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -266,16 +266,17 @@ export default {
     // 获取第一个弹框的表格数据
     getEditList() {
       httpAdminAddressDoctor
-        .getAddressDoctor({ userId: this.searchForm.userId })
+        .getAddressDetail({ userId: this.userId })
         .then((res) => {
-          this.addressList = res.data.elements[0].addressInfos
+          console.log(res)
+          this.addressList = res.data.elements
         })
     },
     // 是否默认
     statusChange(id) {
       httpAdminAddressDoctor.putAddressDefault(id).then((res) => {
         console.log(res)
-        if (res.code === "OK") {
+        if (res.code === 'OK') {
           this.$notify.success({
             title: res.message,
           })
@@ -316,7 +317,7 @@ export default {
     /***** 增删改 *****/
     // 查看收货地址按钮
     examineBtn(val) {
-      this.searchForm.userId = val.userId
+      this.userId = val.doctorUserId
       this.getEditList()
       this.examineDialogVisible = true
     },
@@ -339,9 +340,9 @@ export default {
         if (valid) {
           // 发送请求
           httpAdminAddressDoctor.putAddress(this.editAddForm).then((res) => {
-            if (res.code === "OK") {
+            if (res.code === 'OK') {
               this.$notify.success({
-                title: "编辑成功",
+                title: '编辑成功',
               })
               this.getList()
               this.getEditList()
