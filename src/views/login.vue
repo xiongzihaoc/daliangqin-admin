@@ -58,29 +58,29 @@
 </template>
 
 <script>
-import { getCode } from "@/api/public/httpPublicSms"
-import { validatePhone, validateCode } from "@/utils/index"
+import { getCode } from '@/api/public/httpPublicSms'
+import { validatePhone, validateCode } from '@/utils/index'
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     return {
       // 表单验证
       loginRules: {
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
-        code: [{ required: true, trigger: "blur", validator: validateCode }],
+        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
+        code: [{ required: true, trigger: 'blur', validator: validateCode }],
       },
       loginForm: {
-        phone: "",
-        code: "",
-        deviceType: "PC_WEB",
-        deviceId: "333333",
+        phone: '',
+        code: '',
+        deviceType: 'PC_WEB',
+        deviceId: '333333',
         isAdmin: true,
         maxAge: 2592000,
       },
       loading: false,
       redirect: undefined,
       show: true,
-      count: "",
+      count: '',
       timer: null,
     }
   },
@@ -97,14 +97,14 @@ export default {
     getCodeBtn() {
       const reg = /^1[3|4|5|6|7|8|9]\d{9}$/
       if (this.loginForm.phone.length <= 0) {
-        return this.$message.error("请填写手机号码！")
+        return this.$message.error('请填写手机号码！')
       } else if (!reg.test(this.loginForm.phone)) {
-        return this.$message.error("请填写正确的手机号码！")
+        return this.$message.error('请填写正确的手机号码！')
       } else {
         // 发送请求
-        getCode({ phone: Number(this.loginForm.phone), smsType: "LOGIN" }).then(
+        getCode({ phone: Number(this.loginForm.phone), smsType: 'LOGIN' }).then(
           (res) => {
-            if (res.code !== "OK") {
+            if (res.code !== 'OK') {
               return
             } else {
               // 定时器60s
@@ -134,9 +134,9 @@ export default {
         if (valid) {
           // this.loading = true;
           this.$store
-            .dispatch("Login", this.loginForm)
+            .dispatch('Login', this.loginForm)
             .then((res) => {
-              this.$router.push({ path: "operationsManagement/banner" })
+              this.$router.push({ path: 'operationsManagement/banner' })
               // this.$router.push({ path: this.redirect || "/" });
               this.loading = false
             })
@@ -144,7 +144,7 @@ export default {
               this.loading = false
             })
         } else {
-          console.log("error submit!!")
+          console.log('error submit!!')
           return false
         }
       })
@@ -265,7 +265,7 @@ $light_gray: #eee;
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
-  input[type="number"] {
+  input[type='number'] {
     -moz-appearance: textfield;
   }
 }

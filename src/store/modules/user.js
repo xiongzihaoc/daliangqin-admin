@@ -41,7 +41,7 @@ const user = {
             return Message.error('用户信息不存在')
           } else {
             if (res.data.adminRoleType) {
-              window.localStorage.setItem('userId',res.data.userId)
+              window.sessionStorage.setItem('userId', res.data.userId)
               commit('SET_TOKEN', "xzh")
               setToken("xzh")
               resolve()
@@ -82,6 +82,8 @@ const user = {
     }) {
       return new Promise((resolve, reject) => {
         httpPublicLogin.logout(state.token).then(() => {
+          window.localStorage.clear()
+          window.sessionStorage.clear()
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           commit('SET_PERMISSIONS', [])

@@ -17,7 +17,7 @@ export const httpAdminAddressPatient = {
   },
   putAddressDefault(data) {
     return request({
-      url: 'address/default/' + data.id,
+      url: 'address/' + data.id + '/default',
       method: 'put',
     })
   },

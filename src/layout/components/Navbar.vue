@@ -2,30 +2,30 @@
   <div>
     <div class="navbar">
       <div>
-        <hamburger
-          :is-active="sidebar.opened"
+        <hamburger :is-active="sidebar.opened"
           class="hamburger-container"
-          @toggleClick="toggleSideBar"
-        />
+          @toggleClick="toggleSideBar" />
         <!-- <breadcrumb class="breadcrumb-container" /> -->
       </div>
       <topbar />
       <div class="right-menu">
         <template v-if="device !== 'mobile'">
-          <screenfull id="screenfull" class="right-menu-item hover-effect" />
+          <screenfull id="screenfull"
+            class="right-menu-item hover-effect" />
         </template>
-        <el-dropdown class="avatar-container" trigger="click">
+        <el-dropdown class="avatar-container"
+          trigger="click">
           <div class="avatar-wrapper">
             <!-- <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" /> -->
-            <img
-              src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"
-              class="user-avatar"
-            />
+            <img src="https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80"
+              class="user-avatar" />
 
             <i class="el-icon-caret-bottom" />
           </div>
-          <el-dropdown-menu slot="dropdown" class="user-dropdown">
-            <el-dropdown-item divided @click.native="logout">
+          <el-dropdown-menu slot="dropdown"
+            class="user-dropdown">
+            <el-dropdown-item divided
+              @click.native="logout">
               <span style="display: block">退出</span>
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -36,11 +36,11 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Breadcrumb from "@/components/Breadcrumb";
-import Topbar from "./Topbar";
-import Hamburger from "@/components/Hamburger";
-import Screenfull from "@/components/Screenfull"; // 添加部分
+import { mapGetters } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
+import Topbar from './Topbar'
+import Hamburger from '@/components/Hamburger'
+import Screenfull from '@/components/Screenfull' // 添加部分
 export default {
   components: {
     Breadcrumb,
@@ -49,34 +49,34 @@ export default {
     Topbar,
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar", "device"]),
+    ...mapGetters(['sidebar', 'avatar', 'device']),
     setting: {
       get() {
-        return this.$store.state.settings.showSettings;
+        return this.$store.state.settings.showSettings
       },
       set(val) {
-        this.$store.dispatch("settings/changeSetting", {
-          key: "showSettings",
+        this.$store.dispatch('settings/changeSetting', {
+          key: 'showSettings',
           value: val,
-        });
+        })
       },
     },
     topNav: {
       get() {
-        return this.$store.state.settings.topNav;
+        return this.$store.state.settings.topNav
       },
     },
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch("app/toggleSideBar");
+      this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      await this.$store.dispatch("Logout");
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+      await this.$store.dispatch('Logout')
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
