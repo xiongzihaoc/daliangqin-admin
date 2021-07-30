@@ -317,9 +317,7 @@ export default {
         hospitalName: [
           { required: true, message: '请输入医院名称', trigger: 'blur' },
         ],
-        name: [
-          { required: true, message: '请输入姓名', trigger: 'blur' },
-        ],
+        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
       },
       searchForm: {
         patientUserName: '',
