@@ -23,7 +23,7 @@
           </div>
           <div class="userName flex margin">
             <div class="box"><span class="fw">检测模式：</span>
-              <span v-if="userInfo.detecType === 'DAILY'">日常检测</span>
+              <span v-if="userInfo.detectType === 'DAILY'">日常检测</span>
               <span v-else>24小时检测</span>
             </div>
             <div class="box"><span class="fw">检测时长：</span>
@@ -161,9 +161,12 @@ export default {
       parseTime,
       printObj: {
         id: 'printMe',
-        popTitle: "",
-        extraCss: "",
-        extraHead: "",
+
+        popTitle: '',
+
+        extraCss: '',
+
+        extraHead: '',
       },
       loading: true,
       heartDetail: {},
@@ -190,6 +193,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/*去除页眉页脚*/
+  @page{
+    size:  auto;   /* auto is the initial value */
+    margin: 3mm;  /* this affects the margin in the printer settings */
+  }
+ 
+  html{
+    background-color: #FFFFFF;
+    margin: 0;  /* this affects the margin on the html before sending to printer */
+  }
+ 
+  body{
+    border: solid 1px blue ;
+    margin: 10mm 15mm 10mm 15mm; /* margin you want for the content */
+  }
+  /*去除页眉页脚*
+
 .print-box {
   margin-top: 50px;
   display: flex;
