@@ -161,9 +161,9 @@ export default {
       parseTime,
       printObj: {
         id: 'printMe',
-        popTitle: 'good print',
+        // popTitle: 'good print',
         // extraCss: "https://www.google.com,https://www.google.com",
-        extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+        // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
       },
       loading: true,
       heartDetail: {},
@@ -191,6 +191,7 @@ export default {
 
 <style lang="scss" scoped>
 .print-box {
+  margin-top: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -204,6 +205,7 @@ export default {
   font-size: 11px;
   padding: 20px;
   box-sizing: border-box;
+  margin: 0 auto;
   h3 {
     text-align: center;
   }

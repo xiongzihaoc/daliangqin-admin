@@ -100,17 +100,17 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        label="收缩压"
+        label="收缩压(mmHg)"
         prop="shrinkHighPressure">
         <template slot-scope="scope">
-          {{scope.row.shrinkHighPressure + 'mmHg'}}
+          {{scope.row.shrinkHighPressure}}
         </template>
       </el-table-column>
       <el-table-column align="center"
-        label="舒张压"
+        label="舒张压(mmHg)"
         prop="diastoleLowPressure">
         <template slot-scope="scope">
-          {{scope.row.diastoleLowPressure + 'mmHg'}}
+          {{scope.row.diastoleLowPressure}}
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -160,7 +160,36 @@
       <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
+        v-loading="loading"
         label-width="120px">
+        <el-form-item label="选择医院"
+          prop="hospitalId">
+          <el-select style="width:100%;"
+            filterable
+            clearable
+            @change="selecthospital"
+            v-model.trim="editAddForm.hospitalId"
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="选择医生"
+          prop="doctorUserId">
+          <el-select style="width:100%;"
+            filterable
+            clearable
+            @change="selectDoctor"
+            v-model="editAddForm.doctorUserId"
+            placeholder="请选择医生">
+            <el-option v-for="item in doctorList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
         <!-- 用户 -->
         <el-form-item label="选择用户"
           prop="userId">
@@ -222,7 +251,9 @@
 <script>
 import EleTable from '@/components/Table'
 import { httpAdminBloodPressure } from '@/api/admin/httpAdminBloodPressure'
+import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
 import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import {
   parseTime,
   validateTime,
@@ -239,6 +270,12 @@ export default {
       equipmentResourceTypeList,
       healthList,
       FormRules: {
+        hospitalId: [
+          { required: true, message: '请选择医院', trigger: 'blur' },
+        ],
+        doctorUserId: [
+          { required: true, message: '请选择医生', trigger: 'blur' },
+        ],
         userId: [{ required: true, message: '请选择用户', trigger: 'blur' }],
         inspectionTime: [
           { required: true, trigger: 'blur', validator: validateTime },
@@ -256,11 +293,16 @@ export default {
         equipmentResourceType: '',
         highBloodStatus: '',
       },
+      loading: true,
       list: [],
+      hospitalList: [],
+      doctorList: [],
       patientList: [],
       editAddForm: {
-        userId: '',
         name: '',
+        userId: '',
+        hospitalId: '',
+        doctorUserId: '',
         inspectionTime: '',
         shrinkHighPressure: '',
         diastoleLowPressure: '',
@@ -279,7 +321,7 @@ export default {
     this.getList()
   },
   mounted() {
-    this.getPatientList()
+    this.getHospitalList()
   },
   methods: {
     getList() {
@@ -293,21 +335,38 @@ export default {
           highBloodStatus: this.searchForm.highBloodStatus,
         })
         .then((res) => {
-          console.log(res)
           this.list = res.data.elements
           this.total = res.data.totalSize
         })
     },
-    getPatientList() {
-      httpAdminPatient
-        .getPatient({
-          page: 1,
-          pageSize: 100,
-        })
-        .then((res) => {
-          console.log(res)
-          this.patientList = res.data.elements
-        })
+    // 获取医院列表
+    getHospitalList() {
+      httpAdminHospital.getHospital().then((res) => {
+        this.hospitalList = res.data.elements
+      })
+    },
+    // 获取医生列表
+    getDoctorList(val) {
+      httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
+        this.doctorList = res.data.elements
+      })
+    },
+    // 获取用户列表
+    getPatientList(id) {
+      httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
+        this.patientList = res.data.elements
+        this.loading = false
+      })
+    },
+    selecthospital(val) {
+      this.getDoctorList(val)
+      this.editAddForm.doctorUserId = ''
+      this.editAddForm.patientUserId = ''
+    },
+    selectDoctor(val) {
+      this.$forceUpdate()
+      this.getPatientList(val)
+      this.editAddForm.patientUserId = ''
     },
     selectPatient() {
       this.$forceUpdate()
@@ -326,11 +385,15 @@ export default {
     // 新增
     addBtn() {
       this.infoTitle = '新增'
+      this.doctorList = []
+      this.patientList = []
       this.editAddForm = {}
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
+      this.getDoctorList(val.hospitalId)
+      this.getPatientList(val.doctorUserId)
       this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editAddForm.userId = val.patientUserId

@@ -422,7 +422,6 @@ export default {
     },
     // 获取用户列表
     getPatientList(id) {
-      this.loading = true
       httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
         this.patientList = res.data.elements
         this.loading = false
@@ -466,6 +465,8 @@ export default {
     addBtn() {
       this.infoTitle = '新增'
       this.editAddForm = {}
+      this.doctorList = []
+      this.patientList = []
       this.editDialogVisible = true
       this.loading = false
     },

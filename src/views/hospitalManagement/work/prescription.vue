@@ -138,7 +138,6 @@
     <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
-      @open="editDialogOpen"
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
@@ -187,7 +186,6 @@
             clearable
             class="w100"
             @change="selectTemplate"
-            @remove-tag="removeTag"
             value-key="id"
             v-model="editAddForm.templates">
             <el-option v-for="item in templateList"
@@ -523,17 +521,14 @@ export default {
         JSON.stringify(this.editAddForm.templates)
       )
     },
-    removeTag(val) {
-      console.log(val)
-    },
     selectHospital(val) {
       this.getDoctorList(val)
       this.editAddForm.doctorUserId = ''
       this.editAddForm.patientUserId = ''
     },
     selectDoctor(val) {
-      this.$forceUpdate()
       this.getPatientList(val)
+      this.$forceUpdate()
       this.editAddForm.patientUserId = ''
     },
     selectPatient() {
@@ -553,11 +548,14 @@ export default {
     addBtn() {
       this.infoTitle = '新增'
       this.editAddForm = {}
+      this.doctorList= []
+      this.patientList= []
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      console.log(val)
+      this.getDoctorList(val.hospitalId)
+      this.getPatientList(val.doctorUserId)
       this.infoTitle = '编辑'
       this.editAddForm = val
       // let template = val.templateIds.split(",");
@@ -587,10 +585,6 @@ export default {
         }
         this.getList()
       })
-    },
-    editDialogOpen() {
-      this.getDoctorList()
-      this.getPatientList()
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
