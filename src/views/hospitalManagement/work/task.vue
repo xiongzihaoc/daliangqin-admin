@@ -422,7 +422,6 @@ export default {
     },
     // 获取用户列表
     getPatientList(id) {
-      this.loading = true
       httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
         this.patientList = res.data.elements
         this.loading = false
