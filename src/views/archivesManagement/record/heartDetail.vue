@@ -161,9 +161,9 @@ export default {
       parseTime,
       printObj: {
         id: 'printMe',
-        // popTitle: 'good print',
-        // extraCss: "https://www.google.com,https://www.google.com",
-        // extraHead: '<meta http-equiv="Content-Language"content="zh-cn"/>',
+        popTitle: "",
+        extraCss: "",
+        extraHead: "",
       },
       loading: true,
       heartDetail: {},
