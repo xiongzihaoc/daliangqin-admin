@@ -162,7 +162,6 @@
       <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        v-loading="loading"
         label-width="120px">
         <el-form-item label="选择医院"
           prop="hospitalId">
@@ -332,7 +331,6 @@ export default {
       doctorList: [],
       patientList: [],
       list: [],
-      loading: true,
       editAddForm: {
         name: '',
         userId: '',
@@ -395,7 +393,6 @@ export default {
     getPatientList(id) {
       httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
         this.patientList = res.data.elements
-        this.loading = false
       })
     },
     selecthospital(val) {
