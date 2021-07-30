@@ -90,7 +90,7 @@ export default {
         { type: "index", label: "序号" },
         { prop: "configKey", label: "key" },
         { prop: "configName", label: "名称" },
-        { prop: "configValue", label: "数值" },
+        { prop: "configValue", label: "数值",isTooltip:true },
       ],
       // 分页区域
       pageSize: 10,

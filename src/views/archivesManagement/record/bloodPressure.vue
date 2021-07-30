@@ -125,10 +125,15 @@
         label="检测结果"
         prop="diseaseStatus">
         <template slot-scope="scope">
-          <span v-if="scope.row.highBloodStatus === 'SERIOUS'">重度</span>
-          <span v-if="scope.row.highBloodStatus === 'HEALTH'">健康</span>
-          <span v-if="scope.row.highBloodStatus === 'SLIGHT'">轻度</span>
-          <span v-if="scope.row.highBloodStatus === 'MEDIUM'">中度</span>
+          <span v-if="scope.row.highBloodStatus === 'HEALTH'"
+            class="HEALTH">健康</span>
+          <span v-if="scope.row.highBloodStatus === 'SLIGHT'"
+            class="SLIGHT">轻度</span>
+          <span v-if="scope.row.highBloodStatus === 'MEDIUM'"
+            class="MEDIUM">中度</span>
+          <span v-if="scope.row.highBloodStatus === 'SERIOUS'"
+            class="SERIOUS">重度</span>
+
         </template>
       </el-table-column>
       <el-table-column align="center"
