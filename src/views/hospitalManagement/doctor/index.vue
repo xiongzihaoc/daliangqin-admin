@@ -232,7 +232,7 @@
           </el-select>
         </el-form-item>
         <!-- PHYSICIAN 医师的枚举值 只有职位选中医师 才能选择转诊医生 -->
-        <el-form-item v-if="editAddForm.type === 'PHYSICIAN'"
+        <!-- <el-form-item v-if="editAddForm.type === 'PHYSICIAN'"
           label="转诊医生"
           prop="toDoctorUserId">
           <el-select v-model="editAddForm.toDoctorUserId"
@@ -243,7 +243,7 @@
               :value="item.id"
               :label="item.name"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="个人简介"
           prop="introduction">
           <el-input type="textarea"
@@ -304,9 +304,9 @@ export default {
         hospitalId: [
           { required: true, message: "请选择医院", trigger: "blur" },
         ],
-        toDoctorUserId: [
-          { required: true, message: "请选择转诊医生  ", trigger: "blur" },
-        ],
+        // toDoctorUserId: [
+        //   { required: true, message: "请选择转诊医生  ", trigger: "blur" },
+        // ],
       },
       searchForm: {
         name: "",
@@ -323,7 +323,7 @@ export default {
         phone: "",
         idCard: "",
         hospitalId: "",
-        toDoctorUserId: "",
+        // toDoctorUserId: "",
         type: "",
         introduction: "",
         goodAt: "",
@@ -385,7 +385,6 @@ export default {
     },
     getHospitalList() {
       httpAdminHospital.getHospital().then((res) => {
-        console.log(res)
         this.hospitalList = res.data.elements
       })
     },
