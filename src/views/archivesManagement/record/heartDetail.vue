@@ -12,7 +12,7 @@
           </div>
           <div class="userName flex margin">
             <div class="box"><span class="fw">用户姓名：</span>
-              <span>{{userInfo.patientUserName}}</span>
+              <span>{{this.$route.query.name}}</span>
             </div>
             <div class="box"><span class="fw">检测日期：</span>
               <span>{{parseTime(userInfo.inspectionTime)}}</span>
