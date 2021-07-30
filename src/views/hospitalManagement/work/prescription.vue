@@ -319,12 +319,12 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import { httpAdminUserTemplate } from "@/api/admin/httpAdminUserTemplate"
-import { httpAdminTemplate } from "@/api/admin/httpAdminTemplate"
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
-import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor"
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
+import EleTable from '@/components/Untable'
+import { httpAdminUserTemplate } from '@/api/admin/httpAdminUserTemplate'
+import { httpAdminTemplate } from '@/api/admin/httpAdminTemplate'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
 import {
   parseTime,
   doctorTypeList,
@@ -332,7 +332,7 @@ import {
   healthList,
   heartList,
   formatterElement,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -346,86 +346,86 @@ export default {
       genderList,
       FormRules: {
         doctorUserId: [
-          { required: true, message: "请选择医生", trigger: "blur" },
+          { required: true, message: '请选择医生', trigger: 'blur' },
         ],
         patientUserId: [
-          { required: true, message: "请选择用户", trigger: "blur" },
+          { required: true, message: '请选择用户', trigger: 'blur' },
         ],
-        templates: [{ required: true, message: "请选择模板", trigger: "blur" }],
+        templates: [{ required: true, message: '请选择模板', trigger: 'blur' }],
       },
       searchForm: {
-        doctorName: "",
-        doctorPhone: "",
-        doctorType: "",
-        hospitalName: "",
-        patientName: "",
-        patientPhone: "",
-        highBloodStatus: "",
-        diabetesStatus: "",
-        heartRateStatus: "",
+        doctorName: '',
+        doctorPhone: '',
+        doctorType: '',
+        hospitalName: '',
+        patientName: '',
+        patientPhone: '',
+        highBloodStatus: '',
+        diabetesStatus: '',
+        heartRateStatus: '',
       },
       list: [],
       templateList: [],
       hospitalList: [],
       doctorList: [],
       patientList: [],
-      userId: "",
+      userId: '',
       editAddForm: {
-        hospitalId: "",
-        doctorUserId: "",
-        patientUserId: "",
+        hospitalId: '',
+        doctorUserId: '',
+        patientUserId: '',
         templates: [],
-        content: "",
+        content: '',
       },
       tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "doctorName", label: "医生姓名" },
-        { prop: "doctorPhone", label: "医生手机号" },
-        { prop: "hospitalName", label: "医院名称" },
+        { type: 'index', label: '序号' },
+        { prop: 'doctorName', label: '医生姓名' },
+        { prop: 'doctorPhone', label: '医生手机号' },
+        { prop: 'hospitalName', label: '医院名称' },
         {
-          prop: "doctorType",
-          label: "职位",
+          prop: 'doctorType',
+          label: '职位',
           formatter: (row) => {
             return this.doctorTypeFormatter(row)
           },
         },
         {
-          prop: "createTime",
-          label: "开具时间",
+          prop: 'createTime',
+          label: '开具时间',
           formatter: (row) => {
             return parseTime(row.createTime)
           },
         },
-        { prop: "templateNames", label: "选用模板" },
-        { prop: "templateContents", label: "处方内容", isTooltip: true },
-        { prop: "patientName", label: "用户姓名" },
-        { prop: "patientPhone", label: "用户手机号" },
+        { prop: 'templateNames', label: '选用模板' },
+        { prop: 'templateContents', label: '处方内容', isTooltip: true },
+        { prop: 'patientName', label: '用户姓名' },
+        { prop: 'patientPhone', label: '用户手机号' },
         {
-          prop: "highBloodStatus",
-          label: "高血压",
+          prop: 'highBloodStatus',
+          label: '高血压',
           formatter: (row) => {
             return this.highBloodStatusFormatter(row)
           },
         },
         {
-          prop: "diabetesStatus",
-          label: "糖尿病",
+          prop: 'diabetesStatus',
+          label: '糖尿病',
 
           formatter: (row) => {
             return this.diabetesStatusFormatter(row)
           },
         },
         {
-          prop: "heartRateStatus",
-          label: "心率",
+          prop: 'heartRateStatus',
+          label: '心率',
 
           formatter: (row) => {
             return this.heartRateStatusFormatter(row)
           },
         },
         {
-          prop: "updateTime",
-          label: "最近修改时间",
+          prop: 'updateTime',
+          label: '最近修改时间',
           formatter: (row) => {
             return parseTime(row.updateTime)
           },
@@ -433,10 +433,10 @@ export default {
       ],
       templateFormRules: {},
       templateForm: {
-        name: "",
-        content: "",
+        name: '',
+        content: '',
       },
-      templateSetTitle: "",
+      templateSetTitle: '',
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -446,13 +446,13 @@ export default {
       templateTotal: 0,
       // 弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
       templateDialogVisible: false,
       templateSetDialogVisible: false,
     }
   },
   created() {
-    this.userId = window.localStorage.getItem("userId")
+    this.userId = window.sessionStorage.getItem('userId')
     this.getList()
   },
   mounted() {
@@ -519,7 +519,7 @@ export default {
       // });
       this.$set(
         this.editAddForm,
-        "content",
+        'content',
         JSON.stringify(this.editAddForm.templates)
       )
     },
@@ -528,13 +528,13 @@ export default {
     },
     selectHospital(val) {
       this.getDoctorList(val)
-      this.editAddForm.doctorUserId = ""
-      this.editAddForm.patientUserId = ""
+      this.editAddForm.doctorUserId = ''
+      this.editAddForm.patientUserId = ''
     },
     selectDoctor(val) {
       this.$forceUpdate()
       this.getPatientList(val)
-      this.editAddForm.patientUserId = ""
+      this.editAddForm.patientUserId = ''
     },
     selectPatient() {
       this.$forceUpdate()
@@ -551,14 +551,14 @@ export default {
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
       console.log(val)
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = val
       // let template = val.templateIds.split(",");
       // this.editAddForm.templateName = template;
@@ -567,22 +567,22 @@ export default {
     // 删除单个
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminUserTemplate.deleteUserTemplate(id).then((res) => {
-        if (res.code === "OK") {
+        if (res.code === 'OK') {
           this.$notify.success({
-            title: "删除成功",
+            title: '删除成功',
           })
         }
         this.getList()
@@ -599,14 +599,14 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminUserTemplate
               .postUserTemplate(this.editAddForm)
               .then((res) => {
-                if (res.code === "OK") {
+                if (res.code === 'OK') {
                   this.$notify.success({
-                    title: "新增成功",
+                    title: '新增成功',
                   })
                   this.getList()
                   this.editDialogVisible = false
@@ -617,9 +617,9 @@ export default {
             httpAdminUserTemplate
               .putUserTemplate(this.editAddForm)
               .then((res) => {
-                if (res.code === "OK") {
+                if (res.code === 'OK') {
                   this.$notify.success({
-                    title: "编辑成功",
+                    title: '编辑成功',
                   })
                   this.getList()
                   this.editDialogVisible = false
@@ -635,7 +635,7 @@ export default {
       this.templateDialogVisible = true
     },
     templateAdd() {
-      this.templateSetTitle = "新增"
+      this.templateSetTitle = '新增'
       this.templateForm = {}
       this.templateSetDialogVisible = true
     },
@@ -643,28 +643,28 @@ export default {
     templateDialogEnter() {},
     // 修改
     editTemplateBtn(val) {
-      this.templateSetTitle = "编辑"
+      this.templateSetTitle = '编辑'
       this.templateSetDialogVisible = true
       this.templateForm = JSON.parse(JSON.stringify(val))
     },
     async deleteTemplateBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminTemplate.deleteTemplate(id).then((res) => {
-        if (res.code === "OK") {
+        if (res.code === 'OK') {
           this.$notify.success({
-            title: "删除成功",
+            title: '删除成功',
           })
         }
         this.getTemplateList()
@@ -673,12 +673,12 @@ export default {
     },
     templateSetDialogEnter() {
       this.templateForm.userId = this.userId
-      if (this.templateSetTitle === "新增") {
+      if (this.templateSetTitle === '新增') {
         // 发送请求
         httpAdminTemplate.postTemplate(this.templateForm).then((res) => {
-          if (res.code === "OK") {
+          if (res.code === 'OK') {
             this.$notify.success({
-              title: "新增成功",
+              title: '新增成功',
             })
             this.getTemplateList()
             this.templateSetDialogVisible = false
@@ -687,9 +687,9 @@ export default {
       } else {
         // 发送请求
         httpAdminTemplate.putTemplate(this.templateForm).then((res) => {
-          if (res.code === "OK") {
+          if (res.code === 'OK') {
             this.$notify.success({
-              title: "编辑成功",
+              title: '编辑成功',
             })
             this.getTemplateList()
             this.templateSetDialogVisible = false

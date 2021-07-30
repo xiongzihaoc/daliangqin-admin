@@ -93,39 +93,30 @@
       width="40%"
       @closed="editDialogClosed"
       v-dialogDrag>
-      <ul class="ul"
-        style="height:500px;overflow:auto;padding:15px;box-sizing:border-box;background:#f5f5f5">
-        <li v-for="item in messageList"
-          :key="item.id">
-          <!-- 病人信息 -->
-          <div v-if="!item.isSelf"
-            style="display:flex">
-            <div style="display:flex;">
-              <img style="width:64px;height:64px;border-radius:50%;"
-                :src="toInfo.avatarUrl">
-            </div>
-            <div style="padding-left:10px;margin-bottom:15px;">
-              <div>{{toInfo.userName}}</div>
-              <div style="margin:5px 0;">{{parseTime(item.createTime).slice(6)}}</div>
-              <div style="color:#000;background:#fff;max-width:300px;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
+      <div class="chat-content">
+        <!-- 聊天记录数组-->
+        <div v-for="(item,index) in messageList"
+          :key="index">
+          <!-- 对方 -->
+          <div class="word"
+            v-if="!item.isSelf">
+            <img :src="toInfo.avatarUrl">
+            <div class="info">
+              <p class="time">{{selfInfo.userName}} {{parseTime(item.createTime)}}</p>
+              <div class="info-content">{{item.leaveContent}}</div>
             </div>
           </div>
-          <!-- 医生信息 -->
-          <div v-else
-            style="display:flex;justify-content: flex-end;">
-            <div style="padding-right:10px;margin-bottom:15px;">
-              <div style="text-align:right">{{selfInfo.userName}}</div>
-              <div style="text-align:right;margin:5px 0;">{{parseTime(item.createTime).slice(6)}}</div>
-              <div style="color:#fff;background:#405C59;max-width:300px;border-radius:5px;padding:10px;box-sizing:border-box;">{{item.leaveContent}}</div>
+          <!-- 我的 -->
+          <div class="word-my"
+            v-else>
+            <div class="info">
+              <p class="time">{{selfInfo.userName}} {{parseTime(item.createTime)}}</p>
+              <div class="info-content">{{item.leaveContent}}</div>
             </div>
-            <div>
-              <img style="width:64px;height:64px;border-radius:50%;"
-                :src="selfInfo.avatarUrl"
-                alt="">
-            </div>
+            <img :src="selfInfo.avatarUrl">
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
       <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm">
@@ -147,9 +138,9 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import { parseTime } from "@/utils/index"
-import { httpAdminChat } from "@/api/admin/httpAdminChat"
+import EleTable from '@/components/Untable'
+import { parseTime } from '@/utils/index'
+import { httpAdminChat } from '@/api/admin/httpAdminChat'
 export default {
   components: {
     EleTable,
@@ -160,17 +151,17 @@ export default {
       // 表单验证规则
       FormRules: {
         leaveContent: [
-          { required: true, trigger: "blur", message: "请输入回复内容" },
+          { required: true, trigger: 'blur', message: '请输入回复内容' },
         ],
       },
       // 搜索表单
       searchForm: {
-        fromUserName: "",
-        toUserName: "",
-        leaveStartTime: "",
-        leaveEndTime: "",
-        replyStartTime: "",
-        replayEndTime: "",
+        fromUserName: '',
+        toUserName: '',
+        leaveStartTime: '',
+        leaveEndTime: '',
+        replyStartTime: '',
+        replayEndTime: '',
       },
       // 列表数据
       list: [],
@@ -178,32 +169,33 @@ export default {
       messageList: [],
       // 增改表单
       editAddForm: {
-        contentType: "TEXT",
-        doctorUserId: "",
-        leaveContent: "",
-        patientUserId: "",
+        contentType: 'TEXT',
+        doctorUserId: '',
+        leaveContent: '',
+        isSelf: true,
+        patientUserId: '',
       },
       selfInfo: {},
       toInfo: {},
       // 表格数据
       tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "patientUserName", label: "用户姓名" },
-        { prop: "patientPhone", label: "用户手机号" },
-        { prop: "leaveCount", label: "用户留言数" },
+        { type: 'index', label: '序号' },
+        { prop: 'patientUserName', label: '用户姓名' },
+        { prop: 'patientPhone', label: '用户手机号' },
+        { prop: 'leaveCount', label: '用户留言数' },
         {
-          prop: "leaveTime",
-          label: "最近留言时间",
+          prop: 'leaveTime',
+          label: '最近留言时间',
           formatter: (row) => {
             return parseTime(row.leaveTime)
           },
         },
-        { prop: "doctorUserName", label: "医生姓名" },
-        { prop: "doctorPhone", label: "医生手机号" },
-        { prop: "replyCount", label: "医生回复数" },
+        { prop: 'doctorUserName', label: '医生姓名' },
+        { prop: 'doctorPhone', label: '医生手机号' },
+        { prop: 'replyCount', label: '医生回复数' },
         {
-          prop: "replyTime",
-          label: "最近回复时间",
+          prop: 'replyTime',
+          label: '最近回复时间',
           formatter: (row) => {
             return parseTime(row.replyTime)
           },
@@ -213,6 +205,9 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
+      // 聊天记录分页
+      chatPageNum: 1,
+      chatPageSize: 20000,
       //   弹框区域
       editDialogVisible: false,
     }
@@ -229,7 +224,7 @@ export default {
   methods: {
     scrollToBottom() {
       this.$nextTick(() => {
-        var container = this.$el.querySelector(".ul")
+        var container = this.$el.querySelector('.chat-content')
         container.scrollTop = container.scrollHeight
       })
     },
@@ -248,6 +243,7 @@ export default {
           doctorPhone: this.searchForm.doctorPhone,
         })
         .then((res) => {
+          console.log(res)
           this.list = res.data.elements
           this.total = res.data.totalSize
         })
@@ -255,6 +251,8 @@ export default {
     getChatSubscribe(val) {
       httpAdminChat
         .getChatSubscribe({
+          page: this.chatPageNum,
+          pageSize: this.chatPageSize,
           sessionId: val.sessionId,
           doctorUserId: val.doctorUserId,
         })
@@ -295,19 +293,35 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 发送消息
     editPageEnter() {
+      let currentTime = new Date().getTime()
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 发送请求
-          httpAdminChat.postChat(this.editAddForm).then((res) => {
-            console.log(res)
-            if (res.code === "OK") {
-              this.editAddForm.leaveContent = ""
-              this.getList()
-              this.getChatSubscribe(this.val)
-            }
-          })
+          httpAdminChat
+            .postChat({
+              contentType: 'TEXT',
+              createTime: currentTime,
+              leaveContent: this.editAddForm.leaveContent,
+              doctorUserId: this.editAddForm.doctorUserId,
+              isSelf: true,
+              patientUserId: this.editAddForm.patientUserId,
+            })
+            .then((res) => {
+              if (res.code === 'OK') {
+                this.messageList.push({
+                  contentType: 'TEXT',
+                  createTime: currentTime,
+                  leaveContent: this.editAddForm.leaveContent,
+                  doctorUserId: this.editAddForm.doctorUserId,
+                  isSelf: true,
+                  patientUserId: this.editAddForm.patientUserId,
+                })
+                this.editAddForm.leaveContent = ''
+                this.getList()
+              }
+            })
         }
       })
     },
@@ -324,8 +338,103 @@ export default {
 }
 </script>
 
-<style scoped>
-li {
-  list-style: none;
+<style lang="scss" scoped>
+.chat-content {
+  width: 100%;
+  height: 600px;
+  overflow-y: scroll;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  .word {
+    display: flex;
+    margin-bottom: 20px;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .info {
+      margin-left: 10px;
+      .time {
+        font-size: 12px;
+        color: rgba(51, 51, 51, 0.8);
+        margin: 0;
+        height: 20px;
+        line-height: 20px;
+        margin-top: -5px;
+      }
+      .info-content {
+        max-width: 70%;
+        padding: 10px;
+        font-size: 14px;
+        float: left;
+        margin-right: 10px;
+        position: relative;
+        left: 0;
+        margin-top: 8px;
+        background: #fff;
+        color: #000;
+        border-radius: 5px;
+      }
+      //小三角形
+      .info-content::before {
+        position: absolute;
+        left: -8px;
+        top: 8px;
+        content: '';
+        border-right: 10px solid #fff;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+      }
+    }
+  }
+
+  .word-my {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .info {
+      width: 90%;
+      margin-left: 10px;
+      text-align: right;
+      .time {
+        font-size: 12px;
+        color: rgba(51, 51, 51, 0.8);
+        margin: 0;
+        height: 20px;
+        line-height: 20px;
+        margin-top: -5px;
+        margin-right: 10px;
+      }
+      .info-content {
+        max-width: 70%;
+        padding: 10px;
+        font-size: 14px;
+        float: right;
+        margin-right: 10px;
+        position: relative;
+        margin-top: 8px;
+        background: #425c5a;
+        color: #fff;
+        border-radius: 5px;
+        text-align: left;
+      }
+      .info-content::after {
+        position: absolute;
+        right: -8px;
+        top: 8px;
+        content: '';
+        border-left: 10px solid #425c5a;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+      }
+    }
+  }
 }
 </style>

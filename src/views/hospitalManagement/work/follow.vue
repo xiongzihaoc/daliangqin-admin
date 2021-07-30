@@ -223,8 +223,8 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import { httpAdminFollow } from "@/api/admin/httpAdminFollow"
+import EleTable from '@/components/Table'
+import { httpAdminFollow } from '@/api/admin/httpAdminFollow'
 import {
   doctorTypeList,
   followTypeList,
@@ -234,7 +234,7 @@ import {
   heartList,
   parseTime,
   formatterElement,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -252,27 +252,27 @@ export default {
       heartList,
       // 搜索表单
       searchForm: {
-        doctorUserName: "",
-        doctorType: "",
-        doctorPhone: "",
-        hospitalName: "",
-        patientUserName: "",
-        patientPhone: "",
-        type: "",
-        highBloodStatus: "",
-        diabetesStatus: "",
-        heartRateStatus: "",
-        startTime: "",
-        endTime: "",
-        userStatus: "",
+        doctorUserName: '',
+        doctorType: '',
+        doctorPhone: '',
+        hospitalName: '',
+        patientUserName: '',
+        patientPhone: '',
+        type: '',
+        highBloodStatus: '',
+        diabetesStatus: '',
+        heartRateStatus: '',
+        startTime: '',
+        endTime: '',
+        userStatus: '',
       },
       // 列表数据
       list: [],
       // 增改表单
       editAddForm: {
-        fromUserName: "",
-        contract: "",
-        address: "",
+        fromUserName: '',
+        contract: '',
+        address: '',
       },
       // 表格数据
       tableHeaderBig: [],
@@ -282,7 +282,7 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
@@ -322,35 +322,35 @@ export default {
     },
     addBtn() {
       this.$router.push({
-        path: "/hospitalManagement/work/followDetail",
+        path: '/hospitalManagement/work/followDetail',
       })
     },
     // 编辑
     editBtn(val) {
       this.$router.push({
         path:
-          "/hospitalManagement/work/followDetail?id=" + val.id + "&type=edit",
+          '/hospitalManagement/work/followDetail?id=' + val.id + '&type=edit',
       })
     },
     // 删除
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminFollow.deleteFollow(id).then((res) => {
-        if (res.code === "OK") {
+        if (res.code === 'OK') {
           this.$notify.success({
-            title: "删除成功",
+            title: '删除成功',
           })
           this.getList()
         }
@@ -363,12 +363,12 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminFollow.postFollow(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$notify.success({
-                  title: "新增成功",
+                  title: '新增成功',
                 })
                 this.getList()
                 this.editDialogVisible = false
@@ -377,9 +377,9 @@ export default {
           } else {
             // 发送请求
             httpAdminFollow.putFollow(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$notify.success({
-                  title: "编辑成功",
+                  title: '编辑成功',
                 })
                 this.getList()
                 this.editDialogVisible = false

@@ -8,6 +8,13 @@ export const httpAdminAddressDoctor = {
       params: data
     })
   },
+  getAddressDetail(data) {
+    return request({
+      url: 'address',
+      method: 'get',
+      params: data
+    })
+  },
   putAddress(data) {
     return request({
       url: 'address/' + data.id,
@@ -17,7 +24,7 @@ export const httpAdminAddressDoctor = {
   },
   putAddressDefault(data) {
     return request({
-      url: 'address/default/' + data.id,
+      url: 'address/' + data.id + '/default',
       method: 'put',
     })
   },

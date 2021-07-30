@@ -101,8 +101,7 @@
               <el-input v-model="form.bmi"
                 disabled></el-input>
             </el-form-item>
-            <el-form-item label="体重建议"
-              prop="weightSuggest">
+            <el-form-item label="体重建议">
               <el-input v-model="form.weightSuggest"
                 v-Int
                 maxlength="3"><i slot="suffix"
@@ -700,9 +699,6 @@ export default {
         ],
         type: [
           { required: true, message: "请选择随访方式", trigger: "change" },
-        ],
-        weightSuggest: [
-          { required: true, message: "请输入体重建议", trigger: "blur" },
         ],
         userStatus: [
           { required: true, message: "请选择用户状态", trigger: "change" },
