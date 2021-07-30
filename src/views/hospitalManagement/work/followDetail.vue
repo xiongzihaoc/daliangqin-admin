@@ -14,7 +14,7 @@
               prop="hospitalId">
               <el-select v-model="form.hospitalId"
                 @change="selectHospital"
-                placeholder="请选择医院">
+                placeholder="请选择医院" disabled>
                 <el-option v-for="item in hospitalList"
                   :key="item.id"
                   :label="item.name"
@@ -25,7 +25,7 @@
               prop="doctorUserId">
               <el-select v-model="form.doctorUserId"
                 @change="selectDoctor"
-                placeholder="请选择医生">
+                placeholder="请选择医生" disabled>
                 <el-option v-for="item in doctorList"
                   :key="item.id"
                   :label="item.name"
@@ -36,7 +36,7 @@
               prop="patientUserId">
               <el-select v-model="form.patientUserId"
                 placeholder="请选择用户"
-                @change="selectPatient">
+                @change="selectPatient" disabled>
                 <el-option v-for="item in patientList"
                   :key="item.id"
                   :label="item.name"
