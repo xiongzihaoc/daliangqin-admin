@@ -102,7 +102,7 @@
             v-if="!item.isSelf">
             <img :src="toInfo.avatarUrl">
             <div class="info">
-              <p class="time">{{selfInfo.userName}} {{parseTime(item.createTime)}}</p>
+              <p class="time">{{toInfo.userName}} {{parseTime(item.createTime)}}</p>
               <div class="info-content">{{item.leaveContent}}</div>
             </div>
           </div>
