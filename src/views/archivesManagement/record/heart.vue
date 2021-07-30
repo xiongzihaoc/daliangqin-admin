@@ -259,6 +259,11 @@
           <el-input v-model.trim="hospitalForm.hospitalName"
             placeholder="请输入医院名称"></el-input>
         </el-form-item>
+        <el-form-item label="姓名"
+          prop="name">
+          <el-input v-model.trim="hospitalForm.name"
+            placeholder="请输入姓名"></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer"
         class="dialog-footer">
@@ -312,6 +317,9 @@ export default {
         hospitalName: [
           { required: true, message: '请输入医院名称', trigger: 'blur' },
         ],
+        name: [
+          { required: true, message: '请输入姓名', trigger: 'blur' },
+        ],
       },
       searchForm: {
         patientUserName: '',
@@ -335,6 +343,7 @@ export default {
       hospitalForm: {
         recordId: '',
         hospitalName: '',
+        name: '',
       },
       tableHeaderBig: [],
       // 分页区域
@@ -433,6 +442,7 @@ export default {
     examineBtn(val) {
       console.log(val)
       this.hospitalForm.hospitalName = val.hospitalName
+      this.hospitalForm.name = val.patientUserName
       this.hospitalForm.recordId = val.id
       this.hospitalDialogVisible = true
     },
@@ -445,7 +455,9 @@ export default {
             this.getList()
             this.$router.push(
               '/archivesManagement/record/heartDetail?id=' +
-                this.hospitalForm.recordId
+                this.hospitalForm.recordId +
+                '&name=' +
+                this.hospitalForm.name
             )
           })
         }
