@@ -195,6 +195,22 @@ export function validateGlucoseScore(rule, value, callback) {
     callback();
   }
 };
+
+// 保留N未小数
+export function fomatFloat(value, n) {
+  var f = Math.round(value * Math.pow(10, n)) / Math.pow(10, n);
+  var s = f.toString();
+  var rs = s.indexOf('.');
+  if (rs < 0) {
+    s += '.';
+  }
+  for (var i = s.length - s.indexOf('.'); i <= n; i++) {
+    s += "0";
+  }
+  return s;
+}
+
+
 // 文化程度
 export const educationType = [
   { id: 1, label: "研究生及以上", value: "POSTGRADUATE" },

@@ -109,7 +109,7 @@
         label="血糖值(mmol/L)"
         prop="glucoseScore">
         <template slot-scope="scope">
-          <span class="fw">{{scope.row.glucoseScore}}</span>
+          <span class="fw">{{fomatFloat(scope.row.glucoseScore,1)}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -232,7 +232,7 @@
         <el-form-item label="检测日期"
           prop="inspectionTime">
           <el-date-picker v-model="editAddForm.inspectionTime"
-            style="width:100%"
+            class="w100"
             type="datetime"
             format="yyyy-MM-dd HH:mm"
             value-format="timestamp"
@@ -261,6 +261,7 @@ import {
   validateGlucoseScore,
   equipmentResourceTypeList,
   healthList,
+  fomatFloat,
   glucoseDetectType,
   formatterElement,
 } from '@/utils/index'
@@ -275,6 +276,7 @@ export default {
       healthList,
       glucoseDetectType,
       formatterElement,
+      fomatFloat,
       FormRules: {
         hospitalId: [
           { required: true, message: '请选择医院', trigger: 'blur' },
