@@ -135,7 +135,7 @@
             style="color: #1890ff; text-decoration: underline">{{ scope.row.patientCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center"
+      <!-- <el-table-column align="center"
         prop="toDoctorInfo"
         label="对应转诊医生">
         <template slot-scope="scope">
@@ -146,7 +146,7 @@
             }}</span>
           </div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center"
         label="创建人"
         prop="createUserName"></el-table-column>
