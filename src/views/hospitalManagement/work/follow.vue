@@ -134,96 +134,12 @@
       :total="total"
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
-      <el-table-column align="center"
-        type="index"
-        label="序号">
-      </el-table-column>
-      <el-table-column align="center"
-        label="医生姓名"
-        prop="doctorUserName">
-      </el-table-column>
-      <el-table-column align="center"
-        label="医生手机号"
-        prop="doctorPhone">
-      </el-table-column>
-      <el-table-column align="center"
-        label="职位"
-        :formatter="doctorTypeFormatter"
-        prop="doctorType">
-      </el-table-column>
-      <el-table-column align="center"
-        label="医院名称"
-        prop="hospitalName">
-      </el-table-column>
-      <el-table-column align="center"
-        label="随访方式"
-        :formatter="typeFormatter"
-        prop="type">
-      </el-table-column>
-      <el-table-column align="center"
-        label="随访备注"
-        prop="content">
-      </el-table-column>
-      <el-table-column align="center"
-        label="随访用户"
-        prop="patientUserName">
-      </el-table-column>
-      <el-table-column align="center"
-        label="用户手机号"
-        prop="patientPhone">
-      </el-table-column>
-      <el-table-column align="center"
-        label="高血压"
-        :formatter="highBloodStatusFormatter"
-        prop="highBloodStatus">
-      </el-table-column>
-      <el-table-column align="center"
-        :formatter="diabetesStatusFormatter"
-        label="糖尿病"
-        prop="diabetesStatus">
-      </el-table-column>
-      <el-table-column align="center"
-        :formatter="heartRateStatus"
-        label="心率"
-        prop="heartRateStatus">
-      </el-table-column>
-      <el-table-column align="center"
-        label="随访开始时间"
-        :formatter="(row)=>{return parseTime(row.startTime)}"
-        prop="startTime">
-      </el-table-column>
-      <el-table-column align="center"
-        label="随访结束时间"
-        :formatter="(row)=>{return parseTime(row.endTime)}"
-        prop="endTime">
-      </el-table-column>
-      <el-table-column align="center"
-        label="用户状态"
-        :formatter="userStatusFormatter"
-        prop="userStatus">
-      </el-table-column>
-      <el-table-column align="center"
-        label="操作时间"
-        :formatter="(row)=>{return parseTime(row.updateTime)}"
-        prop="updateTime">
-      </el-table-column>
-      <el-table-column align="center"
-        label="操作"
-        width="220">
-        <template slot-scope="scope">
-          <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
-          <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button>
-        </template>
-      </el-table-column>
+
     </EleTable>
   </div>
 </template>
 <script>
-import EleTable from '@/components/Table'
+import EleTable from '@/components/Untable'
 import { httpAdminFollow } from '@/api/admin/httpAdminFollow'
 import {
   doctorTypeList,
@@ -275,7 +191,78 @@ export default {
         address: '',
       },
       // 表格数据
-      tableHeaderBig: [],
+      tableHeaderBig: [
+        { type: 'index', label: '序号' },
+        { prop: 'doctorUserName', label: '医生姓名' },
+        { prop: 'doctorPhone', label: '医生手机号' },
+        { prop: 'hospitalName', label: '医院名称' },
+        {
+          prop: 'doctorType',
+          label: '职位',
+          formatter: (row) => {
+            return this.doctorTypeFormatter(row)
+          },
+        },
+        {
+          prop: 'type',
+          label: '随访方式',
+          formatter: (row) => {
+            return this.typeFormatter(row)
+          },
+        },
+        { prop: 'content', label: '随访备注', isTooltip: true },
+        { prop: 'patientUserName', label: '随访用户' },
+        { prop: 'patientPhone', label: '用户手机号' },
+        {
+          prop: 'highBloodStatus',
+          label: '高血压',
+          formatter: (row) => {
+            return this.highBloodStatusFormatter(row)
+          },
+        },
+        {
+          prop: 'diabetesStatus',
+          label: '糖尿病',
+          formatter: (row) => {
+            return this.diabetesStatusFormatter(row)
+          },
+        },
+        {
+          prop: 'heartRateStatus',
+          label: '心率',
+          formatter: (row) => {
+            return this.heartRateStatusFormatter(row)
+          },
+        },
+        {
+          prop: 'startTime',
+          label: '随访开始时间',
+          formatter: (row) => {
+            return parseTime(row.startTime)
+          },
+        },
+        {
+          prop: 'endTime',
+          label: '随访结束时间',
+          formatter: (row) => {
+            return parseTime(row.endTime)
+          },
+        },
+        {
+          prop: 'userStatus',
+          label: '用户状态',
+          formatter: (row) => {
+            return this.userStatusFormatter(row)
+          },
+        },
+        {
+          prop: 'updateTime',
+          label: '创建时间',
+          formatter: (row) => {
+            return parseTime(row.updateTime)
+          },
+        },
+      ],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -407,17 +394,47 @@ export default {
       return formatterElement.followType[row.type]
     },
     highBloodStatusFormatter(row) {
-      return formatterElement.highBlood[row.highBloodStatus]
+      console.log(row)
+      // return formatterElement.highBlood[row.highBloodStatus]
+      switch (row.highBloodStatus) {
+        case 'HEALTH':
+          return `<span class='HEALTH'>健康</span>`
+        case 'SLIGHT':
+          return `<span class='SLIGHT'>轻度</span>`
+        case 'MEDIUM':
+          return `<span class='MEDIUM'>中度</span>`
+        case 'SERIOUS':
+          return `<span class='SERIOUS'>重度</span>`
+      }
     },
     diabetesStatusFormatter(row) {
-      return formatterElement.diabetes[row.diabetesStatus]
+      // return formatterElement.diabetes[row.diabetesStatus]
+      switch (row.diabetesStatus) {
+        case 'HEALTH':
+          return `<span class='HEALTH'>健康</span>`
+        case 'SLIGHT':
+          return `<span class='SLIGHT'>轻度</span>`
+        case 'MEDIUM':
+          return `<span class='MEDIUM'>中度</span>`
+        case 'SERIOUS':
+          return `<span class='SERIOUS'>重度</span>`
+      }
+    },
+    heartRateStatusFormatter(row) {
+      // return formatterElement.heart[row.heartRateStatus]
+      switch (row.heartRateStatus) {
+        case 'NORMAL':
+          return `<span class='HEALTH'>正常</span>`
+        case 'SLOW':
+          return `<span class='MEDIUM'>稍慢</span>`
+        case 'FAST':
+          return `<span class='SERIOUS'>稍快</span>`
+      }
     },
     diseaseTypeFormatter(row) {
       return formatterElement.followTypeList[row.diseaseType]
     },
-    heartRateStatus(row) {
-      return formatterElement.heart[row.heartRateStatus]
-    },
+
     userStatusFormatter(row) {
       return formatterElement.userStatus[row.userStatus]
     },

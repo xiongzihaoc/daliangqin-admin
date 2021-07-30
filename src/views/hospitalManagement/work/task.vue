@@ -543,15 +543,40 @@ export default {
     },
     // 高血压状态
     highBloodFormatter(row) {
-      return formatterElement.highBlood[row.highBloodStatus]
+      switch (row.highBloodStatus) {
+        case 'HEALTH':
+          return `<span class='HEALTH'>健康</span>`
+        case 'SLIGHT':
+          return `<span class='SLIGHT'>轻度</span>`
+        case 'MEDIUM':
+          return `<span class='MEDIUM'>中度</span>`
+        case 'SERIOUS':
+          return `<span class='SERIOUS'>重度</span>`
+      }
     },
     // 糖尿病状态
     diabetesFormatter(row) {
-      return formatterElement.diabetes[row.diabetesStatus]
+      switch (row.diabetesStatus) {
+        case 'HEALTH':
+          return `<span class='HEALTH'>健康</span>`
+        case 'SLIGHT':
+          return `<span class='SLIGHT'>轻度</span>`
+        case 'MEDIUM':
+          return `<span class='MEDIUM'>中度</span>`
+        case 'SERIOUS':
+          return `<span class='SERIOUS'>重度</span>`
+      }
     },
     // 心率状态
     heartRateFormatter(row) {
-      return formatterElement.heart[row.heartRateStatus]
+      switch (row.heartRateStatus) {
+        case 'NORMAL':
+          return `<span class='HEALTH'>正常</span>`
+        case 'SLOW':
+          return `<span class='MEDIUM'>稍慢</span>`
+        case 'FAST':
+          return `<span class='SERIOUS'>稍快</span>`
+      }
     },
     // 加入方式
     resourceFormatter(row) {

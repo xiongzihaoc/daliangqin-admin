@@ -154,15 +154,15 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
+import EleTable from '@/components/Untable'
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
 import {
   parseTime,
   genderList,
   healthList,
   heartList,
   formatterElement,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -174,97 +174,97 @@ export default {
       healthList,
       heartList,
       searchForm: {
-        name: "",
-        phone: "",
-        idCard: "",
-        gender: "",
-        highBloodStatus: "",
-        diabetesStatus: "",
-        heartRateStatus: "",
+        name: '',
+        phone: '',
+        idCard: '',
+        gender: '',
+        highBloodStatus: '',
+        diabetesStatus: '',
+        heartRateStatus: '',
         beginAge: 1,
         endAge: 120,
       },
       list: [],
       tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "name", label: "姓名" },
-        { prop: "avatarUrl", label: "照片", isImg: true },
-        { prop: "idCard", label: "身份证号" },
+        { type: 'index', label: '序号' },
+        { prop: 'name', label: '姓名' },
+        { prop: 'avatarUrl', label: '照片', isImg: true },
+        { prop: 'idCard', label: '身份证号' },
         {
-          prop: "gender",
-          label: "性别",
+          prop: 'gender',
+          label: '性别',
           formatter: (row) => {
             return this.genderFormatter(row)
           },
         },
         {
-          prop: "birthday",
-          label: "出生日期",
+          prop: 'birthday',
+          label: '出生日期',
           formatter: (row) => {
             return parseTime(row.birthday)?.slice(0, 10)
           },
         },
-        { prop: "age", label: "年龄" },
-        { prop: "phone", label: "本人电话" },
+        { prop: 'age', label: '年龄' },
+        { prop: 'phone', label: '本人电话' },
         {
-          prop: "highBloodStatus",
-          label: "高血压",
+          prop: 'highBloodStatus',
+          label: '高血压',
           formatter: (row) => {
-            return this.highBloodFormatter(row)
+            return this.highBloodStatusFormatter(row)
           },
         },
         {
-          prop: "diabetesStatus",
-          label: "糖尿病",
+          prop: 'diabetesStatus',
+          label: '糖尿病',
           formatter: (row) => {
-            return this.diabetesFormatter(row)
+            return this.diabetesStatusFormatter(row)
           },
         },
         {
-          prop: "heartRateStatus",
-          label: "心率",
+          prop: 'heartRateStatus',
+          label: '心率',
           formatter: (row) => {
-            return this.heartRateFormatter(row)
+            return this.heartRateStatusFormatter(row)
           },
         },
-        { prop: "healthScore", label: "两慢指数" },
-        { prop: "doctorUserName", label: "对应医师" },
-        { prop: "doctorUserPhone", label: "医师手机号" },
+        { prop: 'healthScore', label: '两慢指数' },
+        { prop: 'doctorUserName', label: '对应医师' },
+        { prop: 'doctorUserPhone', label: '医师手机号' },
         {
-          prop: "archivesMongo.createTime",
-          label: "创建时间",
+          prop: 'archivesMongo.createTime',
+          label: '创建时间',
           formatter: (row) => {
             return parseTime(row.archivesMongo?.createTime)
           },
         },
-        { prop: "archivesMongo.createUserName", label: "创建人" },
+        { prop: 'archivesMongo.createUserName', label: '创建人' },
       ],
       loading: true,
       // 医生列表跳转用户列表携带参数
-      doctorId: "",
-      collectionDoctorUserId: "",
+      doctorId: '',
+      collectionDoctorUserId: '',
       // 分页区域
       pageSize: 10,
       pageNum: 1,
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
-    this.doctorId = localStorage.getItem("doctorId")
-    this.collectionDoctorUserId = localStorage.getItem("collectionDoctorUserId")
-    let pageNum = localStorage.getItem("patientNum")
+    this.doctorId = localStorage.getItem('doctorId')
+    this.collectionDoctorUserId = localStorage.getItem('collectionDoctorUserId')
+    let pageNum = localStorage.getItem('patientNum')
     if (pageNum) {
       this.pageNum = pageNum
     }
     this.getList()
   },
   destroyed() {
-    localStorage.removeItem("doctorId")
-    localStorage.removeItem("collectionDoctorUserId")
-    localStorage.removeItem("patientNum")
+    localStorage.removeItem('doctorId')
+    localStorage.removeItem('collectionDoctorUserId')
+    localStorage.removeItem('patientNum')
   },
   methods: {
     getList() {
@@ -308,34 +308,59 @@ export default {
     // 新增
     addBtn() {
       this.$router.push({
-        path: "/archivesManagement/details",
-        query: { type: "add" },
+        path: '/archivesManagement/details',
+        query: { type: 'add' },
       })
     },
     // 跳转详细资料
     detailsBtn(val) {
       this.$router.push({
-        path: "/archivesManagement/details",
-        query: { id: val.id, type: "edit", isArchives: val.isArchives },
+        path: '/archivesManagement/details',
+        query: { id: val.id, type: 'edit', isArchives: val.isArchives },
       })
-      localStorage.setItem("patientNum", this.pageNum)
+      localStorage.setItem('patientNum', this.pageNum)
     },
     /***** 表格格式化内容区域 *****/
     // 出生年月
     genderFormatter(row) {
       return formatterElement.gender[row.gender]
     },
-    // 高血压状态
-    highBloodFormatter(row) {
-      return formatterElement.highBlood[row.highBloodStatus]
+    highBloodStatusFormatter(row) {
+      // return formatterElement.highBlood[row.highBloodStatus]
+      switch (row.highBloodStatus) {
+        case 'HEALTH':
+          return `<span class='HEALTH'>健康</span>`
+        case 'SLIGHT':
+          return `<span class='SLIGHT'>轻度</span>`
+        case 'MEDIUM':
+          return `<span class='MEDIUM'>中度</span>`
+        case 'SERIOUS':
+          return `<span class='SERIOUS'>重度</span>`
+      }
     },
-    // 糖尿病状态
-    diabetesFormatter(row) {
-      return formatterElement.diabetes[row.diabetesStatus]
+    diabetesStatusFormatter(row) {
+      // return formatterElement.diabetes[row.diabetesStatus]
+      switch (row.diabetesStatus) {
+        case 'HEALTH':
+          return `<span class='HEALTH'>健康</span>`
+        case 'SLIGHT':
+          return `<span class='SLIGHT'>轻度</span>`
+        case 'MEDIUM':
+          return `<span class='MEDIUM'>中度</span>`
+        case 'SERIOUS':
+          return `<span class='SERIOUS'>重度</span>`
+      }
     },
-    // 心率状态
-    heartRateFormatter(row) {
-      return formatterElement.heart[row.heartRateStatus]
+    heartRateStatusFormatter(row) {
+      // return formatterElement.heart[row.heartRateStatus]
+      switch (row.heartRateStatus) {
+        case 'NORMAL':
+          return `<span class='HEALTH'>正常</span>`
+        case 'SLOW':
+          return `<span class='MEDIUM'>稍慢</span>`
+        case 'FAST':
+          return `<span class='SERIOUS'>稍快</span>`
+      }
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

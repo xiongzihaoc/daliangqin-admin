@@ -548,8 +548,8 @@ export default {
     addBtn() {
       this.infoTitle = '新增'
       this.editAddForm = {}
-      this.doctorList= []
-      this.patientList= []
+      this.doctorList = []
+      this.patientList = []
       this.editDialogVisible = true
     },
     // 编辑
@@ -696,13 +696,41 @@ export default {
       return formatterElement.doctorType[row.doctorType]
     },
     highBloodStatusFormatter(row) {
-      return formatterElement.highBlood[row.highBloodStatus]
+      // return formatterElement.highBlood[row.highBloodStatus]
+      switch (row.highBloodStatus) {
+        case 'HEALTH':
+          return `<span class='HEALTH'>健康</span>`
+        case 'SLIGHT':
+          return `<span class='SLIGHT'>轻度</span>`
+        case 'MEDIUM':
+          return `<span class='MEDIUM'>中度</span>`
+        case 'SERIOUS':
+          return `<span class='SERIOUS'>重度</span>`
+      }
     },
     diabetesStatusFormatter(row) {
-      return formatterElement.diabetes[row.diabetesStatus]
+      // return formatterElement.diabetes[row.diabetesStatus]
+      switch (row.diabetesStatus) {
+        case 'HEALTH':
+          return `<span class='HEALTH'>健康</span>`
+        case 'SLIGHT':
+          return `<span class='SLIGHT'>轻度</span>`
+        case 'MEDIUM':
+          return `<span class='MEDIUM'>中度</span>`
+        case 'SERIOUS':
+          return `<span class='SERIOUS'>重度</span>`
+      }
     },
     heartRateStatusFormatter(row) {
-      return formatterElement.heart[row.heartRateStatus]
+      // return formatterElement.heart[row.heartRateStatus]
+      switch (row.heartRateStatus) {
+        case 'NORMAL':
+          return `<span class='HEALTH'>正常</span>`
+        case 'SLOW':
+          return `<span class='MEDIUM'>稍慢</span>`
+        case 'FAST':
+          return `<span class='SERIOUS'>稍快</span>`
+      }
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

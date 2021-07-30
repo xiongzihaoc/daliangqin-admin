@@ -122,12 +122,16 @@
       </el-table-column>
       <el-table-column align="center"
         label="检测结果"
-        prop="diseaseStatus">
+        prop="diabetesStatus">
         <template slot-scope="scope">
-          <span v-if="scope.row.diabetesStatus === 'SERIOUS'">重度</span>
-          <span v-if="scope.row.diabetesStatus === 'HEALTH'">健康</span>
-          <span v-if="scope.row.diabetesStatus === 'SLIGHT'">轻度</span>
-          <span v-if="scope.row.diabetesStatus === 'MEDIUM'">中度</span>
+          <span v-if="scope.row.diabetesStatus === 'HEALTH'"
+            class="HEALTH">健康</span>
+          <span v-if="scope.row.diabetesStatus === 'SLIGHT'"
+            class="SLIGHT">轻度</span>
+          <span v-if="scope.row.diabetesStatus === 'MEDIUM'"
+            class="MEDIUM">中度</span>
+          <span v-if="scope.row.diabetesStatus === 'SERIOUS'"
+            class="SERIOUS">重度</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -298,7 +302,7 @@ export default {
       doctorList: [],
       patientList: [],
       list: [],
-      loading:true,
+      loading: true,
       editAddForm: {
         name: '',
         userId: '',

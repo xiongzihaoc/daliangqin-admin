@@ -52,10 +52,12 @@ a:hover {
 div:focus {
   outline: none;
 }
+
 .el-tooltip__popper {
   max-width: 800px;
 
 }
+
 .clearfix {
   &:after {
     visibility: hidden;
@@ -107,6 +109,31 @@ div:focus {
 .tableAdd {
   margin-bottom: 10px;
 }
+
+// 状态颜色
+.HEALTH,
+.SLIGHT,
+.SERIOUS,
+.MEDIUM {
+  font-weight: 700;
+}
+
+.HEALTH {
+  color: #37AF9D;
+}
+
+.SLIGHT {
+  color: #F2C438;
+}
+
+.MEDIUM {
+  color: #E47A29;
+}
+
+.SERIOUS {
+  color: #E7534C;
+}
+
 
 .el-button--primary,
 .el-button--primary:focus,

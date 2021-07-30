@@ -117,9 +117,12 @@
         label="检测结果"
         prop="diseaseStatus">
         <template slot-scope="scope">
-          <span v-if="scope.row.heartRateStatus === 'FAST'">稍快</span>
-          <span v-if="scope.row.heartRateStatus === 'NORMAL'">正常</span>
-          <span v-if="scope.row.heartRateStatus === 'SLOW'">稍慢</span>
+          <span v-if="scope.row.heartRateStatus === 'FAST'"
+            class="SERIOUS">稍快</span>
+          <span v-if="scope.row.heartRateStatus === 'NORMAL'"
+            class="HEALTH">正常</span>
+          <span v-if="scope.row.heartRateStatus === 'SLOW'"
+            class="MEDIUM">稍慢</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
