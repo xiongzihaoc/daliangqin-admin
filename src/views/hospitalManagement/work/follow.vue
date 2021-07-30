@@ -134,7 +134,20 @@
       :total="total"
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
-
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        label="操作"
+        width="220">
+        <template slot-scope="scope">
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
+          <el-button size="mini"
+            type="danger"
+            @click="deleteBtn(scope.row.id)">删除</el-button>
+        </template>
+      </el-table-column>
     </EleTable>
   </div>
 </template>
@@ -273,6 +286,10 @@ export default {
     }
   },
   created() {
+    // let pageNum = window.sessionStorage.getItem('followPageNum')
+    // if (pageNum) {
+    //   this.pageNum = pageNum
+    // }
     this.getList()
   },
   methods: {
@@ -314,6 +331,7 @@ export default {
     },
     // 编辑
     editBtn(val) {
+      // window.sessionStorage.setItem('followPageNum', this.pageNum)
       this.$router.push({
         path:
           '/hospitalManagement/work/followDetail?id=' + val.id + '&type=edit',
@@ -394,7 +412,6 @@ export default {
       return formatterElement.followType[row.type]
     },
     highBloodStatusFormatter(row) {
-      console.log(row)
       // return formatterElement.highBlood[row.highBloodStatus]
       switch (row.highBloodStatus) {
         case 'HEALTH':
