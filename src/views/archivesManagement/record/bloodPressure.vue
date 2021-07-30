@@ -133,7 +133,6 @@
             class="MEDIUM">中度</span>
           <span v-if="scope.row.highBloodStatus === 'SERIOUS'"
             class="SERIOUS">重度</span>
-
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -150,9 +149,6 @@
           <el-button size="mini"
             type="primary"
             @click="editBtn(scope.row)">编辑</el-button>
-          <!-- <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button> -->
         </template>
       </el-table-column>
     </EleTable>
@@ -165,7 +161,6 @@
       <el-form ref="FormRef"
         :rules="FormRules"
         :model="editAddForm"
-        v-loading="loading"
         label-width="120px">
         <el-form-item label="选择医院"
           prop="hospitalId">
@@ -298,7 +293,6 @@ export default {
         equipmentResourceType: '',
         highBloodStatus: '',
       },
-      loading: true,
       list: [],
       hospitalList: [],
       doctorList: [],
@@ -360,7 +354,6 @@ export default {
     getPatientList(id) {
       httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
         this.patientList = res.data.elements
-        this.loading = false
       })
     },
     selecthospital(val) {

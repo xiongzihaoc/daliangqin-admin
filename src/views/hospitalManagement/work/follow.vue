@@ -434,9 +434,16 @@ export default {
     diseaseTypeFormatter(row) {
       return formatterElement.followTypeList[row.diseaseType]
     },
-
     userStatusFormatter(row) {
-      return formatterElement.userStatus[row.userStatus]
+      // return formatterElement.userStatus[row.userStatus]
+      switch (row.userStatus) {
+        case 'HEALTH':
+          return `<span class='HEALTH'>良好</span>`
+        case 'SLIGHT':
+          return `<span class='SLIGHT'>轻微</span>`
+        case 'SERIOUS':
+          return `<span class='SERIOUS'>严重</span>`
+      }
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
