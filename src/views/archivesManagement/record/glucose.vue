@@ -211,12 +211,12 @@
             placeholder="请输入设备"></el-input>
         </el-form-item>
         <!-- 高压 -->
-        <el-form-item label="空腹血糖"
+        <el-form-item label="血糖"
           prop="glucoseScore">
           <el-input maxlength="4"
             v-model="editAddForm.glucoseScore"
             oninput="if (value > 36) {value = 36;return} value=value.replace(/[^0-9.]/g,'')"
-            placeholder="请输入空腹血糖"><i slot="suffix"
+            placeholder="请输入血糖"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
         </el-form-item>
         <el-form-item label="检测模式"
