@@ -404,8 +404,8 @@ export default {
       this.editAddForm.userId = ''
     },
     selectDoctor(val) {
-      this.$forceUpdate()
       this.getPatientList(val)
+      this.$forceUpdate()
       this.editAddForm.userId = ''
     },
     selectPatient() {
@@ -441,7 +441,6 @@ export default {
     },
     // 查看
     examineBtn(val) {
-      console.log(val)
       this.hospitalForm.hospitalName = val.hospitalName
       this.hospitalForm.name = val.patientUserName
       this.hospitalForm.recordId = val.id

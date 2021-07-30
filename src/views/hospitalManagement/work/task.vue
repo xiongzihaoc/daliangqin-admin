@@ -136,7 +136,6 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        v-loading="loading"
         :rules="FormRules"
         :model="editAddForm"
         label-width="100px">
@@ -250,7 +249,6 @@ export default {
       // 加入方式
       resourceTypeList,
       statusList,
-      loading: true,
       FormRules: {
         hospitalId: [
           { required: true, message: '请选择医院', trigger: 'blur' },
@@ -424,7 +422,6 @@ export default {
     getPatientList(id) {
       httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
         this.patientList = res.data.elements
-        this.loading = false
       })
     },
     selecthospital(val) {
@@ -468,7 +465,6 @@ export default {
       this.doctorList = []
       this.patientList = []
       this.editDialogVisible = true
-      this.loading = false
     },
     // 编辑
     editBtn(val) {

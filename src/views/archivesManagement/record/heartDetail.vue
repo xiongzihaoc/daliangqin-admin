@@ -58,17 +58,17 @@
             <div>
               <span class="fw">平均心率：</span>
               <span class="fw fz16">{{heartDetail.avg}}</span>
-              <span>bpm</span>
+              <span class="fw">bpm</span>
             </div>
             <div>
               <span class="fw">最高心率：</span>
               <span class="fw fz16">{{heartDetail.max}}</span>
-              <span>bpm</span>
+              <span class="fw">bpm</span>
             </div>
             <div>
               <span class="fw">最低心率：</span>
               <span class="fw fz16">{{heartDetail.min}}</span>
-              <span>bpm</span>
+              <span class="fw">bpm</span>
             </div>
           </div>
           <div class="flex resultWidth">
@@ -272,10 +272,11 @@ body {
     .result-option {
       display: flex;
       .result-title {
+        line-height: 1.5;
         min-width: 60px;
       }
       .content {
-        line-height: 18px;
+        line-height: 1.5;
         text-align-last: left;
         text-align: justify;
         text-justify: distribute-all-lines;
