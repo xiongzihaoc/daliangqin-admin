@@ -365,12 +365,12 @@ export default {
     selecthospital(val) {
       this.getDoctorList(val)
       this.editAddForm.doctorUserId = ''
-      this.editAddForm.patientUserId = ''
+      this.editAddForm.userId = ''
     },
     selectDoctor(val) {
       this.getPatientList(val)
       this.$forceUpdate()
-      this.editAddForm.patientUserId = ''
+      this.editAddForm.userId = ''
     },
     selectPatient() {
       this.$forceUpdate()

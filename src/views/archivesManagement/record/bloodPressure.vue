@@ -164,10 +164,11 @@
         label-width="120px">
         <el-form-item label="选择医院"
           prop="hospitalId">
-          <el-select style="width:100%;"
+          <el-select class="w100"
             filterable
             clearable
             @change="selecthospital"
+            :disabled="this.infoTitle === '编辑'?true:false"
             v-model.trim="editAddForm.hospitalId"
             placeholder="请选择医院">
             <el-option v-for="item in hospitalList"
@@ -178,10 +179,11 @@
         </el-form-item>
         <el-form-item label="选择医生"
           prop="doctorUserId">
-          <el-select style="width:100%;"
+          <el-select class="w100"
             filterable
             clearable
             @change="selectDoctor"
+            :disabled="this.infoTitle === '编辑'?true:false"
             v-model="editAddForm.doctorUserId"
             placeholder="请选择医生">
             <el-option v-for="item in doctorList"
@@ -196,6 +198,7 @@
           <el-select class="w100"
             filterable
             @change="selectPatient"
+            :disabled="this.infoTitle === '编辑'?true:false"
             v-model="editAddForm.userId">
             <el-option v-for="item in patientList"
               :key="item.id"
@@ -359,12 +362,12 @@ export default {
     selecthospital(val) {
       this.getDoctorList(val)
       this.editAddForm.doctorUserId = ''
-      this.editAddForm.patientUserId = ''
+      this.editAddForm.userId = ''
     },
     selectDoctor(val) {
       this.$forceUpdate()
       this.getPatientList(val)
-      this.editAddForm.patientUserId = ''
+      this.editAddForm.userId = ''
     },
     selectPatient() {
       this.$forceUpdate()
@@ -390,6 +393,7 @@ export default {
     },
     // 编辑
     editBtn(val) {
+      console.log(val)
       this.getDoctorList(val.hospitalId)
       this.getPatientList(val.doctorUserId)
       this.infoTitle = '编辑'
