@@ -466,6 +466,8 @@ export default {
     addBtn() {
       this.infoTitle = '新增'
       this.editAddForm = {}
+      this.doctorList = []
+      this.patientList = []
       this.editDialogVisible = true
       this.loading = false
     },
