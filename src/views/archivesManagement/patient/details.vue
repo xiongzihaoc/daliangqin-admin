@@ -277,9 +277,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="过敏物质名称">
-            <el-input v-Int
-              v-model="form.allergyName"
-              maxlength="140"
+            <el-input v-model="form.allergyName"
+              maxlength="20"
               placeholder="请输入过敏物质名称"></el-input>
           </el-form-item>
           <!-- 动态既往史 -->
