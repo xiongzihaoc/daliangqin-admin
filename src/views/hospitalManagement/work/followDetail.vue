@@ -14,7 +14,8 @@
               prop="hospitalId">
               <el-select v-model="form.hospitalId"
                 @change="selectHospital"
-                placeholder="请选择医院" disabled>
+                placeholder="请选择医院"
+                :disabled="$route.query.type === 'edit'?true:false">
                 <el-option v-for="item in hospitalList"
                   :key="item.id"
                   :label="item.name"
@@ -25,7 +26,8 @@
               prop="doctorUserId">
               <el-select v-model="form.doctorUserId"
                 @change="selectDoctor"
-                placeholder="请选择医生" disabled>
+                placeholder="请选择医生"
+                :disabled="$route.query.type === 'edit'?true:false">
                 <el-option v-for="item in doctorList"
                   :key="item.id"
                   :label="item.name"
@@ -36,7 +38,8 @@
               prop="patientUserId">
               <el-select v-model="form.patientUserId"
                 placeholder="请选择用户"
-                @change="selectPatient" disabled>
+                @change="selectPatient"
+                :disabled="$route.query.type === 'edit'?true:false">
                 <el-option v-for="item in patientList"
                   :key="item.id"
                   :label="item.name"
@@ -627,10 +630,10 @@
 </template>
 
 <script>
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
-import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor"
-import { httpAdminPatient } from "@/api/admin/httpAdminPatient"
-import { httpAdminFollow } from "@/api/admin/httpAdminFollow"
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
+import { httpAdminFollow } from '@/api/admin/httpAdminFollow'
 import {
   followType,
   followTypeList,
@@ -650,7 +653,7 @@ import {
   bloodSymptomTypeList,
   bloodComplicationTypeList,
   BloodReferralReasonStatusesList,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   data() {
     return {
@@ -674,56 +677,56 @@ export default {
       BloodReferralReasonStatusesList,
       FormRules: {
         hospitalId: [
-          { required: true, message: "请选择医院", trigger: "change" },
+          { required: true, message: '请选择医院', trigger: 'change' },
         ],
         doctorUserId: [
-          { required: true, message: "请选择医生", trigger: "change" },
+          { required: true, message: '请选择医生', trigger: 'change' },
         ],
         patientUserId: [
-          { required: true, message: "请选择用户", trigger: "change" },
+          { required: true, message: '请选择用户', trigger: 'change' },
         ],
         patientIdCard: [
-          { required: true, message: "请输入用户身份证号", trigger: "change" },
+          { required: true, message: '请输入用户身份证号', trigger: 'change' },
         ],
         startTime: [
-          { required: true, message: "请选择随访开始时间", trigger: "change" },
+          { required: true, message: '请选择随访开始时间', trigger: 'change' },
         ],
         endTime: [
-          { required: true, message: "请选择随访结束时间", trigger: "change" },
+          { required: true, message: '请选择随访结束时间', trigger: 'change' },
         ],
         nowHeight: [
-          { required: true, message: "请输入本次身高", trigger: "blur" },
+          { required: true, message: '请输入本次身高', trigger: 'blur' },
         ],
         nowWeight: [
-          { required: true, message: "请输入本次体重", trigger: "blur" },
+          { required: true, message: '请输入本次体重', trigger: 'blur' },
         ],
         type: [
-          { required: true, message: "请选择随访方式", trigger: "change" },
+          { required: true, message: '请选择随访方式', trigger: 'change' },
         ],
         userStatus: [
-          { required: true, message: "请选择用户状态", trigger: "change" },
+          { required: true, message: '请选择用户状态', trigger: 'change' },
         ],
         content: [
-          { required: true, message: "请输入随访备注", trigger: "change" },
+          { required: true, message: '请输入随访备注', trigger: 'change' },
         ],
       },
       diabetesFormRules: {
         shrinkHighPressure: [
-          { required: true, message: "请输入收缩压", trigger: "blur" },
+          { required: true, message: '请输入收缩压', trigger: 'blur' },
         ],
         diastoleLowPressure: [
-          { required: true, message: "请输入舒张压", trigger: "blur" },
+          { required: true, message: '请输入舒张压', trigger: 'blur' },
         ],
         fastingBloodGlucose: [
-          { required: true, message: "请输入空腹血糖", trigger: "blur" },
+          { required: true, message: '请输入空腹血糖', trigger: 'blur' },
         ],
       },
       highBloodFormRules: {
         shrinkHighPressure: [
-          { required: true, message: "请输入收缩压", trigger: "blur" },
+          { required: true, message: '请输入收缩压', trigger: 'blur' },
         ],
         diastoleLowPressure: [
-          { required: true, message: "请输入舒张压", trigger: "blur" },
+          { required: true, message: '请输入舒张压', trigger: 'blur' },
         ],
       },
       hospitalList: [],
@@ -734,97 +737,97 @@ export default {
       loading: true,
       form: {
         // 基本信息
-        hospitalId: "",
-        doctorUserId: "",
-        patientUserId: "",
-        patientIdCard: "",
-        type: "",
-        startTime: "",
-        endTime: "",
-        nowHeight: "170",
-        nowWeight: "60",
-        bmi: "",
-        weightSuggest: "",
+        hospitalId: '',
+        doctorUserId: '',
+        patientUserId: '',
+        patientIdCard: '',
+        type: '',
+        startTime: '',
+        endTime: '',
+        nowHeight: '',
+        nowWeight: '',
+        bmi: '',
+        weightSuggest: '',
         // 行为方式
-        daySmoking: "",
-        daySmokingSuggest: "",
-        dayDrink: "",
-        dayDrinkSuggest: "",
-        weekMovement: "",
-        minuteMovement: "",
-        dayFood: "",
-        dayFoodSuggest: "",
-        saltIntake: "",
-        saltIntakeSuggest: "",
-        adjustMentality: "",
-        compliance: "",
-        FollowClassStatus: "",
-        userStatus: "",
-        content: "",
+        daySmoking: '',
+        daySmokingSuggest: '',
+        dayDrink: '',
+        dayDrinkSuggest: '',
+        weekMovement: '',
+        minuteMovement: '',
+        dayFood: '',
+        dayFoodSuggest: '',
+        saltIntake: '',
+        saltIntakeSuggest: '',
+        adjustMentality: '',
+        compliance: '',
+        FollowClassStatus: '',
+        userStatus: '',
+        content: '',
       },
       diabetesForm: {
         symptomTypes: [],
-        symptomOther: "",
-        dorsalArteryStatus: "",
-        shrinkHighPressure: "",
-        diastoleLowPressure: "",
-        fastingBloodGlucose: "",
-        bloodGlucoseRandom: "",
-        glycosylatedHemoglobin: "",
-        otherInspection: "",
+        symptomOther: '',
+        dorsalArteryStatus: '',
+        shrinkHighPressure: '',
+        diastoleLowPressure: '',
+        fastingBloodGlucose: '',
+        bloodGlucoseRandom: '',
+        glycosylatedHemoglobin: '',
+        otherInspection: '',
         complicationType: [],
-        otherComplication: "",
+        otherComplication: '',
         referralReasonStatuses: [],
-        otherReferralReason: "",
-        referralAgency: "",
-        referralDepartment: "",
-        drugName: "",
-        drugDosage: "",
-        companyName: "",
-        using: "",
-        giveDrugMode: "",
-        insulinVarietiesType: "",
+        otherReferralReason: '',
+        referralAgency: '',
+        referralDepartment: '',
+        drugName: '',
+        drugDosage: '',
+        companyName: '',
+        using: '',
+        giveDrugMode: '',
+        insulinVarietiesType: '',
         insulinUsings: [],
-        insulinDosageMorning: "",
-        insulinDosageNoon: "",
-        insulinDosageNight: "",
-        insulinDosageBeforeSleep: "",
-        medicationStatus: "",
-        drugReaction: "",
-        reactionRemark: "",
-        hypoglycemiaReaction: "",
+        insulinDosageMorning: '',
+        insulinDosageNoon: '',
+        insulinDosageNight: '',
+        insulinDosageBeforeSleep: '',
+        medicationStatus: '',
+        drugReaction: '',
+        reactionRemark: '',
+        hypoglycemiaReaction: '',
         healthEducationTypes: [],
-        otherHealthEducation: "",
+        otherHealthEducation: '',
       },
       highBloodForm: {
         symptomTypes: [],
-        symptomOther: "",
-        shrinkHighPressure: "",
-        diastoleLowPressure: "",
-        physicalSignsOther: "",
-        otherInspection: "",
+        symptomOther: '',
+        shrinkHighPressure: '',
+        diastoleLowPressure: '',
+        physicalSignsOther: '',
+        otherInspection: '',
         complicationType: [],
-        otherComplication: "",
+        otherComplication: '',
         referralReasonStatuses: [],
-        otherReferralReason: "",
-        referralAgency: "",
-        referralDepartment: "",
-        drugName: "",
-        drugDosage: "",
-        companyName: "",
-        using: "",
-        giveDrugMode: "",
-        medicationStatus: "",
-        drugReaction: "",
-        reactionRemark: "",
+        otherReferralReason: '',
+        referralAgency: '',
+        referralDepartment: '',
+        drugName: '',
+        drugDosage: '',
+        companyName: '',
+        using: '',
+        giveDrugMode: '',
+        medicationStatus: '',
+        drugReaction: '',
+        reactionRemark: '',
         healthEducationTypes: [],
-        otherHealthEducation: "",
+        otherHealthEducation: '',
       },
     }
   },
   created() {
     // 判断是编辑还是新增
-    if (this.$route.query.type === "edit") {
+    if (this.$route.query.type === 'edit') {
       this.getList()
     } else {
       this.loading = false
@@ -861,28 +864,28 @@ export default {
           this.form.nowWeight /
           ((this.form.nowHeight / 100) * (this.form.nowHeight / 100))
         ).toFixed(1)
-        this.$set(this.form, "bmi", bmi)
+        this.$set(this.form, 'bmi', bmi)
       } else {
-        this.$set(this.form, "bmi", "")
+        this.$set(this.form, 'bmi', '')
       }
     },
     startTimeBlur() {
-      if (this.form.endTime != "") {
+      if (this.form.endTime != '') {
         if (this.form.endTime <= this.form.startTime) {
-          this.form.endTime = ""
+          this.form.endTime = ''
           return this.$notify.error({
-            title: "结束时间不能小于或等于开始时间",
+            title: '结束时间不能小于或等于开始时间',
           })
         }
       }
     },
     // 结束时间失去焦点
     endTimeBlur() {
-      if (this.form.startTime != "") {
+      if (this.form.startTime != '') {
         if (this.form.endTime <= this.form.startTime) {
-          this.form.endTime = ""
+          this.form.endTime = ''
           return this.$notify.error({
-            title: "结束时间不能小于或等于开始时间",
+            title: '结束时间不能小于或等于开始时间',
           })
         }
       }
@@ -905,14 +908,14 @@ export default {
     },
     selectHospital(val) {
       this.getDoctorList(val)
-      this.form.doctorUserId = ""
-      this.form.patientUserId = ""
-      this.form.patientIdCard = ""
+      this.form.doctorUserId = ''
+      this.form.patientUserId = ''
+      this.form.patientIdCard = ''
     },
     selectDoctor(val) {
       this.getPatientList(val)
-      this.form.patientUserId = ""
-      this.form.patientIdCard = ""
+      this.form.patientUserId = ''
+      this.form.patientIdCard = ''
     },
     selectPatient(val) {
       httpAdminPatient.getPatient({ userId: val }).then((res) => {
@@ -920,14 +923,14 @@ export default {
       })
     },
     cancel() {
-      this.$router.push({ path: "/hospitalManagement/follow" })
+      this.$router.push({ path: '/hospitalManagement/follow' })
     },
     confirm() {
       let form = this.form
       // 必须选一个随访类型
       if (this.diabetesChecked === false && this.bloodChecked === false) {
         return this.$notify.error({
-          title: "未添加随访",
+          title: '未添加随访',
         })
       } else {
         if (this.diabetesChecked === true) {
@@ -968,19 +971,19 @@ export default {
       }
       Promise.all(refArr).then(() => {
         // 编辑
-        if (this.$route.query.type === "edit") {
+        if (this.$route.query.type === 'edit') {
           httpAdminFollow.putFollow(form, this.$route.query.id).then((res) => {
-            if (res.code === "OK") {
+            if (res.code === 'OK') {
               this.$router.push({
-                path: "/hospitalManagement/work/follow",
+                path: '/hospitalManagement/work/follow',
               })
             }
           })
         } else {
           // 新增
           httpAdminFollow.postFollow(form).then((res) => {
-            if (res.code === "OK") {
-              this.$router.push({ path: "/hospitalManagement/work/follow" })
+            if (res.code === 'OK') {
+              this.$router.push({ path: '/hospitalManagement/work/follow' })
             }
           })
         }
