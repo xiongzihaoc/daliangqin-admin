@@ -860,7 +860,7 @@ export default {
         let bmi = (
           this.form.nowWeight /
           ((this.form.nowHeight / 100) * (this.form.nowHeight / 100))
-        ).toFixed(2)
+        ).toFixed(1)
         this.$set(this.form, "bmi", bmi)
       } else {
         this.$set(this.form, "bmi", "")
