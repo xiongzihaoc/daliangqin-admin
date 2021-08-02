@@ -606,7 +606,6 @@ export const disabilityTypesList = [
   { id: 4, label: "肢体残疾", value: "LIMB" },
   { id: 5, label: "智力残疾", value: "INTELLECT" },
   { id: 6, label: "精神残疾", value: "SPIRIT" },
-  { id: 7, label: "其他残疾", value: "OTHER" },
 ]
 // 血糖检测类型
 export const glucoseDetectType = [
