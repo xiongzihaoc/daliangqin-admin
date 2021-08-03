@@ -439,7 +439,7 @@ export const complianceList = [
   { id: 4, label: "差", value: "DIFF" }
 ]
 // 随访分类
-export const FollowClassStatusList = [
+export const followClassStatusList = [
   { id: 1, label: "控制满意", value: "SATISFACTION" },
   { id: 2, label: "控制不满意", value: "NO_SATISFACTION" },
   { id: 3, label: "不良反应", value: "ADVERSE_REACTIONS" },
@@ -606,7 +606,6 @@ export const disabilityTypesList = [
   { id: 4, label: "肢体残疾", value: "LIMB" },
   { id: 5, label: "智力残疾", value: "INTELLECT" },
   { id: 6, label: "精神残疾", value: "SPIRIT" },
-  { id: 7, label: "其他残疾", value: "OTHER" },
 ]
 // 血糖检测类型
 export const glucoseDetectType = [

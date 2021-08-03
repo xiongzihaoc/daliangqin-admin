@@ -277,9 +277,8 @@
             </el-select>
           </el-form-item>
           <el-form-item label="过敏物质名称">
-            <el-input v-Int
-              v-model="form.allergyName"
-              maxlength="140"
+            <el-input v-model="form.allergyName"
+              maxlength="20"
               placeholder="请输入过敏物质名称"></el-input>
           </el-form-item>
           <!-- 动态既往史 -->
@@ -653,8 +652,6 @@ export default {
         child: [],
         other: [],
       },
-      nameLabel: '疾病',
-      namePlaceholder: '请输入疾病',
     }
   },
   created() {
@@ -677,7 +674,6 @@ export default {
       httpAdminPatient
         .getPatient({ userId: this.$route.query.id })
         .then((res) => {
-          console.log(res)
           // 回显表单数据
           let value = res.data.elements[0]
           if (value.archivesMongo) {
@@ -747,7 +743,7 @@ export default {
         let bmi = (
           this.form.weight /
           ((this.form.height / 100) * (this.form.height / 100))
-        ).toFixed(2)
+        ).toFixed(1)
         this.$set(this.form, 'bmi', bmi)
       } else {
         this.$set(this.form, 'bmi', '')
@@ -762,9 +758,6 @@ export default {
         remark: '',
       })
     },
-    // pickerOptions() {
-
-    // },
     pastHistoryTypeVChange() {},
     // 删除既往史
     deletePastHistories(val, index) {

@@ -99,6 +99,7 @@
       </el-table-column>
       <el-table-column align="center"
         label="笔记内容"
+        show-overflow-tooltip
         prop="content">
       </el-table-column>
       <el-table-column align="center"
