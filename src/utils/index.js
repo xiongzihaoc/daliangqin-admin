@@ -439,7 +439,7 @@ export const complianceList = [
   { id: 4, label: "差", value: "DIFF" }
 ]
 // 随访分类
-export const FollowClassStatusList = [
+export const followClassStatusList = [
   { id: 1, label: "控制满意", value: "SATISFACTION" },
   { id: 2, label: "控制不满意", value: "NO_SATISFACTION" },
   { id: 3, label: "不良反应", value: "ADVERSE_REACTIONS" },

@@ -199,9 +199,9 @@
               </el-select>
             </el-form-item>
             <el-form-item label="此次随访分类">
-              <el-select v-model="form.FollowClassStatus"
+              <el-select v-model="form.followClassStatus"
                 placeholder="请选择此次随访分类">
-                <el-option v-for="item in FollowClassStatusList"
+                <el-option v-for="item in followClassStatusList"
                   :key="item.id"
                   :label="item.label"
                   :value="item.value"></el-option>
@@ -638,7 +638,7 @@ import {
   followType,
   followTypeList,
   complianceList,
-  FollowClassStatusList,
+  followClassStatusList,
   userStatusList,
   symptomTypeList,
   dorsalArteryStatusList,
@@ -660,7 +660,7 @@ export default {
       followType,
       followTypeList,
       complianceList,
-      FollowClassStatusList,
+      followClassStatusList,
       userStatusList,
       symptomTypeList,
       dorsalArteryStatusList,
@@ -761,7 +761,7 @@ export default {
         saltIntakeSuggest: '',
         adjustMentality: '',
         compliance: '',
-        FollowClassStatus: '',
+        followClassStatus: '',
         userStatus: '',
         content: '',
       },
@@ -843,10 +843,10 @@ export default {
       httpAdminFollow
         .getFollowDetail({ id: this.$route.query.id })
         .then((res) => {
-          console.log(res.data.followClassStatus);
+          console.log(res.data)
           this.form = res.data
-          this.$set(this.form,'followClassStatus',res.data.followClassStatus)
-          console.log(this.form);
+          // this.$set(this.form,'followClassStatus',res.data.followClassStatus)
+          console.log(this.form)
           if (Boolean(res.data.followDiabetesMongo)) {
             this.diabetesChecked = true
             this.diabetesForm = res?.data?.followDiabetesMongo

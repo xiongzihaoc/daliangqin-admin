@@ -652,8 +652,6 @@ export default {
         child: [],
         other: [],
       },
-      nameLabel: '疾病',
-      namePlaceholder: '请输入疾病',
     }
   },
   created() {
@@ -676,7 +674,6 @@ export default {
       httpAdminPatient
         .getPatient({ userId: this.$route.query.id })
         .then((res) => {
-          console.log(res)
           // 回显表单数据
           let value = res.data.elements[0]
           if (value.archivesMongo) {
@@ -761,9 +758,6 @@ export default {
         remark: '',
       })
     },
-    // pickerOptions() {
-
-    // },
     pastHistoryTypeVChange() {},
     // 删除既往史
     deletePastHistories(val, index) {
