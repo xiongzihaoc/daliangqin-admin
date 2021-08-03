@@ -220,7 +220,7 @@
               style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
         </el-form-item>
         <el-form-item label="检测模式"
-          prop="userId">
+          prop="detectType">
           <el-select class="w100"
             v-model="editAddForm.detectType">
             <el-option v-for="item in glucoseDetectType"
@@ -283,6 +283,9 @@ export default {
         ],
         doctorUserId: [
           { required: true, message: '请选择医生', trigger: 'blur' },
+        ],
+        detectType: [
+          { required: true, message: '请选择检测模式', trigger: 'blur' },
         ],
         userId: [{ required: true, message: '请选择用户', trigger: 'blur' }],
         inspectionTime: [

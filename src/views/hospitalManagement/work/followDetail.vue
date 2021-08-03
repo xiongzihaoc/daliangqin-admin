@@ -843,10 +843,7 @@ export default {
       httpAdminFollow
         .getFollowDetail({ id: this.$route.query.id })
         .then((res) => {
-          console.log(res.data)
           this.form = res.data
-          // this.$set(this.form,'followClassStatus',res.data.followClassStatus)
-          console.log(this.form)
           if (Boolean(res.data.followDiabetesMongo)) {
             this.diabetesChecked = true
             this.diabetesForm = res?.data?.followDiabetesMongo
