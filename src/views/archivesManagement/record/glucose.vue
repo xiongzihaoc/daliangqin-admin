@@ -215,7 +215,7 @@
           prop="glucoseScore">
           <el-input maxlength="4"
             v-model="editAddForm.glucoseScore"
-            oninput="if (value > 36) {value = 36;return} value=value.replace(/[^0-9.]/g,'')"
+            v-on:input="glucoseScoreOniput"
             placeholder="请输入血糖"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
         </el-form-item>
@@ -444,6 +444,46 @@ export default {
           }
         }
       })
+    },
+    glucoseScoreOniput(e) {
+      // 先把非数字的都替换掉，除了数字和.
+      this.editAddForm.glucoseScore = this.editAddForm.glucoseScore.replace(
+        /[^\d.]/g,
+        ''
+      )
+      // 必须保证第一个为数字而不是.
+      this.editAddForm.glucoseScore = this.editAddForm.glucoseScore.replace(
+        /^\./g,
+        ''
+      )
+      // 保证只有出现一个.而没有多个.
+      this.editAddForm.glucoseScore = this.editAddForm.glucoseScore.replace(
+        /\.{2,}/g,
+        ''
+      )
+      // 保证.只出现一次，而不能出现两次以上
+      this.editAddForm.glucoseScore = this.editAddForm.glucoseScore
+        .replace('.', '$#$')
+        .replace(/\./g, '')
+        .replace('$#$', '.')
+      let index = -1
+      for (let i in this.editAddForm.glucoseScore) {
+        if (this.editAddForm.glucoseScore[i] === '.') {
+          index = i
+        }
+        if (index !== -1) {
+          if (i - index > 1) {
+            this.editAddForm.glucoseScore =
+              this.editAddForm.glucoseScore.substring(
+                0,
+                this.editAddForm.glucoseScore.length - 1
+              )
+          }
+        }
+      }
+      if (e > 36) {
+        this.editAddForm.glucoseScore = 36
+      }
     },
     /***** 表格格式化内容区域 *****/
     // 出生年月
