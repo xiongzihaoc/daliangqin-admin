@@ -37,9 +37,10 @@
         :formatter="col.formatter">
         <template slot-scope="scope">
           <div v-if="col.isImg">
-            <img class="tableImg"
+            <img v-if="scope.row[col.prop] != ''" class="tableImg"
               :src="scope.row[col.prop]"
               alt="">
+              <img v-else class="tableImg" src="../../assets/images/default-avatar.png" alt="">
           </div>
           <div v-else-if="col.type">
             <div>{{scope.$index + 1}}</div>
