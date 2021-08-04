@@ -161,11 +161,8 @@ export default {
       parseTime,
       printObj: {
         id: 'printMe',
-
         popTitle: '',
-
         extraCss: '',
-
         extraHead: '',
       },
       loading: true,
