@@ -311,7 +311,7 @@ export default {
         inspectionTime: [
           { required: true, trigger: 'blur', validator: validateTime },
         ],
-        glucoseScore: [
+        heartRateScore: [
           { required: true, message: '请输入心率', trigger: 'blur' },
         ],
         detectType: [

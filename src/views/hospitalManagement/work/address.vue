@@ -98,6 +98,7 @@
             <el-switch v-model="scope.row.isDefault"
               @change="statusChange(scope.row)"
               :active-value="true"
+              :disabled="scope.row.isDefault"
               :inactive-value="false"
               active-color="#13ce66"
               inactive-color="#ff4949">
