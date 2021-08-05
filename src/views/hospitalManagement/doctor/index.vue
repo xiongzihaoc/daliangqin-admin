@@ -223,6 +223,7 @@
         <el-form-item label="医院名称"
           prop="hospitalId">
           <el-select v-model="editAddForm.hospitalId"
+          :disabled="this.infoTitle === '编辑' ? true : false"
             placeholder="请选择医院"
             style="width: 100%">
             <el-option v-for="item in hospitalList"
