@@ -46,6 +46,7 @@
             size="small"
             type="datetimerange"
             @change="selectNoteTime"
+            format="yyyy-MM-dd HH:mm"
             value-format="timestamp"
             range-separator="至"
             start-placeholder="开始日期"
