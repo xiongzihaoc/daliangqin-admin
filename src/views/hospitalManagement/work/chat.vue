@@ -24,6 +24,7 @@
             size="small"
             type="datetimerange"
             @change="selectLeaveTime"
+            format="yyyy-MM-dd HH:mm"
             value-format="timestamp"
             range-separator="至"
             start-placeholder="开始日期"
@@ -49,6 +50,7 @@
             type="datetimerange"
             @change="selectReplyTime"
             value-format="timestamp"
+            format="yyyy-MM-dd HH:mm"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期">
