@@ -420,7 +420,7 @@ export default {
     },
     // 获取用户列表
     getPatientList(id) {
-      httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
+      httpAdminPatient.getPatient({ doctorUserId: id,pageSize:10000 }).then((res) => {
         this.patientList = res.data.elements
       })
     },

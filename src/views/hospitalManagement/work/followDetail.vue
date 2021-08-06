@@ -900,7 +900,7 @@ export default {
       })
     },
     getPatientList(val) {
-      httpAdminPatient.getPatient({ doctorUserId: val }).then((res) => {
+      httpAdminPatient.getPatient({ doctorUserId: val,pageSize:10000 }).then((res) => {
         this.patientList = res.data.elements
         this.loading = false
       })
