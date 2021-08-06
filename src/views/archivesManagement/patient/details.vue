@@ -301,7 +301,6 @@
                   :value="subItem.value"></el-option>
               </el-select>
             </el-form-item>
-
             <el-form-item v-if="item.pastHistoryType === 'DISEASE'"
               label="疾病名称">
               <el-input v-model="item.name"
@@ -325,7 +324,6 @@
                 placeholder="请输入输血量"><i slot="suffix"
                   style="font-style: normal; margin-right: 10px">cc</i></el-input>
             </el-form-item>
-
             <el-form-item label="详细"
               v-if="item.pastHistoryType === 'DISEASE'">
               <el-input type="textarea"
@@ -664,7 +662,6 @@ export default {
   },
   mounted() {
     this.getHospitalList()
-    this.getDoctorList()
     this.computeBmi()
     this.getTreeData(addressJson)
   },
@@ -677,6 +674,7 @@ export default {
           // 回显表单数据
           let value = res.data.elements[0]
           if (value.archivesMongo) {
+            this.getDoctorList(value.archivesMongo.hospitalId)
             this.form = value?.archivesMongo
             if (value?.archivesMongo?.archivesFamily) {
               this.archivesFamily = value?.archivesMongo?.archivesFamily
@@ -720,15 +718,17 @@ export default {
     },
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital().then((res) => {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
     // 获取医生列表
     getDoctorList(val) {
-      httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
-        this.doctorList = res.data.elements
-      })
+      httpAdminDoctor
+        .getDoctor({ hospitalId: val, pageSize: 10000 })
+        .then((res) => {
+          this.doctorList = res.data.elements
+        })
     },
     selectHospital(val) {
       this.getDoctorList(val)

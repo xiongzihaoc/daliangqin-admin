@@ -42,15 +42,15 @@
               alt="">
               <img v-else class="tableImg" src="../../assets/images/default-avatar.png" alt="">
           </div>
-          <div v-else-if="col.type">
-            <div>{{scope.$index + 1}}</div>
-          </div>
-          <div v-else-if="col.formatter">
-            <div v-html="col.formatter(scope.row)"></div>
-          </div>
-          <div v-else>
-            <div>{{scope.row[col.prop]}}</div>
-          </div>
+          <span v-else-if="col.type">
+            <span>{{scope.$index + 1}}</span>
+          </span>
+          <span v-else-if="col.formatter">
+            <span v-html="col.formatter(scope.row)"></span>
+          </span>
+          <span v-else>
+            <span>{{scope.row[col.prop]}}</span>
+          </span>
         </template>
       </el-table-column>
     </el-table>

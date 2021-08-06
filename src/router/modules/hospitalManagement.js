@@ -82,7 +82,7 @@ const hospitalRouter = {
                     name: "chat",
                     component: () => import('@/views/hospitalManagement/work/chat'),
                     meta: {
-                        title: '留言问诊',
+                        title: '留言板',
                         icon: 'general'
                     },
                 },

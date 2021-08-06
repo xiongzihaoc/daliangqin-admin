@@ -279,28 +279,23 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="templateTotal"
         class="el-pagination-style"></el-pagination>
-      <span slot="footer"
-        class="dialog-footer">
-        <el-button @click="templateDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="templateDialogEnter">确 定</el-button>
-      </span>
     </el-dialog>
     <el-dialog :title="templateSetTitle"
       :visible.sync="templateSetDialogVisible"
       width="60%"
+      @closed="templateSetDialogClosed"
       v-dialogDrag>
       <el-form ref="templateFormRef"
         :rules="templateFormRules"
         :model="templateForm"
         label-width="100px">
         <el-form-item label="模板标题"
-          prop="doctorUserId">
+          prop="name">
           <el-input v-model="templateForm.name"
             placeholder="请输入模板标题"></el-input>
         </el-form-item>
         <el-form-item label="处方内容"
-          prop="doctorUserId">
+          prop="content">
           <el-input v-model="templateForm.content"
             type="textarea"
             :rows="10"
@@ -429,7 +424,12 @@ export default {
           },
         },
       ],
-      templateFormRules: {},
+      templateFormRules: {
+        name: [{ required: true, message: '请输入模板标题', trigger: 'blur' }],
+        content: [
+          { required: true, message: '请输入处方内容', trigger: 'blur' },
+        ],
+      },
       templateForm: {
         name: '',
         content: '',
@@ -504,17 +504,13 @@ export default {
     },
     // 获取用户列表
     getPatientList(val) {
-      httpAdminPatient.getPatient({ doctorUserId: val }).then((res) => {
+      httpAdminPatient.getPatient({ doctorUserId: val,pageSize:10000 }).then((res) => {
         this.patientList = res.data.elements
       })
     },
     // 选择模板
     selectTemplate(val) {
-      console.log(val)
       this.editAddForm.templates = val
-      // this.editAddForm.templates = val.map((item) => {
-      //   return { content: item.content, name: item.name };
-      // });
       this.$set(
         this.editAddForm,
         'content',
@@ -558,8 +554,6 @@ export default {
       this.getPatientList(val.doctorUserId)
       this.infoTitle = '编辑'
       this.editAddForm = val
-      // let template = val.templateIds.split(",");
-      // this.editAddForm.templateName = template;
       this.editDialogVisible = true
     },
     // 删除单个
@@ -633,8 +627,6 @@ export default {
       this.templateForm = {}
       this.templateSetDialogVisible = true
     },
-    // 确定
-    templateDialogEnter() {},
     // 修改
     editTemplateBtn(val) {
       this.templateSetTitle = '编辑'
@@ -665,31 +657,38 @@ export default {
         this.templateSetDialogVisible = false
       })
     },
+    templateSetDialogClosed() {
+      this.$refs.templateFormRef.resetFields()
+    },
     templateSetDialogEnter() {
       this.templateForm.userId = this.userId
-      if (this.templateSetTitle === '新增') {
-        // 发送请求
-        httpAdminTemplate.postTemplate(this.templateForm).then((res) => {
-          if (res.code === 'OK') {
-            this.$notify.success({
-              title: '新增成功',
+      this.$refs.templateFormRef.validate((valid) => {
+        if (valid) {
+          if (this.templateSetTitle === '新增') {
+            // 发送请求
+            httpAdminTemplate.postTemplate(this.templateForm).then((res) => {
+              if (res.code === 'OK') {
+                this.$notify.success({
+                  title: '新增成功',
+                })
+                this.getTemplateList()
+                this.templateSetDialogVisible = false
+              }
             })
-            this.getTemplateList()
-            this.templateSetDialogVisible = false
-          }
-        })
-      } else {
-        // 发送请求
-        httpAdminTemplate.putTemplate(this.templateForm).then((res) => {
-          if (res.code === 'OK') {
-            this.$notify.success({
-              title: '编辑成功',
+          } else {
+            // 发送请求
+            httpAdminTemplate.putTemplate(this.templateForm).then((res) => {
+              if (res.code === 'OK') {
+                this.$notify.success({
+                  title: '编辑成功',
+                })
+                this.getTemplateList()
+                this.templateSetDialogVisible = false
+              }
             })
-            this.getTemplateList()
-            this.templateSetDialogVisible = false
           }
-        })
-      }
+        }
+      })
     },
     /***** 表格格式化内容 *****/
     doctorTypeFormatter(row) {

@@ -291,9 +291,8 @@
           </el-form-item>
           <el-form-item label="糖化血红蛋白">
             <el-input v-model="diabetesForm.glycosylatedHemoglobin"
-              v-Int
-              oninput="if (value > 100) value = 100"
-              maxlength="3"><i slot="suffix"
+              oninput="if (value > 100) {value = 100;return} value=value.replace(/[^0-9.]/g,'')"
+              maxlength="4"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">%</i></el-input>
           </el-form-item>
           <el-form-item label="其他辅助检查">
@@ -901,7 +900,7 @@ export default {
       })
     },
     getPatientList(val) {
-      httpAdminPatient.getPatient({ doctorUserId: val }).then((res) => {
+      httpAdminPatient.getPatient({ doctorUserId: val,pageSize:10000 }).then((res) => {
         this.patientList = res.data.elements
         this.loading = false
       })
