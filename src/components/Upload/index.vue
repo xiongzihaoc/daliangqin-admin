@@ -15,14 +15,15 @@
         style="border:1px dashed #ccc;border-radius:10px;"
         class="el-icon-plus avatar-uploader-icon"></i>
     </el-upload>
-    <el-progress v-show="percentage < 100 && percentage > 0" :percentage="percentage"
+    <el-progress v-show="percentage < 100 && percentage > 0"
+      :percentage="percentage"
       status="success"></el-progress>
   </div>
 </template>
 <script>
-import { httpAdminUploadApi } from "@/api/admin/httpAdminUploadApi";
+import { httpAdminUploadApi } from '@/api/admin/httpAdminUploadApi'
 export default {
-  name: "SingleUpload",
+  name: 'SingleUpload',
   props: {
     value: String,
     uploadType: String,
@@ -30,77 +31,77 @@ export default {
   data() {
     return {
       dataObj: {
-        policy: "",
-        signature: "",
-        key: "",
-        ossaccessKeyId: "",
-        host: "",
+        policy: '',
+        signature: '',
+        key: '',
+        ossaccessKeyId: '',
+        host: '',
       },
       percentage: 0,
       infoList: [],
-    };
+    }
   },
   mounted() {
     httpAdminUploadApi
       .postAliyunSignAdmin({ adminUpload: this.uploadType })
       .then((res) => {
-        this.infoList = res.data;
-      });
+        this.infoList = res.data
+      })
   },
   computed: {
     imageUrl() {
-      return this.value;
+      return this.value
     },
     imageName() {
-      if (this.value != null && this.value !== "") {
-        return this.value.substr(this.value.lastIndexOf("/") + 1);
+      if (this.value != null && this.value !== '') {
+        return this.value.substr(this.value.lastIndexOf('/') + 1)
       } else {
-        return null;
+        return null
       }
     },
   },
   methods: {
     emitInput(val) {
-      this.$emit("input", val);
+      this.$emit('input', val)
     },
     handleRemove(file, fileList) {
-      this.emitInput("");
+      this.emitInput('')
     },
     getUUID() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
         return (
-          c === "x" ? (Math.random() * 16) | 0 : "r&0x3" | "0x8"
-        ).toString(16);
-      });
+          c === 'x' ? (Math.random() * 16) | 0 : 'r&0x3' | '0x8'
+        ).toString(16)
+      })
     },
     handleProgress(event) {
       this.percentage = event.percent
     },
     beforeUpload(file) {
-      const _self = this;
-      _self.dataObj.policy = this.infoList.policy;
-      _self.dataObj.signature = this.infoList.signature;
-      _self.dataObj.ossaccessKeyId = this.infoList.accessId;
-      _self.dataObj.key = this.infoList.key + this.getUUID();
-      _self.dataObj.host = this.infoList.endPoint;
-      const isJPG = file.type === "image/jpeg";
-      const isGIF = file.type === "image/gif";
-      const isPNG = file.type === "image/png";
-      const isBMP = file.type === "image/bmp";
-      const isLt10M = file.size / 1024 / 1024 < 2;
+      const _self = this
+      _self.dataObj.policy = this.infoList.policy
+      _self.dataObj.signature = this.infoList.signature
+      _self.dataObj.ossaccessKeyId = this.infoList.accessId
+      _self.dataObj.key = this.infoList.key + this.getUUID()
+      _self.dataObj.host = this.infoList.endPoint
+      const isJPG = file.type === 'image/jpeg'
+      const isGIF = file.type === 'image/gif'
+      const isPNG = file.type === 'image/png'
+      const isBMP = file.type === 'image/bmp'
+      const isLt10M = file.size / 1024 / 1024 < 2
       if (!isJPG && !isGIF && !isPNG && !isBMP) {
-        this.$message.error("上传图片必须是JPG/GIF/PNG/BMP 格式!");
+        this.$message.error('上传图片必须是JPG/GIF/PNG/BMP 格式!')
       }
       if (!isLt10M) {
-        this.$message.error("上传图片大小不能超过 2MB!");
+        this.$message.error('上传图片大小不能超过 2MB!')
       }
-      return (isJPG || isBMP || isGIF || isPNG) && isLt10M;
+      return (isJPG || isBMP || isGIF || isPNG) && isLt10M
     },
     handleUploadSuccess(response, file, fileList) {
-      this.emitInput("https://cdn.daliangqing.com/" + this.dataObj.key);
+      this.emitInput('https://cdn.daliangqing.com/' + this.dataObj.key)
     },
   },
-};
+}
 </script>
 <style scoped>
 .avatar-uploader .el-upload {
@@ -125,5 +126,6 @@ export default {
   width: 64px;
   height: 64px;
   display: block;
+  border-radius: 10px;
 }
 </style>
