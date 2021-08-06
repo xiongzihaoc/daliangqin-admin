@@ -301,7 +301,6 @@
                   :value="subItem.value"></el-option>
               </el-select>
             </el-form-item>
-
             <el-form-item v-if="item.pastHistoryType === 'DISEASE'"
               label="疾病名称">
               <el-input v-model="item.name"
@@ -325,7 +324,6 @@
                 placeholder="请输入输血量"><i slot="suffix"
                   style="font-style: normal; margin-right: 10px">cc</i></el-input>
             </el-form-item>
-
             <el-form-item label="详细"
               v-if="item.pastHistoryType === 'DISEASE'">
               <el-input type="textarea"

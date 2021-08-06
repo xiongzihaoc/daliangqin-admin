@@ -441,7 +441,6 @@ export default {
     },
     // 查看
     examineBtn(val) {
-      console.log(val);
       this.hospitalForm.hospitalName = val.hospitalName
       this.hospitalForm.name = val.patientUserName
       this.hospitalForm.recordId = val.id
@@ -451,16 +450,12 @@ export default {
     edithospitalNameEnter() {
       this.$refs.hospitalFormRef.validate((valid) => {
         if (valid) {
-          httpAdminHeartRate.putHospitalName(this.hospitalForm).then((res) => {
-            this.hospitalDialogVisible = false
-            this.getList()
-            this.$router.push(
-              '/archivesManagement/record/heartDetail?id=' +
-                this.hospitalForm.recordId +
-                '&name=' +
-                this.hospitalForm.name
-            )
-          })
+          this.$router.push(
+            '/archivesManagement/record/heartDetail?id=' +
+              this.hospitalForm.recordId +
+              '&name=' +
+              this.hospitalForm.name
+          )
         }
       })
     },
