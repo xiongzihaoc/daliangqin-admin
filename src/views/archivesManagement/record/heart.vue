@@ -106,6 +106,13 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
+        label="心率值(bpm)"
+        prop="heartRateScore">
+        <template slot-scope="scope">
+          <span class="fw">{{scope.row.heartRateScore}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
         label="录入方式"
         prop="name">
         <template slot-scope="scope">
@@ -454,7 +461,9 @@ export default {
             '/archivesManagement/record/heartDetail?id=' +
               this.hospitalForm.recordId +
               '&name=' +
-              this.hospitalForm.name
+              this.hospitalForm.name +
+              '&hospitalName=' +
+              this.hospitalForm.hospitalName
           )
         }
       })

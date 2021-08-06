@@ -291,9 +291,7 @@ export default {
         inspectionTime: [
           { required: true, trigger: 'blur', validator: validateTime },
         ],
-        glucoseScore: [
-          { required: true, trigger: 'blur', validator: validateGlucoseScore },
-        ],
+        glucoseScore: [{ required: true, trigger: 'blur' }],
       },
       searchForm: {
         patientUserName: '',

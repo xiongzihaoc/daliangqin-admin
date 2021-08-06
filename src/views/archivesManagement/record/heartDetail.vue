@@ -8,7 +8,7 @@
         <div class="userInfo">
           <div class="hospital">
             <span class="title fw">检测医院：</span>
-            <span class="content">{{userInfo.hospitalName}}</span>
+            <span class="content">{{this.$route.query.hospitalName}}</span>
           </div>
           <div class="userName flex margin">
             <div class="box"><span class="fw">用户姓名：</span>
