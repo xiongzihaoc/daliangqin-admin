@@ -106,6 +106,13 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
+        label="心率值(bpm)"
+        prop="heartRateScore">
+        <template slot-scope="scope">
+          <span class="fw">{{scope.row.heartRateScore}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
         label="录入方式"
         prop="name">
         <template slot-scope="scope">
@@ -269,6 +276,12 @@
           <el-input v-model.trim="hospitalForm.name"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
+        <el-form-item label="启用签名">
+          <el-radio-group v-model="hospitalForm.isSignature">
+            <el-radio label="1">是</el-radio>
+            <el-radio label="0">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <span slot="footer"
         class="dialog-footer">
@@ -346,6 +359,7 @@ export default {
         recordId: '',
         hospitalName: '',
         name: '',
+        isSignature: '1',
       },
       tableHeaderBig: [],
       // 分页区域
@@ -454,7 +468,11 @@ export default {
             '/archivesManagement/record/heartDetail?id=' +
               this.hospitalForm.recordId +
               '&name=' +
-              this.hospitalForm.name
+              this.hospitalForm.name +
+              '&hospitalName=' +
+              this.hospitalForm.hospitalName +
+              '&isSignature=' +
+              this.hospitalForm.isSignature
           )
         }
       })

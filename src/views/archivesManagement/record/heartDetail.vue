@@ -8,7 +8,7 @@
         <div class="userInfo">
           <div class="hospital">
             <span class="title fw">检测医院：</span>
-            <span class="content">{{userInfo.hospitalName}}</span>
+            <span class="content">{{this.$route.query.hospitalName}}</span>
           </div>
           <div class="userName flex margin">
             <div class="box"><span class="fw">用户姓名：</span>
@@ -130,13 +130,10 @@
         <!-- 底部 -->
         <div class="footer">
           <div class="left">
-            <!-- <span class="fz14 date">签名日期：</span>
-            <span class="fz14">年</span>
-            <span class="fz14">月</span>
-            <span class="fz14">日</span> -->
           </div>
           <div class="right">
             <span class="fz14">医生签名：</span>
+            <img v-if="this.$route.query.isSignature ==='1'" class="signature" :src="userInfo.signUrl" alt="">
           </div>
         </div>
       </div>
@@ -310,6 +307,19 @@ body {
       }
       .date {
         min-width: 120px;
+      }
+    }
+    .right {
+      display: flex;
+      align-items: center;
+      span {
+        min-width: 80px;
+      }
+      .signature {
+        vertical-align: bottom;
+        width: 200px;
+        height: 70px;
+        margin-left: -20px;
       }
     }
   }
