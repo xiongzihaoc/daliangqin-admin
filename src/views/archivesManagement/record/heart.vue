@@ -276,6 +276,12 @@
           <el-input v-model.trim="hospitalForm.name"
             placeholder="请输入姓名"></el-input>
         </el-form-item>
+        <el-form-item label="启用签名">
+          <el-radio-group v-model="hospitalForm.isSignature">
+            <el-radio label="1">是</el-radio>
+            <el-radio label="0">否</el-radio>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <span slot="footer"
         class="dialog-footer">
@@ -353,6 +359,7 @@ export default {
         recordId: '',
         hospitalName: '',
         name: '',
+        isSignature: '1',
       },
       tableHeaderBig: [],
       // 分页区域
@@ -463,7 +470,9 @@ export default {
               '&name=' +
               this.hospitalForm.name +
               '&hospitalName=' +
-              this.hospitalForm.hospitalName
+              this.hospitalForm.hospitalName +
+              '&isSignature=' +
+              this.hospitalForm.isSignature
           )
         }
       })

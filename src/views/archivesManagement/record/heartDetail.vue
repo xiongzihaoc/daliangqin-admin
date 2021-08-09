@@ -133,7 +133,7 @@
           </div>
           <div class="right">
             <span class="fz14">医生签名：</span>
-            <img class="signature" :src="userInfo.signUrl" alt="">
+            <img v-if="this.$route.query.isSignature ==='1'" class="signature" :src="userInfo.signUrl" alt="">
           </div>
         </div>
       </div>
