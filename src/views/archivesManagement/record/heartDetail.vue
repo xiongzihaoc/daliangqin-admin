@@ -8,17 +8,18 @@
         <div class="userInfo">
           <div class="hospital">
             <span class="title fw">检测医院：</span>
-            <span class="content">{{this.$route.query.hospitalName}}</span>
+            <span class="content"
+              contenteditable="true">{{this.$route.query.hospitalName}}</span>
           </div>
           <div class="userName flex margin">
             <div class="box"><span class="fw">用户姓名：</span>
-              <span>{{this.$route.query.name}}</span>
+              <span contenteditable="true">{{this.$route.query.name}}</span>
             </div>
             <div class="box"><span class="fw">检测日期：</span>
               <span>{{parseTime(userInfo.inspectionTime)}}</span>
             </div>
             <div class="box"><span class="fw">设备：</span>
-              <span>{{userInfo.name}}</span>
+              <span contenteditable="true">{{userInfo.name}}</span>
             </div>
           </div>
           <div class="userName flex margin">
@@ -27,10 +28,10 @@
               <span v-else>24小时检测</span>
             </div>
             <div class="box"><span class="fw">检测时长：</span>
-              <span>{{heartDetail.length}}秒</span>
+              <span contenteditable="true">{{heartDetail.length}}秒</span>
             </div>
             <div class="box"><span class="fw">心率：</span>
-              <span v-if="userInfo.heartRateScore">{{userInfo.heartRateScore}}bpm</span>
+              <span v-if="userInfo.heartRateScore" contenteditable="true">{{userInfo.heartRateScore}}bpm</span>
             </div>
           </div>
           <div class="userName flex">
@@ -133,7 +134,10 @@
           </div>
           <div class="right">
             <span class="fz14">医生签名：</span>
-            <img v-if="this.$route.query.isSignature ==='1'" class="signature" :src="userInfo.signUrl" alt="">
+            <img v-if="this.$route.query.isSignature ==='1'"
+              class="signature"
+              :src="userInfo.signUrl"
+              alt="">
           </div>
         </div>
       </div>
@@ -187,6 +191,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+  caret-color: red;
+  background-color: #eee;
+  padding: 5px 0;
+}
 @page {
   size: auto; /* auto is the initial value */
   margin: 3mm; /* this affects the margin in the printer settings */

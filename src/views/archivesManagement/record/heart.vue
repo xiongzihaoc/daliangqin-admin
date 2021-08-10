@@ -99,11 +99,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        label="心率值(bpm)"
-        prop="heartRateScore">
-        <template slot-scope="scope">
-          <span class="fw">{{scope.row.heartRateScore}}</span>
-        </template>
+        label="检测时长" prop="length" :formatter="lengthFormatter">
       </el-table-column>
       <el-table-column align="center"
         label="心率值(bpm)"
@@ -282,6 +278,11 @@
             <el-radio label="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="签名图"
+          v-if="hospitalForm.isSignature === '1'">
+          <img :src="hospitalForm.signUrl"
+            class="signature">
+        </el-form-item>
       </el-form>
       <span slot="footer"
         class="dialog-footer">
@@ -359,6 +360,7 @@ export default {
         recordId: '',
         hospitalName: '',
         name: '',
+        signUrl: '',
         isSignature: '1',
       },
       tableHeaderBig: [],
@@ -457,6 +459,7 @@ export default {
     examineBtn(val) {
       this.hospitalForm.hospitalName = val.hospitalName
       this.hospitalForm.name = val.patientUserName
+      this.hospitalForm.signUrl = val.signUrl
       this.hospitalForm.recordId = val.id
       this.hospitalDialogVisible = true
     },
@@ -514,6 +517,12 @@ export default {
         }
       })
     },
+    lengthFormatter(row){
+      if (row.reportResult != '') {
+      console.log(JSON.parse(row.reportResult));
+
+      }
+    },
     /***** 分页 *****/
     handleSizeChange(newSize) {
       this.pageSize = newSize
@@ -527,5 +536,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.signature {
+  width: 200px;
+  height: 70px;
+  border: 1px dashed #ccc;
+  border-radius: 5px;
+}
 </style>

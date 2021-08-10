@@ -240,7 +240,7 @@ export default {
           leaveStartTime: this.searchForm.leaveStartTime,
           leaveEndTime: this.searchForm.leaveEndTime,
           replyStartTime: this.searchForm.replyStartTime,
-          replayEndTime: this.searchForm.replayEndTime,
+          replyEndTime: this.searchForm.replayEndTime,
           patientPhone: this.searchForm.patientPhone,
           doctorPhone: this.searchForm.doctorPhone,
         })
