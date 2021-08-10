@@ -99,7 +99,9 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        label="检测时长" prop="length" :formatter="lengthFormatter">
+        label="检测时长"
+        prop="length"
+        :formatter="lengthFormatter">
       </el-table-column>
       <el-table-column align="center"
         label="心率值(bpm)"
@@ -517,10 +519,9 @@ export default {
         }
       })
     },
-    lengthFormatter(row){
+    lengthFormatter(row) {
       if (row.reportResult != '') {
-      console.log(JSON.parse(row.reportResult));
-
+        return JSON.parse(row.reportResult).body.data.length + 's'
       }
     },
     /***** 分页 *****/
