@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="print-box">
+    <div class="print-box"
+      contenteditable="true">
       <div class="container"
         id="printMe"
         v-loading="loading">
@@ -8,18 +9,17 @@
         <div class="userInfo">
           <div class="hospital">
             <span class="title fw">检测医院：</span>
-            <span class="content"
-              contenteditable="true">{{this.$route.query.hospitalName}}</span>
+            <span class="content">{{this.$route.query.hospitalName}}</span>
           </div>
           <div class="userName flex margin">
             <div class="box"><span class="fw">用户姓名：</span>
-              <span contenteditable="true">{{this.$route.query.name}}</span>
+              <span>{{this.$route.query.name}}</span>
             </div>
             <div class="box"><span class="fw">检测日期：</span>
               <span>{{parseTime(userInfo.inspectionTime)}}</span>
             </div>
             <div class="box"><span class="fw">设备：</span>
-              <span contenteditable="true">{{userInfo.name}}</span>
+              <span>{{userInfo.name}}</span>
             </div>
           </div>
           <div class="userName flex margin">
@@ -28,10 +28,10 @@
               <span v-else>24小时检测</span>
             </div>
             <div class="box"><span class="fw">检测时长：</span>
-              <span contenteditable="true">{{heartDetail.length}}秒</span>
+              <span>{{heartDetail.length}}秒</span>
             </div>
             <div class="box"><span class="fw">心率：</span>
-              <span v-if="userInfo.heartRateScore" contenteditable="true">{{userInfo.heartRateScore}}bpm</span>
+              <span v-if="userInfo.heartRateScore">{{userInfo.heartRateScore}}bpm</span>
             </div>
           </div>
           <div class="userName flex">
@@ -109,7 +109,7 @@
             <div class="content">{{heartDetail.healthCareAdvice}}</div>
           </div>
         </div>
-        <div class="variation-box">
+        <!-- <div class="variation-box">
           <div class="fz14 impression-title">心率变异性分析：</div>
           <div>
             <div class="fz11 variation">心率变异性指数：</div>
@@ -127,7 +127,7 @@
             <div class="fz11 variation">身体疲劳指数：</div>
             <div class="variation-text">{{heartDetail.fatigue}}</div>
           </div>
-        </div>
+        </div> -->
         <!-- 底部 -->
         <div class="footer">
           <div class="left">
@@ -194,8 +194,6 @@ export default {
 [contenteditable]:focus {
   outline: 0px solid transparent;
   caret-color: red;
-  background-color: #eee;
-  padding: 5px 0;
 }
 @page {
   size: auto; /* auto is the initial value */

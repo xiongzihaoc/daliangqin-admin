@@ -56,12 +56,12 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-button @click="addBtn"
+    <!-- <el-button @click="addBtn"
       type="primary"
       class="tableAdd"
       size="small"
       plain
-      icon="el-icon-plus">新增</el-button>
+      icon="el-icon-plus">新增</el-button> -->
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig"
@@ -118,7 +118,7 @@
           <span v-else>设备检测</span>
         </template>
       </el-table-column>
-      <el-table-column align="center"
+      <!-- <el-table-column align="center"
         label="检测结果"
         prop="diseaseStatus">
         <template slot-scope="scope">
@@ -129,7 +129,7 @@
           <span v-if="scope.row.heartRateStatus === 'SLOW'"
             class="MEDIUM">稍慢</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center"
         label="测量结果"
         prop="title">
