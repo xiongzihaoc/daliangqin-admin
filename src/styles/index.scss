@@ -49,6 +49,10 @@ a:hover {
   font-weight: 700;
 }
 
+.fz16 {
+  font-size: 16px;
+}
+
 div:focus {
   outline: none;
 }
@@ -67,10 +71,6 @@ div:focus {
     clear: both;
     height: 0;
   }
-}
-
-.fz16 {
-  font-size: 16px;
 }
 
 // main-container global css

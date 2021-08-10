@@ -30,7 +30,7 @@
               <span>{{heartDetail.length}}秒</span>
             </div>
             <div class="box"><span class="fw">心率：</span>
-              <span>{{userInfo.heartRateScore}}bpm</span>
+              <span v-if="userInfo.heartRateScore">{{userInfo.heartRateScore}}bpm</span>
             </div>
           </div>
           <div class="userName flex">
