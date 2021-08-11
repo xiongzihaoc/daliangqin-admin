@@ -282,7 +282,7 @@
     </el-dialog>
     <el-dialog :title="templateSetTitle"
       :visible.sync="templateSetDialogVisible"
-      width="60%"
+      width="40%"
       @closed="templateSetDialogClosed"
       v-dialogDrag>
       <el-form ref="templateFormRef"

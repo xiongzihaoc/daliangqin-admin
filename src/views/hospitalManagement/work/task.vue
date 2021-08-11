@@ -144,6 +144,7 @@
           <el-select style="width:100%;"
             filterable
             clearable
+            :disabled="this.infoTitle === '编辑'?true:false"
             @change="selecthospital"
             v-model.trim="editAddForm.hospitalId"
             placeholder="请选择医院">
@@ -158,6 +159,7 @@
           <el-select style="width:100%;"
             filterable
             clearable
+            :disabled="this.infoTitle === '编辑'?true:false"
             @change="selectDoctor"
             v-model="editAddForm.doctorUserId"
             placeholder="请选择医生">
@@ -172,6 +174,7 @@
           <el-select style="width:100%;"
             filterable
             clearable
+            :disabled="this.infoTitle === '编辑'?true:false"
             @change="selectPatient"
             v-model="editAddForm.patientUserId"
             placeholder="请选择用户">
@@ -420,9 +423,11 @@ export default {
     },
     // 获取用户列表
     getPatientList(id) {
-      httpAdminPatient.getPatient({ doctorUserId: id,pageSize:10000 }).then((res) => {
-        this.patientList = res.data.elements
-      })
+      httpAdminPatient
+        .getPatient({ doctorUserId: id, pageSize: 10000 })
+        .then((res) => {
+          this.patientList = res.data.elements
+        })
     },
     selecthospital(val) {
       this.getDoctorList(val)

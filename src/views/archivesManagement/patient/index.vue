@@ -237,7 +237,13 @@ export default {
             return parseTime(row.archivesMongo?.createTime)
           },
         },
-        { prop: 'archivesMongo.createUserName', label: '创建人' },
+        {
+          prop: 'archivesMongo.createUserName',
+          label: '创建人',
+          formatter: (row) => {
+            return row.archivesMongo?.createUserName
+          },
+        },
       ],
       loading: true,
       // 医生列表跳转用户列表携带参数

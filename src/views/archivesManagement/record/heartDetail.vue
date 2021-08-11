@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="print-box">
+    <div class="print-box"
+      contenteditable="true">
       <div class="container"
         id="printMe"
         v-loading="loading">
@@ -30,7 +31,7 @@
               <span>{{heartDetail.length}}秒</span>
             </div>
             <div class="box"><span class="fw">心率：</span>
-              <span>{{userInfo.heartRateScore}}bpm</span>
+              <span v-if="userInfo.heartRateScore">{{userInfo.heartRateScore}}bpm</span>
             </div>
           </div>
           <div class="userName flex">
@@ -108,7 +109,7 @@
             <div class="content">{{heartDetail.healthCareAdvice}}</div>
           </div>
         </div>
-        <div class="variation-box">
+        <!-- <div class="variation-box">
           <div class="fz14 impression-title">心率变异性分析：</div>
           <div>
             <div class="fz11 variation">心率变异性指数：</div>
@@ -126,14 +127,17 @@
             <div class="fz11 variation">身体疲劳指数：</div>
             <div class="variation-text">{{heartDetail.fatigue}}</div>
           </div>
-        </div>
+        </div> -->
         <!-- 底部 -->
         <div class="footer">
           <div class="left">
           </div>
           <div class="right">
             <span class="fz14">医生签名：</span>
-            <img v-if="this.$route.query.isSignature ==='1'" class="signature" :src="userInfo.signUrl" alt="">
+            <img v-if="this.$route.query.isSignature ==='1'"
+              class="signature"
+              :src="userInfo.signUrl"
+              alt="">
           </div>
         </div>
       </div>
@@ -187,6 +191,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+  caret-color: red;
+}
 @page {
   size: auto; /* auto is the initial value */
   margin: 3mm; /* this affects the margin in the printer settings */
