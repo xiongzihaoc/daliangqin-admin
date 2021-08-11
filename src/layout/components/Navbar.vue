@@ -17,17 +17,27 @@
           trigger="click">
           <div class="avatar-wrapper">
             <!-- <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" /> -->
-            <img src="@/assets/images/topLogo.png"
+            <img :src="userInfo.avatarUrl"
               class="user-avatar" />
 
             <i class="el-icon-caret-bottom" />
           </div>
           <el-dropdown-menu slot="dropdown"
             class="user-dropdown">
-            <el-dropdown-item divided
-              @click.native="logout">
-              <span style="display: block">退出</span>
-            </el-dropdown-item>
+            <div style="padding:10px;display: flex;flex-direction: column;align-items: center;">
+              <div><img style="width:64px;height:64px;border-radius:50%"
+                  :src="userInfo.avatarUrl"
+                  alt=""></div>
+              <div class="name">{{userInfo.name}}</div>
+              <div class="hospitalName">{{userInfo.hospitalName}}</div>
+              <div class="phone">{{userInfo.phone}}</div>
+            </div>
+            <div class="bottom">
+              <el-button type="danger"
+                size="mini"
+                icon="el-icon-switch-button"
+                @click.native="logout">退出</el-button>
+            </div>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -47,6 +57,17 @@ export default {
     Hamburger,
     Screenfull,
     Topbar,
+  },
+  data() {
+    return {
+      userInfo: {
+        avatarUrl:
+          'https://img1.baidu.com/it/u=1723336545,3282618761&fm=26&fmt=auto&gp=0.jpg',
+        name: '熊梓豪',
+        hospitalName: '杭州萧山医院',
+        phone: '13426641888',
+      },
+    }
   },
   computed: {
     ...mapGetters(['sidebar', 'avatar', 'device']),
@@ -80,6 +101,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-dropdown-menu {
+  width: 300px;
+  padding: 0;
+  border: none;
+  background-color: #304156;
+  color: #fff;
+}
+.popper__arrow::after {
+  color: red !important;
+}
+.bottom {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  background: #f9f9f9;
+}
+.name,
+.hospitalName,
+.phone {
+  margin-top: 10px;
+}
 .navbar {
   height: 50px;
   overflow: hidden;
@@ -130,7 +172,6 @@ export default {
         }
       }
     }
-
     .avatar-container {
       margin-right: 30px;
 
@@ -142,7 +183,7 @@ export default {
           cursor: pointer;
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          border-radius: 50%;
         }
 
         .el-icon-caret-bottom {

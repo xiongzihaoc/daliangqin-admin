@@ -150,6 +150,14 @@ export default {
       })
     },
   },
+  // 获取登录用户信息
+  getUserInfo() {
+    httpDoctorInfo.getDoctorInfo().then((res) => {
+      window.sessionStorage.setItem('userInfo', JSON.stringify(res.data))
+
+      this.loading = false
+    })
+  },
   // 清除定时器
   beforeDestroy() {
     clearInterval(this.timer)
