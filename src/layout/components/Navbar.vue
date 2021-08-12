@@ -99,7 +99,12 @@ export default {
   },
 }
 </script>
-
+<style>
+.el-popper[x-placement^='bottom'] .popper__arrow {
+  border-bottom-color: #304156 !important;
+  right: 50% !important;
+}
+</style>
 <style lang="scss" scoped>
 .el-dropdown-menu {
   width: 300px;
@@ -130,7 +135,7 @@ export default {
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
 
   .hamburger-container {
-    line-height: 54px;
+    line-height: 46px;
     height: 100%;
     float: left;
     cursor: pointer;
@@ -147,7 +152,9 @@ export default {
   }
 
   .right-menu {
-    float: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     height: 100%;
     line-height: 50px;
 
@@ -172,11 +179,16 @@ export default {
         }
       }
     }
+
     .avatar-container {
       margin-right: 30px;
-
+      .user-dropdown {
+        background: #1890ff !important;
+        color: #fff;
+      }
       .avatar-wrapper {
-        margin-top: 5px;
+        display: flex;
+        align-items: center;
         position: relative;
 
         .user-avatar {

@@ -154,7 +154,6 @@ export default {
   getUserInfo() {
     httpDoctorInfo.getDoctorInfo().then((res) => {
       window.sessionStorage.setItem('userInfo', JSON.stringify(res.data))
-
       this.loading = false
     })
   },

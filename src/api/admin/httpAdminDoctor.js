@@ -24,12 +24,17 @@ export const httpAdminDoctor = {
       data
     })
   },
-
   putDoctor(data) {
     return request({
       url: 'doctor/' + data.id,
       method: 'put',
       data
+    })
+  },
+  getDoctorDetail(data) {
+    return request({
+      url: 'doctor/' + data.id,
+      method: 'get',
     })
   },
   deleteDoctor(id) {
