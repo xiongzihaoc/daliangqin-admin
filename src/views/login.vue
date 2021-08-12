@@ -138,7 +138,8 @@ export default {
             .dispatch('Login', this.loginForm)
             .then((res) => {
               // this.$router.push({ path: this.redirect || "/" });
-              this.getUserInfo(res.data.userId)
+              // this.getUserInfo(res.data.userId)
+              this.$router.push({ path: 'operationsManagement/banner' })
             })
             .catch(() => {
               this.loading = false
@@ -152,8 +153,8 @@ export default {
     // 获取登录用户信息
     getUserInfo(userId) {
       httpAdminDoctor.getDoctorDetail(userId).then((res) => {
+        console.log(res)
         window.localStorage.setItem('adminUserInfo', JSON.stringify(res.data))
-        this.$router.push({ path: 'operationsManagement/banner' })
         this.loading = false
       })
     },
