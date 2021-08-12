@@ -59,6 +59,7 @@
 
 <script>
 import { getCode } from '@/api/public/httpPublicSms'
+import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
 import { validatePhone, validateCode } from '@/utils/index'
 export default {
   name: 'Login',
@@ -136,9 +137,8 @@ export default {
           this.$store
             .dispatch('Login', this.loginForm)
             .then((res) => {
-              this.$router.push({ path: 'operationsManagement/banner' })
               // this.$router.push({ path: this.redirect || "/" });
-              this.loading = false
+              this.getUserInfo(res.data.userId)
             })
             .catch(() => {
               this.loading = false
@@ -149,14 +149,17 @@ export default {
         }
       })
     },
+    // 获取登录用户信息
+    getUserInfo(userId) {
+      debugger
+      httpAdminDoctor.getDoctorDetail(userId).then((res) => {
+        window.sessionStorage.setItem('adminUserInfo', JSON.stringify(res.data))
+        this.$router.push({ path: 'operationsManagement/banner' })
+        this.loading = false
+      })
+    },
   },
-  // 获取登录用户信息
-  getUserInfo() {
-    httpDoctorInfo.getDoctorInfo().then((res) => {
-      window.sessionStorage.setItem('userInfo', JSON.stringify(res.data))
-      this.loading = false
-    })
-  },
+
   // 清除定时器
   beforeDestroy() {
     clearInterval(this.timer)

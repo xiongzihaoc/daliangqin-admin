@@ -31,9 +31,9 @@ export const httpAdminDoctor = {
       data
     })
   },
-  getDoctorDetail(data) {
+  getDoctorDetail(userId) {
     return request({
-      url: 'doctor/' + data.id,
+      url: 'doctor/' + userId,
       method: 'get',
     })
   },

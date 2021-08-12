@@ -37,16 +37,14 @@ const user = {
     }, userInfo) {
       return new Promise((resolve, reject) => {
         httpPublicLogin.login(userInfo).then(res => {
-          if (res.code !== 'OK') {
-            return Message.error('用户信息不存在')
-          } else {
+          if (res.code === 'OK') {
             if (res.data.adminRoleType) {
               window.sessionStorage.setItem('userId', res.data.userId)
               commit('SET_TOKEN', "xzh")
               setToken("xzh")
-              resolve()
+              resolve(res)
             } else {
-              return Message.error('用户信息不存在')
+              return Message.error('该用户不是管理员')
             }
           }
         }).catch(error => {
@@ -54,27 +52,6 @@ const user = {
         })
       })
     },
-    // 获取用户信息
-    // GetInfo({ commit, state }) {
-    //   return new Promise((resolve, reject) => {
-    //     getInfo(state.token).then(res => {
-    //       const user = res.user
-    // const avatar = user.avatar == "" ? require("@/assets/images/profile.jpg") : process.env.VUE_APP_BASE_API + user.avatar;
-    //       if (res.roles && res.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-    //         commit('SET_ROLES', res.roles)
-    //         commit('SET_PERMISSIONS', res.permissions)
-    //       } else {
-    //         commit('SET_ROLES', ['ROLE_DEFAULT'])
-    //       }
-    //       commit('SET_NAME', user.userName)
-    //       commit('SET_AVATAR', avatar)
-    //       resolve(res)
-    //     }).catch(error => {
-    //       reject(error)
-    //     })
-    //   })
-    // },
-
     // 退出系统
     Logout({
       commit,
