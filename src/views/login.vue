@@ -151,9 +151,8 @@ export default {
     },
     // 获取登录用户信息
     getUserInfo(userId) {
-      debugger
       httpAdminDoctor.getDoctorDetail(userId).then((res) => {
-        window.sessionStorage.setItem('adminUserInfo', JSON.stringify(res.data))
+        window.localStorage.setItem('adminUserInfo', JSON.stringify(res.data))
         this.$router.push({ path: 'operationsManagement/banner' })
         this.loading = false
       })

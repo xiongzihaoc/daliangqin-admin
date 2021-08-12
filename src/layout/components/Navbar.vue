@@ -69,7 +69,7 @@ export default {
     }
   },
   created() {
-    this.userInfo = JSON.parse(window.sessionStorage.getItem('adminUserInfo'))
+    this.userInfo = JSON.parse(window.localStorage.getItem('adminUserInfo'))
   },
   computed: {
     ...mapGetters(['sidebar', 'avatar', 'device']),
