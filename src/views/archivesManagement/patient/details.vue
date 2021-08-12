@@ -240,14 +240,14 @@
               placeholder="请输入空腹血糖"><i slot="suffix"
                 style="font-style: normal; margin-right: 10px">mmol/L</i></el-input>
           </el-form-item>
-          <el-form-item label="心率">
+          <!-- <el-form-item label="心率">
             <el-input v-Int
               v-model="form.heartRate"
               oninput="if (value > 200) value = 200"
               maxlength="3"
               placeholder="请输入心率"><i slot="suffix"
                 style="font-style: normal; margin-right: 10px">bpm</i></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="收缩压">
             <el-input v-Int
               v-model="form.shrinkHighPressure"
@@ -470,7 +470,7 @@
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="遗传病史其他">
+          <el-form-item label="遗传病史其他" v-if="form.geneticHistory === 'HAVE'">
             <el-input v-model="form.otherGeneticHistory"
               type="textarea"
               placeholder="请输入遗传病史其他"></el-input>
@@ -617,7 +617,7 @@ export default {
         adjustMentality: '',
         compliance: '',
         fastingBloodGlucose: '',
-        heartRate: '',
+        // heartRate: '',
         shrinkHighPressure: '',
         diastoleLowPressure: '',
         allergyTypes: [],
@@ -772,6 +772,11 @@ export default {
     },
     confirm() {
       this.form.archivesFamily = this.archivesFamily
+      // 创建人信息
+      this.form.createUserName = JSON.parse(
+        localStorage.getItem('adminUserInfo')
+      ).name
+      // 提交
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 编辑

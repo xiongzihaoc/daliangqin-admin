@@ -402,7 +402,7 @@ export const sitType = [
 export const bloodTypeList = [
   { id: 1, label: "A型", value: "A" },
   { id: 2, label: "B型", value: "B" },
-  { id: 3, label: "0型", value: "O" },
+  { id: 3, label: "O型", value: "O" },
   { id: 4, label: "AB型", value: "AB" },
   { id: 5, label: "AB型RH阳性", value: "RH_Y" },
   { id: 6, label: "AB型RH阴性", value: "RH_N" },
@@ -557,7 +557,7 @@ export const healthEducationTypesList = [
   { id: 6, label: "减少膳食脂肪", value: "LIMIT_DIETARY_FAT" },
   { id: 7, label: "平衡膳食", value: "BALANCED_DIET" },
   { id: 8, label: "适当运动", value: "PROPER_EXERCISE" },
-  { id: 9, label: "定期监测血糖", value: "MONITOR_BLOOD_SUGAR_REGULARLY" },
+  { id: 9, label: "定期监测血糖(空腹血糖和餐后小时)", value: "MONITOR_BLOOD_SUGAR_REGULARLY" },
   { id: 10, label: "定期测量血压", value: "REGULAR_BLOOD_PRESSURE_MEASUREMENT" },
   { id: 11, label: "放松情绪", value: "RELAX_EMOTIONS" },
   { id: 12, label: "适当用药", value: "APPROPRIATE_MEDICATION" },

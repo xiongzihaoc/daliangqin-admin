@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="navbar-box">
     <div class="navbar">
       <div>
         <hamburger :is-active="sidebar.opened"
@@ -16,7 +16,6 @@
         <el-dropdown class="avatar-container"
           trigger="click">
           <div class="avatar-wrapper">
-            <!-- <img :src="avatar + '?imageView2/1/w/80/h/80'" class="user-avatar" /> -->
             <img :src="userInfo.avatarUrl"
               class="user-avatar" />
 
@@ -29,7 +28,7 @@
                   :src="userInfo.avatarUrl"
                   alt=""></div>
               <div class="name">{{userInfo.name}}</div>
-              <div class="hospitalName">{{userInfo.hospitalName}}</div>
+              <!-- <div class="hospitalName">{{userInfo.hospitalName}}</div> -->
               <div class="phone">{{userInfo.phone}}</div>
             </div>
             <div class="bottom">
@@ -63,11 +62,14 @@ export default {
       userInfo: {
         avatarUrl:
           'https://img1.baidu.com/it/u=1723336545,3282618761&fm=26&fmt=auto&gp=0.jpg',
-        name: '熊梓豪',
-        hospitalName: '杭州萧山医院',
-        phone: '13426641888',
+        name: '111',
+        // hospitalName: '杭州萧山医院',
+        phone: '18682308445',
       },
     }
+  },
+  created() {
+    this.userInfo = JSON.parse(window.localStorage.getItem('adminUserInfo'))
   },
   computed: {
     ...mapGetters(['sidebar', 'avatar', 'device']),
@@ -100,10 +102,10 @@ export default {
 }
 </script>
 <style>
-.el-popper[x-placement^='bottom'] .popper__arrow {
+/* .navbar-box .el-popper[x-placement^='bottom'] .popper__arrow {
   border-bottom-color: #304156 !important;
   right: 50% !important;
-}
+} */
 </style>
 <style lang="scss" scoped>
 .el-dropdown-menu {
