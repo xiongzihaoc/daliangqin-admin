@@ -317,7 +317,7 @@
               v-model="diabetesForm.otherComplication"
               placeholder="请输入并发症症状"></el-input>
           </el-form-item>
-          <el-form-item label="转诊原因">
+          <!-- <el-form-item label="转诊原因">
             <el-select v-model="diabetesForm.referralReasonStatuses"
               multiple
               clearable
@@ -341,7 +341,7 @@
           <el-form-item label="转诊科别">
             <el-input v-model="diabetesForm.referralDepartment"
               placeholder="请输入转诊科别"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="药物名称">
             <el-input v-model="diabetesForm.drugName"
               placeholder="请输入药物名称"></el-input>
@@ -384,25 +384,25 @@
           </el-form-item>
           <el-form-item label="胰岛素用量  早上">
             <el-input v-model="diabetesForm.insulinDosageMorning"
-              v-Int
+              oninput="if (value > 1000) {value = 1000;return} value=value.replace(/[^0-9.]/g,'')"
               maxlength="5"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">μ</i></el-input>
           </el-form-item>
           <el-form-item label="胰岛素用量  中午">
             <el-input v-model="diabetesForm.insulinDosageNoon"
-              v-Int
+              oninput="if (value > 1000) {value = 1000;return} value=value.replace(/[^0-9.]/g,'')"
               maxlength="5"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">μ</i></el-input>
           </el-form-item>
           <el-form-item label="胰岛素用量  晚上">
             <el-input v-model="diabetesForm.insulinDosageNight"
-              v-Int
+              oninput="if (value > 1000) {value = 1000;return} value=value.replace(/[^0-9.]/g,'')"
               maxlength="5"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">μ</i></el-input>
           </el-form-item>
           <el-form-item label="胰岛素用量  睡前">
             <el-input v-model="diabetesForm.insulinDosageBeforeSleep"
-              v-Int
+              oninput="if (value > 1000) {value = 1000;return} value=value.replace(/[^0-9.]/g,'')"
               maxlength="5"><i slot="suffix"
                 style="font-style:normal;margin-right: 10px;">μ</i></el-input>
           </el-form-item>
@@ -528,7 +528,7 @@
               v-model="highBloodForm.otherComplication"
               placeholder="请输入并发症症状"></el-input>
           </el-form-item>
-          <el-form-item label="转诊原因">
+          <!-- <el-form-item label="转诊原因">
             <el-select v-model="highBloodForm.referralReasonStatuses"
               placeholder="请选择转诊原因"
               multiple
@@ -551,7 +551,7 @@
           <el-form-item label="转诊科别">
             <el-input v-model="highBloodForm.referralDepartment"
               placeholder="请输入转诊科别"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="药物名称">
             <el-input v-model="highBloodForm.drugName"
               placeholder="请输入药物名称"></el-input>
@@ -642,7 +642,7 @@ import {
   symptomTypeList,
   dorsalArteryStatusList,
   complicationTypeList,
-  referralReasonStatusesList,
+  // referralReasonStatusesList,
   insulinVarietiesTypeList,
   insulinUsingsList,
   medicationStatusList,
@@ -664,7 +664,7 @@ export default {
       symptomTypeList,
       dorsalArteryStatusList,
       complicationTypeList,
-      referralReasonStatusesList,
+      // referralReasonStatusesList,
       insulinVarietiesTypeList,
       insulinUsingsList,
       medicationStatusList,
@@ -776,10 +776,10 @@ export default {
         otherInspection: '',
         complicationType: [],
         otherComplication: '',
-        referralReasonStatuses: [],
-        otherReferralReason: '',
-        referralAgency: '',
-        referralDepartment: '',
+        // referralReasonStatuses: [],
+        // otherReferralReason: '',
+        // referralAgency: '',
+        // referralDepartment: '',
         drugName: '',
         drugDosage: '',
         companyName: '',
@@ -807,10 +807,10 @@ export default {
         otherInspection: '',
         complicationType: [],
         otherComplication: '',
-        referralReasonStatuses: [],
-        otherReferralReason: '',
-        referralAgency: '',
-        referralDepartment: '',
+        // referralReasonStatuses: [],
+        // otherReferralReason: '',
+        // referralAgency: '',
+        // referralDepartment: '',
         drugName: '',
         drugDosage: '',
         companyName: '',
@@ -900,10 +900,12 @@ export default {
       })
     },
     getPatientList(val) {
-      httpAdminPatient.getPatient({ doctorUserId: val,pageSize:10000 }).then((res) => {
-        this.patientList = res.data.elements
-        this.loading = false
-      })
+      httpAdminPatient
+        .getPatient({ doctorUserId: val, pageSize: 10000 })
+        .then((res) => {
+          this.patientList = res.data.elements
+          this.loading = false
+        })
     },
     selectHospital(val) {
       this.getDoctorList(val)
