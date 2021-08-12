@@ -772,10 +772,13 @@ export default {
     },
     confirm() {
       this.form.archivesFamily = this.archivesFamily
+
       // 创建人信息
-      this.form.createUserName = JSON.parse(
-        localStorage.getItem('adminUserInfo')
-      ).name
+      // this.form.createUserName = JSON.parse(
+      //   localStorage.getItem('adminUserInfo')
+      // ).name
+
+      
       // 提交
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
