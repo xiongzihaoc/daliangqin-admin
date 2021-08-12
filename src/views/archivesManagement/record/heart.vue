@@ -33,7 +33,7 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="检测结果"
+        <!-- <el-form-item label="检测结果"
           align="left"
           prop="heartRateStatus">
           <el-select class="w100"
@@ -43,7 +43,7 @@
               :label="item.label"
               :value="item.value"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -264,7 +264,7 @@
         :rules="hospitalFormRules"
         :model="hospitalForm"
         label-width="120px">
-        <el-form-item label="医院名称"
+        <!-- <el-form-item label="医院名称"
           prop="hospitalName">
           <el-input v-model.trim="hospitalForm.hospitalName"
             placeholder="请输入医院名称"></el-input>
@@ -273,7 +273,7 @@
           prop="name">
           <el-input v-model.trim="hospitalForm.name"
             placeholder="请输入姓名"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="启用签名">
           <el-radio-group v-model="hospitalForm.isSignature">
             <el-radio label="1">是</el-radio>
@@ -344,7 +344,7 @@ export default {
         patientUserName: '',
         patientUserPhone: '',
         equipmentResourceType: '',
-        heartRateStatus: '',
+        // heartRateStatus: '',
       },
       hospitalList: [],
       doctorList: [],
@@ -391,7 +391,7 @@ export default {
           patientUserName: this.searchForm.patientUserName,
           patientUserPhone: this.searchForm.patientUserPhone,
           equipmentResourceType: this.searchForm.equipmentResourceType,
-          heartRateStatus: this.searchForm.heartRateStatus,
+          // heartRateStatus: this.searchForm.heartRateStatus,
         })
         .then((res) => {
           this.list = res.data.elements
