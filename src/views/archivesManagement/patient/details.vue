@@ -470,7 +470,7 @@
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="遗传病史其他">
+          <el-form-item label="遗传病史其他" v-if="form.geneticHistory === 'HAVE'">
             <el-input v-model="form.otherGeneticHistory"
               type="textarea"
               placeholder="请输入遗传病史其他"></el-input>

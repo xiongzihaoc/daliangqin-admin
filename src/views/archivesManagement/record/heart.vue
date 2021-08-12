@@ -22,7 +22,7 @@
             v-Int
             placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item label="录入方式"
+        <!-- <el-form-item label="录入方式"
           align="left"
           prop="equipmentResourceType">
           <el-select class="w100"
@@ -32,7 +32,7 @@
               :label="item.label"
               :value="item.value"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <!-- <el-form-item label="检测结果"
           align="left"
           prop="heartRateStatus">

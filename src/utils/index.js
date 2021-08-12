@@ -402,7 +402,7 @@ export const sitType = [
 export const bloodTypeList = [
   { id: 1, label: "A型", value: "A" },
   { id: 2, label: "B型", value: "B" },
-  { id: 3, label: "0型", value: "O" },
+  { id: 3, label: "O型", value: "O" },
   { id: 4, label: "AB型", value: "AB" },
   { id: 5, label: "AB型RH阳性", value: "RH_Y" },
   { id: 6, label: "AB型RH阴性", value: "RH_N" },
