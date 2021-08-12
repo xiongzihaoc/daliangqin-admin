@@ -16,7 +16,7 @@
         <el-dropdown class="avatar-container"
           trigger="click">
           <div class="avatar-wrapper">
-            <img :src="userInfo.avatarUrl"
+            <img src="../../assets/images/topLogo.png"
               class="user-avatar" />
 
             <i class="el-icon-caret-bottom" />
@@ -25,11 +25,13 @@
             class="user-dropdown">
             <div style="padding:10px;display: flex;flex-direction: column;align-items: center;">
               <div><img style="width:64px;height:64px;border-radius:50%"
-                  :src="userInfo.avatarUrl"
+                  src="../../assets/images/topLogo.png"
                   alt=""></div>
-              <div class="name">{{userInfo.name}}</div>
+              <!-- <div v-if="userInfo.name"
+                class="name">{{userInfo.name}}</div> -->
               <!-- <div class="hospitalName">{{userInfo.hospitalName}}</div> -->
-              <div class="phone">{{userInfo.phone}}</div>
+              <!-- <div v-if="userInfo.phone"
+                class="phone">{{userInfo.phone}}</div> -->
             </div>
             <div class="bottom">
               <el-button type="danger"
@@ -60,16 +62,15 @@ export default {
   data() {
     return {
       userInfo: {
-        avatarUrl:
-          'https://img1.baidu.com/it/u=1723336545,3282618761&fm=26&fmt=auto&gp=0.jpg',
-        name: '111',
+        avatarUrl: '',
+        // name: '111',
         // hospitalName: '杭州萧山医院',
-        phone: '18682308445',
+        // phone: '18682308445',
       },
     }
   },
   created() {
-    this.userInfo = JSON.parse(window.localStorage.getItem('adminUserInfo'))
+    // this.userInfo = JSON.parse(window.localStorage.getItem('adminUserInfo'))
   },
   computed: {
     ...mapGetters(['sidebar', 'avatar', 'device']),
