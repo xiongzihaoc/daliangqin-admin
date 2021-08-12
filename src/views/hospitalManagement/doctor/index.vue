@@ -337,7 +337,7 @@ export default {
       // 医生类型列表
       editVal: {},
       // 转诊医生列表
-      toDoctorList: [],
+      // toDoctorList: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -354,7 +354,7 @@ export default {
   mounted() {
     // 获取医院  转诊医生列表
     this.getHospitalList()
-    this.getToDoctorList()
+    // this.getToDoctorList()
   },
   //离开当前页面后执行
   destroyed() {
@@ -379,11 +379,11 @@ export default {
           this.total = res.data.totalSize
         })
     },
-    getToDoctorList() {
-      httpAdminDoctor.getDoctoTransfer().then((res) => {
-        this.toDoctorList = res.data.elements
-      })
-    },
+    // getToDoctorList() {
+    //   httpAdminDoctor.getDoctoTransfer().then((res) => {
+    //     this.toDoctorList = res.data.elements
+    //   })
+    // },
     getHospitalList() {
       httpAdminHospital.getHospital().then((res) => {
         this.hospitalList = res.data.elements
@@ -473,7 +473,7 @@ export default {
                   title: "新增成功",
                 })
                 this.getList()
-                this.getToDoctorList()
+                // this.getToDoctorList()
                 this.editDialogVisible = false
               }
             })
