@@ -179,10 +179,10 @@ export default {
       httpAdminHeartRate
         .getHeartRate({ id: this.$route.query.id })
         .then((res) => {
-          this.userInfo = res.data.elements[0]
+          this.userInfo = res?.data?.elements[0]
           this.heartDetail = JSON.parse(
-            res.data.elements[0].reportResult
-          ).body.data
+            res?.data?.elements[0]?.reportResult
+          )?.body?.data
           this.loading = false
         })
     },
