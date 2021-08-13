@@ -22,28 +22,6 @@
             v-Int
             placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="录入方式"
-          align="left"
-          prop="equipmentResourceType">
-          <el-select class="w100"
-            v-model="searchForm.equipmentResourceType">
-            <el-option v-for="item in equipmentResourceTypeList"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"></el-option>
-          </el-select>
-        </el-form-item> -->
-        <!-- <el-form-item label="检测结果"
-          align="left"
-          prop="heartRateStatus">
-          <el-select class="w100"
-            v-model="searchForm.heartRateStatus">
-            <el-option v-for="item in heartList"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"></el-option>
-          </el-select>
-        </el-form-item> -->
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -56,12 +34,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <!-- <el-button @click="addBtn"
-      type="primary"
-      class="tableAdd"
-      size="small"
-      plain
-      icon="el-icon-plus">新增</el-button> -->
     <!-- 表格区域 -->
     <EleTable :data="list"
       :header="tableHeaderBig"
@@ -118,18 +90,6 @@
           <span v-else>设备检测</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column align="center"
-        label="检测结果"
-        prop="diseaseStatus">
-        <template slot-scope="scope">
-          <span v-if="scope.row.heartRateStatus === 'FAST'"
-            class="SERIOUS">稍快</span>
-          <span v-if="scope.row.heartRateStatus === 'NORMAL'"
-            class="HEALTH">正常</span>
-          <span v-if="scope.row.heartRateStatus === 'SLOW'"
-            class="MEDIUM">稍慢</span>
-        </template>
-      </el-table-column> -->
       <el-table-column align="center"
         label="测量结果"
         prop="title">
@@ -261,19 +221,8 @@
       width="30%"
       v-dialogDrag>
       <el-form ref="hospitalFormRef"
-        :rules="hospitalFormRules"
         :model="hospitalForm"
         label-width="120px">
-        <!-- <el-form-item label="医院名称"
-          prop="hospitalName">
-          <el-input v-model.trim="hospitalForm.hospitalName"
-            placeholder="请输入医院名称"></el-input>
-        </el-form-item>
-        <el-form-item label="姓名"
-          prop="name">
-          <el-input v-model.trim="hospitalForm.name"
-            placeholder="请输入姓名"></el-input>
-        </el-form-item> -->
         <el-form-item label="启用签名">
           <el-radio-group v-model="hospitalForm.isSignature">
             <el-radio label="1">是</el-radio>
@@ -333,12 +282,6 @@ export default {
         detectType: [
           { required: true, message: '请选择检测模式', trigger: 'blur' },
         ],
-      },
-      hospitalFormRules: {
-        hospitalName: [
-          { required: true, message: '请输入医院名称', trigger: 'blur' },
-        ],
-        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
       },
       searchForm: {
         patientUserName: '',
@@ -459,28 +402,36 @@ export default {
     },
     // 查看
     examineBtn(val) {
-      this.hospitalForm.hospitalName = val.hospitalName
-      this.hospitalForm.name = val.patientUserName
-      this.hospitalForm.signUrl = val.signUrl
-      this.hospitalForm.recordId = val.id
-      this.hospitalDialogVisible = true
+      if (val.signUrl != '') {
+        this.hospitalForm.hospitalName = val.hospitalName
+        this.hospitalForm.name = val.patientUserName
+        this.hospitalForm.signUrl = val.signUrl
+        this.hospitalForm.recordId = val.id
+        this.hospitalDialogVisible = true
+      } else {
+        this.$router.push(
+          '/archivesManagement/record/heartDetail?id=' +
+            val.id +
+            '&name=' +
+            val.patientUserName +
+            '&hospitalName=' +
+            val.hospitalName
+        )
+      }
     },
     // 修改医院名称
     edithospitalNameEnter() {
-      this.$refs.hospitalFormRef.validate((valid) => {
-        if (valid) {
-          this.$router.push(
-            '/archivesManagement/record/heartDetail?id=' +
-              this.hospitalForm.recordId +
-              '&name=' +
-              this.hospitalForm.name +
-              '&hospitalName=' +
-              this.hospitalForm.hospitalName +
-              '&isSignature=' +
-              this.hospitalForm.isSignature
-          )
-        }
-      })
+      this.hospitalDialogVisible = false
+      this.$router.push(
+        '/archivesManagement/record/heartDetail?id=' +
+          this.hospitalForm.recordId +
+          '&name=' +
+          this.hospitalForm.name +
+          '&hospitalName=' +
+          this.hospitalForm.hospitalName +
+          '&isSignature=' +
+          this.hospitalForm.isSignature
+      )
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
