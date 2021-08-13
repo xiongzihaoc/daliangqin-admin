@@ -19,6 +19,7 @@
           <el-input v-model="searchForm.phone"
             v-Int
             size="small"
+            maxlength="11"
             placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item label="身份证号"
@@ -26,7 +27,8 @@
           prop="idCard">
           <el-input v-model="searchForm.idCard"
             size="small"
-            placeholder="请输入身份证号"></el-input>
+            placeholder="请输入身份证号"
+            maxlength="18"></el-input>
         </el-form-item>
         <el-form-item label="性别"
           align="left"
@@ -43,7 +45,8 @@
           align="left"
           prop="type">
           <el-select v-model="searchForm.type"
-            placeholder="请选择职位">
+            placeholder="请选择职位"
+            size="small">
             <el-option v-for="item in doctorTypeList"
               :key="item.id"
               :label="item.label"
@@ -188,23 +191,27 @@
             v-model="editAddForm.name"
             placeholder="请输入医生真实姓名"></el-input>
         </el-form-item>
+
         <el-form-item label="医生头像"
           prop="avatarUrl">
           <single-upload v-model="editAddForm.avatarUrl"
             uploadType="AVATAR" />
         </el-form-item>
+
         <!-- 编辑阻止修改医生手机号-->
         <el-form-item label="手机号"
           prop="phone">
           <el-input :disabled="this.infoTitle === '编辑' ? true : false"
             v-model="editAddForm.phone"
             v-Int
+            maxlength="11"
             placeholder="请输入该医生手机号"></el-input>
         </el-form-item>
         <!-- 编辑阻止修改医生身份证号 -->
         <el-form-item label="身份证号"
           prop="idCard">
           <el-input v-model="editAddForm.idCard"
+            maxlength="18"
             :disabled="this.infoTitle === '编辑' ? true : false"
             placeholder="请输入该医生身份证号"></el-input>
         </el-form-item>
@@ -223,7 +230,7 @@
         <el-form-item label="医院名称"
           prop="hospitalId">
           <el-select v-model="editAddForm.hospitalId"
-          :disabled="this.infoTitle === '编辑' ? true : false"
+            :disabled="this.infoTitle === '编辑' ? true : false"
             placeholder="请选择医院"
             style="width: 100%">
             <el-option v-for="item in hospitalList"
@@ -232,19 +239,6 @@
               :label="item.name"></el-option>
           </el-select>
         </el-form-item>
-        <!-- PHYSICIAN 医师的枚举值 只有职位选中医师 才能选择转诊医生 -->
-        <!-- <el-form-item v-if="editAddForm.type === 'PHYSICIAN'"
-          label="转诊医生"
-          prop="toDoctorUserId">
-          <el-select v-model="editAddForm.toDoctorUserId"
-            placeholder="请选择转诊医生"
-            style="width: 100%">
-            <el-option v-for="item in toDoctorList"
-              :key="item.id"
-              :value="item.id"
-              :label="item.name"></el-option>
-          </el-select>
-        </el-form-item> -->
         <el-form-item label="个人简介"
           prop="introduction">
           <el-input type="textarea"
@@ -272,10 +266,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import singleUpload from "@/components/Upload"
-import { httpAdminDoctor } from "@/api/admin/httpAdminDoctor"
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
+import EleTable from '@/components/Table'
+import singleUpload from '@/components/Upload'
+import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import {
   validateIdCard,
   validatePhone,
@@ -283,7 +277,7 @@ import {
   doctorTypeList,
   genderList,
   formatterElement,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -295,45 +289,45 @@ export default {
       doctorTypeList,
       genderList,
       FormRules: {
-        name: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
-        avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
+        name: [{ required: true, message: '请输入医生姓名', trigger: 'blur' }],
+        avatarUrl: [{ required: true, message: '请上传头像', trigger: 'blur' }],
+        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
         idCard: [
-          { required: true, trigger: "blur", validator: validateIdCard },
+          { required: true, trigger: 'blur', validator: validateIdCard },
         ],
-        type: [{ required: true, message: "请选择职位", trigger: "blur" }],
+        type: [{ required: true, message: '请选择职位', trigger: 'blur' }],
         hospitalId: [
-          { required: true, message: "请选择医院", trigger: "blur" },
+          { required: true, message: '请选择医院', trigger: 'blur' },
         ],
         // toDoctorUserId: [
         //   { required: true, message: "请选择转诊医生  ", trigger: "blur" },
         // ],
       },
       searchForm: {
-        name: "",
-        phone: "",
-        idCard: "",
-        gender: "",
-        type: "",
-        hospitalName: "",
+        name: '',
+        phone: '',
+        idCard: '',
+        gender: '',
+        type: '',
+        hospitalName: '',
       },
       list: [],
       editAddForm: {
-        name: "",
-        avatarUrl: "",
-        phone: "",
-        idCard: "",
-        hospitalId: "",
+        name: '',
+        avatarUrl: '',
+        phone: '',
+        idCard: '',
+        hospitalId: '',
         // toDoctorUserId: "",
-        type: "",
-        introduction: "",
-        goodAt: "",
+        type: '',
+        introduction: '',
+        goodAt: '',
       },
       tableHeaderBig: [],
       // 医院列表
       hospitalList: [],
       // 医院跳转医生携带医院id
-      hospitalId: "",
+      hospitalId: '',
       // 医生类型列表
       editVal: {},
       // 转诊医生列表
@@ -344,11 +338,11 @@ export default {
       total: 0,
       // 弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
-    this.hospitalId = localStorage.getItem("hospitalId")
+    this.hospitalId = localStorage.getItem('hospitalId')
     this.getList()
   },
   mounted() {
@@ -358,7 +352,7 @@ export default {
   },
   //离开当前页面后执行
   destroyed() {
-    localStorage.removeItem("hospitalId")
+    localStorage.removeItem('hospitalId')
   },
   methods: {
     getList() {
@@ -401,8 +395,8 @@ export default {
     },
     // 点击用户跳转
     skipPatient(val) {
-      this.$router.push("/archivesManagement/patient")
-      localStorage.setItem("doctorId", val.id)
+      this.$router.push('/archivesManagement/patient')
+      localStorage.setItem('doctorId', val.id)
     },
     // 递归处理json文件的最后一级
     getTreeData(data) {
@@ -420,15 +414,21 @@ export default {
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
+      // 添加默认医生头像
+      this.$set(
+        this.editAddForm,
+        'avatarUrl',
+        'http://cdn.daliangqing.com/doctor/%E6%BE%B6%E6%9D%91%E5%84%9A1%403x.png'
+      )
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
       console.log(val)
       this.editVal = val
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editDialogVisible = true
     },
@@ -437,22 +437,22 @@ export default {
     // 删除单个
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminDoctor.deleteDoctor(id).then((res) => {
-        if (res.code === "OK") {
+        if (res.code === 'OK') {
           this.$notify.success({
-            title: "删除成功",
+            title: '删除成功',
           })
         }
         this.getList()
@@ -465,12 +465,12 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminDoctor.postDoctor(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$notify.success({
-                  title: "新增成功",
+                  title: '新增成功',
                 })
                 this.getList()
                 // this.getToDoctorList()
@@ -480,9 +480,9 @@ export default {
           } else {
             // 发送请求
             httpAdminDoctor.putDoctor(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$notify.success({
-                  title: "编辑成功",
+                  title: '编辑成功',
                 })
                 this.getList()
                 this.editDialogVisible = false
@@ -500,7 +500,7 @@ export default {
       return formatterElement.doctorType[row.type]
     },
     birthdayFormatter(row) {
-      return Boolean(row.birthday) ? parseTime(row.birthday).slice(0, 10) : ""
+      return Boolean(row.birthday) ? parseTime(row.birthday).slice(0, 10) : ''
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

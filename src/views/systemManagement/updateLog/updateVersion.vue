@@ -10,7 +10,7 @@
           align="left"
           prop="appType">
           <el-select placeholder="请选择app类型"
-            v-model="searchForm.appType">
+            v-model="searchForm.appType" size="small">
             <el-option v-for="item in appTypeList"
               :key="item.id"
               :label="item.label"
@@ -21,7 +21,7 @@
           align="left"
           prop="deviceType">
           <el-select placeholder="请选择设备类型"
-            v-model="searchForm.deviceType">
+            v-model="searchForm.deviceType" size="small">
             <el-option v-for="item in deviceTypeList"
               :key="item.id"
               :label="item.label"

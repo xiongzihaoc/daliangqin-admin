@@ -52,6 +52,7 @@
           <el-input v-model.trim="searchForm.phone"
             size="small"
             v-Int
+            maxlength="11"
             placeholder="请输入本人电话"></el-input>
         </el-form-item>
         <el-form-item label="高血压"
@@ -94,7 +95,7 @@
           align="left"
           prop="doctorUserName">
           <el-input placeholder="请输入对应医师"
-            v-model.trim="searchForm.doctorUserName"></el-input>
+            v-model.trim="searchForm.doctorUserName" size="small"></el-input>
         </el-form-item>
         <el-form-item label="医师手机号"
           align="left"
@@ -102,6 +103,7 @@
           <el-input placeholder="请输入医师手机号"
             v-Int
             maxlength="11"
+            size="small"
             v-model.trim="searchForm.doctorUserPhone"></el-input>
         </el-form-item>
         <el-form-item>

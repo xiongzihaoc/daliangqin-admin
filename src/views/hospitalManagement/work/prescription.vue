@@ -30,7 +30,7 @@
           align="left"
           prop="type">
           <el-select v-model="searchForm.doctorType"
-            placeholder="请选择职位">
+            placeholder="请选择职位" size="small">
             <el-option v-for="item in doctorTypeList"
               :key="item.id"
               :label="item.label"
@@ -450,7 +450,7 @@ export default {
     }
   },
   created() {
-    this.userId = window.sessionStorage.getItem('userId')
+    this.userId = window.localStorage.getItem('userId')
     this.getList()
   },
   mounted() {

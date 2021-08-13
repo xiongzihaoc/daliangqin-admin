@@ -14,6 +14,7 @@
         <el-form-item label="医生手机号">
           <el-input v-model="searchForm.doctorPhone"
             size="small"
+            maxlength="11"
             placeholder="请输入医生手机号"></el-input>
         </el-form-item>
         <el-form-item label="职位">
@@ -28,7 +29,7 @@
         </el-form-item>
         <el-form-item label="医院名称">
           <el-input placeholder="请输入医院名称"
-            v-model="searchForm.hospitalName"></el-input>
+            v-model="searchForm.hospitalName" size="small"></el-input>
         </el-form-item>
         <el-form-item label="随访方式">
           <el-select v-model="searchForm.type"
@@ -48,6 +49,7 @@
         <el-form-item label="用户手机号">
           <el-input v-model="searchForm.patientPhone"
             size="small"
+            maxlength="11"
             placeholder="请输入用户手机号"></el-input>
         </el-form-item>
         <el-form-item label="高血压">
@@ -60,7 +62,6 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-
         <el-form-item label="糖尿病">
           <el-select v-model="searchForm.diabetesStatus"
             size="small"
@@ -286,10 +287,6 @@ export default {
     }
   },
   created() {
-    // let pageNum = window.sessionStorage.getItem('followPageNum')
-    // if (pageNum) {
-    //   this.pageNum = pageNum
-    // }
     this.getList()
   },
   methods: {
@@ -331,7 +328,6 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      // window.sessionStorage.setItem('followPageNum', this.pageNum)
       this.$router.push({
         path:
           '/hospitalManagement/work/followDetail?id=' + val.id + '&type=edit',

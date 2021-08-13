@@ -17,6 +17,7 @@
           align="left">
           <el-input v-model="searchForm.doctorUserPhone"
             size="small"
+            maxlength="11"
             placeholder="请输入医生手机号"></el-input>
         </el-form-item>
         <el-form-item label="医院名称"
@@ -30,7 +31,7 @@
         <el-form-item label="随访方式"
           prop="type">
           <el-select v-model="searchForm.type"
-            placeholder="请选择随访方式">
+            placeholder="请选择随访方式" size="small">
             <el-option v-for="item in followTypeList"
               :key="item.id"
               :label="item.label"
@@ -43,11 +44,6 @@
             size="small"
             placeholder="请输入随访用户"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="用户手机号">
-          <el-input v-model="searchForm.patientPhone"
-            size="small"
-            placeholder="请输入用户手机号"></el-input>
-        </el-form-item> -->
         <!-- 随访时间 -->
         <el-form-item label="随访时间">
           <el-date-picker v-model="searchForm.taskTime"
@@ -65,7 +61,7 @@
         <!-- 加入方式 -->
         <el-form-item label="加入方式">
           <el-select v-model="searchForm.resource"
-            placeholder="请选择加入方式">
+            placeholder="请选择加入方式" size="small">
             <el-option v-for="item in resourceTypeList"
               :key="item.id"
               :label="item.label"
@@ -75,7 +71,7 @@
         <!-- 状态 -->
         <el-form-item label="状态">
           <el-select v-model="searchForm.status"
-            placeholder="请选择状态">
+            placeholder="请选择状态" size="small">
             <el-option v-for="item in statusList"
               :key="item.id"
               :label="item.label"

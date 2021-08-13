@@ -7,6 +7,7 @@
         type="text"
         size="small"
         v-Int
+        maxlength="11"
         placeholder="请输入手机号"
         @keyup.enter.native="searchBtn"></el-input>
       <el-button v-debounce="[searchBtn]"
@@ -43,7 +44,7 @@
         <el-form-item prop="phone"
           label="手机号">
           <el-input v-model="editAddForm.phone"
-            v-Int></el-input>
+            v-Int maxlength="11"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"

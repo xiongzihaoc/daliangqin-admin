@@ -39,7 +39,7 @@ const user = {
         httpPublicLogin.login(userInfo).then(res => {
           if (res.code === 'OK') {
             if (res.data.adminRoleType) {
-              window.sessionStorage.setItem('userId', res.data.userId)
+              window.localStorage.setItem('userId', res.data.userId)
               commit('SET_TOKEN', "xzh")
               setToken("xzh")
               resolve(res)

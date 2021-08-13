@@ -122,6 +122,7 @@
           prop="contract">
           <el-input v-model="editAddForm.contract"
             v-Int
+            maxlength="11"
             placeholder="请输入医院电话"></el-input>
         </el-form-item>
         <el-form-item label="省市区"
@@ -160,6 +161,7 @@
           prop="adminPhone">
           <el-input v-model="editAddForm.adminPhone"
             v-Int
+            maxlength="11"
             placeholder="请输入管理员手机号"></el-input>
         </el-form-item>
       </el-form>
@@ -173,15 +175,15 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import singleUpload from "@/components/Upload"
-import addressJson from "@/utils/address.json"
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
+import EleTable from '@/components/Table'
+import singleUpload from '@/components/Upload'
+import addressJson from '@/utils/address.json'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import {
   validatePhone,
   hospitalClassList,
   formatterElement,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -194,51 +196,52 @@ export default {
       // 表单验证规则
       FormRules: {
         adminPhone: [
-          { required: true, trigger: "blur", validator: validatePhone },
+          { required: true, trigger: 'blur', validator: validatePhone },
         ],
         adminName: [
-          { required: true, message: "请输入管理员姓名", trigger: "blur" },
+          { required: true, message: '请输入管理员姓名', trigger: 'blur' },
         ],
-        name: [{ required: true, message: "请输入医院名称", trigger: "blur" }],
-        address: [{ required: true, message: "请选择省市区", trigger: "blur" }],
+        name: [{ required: true, message: '请输入医院名称', trigger: 'blur' }],
+        address: [{ required: true, message: '请选择省市区', trigger: 'blur' }],
         contract: [
           {
             required: true,
-            message: "请输入医院电话",
-            trigger: "blur",
+            message: '请输入医院电话',
+            trigger: 'blur',
             validator: validatePhone,
           },
         ],
         detail: [
-          { required: true, message: "请输入详细地址", trigger: "blur" },
+          { required: true, message: '请输入详细地址', trigger: 'blur' },
         ],
         hospitalType: [
-          { required: true, message: "请选择医院等级", trigger: "blur" },
+          { required: true, message: '请选择医院等级', trigger: 'blur' },
         ],
       },
       // 搜索表单
       searchForm: {
-        hospitalName: "",
-        hospitalType: "",
+        hospitalName: '',
+        hospitalType: '',
       },
       // 列表数据
       list: [],
       cateListProps: {
-        value: "name", //匹配响应数据中的id
-        label: "name", //匹配响应数据中的name
-        children: "districts", //匹配响应数据中的children
+        value: 'name', //匹配响应数据中的id
+        label: 'name', //匹配响应数据中的name
+        children: 'districts', //匹配响应数据中的children
       },
       // 增改表单
       editAddForm: {
-        name: "",
-        contract: "",
-        hospitalType: "",
-        province: "",
-        city: "",
-        area: "",
+        name: '',
+        contract: '',
+        hospitalType: '',
+        avatarUrl: '',
+        province: '',
+        city: '',
+        area: '',
         address: [],
-        detail: "",
-        adminName: "",
+        detail: '',
+        adminName: '',
       },
       // 表格数据
       tableHeaderBig: [],
@@ -248,7 +251,7 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
@@ -301,19 +304,25 @@ export default {
     // 跳转医生列表
     skipDoctor(val) {
       console.log(val)
-      this.$router.push("/hospitalManagement/doctor")
-      localStorage.setItem("hospitalId", val.id)
+      this.$router.push('/hospitalManagement/doctor')
+      localStorage.setItem('hospitalId', val.id)
     },
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
+      // 添加默认医院头像
+      this.$set(
+        this.editAddForm,
+        'avatarUrl',
+        'http://cdn.daliangqing.com/hospital/%E6%BE%B6%E6%9D%91%E5%84%9A3.png'
+      )
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editAddForm.address = [
         this.editAddForm.province,
@@ -327,22 +336,22 @@ export default {
     // 删除单个
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminHospital.deleteHospital(id).then((res) => {
-        if (res.code === "OK") {
+        if (res.code === 'OK') {
           this.$notify.success({
-            title: "删除成功",
+            title: '删除成功',
           })
           this.getList()
         }
@@ -355,12 +364,12 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminHospital.postHospital(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$notify.success({
-                  title: "新增成功",
+                  title: '新增成功',
                 })
                 this.getList()
                 this.editDialogVisible = false
@@ -369,9 +378,9 @@ export default {
           } else {
             // 发送请求
             httpAdminHospital.putHospital(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$notify.success({
-                  title: "编辑成功",
+                  title: '编辑成功',
                 })
                 this.getList()
                 this.editDialogVisible = false

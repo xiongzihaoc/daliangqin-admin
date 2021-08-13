@@ -26,7 +26,7 @@
           align="left"
           prop="equipmentResourceType">
           <el-select class="w100"
-            v-model="searchForm.equipmentResourceType">
+            v-model="searchForm.equipmentResourceType" size="small">
             <el-option v-for="item in equipmentResourceTypeList"
               :key="item.id"
               :label="item.label"
@@ -37,7 +37,7 @@
           align="left"
           prop="highBloodStatus">
           <el-select class="w100"
-            v-model="searchForm.highBloodStatus">
+            v-model="searchForm.highBloodStatus" size="small">
             <el-option v-for="item in healthList"
               :key="item.id"
               :label="item.label"

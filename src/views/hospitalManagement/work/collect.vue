@@ -19,6 +19,7 @@
           <el-input v-model="searchForm.doctorPhone"
             v-Int
             size="small"
+            maxlength="11"
             placeholder="请输入医生手机号"></el-input>
         </el-form-item>
         <el-form-item label="职位"

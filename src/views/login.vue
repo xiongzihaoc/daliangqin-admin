@@ -59,7 +59,7 @@
 
 <script>
 import { getCode } from '@/api/public/httpPublicSms'
-import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
+import { httpAdminRole } from '@/api/admin/httpAdminRole'
 import { validatePhone, validateCode } from '@/utils/index'
 export default {
   name: 'Login',
@@ -138,8 +138,7 @@ export default {
             .dispatch('Login', this.loginForm)
             .then((res) => {
               // this.$router.push({ path: this.redirect || "/" });
-              // this.getUserInfo(res.data.userId)
-              this.$router.push({ path: 'operationsManagement/banner' })
+              this.getUserInfo(res.data.userId)
             })
             .catch(() => {
               this.loading = false
@@ -152,9 +151,9 @@ export default {
     },
     // 获取登录用户信息
     getUserInfo(userId) {
-      httpAdminDoctor.getDoctorDetail(userId).then((res) => {
-        console.log(res)
+      httpAdminRole.getAdminRoleUserInfo(userId).then((res) => {
         window.localStorage.setItem('adminUserInfo', JSON.stringify(res.data))
+        this.$router.push({ path: 'operationsManagement/banner' })
         this.loading = false
       })
     },
