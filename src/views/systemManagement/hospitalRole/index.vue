@@ -27,7 +27,7 @@
           prop="hospitalId">
           <el-select v-model="searchForm.hospitalId"
             @change="selectChange"
-            class="w100">
+            class="w100" size="small">
             <el-option v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"

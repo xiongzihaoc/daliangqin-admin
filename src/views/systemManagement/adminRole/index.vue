@@ -19,6 +19,7 @@
           <el-input v-model="searchForm.phone"
             v-Int
             size="small"
+            maxlength="11"
             placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item label="身份"
@@ -26,7 +27,7 @@
           prop="adminRoleType">
           <el-select style="width: 100%"
             placeholder="请选择身份"
-            v-model="searchForm.adminRoleType">
+            v-model="searchForm.adminRoleType" size="small">
             <el-option v-for="item in adminRoleTypeList"
               :key="item.id"
               :label="item.label"
@@ -104,7 +105,7 @@
           prop="phone"
           v-if="this.infoTitle === '新增'">
           <el-input v-Int
-            v-model="editAddForm.phone"></el-input>
+            v-model="editAddForm.phone" maxlength="11"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"

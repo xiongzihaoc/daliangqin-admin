@@ -16,6 +16,7 @@
           prop="patientPhone">
           <el-input v-model="searchForm.patientPhone"
             size="small"
+            maxlength="11"
             placeholder="请输入用户手机号"></el-input>
         </el-form-item>
         <el-form-item label="留言时间"
@@ -41,6 +42,7 @@
           prop="doctorPhone">
           <el-input v-model="searchForm.doctorPhone"
             size="small"
+            maxlength="11"
             placeholder="请输入医生手机号"></el-input>
         </el-form-item>
         <el-form-item label="回复时间"

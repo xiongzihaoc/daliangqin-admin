@@ -8,6 +8,13 @@ export const httpAdminRole = {
       params: data
     })
   },
+  // 获取登录用户信息
+  getAdminRoleUserInfo(id) {
+    return request({
+      url: 'adminRole/' + id,
+      method: 'get',
+    })
+  },
   postAdminRole(data) {
     return request({
       url: 'adminRole',

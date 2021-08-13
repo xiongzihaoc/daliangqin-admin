@@ -470,7 +470,8 @@
                 :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="遗传病史其他" v-if="form.geneticHistory === 'HAVE'">
+          <el-form-item label="遗传病史其他"
+            v-if="form.geneticHistory === 'HAVE'">
             <el-input v-model="form.otherGeneticHistory"
               type="textarea"
               placeholder="请输入遗传病史其他"></el-input>
@@ -657,6 +658,11 @@ export default {
     if (this.$route.query.type === 'edit') {
       this.getList()
     } else {
+      this.$set(
+        this.form,
+        'avatarUrl',
+        'http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png'
+      )
     }
     this.form.patientUserId = this.$route.query.id
   },
@@ -778,7 +784,6 @@ export default {
       //   localStorage.getItem('adminUserInfo')
       // ).name
 
-      
       // 提交
       this.$refs.FormRef.validate((valid) => {
         if (valid) {

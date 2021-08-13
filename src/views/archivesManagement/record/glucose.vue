@@ -25,7 +25,7 @@
         <el-form-item label="检测模式"
           align="left">
           <el-select class="w100"
-            v-model="searchForm.detectType">
+            v-model="searchForm.detectType" size="small">
             <el-option v-for="item in glucoseDetectType"
               :key="item.id"
               :label="item.label"
@@ -36,7 +36,7 @@
           align="left"
           prop="equipmentResourceType">
           <el-select class="w100"
-            v-model="searchForm.equipmentResourceType">
+            v-model="searchForm.equipmentResourceType" size="small">
             <el-option v-for="item in equipmentResourceTypeList"
               :key="item.id"
               :label="item.label"
@@ -45,7 +45,7 @@
         </el-form-item>
         <el-form-item label="检测结果"
           align="left"
-          prop="diabetesStatus">
+          prop="diabetesStatus" size="small">
           <el-select class="w100"
             v-model="searchForm.diabetesStatus">
             <el-option v-for="item in healthList"

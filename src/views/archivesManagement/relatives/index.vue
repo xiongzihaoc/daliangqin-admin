@@ -19,6 +19,7 @@
           <el-input v-model="searchForm.userPhone"
             size="small"
             v-Int
+            maxlength="11"
             placeholder="请输入用户手机号"></el-input>
         </el-form-item>
         <el-form-item label="身份"
