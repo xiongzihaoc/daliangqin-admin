@@ -210,7 +210,19 @@ export function fomatFloat(value, n) {
   return s;
 }
 
+// 秒转时分
+export function formatSeconds(value) {
+  let result = parseInt(value)
+  let h = Math.floor(result / 3600) < 10 ? '0' + Math.floor(result / 3600) : Math.floor(result / 3600);
+  let m = Math.floor((result / 60 % 60)) < 10 ? '0' + Math.floor((result / 60 % 60)) : Math.floor((result / 60 % 60));
+  let s = Math.floor((result % 60)) < 10 ? '0' + Math.floor((result % 60)) : Math.floor((result % 60));
 
+  let res = '';
+  if(h !== '00') res += `${h}时`;
+  if(m !== '00') res += `${m}分`;
+  res += `${s}秒`;
+  return res;
+}
 // 文化程度
 export const educationType = [
   { id: 1, label: "研究生及以上", value: "POSTGRADUATE" },
