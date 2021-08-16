@@ -12,12 +12,6 @@
             <el-input v-model="form.name"
               placeholder="请输入姓名"></el-input>
           </el-form-item>
-          <!-- 用户头像 -->
-          <el-form-item label="照片"
-            prop="avatarUrl">
-            <single-upload v-model="form.avatarUrl"
-              uploadType="AVATAR" />
-          </el-form-item>
           <!-- 身份证 -->
           <el-form-item label="身份证号"
             prop="idCard">
@@ -25,6 +19,11 @@
               maxlength="18"
               oninput="value=value.replace(/[^0-9Xx]/g,'')"
               placeholder="请输入身份证号"></el-input>
+          </el-form-item>
+          <!-- 用户头像 -->
+          <el-form-item label="照片">
+            <single-upload v-model="form.avatarUrl"
+              uploadType="AVATAR" />
           </el-form-item>
           <el-form-item label="省市区"
             prop="addressDetail">
@@ -554,20 +553,20 @@ export default {
         idCard: [
           { required: true, trigger: 'blur', validator: validateIdCard },
         ],
-        addressDetail: [
-          { required: true, message: '请选择省市区', trigger: 'blur' },
-        ],
-        address: [
-          { required: true, message: '请输入详细地址', trigger: 'blur' },
-        ],
-        hospitalId: [
-          { required: true, message: '请选择对应医院', trigger: 'blur' },
-        ],
-        doctorUserId: [
-          { required: true, message: '请选择对应医师', trigger: 'blur' },
-        ],
-        height: [{ required: true, message: '请输入身高', trigger: 'blur' }],
-        weight: [{ required: true, message: '请输入体重', trigger: 'blur' }],
+        // addressDetail: [
+        //   { required: true, message: '请选择省市区', trigger: 'blur' },
+        // ],
+        // address: [
+        //   { required: true, message: '请输入详细地址', trigger: 'blur' },
+        // ],
+        // hospitalId: [
+        //   { required: true, message: '请选择对应医院', trigger: 'blur' },
+        // ],
+        // doctorUserId: [
+        //   { required: true, message: '请选择对应医师', trigger: 'blur' },
+        // ],
+        // height: [{ required: true, message: '请输入身高', trigger: 'blur' }],
+        // weight: [{ required: true, message: '请输入体重', trigger: 'blur' }],
       },
       // 级联配置
       cateListProps: {

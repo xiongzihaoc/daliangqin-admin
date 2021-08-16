@@ -10,7 +10,8 @@
           align="left"
           prop="appType">
           <el-select placeholder="请选择app类型"
-            v-model="searchForm.appType" size="small">
+            v-model="searchForm.appType"
+            size="small">
             <el-option v-for="item in appTypeList"
               :key="item.id"
               :label="item.label"
@@ -21,7 +22,8 @@
           align="left"
           prop="deviceType">
           <el-select placeholder="请选择设备类型"
-            v-model="searchForm.deviceType" size="small">
+            v-model="searchForm.deviceType"
+            size="small">
             <el-option v-for="item in deviceTypeList"
               :key="item.id"
               :label="item.label"
@@ -140,6 +142,16 @@
             v-show="percentage > 0 && percentage < 100"
             :percentage="percentage"></el-progress>
         </el-form-item>
+        <el-form-item v-if="editAddForm.deviceType === 'ANDROID'">
+          <div>
+            <vue-qr :logo-src="logoSrc"
+              :size="191"
+              :margin="0"
+              :auto-color="true"
+              :dot-scale="1"
+              :text="appSrc" />
+          </div>
+        </el-form-item>
       </el-form>
       <span slot="footer"
         class="dialog-footer">
@@ -152,19 +164,22 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import singleUpload from "@/components/UploadFile"
-import { httpAdminUpdateVersion } from "@/api/admin/httpAdminUpdateVersion"
+// 二维码
+import VueQr from 'vue-qr'
+import EleTable from '@/components/Untable'
+import singleUpload from '@/components/UploadFile'
+import { httpAdminUpdateVersion } from '@/api/admin/httpAdminUpdateVersion'
 import {
   parseTime,
   deviceTypeList,
   appTypeList,
   formatterElement,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
     singleUpload,
+    VueQr,
   },
   data() {
     return {
@@ -173,63 +188,67 @@ export default {
       deviceTypeList,
       FormRules: {
         appType: [
-          { required: true, message: "请选择app类型", trigger: "blur" },
+          { required: true, message: '请选择app类型', trigger: 'blur' },
         ],
         deviceType: [
-          { required: true, message: "请选择设备类型", trigger: "blur" },
+          { required: true, message: '请选择设备类型', trigger: 'blur' },
         ],
         versionString: [
-          { required: true, message: "请输入版本", trigger: "blur" },
+          { required: true, message: '请输入版本', trigger: 'blur' },
         ],
         versionCode: [
-          { required: true, message: "请输入版本号", trigger: "blur" },
+          { required: true, message: '请输入版本号', trigger: 'blur' },
         ],
         updateLog: [
-          { required: true, message: "请选择更新日志  ", trigger: "blur" },
+          { required: true, message: '请选择更新日志  ', trigger: 'blur' },
         ],
-        url: [{ required: true, message: "请输入url  ", trigger: "blur" }],
+        url: [{ required: true, message: '请输入url  ', trigger: 'blur' }],
       },
       searchForm: {
-        appType: "",
-        deviceType: "",
+        appType: '',
+        deviceType: '',
       },
       list: [],
       editAddForm: {
-        appType: "",
-        deviceType: "",
-        versionString: "",
-        versionCode: "",
-        updateLog: "",
-        url: "",
+        appType: '',
+        deviceType: '',
+        versionString: '',
+        versionCode: '',
+        updateLog: '',
+        url: '',
       },
       tableHeaderBig: [
-        { type: "index", label: "序号" },
+        { type: 'index', label: '序号' },
         {
-          prop: "appType",
-          label: "app类型",
+          prop: 'appType',
+          label: 'app类型',
           formatter: (row) => {
             return this.appTypeFormatter(row)
           },
         },
         {
-          prop: "deviceType",
-          label: "设备类型",
+          prop: 'deviceType',
+          label: '设备类型',
           formatter: (row) => {
             return this.deviceTypeFormatter(row)
           },
         },
-        { prop: "versionString", label: "版本号" },
-        { prop: "versionCode", label: "版本code" },
-        { prop: "updateLog", label: "版本日志" },
-        { prop: "url", label: "链接" },
+        { prop: 'versionString', label: '版本号' },
+        { prop: 'versionCode', label: '版本code' },
+        { prop: 'updateLog', label: '版本日志' },
+        { prop: 'url', label: '链接' },
         {
-          prop: "updateTime",
-          label: "更新时间",
+          prop: 'updateTime',
+          label: '更新时间',
           formatter: (row) => {
             return parseTime(row.updateTime)
           },
         },
       ],
+      // 二维码参数
+      logoSrc: '',
+      appSrc: 'http://www.baidu.com',
+
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -237,7 +256,7 @@ export default {
       percentage: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
@@ -277,14 +296,14 @@ export default {
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      console.log(val)
-      this.infoTitle = "编辑"
+      this.appSrc = val.url
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editDialogVisible = true
     },
@@ -293,22 +312,22 @@ export default {
     // 删除单个
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminUpdateVersion.deleteUpdateVersion(id).then((res) => {
-        if (res.code === "OK") {
+        if (res.code === 'OK') {
           this.$notify.success({
-            title: "删除成功",
+            title: '删除成功',
           })
           this.getList()
         }
@@ -321,14 +340,14 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminUpdateVersion
               .postUpdateVersion(this.editAddForm)
               .then((res) => {
-                if (res.code === "OK") {
+                if (res.code === 'OK') {
                   this.$notify.success({
-                    title: "新增成功",
+                    title: '新增成功',
                   })
                   this.getList()
                   this.editDialogVisible = false
@@ -339,9 +358,9 @@ export default {
             httpAdminUpdateVersion
               .putUpdateVersion(this.editAddForm)
               .then((res) => {
-                if (res.code === "OK") {
+                if (res.code === 'OK') {
                   this.$notify.success({
-                    title: "编辑成功",
+                    title: '编辑成功',
                   })
                   this.getList()
                   this.editDialogVisible = false
