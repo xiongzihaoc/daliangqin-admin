@@ -664,6 +664,7 @@ export default {
         .then((res) => {
           // 回显表单数据
           let value = res.data.elements[0]
+          // 如果建档
           if (value.archivesMongo) {
             this.getDoctorList(value.archivesMongo.hospitalId)
             this.form = value?.archivesMongo
@@ -671,8 +672,11 @@ export default {
               this.archivesFamily = value?.archivesMongo?.archivesFamily
             }
           } else {
-            this.form.phone = value?.phone
+            this.$set(this.form, 'phone', value?.phone)
+            this.$set(this.form, 'idCard', value?.idCard)
+            this.$set(this.form, 'name', value?.name)
           }
+          // 如果头像为空 给默认头像
           if (this.form.avatarUrl === '') {
             this.$set(
               this.form,
