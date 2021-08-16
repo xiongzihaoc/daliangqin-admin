@@ -20,6 +20,13 @@
               oninput="value=value.replace(/[^0-9Xx]/g,'')"
               placeholder="请输入身份证号"></el-input>
           </el-form-item>
+          <!-- 手机号 -->
+          <el-form-item label="手机号">
+            <el-input v-model="form.phone"
+              maxlength="11"
+              v-Int
+              placeholder="请输入手机号"></el-input>
+          </el-form-item>
           <!-- 用户头像 -->
           <el-form-item label="照片">
             <single-upload v-model="form.avatarUrl"
@@ -61,13 +68,6 @@
             prop="bmi">
             <el-input v-model="form.bmi"
               disabled></el-input>
-          </el-form-item>
-          <!-- 手机号 -->
-          <el-form-item label="手机">
-            <el-input v-model="form.phone"
-              maxlength="11"
-              v-Int
-              placeholder="请输入手机号"></el-input>
           </el-form-item>
           <el-form-item label="座机">
             <el-input v-model="form.contact"
