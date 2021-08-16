@@ -41,7 +41,7 @@ const user = {
             if (res.data.adminRoleType) {
               window.localStorage.setItem('userId', res.data.userId)
               commit('SET_TOKEN', "admin")
-              setToken("xzh")
+              setToken("admin")
               resolve(res)
             }
           }
