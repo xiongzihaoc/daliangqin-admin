@@ -83,14 +83,6 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        label="录入方式"
-        prop="name">
-        <template slot-scope="scope">
-          <span v-if="scope.row.equipmentResourceType === 'MANUAL'">手动录入</span>
-          <span v-else>设备检测</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center"
         label="测量结果"
         prop="title">
       </el-table-column>
@@ -104,118 +96,14 @@
       <!-- 操作 -->
       <el-table-column align="center"
         label="操作"
-        width="220">
+        width="120">
         <template slot-scope="scope">
           <el-button size="mini"
-            @click="editBtn(scope.row)"
-            type="primary"
-            v-if="scope.row.equipmentResourceType === 'MANUAL'">编辑</el-button>
-          <el-button size="mini"
             @click="examineBtn(scope.row)"
-            type="primary"
-            plain
-            v-else>查看</el-button>
+            type="primary">查看</el-button>
         </template>
       </el-table-column>
     </EleTable>
-    <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
-      :visible.sync="editDialogVisible"
-      width="40%"
-      @closed="editDialogClosed"
-      v-dialogDrag>
-      <el-form ref="FormRef"
-        :rules="FormRules"
-        :model="editAddForm"
-        label-width="120px">
-        <el-form-item label="选择医院"
-          prop="hospitalId">
-          <el-select class="w100"
-            filterable
-            clearable
-            @change="selecthospital"
-            v-model.trim="editAddForm.hospitalId"
-            :disabled="this.infoTitle === '编辑'?true:false"
-            placeholder="请选择医院">
-            <el-option v-for="item in hospitalList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="选择医生"
-          prop="doctorUserId">
-          <el-select class="w100"
-            filterable
-            clearable
-            @change="selectDoctor"
-            v-model="editAddForm.doctorUserId"
-            :disabled="this.infoTitle === '编辑'?true:false"
-            placeholder="请选择医生">
-            <el-option v-for="item in doctorList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-        <!-- 用户 -->
-        <el-form-item label="选择用户"
-          prop="userId">
-          <el-select class="w100"
-            filterable
-            @change="selectPatient"
-            :disabled="this.infoTitle === '编辑'?true:false"
-            v-model="editAddForm.userId">
-            <el-option v-for="item in patientList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="设备"
-          prop="name">
-          <el-input v-model.trim="editAddForm.name"
-            placeholder="请输入设备"></el-input>
-        </el-form-item>
-        <!-- 高压 -->
-        <el-form-item label="心率"
-          prop="heartRateScore">
-          <el-input maxlength="3"
-            v-model="editAddForm.heartRateScore"
-            v-Int
-            oninput="if (value > 200) value = 200"
-            placeholder="请输入心率"><i slot="suffix"
-              style="font-style:normal;margin-right: 10px;">bpm</i></el-input>
-        </el-form-item>
-        <el-form-item label="检测模式"
-          prop="detectType">
-          <el-select class="w100"
-            @change="selectPatient"
-            v-model="editAddForm.detectType">
-            <el-option label="日常检测"
-              value="DAILY"></el-option>
-            <el-option label="24小时检测"
-              value="TWENTY_FOUR_HOURS"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="检测日期"
-          prop="inspectionTime">
-          <el-date-picker v-model="editAddForm.inspectionTime"
-            style="width:100%"
-            format="yyyy-MM-dd HH:mm"
-            type="datetime"
-            value-format="timestamp"
-            placeholder="选择日期">
-          </el-date-picker>
-        </el-form-item>
-      </el-form>
-      <span slot="footer"
-        class="dialog-footer">
-        <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
-      </span>
-    </el-dialog>
     <el-dialog title="提示"
       :visible.sync="hospitalDialogVisible"
       width="30%"
@@ -247,15 +135,9 @@
 <script>
 import EleTable from '@/components/Table'
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
-import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
-import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
-import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import {
   parseTime,
   formatSeconds,
-  validateTime,
-  equipmentResourceTypeList,
-  heartList,
 } from '@/utils/index'
 export default {
   components: {
@@ -265,31 +147,10 @@ export default {
     return {
       parseTime,
       formatSeconds,
-      equipmentResourceTypeList,
-      heartList,
-      FormRules: {
-        hospitalId: [
-          { required: true, message: '请选择医院', trigger: 'blur' },
-        ],
-        doctorUserId: [
-          { required: true, message: '请选择医生', trigger: 'blur' },
-        ],
-        userId: [{ required: true, message: '请选择用户', trigger: 'blur' }],
-        inspectionTime: [
-          { required: true, trigger: 'blur', validator: validateTime },
-        ],
-        heartRateScore: [
-          { required: true, message: '请输入心率', trigger: 'blur' },
-        ],
-        detectType: [
-          { required: true, message: '请选择检测模式', trigger: 'blur' },
-        ],
-      },
       searchForm: {
         patientUserName: '',
         patientUserPhone: '',
         equipmentResourceType: '',
-        // heartRateStatus: '',
       },
       hospitalList: [],
       doctorList: [],
@@ -316,16 +177,11 @@ export default {
       pageNum: 1,
       total: 0,
       //   弹框区域
-      editDialogVisible: false,
       hospitalDialogVisible: false,
-      infoTitle: '',
     }
   },
   created() {
     this.getList()
-  },
-  mounted() {
-    this.getHospitalList()
   },
   methods: {
     getList() {
@@ -336,43 +192,11 @@ export default {
           patientUserName: this.searchForm.patientUserName,
           patientUserPhone: this.searchForm.patientUserPhone,
           equipmentResourceType: this.searchForm.equipmentResourceType,
-          // heartRateStatus: this.searchForm.heartRateStatus,
         })
         .then((res) => {
           this.list = res.data.elements
           this.total = res.data.totalSize
         })
-    },
-    // 获取医院列表
-    getHospitalList() {
-      httpAdminHospital.getHospital().then((res) => {
-        this.hospitalList = res.data.elements
-      })
-    },
-    // 获取医生列表
-    getDoctorList(val) {
-      httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
-        this.doctorList = res.data.elements
-      })
-    },
-    // 获取用户列表
-    getPatientList(id) {
-      httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
-        this.patientList = res.data.elements
-      })
-    },
-    selecthospital(val) {
-      this.getDoctorList(val)
-      this.editAddForm.doctorUserId = ''
-      this.editAddForm.userId = ''
-    },
-    selectDoctor(val) {
-      this.getPatientList(val)
-      this.$forceUpdate()
-      this.editAddForm.userId = ''
-    },
-    selectPatient() {
-      this.$forceUpdate()
     },
     /***** 搜索区域 *****/
     // 搜索
@@ -385,23 +209,6 @@ export default {
       this.getList()
     },
     /***** 增删改 *****/
-    // 新增
-    addBtn() {
-      this.infoTitle = '新增'
-      this.doctorList = []
-      this.patientList = []
-      this.editAddForm = {}
-      this.editDialogVisible = true
-    },
-    // 编辑
-    editBtn(val) {
-      this.getDoctorList(val.hospitalId)
-      this.getPatientList(val.doctorUserId)
-      this.infoTitle = '编辑'
-      this.editAddForm = JSON.parse(JSON.stringify(val))
-      this.editAddForm.userId = val.patientUserId
-      this.editDialogVisible = true
-    },
     // 查看
     examineBtn(val) {
       if (val.signUrl != '') {
@@ -437,40 +244,6 @@ export default {
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
-    },
-    // 新增编辑确定
-    editPageEnter() {
-      this.$refs.FormRef.validate((valid) => {
-        if (valid) {
-          if (this.infoTitle === '新增') {
-            // 发送请求
-            httpAdminHeartRate.postHeartRate(this.editAddForm).then((res) => {
-              if (res.code !== 'OK') {
-                return
-              } else {
-                this.$notify.success({
-                  title: '新增成功',
-                })
-                this.getList()
-                this.editDialogVisible = false
-              }
-            })
-          } else {
-            // 发送请求
-            httpAdminHeartRate.putHeartRate(this.editAddForm).then((res) => {
-              if (res.code !== 'OK') {
-                return
-              } else {
-                this.$notify.success({
-                  title: '编辑成功',
-                })
-                this.getList()
-                this.editDialogVisible = false
-              }
-            })
-          }
-        }
-      })
     },
     lengthFormatter(row) {
       if (row.reportResult != '') {

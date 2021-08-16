@@ -104,7 +104,9 @@
           <!-- 对方 -->
           <div class="word"
             v-if="!item.isSelf">
-            <img :src="toInfo.avatarUrl">
+            <!-- 如果头像不为空 -->
+            <img v-if="toInfo.avatarUrl != ''" :src="toInfo.avatarUrl">
+            <img v-else src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png">
             <div class="info">
               <p class="time">{{toInfo.userName}} {{parseTime(item.createTime)}}</p>
               <div class="info-content">{{item.leaveContent}}</div>
@@ -264,6 +266,7 @@ export default {
           this.messageList = res.data.elements.reverse()
           this.selfInfo = res.data.expand.selfInfo
           this.toInfo = res.data.expand.toInfo
+          console.log(toInfo);
         })
     },
     // 日期控件选择事件

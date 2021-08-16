@@ -29,10 +29,4 @@ export const httpAdminHeartRate = {
       data
     })
   },
-  deleteHeartRate(id) {
-    return request({
-      url: 'equipment/heartRate/' + id,
-      method: 'delete',
-    })
-  },
 }
