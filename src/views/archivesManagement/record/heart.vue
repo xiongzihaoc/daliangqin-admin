@@ -252,6 +252,7 @@ import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import {
   parseTime,
+  formatSeconds,
   validateTime,
   equipmentResourceTypeList,
   heartList,
@@ -263,6 +264,7 @@ export default {
   data() {
     return {
       parseTime,
+      formatSeconds,
       equipmentResourceTypeList,
       heartList,
       FormRules: {
@@ -472,7 +474,7 @@ export default {
     },
     lengthFormatter(row) {
       if (row.reportResult != '') {
-        return JSON.parse(row.reportResult).body.data.length + 's'
+        return formatSeconds(JSON.parse(row.reportResult).body.data.length)
       }
     },
     /***** 分页 *****/
