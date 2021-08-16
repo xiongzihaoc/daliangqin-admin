@@ -40,11 +40,9 @@ const user = {
           if (res.code === 'OK') {
             if (res.data.adminRoleType) {
               window.localStorage.setItem('userId', res.data.userId)
-              commit('SET_TOKEN', "xzh")
+              commit('SET_TOKEN', "admin")
               setToken("xzh")
               resolve(res)
-            } else {
-              return Message.error('该用户不是管理员')
             }
           }
         }).catch(error => {

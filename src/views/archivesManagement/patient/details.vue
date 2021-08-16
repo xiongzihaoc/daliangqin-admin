@@ -553,20 +553,6 @@ export default {
         idCard: [
           { required: true, trigger: 'blur', validator: validateIdCard },
         ],
-        // addressDetail: [
-        //   { required: true, message: '请选择省市区', trigger: 'blur' },
-        // ],
-        // address: [
-        //   { required: true, message: '请输入详细地址', trigger: 'blur' },
-        // ],
-        // hospitalId: [
-        //   { required: true, message: '请选择对应医院', trigger: 'blur' },
-        // ],
-        // doctorUserId: [
-        //   { required: true, message: '请选择对应医师', trigger: 'blur' },
-        // ],
-        // height: [{ required: true, message: '请输入身高', trigger: 'blur' }],
-        // weight: [{ required: true, message: '请输入体重', trigger: 'blur' }],
       },
       // 级联配置
       cateListProps: {
@@ -686,6 +672,13 @@ export default {
             }
           } else {
             this.form.phone = value?.phone
+          }
+          if (this.form.avatarUrl === '') {
+            this.$set(
+              this.form,
+              'avatarUrl',
+              'http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png'
+            )
           }
           this.form.province = value?.province
           this.form.city = value?.city

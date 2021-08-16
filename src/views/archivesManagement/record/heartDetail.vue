@@ -109,25 +109,6 @@
             <div class="content">{{heartDetail.healthCareAdvice}}</div>
           </div>
         </div>
-        <!-- <div class="variation-box">
-          <div class="fz14 impression-title">心率变异性分析：</div>
-          <div>
-            <div class="fz11 variation">心率变异性指数：</div>
-            <div class="variation-text">{{heartDetail.hrv}}</div>
-          </div>
-          <div>
-            <div class="fz11 variation">心脏疾病风险评估：</div>
-            <div class="variation-text">{{heartDetail.hdrisk}}</div>
-          </div>
-          <div>
-            <div class="fz11 variation">精神压力指数：</div>
-            <div class="variation-text">{{heartDetail.mentalPressure}}</div>
-          </div>
-          <div>
-            <div class="fz11 variation">身体疲劳指数：</div>
-            <div class="variation-text">{{heartDetail.fatigue}}</div>
-          </div>
-        </div> -->
         <!-- 底部 -->
         <div class="footer">
           <div class="left">
