@@ -663,19 +663,8 @@ export default {
         .getPatient({ userId: this.$route.query.id })
         .then((res) => {
           // 回显表单数据
-          let value = res.data.elements[0]
-          // 如果建档
-          if (value.archivesMongo) {
-            this.getDoctorList(value.archivesMongo.hospitalId)
-            this.form = value?.archivesMongo
-            if (value?.archivesMongo?.archivesFamily) {
-              this.archivesFamily = value?.archivesMongo?.archivesFamily
-            }
-          } else {
-            this.$set(this.form, 'phone', value?.phone)
-            this.$set(this.form, 'idCard', value?.idCard)
-            this.$set(this.form, 'name', value?.name)
-          }
+          let userInfo = res?.data?.elements[0]
+          this.form = userInfo?.archivesMongo
           // 如果头像为空 给默认头像
           if (this.form.avatarUrl === '') {
             this.$set(
@@ -684,17 +673,22 @@ export default {
               'http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png'
             )
           }
-          this.form.province = value?.province
-          this.form.city = value?.city
-          this.form.area = value?.area
-          this.$set(this.form, 'address', value?.address)
-          this.$set(this.form, 'avatarUrl', value?.avatarUrl)
-          this.computeBmi()
+          if (userInfo.archivesMongo.archivesFamily) {
+            this.archivesFamily = userInfo.archivesMongo.archivesFamily
+          }
+          this.$set(this.form, 'address', userInfo?.address)
+          this.form.province = userInfo?.province
+          this.form.city = userInfo?.city
+          this.form.area = userInfo?.area
           this.form.addressDetail = [
             this.form.province,
             this.form.city,
             this.form.area,
           ]
+          // BMI计算
+          this.computeBmi()
+          // 医生列表
+          this.getDoctorList(userInfo.archivesMongo.hospitalId)
         })
     },
     // 级联change事件

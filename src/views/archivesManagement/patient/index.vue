@@ -95,7 +95,8 @@
           align="left"
           prop="doctorUserName">
           <el-input placeholder="请输入对应医师"
-            v-model.trim="searchForm.doctorUserName" size="small"></el-input>
+            v-model.trim="searchForm.doctorUserName"
+            size="small"></el-input>
         </el-form-item>
         <el-form-item label="医师手机号"
           align="left"
@@ -233,14 +234,12 @@ export default {
         { prop: 'doctorUserName', label: '对应医师' },
         { prop: 'doctorUserPhone', label: '医师手机号' },
         {
-          prop: 'archivesMongo.createTime',
           label: '创建时间',
           formatter: (row) => {
             return parseTime(row.archivesMongo?.createTime)
           },
         },
         {
-          prop: 'archivesMongo.createUserName',
           label: '创建人',
           formatter: (row) => {
             return row.archivesMongo?.createUserName

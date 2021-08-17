@@ -22,6 +22,18 @@
             v-Int
             placeholder="请输入手机号"></el-input>
         </el-form-item>
+        <!-- <el-form-item label="检测模式"
+          align="left"
+          prop="detectType">
+          <el-select v-model="searchForm.detectType"
+            size="small"
+            placeholder="请选择检测模式">
+            <el-option label="24小时检测"
+              value="TWENTY_FOUR_HOURS"></el-option>
+            <el-option label="日常检测"
+              value="DAILY"></el-option>
+          </el-select>
+        </el-form-item> -->
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -135,10 +147,7 @@
 <script>
 import EleTable from '@/components/Table'
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
-import {
-  parseTime,
-  formatSeconds,
-} from '@/utils/index'
+import { parseTime, formatSeconds } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -150,7 +159,7 @@ export default {
       searchForm: {
         patientUserName: '',
         patientUserPhone: '',
-        equipmentResourceType: '',
+        detectType: '',
       },
       hospitalList: [],
       doctorList: [],
@@ -191,7 +200,7 @@ export default {
           pageSize: this.pageSize,
           patientUserName: this.searchForm.patientUserName,
           patientUserPhone: this.searchForm.patientUserPhone,
-          equipmentResourceType: this.searchForm.equipmentResourceType,
+          detectType: this.searchForm.detectType,
         })
         .then((res) => {
           this.list = res.data.elements
