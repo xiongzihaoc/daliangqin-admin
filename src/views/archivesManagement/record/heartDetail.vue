@@ -28,7 +28,7 @@
               <span v-else>24小时检测</span>
             </div>
             <div class="box"><span class="fw">检测时长：</span>
-              <span>{{heartDetail.length}}秒</span>
+              <span>{{formatSeconds(heartDetail.length)}}</span>
             </div>
             <div class="box"><span class="fw">心率：</span>
               <span v-if="userInfo.heartRateScore">{{userInfo.heartRateScore}}bpm</span>
@@ -136,11 +136,12 @@
 
 <script>
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
-import { parseTime } from '@/utils/index'
+import { parseTime, formatSeconds } from '@/utils/index'
 export default {
   data() {
     return {
       parseTime,
+      formatSeconds,
       printObj: {
         id: 'printMe',
         popTitle: '',
