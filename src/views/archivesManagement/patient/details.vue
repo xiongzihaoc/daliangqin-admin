@@ -572,7 +572,7 @@ export default {
         // 基本信息
         name: '',
         avatarUrl: '',
-        phone: '',
+        phone: null,
         contact: '',
         idCard: '',
         addressDetail: '',
@@ -774,6 +774,9 @@ export default {
     },
     confirm() {
       this.form.archivesFamily = this.archivesFamily
+      if(this.form.phone === '') {
+        this.form.phone = null
+      }
       // 创建人信息
       this.form.createUserName = JSON.parse(
         localStorage.getItem('adminUserInfo')
