@@ -22,7 +22,7 @@
             v-Int
             placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="检测模式"
+        <el-form-item label="检测模式"
           align="left"
           prop="detectType">
           <el-select v-model="searchForm.detectType"
@@ -33,7 +33,7 @@
             <el-option label="日常检测"
               value="DAILY"></el-option>
           </el-select>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
