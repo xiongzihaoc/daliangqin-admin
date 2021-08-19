@@ -22,15 +22,15 @@
             v-Int
             placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item label="检测模式"
+        <el-form-item label="监测模式"
           align="left"
           prop="detectType">
           <el-select v-model="searchForm.detectType"
             size="small"
-            placeholder="请选择检测模式">
-            <el-option label="24小时检测"
+            placeholder="请选择监测模式">
+            <el-option label="24小时监测"
               value="TWENTY_FOUR_HOURS"></el-option>
-            <el-option label="日常检测"
+            <el-option label="日常监测"
               value="DAILY"></el-option>
           </el-select>
         </el-form-item>
@@ -75,17 +75,12 @@
         prop="serialNumber">
       </el-table-column>
       <el-table-column align="center"
-        label="检测模式"
+        label="监测模式"
         prop="detectType">
         <template slot-scope="scope">
-          <span v-if="scope.row.detectType === 'DAILY'">日常检测</span>
-          <span v-else>24小时检测</span>
+          <span v-if="scope.row.detectType === 'DAILY'">日常监测</span>
+          <span v-else>24小时监测</span>
         </template>
-      </el-table-column>
-      <el-table-column align="center"
-        label="检测时长"
-        prop="length"
-        :formatter="lengthFormatter">
       </el-table-column>
       <el-table-column align="center"
         label="心率值(bpm)"
@@ -95,11 +90,36 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
+        label="监测时长"
+        prop="length"
+        :formatter="lengthFormatter">
+      </el-table-column>
+      <el-table-column align="center"
         label="测量结果"
         prop="title">
       </el-table-column>
       <el-table-column align="center"
-        label="检测日期"
+        label="监测日期"
+        prop="inspectionTime">
+        <template slot-scope="scope">
+          {{parseTime(scope.row.inspectionTime)}}
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        label="审核状态"
+        prop="inspectionTime">
+        <!-- @change="statusChange(scope.row)" -->
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.status"
+            active-value="UP"
+            inactive-value="DOWN"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        label="审核时间"
         prop="inspectionTime">
         <template slot-scope="scope">
           {{parseTime(scope.row.inspectionTime)}}

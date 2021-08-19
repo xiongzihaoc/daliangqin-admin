@@ -32,7 +32,7 @@ const archivesRouter = {
         component: () => import('@/views/archivesManagement/record/record'),
         redirect: "/archivesManagement/record/bloodPressure",
         meta: {
-            title: '设备检测',
+            title: '设备监测',
             icon: 'equipment'
 
         },
@@ -42,7 +42,7 @@ const archivesRouter = {
                 name: "heart",
                 component: () => import('@/views/archivesManagement/record/heart'),
                 meta: {
-                    title: '心率检测',
+                    title: '心率监测',
                     icon: 'general',
                     noCache: true
                 },
@@ -52,7 +52,7 @@ const archivesRouter = {
                 name: "bloodPressure",
                 component: () => import('@/views/archivesManagement/record/bloodPressure'),
                 meta: {
-                    title: '血压检测',
+                    title: '血压监测',
                     icon: 'general',
                     noCache: true
                 },
@@ -62,7 +62,7 @@ const archivesRouter = {
                 name: "glucose",
                 component: () => import('@/views/archivesManagement/record/glucose'),
                 meta: {
-                    title: '血糖检测',
+                    title: '血糖监测',
                     icon: 'general'
                 },
             },
@@ -72,7 +72,7 @@ const archivesRouter = {
                 hidden: true,
                 component: () => import('@/views/archivesManagement/record/heartDetail'),
                 meta: {
-                    title: '检测报告',
+                    title: '监测报告',
                     icon: 'general'
                 },
             },

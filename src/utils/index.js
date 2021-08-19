@@ -168,7 +168,7 @@ export function validateTime(rule, value, callback) {
   if (!value) {
     return callback(new Error("请选择时间"));
   } else if (value > time) {
-    return callback(new Error("检测时间不能大于现在时间"));
+    return callback(new Error("监测时间不能大于现在时间"));
   } else {
     callback();
   }
@@ -441,7 +441,7 @@ export const transferStatusList = [
 
 export const equipmentResourceTypeList = [
   { id: 1, label: "手动录入", value: "MANUAL" },
-  { id: 2, label: "设备检测", value: "DETECTION" }
+  { id: 2, label: "设备监测", value: "DETECTION" }
 ]
 // 心里调整 遵医行为
 export const complianceList = [
@@ -619,7 +619,7 @@ export const disabilityTypesList = [
   { id: 5, label: "智力残疾", value: "INTELLECT" },
   { id: 6, label: "精神残疾", value: "SPIRIT" },
 ]
-// 血糖检测类型
+// 血糖监测类型
 export const glucoseDetectType = [
   { id: 1, label: "凌晨", value: "EARLYMORNING" },
   { id: 2, label: "空腹", value: "LIMOSIS" },

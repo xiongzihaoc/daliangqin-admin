@@ -1,21 +1,21 @@
 <template>
   <div>
-    <div class="print-box"
-      contenteditable="true">
+    <div class="print-box">
       <div class="container"
         id="printMe"
         v-loading="loading">
-        <h3 class="fz18">动态心电仪检测报告</h3>
+        <h3 class="fz18">院外便携式心电监测</h3>
         <div class="userInfo">
           <div class="hospital">
             <span class="title fw">检测医院：</span>
-            <span class="content">{{this.$route.query.hospitalName}}</span>
+            <span class="content"
+              contenteditable="true">{{this.$route.query.hospitalName}}</span>
           </div>
           <div class="userName flex margin">
             <div class="box"><span class="fw">用户姓名：</span>
-              <span>{{this.$route.query.name}}</span>
+              <span contenteditable="true">{{this.$route.query.name}}</span>
             </div>
-            <div class="box"><span class="fw">检测日期：</span>
+            <div class="box"><span class="fw">监测日期：</span>
               <span>{{parseTime(userInfo.inspectionTime)}}</span>
             </div>
             <div class="box"><span class="fw">设备：</span>
@@ -23,30 +23,25 @@
             </div>
           </div>
           <div class="userName flex margin">
-            <div class="box"><span class="fw">检测模式：</span>
-              <span v-if="userInfo.detectType === 'DAILY'">日常检测</span>
-              <span v-else>24小时检测</span>
+            <div class="box"><span class="fw">监测模式：</span>
+              <span v-if="userInfo.detectType === 'DAILY'">日常监测</span>
+              <span v-else>24小时监测</span>
             </div>
-            <div class="box"><span class="fw">检测时长：</span>
+            <div class="box"><span class="fw">监测时长：</span>
               <span>{{formatSeconds(heartDetail.length)}}</span>
             </div>
             <div class="box"><span class="fw">心率：</span>
-              <span v-if="userInfo.heartRateScore">{{userInfo.heartRateScore}}bpm</span>
+              <span v-if="userInfo.heartRateScore"
+                contenteditable="true">{{userInfo.heartRateScore}}</span>
+              <span>bpm</span>
             </div>
           </div>
           <div class="userName flex">
-            <div class="box"><span class="fw">检测结果：</span>
-              <span v-if="userInfo.heartRateStatus ==='NORMAL'">正常</span>
-              <span v-else-if="userInfo.heartRateStatus ==='FAST'">稍快</span>
-              <span v-else>稍慢</span>
-            </div>
             <div class="box"><span class="fw">测量结果：</span>
-              <span>{{userInfo.title}}</span>
+              <span contenteditable="true">{{userInfo.title}}</span>
             </div>
             <!-- 占位符 -->
-            <div class="over box"><span class="fw">测量结果：</span>
-              <span>2021/6/17 15:30:00</span>
-            </div>
+            <div class="over box"><span class="fw"></span></div>
           </div>
         </div>
 
@@ -58,55 +53,66 @@
           <div class="flex margin resultWidth">
             <div>
               <span class="fw">平均心率：</span>
-              <span class="fw fz16">{{heartDetail.avg}}</span>
+              <span class="fw fz16"
+                contenteditable="true">{{heartDetail.avg}}</span>
               <span class="fw">bpm</span>
             </div>
             <div>
               <span class="fw">最高心率：</span>
-              <span class="fw fz16">{{heartDetail.max}}</span>
+              <span class="fw fz16"
+                contenteditable="true">{{heartDetail.max}}</span>
               <span class="fw">bpm</span>
             </div>
             <div>
               <span class="fw">最低心率：</span>
-              <span class="fw fz16">{{heartDetail.min}}</span>
+              <span class="fw fz16"
+                contenteditable="true">{{heartDetail.min}}</span>
               <span class="fw">bpm</span>
             </div>
           </div>
           <div class="flex resultWidth">
             <div>
               <span class="fw">正常心率：</span>
-              <span class="fw fz16">{{heartDetail.normalRate}}%</span>
+              <span class="fw fz16"
+                contenteditable="true">{{heartDetail.normalRate}}</span>
+              <span class="fw">%</span>
             </div>
             <div>
               <span class="fw">心率偏快：</span>
-              <span class="fw fz16">{{heartDetail.heartbeatRate}}%</span>
-
+              <span class="fw fz16"
+                contenteditable="true">{{heartDetail.heartbeatRate}}</span>
+              <span class="fw">%</span>
             </div>
             <div>
               <span class="fw">心率偏慢：</span>
-              <span class="fw fz16">{{heartDetail.slowRate}}%</span>
-
+              <span class="fw fz16"
+                contenteditable="true">{{heartDetail.slowRate}}</span>
+              <span class="fw">%</span>
             </div>
           </div>
         </div>
         <div class="impression">
           <div class="fz14 impression-title">心电分析印象：</div>
-          <div>{{heartDetail.ecgResultTz}}</div>
+          <div contenteditable="true">{{heartDetail.ecgResultTz}}</div>
         </div>
         <div class="result">
           <div class="fz14">心电分析结果：</div>
-          <div class="fz11 result-text">{{heartDetail.ecgResult}}</div>
+          <div class="fz11 result-text"
+            contenteditable="true">{{heartDetail.ecgResult}}</div>
           <div class="result-option">
             <div class="fw result-title">原因分析：</div>
-            <div class="content">{{heartDetail.abnorAnalysis}}</div>
+            <div class="content"
+              contenteditable="true">{{heartDetail.abnorAnalysis}}</div>
           </div>
           <div class="result-option middle">
             <div class="fw result-title">处置建议：</div>
-            <div class="content">{{heartDetail.suggestion}}</div>
+            <div class="content"
+              contenteditable="true">{{heartDetail.suggestion}}</div>
           </div>
           <div class="result-option">
             <div class="fw result-title">保健建议：</div>
-            <div class="content">{{heartDetail.healthCareAdvice}}</div>
+            <div class="content"
+              contenteditable="true">{{heartDetail.healthCareAdvice}}</div>
           </div>
         </div>
         <!-- 底部 -->
@@ -124,11 +130,16 @@
       </div>
 
     </div>
-    <div style="text-align:center">
+    <div class="operationBtn">
+      <el-button type="primary"
+        size="mini"
+        @click="reset">重置</el-button>
+      <el-button type="primary"
+        size="mini"
+        @click="save">保存</el-button>
       <el-button type="primary"
         v-print="printObj"
-        size="mini"
-        style="marin:0 auto;margin-top:30px">打印</el-button>
+        size="mini">打印</el-button>
     </div>
   </div>
 
@@ -150,13 +161,16 @@ export default {
       },
       loading: true,
       heartDetail: {},
-      userInfo: {},
+      userInfo: {
+
+      },
     }
   },
   created() {
     this.getList()
   },
   methods: {
+    // 获取信息
     getList() {
       httpAdminHeartRate
         .getHeartRate({ id: this.$route.query.id })
@@ -165,9 +179,15 @@ export default {
           this.heartDetail = JSON.parse(
             res?.data?.elements[0]?.reportResult
           )?.body?.data
+          console.log(this.heartDetail)
           this.loading = false
         })
     },
+    // 保存
+    save() {
+      console.log(this.userInfo);
+    },
+    reset() {},
   },
 }
 </script>
@@ -316,6 +336,12 @@ body {
   .resultWidth div {
     min-width: 110px;
   }
+}
+.operationBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
 }
 .flex {
   display: flex;

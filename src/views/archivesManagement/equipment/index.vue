@@ -29,7 +29,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        label="支持检测的类型"
+        label="支持监测的类型"
         :formatter="diseaseTypeFormatter"
         prop="diseaseType">
       </el-table-column>
@@ -57,11 +57,11 @@
         prop="brandUrl">
       </el-table-column>
       <el-table-column align="center"
-        label="检测人数"
+        label="监测人数"
         prop="countPeople">
       </el-table-column>
       <el-table-column align="center"
-        label="检测次数"
+        label="监测次数"
         prop="countNumber">
       </el-table-column>
     </EleTable>

@@ -33,7 +33,7 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="检测结果"
+        <el-form-item label="监测结果"
           align="left"
           prop="highBloodStatus">
           <el-select class="w100"
@@ -91,7 +91,7 @@
         prop="serialNumber">
       </el-table-column>
       <el-table-column align="center"
-        label="检测类型"
+        label="监测类型"
         prop="diseaseType">
         <template slot-scope="scope">
           <span v-if="scope.row.diseaseType === 'HIGH_BLOOD'">血压</span>
@@ -118,11 +118,11 @@
         prop="name">
         <template slot-scope="scope">
           <span v-if="scope.row.equipmentResourceType === 'MANUAL'">手动录入</span>
-          <span v-else>设备检测</span>
+          <span v-else>设备监测</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
-        label="检测结果"
+        label="监测结果"
         prop="diseaseStatus">
         <template slot-scope="scope">
           <span v-if="scope.row.highBloodStatus === 'HEALTH'"
@@ -136,7 +136,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        label="检测日期"
+        label="监测日期"
         prop="inspectionTime">
         <template slot-scope="scope">
           {{parseTime(scope.row.inspectionTime)}}
@@ -231,7 +231,7 @@
             placeholder="请输入舒张压"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmHg</i></el-input>
         </el-form-item>
-        <el-form-item label="检测日期"
+        <el-form-item label="监测日期"
           prop="inspectionTime">
           <el-date-picker v-model="editAddForm.inspectionTime"
             style="width:100%"

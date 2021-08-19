@@ -22,7 +22,7 @@
             v-Int
             placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item label="检测模式"
+        <el-form-item label="监测模式"
           align="left">
           <el-select class="w100"
             v-model="searchForm.detectType" size="small">
@@ -43,7 +43,7 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="检测结果"
+        <el-form-item label="监测结果"
           align="left"
           prop="diabetesStatus" size="small">
           <el-select class="w100"
@@ -101,7 +101,7 @@
         prop="serialNumber">
       </el-table-column>
       <el-table-column align="center"
-        label="检测模式"
+        label="监测模式"
         prop="detectType"
         :formatter="detectTypeFormatter">
       </el-table-column>
@@ -117,11 +117,11 @@
         prop="name">
         <template slot-scope="scope">
           <span v-if="scope.row.equipmentResourceType === 'MANUAL'">手动录入</span>
-          <span v-else>设备检测</span>
+          <span v-else>设备监测</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
-        label="检测结果"
+        label="监测结果"
         prop="diabetesStatus">
         <template slot-scope="scope">
           <span v-if="scope.row.diabetesStatus === 'HEALTH'"
@@ -135,7 +135,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center"
-        label="检测日期"
+        label="监测日期"
         prop="inspectionTime">
         <template slot-scope="scope">
           {{parseTime(scope.row.inspectionTime)}}
@@ -219,7 +219,7 @@
             placeholder="请输入血糖"><i slot="suffix"
               style="font-style:normal;margin-right: 10px;">mmol/L</i></el-input>
         </el-form-item>
-        <el-form-item label="检测模式"
+        <el-form-item label="监测模式"
           prop="detectType">
           <el-select class="w100"
             v-model="editAddForm.detectType">
@@ -229,7 +229,7 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="检测日期"
+        <el-form-item label="监测日期"
           prop="inspectionTime">
           <el-date-picker v-model="editAddForm.inspectionTime"
             class="w100"
@@ -285,7 +285,7 @@ export default {
           { required: true, message: '请选择医生', trigger: 'blur' },
         ],
         detectType: [
-          { required: true, message: '请选择检测模式', trigger: 'blur' },
+          { required: true, message: '请选择监测模式', trigger: 'blur' },
         ],
         userId: [{ required: true, message: '请选择用户', trigger: 'blur' }],
         inspectionTime: [
