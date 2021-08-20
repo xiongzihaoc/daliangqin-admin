@@ -243,7 +243,7 @@ export default {
       // 发送请求
       httpAdminRole.deleteAdminRole(id).then((res) => {
         if (res.code === "OK") {
-          this.$notify.success({
+          this.$message.success({
             title: "删除成功",
           })
           this.getList()
@@ -261,7 +261,7 @@ export default {
             // 发送请求
             httpAdminRole.postAdminRole(this.editAddForm).then((res) => {
               if (res.code === "OK") {
-                this.$notify.success({
+                this.$message.success({
                   title: "新增成功",
                 })
                 this.getList()
@@ -272,7 +272,7 @@ export default {
             // 发送请求
             httpAdminRole.putAdminRole(this.editAddForm).then((res) => {
               if (res.code === "OK") {
-                this.$notify.success({
+                this.$message.success({
                   title: "编辑成功",
                 })
                 this.getList()

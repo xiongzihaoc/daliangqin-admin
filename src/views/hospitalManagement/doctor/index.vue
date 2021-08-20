@@ -451,7 +451,7 @@ export default {
       // 发送请求
       httpAdminDoctor.deleteDoctor(id).then((res) => {
         if (res.code === 'OK') {
-          this.$notify.success({
+          this.$message.success({
             title: '删除成功',
           })
         }
@@ -469,7 +469,7 @@ export default {
             // 发送请求
             httpAdminDoctor.postDoctor(this.editAddForm).then((res) => {
               if (res.code === 'OK') {
-                this.$notify.success({
+                this.$message.success({
                   title: '新增成功',
                 })
                 this.getList()
@@ -481,7 +481,7 @@ export default {
             // 发送请求
             httpAdminDoctor.putDoctor(this.editAddForm).then((res) => {
               if (res.code === 'OK') {
-                this.$notify.success({
+                this.$message.success({
                   title: '编辑成功',
                 })
                 this.getList()

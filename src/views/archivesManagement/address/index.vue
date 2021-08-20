@@ -249,7 +249,7 @@ export default {
     changeStatus(id) {
       httpAdminAddressPatient.putAddressDefault(id).then((res) => {
         if (res.code === "OK") {
-          this.$notify.success({
+          this.$message.success({
             title: res.message,
           })
           this.getList()
@@ -312,7 +312,7 @@ export default {
           // 发送请求
           httpAdminAddressPatient.putAddress(this.editAddForm).then((res) => {
             if (res.code === "OK") {
-              this.$notify.success({
+              this.$message.success({
                 title: "编辑成功",
               })
               this.getList()

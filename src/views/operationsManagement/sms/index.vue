@@ -142,7 +142,7 @@ export default {
             .postSmsReset({ phone: this.editAddForm.phone })
             .then((res) => {
               if (res.code === "OK") {
-                this.$notify.success({
+                this.$message.success({
                   title: "重置成功",
                 })
                 this.getList()

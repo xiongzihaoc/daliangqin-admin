@@ -279,7 +279,7 @@ export default {
       this.editAddForm.status = val
       httpAdminBanner.putBanner(val).then((res) => {
         if (res.code === "OK") {
-          this.$notify.success({
+          this.$message.success({
             title: "状态更改成功",
           })
           this.getList()
@@ -326,7 +326,7 @@ export default {
       // 发送请求
       httpAdminBanner.deleteBanner(id).then((res) => {
         if (res.code === "OK") {
-          this.$notify.success({
+          this.$message.success({
             title: "删除成功",
           })
           this.getList()
@@ -344,7 +344,7 @@ export default {
             // 发送请求
             httpAdminBanner.postBanner(this.editAddForm).then((res) => {
               if (res.code === "OK") {
-                this.$notify.success({
+                this.$message.success({
                   title: "新增成功",
                 })
                 this.getList()
@@ -355,7 +355,7 @@ export default {
             // 发送请求
             httpAdminBanner.putBanner(this.editAddForm).then((res) => {
               if (res.code === "OK") {
-                this.$notify.success({
+                this.$message.success({
                   title: "编辑成功",
                 })
                 this.getList()
@@ -371,7 +371,7 @@ export default {
       httpAdminBanner.postBannerSort({ id: id, status: "UP" }).then((res) => {
         if (res.code === "OK") {
           this.getList()
-          return this.$notify.success({
+          return this.$message.success({
             title: res.message,
           })
         }
@@ -381,7 +381,7 @@ export default {
       httpAdminBanner.postBannerSort({ id: id, status: "DOWN" }).then((res) => {
         if (res.code === "OK") {
           this.getList()
-          return this.$notify.success({
+          return this.$message.success({
             title: res.message,
           })
         }

@@ -416,7 +416,7 @@ export default {
                 if (res.code !== 'OK') {
                   return
                 } else {
-                  this.$notify.success({
+                  this.$message.success({
                     title: '新增成功',
                   })
                   this.getList()
@@ -431,7 +431,7 @@ export default {
                 if (res.code !== 'OK') {
                   return
                 } else {
-                  this.$notify.success({
+                  this.$message.success({
                     title: '编辑成功',
                   })
                   this.getList()

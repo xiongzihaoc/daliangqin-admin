@@ -414,7 +414,7 @@ export default {
         if (res.code != "OK") {
           return
         } else {
-          this.$notify.success({
+          this.$message.success({
             title: "状态更改成功",
           })
           this.getList()
@@ -462,7 +462,7 @@ export default {
       // 发送请求
       httpAdminNews.deleteNews(id).then((res) => {
         console.log(res)
-        this.$notify.success({
+        this.$message.success({
           title: "删除成功",
         })
         this.getList()
@@ -479,7 +479,7 @@ export default {
             // 发送请求
             httpAdminNews.postNews(this.editAddForm).then((res) => {
               if (res.code === "OK") {
-                this.$notify.success({
+                this.$message.success({
                   title: "新增成功",
                 })
                 this.getList()
@@ -490,7 +490,7 @@ export default {
             // 发送请求
             httpAdminNews.putNews(this.editAddForm).then((res) => {
               if (res.code === "OK") {
-                this.$notify.success({
+                this.$message.success({
                   title: "编辑成功",
                 })
                 this.getList()
@@ -506,7 +506,7 @@ export default {
       httpAdminNews.postNewsSort({ id: id, status: "UP" }).then((res) => {
         if (res.code === "OK") {
           this.getList()
-          return this.$notify.success({
+          return this.$message.success({
             title: res.message,
           })
         }
@@ -516,7 +516,7 @@ export default {
       httpAdminNews.postNewsSort({ id: id, status: "DOWN" }).then((res) => {
         if (res.code === "OK") {
           this.getList()
-          return this.$notify.success({
+          return this.$message.success({
             title: res.message,
           })
         }

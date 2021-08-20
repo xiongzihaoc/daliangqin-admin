@@ -493,7 +493,7 @@ export default {
       // 发送请求
       httpAdminTask.deleteTask(id).then((res) => {
         if (res.code === 'OK') {
-          this.$notify.success({
+          this.$message.success({
             title: '删除成功',
           })
           this.getList()
@@ -511,7 +511,7 @@ export default {
             // 发送请求
             httpAdminTask.postTask(this.editAddForm).then((res) => {
               if (res.code === 'OK') {
-                this.$notify.success({
+                this.$message.success({
                   title: '新增成功',
                 })
                 this.getList()
@@ -522,7 +522,7 @@ export default {
             // 发送请求
             httpAdminTask.putTask(this.editAddForm).then((res) => {
               if (res.code === 'OK') {
-                this.$notify.success({
+                this.$message.success({
                   title: '编辑成功',
                 })
                 this.getList()

@@ -573,7 +573,7 @@ export default {
       // 发送请求
       httpAdminUserTemplate.deleteUserTemplate(id).then((res) => {
         if (res.code === 'OK') {
-          this.$notify.success({
+          this.$message.success({
             title: '删除成功',
           })
         }
@@ -593,7 +593,7 @@ export default {
               .postUserTemplate(this.editAddForm)
               .then((res) => {
                 if (res.code === 'OK') {
-                  this.$notify.success({
+                  this.$message.success({
                     title: '新增成功',
                   })
                   this.getList()
@@ -606,7 +606,7 @@ export default {
               .putUserTemplate(this.editAddForm)
               .then((res) => {
                 if (res.code === 'OK') {
-                  this.$notify.success({
+                  this.$message.success({
                     title: '编辑成功',
                   })
                   this.getList()
@@ -649,7 +649,7 @@ export default {
       // 发送请求
       httpAdminTemplate.deleteTemplate(id).then((res) => {
         if (res.code === 'OK') {
-          this.$notify.success({
+          this.$message.success({
             title: '删除成功',
           })
         }
@@ -668,7 +668,7 @@ export default {
             // 发送请求
             httpAdminTemplate.postTemplate(this.templateForm).then((res) => {
               if (res.code === 'OK') {
-                this.$notify.success({
+                this.$message.success({
                   title: '新增成功',
                 })
                 this.getTemplateList()
@@ -679,7 +679,7 @@ export default {
             // 发送请求
             httpAdminTemplate.putTemplate(this.templateForm).then((res) => {
               if (res.code === 'OK') {
-                this.$notify.success({
+                this.$message.success({
                   title: '编辑成功',
                 })
                 this.getTemplateList()
