@@ -210,7 +210,7 @@ export default {
         min: Number(this.$refs.min.innerHTML),
         normalRate: Number(this.$refs.normalRate.innerHTML),
         heartbeatRate: Number(this.$refs.heartbeatRate.innerHTML),
-        slowRate: Numberthis.$refs.slowRate.innerHTML,
+        slowRate: Number(this.$refs.slowRate.innerHTML),
         ecgResultTz: this.$refs.ecgResultTz.innerHTML,
         ecgResult: this.$refs.ecgResult.innerHTML,
         abnorAnalysis: this.$refs.abnorAnalysis.innerHTML,
