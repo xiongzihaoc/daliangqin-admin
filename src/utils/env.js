@@ -1,5 +1,5 @@
 module.exports = {
-    current: 'test',
+    current: 'prod',
     local: {
         public: {
             target: '/api/public',
