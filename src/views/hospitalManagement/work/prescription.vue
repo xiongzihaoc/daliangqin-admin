@@ -30,7 +30,8 @@
           align="left"
           prop="type">
           <el-select v-model="searchForm.doctorType"
-            placeholder="请选择职位" size="small">
+            placeholder="请选择职位"
+            size="small">
             <el-option v-for="item in doctorTypeList"
               :key="item.id"
               :label="item.label"
@@ -504,9 +505,11 @@ export default {
     },
     // 获取用户列表
     getPatientList(val) {
-      httpAdminPatient.getPatient({ doctorUserId: val,pageSize:10000 }).then((res) => {
-        this.patientList = res.data.elements
-      })
+      httpAdminPatient
+        .getPatient({ doctorUserId: val, pageSize: 10000 })
+        .then((res) => {
+          this.patientList = res.data.elements
+        })
     },
     // 选择模板
     selectTemplate(val) {
@@ -573,11 +576,9 @@ export default {
       // 发送请求
       httpAdminUserTemplate.deleteUserTemplate(id).then((res) => {
         if (res.code === 'OK') {
-          this.$notify.success({
-            title: '删除成功',
-          })
+          this.$message.success('删除成功')
+          this.getList()
         }
-        this.getList()
       })
     },
     editDialogClosed() {
@@ -593,9 +594,7 @@ export default {
               .postUserTemplate(this.editAddForm)
               .then((res) => {
                 if (res.code === 'OK') {
-                  this.$notify.success({
-                    title: '新增成功',
-                  })
+                  this.$message.success('新增成功')
                   this.getList()
                   this.editDialogVisible = false
                 }
@@ -606,9 +605,7 @@ export default {
               .putUserTemplate(this.editAddForm)
               .then((res) => {
                 if (res.code === 'OK') {
-                  this.$notify.success({
-                    title: '编辑成功',
-                  })
+                  this.$message.success('编辑成功')
                   this.getList()
                   this.editDialogVisible = false
                 }
@@ -649,12 +646,10 @@ export default {
       // 发送请求
       httpAdminTemplate.deleteTemplate(id).then((res) => {
         if (res.code === 'OK') {
-          this.$notify.success({
-            title: '删除成功',
-          })
+          this.$message.success('删除成功')
+          this.getTemplateList()
+          this.templateSetDialogVisible = false
         }
-        this.getTemplateList()
-        this.templateSetDialogVisible = false
       })
     },
     templateSetDialogClosed() {
@@ -668,9 +663,7 @@ export default {
             // 发送请求
             httpAdminTemplate.postTemplate(this.templateForm).then((res) => {
               if (res.code === 'OK') {
-                this.$notify.success({
-                  title: '新增成功',
-                })
+                this.$message.success('新增成功')
                 this.getTemplateList()
                 this.templateSetDialogVisible = false
               }
@@ -679,9 +672,7 @@ export default {
             // 发送请求
             httpAdminTemplate.putTemplate(this.templateForm).then((res) => {
               if (res.code === 'OK') {
-                this.$notify.success({
-                  title: '编辑成功',
-                })
+                this.$message.success('编辑成功')
                 this.getTemplateList()
                 this.templateSetDialogVisible = false
               }
@@ -695,7 +686,6 @@ export default {
       return formatterElement.doctorType[row.doctorType]
     },
     highBloodStatusFormatter(row) {
-      // return formatterElement.highBlood[row.highBloodStatus]
       switch (row.highBloodStatus) {
         case 'HEALTH':
           return `<span class='HEALTH'>健康</span>`
@@ -708,7 +698,6 @@ export default {
       }
     },
     diabetesStatusFormatter(row) {
-      // return formatterElement.diabetes[row.diabetesStatus]
       switch (row.diabetesStatus) {
         case 'HEALTH':
           return `<span class='HEALTH'>健康</span>`
@@ -721,7 +710,6 @@ export default {
       }
     },
     heartRateStatusFormatter(row) {
-      // return formatterElement.heart[row.heartRateStatus]
       switch (row.heartRateStatus) {
         case 'NORMAL':
           return `<span class='HEALTH'>正常</span>`

@@ -141,15 +141,19 @@
           </div>
         </div>
       </div>
-
     </div>
+    <!-- 备注 -->
+    <div class="remark">
+      提示：检测医院和用户姓名进行修改之后，只用于打印，不做其他用途；其余内容修改后会进行数据更新
+    </div>
+    <!-- 操作按钮 -->
     <div class="operationBtn">
       <el-button type="primary"
         size="mini"
-        @click="reset">重置</el-button>
+        v-debounce="[reset]">重置</el-button>
       <el-button type="primary"
         size="mini"
-        @click="save">保存</el-button>
+        v-debounce="[save]">保存</el-button>
       <el-button type="primary"
         v-print="printObj"
         size="mini">打印</el-button>
@@ -214,15 +218,16 @@ export default {
         suggestion: this.$refs.suggestion.innerHTML,
         healthCareAdvice: this.$refs.healthCareAdvice.innerHTML,
       }
-      this.heartDetail = thirdForm
-      console.log(this.heartDetail)
-      console.log(thirdForm)
       httpAdminHeartRate.putThirdReport(thirdForm).then((res) => {
         this.loading = true
+        this.$message.success('保存成功')
         this.getList()
       })
     },
-    reset() {},
+    reset() {
+      location.reload()
+      this.$message.success('重置成功')
+    },
   },
 }
 </script>
@@ -376,7 +381,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
+}
+.remark {
+  text-align: center;
+  margin: 30px 0;
+  font-size: 12px;
+  color: #ccc;
 }
 .flex {
   display: flex;

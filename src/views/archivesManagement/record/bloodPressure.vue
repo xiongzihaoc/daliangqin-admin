@@ -26,7 +26,8 @@
           align="left"
           prop="equipmentResourceType">
           <el-select class="w100"
-            v-model="searchForm.equipmentResourceType" size="small">
+            v-model="searchForm.equipmentResourceType"
+            size="small">
             <el-option v-for="item in equipmentResourceTypeList"
               :key="item.id"
               :label="item.label"
@@ -37,7 +38,8 @@
           align="left"
           prop="highBloodStatus">
           <el-select class="w100"
-            v-model="searchForm.highBloodStatus" size="small">
+            v-model="searchForm.highBloodStatus"
+            size="small">
             <el-option v-for="item in healthList"
               :key="item.id"
               :label="item.label"
@@ -413,12 +415,8 @@ export default {
             httpAdminBloodPressure
               .postBloodPressure(this.editAddForm)
               .then((res) => {
-                if (res.code !== 'OK') {
-                  return
-                } else {
-                  this.$notify.success({
-                    title: '新增成功',
-                  })
+                if (res.code === 'OK') {
+                  this.$message.success('新增成功')
                   this.getList()
                   this.editDialogVisible = false
                 }
@@ -428,12 +426,8 @@ export default {
             httpAdminBloodPressure
               .putBloodPressurer(this.editAddForm)
               .then((res) => {
-                if (res.code !== 'OK') {
-                  return
-                } else {
-                  this.$notify.success({
-                    title: '编辑成功',
-                  })
+                if (res.code === 'OK') {
+                  this.$message.success('编辑成功')
                   this.getList()
                   this.editDialogVisible = false
                 }

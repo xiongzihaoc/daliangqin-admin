@@ -164,9 +164,7 @@ export default {
               if (res.code != 'OK') {
                 return
               } else {
-                this.$notify.success({
-                  title: '编辑成功',
-                })
+                this.$message.success('编辑成功')
                 this.getList()
                 this.editDialogVisible = false
               }

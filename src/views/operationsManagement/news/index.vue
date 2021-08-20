@@ -271,19 +271,19 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import singleUpload from "@/components/Upload"
-import { httpAdminNews } from "@/api/admin/httpAdminNews"
-import Vue from "vue"
-import VueQuillEditor from "vue-quill-editor"
-import * as Quill from "quill" //引入编辑器
-import resizeImage from "quill-image-resize-module" // 图片缩放组件。
-import { ImageDrop } from "quill-image-drop-module" // 图片拖动组件。
-Quill.register("modules/imageDrop", ImageDrop)
-Quill.register("modules/resizeImage ", resizeImage)
-import "quill/dist/quill.core.css"
-import "quill/dist/quill.snow.css"
-import "quill/dist/quill.bubble.css"
+import EleTable from '@/components/Table'
+import singleUpload from '@/components/Upload'
+import { httpAdminNews } from '@/api/admin/httpAdminNews'
+import Vue from 'vue'
+import VueQuillEditor from 'vue-quill-editor'
+import * as Quill from 'quill' //引入编辑器
+import resizeImage from 'quill-image-resize-module' // 图片缩放组件。
+import { ImageDrop } from 'quill-image-drop-module' // 图片拖动组件。
+Quill.register('modules/imageDrop', ImageDrop)
+Quill.register('modules/resizeImage ', resizeImage)
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 Vue.use(VueQuillEditor)
 import {
   parseTime,
@@ -291,7 +291,7 @@ import {
   newsTypeList,
   newsStatusList,
   appTypeList,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -305,49 +305,49 @@ export default {
       appTypeList,
       FormRules: {
         contentType: [
-          { required: true, message: "请选择内容类型", trigger: "blur" },
+          { required: true, message: '请选择内容类型', trigger: 'blur' },
         ],
-        title: [{ required: true, message: "请输入标题", trigger: "blur" }],
-        type: [{ required: true, message: "请选择类型", trigger: "blur" }],
+        title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
+        type: [{ required: true, message: '请选择类型', trigger: 'blur' }],
         coverUrl: [
-          { required: true, message: "请上传封面图", trigger: "blur" },
+          { required: true, message: '请上传封面图', trigger: 'blur' },
         ],
-        avatarUrl: [{ required: true, message: "请上传头像", trigger: "blur" }],
+        avatarUrl: [{ required: true, message: '请上传头像', trigger: 'blur' }],
         appTypes: [
-          { required: true, message: "请选择呈现位置", trigger: "blur" },
+          { required: true, message: '请选择呈现位置', trigger: 'blur' },
         ],
-        content: [{ required: true, message: "请输入内容", trigger: "blur" }],
+        content: [{ required: true, message: '请输入内容', trigger: 'blur' }],
 
         publishTime: [
-          { required: true, message: "请选择发布时间", trigger: "blur" },
+          { required: true, message: '请选择发布时间', trigger: 'blur' },
         ],
         position: [
-          { required: true, message: "请输入发布人", trigger: "blur" },
+          { required: true, message: '请输入发布人', trigger: 'blur' },
         ],
-        zOrder: [{ required: true, message: "请输入权重", trigger: "blur" }],
+        zOrder: [{ required: true, message: '请输入权重', trigger: 'blur' }],
         deletedStatus: [
-          { required: true, message: "请选择状态", trigger: "blur" },
+          { required: true, message: '请选择状态', trigger: 'blur' },
         ],
       },
       searchForm: {
-        title: "",
-        contentType: "",
-        deletedStatus: "",
+        title: '',
+        contentType: '',
+        deletedStatus: '',
       },
       list: [],
       editAddForm: {
-        contentType: "",
-        title: "",
-        type: "",
-        coverUrl: "",
-        content: "",
+        contentType: '',
+        title: '',
+        type: '',
+        coverUrl: '',
+        content: '',
         appTypes: [],
-        author: "",
-        avatarUrl: "",
-        position: "",
-        publishTime: "",
-        zOrder: "",
-        deletedStatus: "",
+        author: '',
+        avatarUrl: '',
+        position: '',
+        publishTime: '',
+        zOrder: '',
+        deletedStatus: '',
       },
       tableHeaderBig: [],
       // 分页区域
@@ -356,34 +356,34 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
       editorOption: {
-        placeholder: "请在这里输入",
+        placeholder: '请在这里输入',
         modules: {
           toolbar: [
-            ["bold", "italic", "underline", "strike"], //加粗，斜体，下划线，删除线
+            ['bold', 'italic', 'underline', 'strike'], //加粗，斜体，下划线，删除线
             // ["blockquote", "code-block"], //引用，代码块
             [{ header: 1 }, { header: 2 }], // 标题，键值对的形式；1、2表示字体大小
             // [{ list: "ordered" }, { list: "bullet" }], //列表
             // [{ script: "sub" }, { script: "super" }], // 上下标
             // [{ indent: "-1" }, { indent: "+1" }], // 缩进
             // [{ direction: "rtl" }], // 文本方向
-            [{ size: ["12px", false, "18px", "22px", "26px", "32px", "36px"] }], // 字体大小
+            [{ size: ['12px', false, '18px', '22px', '26px', '32px', '36px'] }], // 字体大小
             // [{ header: [1, 2, 3, 4, 5, 6, false] }], //几级标题
             [{ color: [] }, { background: [] }], // 字体颜色，字体背景颜色
             // [{ font: ['Helvetica Neue', 'Helvetica', 'Arial'] }], //字体
             // [{ align: [] }], //对齐方式
-            ["clean"], //清除字体样式
-            ["image", "video"], //上传图片、上传视频
+            ['clean'], //清除字体样式
+            ['image', 'video'], //上传图片、上传视频
           ],
           imageDrop: true,
           imageResize: {
             displayStyles: {
-              backgroundColor: "black",
-              border: "none",
-              color: "white",
+              backgroundColor: 'black',
+              border: 'none',
+              color: 'white',
             },
-            modules: ["Resize", "DisplaySize", "Toolbar"],
+            modules: ['Resize', 'DisplaySize', 'Toolbar'],
           },
         },
       },
@@ -411,12 +411,8 @@ export default {
     // 开关change事件
     statusChange(val) {
       httpAdminNews.putNews(val).then((res) => {
-        if (res.code != "OK") {
-          return
-        } else {
-          this.$notify.success({
-            title: "状态更改成功",
-          })
+        if (res.code === 'OK') {
+          this.$message.success('状态更改成功')
           this.getList()
         }
       })
@@ -434,38 +430,37 @@ export default {
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
       console.log(val)
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editDialogVisible = true
     },
     // 删除
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminNews.deleteNews(id).then((res) => {
-        console.log(res)
-        this.$notify.success({
-          title: "删除成功",
-        })
-        this.getList()
+        if (res.code === 'OK') {
+          this.$message.success('删除成功')
+          this.getList()
+        }
       })
     },
     editDialogClosed() {
@@ -475,13 +470,11 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminNews.postNews(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
-                this.$notify.success({
-                  title: "新增成功",
-                })
+              if (res.code === 'OK') {
+                this.$message.success('新增成功')
                 this.getList()
                 this.editDialogVisible = false
               }
@@ -489,10 +482,8 @@ export default {
           } else {
             // 发送请求
             httpAdminNews.putNews(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
-                this.$notify.success({
-                  title: "编辑成功",
-                })
+              if (res.code === 'OK') {
+                this.$message.success('编辑成功')
                 this.getList()
                 this.editDialogVisible = false
               }
@@ -503,22 +494,18 @@ export default {
     },
     // 排序
     sortTop(id) {
-      httpAdminNews.postNewsSort({ id: id, status: "UP" }).then((res) => {
-        if (res.code === "OK") {
+      httpAdminNews.postNewsSort({ id: id, status: 'UP' }).then((res) => {
+        if (res.code === 'OK') {
           this.getList()
-          return this.$notify.success({
-            title: res.message,
-          })
+          return this.$message.success(res.message)
         }
       })
     },
     sortBottom(id) {
-      httpAdminNews.postNewsSort({ id: id, status: "DOWN" }).then((res) => {
-        if (res.code === "OK") {
+      httpAdminNews.postNewsSort({ id: id, status: 'DOWN' }).then((res) => {
+        if (res.code === 'OK') {
           this.getList()
-          return this.$notify.success({
-            title: res.message,
-          })
+          return this.$message.success(res.message)
         }
       })
     },
@@ -581,74 +568,74 @@ export default {
 .ql-snow .ql-tooltip {
   z-index: 999;
 }
-.ql-snow .ql-tooltip[data-mode="link"]::before {
-  content: "请输入链接地址:";
+.ql-snow .ql-tooltip[data-mode='link']::before {
+  content: '请输入链接地址:';
 }
 .ql-snow .ql-tooltip.ql-editing a.ql-action::after {
   border-right: 0px;
-  content: "保存";
+  content: '保存';
   padding-right: 0px;
 }
-.ql-snow .ql-tooltip[data-mode="video"]::before {
-  content: "请输入视频地址:";
+.ql-snow .ql-tooltip[data-mode='video']::before {
+  content: '请输入视频地址:';
 }
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {
-  content: "14px";
+  content: '14px';
 }
 .ql-toolbar.ql-snow .ql-picker.ql-expanded .ql-picker-options {
   z-index: 999;
 }
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="small"]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="small"]::before {
-  content: "10px";
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value='small']::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='small']::before {
+  content: '10px';
 }
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="large"]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="large"]::before {
-  content: "18px";
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value='large']::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='large']::before {
+  content: '18px';
 }
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="huge"]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="huge"]::before {
-  content: "32px";
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value='huge']::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value='huge']::before {
+  content: '32px';
 }
 .ql-snow .ql-picker.ql-header .ql-picker-label::before,
 .ql-snow .ql-picker.ql-header .ql-picker-item::before {
-  content: "文本";
+  content: '文本';
 }
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
-  content: "标题1";
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value='1']::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value='1']::before {
+  content: '标题1';
 }
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
-  content: "标题2";
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value='2']::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value='2']::before {
+  content: '标题2';
 }
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
-  content: "标题3";
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value='3']::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value='3']::before {
+  content: '标题3';
 }
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before {
-  content: "标题4";
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value='4']::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value='4']::before {
+  content: '标题4';
 }
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="5"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="5"]::before {
-  content: "标题5";
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value='5']::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value='5']::before {
+  content: '标题5';
 }
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="6"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="6"]::before {
-  content: "标题6";
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value='6']::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value='6']::before {
+  content: '标题6';
 }
 .ql-snow .ql-picker.ql-font .ql-picker-label::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item::before {
-  content: "标准字体";
+  content: '标准字体';
 }
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="serif"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="serif"]::before {
-  content: "衬线字体";
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='serif']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='serif']::before {
+  content: '衬线字体';
 }
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="monospace"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="monospace"]::before {
-  content: "等宽字体";
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value='monospace']::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value='monospace']::before {
+  content: '等宽字体';
 }
 </style>

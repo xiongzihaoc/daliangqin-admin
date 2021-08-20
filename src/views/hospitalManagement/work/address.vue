@@ -279,9 +279,7 @@ export default {
       httpAdminAddressDoctor.putAddressDefault(id).then((res) => {
         console.log(res)
         if (res.code === 'OK') {
-          this.$notify.success({
-            title: res.message,
-          })
+          this.$message.success('操作成功')
           this.getEditList()
           this.getList()
         }
@@ -343,9 +341,7 @@ export default {
           // 发送请求
           httpAdminAddressDoctor.putAddress(this.editAddForm).then((res) => {
             if (res.code === 'OK') {
-              this.$notify.success({
-                title: '编辑成功',
-              })
+              this.$message.success('编辑成功')
               this.getList()
               this.getEditList()
               this.editDialogVisible = false

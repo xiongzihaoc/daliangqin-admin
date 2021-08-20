@@ -872,9 +872,7 @@ export default {
       if (this.form.endTime != '') {
         if (this.form.endTime <= this.form.startTime) {
           this.form.endTime = ''
-          return this.$notify.error({
-            title: '结束时间不能小于或等于开始时间',
-          })
+          return this.$message.error('结束时间不能小于或等于开始时间')
         }
       }
     },
@@ -883,9 +881,7 @@ export default {
       if (this.form.startTime != '') {
         if (this.form.endTime <= this.form.startTime) {
           this.form.endTime = ''
-          return this.$notify.error({
-            title: '结束时间不能小于或等于开始时间',
-          })
+          return this.$message.error('结束时间不能小于或等于开始时间')
         }
       }
     },
@@ -934,9 +930,7 @@ export default {
       let form = this.form
       // 必须选一个随访类型
       if (this.diabetesChecked === false && this.bloodChecked === false) {
-        return this.$notify.error({
-          title: '未添加随访',
-        })
+        return this.$message.error('未添加随访')
       } else {
         if (this.diabetesChecked === true) {
           form.followDiabetesDTO = this.diabetesForm

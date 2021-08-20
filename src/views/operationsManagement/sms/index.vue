@@ -44,7 +44,8 @@
         <el-form-item prop="phone"
           label="手机号">
           <el-input v-model="editAddForm.phone"
-            v-Int maxlength="11"></el-input>
+            v-Int
+            maxlength="11"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -57,9 +58,9 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import { httpAdminSms } from "@/api/admin/httpAdminSms"
-import { validatePhone, parseTime } from "@/utils/index"
+import EleTable from '@/components/Untable'
+import { httpAdminSms } from '@/api/admin/httpAdminSms'
+import { validatePhone, parseTime } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -67,34 +68,34 @@ export default {
   data() {
     return {
       parseTime,
-      searchInput: "",
+      searchInput: '',
       editDialogVisible: false,
       // 列表数据
       list: [],
       tableHeaderBig: [
-        { label: "序号", type: "index" },
-        { prop: "phone", label: "手机号" },
+        { label: '序号', type: 'index' },
+        { prop: 'phone', label: '手机号' },
         {
-          prop: "content",
-          label: "内容",
+          prop: 'content',
+          label: '内容',
           // formatter: (row) => {
           //   return this.typeFormatter(row);
           // },
         },
-        { prop: "howMany", label: "剩余次数" },
+        { prop: 'howMany', label: '剩余次数' },
         {
-          prop: "createTime",
-          label: "发送时间",
+          prop: 'createTime',
+          label: '发送时间',
           formatter: (row) => {
             return parseTime(row.createTime)
           },
         },
       ],
       FormRules: {
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
+        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
       },
       editAddForm: {
-        phone: "",
+        phone: '',
       },
       // 分页数据
       pageSize: 10,
@@ -125,7 +126,7 @@ export default {
     },
     // 搜索条件重置
     searchReset() {
-      this.searchInput = ""
+      this.searchInput = ''
       this.getList()
     },
     // 短信重置
@@ -141,10 +142,8 @@ export default {
           httpAdminSms
             .postSmsReset({ phone: this.editAddForm.phone })
             .then((res) => {
-              if (res.code === "OK") {
-                this.$notify.success({
-                  title: "重置成功",
-                })
+              if (res.code === 'OK') {
+                this.$message.success('重置成功')
                 this.getList()
                 this.editDialogVisible = false
               }
@@ -154,10 +153,10 @@ export default {
     },
     /***** 表格格式化内容 *****/
     typeFormatter(row) {
-      if (row.type === "LOGIN") {
-        return "登录"
+      if (row.type === 'LOGIN') {
+        return '登录'
       } else {
-        return "其他"
+        return '其他'
       }
     },
     // 分页

@@ -198,10 +198,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import singleUpload from "@/components/Upload"
-import { httpAdminBanner } from "@/api/admin/httpAdminBanner"
-import { appTypeList, typeList } from "@/utils/index"
+import EleTable from '@/components/Table'
+import singleUpload from '@/components/Upload'
+import { httpAdminBanner } from '@/api/admin/httpAdminBanner'
+import { appTypeList, typeList } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -215,37 +215,37 @@ export default {
       typeList,
       FormRules: {
         title: [
-          { required: true, message: "请输入轮播图名称", trigger: "blur" },
+          { required: true, message: '请输入轮播图名称', trigger: 'blur' },
         ],
         imageUrl: [
-          { required: true, message: "请上传轮播图图片", trigger: "blur" },
+          { required: true, message: '请上传轮播图图片', trigger: 'blur' },
         ],
 
         appType: [
-          { required: true, message: "请选择呈现位置", trigger: "blur" },
+          { required: true, message: '请选择呈现位置', trigger: 'blur' },
         ],
-        zOrder: [{ required: true, message: "请输入权重", trigger: "blur" }],
+        zOrder: [{ required: true, message: '请输入权重', trigger: 'blur' }],
 
-        status: [{ required: true, message: "请选择状态", trigger: "blur" }],
+        status: [{ required: true, message: '请选择状态', trigger: 'blur' }],
       },
       // 表格数据
       list: [],
       tableHeaderBig: [],
       // 新增编辑表单
       editAddForm: {
-        title: "",
+        title: '',
         appType: [],
-        imageUrl: "",
-        linkUrl: "",
-        zOrder: "",
-        type: "",
-        status: "",
+        imageUrl: '',
+        linkUrl: '',
+        zOrder: '',
+        type: '',
+        status: '',
       },
       // 搜索表单
       searchForm: {
-        title: "",
-        type: "",
-        status: "",
+        title: '',
+        type: '',
+        status: '',
       },
       // 分页区域
       pageSize: 10,
@@ -253,7 +253,7 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
@@ -278,10 +278,8 @@ export default {
     statusChange(val) {
       this.editAddForm.status = val
       httpAdminBanner.putBanner(val).then((res) => {
-        if (res.code === "OK") {
-          this.$notify.success({
-            title: "状态更改成功",
-          })
+        if (res.code === 'OK') {
+          this.$message.success('状态更改成功')
           this.getList()
         }
       })
@@ -299,36 +297,34 @@ export default {
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editDialogVisible = true
     },
     // 删除
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminBanner.deleteBanner(id).then((res) => {
-        if (res.code === "OK") {
-          this.$notify.success({
-            title: "删除成功",
-          })
+        if (res.code === 'OK') {
+          this.$message.success('删除成功')
           this.getList()
         }
       })
@@ -340,13 +336,11 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminBanner.postBanner(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
-                this.$notify.success({
-                  title: "新增成功",
-                })
+              if (res.code === 'OK') {
+                this.$message.success('新增成功')
                 this.getList()
                 this.editDialogVisible = false
               }
@@ -354,10 +348,8 @@ export default {
           } else {
             // 发送请求
             httpAdminBanner.putBanner(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
-                this.$notify.success({
-                  title: "编辑成功",
-                })
+              if (res.code === 'OK') {
+                this.$message.success('编辑成功')
                 this.getList()
                 this.editDialogVisible = false
               }
@@ -368,22 +360,18 @@ export default {
     },
     // 排序
     sortTop(id) {
-      httpAdminBanner.postBannerSort({ id: id, status: "UP" }).then((res) => {
-        if (res.code === "OK") {
+      httpAdminBanner.postBannerSort({ id: id, status: 'UP' }).then((res) => {
+        if (res.code === 'OK') {
           this.getList()
-          return this.$notify.success({
-            title: res.message,
-          })
+          return this.$message.success(res.message)
         }
       })
     },
     sortBottom(id) {
-      httpAdminBanner.postBannerSort({ id: id, status: "DOWN" }).then((res) => {
-        if (res.code === "OK") {
+      httpAdminBanner.postBannerSort({ id: id, status: 'DOWN' }).then((res) => {
+        if (res.code === 'OK') {
           this.getList()
-          return this.$notify.success({
-            title: res.message,
-          })
+          return this.$message.success(res.message)
         }
       })
     },

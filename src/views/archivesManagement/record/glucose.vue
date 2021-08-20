@@ -25,7 +25,8 @@
         <el-form-item label="监测模式"
           align="left">
           <el-select class="w100"
-            v-model="searchForm.detectType" size="small">
+            v-model="searchForm.detectType"
+            size="small">
             <el-option v-for="item in glucoseDetectType"
               :key="item.id"
               :label="item.label"
@@ -36,7 +37,8 @@
           align="left"
           prop="equipmentResourceType">
           <el-select class="w100"
-            v-model="searchForm.equipmentResourceType" size="small">
+            v-model="searchForm.equipmentResourceType"
+            size="small">
             <el-option v-for="item in equipmentResourceTypeList"
               :key="item.id"
               :label="item.label"
@@ -45,7 +47,8 @@
         </el-form-item>
         <el-form-item label="监测结果"
           align="left"
-          prop="diabetesStatus" size="small">
+          prop="diabetesStatus"
+          size="small">
           <el-select class="w100"
             v-model="searchForm.diabetesStatus">
             <el-option v-for="item in healthList"
@@ -416,12 +419,8 @@ export default {
           if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminGlucose.postGlucose(this.editAddForm).then((res) => {
-              if (res.code !== 'OK') {
-                return
-              } else {
-                this.$notify.success({
-                  title: '新增成功',
-                })
+              if (res.code === 'OK') {
+                this.$message.success('新增成功')
                 this.getList()
                 this.editDialogVisible = false
               }
@@ -429,12 +428,8 @@ export default {
           } else {
             // 发送请求
             httpAdminGlucose.putGlucose(this.editAddForm).then((res) => {
-              if (res.code !== 'OK') {
-                return
-              } else {
-                this.$notify.success({
-                  title: '编辑成功',
-                })
+              if (res.code === 'OK') {
+                this.$message.success('编辑成功')
                 this.getList()
                 this.editDialogVisible = false
               }
