@@ -31,14 +31,16 @@
               <span>{{formatSeconds(heartDetail.length)}}</span>
             </div>
             <div class="box"><span class="fw">心率：</span>
-              <span v-if="userInfo.heartRateScore"
-                contenteditable="true">{{userInfo.heartRateScore}}</span>
+              <span v-if="heartDetail.heartRate"
+                contenteditable="true"
+                ref="heartRateScore">{{heartDetail.heartRate}}</span>
               <span>bpm</span>
             </div>
           </div>
           <div class="userName flex">
             <div class="box"><span class="fw">测量结果：</span>
-              <span contenteditable="true">{{userInfo.title}}</span>
+              <span contenteditable="true"
+                ref="title">{{heartDetail.title}}</span>
             </div>
             <!-- 占位符 -->
             <div class="over box"><span class="fw"></span></div>
@@ -54,19 +56,22 @@
             <div>
               <span class="fw">平均心率：</span>
               <span class="fw fz16"
-                contenteditable="true">{{heartDetail.avg}}</span>
+                contenteditable="true"
+                ref="avg">{{heartDetail.avg}}</span>
               <span class="fw">bpm</span>
             </div>
             <div>
               <span class="fw">最高心率：</span>
               <span class="fw fz16"
-                contenteditable="true">{{heartDetail.max}}</span>
+                contenteditable="true"
+                ref="max">{{heartDetail.max}}</span>
               <span class="fw">bpm</span>
             </div>
             <div>
               <span class="fw">最低心率：</span>
               <span class="fw fz16"
-                contenteditable="true">{{heartDetail.min}}</span>
+                contenteditable="true"
+                ref="min">{{heartDetail.min}}</span>
               <span class="fw">bpm</span>
             </div>
           </div>
@@ -74,45 +79,53 @@
             <div>
               <span class="fw">正常心率：</span>
               <span class="fw fz16"
-                contenteditable="true">{{heartDetail.normalRate}}</span>
+                contenteditable="true"
+                ref="normalRate">{{heartDetail.normalRate}}</span>
               <span class="fw">%</span>
             </div>
             <div>
               <span class="fw">心率偏快：</span>
               <span class="fw fz16"
-                contenteditable="true">{{heartDetail.heartbeatRate}}</span>
+                contenteditable="true"
+                ref="heartbeatRate">{{heartDetail.heartbeatRate}}</span>
               <span class="fw">%</span>
             </div>
             <div>
               <span class="fw">心率偏慢：</span>
               <span class="fw fz16"
-                contenteditable="true">{{heartDetail.slowRate}}</span>
+                contenteditable="true"
+                ref="slowRate">{{heartDetail.slowRate}}</span>
               <span class="fw">%</span>
             </div>
           </div>
         </div>
         <div class="impression">
           <div class="fz14 impression-title">心电分析印象：</div>
-          <div contenteditable="true">{{heartDetail.ecgResultTz}}</div>
+          <div contenteditable="true"
+            ref="ecgResultTz">{{heartDetail.ecgResultTz}}</div>
         </div>
         <div class="result">
           <div class="fz14">心电分析结果：</div>
           <div class="fz11 result-text"
-            contenteditable="true">{{heartDetail.ecgResult}}</div>
+            contenteditable="true"
+            ref="ecgResult">{{heartDetail.ecgResult}}</div>
           <div class="result-option">
             <div class="fw result-title">原因分析：</div>
             <div class="content"
-              contenteditable="true">{{heartDetail.abnorAnalysis}}</div>
+              contenteditable="true"
+              ref="abnorAnalysis">{{heartDetail.abnorAnalysis}}</div>
           </div>
           <div class="result-option middle">
             <div class="fw result-title">处置建议：</div>
             <div class="content"
-              contenteditable="true">{{heartDetail.suggestion}}</div>
+              contenteditable="true"
+              ref="suggestion">{{heartDetail.suggestion}}</div>
           </div>
           <div class="result-option">
             <div class="fw result-title">保健建议：</div>
             <div class="content"
-              contenteditable="true">{{heartDetail.healthCareAdvice}}</div>
+              contenteditable="true"
+              ref="healthCareAdvice">{{heartDetail.healthCareAdvice}}</div>
           </div>
         </div>
         <!-- 底部 -->
@@ -161,9 +174,7 @@ export default {
       },
       loading: true,
       heartDetail: {},
-      userInfo: {
-
-      },
+      userInfo: {},
     }
   },
   created() {
@@ -175,7 +186,9 @@ export default {
       httpAdminHeartRate
         .getHeartRate({ id: this.$route.query.id })
         .then((res) => {
+          // 个人信息
           this.userInfo = res?.data?.elements[0]
+          // 心率建议信息
           this.heartDetail = JSON.parse(
             res?.data?.elements[0]?.reportResult
           )?.body?.data
@@ -185,7 +198,29 @@ export default {
     },
     // 保存
     save() {
-      console.log(this.userInfo);
+      let thirdForm = {
+        recordId: this.$route.query.id,
+        heartRate: this.$refs.heartRateScore.innerHTML,
+        title: this.$refs.title.innerHTML,
+        avg: this.$refs.avg.innerHTML,
+        max: this.$refs.max.innerHTML,
+        min: this.$refs.min.innerHTML,
+        normalRate: this.$refs.normalRate.innerHTML,
+        heartbeatRate: this.$refs.heartbeatRate.innerHTML,
+        slowRate: this.$refs.slowRate.innerHTML,
+        ecgResultTz: this.$refs.ecgResultTz.innerHTML,
+        ecgResult: this.$refs.ecgResult.innerHTML,
+        abnorAnalysis: this.$refs.abnorAnalysis.innerHTML,
+        suggestion: this.$refs.suggestion.innerHTML,
+        healthCareAdvice: this.$refs.healthCareAdvice.innerHTML,
+      }
+      this.heartDetail = thirdForm
+      console.log(this.heartDetail)
+      console.log(thirdForm)
+      httpAdminHeartRate.putThirdReport(thirdForm).then((res) => {
+        this.loading = true
+        this.getList()
+      })
     },
     reset() {},
   },

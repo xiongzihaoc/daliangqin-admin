@@ -890,14 +890,18 @@ export default {
       }
     },
     getHospitalList() {
-      httpAdminHospital.getHospital().then((res) => {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
     getDoctorList(val) {
-      httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
-        this.doctorList = res.data.elements
-      })
+      console.log(val)
+      httpAdminDoctor
+        .getDoctor({ hospitalId: val, pageSize: 10000 })
+        .then((res) => {
+          console.log(res)
+          this.doctorList = res.data.elements
+        })
     },
     getPatientList(val) {
       httpAdminPatient

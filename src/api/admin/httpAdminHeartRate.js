@@ -22,9 +22,10 @@ export const httpAdminHeartRate = {
       data
     })
   },
-  putHospitalName(data) {
+  // 修改第三方检测报告
+  putThirdReport(data) {
     return request({
-      url: 'equipment/heartRate/hospital/' + data.recordId,
+      url: 'equipment/heartRate/thirdReport/' + data.recordId,
       method: 'put',
       data
     })
