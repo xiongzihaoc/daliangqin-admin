@@ -31,8 +31,7 @@
               <span>{{formatSeconds(heartDetail.length)}}</span>
             </div>
             <div class="box"><span class="fw">心率：</span>
-              <span v-if="heartDetail.heartRate"
-                contenteditable="true"
+              <span contenteditable="true"
                 ref="heartRateScore">{{heartDetail.heartRate}}</span>
               <span>bpm</span>
             </div>
@@ -196,7 +195,7 @@ export default {
           this.heartDetail = JSON.parse(
             res?.data?.elements[0]?.reportResult
           )?.body?.data
-          console.log(this.heartDetail)
+          console.log(this.heartDetail.heartRate)
           this.loading = false
         })
     },
