@@ -774,7 +774,7 @@ export default {
     },
     confirm() {
       this.form.archivesFamily = this.archivesFamily
-      if(this.form.phone === '') {
+      if (this.form.phone === '') {
         this.form.phone = null
       }
       // 创建人信息
@@ -788,6 +788,7 @@ export default {
           if (this.$route.query.isArchives == true) {
             httpAdminArchives.putArchives(this.form).then((res) => {
               if (res.code === 'OK') {
+                this.$message.success('编辑成功')
                 this.$router.push({ path: '/archivesManagement/patient' })
               }
             })
@@ -795,6 +796,7 @@ export default {
             // 新增
             httpAdminArchives.postArchives(this.form).then((res) => {
               if (res.code === 'OK') {
+                this.$message.success('新增成功')
                 this.$router.push({ path: '/archivesManagement/patient' })
               }
             })

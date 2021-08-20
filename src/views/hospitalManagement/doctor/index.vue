@@ -138,18 +138,6 @@
             style="color: #1890ff; text-decoration: underline">{{ scope.row.patientCount }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column align="center"
-        prop="toDoctorInfo"
-        label="对应转诊医生">
-        <template slot-scope="scope">
-          <div v-if="scope.row.toDoctorInfo[0]">
-            <span v-for="item in scope.row.toDoctorInfo"
-              :key="item.id">{{
-              item.name + "  "
-            }}</span>
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column align="center"
         label="创建人"
         prop="createUserName"></el-table-column>
@@ -299,9 +287,6 @@ export default {
         hospitalId: [
           { required: true, message: '请选择医院', trigger: 'blur' },
         ],
-        // toDoctorUserId: [
-        //   { required: true, message: "请选择转诊医生  ", trigger: "blur" },
-        // ],
       },
       searchForm: {
         name: '',
@@ -318,7 +303,6 @@ export default {
         phone: '',
         idCard: '',
         hospitalId: '',
-        // toDoctorUserId: "",
         type: '',
         introduction: '',
         goodAt: '',
@@ -331,7 +315,6 @@ export default {
       // 医生类型列表
       editVal: {},
       // 转诊医生列表
-      // toDoctorList: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -373,11 +356,6 @@ export default {
           this.total = res.data.totalSize
         })
     },
-    // getToDoctorList() {
-    //   httpAdminDoctor.getDoctoTransfer().then((res) => {
-    //     this.toDoctorList = res.data.elements
-    //   })
-    // },
     getHospitalList() {
       httpAdminHospital.getHospital().then((res) => {
         this.hospitalList = res.data.elements
@@ -451,11 +429,9 @@ export default {
       // 发送请求
       httpAdminDoctor.deleteDoctor(id).then((res) => {
         if (res.code === 'OK') {
-          this.$message.success({
-            title: '删除成功',
-          })
+          this.$message.success('删除成功')
+          this.getList()
         }
-        this.getList()
       })
     },
     editDialogClosed() {
@@ -469,11 +445,8 @@ export default {
             // 发送请求
             httpAdminDoctor.postDoctor(this.editAddForm).then((res) => {
               if (res.code === 'OK') {
-                this.$message.success({
-                  title: '新增成功',
-                })
+                this.$message.success('新增成功')
                 this.getList()
-                // this.getToDoctorList()
                 this.editDialogVisible = false
               }
             })
@@ -481,9 +454,7 @@ export default {
             // 发送请求
             httpAdminDoctor.putDoctor(this.editAddForm).then((res) => {
               if (res.code === 'OK') {
-                this.$message.success({
-                  title: '编辑成功',
-                })
+                this.$message.success('编辑成功')
                 this.getList()
                 this.editDialogVisible = false
               }

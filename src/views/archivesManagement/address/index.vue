@@ -151,10 +151,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import addressJson from "@/utils/address.json"
-import { validatePhone } from "@/utils/index"
-import { httpAdminAddressPatient } from "@/api/admin/httpAdminAddressPatient"
+import EleTable from '@/components/Table'
+import addressJson from '@/utils/address.json'
+import { validatePhone } from '@/utils/index'
+import { httpAdminAddressPatient } from '@/api/admin/httpAdminAddressPatient'
 export default {
   components: {
     EleTable,
@@ -165,48 +165,48 @@ export default {
       // 表单验证规则
       FormRules: {
         name: [
-          { required: true, message: "请输入收货人名字", trigger: "blur" },
+          { required: true, message: '请输入收货人名字', trigger: 'blur' },
         ],
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
-        address: [{ required: true, message: "请选择省市区", trigger: "blur" }],
+        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
+        address: [{ required: true, message: '请选择省市区', trigger: 'blur' }],
         detail: [
-          { required: true, message: "请输入详细地址", trigger: "blur" },
+          { required: true, message: '请输入详细地址', trigger: 'blur' },
         ],
       },
       // 搜索表单
       searchForm: {
-        patientName: "",
-        patientPhone: "",
-        userId: "",
+        patientName: '',
+        patientPhone: '',
+        userId: '',
       },
       // 列表数据
       list: [],
       addressList: [],
       cateListProps: {
-        value: "name", //匹配响应数据中的id
-        label: "name", //匹配响应数据中的name
-        children: "districts", //匹配响应数据中的children
+        value: 'name', //匹配响应数据中的id
+        label: 'name', //匹配响应数据中的name
+        children: 'districts', //匹配响应数据中的children
       },
       // 增改表单
       editAddForm: {
-        name: "",
-        phone: "",
-        province: "",
-        city: "",
-        area: "",
+        name: '',
+        phone: '',
+        province: '',
+        city: '',
+        area: '',
         address: [],
         isDefault: false,
-        detail: "",
-        userId: "",
+        detail: '',
+        userId: '',
       },
       // 表格数据
       tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "patientName", label: "用户姓名" },
-        { prop: "patientPhone", label: "用户手机号" },
+        { type: 'index', label: '序号' },
+        { prop: 'patientName', label: '用户姓名' },
+        { prop: 'patientPhone', label: '用户手机号' },
       ],
-      patientName: "",
-      patientUserId: "",
+      patientName: '',
+      patientUserId: '',
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -248,10 +248,8 @@ export default {
     // 是否默认
     changeStatus(id) {
       httpAdminAddressPatient.putAddressDefault(id).then((res) => {
-        if (res.code === "OK") {
-          this.$message.success({
-            title: res.message,
-          })
+        if (res.code === 'OK') {
+          this.$message.success('操作成功')
           this.getList()
           this.getEditList()
         }
@@ -311,10 +309,8 @@ export default {
         if (valid) {
           // 发送请求
           httpAdminAddressPatient.putAddress(this.editAddForm).then((res) => {
-            if (res.code === "OK") {
-              this.$message.success({
-                title: "编辑成功",
-              })
+            if (res.code === 'OK') {
+              this.$message.success('编辑成功')
               this.getList()
               this.getEditList()
               this.editDialogVisible = false

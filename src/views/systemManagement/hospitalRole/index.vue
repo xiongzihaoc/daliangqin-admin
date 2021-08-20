@@ -251,9 +251,7 @@ export default {
       // 发送请求
       httpAdminHospitalRole.deleteRole(id).then((res) => {
         if (res.code === "OK") {
-          this.$message.success({
-            title: "删除成功",
-          })
+          this.$message.success('删除成功')
           this.getList()
         }
       })
@@ -269,9 +267,7 @@ export default {
             // 发送请求
             httpAdminHospitalRole.postRole(this.editAddForm).then((res) => {
               if (res.code === "OK") {
-                this.$message.success({
-                  title: "新增成功",
-                })
+                this.$message.success('新增成功')
                 this.getList()
                 this.editDialogVisible = false
               }
@@ -280,9 +276,7 @@ export default {
             // 发送请求
             httpAdminHospitalRole.putRole(this.editAddForm).then((res) => {
               if (res.code === "OK") {
-                this.$message.success({
-                  title: "编辑成功",
-                })
+                this.$message.success('编辑成功')
                 this.getList()
                 this.editDialogVisible = false
               }
