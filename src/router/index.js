@@ -48,6 +48,7 @@ export const constantRoutes = [
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
+      redirect: 'operationsManagement/banner',
       component: () => import('@/views/index'),
       meta: {
         title: '首页',

@@ -15,9 +15,16 @@ import '@/permission' // permission control
 
 import 'default-passive-events'  // Passive Event Listeners——让页面滑动更加流畅的新特性
 Vue.use(ElementUI)
+// 全局打印
 import Print from 'vue-print-nb'
 Vue.use(Print);
+
+// 全局插件
+import Plugins from '@/utils/plugin' // 引入
+Vue.use(Plugins)
+
 Vue.config.productionTip = false
+
 // 弹框拖拽功能
 import './utils/directives'
 new Vue({

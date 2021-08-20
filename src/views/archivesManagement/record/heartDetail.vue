@@ -31,8 +31,7 @@
               <span>{{formatSeconds(heartDetail.length)}}</span>
             </div>
             <div class="box"><span class="fw">心率：</span>
-              <span v-if="heartDetail.heartRate"
-                contenteditable="true"
+              <span contenteditable="true"
                 ref="heartRateScore">{{heartDetail.heartRate}}</span>
               <span>bpm</span>
             </div>
@@ -196,7 +195,7 @@ export default {
           this.heartDetail = JSON.parse(
             res?.data?.elements[0]?.reportResult
           )?.body?.data
-          console.log(this.heartDetail)
+          console.log(this.heartDetail.heartRate)
           this.loading = false
         })
     },
@@ -204,14 +203,14 @@ export default {
     save() {
       let thirdForm = {
         recordId: this.$route.query.id,
-        heartRate: this.$refs.heartRateScore.innerHTML,
+        heartRate: Number(this.$refs.heartRateScore.innerHTML),
         title: this.$refs.title.innerHTML,
-        avg: this.$refs.avg.innerHTML,
-        max: this.$refs.max.innerHTML,
-        min: this.$refs.min.innerHTML,
-        normalRate: this.$refs.normalRate.innerHTML,
-        heartbeatRate: this.$refs.heartbeatRate.innerHTML,
-        slowRate: this.$refs.slowRate.innerHTML,
+        avg: Number(this.$refs.avg.innerHTML),
+        max: Number(this.$refs.max.innerHTML),
+        min: Number(this.$refs.min.innerHTML),
+        normalRate: Number(this.$refs.normalRate.innerHTML),
+        heartbeatRate: Number(this.$refs.heartbeatRate.innerHTML),
+        slowRate: Number(this.$refs.slowRate.innerHTML),
         ecgResultTz: this.$refs.ecgResultTz.innerHTML,
         ecgResult: this.$refs.ecgResult.innerHTML,
         abnorAnalysis: this.$refs.abnorAnalysis.innerHTML,
@@ -320,6 +319,7 @@ body {
         min-width: 60px;
       }
       .content {
+        width: 473px;
         line-height: 1.5;
         text-align-last: left;
         text-align: justify;
