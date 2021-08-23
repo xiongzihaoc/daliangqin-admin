@@ -345,21 +345,25 @@ export default {
     },
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital().then((res) => {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
     // 获取医生列表
     getDoctorList(val) {
-      httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
-        this.doctorList = res.data.elements
-      })
+      httpAdminDoctor
+        .getDoctor({ hospitalId: val, pageSize: 10000 })
+        .then((res) => {
+          this.doctorList = res.data.elements
+        })
     },
     // 获取用户列表
     getPatientList(id) {
-      httpAdminPatient.getPatient({ doctorUserId: id }).then((res) => {
-        this.patientList = res.data.elements
-      })
+      httpAdminPatient
+        .getPatient({ doctorUserId: id, pageSize: 10000 })
+        .then((res) => {
+          this.patientList = res.data.elements
+        })
     },
     selecthospital(val) {
       this.getDoctorList(val)

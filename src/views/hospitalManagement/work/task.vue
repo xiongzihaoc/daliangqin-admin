@@ -407,13 +407,13 @@ export default {
     },
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital().then((res) => {
+      httpAdminHospital.getHospital({pageSize: 10000}).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
     // 获取医生列表
     getDoctorList(val) {
-      httpAdminDoctor.getDoctor({ hospitalId: val }).then((res) => {
+      httpAdminDoctor.getDoctor({ hospitalId: val,pageSize: 10000 }).then((res) => {
         this.doctorList = res.data.elements
       })
     },
