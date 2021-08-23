@@ -43,6 +43,8 @@ const user = {
               commit('SET_TOKEN', "admin")
               setToken("admin")
               resolve(res)
+            } else {
+              Message.error('该用户不是管理员')
             }
           }
         }).catch(error => {
