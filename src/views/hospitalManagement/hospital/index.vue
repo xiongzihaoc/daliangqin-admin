@@ -293,7 +293,7 @@ export default {
       return data
     },
     /***** 搜索区域 *****/
-    searchBtn() {
+    searchBtn() {this.pageNum = 1
       this.getList()
     },
     // 重置

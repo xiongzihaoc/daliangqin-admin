@@ -276,7 +276,6 @@ export default {
     },
     // 开关change事件
     statusChange(val) {
-      this.editAddForm.status = val
       httpAdminBanner.putBanner(val).then((res) => {
         if (res.code === 'OK') {
           this.$message.success('状态更改成功')
@@ -286,7 +285,7 @@ export default {
     },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {
+    searchBtn() {this.pageNum = 1
       this.getList()
     },
     // 重置

@@ -445,7 +445,7 @@ export default {
       this.searchForm.endTime = val[1]
     },
     // 搜索
-    searchBtn() {
+    searchBtn() {this.pageNum = 1
       this.getList()
     },
     // 重置

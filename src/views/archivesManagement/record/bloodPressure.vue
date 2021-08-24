@@ -380,7 +380,7 @@ export default {
     },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {
+    searchBtn() {this.pageNum = 1
       this.getList()
     },
     // 重置

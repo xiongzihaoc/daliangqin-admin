@@ -23,8 +23,7 @@
             placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item label="监测模式"
-          align="left"
-          prop="detectType">
+          align="left">
           <el-select v-model="searchForm.detectType"
             size="small"
             placeholder="请选择监测模式">
@@ -33,6 +32,31 @@
             <el-option label="日常监测"
               value="DAILY"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="审核状态"
+          align="left">
+          <el-select v-model="searchForm.checkStatus"
+            size="small"
+            placeholder="请选择审核状态">
+            <el-option label="已审核"
+              :value="true"></el-option>
+            <el-option label="未审核"
+              :value="false"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="医师姓名"
+          align="left"
+          prop="doctorUserName">
+          <el-input v-model="searchForm.doctorUserName"
+            size="small"
+            placeholder="请输入医师姓名"></el-input>
+        </el-form-item>
+        <el-form-item label="医院名称"
+          align="left"
+          prop="doctorUserName">
+          <el-input v-model="searchForm.hospitalName"
+            size="small"
+            placeholder="请输入医院名称"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -108,11 +132,11 @@
       <el-table-column align="center"
         label="审核状态"
         prop="inspectionTime">
-        <!-- @change="statusChange(scope.row)" -->
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.status"
-            active-value="UP"
-            inactive-value="DOWN"
+          <el-switch @change="changeStatus(scope.row)"
+            v-model="scope.row.checkStatus"
+            :active-value="true"
+            :inactive-value="false"
             active-color="#13ce66"
             inactive-color="#ff4949">
           </el-switch>
@@ -122,17 +146,28 @@
         label="审核时间"
         prop="inspectionTime">
         <template slot-scope="scope">
-          {{parseTime(scope.row.inspectionTime)}}
+          {{scope.row.checkTime}}
         </template>
+      </el-table-column>
+      <el-table-column align="center"
+        label="医师姓名"
+        prop="doctorUserName">
+      </el-table-column>
+      <el-table-column align="center"
+        label="医院名称"
+        prop="hospitalName">
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         label="操作"
-        width="120">
+        width="240">
         <template slot-scope="scope">
           <el-button size="mini"
-            @click="examineBtn(scope.row)"
-            type="primary">查看</el-button>
+            @click="examineReport(scope.row)"
+            type="primary">查看报告</el-button>
+          <el-button size="mini"
+            @click="examineElectrocardiograph(scope.row)"
+            plain>查看心电图</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -159,7 +194,7 @@
         class="dialog-footer">
         <el-button @click="hospitalDialogVisible = false">取 消</el-button>
         <el-button type="primary"
-          @click="edithospitalNameEnter">确 定</el-button>
+          @click="skipReportDetail">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -180,6 +215,9 @@ export default {
         patientUserName: '',
         patientUserPhone: '',
         detectType: '',
+        checkStatus: '',
+        doctorUserName: '',
+        hospitalName: '',
       },
       hospitalList: [],
       doctorList: [],
@@ -192,6 +230,7 @@ export default {
         inspectionTime: '',
         heartRateScore: '',
         detectType: '',
+        checkStatus: '',
       },
       hospitalForm: {
         recordId: '',
@@ -221,6 +260,9 @@ export default {
           patientUserName: this.searchForm.patientUserName,
           patientUserPhone: this.searchForm.patientUserPhone,
           detectType: this.searchForm.detectType,
+          checkStatus: this.searchForm.checkStatus,
+          doctorUserName: this.searchForm.doctorUserName,
+          hospitalName: this.searchForm.hospitalName,
         })
         .then((res) => {
           this.list = res.data.elements
@@ -230,6 +272,7 @@ export default {
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
@@ -238,8 +281,8 @@ export default {
       this.getList()
     },
     /***** 增删改 *****/
-    // 查看
-    examineBtn(val) {
+    // 查看报告
+    examineReport(val) {
       if (val.signUrl != '') {
         this.hospitalForm.hospitalName = val.hospitalName
         this.hospitalForm.name = val.patientUserName
@@ -257,8 +300,13 @@ export default {
         )
       }
     },
-    // 修改医院名称
-    edithospitalNameEnter() {
+    // 查看心电图
+    examineElectrocardiograph(val) {
+      let ecgUrl = JSON.parse(val.reportResult).body.data.ecgUrl
+      window.location.href = ecgUrl
+    },
+    // 跳转报告详情
+    skipReportDetail() {
       this.hospitalDialogVisible = false
       this.$router.push(
         '/archivesManagement/record/heartDetail?id=' +
@@ -271,6 +319,7 @@ export default {
           this.hospitalForm.isSignature
       )
     },
+
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
@@ -278,6 +327,15 @@ export default {
       if (row.reportResult != '') {
         return formatSeconds(JSON.parse(row.reportResult).body.data.length)
       }
+    },
+    // 改变审核状态
+    changeStatus(val) {
+      httpAdminHeartRate.putHeartRateStatus(val).then((res) => {
+        if (res.code === 'OK') {
+          this.$message.success('状态更改成功')
+          this.getList()
+        }
+      })
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {

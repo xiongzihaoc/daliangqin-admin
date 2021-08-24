@@ -224,7 +224,7 @@ export default {
       this.searchForm.confirmEndTime = val[1]
     },
     // 搜索
-    searchBtn() {
+    searchBtn() {this.pageNum = 1
       this.getList()
     },
     // 重置
