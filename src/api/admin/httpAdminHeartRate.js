@@ -15,9 +15,10 @@ export const httpAdminHeartRate = {
       data
     })
   },
-  putHeartRate(data) {
+  // 修改审核状态
+  putHeartRateStatus(data) {
     return request({
-      url: 'equipment/heartRate/' + data.id,
+      url: 'equipment/heartRate/checkStatus/' + data.id,
       method: 'put',
       data
     })

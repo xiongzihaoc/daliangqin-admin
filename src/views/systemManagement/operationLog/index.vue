@@ -53,9 +53,9 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import { httpAdminLog } from "@/api/admin/httpAdminLog"
-import { validatePhone, parseTime } from "@/utils/index"
+import EleTable from '@/components/Untable'
+import { httpAdminLog } from '@/api/admin/httpAdminLog'
+import { validatePhone, parseTime } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -66,41 +66,41 @@ export default {
       // 列表数据
       list: [],
       tableHeaderBig: [
-        { label: "序号", type: "index" },
-        { prop: "description", label: "目录" },
-        { prop: "url", label: "链接" },
-        { prop: "name", label: "姓名" },
-        { prop: "phone", label: "手机号" },
-        { prop: "idCard", label: "身份证号" },
-        { prop: "ip", label: "ip" },
+        { label: '序号', type: 'index' },
+        { prop: 'description', label: '目录' },
+        { prop: 'url', label: '链接' },
+        { prop: 'name', label: '姓名' },
+        { prop: 'phone', label: '手机号' },
+        { prop: 'idCard', label: '身份证号' },
+        { prop: 'ip', label: 'ip' },
         {
-          prop: "createTime",
-          label: "操作时间",
+          prop: 'createTime',
+          label: '操作时间',
           formatter: (row) => {
             return parseTime(row.createTime)
           },
         },
       ],
       FormRules: {
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
+        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
       },
       editAddForm: {
-        userName: "",
-        name: "",
-        phone: "",
-        relationship: "",
+        userName: '',
+        name: '',
+        phone: '',
+        relationship: '',
       },
       // 关系列表
       relationshipList: [
-        { id: 1, label: "家人", value: "FAMILY" },
-        { id: 2, label: "朋友", value: "FRIENDS" },
-        { id: 3, label: "亲戚", value: "RELATIVE" },
+        { id: 1, label: '家人', value: 'FAMILY' },
+        { id: 2, label: '朋友', value: 'FRIENDS' },
+        { id: 3, label: '亲戚', value: 'RELATIVE' },
       ],
       // 搜索区域
       searchForm: {
-        name: "",
-        phone: "",
-        description: "",
+        name: '',
+        phone: '',
+        description: '',
       },
       // 分页数据
       pageSize: 10,
@@ -128,11 +128,13 @@ export default {
         })
     },
     // 搜索
-    searchBtn(val) {
+    searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 搜索条件重置
     searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },

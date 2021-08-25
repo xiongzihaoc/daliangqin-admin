@@ -87,6 +87,15 @@ const archivesRouter = {
             icon: 'shebei'
         }
     },
+    {
+        path: 'usage',
+        name: 'usage',
+        component: () => import('@/views/archivesManagement/usage'),
+        meta: {
+            title: '设备使用情况',
+            icon: 'shebei'
+        }
+    },
     // {
     //     path: 'archivesAddress',
     //     name: 'archivesAddress',

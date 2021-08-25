@@ -121,7 +121,8 @@ export default {
         })
     },
     // 搜索
-    searchBtn(val) {
+    searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 搜索条件重置

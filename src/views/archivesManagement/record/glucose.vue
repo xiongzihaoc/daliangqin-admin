@@ -90,6 +90,10 @@
       <el-table-column align="center"
         label="姓名"
         prop="patientUserName">
+        <template slot-scope="scope">
+          <span style="color: #1890ff; text-decoration: underline"
+            @click="skipPatient(scope.row)">{{scope.row.patientUserName}}</span>
+        </template>
       </el-table-column>
       <el-table-column align="center"
         label="手机号"
@@ -352,21 +356,25 @@ export default {
     },
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital({pageSize: 10000}).then((res) => {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
     // 获取医生列表
     getDoctorList(val) {
-      httpAdminDoctor.getDoctor({ hospitalId: val,pageSize: 10000 }).then((res) => {
-        this.doctorList = res.data.elements
-      })
+      httpAdminDoctor
+        .getDoctor({ hospitalId: val, pageSize: 10000 })
+        .then((res) => {
+          this.doctorList = res.data.elements
+        })
     },
     // 获取用户列表
     getPatientList(id) {
-      httpAdminPatient.getPatient({ doctorUserId: id,pageSize: 10000 }).then((res) => {
-        this.patientList = res.data.elements
-      })
+      httpAdminPatient
+        .getPatient({ doctorUserId: id, pageSize: 10000 })
+        .then((res) => {
+          this.patientList = res.data.elements
+        })
     },
     selecthospital(val) {
       this.getDoctorList(val)
@@ -384,10 +392,12 @@ export default {
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },
@@ -437,6 +447,15 @@ export default {
           }
         }
       })
+    },
+    // 跳转用户档案
+    skipPatient(val) {
+      this.$router.push(
+        '/archivesManagement/details?id=' +
+          val.patientUserId +
+          '&type=edit' +
+          '&isArchives=true'
+      )
     },
     glucoseScoreOniput(e) {
       // 先把非数字的都替换掉，除了数字和.

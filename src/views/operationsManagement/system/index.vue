@@ -63,8 +63,8 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import { httpAdminSystem } from "@/api/admin/httpAdminSystem"
+import EleTable from '@/components/Untable'
+import { httpAdminSystem } from '@/api/admin/httpAdminSystem'
 export default {
   components: {
     EleTable,
@@ -72,25 +72,25 @@ export default {
   data() {
     return {
       FormRules: {
-        configKey: [{ required: true, message: "请输入key", trigger: "blur" }],
+        configKey: [{ required: true, message: '请输入key', trigger: 'blur' }],
         configName: [
-          { required: true, message: "请输入名称", trigger: "blur" },
+          { required: true, message: '请输入名称', trigger: 'blur' },
         ],
         configValue: [
-          { required: true, message: "请输入数值", trigger: "blur" },
+          { required: true, message: '请输入数值', trigger: 'blur' },
         ],
       },
       list: [],
       editAddForm: {
-        configKey: "",
-        configName: "",
-        configValue: "",
+        configKey: '',
+        configName: '',
+        configValue: '',
       },
       tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "configKey", label: "key" },
-        { prop: "configName", label: "名称" },
-        { prop: "configValue", label: "数值",isTooltip:true },
+        { type: 'index', label: '序号' },
+        { prop: 'configKey', label: 'key' },
+        { prop: 'configName', label: '名称' },
+        { prop: 'configValue', label: '数值', isTooltip: true },
       ],
       // 分页区域
       pageSize: 10,
@@ -98,7 +98,7 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
@@ -120,43 +120,45 @@ export default {
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },
     /***** 增删改 *****/
     // 新增
     add() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editDialogVisible = true
     },
     // 删除
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminSystem.deleteSystem(id).then((res) => {
-        if (res.code === "OK") {
+        if (res.code === 'OK') {
           this.$message.success('删除成功')
           this.getList()
         }
@@ -169,10 +171,10 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminSystem.postSystem(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$message.success('新增成功')
                 this.getList()
                 this.editDialogVisible = false
@@ -181,7 +183,7 @@ export default {
           } else {
             // 发送请求
             httpAdminSystem.putSystem(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$message.success('编辑成功')
                 this.getList()
                 this.editDialogVisible = false

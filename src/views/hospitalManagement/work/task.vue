@@ -31,7 +31,8 @@
         <el-form-item label="随访方式"
           prop="type">
           <el-select v-model="searchForm.type"
-            placeholder="请选择随访方式" size="small">
+            placeholder="请选择随访方式"
+            size="small">
             <el-option v-for="item in followTypeList"
               :key="item.id"
               :label="item.label"
@@ -61,7 +62,8 @@
         <!-- 加入方式 -->
         <el-form-item label="加入方式">
           <el-select v-model="searchForm.resource"
-            placeholder="请选择加入方式" size="small">
+            placeholder="请选择加入方式"
+            size="small">
             <el-option v-for="item in resourceTypeList"
               :key="item.id"
               :label="item.label"
@@ -71,7 +73,8 @@
         <!-- 状态 -->
         <el-form-item label="状态">
           <el-select v-model="searchForm.status"
-            placeholder="请选择状态" size="small">
+            placeholder="请选择状态"
+            size="small">
             <el-option v-for="item in statusList"
               :key="item.id"
               :label="item.label"
@@ -407,15 +410,17 @@ export default {
     },
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital({pageSize: 10000}).then((res) => {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
     // 获取医生列表
     getDoctorList(val) {
-      httpAdminDoctor.getDoctor({ hospitalId: val,pageSize: 10000 }).then((res) => {
-        this.doctorList = res.data.elements
-      })
+      httpAdminDoctor
+        .getDoctor({ hospitalId: val, pageSize: 10000 })
+        .then((res) => {
+          this.doctorList = res.data.elements
+        })
     },
     // 获取用户列表
     getPatientList(id) {
@@ -446,10 +451,12 @@ export default {
     },
     // 搜索
     searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },

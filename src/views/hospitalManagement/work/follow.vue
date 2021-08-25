@@ -29,7 +29,8 @@
         </el-form-item>
         <el-form-item label="医院名称">
           <el-input placeholder="请输入医院名称"
-            v-model="searchForm.hospitalName" size="small"></el-input>
+            v-model="searchForm.hospitalName"
+            size="small"></el-input>
         </el-form-item>
         <el-form-item label="随访方式">
           <el-select v-model="searchForm.type"
@@ -387,10 +388,12 @@ export default {
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },

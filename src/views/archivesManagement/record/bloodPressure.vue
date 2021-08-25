@@ -79,6 +79,10 @@
       <el-table-column align="center"
         label="姓名"
         prop="patientUserName">
+        <template slot-scope="scope">
+          <span style="color: #1890ff; text-decoration: underline"
+            @click="skipPatient(scope.row)">{{scope.row.patientUserName}}</span>
+        </template>
       </el-table-column>
       <el-table-column align="center"
         label="手机号"
@@ -381,10 +385,12 @@ export default {
     /***** 搜索区域 *****/
     // 搜索
     searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },
@@ -439,6 +445,15 @@ export default {
           }
         }
       })
+    },
+    // 跳转用户档案
+    skipPatient(val) {
+      this.$router.push(
+        '/archivesManagement/details?id=' +
+          val.patientUserId +
+          '&type=edit' +
+          '&isArchives=true'
+      )
     },
     /***** 分页 *****/
     handleSizeChange(newSize) {
