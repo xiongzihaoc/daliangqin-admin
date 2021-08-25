@@ -315,8 +315,13 @@ export default {
     },
     // 查看心电图
     examineElectrocardiograph(val) {
+      let deskUrl = JSON.parse(val.reportResult).body.data.deskUrl
       let ecgUrl = JSON.parse(val.reportResult).body.data.ecgUrl
-      window.open(ecgUrl)
+      if (deskUrl) {
+        window.open(deskUrl)
+      } else {
+        window.open(ecgUrl)
+      }
     },
     // 改变审核状态
     changeStatus(val) {
