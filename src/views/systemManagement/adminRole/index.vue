@@ -27,7 +27,8 @@
           prop="adminRoleType">
           <el-select style="width: 100%"
             placeholder="请选择身份"
-            v-model="searchForm.adminRoleType" size="small">
+            v-model="searchForm.adminRoleType"
+            size="small">
             <el-option v-for="item in adminRoleTypeList"
               :key="item.id"
               :label="item.label"
@@ -105,7 +106,8 @@
           prop="phone"
           v-if="this.infoTitle === '新增'">
           <el-input v-Int
-            v-model="editAddForm.phone" maxlength="11"></el-input>
+            v-model="editAddForm.phone"
+            maxlength="11"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -118,14 +120,14 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import { httpAdminRole } from "@/api/admin/httpAdminRole"
+import EleTable from '@/components/Untable'
+import { httpAdminRole } from '@/api/admin/httpAdminRole'
 import {
   parseTime,
   validatePhone,
   adminRoleTypeList,
   deviceTypeList,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -137,38 +139,38 @@ export default {
       deviceTypeList,
       FormRules: {
         adminRoleType: [
-          { required: true, message: "请选择身份", trigger: "blur" },
+          { required: true, message: '请选择身份', trigger: 'blur' },
         ],
-        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         phone: [{ required: true, validator: validatePhone }],
       },
       searchForm: {
-        adminRoleType: "",
-        name: "",
-        phone: "",
+        adminRoleType: '',
+        name: '',
+        phone: '',
       },
       list: [],
       editAddForm: {
-        adminRoleType: "",
-        deviceType: "",
-        name: "",
-        phone: "",
+        adminRoleType: '',
+        deviceType: '',
+        name: '',
+        phone: '',
       },
       tableHeaderBig: [
-        { label: "序号", type: "index" },
-        { prop: "name", label: "姓名" },
-        { prop: "phone", label: "手机号" },
-        { prop: "roleName", label: "身份" },
+        { label: '序号', type: 'index' },
+        { prop: 'name', label: '姓名' },
+        { prop: 'phone', label: '手机号' },
+        { prop: 'roleName', label: '身份' },
         {
-          prop: "createTime",
-          label: "创建时间",
+          prop: 'createTime',
+          label: '创建时间',
           formatter: (row) => {
             return parseTime(row.createTime)
           },
         },
         {
-          prop: "loginTime",
-          label: "最后登录时间",
+          prop: 'loginTime',
+          label: '最后登录时间',
           formatter: (row) => {
             return parseTime(row.loginTime)
           },
@@ -180,7 +182,7 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
@@ -204,45 +206,47 @@ export default {
     },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {this.pageNum = 1
+    searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
       console.log(val)
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editDialogVisible = true
     },
     // 删除
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminRole.deleteAdminRole(id).then((res) => {
-        if (res.code === "OK") {
+        if (res.code === 'OK') {
           this.$message.success('删除成功')
           this.getList()
         }
@@ -255,10 +259,10 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminRole.postAdminRole(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$message.success('新增成功')
                 this.getList()
                 this.editDialogVisible = false
@@ -267,7 +271,7 @@ export default {
           } else {
             // 发送请求
             httpAdminRole.putAdminRole(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$message.success('编辑成功')
                 this.getList()
                 this.editDialogVisible = false

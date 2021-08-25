@@ -293,11 +293,13 @@ export default {
       return data
     },
     /***** 搜索区域 *****/
-    searchBtn() {this.pageNum = 1
+    searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },

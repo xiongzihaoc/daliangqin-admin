@@ -27,7 +27,8 @@
           prop="hospitalId">
           <el-select v-model="searchForm.hospitalId"
             @change="selectChange"
-            class="w100" size="small">
+            class="w100"
+            size="small">
             <el-option v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
@@ -119,10 +120,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import { httpAdminHospitalRole } from "@/api/admin/httpAdminHospitalRole"
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital"
-import { parseTime, validatePhone } from "@/utils/index"
+import EleTable from '@/components/Untable'
+import { httpAdminHospitalRole } from '@/api/admin/httpAdminHospitalRole'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { parseTime, validatePhone } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -131,41 +132,41 @@ export default {
     return {
       parseTime,
       FormRules: {
-        userName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        userName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         hospitalId: [
-          { required: true, message: "请选择医院", trigger: "blur" },
+          { required: true, message: '请选择医院', trigger: 'blur' },
         ],
         userPhone: [{ required: true, validator: validatePhone }],
       },
       searchForm: {
-        userName: "",
-        userPhone: "",
-        hospitalId: "",
-        hospitalRoleType: "ADMIN",
+        userName: '',
+        userPhone: '',
+        hospitalId: '',
+        hospitalRoleType: 'ADMIN',
       },
       list: [],
       hospitalList: [],
       editAddForm: {
-        userName: "",
-        userPhone: "",
-        hospitalRoleType: "ADMIN",
-        hospitalId: "",
+        userName: '',
+        userPhone: '',
+        hospitalRoleType: 'ADMIN',
+        hospitalId: '',
       },
       tableHeaderBig: [
-        { label: "序号", type: "index" },
-        { prop: "userName", label: "姓名" },
-        { prop: "userPhone", label: "手机号" },
-        { prop: "hospitalName", label: "医院名称" },
+        { label: '序号', type: 'index' },
+        { prop: 'userName', label: '姓名' },
+        { prop: 'userPhone', label: '手机号' },
+        { prop: 'hospitalName', label: '医院名称' },
         {
-          prop: "createTime",
-          label: "添加时间",
+          prop: 'createTime',
+          label: '添加时间',
           formatter: (row) => {
             return parseTime(row.createTime)
           },
         },
         {
-          prop: "updateTime",
-          label: "最后登录时间",
+          prop: 'updateTime',
+          label: '最后登录时间',
           formatter: (row) => {
             return parseTime(row.updateTime)
           },
@@ -177,7 +178,7 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
@@ -211,25 +212,27 @@ export default {
     },
     /***** 搜索区域 *****/
     // 搜索
-    searchBtn() {this.pageNum = 1
+    searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },
     /***** 增删改 *****/
     // 新增
     addBtn() {
-      this.infoTitle = "新增"
+      this.infoTitle = '新增'
       this.editAddForm = {}
-      this.editAddForm.hospitalRoleType = "ADMIN"
+      this.editAddForm.hospitalRoleType = 'ADMIN'
       this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      this.infoTitle = "编辑"
+      this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       console.log(this.editAddForm)
       this.editDialogVisible = true
@@ -237,20 +240,20 @@ export default {
     // 删除
     async deleteBtn(id) {
       const confirmResult = await this.$confirm(
-        "你确定要执行此操作, 是否继续?",
-        "提示",
+        '你确定要执行此操作, 是否继续?',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).catch((err) => console.log(err))
-      if (confirmResult != "confirm") {
-        return this.$message.info("取消删除")
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminHospitalRole.deleteRole(id).then((res) => {
-        if (res.code === "OK") {
+        if (res.code === 'OK') {
           this.$message.success('删除成功')
           this.getList()
         }
@@ -263,10 +266,10 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          if (this.infoTitle === "新增") {
+          if (this.infoTitle === '新增') {
             // 发送请求
             httpAdminHospitalRole.postRole(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$message.success('新增成功')
                 this.getList()
                 this.editDialogVisible = false
@@ -275,7 +278,7 @@ export default {
           } else {
             // 发送请求
             httpAdminHospitalRole.putRole(this.editAddForm).then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.$message.success('编辑成功')
                 this.getList()
                 this.editDialogVisible = false

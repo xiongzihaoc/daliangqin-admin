@@ -55,9 +55,9 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import { httpAdminKpiRecord } from "@/api/admin/httpAdminKpiRecord"
-import { parseTime } from "@/utils"
+import EleTable from '@/components/Table'
+import { httpAdminKpiRecord } from '@/api/admin/httpAdminKpiRecord'
+import { parseTime } from '@/utils'
 export default {
   components: {
     EleTable,
@@ -67,32 +67,32 @@ export default {
       // 列表数据
       list: [],
       tableHeaderBig: [
-        { label: "序号", type: "index" },
+        { label: '序号', type: 'index' },
         {
-          prop: "createTime",
-          label: "日期",
+          prop: 'createTime',
+          label: '日期',
           formatter: (row) => {
             return parseTime(row.createTime).slice(0, 7)
           },
         },
-        { prop: "finishCount", label: "完成总次数" },
-        { prop: "finishPeople", label: "完成总人数" },
-        { prop: "equivalentCount", label: "获得总当量" },
-        { prop: "equivalentAvg", label: "人均总当量" },
+        { prop: 'finishCount', label: '完成总次数' },
+        { prop: 'finishPeople', label: '完成总人数' },
+        { prop: 'equivalentCount', label: '获得总当量' },
+        { prop: 'equivalentAvg', label: '人均总当量' },
       ],
       FormRules: {},
       editAddForm: {
-        userName: "",
-        name: "",
-        phone: "",
-        relationship: "",
+        userName: '',
+        name: '',
+        phone: '',
+        relationship: '',
       },
       // 搜索区域
       searchForm: {
-        userName: "",
-        name: "",
-        phone: "",
-        relationship: "",
+        userName: '',
+        name: '',
+        phone: '',
+        relationship: '',
       },
       // 分页数据
       pageSize: 10,
@@ -117,11 +117,13 @@ export default {
         })
     },
     // 搜索
-    searchBtn(val) {
+    searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 搜索条件重置
     searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },

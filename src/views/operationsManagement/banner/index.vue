@@ -289,7 +289,7 @@ export default {
       this.getList()
     },
     // 重置
-    searchReset() {
+    searchReset() {this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },

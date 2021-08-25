@@ -58,14 +58,14 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable"
-import { httpAdminRelatives } from "@/api/admin/httpAdminRelatives"
+import EleTable from '@/components/Untable'
+import { httpAdminRelatives } from '@/api/admin/httpAdminRelatives'
 import {
   validatePhone,
   parseTime,
   relationshipList,
   formatterElement,
-} from "@/utils/index"
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -76,35 +76,35 @@ export default {
       // 列表数据
       list: [],
       tableHeaderBig: [
-        { label: "序号", type: "index" },
-        { prop: "userName", label: "用户姓名" },
-        { prop: "userPhone", label: "用户手机号" },
-        { prop: "name", label: "亲属姓名" },
-        { prop: "phone", label: "亲属手机号" },
+        { label: '序号', type: 'index' },
+        { prop: 'userName', label: '用户姓名' },
+        { prop: 'userPhone', label: '用户手机号' },
+        { prop: 'name', label: '亲属姓名' },
+        { prop: 'phone', label: '亲属手机号' },
         {
-          prop: "relationship",
-          label: "身份",
+          prop: 'relationship',
+          label: '身份',
           formatter: (row) => {
             return this.relationshipFormatter(row)
           },
         },
       ],
       FormRules: {
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
+        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
       },
       editAddForm: {
-        userName: "",
-        name: "",
-        phone: "",
-        relationship: "",
+        userName: '',
+        name: '',
+        phone: '',
+        relationship: '',
       },
       relationshipList,
       // 搜索区域
       searchForm: {
-        userName: "",
-        name: "",
-        phone: "",
-        relationship: "",
+        userName: '',
+        name: '',
+        phone: '',
+        relationship: '',
       },
       // 分页数据
       pageSize: 10,
@@ -132,11 +132,13 @@ export default {
         })
     },
     // 搜索
-    searchBtn(val) {
+    searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 搜索条件重置
     searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },
