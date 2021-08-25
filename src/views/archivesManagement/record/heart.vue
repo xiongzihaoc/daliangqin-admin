@@ -304,7 +304,7 @@ export default {
     // 查看心电图
     examineElectrocardiograph(val) {
       let ecgUrl = JSON.parse(val.reportResult).body.data.ecgUrl
-      window.location.href = ecgUrl
+      window.open(ecgUrl)
     },
     // 跳转报告详情
     skipReportDetail() {
