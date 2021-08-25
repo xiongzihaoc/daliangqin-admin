@@ -85,10 +85,22 @@
       <el-table-column align="center"
         label="姓名"
         prop="patientUserName">
+        <template slot-scope="scope">
+          <span style="color: #1890ff; text-decoration: underline"
+            @click="skipPatient(scope.row)">{{scope.row.patientUserName}}</span>
+        </template>
       </el-table-column>
       <el-table-column align="center"
         label="手机号"
         prop="patientUserPhone">
+      </el-table-column>
+      <el-table-column align="center"
+        label="身份证号"
+        prop="idCard">
+      </el-table-column>
+      <el-table-column align="center"
+        label="年龄"
+        prop="age">
       </el-table-column>
       <el-table-column align="center"
         label="设备名称"
@@ -146,7 +158,7 @@
         label="审核时间"
         prop="inspectionTime">
         <template slot-scope="scope">
-          {{scope.row.checkTime}}
+          {{parseTime(scope.row.checkTime)}}
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -306,6 +318,15 @@ export default {
       let ecgUrl = JSON.parse(val.reportResult).body.data.ecgUrl
       window.open(ecgUrl)
     },
+    // 改变审核状态
+    changeStatus(val) {
+      httpAdminHeartRate.putHeartRateStatus(val).then((res) => {
+        if (res.code === 'OK') {
+          this.$message.success('状态更改成功')
+          this.getList()
+        }
+      })
+    },
     // 跳转报告详情
     skipReportDetail() {
       this.hospitalDialogVisible = false
@@ -320,7 +341,15 @@ export default {
           this.hospitalForm.isSignature
       )
     },
-
+    // 跳转用户档案
+    skipPatient(val) {
+      this.$router.push(
+        '/archivesManagement/details?id=' +
+          val.patientUserId +
+          '&type=edit' +
+          '&isArchives=true'
+      )
+    },
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
@@ -329,15 +358,7 @@ export default {
         return formatSeconds(JSON.parse(row.reportResult).body.data.length)
       }
     },
-    // 改变审核状态
-    changeStatus(val) {
-      httpAdminHeartRate.putHeartRateStatus(val).then((res) => {
-        if (res.code === 'OK') {
-          this.$message.success('状态更改成功')
-          this.getList()
-        }
-      })
-    },
+
     /***** 分页 *****/
     handleSizeChange(newSize) {
       this.pageSize = newSize
