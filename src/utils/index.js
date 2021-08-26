@@ -218,8 +218,8 @@ export function formatSeconds(value) {
   let s = Math.floor((result % 60)) < 10 ? '0' + Math.floor((result % 60)) : Math.floor((result % 60));
 
   let res = '';
-  if(h !== '00') res += `${h}时`;
-  if(m !== '00') res += `${m}分`;
+  if (h !== '00') res += `${h}时`;
+  if (m !== '00') res += `${m}分`;
   res += `${s}秒`;
   return res;
 }
@@ -630,6 +630,11 @@ export const glucoseDetectType = [
   { id: 7, label: "晚餐后", value: "AFTERDINNER" },
   { id: 8, label: "睡前", value: "BEFOREGOINGTOBED" },
   { id: 9, label: "随机", value: "RANDOM" },
+]
+export const resultStatus = [
+  { id: 1, label: "全部", value: "ALL" },
+  { id: 2, label: "导联脱落", value: "FALL_OFF" },
+  { id: 3, label: "数据干扰", value: "INTERFERENCE" },
 ]
 // 所有枚举类型转义
 export const formatterElement = {

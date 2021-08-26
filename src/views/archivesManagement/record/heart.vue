@@ -58,6 +58,17 @@
             size="small"
             placeholder="请输入医院名称"></el-input>
         </el-form-item>
+        <el-form-item label="监测结果"
+          align="left">
+          <el-select v-model="searchForm.resultStatus"
+            size="small"
+            placeholder="请选择监测结果">
+            <el-option v-for="item in resultStatus"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -214,7 +225,7 @@
 <script>
 import EleTable from '@/components/Table'
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
-import { parseTime, formatSeconds } from '@/utils/index'
+import { parseTime, formatSeconds,resultStatus } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -223,6 +234,7 @@ export default {
     return {
       parseTime,
       formatSeconds,
+      resultStatus,
       searchForm: {
         patientUserName: '',
         patientUserPhone: '',
@@ -230,6 +242,7 @@ export default {
         checkStatus: '',
         doctorUserName: '',
         hospitalName: '',
+        resultStatus: '',
       },
       hospitalList: [],
       doctorList: [],
@@ -275,6 +288,7 @@ export default {
           checkStatus: this.searchForm.checkStatus,
           doctorUserName: this.searchForm.doctorUserName,
           hospitalName: this.searchForm.hospitalName,
+          resultStatus: this.searchForm.resultStatus,
         })
         .then((res) => {
           this.list = res.data.elements
@@ -320,7 +334,7 @@ export default {
       if (deskUrl) {
         window.open(deskUrl)
       } else {
-        window.open(ecgUrl)
+        window.open(ecgUrl.replace('vertical', 'one_ecg'))
       }
     },
     // 改变审核状态
