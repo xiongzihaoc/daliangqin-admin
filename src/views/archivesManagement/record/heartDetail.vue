@@ -1,51 +1,60 @@
 <template>
   <div>
+    <!-- 打印区域 -->
     <div class="print-box">
       <div class="container"
         id="printMe"
         v-loading="loading">
         <h3 class="fz18">院外便携式心电监测</h3>
-        <div class="userInfo">
+        <!-- 监测医院 时间 -->
+        <div class="userInfo top">
           <div class="hospital">
-            <span class="title fw">检测医院：</span>
+            <span class="title fw">监测医院：</span>
             <span class="content"
-              contenteditable="true">{{this.$route.query.hospitalName}}</span>
+              contenteditable="true">{{userInfo.hospitalName}}</span>
+          </div>
+          <div class="hospital">
+            <span class="title fw">监测时间：</span>
+            <span class="content">{{parseTime(userInfo.inspectionTime)}}</span>
+          </div>
+        </div>
+        <!-- 个人详细信息 -->
+        <div class="userInfo">
+          <div class="userName flex margin">
+            <div class="box"><span class="fw">姓名：</span>
+              <span contenteditable="true">{{userInfo.patientUserName}}</span>
+            </div>
+            <div class="box"><span class="fw">年龄：</span>
+              <span>{{userInfo.age}}</span>
+            </div>
+            <div class="box"><span class="fw">身份证：</span>
+              <span>{{userInfo.idCard}}</span>
+            </div>
           </div>
           <div class="userName flex margin">
-            <div class="box"><span class="fw">用户姓名：</span>
-              <span contenteditable="true">{{this.$route.query.name}}</span>
+            <div class="box"><span class="fw">手机号码：</span>
+              <span>{{userInfo.patientUserPhone}}</span>
             </div>
-            <div class="box"><span class="fw">监测日期：</span>
-              <span>{{parseTime(userInfo.inspectionTime)}}</span>
-            </div>
-            <div class="box"><span class="fw">设备：</span>
+            <div class="box"><span class="fw">监测设备：</span>
               <span>{{userInfo.name}}</span>
             </div>
-          </div>
-          <div class="userName flex margin">
             <div class="box"><span class="fw">监测模式：</span>
               <span v-if="userInfo.detectType === 'DAILY'">日常监测</span>
               <span v-else>24小时监测</span>
             </div>
+          </div>
+          <div class="userName flex">
             <div class="box"><span class="fw">监测时长：</span>
               <span>{{formatSeconds(heartDetail.length)}}</span>
             </div>
-            <div class="box"><span class="fw">心率：</span>
-              <span contenteditable="true"
-                ref="heartRateScore">{{heartDetail.heartRate}}</span>
-              <span>bpm</span>
-            </div>
-          </div>
-          <div class="userName flex">
             <div class="box"><span class="fw">测量结果：</span>
-              <span contenteditable="true"
-                ref="title">{{heartDetail.title}}</span>
+              <span ref="title"
+                contenteditable="true">{{heartDetail.title}}</span>
             </div>
             <!-- 占位符 -->
             <div class="over box"><span class="fw"></span></div>
           </div>
         </div>
-
         <div class="analyse">
           <img class="analyse-img"
             :src="heartDetail.fileImagePath"
@@ -108,18 +117,21 @@
           <div class="fz11 result-text"
             contenteditable="true"
             ref="ecgResult">{{heartDetail.ecgResult}}</div>
+
           <div class="result-option">
-            <div class="fw result-title">原因分析：</div>
-            <div class="content"
-              contenteditable="true"
-              ref="abnorAnalysis">{{heartDetail.abnorAnalysis}}</div>
-          </div>
-          <div class="result-option middle">
             <div class="fw result-title">处置建议：</div>
             <div class="content"
               contenteditable="true"
               ref="suggestion">{{heartDetail.suggestion}}</div>
           </div>
+
+          <div class="result-option middle">
+            <div class="fw result-title">原因分析：</div>
+            <div class="content"
+              contenteditable="true"
+              ref="abnorAnalysis">{{heartDetail.abnorAnalysis}}</div>
+          </div>
+
           <div class="result-option">
             <div class="fw result-title">保健建议：</div>
             <div class="content"
@@ -138,6 +150,16 @@
               :src="userInfo.signUrl"
               alt="">
           </div>
+        </div>
+        <!-- 处置建议模板 -->
+        <div class="advice">
+          <h2>处置建议</h2>
+          <p>1. 建议重新测量</p>
+          <p>2. 建议定期复查</p>
+          <p>3. 建议治疗后复查</p>
+          <p>4. 建议进一步检查治疗</p>
+          <p>5. 建议转诊治疗</p>
+          <p>6. 建议转院治疗</p>
         </div>
       </div>
     </div>
@@ -195,17 +217,16 @@ export default {
           this.heartDetail = JSON.parse(
             res?.data?.elements[0]?.reportResult
           )?.body?.data
-          console.log(this.heartDetail.heartRate)
           this.loading = false
         })
     },
     // 保存
     save() {
+      console.log(this.$refs.avg.innerHTML)
       let thirdForm = {
         recordId: this.$route.query.id,
-        heartRate: Number(this.$refs.heartRateScore.innerHTML),
-        title: this.$refs.title.innerHTML,
         avg: Number(this.$refs.avg.innerHTML),
+        title: this.$refs.title.innerHTML,
         max: Number(this.$refs.max.innerHTML),
         min: Number(this.$refs.min.innerHTML),
         normalRate: Number(this.$refs.normalRate.innerHTML),
@@ -257,6 +278,7 @@ body {
   align-items: center;
 }
 #printMe {
+  position: relative;
   border: 1px solid #ccc;
   // margin-top: 100px;
 }
@@ -273,22 +295,27 @@ body {
     padding: 10px;
     box-sizing: border-box;
     border-top: 2px solid #000;
-    border-bottom: 2px solid #000;
     .userName {
       .box {
         flex: 1;
       }
     }
   }
+  .top {
+    display: flex;
+    align-items: center;
+    border-bottom: none;
+    justify-content: space-between;
+  }
   .analyse {
-    padding: 8px 10px;
+    padding: 0 10px 10px;
     box-sizing: border-box;
     border-bottom: 2px solid #000;
     .analyse-img {
       display: block;
       margin: 0 auto;
-      width: 347px;
-      height: 93px;
+      width: 100%;
+      height: 120px;
     }
     .analyse-title {
       margin: 5px 0;
@@ -375,6 +402,15 @@ body {
   }
   .resultWidth div {
     min-width: 110px;
+  }
+}
+.advice {
+  position: absolute;
+  right: -40%;
+  top: 50%;
+  transform: translateY(-50%);
+  p {
+    font-size: 16px;
   }
 }
 .operationBtn {
