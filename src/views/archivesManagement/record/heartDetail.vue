@@ -22,34 +22,34 @@
         <!-- 个人详细信息 -->
         <div class="userInfo">
           <div class="userName flex margin">
-            <div class="box"><span class="fw txt-r">姓名：</span>
+            <div class="box"><span class="fw txt-r">姓名</span>:
               <span contenteditable="true"
                 v-html="userInfo.patientUserName"></span>
             </div>
-            <div class="box"><span class="fw txt-r">年龄：</span>
+            <div class="box"><span class="fw txt-r">年龄</span>
               <span>{{userInfo.age}}</span>
             </div>
-            <div class="box"><span class="fw txt-r">身份证：</span>
+            <div class="box"><span class="fw txt-r">身份证</span>
               <span>{{userInfo.idCard}}</span>
             </div>
           </div>
           <div class="userName flex margin">
-            <div class="box"><span class="fw">手机号码：</span>
+            <div class="box"><span class="fw txt-r">手机号码</span>
               <span>{{userInfo.patientUserPhone}}</span>
             </div>
-            <div class="box"><span class="fw">监测设备：</span>
+            <div class="box"><span class="fw txt-r">监测设备</span>
               <span>{{userInfo.name}}</span>
             </div>
-            <div class="box"><span class="fw">监测模式：</span>
+            <div class="box"><span class="fw txt-r">监测模式</span>
               <span v-if="userInfo.detectType === 'DAILY'">日常监测</span>
               <span v-else>24小时监测</span>
             </div>
           </div>
           <div class="userName flex">
-            <div class="box"><span class="fw">监测时长：</span>
+            <div class="box"><span class="fw">监测时长</span>
               <span>{{formatSeconds(heartDetail.length)}}</span>
             </div>
-            <div class="box"><span class="fw">测量结果：</span>
+            <div class="box"><span class="fw">测量结果</span>
               <span ref="title"
                 contenteditable="true"
                 v-html="heartDetail.title"></span>
@@ -179,7 +179,7 @@
     </div>
     <!-- 备注 -->
     <div class="remark">
-      提示：检测医院和用户姓名进行修改之后，只用于打印，不做其他用途；其余内容修改后会进行数据更新
+      提示：监测医院和用户姓名进行修改之后，只用于打印，不做其他用途；其余内容修改后会进行数据更新
     </div>
     <!-- 操作按钮 -->
     <div class="operationBtn">
@@ -259,7 +259,7 @@ export default {
         max: Number(this.$refs.max.innerHTML),
         min: Number(this.$refs.min.innerHTML),
         normalRate: Number(this.$refs.normalRate.innerHTML),
-        heartRate: this.heartDetail.heartRate,
+        heartRate: Number(this.$refs.avg.innerHTML),
         heartbeatRate: Number(this.$refs.heartbeatRate.innerHTML),
         slowRate: Number(this.$refs.slowRate.innerHTML),
         ecgResultTz: this.$refs.ecgResultTz.innerHTML,
@@ -437,9 +437,11 @@ body {
   }
 }
 .txt-r {
-  display: inline-block;
-  width: 60px;
-  text-align: right;
+  margin: 0 0;
+  width: 50px;
+  text-align-last: justify;
+
+  // text-align: right;
 }
 .advice {
   position: absolute;
