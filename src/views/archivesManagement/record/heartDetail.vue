@@ -22,34 +22,34 @@
         <!-- 个人详细信息 -->
         <div class="userInfo">
           <div class="userName flex margin">
-            <div class="box"><span class="fw txt-r">姓名</span>:
+            <div class="box"><span class="fw txt-r">姓名</span>：
               <span contenteditable="true"
                 v-html="userInfo.patientUserName"></span>
             </div>
-            <div class="box"><span class="fw txt-r">年龄</span>
+            <div class="box"><span class="fw txt-r">年龄</span>：
               <span>{{userInfo.age}}</span>
             </div>
-            <div class="box"><span class="fw txt-r">身份证</span>
+            <div class="box"><span class="fw txt-r">身份证</span>：
               <span>{{userInfo.idCard}}</span>
             </div>
           </div>
           <div class="userName flex margin">
-            <div class="box"><span class="fw txt-r">手机号码</span>
+            <div class="box"><span class="fw txt-r">手机号码</span>：
               <span>{{userInfo.patientUserPhone}}</span>
             </div>
-            <div class="box"><span class="fw txt-r">监测设备</span>
+            <div class="box"><span class="fw txt-r">监测设备</span>：
               <span>{{userInfo.name}}</span>
             </div>
-            <div class="box"><span class="fw txt-r">监测模式</span>
+            <div class="box"><span class="fw txt-r">监测模式</span>：
               <span v-if="userInfo.detectType === 'DAILY'">日常监测</span>
               <span v-else>24小时监测</span>
             </div>
           </div>
           <div class="userName flex">
-            <div class="box"><span class="fw">监测时长</span>
+            <div class="box"><span class="fw txt-r">监测时长</span>：
               <span>{{formatSeconds(heartDetail.length)}}</span>
             </div>
-            <div class="box"><span class="fw">测量结果</span>
+            <div class="box"><span class="fw txt-r">测量结果</span>：
               <span ref="title"
                 contenteditable="true"
                 v-html="heartDetail.title"></span>
@@ -327,9 +327,11 @@ body {
     border-top: 2px solid #000;
     .userName {
       .box {
-        display: flex;
-        flex-wrap: nowrap;
         flex: 1;
+        .txt-r {
+          display: inline-block;
+          width: 60px;
+        }
       }
     }
   }
