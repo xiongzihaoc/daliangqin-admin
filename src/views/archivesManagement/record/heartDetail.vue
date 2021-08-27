@@ -11,7 +11,8 @@
           <div class="hospital">
             <span class="title fw">监测医院：</span>
             <span class="content"
-              contenteditable="true">{{userInfo.hospitalName}}</span>
+              contenteditable="true"
+              v-html="userInfo.hospitalName"></span>
           </div>
           <div class="hospital">
             <span class="title fw">监测时间：</span>
@@ -21,13 +22,14 @@
         <!-- 个人详细信息 -->
         <div class="userInfo">
           <div class="userName flex margin">
-            <div class="box"><span class="fw">姓名：</span>
-              <span contenteditable="true">{{userInfo.patientUserName}}</span>
+            <div class="box"><span class="fw txt-r">姓名：</span>
+              <span contenteditable="true"
+                v-html="userInfo.patientUserName"></span>
             </div>
-            <div class="box"><span class="fw">年龄：</span>
+            <div class="box"><span class="fw txt-r">年龄：</span>
               <span>{{userInfo.age}}</span>
             </div>
-            <div class="box"><span class="fw">身份证：</span>
+            <div class="box"><span class="fw txt-r">身份证：</span>
               <span>{{userInfo.idCard}}</span>
             </div>
           </div>
@@ -49,7 +51,8 @@
             </div>
             <div class="box"><span class="fw">测量结果：</span>
               <span ref="title"
-                contenteditable="true">{{heartDetail.title}}</span>
+                contenteditable="true"
+                v-html="heartDetail.title"></span>
             </div>
             <!-- 占位符 -->
             <div class="over box"><span class="fw"></span></div>
@@ -65,21 +68,24 @@
               <span class="fw">平均心率：</span>
               <span class="fw fz16"
                 contenteditable="true"
-                ref="avg">{{heartDetail.avg}}</span>
+                ref="avg"
+                v-html="heartDetail.avg"></span>
               <span class="fw">bpm</span>
             </div>
             <div>
               <span class="fw">最高心率：</span>
               <span class="fw fz16"
                 contenteditable="true"
-                ref="max">{{heartDetail.max}}</span>
+                ref="max"
+                v-html="heartDetail.max"></span>
               <span class="fw">bpm</span>
             </div>
             <div>
               <span class="fw">最低心率：</span>
               <span class="fw fz16"
                 contenteditable="true"
-                ref="min">{{heartDetail.min}}</span>
+                ref="min"
+                v-html="heartDetail.min"></span>
               <span class="fw">bpm</span>
             </div>
           </div>
@@ -88,21 +94,24 @@
               <span class="fw">正常心率：</span>
               <span class="fw fz16"
                 contenteditable="true"
-                ref="normalRate">{{heartDetail.normalRate}}</span>
+                ref="normalRate"
+                v-html="heartDetail.normalRate"></span>
               <span class="fw">%</span>
             </div>
             <div>
               <span class="fw">心率偏快：</span>
               <span class="fw fz16"
                 contenteditable="true"
-                ref="heartbeatRate">{{heartDetail.heartbeatRate}}</span>
+                ref="heartbeatRate"
+                v-html="heartDetail.heartbeatRate"></span>
               <span class="fw">%</span>
             </div>
             <div>
               <span class="fw">心率偏慢：</span>
               <span class="fw fz16"
                 contenteditable="true"
-                ref="slowRate">{{heartDetail.slowRate}}</span>
+                ref="slowRate"
+                v-html="heartDetail.slowRate"></span>
               <span class="fw">%</span>
             </div>
           </div>
@@ -110,33 +119,38 @@
         <div class="impression">
           <div class="fz14 impression-title">心电分析印象：</div>
           <div contenteditable="true"
-            ref="ecgResultTz">{{heartDetail.ecgResultTz}}</div>
+            ref="ecgResultTz"
+            v-html="heartDetail.ecgResultTz"></div>
         </div>
         <div class="result">
           <div class="fz14">心电分析结果：</div>
           <div class="fz11 result-text"
             contenteditable="true"
-            ref="ecgResult">{{heartDetail.ecgResult}}</div>
+            ref="ecgResult"
+            v-html="heartDetail.ecgResult"></div>
 
           <div class="result-option">
             <div class="fw result-title">处置建议：</div>
             <div class="content"
               contenteditable="true"
-              ref="suggestion">{{heartDetail.suggestion}}</div>
+              ref="suggestion"
+              v-html="heartDetail.suggestion"></div>
           </div>
 
           <div class="result-option middle">
             <div class="fw result-title">原因分析：</div>
             <div class="content"
               contenteditable="true"
-              ref="abnorAnalysis">{{heartDetail.abnorAnalysis}}</div>
+              ref="abnorAnalysis"
+              v-html="heartDetail.abnorAnalysis"></div>
           </div>
 
           <div class="result-option">
             <div class="fw result-title">保健建议：</div>
             <div class="content"
               contenteditable="true"
-              ref="healthCareAdvice">{{heartDetail.healthCareAdvice}}</div>
+              ref="healthCareAdvice"
+              v-html="heartDetail.healthCareAdvice"></div>
           </div>
         </div>
         <!-- 底部 -->
@@ -185,7 +199,7 @@
 
 <script>
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
-import { parseTime, formatSeconds } from '@/utils/index'
+import { parseTime, formatSeconds, textFormat } from '@/utils/index'
 export default {
   data() {
     return {
@@ -204,6 +218,21 @@ export default {
   },
   created() {
     this.getList()
+  },
+  mounted() {
+    this.$nextTick(() => {
+      const textArr = document.querySelectorAll('.result-title')
+      console.log(textArr)
+      textArr.forEach((el) => {
+        console.log(el.paste)
+        if (!el.paste) {
+          el.addEventListener('paste', (e) => {
+            el.paste = true
+            textFormat(e)
+          })
+        }
+      })
+    })
   },
   methods: {
     // 获取信息
@@ -230,6 +259,7 @@ export default {
         max: Number(this.$refs.max.innerHTML),
         min: Number(this.$refs.min.innerHTML),
         normalRate: Number(this.$refs.normalRate.innerHTML),
+        heartRate: this.heartDetail.heartRate,
         heartbeatRate: Number(this.$refs.heartbeatRate.innerHTML),
         slowRate: Number(this.$refs.slowRate.innerHTML),
         ecgResultTz: this.$refs.ecgResultTz.innerHTML,
@@ -297,6 +327,8 @@ body {
     border-top: 2px solid #000;
     .userName {
       .box {
+        display: flex;
+        flex-wrap: nowrap;
         flex: 1;
       }
     }
@@ -404,13 +436,18 @@ body {
     min-width: 110px;
   }
 }
+.txt-r {
+  display: inline-block;
+  width: 60px;
+  text-align: right;
+}
 .advice {
   position: absolute;
-  right: -40%;
+  right: -30%;
   top: 50%;
   transform: translateY(-50%);
   p {
-    font-size: 16px;
+    font-size: 11px;
   }
 }
 .operationBtn {
