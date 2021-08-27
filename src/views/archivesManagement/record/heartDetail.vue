@@ -327,10 +327,13 @@ body {
     border-top: 2px solid #000;
     .userName {
       .box {
-        flex: 1;
+        display: flex;
+        align-items: center;
+        width: 33.3%;
         .txt-r {
           display: inline-block;
-          width: 60px;
+          width: 50px;
+          text-align-last: justify;
         }
       }
     }
@@ -437,13 +440,6 @@ body {
   .resultWidth div {
     min-width: 110px;
   }
-}
-.txt-r {
-  margin: 0 0;
-  width: 50px;
-  text-align-last: justify;
-
-  // text-align: right;
 }
 .advice {
   position: absolute;
