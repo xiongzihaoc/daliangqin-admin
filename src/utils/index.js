@@ -81,9 +81,9 @@ export function formatTime(time, option) {
 export function param2Obj(url) {
   const search = decodeURIComponent(url.split('?')[1]).replace(/\+/g, ' ')
   if (!search) {
-    return {}
+    return { }
   }
-  const obj = {}
+  const obj = { }
   const searchArr = search.split('&')
   searchArr.forEach(v => {
     const index = v.indexOf('=')
@@ -96,6 +96,28 @@ export function param2Obj(url) {
   return obj
 }
 
+export function textFormat(e) {
+  e.preventDefault()
+  var text
+  var clp = (e.originalEvent || e).clipboardData
+  if (clp === undefined || clp === null) {
+    text = window.clipboardData.getData('text') || ''
+    if (text !== '') {
+      if (window.getSelection) {
+        var newNode = document.createElement('span')
+        newNode.innerHTML = text
+        window.getSelection().getRangeAt(0).insertNode(newNode)
+      } else {
+        document.selection.createRange().pasteHTML(text)
+      }
+    }
+  } else {
+    text = clp.getData('text/plain') || ''
+    if (text !== '') {
+      document.execCommand('insertText', false, text)
+    }
+  }
+}
 //  根据身份证获取出生日期（yyyy-MM-dd）
 export function GetBirthday(psidno) {
   var birthdayno, birthdaytemp
@@ -633,8 +655,9 @@ export const glucoseDetectType = [
 ]
 export const resultStatus = [
   { id: 1, label: "全部", value: "ALL" },
-  { id: 2, label: "导联脱落", value: "FALL_OFF" },
-  { id: 3, label: "数据干扰", value: "INTERFERENCE" },
+  { id: 2, label: "正常", value: "NORMAL" },
+  { id: 3, label: "导联脱落", value: "FALL_OFF" },
+  { id: 4, label: "数据干扰", value: "INTERFERENCE" },
 ]
 // 所有枚举类型转义
 export const formatterElement = {
@@ -770,3 +793,5 @@ export const formatterElement = {
     RANDOM: "随机",
   },
 }
+
+

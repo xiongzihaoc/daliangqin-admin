@@ -242,7 +242,7 @@ export default {
         checkStatus: '',
         doctorUserName: '',
         hospitalName: '',
-        resultStatus: '',
+        resultStatus: 'NORMAL',
       },
       hospitalList: [],
       doctorList: [],
