@@ -390,7 +390,7 @@ export default {
             return parseTime(row.createTime)
           },
         },
-        { prop: 'templateNames', label: '选用模板' },
+        { prop: 'templateNames', label: '选用模板', isTooltip: true },
         { prop: 'templateContents', label: '处方内容', isTooltip: true },
         { prop: 'patientName', label: '用户姓名' },
         { prop: 'patientPhone', label: '用户手机号' },
@@ -493,15 +493,17 @@ export default {
     },
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital({pageSize: 10000}).then((res) => {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
     // 获取医生列表
     getDoctorList(val) {
-      httpAdminDoctor.getDoctor({ hospitalId: val,pageSize: 10000 }).then((res) => {
-        this.doctorList = res.data.elements
-      })
+      httpAdminDoctor
+        .getDoctor({ hospitalId: val, pageSize: 10000 })
+        .then((res) => {
+          this.doctorList = res.data.elements
+        })
     },
     // 获取用户列表
     getPatientList(val) {
@@ -534,11 +536,13 @@ export default {
       this.$forceUpdate()
     },
     // 搜索
-    searchBtn() {this.pageNum = 1
+    searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
-    searchReset() {this.pageNum = 1
+    searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },

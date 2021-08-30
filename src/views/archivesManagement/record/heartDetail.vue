@@ -29,7 +29,7 @@
             <div class="box"><span class="fw txt-r">年龄</span>：
               <span>{{userInfo.age}}</span>
             </div>
-            <div class="box"><span class="fw txt-r">身份证</span>：
+            <div class="box"><span class="fw txt-r">身份证号</span>：
               <span>{{userInfo.idCard}}</span>
             </div>
           </div>
@@ -219,21 +219,6 @@ export default {
   created() {
     this.getList()
   },
-  mounted() {
-    this.$nextTick(() => {
-      const textArr = document.querySelectorAll('.result-title')
-      console.log(textArr)
-      textArr.forEach((el) => {
-        console.log(el.paste)
-        if (!el.paste) {
-          el.addEventListener('paste', (e) => {
-            el.paste = true
-            textFormat(e)
-          })
-        }
-      })
-    })
-  },
   methods: {
     // 获取信息
     getList() {
@@ -321,7 +306,7 @@ body {
     text-align: center;
   }
   .userInfo {
-    padding: 10px;
+    padding: 10px 0;
     box-sizing: border-box;
     border-top: 2px solid #000;
     .userName {
@@ -442,7 +427,7 @@ body {
 }
 .advice {
   position: absolute;
-  right: -30%;
+  right: -60%;
   top: 50%;
   transform: translateY(-50%);
   p {
