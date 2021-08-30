@@ -251,22 +251,21 @@ export default {
     },
     // 保存
     save() {
-      console.log(this.$refs.avg.innerHTML)
       let thirdForm = {
         recordId: this.$route.query.id,
-        avg: Number(this.$refs.avg.innerHTML),
-        title: this.$refs.title.innerHTML,
-        max: Number(this.$refs.max.innerHTML),
-        min: Number(this.$refs.min.innerHTML),
-        normalRate: Number(this.$refs.normalRate.innerHTML),
-        heartRate: Number(this.$refs.avg.innerHTML),
-        heartbeatRate: Number(this.$refs.heartbeatRate.innerHTML),
-        slowRate: Number(this.$refs.slowRate.innerHTML),
-        ecgResultTz: this.$refs.ecgResultTz.innerHTML,
-        ecgResult: this.$refs.ecgResult.innerHTML,
-        abnorAnalysis: this.$refs.abnorAnalysis.innerHTML,
-        suggestion: this.$refs.suggestion.innerHTML,
-        healthCareAdvice: this.$refs.healthCareAdvice.innerHTML,
+        avg: Number(this.$refs.avg.innerText),
+        title: this.$refs.title.innerText,
+        max: Number(this.$refs.max.innerText),
+        min: Number(this.$refs.min.innerText),
+        normalRate: Number(this.$refs.normalRate.innerText),
+        heartRate: Number(this.$refs.avg.innerText),
+        heartbeatRate: Number(this.$refs.heartbeatRate.innerText),
+        slowRate: Number(this.$refs.slowRate.innerText),
+        ecgResultTz: this.$refs.ecgResultTz.innerText,
+        ecgResult: this.$refs.ecgResult.innerText,
+        abnorAnalysis: this.$refs.abnorAnalysis.innerText,
+        suggestion: this.$refs.suggestion.innerText,
+        healthCareAdvice: this.$refs.healthCareAdvice.innerText,
       }
       httpAdminHeartRate.putThirdReport(thirdForm).then((res) => {
         this.loading = true
