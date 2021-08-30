@@ -196,8 +196,7 @@
             placeholder="请输入该医生手机号"></el-input>
         </el-form-item>
         <!-- 编辑阻止修改医生身份证号 -->
-        <el-form-item label="身份证号"
-          prop="idCard">
+        <el-form-item label="身份证号">
           <el-input v-model="editAddForm.idCard"
             maxlength="18"
             :disabled="this.infoTitle === '编辑' ? true : false"
@@ -280,9 +279,9 @@ export default {
         name: [{ required: true, message: '请输入医生姓名', trigger: 'blur' }],
         avatarUrl: [{ required: true, message: '请上传头像', trigger: 'blur' }],
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
-        idCard: [
-          { required: true, trigger: 'blur', validator: validateIdCard },
-        ],
+        // idCard: [
+        //   { required: true, trigger: 'blur', validator: validateIdCard },
+        // ],
         type: [{ required: true, message: '请选择职位', trigger: 'blur' }],
         hospitalId: [
           { required: true, message: '请选择医院', trigger: 'blur' },
