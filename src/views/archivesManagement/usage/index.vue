@@ -28,7 +28,7 @@
             placeholder="请输入设备号"></el-input>
         </el-form-item>
         <!-- 监测模式和app端统一不用枚举  0 日常 5 24小时-->
-        <el-form-item label="监测模式"
+        <!-- <el-form-item label="监测模式"
           align="left">
           <el-select v-model="searchForm.ecgComingMode"
             size="small"
@@ -38,7 +38,7 @@
             <el-option label="日常监测"
               value=0></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -79,14 +79,14 @@
         label="设备号"
         prop="deviceSn">
       </el-table-column>
-      <el-table-column align="center"
+      <!-- <el-table-column align="center"
         label="监测模式"
         prop="ecgComingMode">
         <template slot-scope="scope">
           <span v-if="scope.row.ecgComingMode === 0">日常监测</span>
           <span v-else>24小时监测</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center"
         label="设备状态"
         prop="equipmentStatus">
