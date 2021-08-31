@@ -30,13 +30,13 @@
         <!-- 监测模式和app端统一不用枚举  0 日常 5 24小时-->
         <el-form-item label="监测模式"
           align="left">
-          <el-select v-model="searchForm.detectType"
+          <el-select v-model="searchForm.ecgComingMode"
             size="small"
             placeholder="请选择监测模式">
             <el-option label="24小时监测"
-              value="5"></el-option>
+              value=5></el-option>
             <el-option label="日常监测"
-              value="0"></el-option>
+              value=0></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -81,9 +81,9 @@
       </el-table-column>
       <el-table-column align="center"
         label="监测模式"
-        prop="detectType">
+        prop="ecgComingMode">
         <template slot-scope="scope">
-          <span v-if="scope.row.detectType === 'DAILY'">日常监测</span>
+          <span v-if="scope.row.ecgComingMode === 0">日常监测</span>
           <span v-else>24小时监测</span>
         </template>
       </el-table-column>
@@ -91,15 +91,15 @@
         label="设备状态"
         prop="equipmentStatus">
         <template slot-scope="scope">
-          <span v-if="scope.row.equipmentStatus === 'DEVICE_COLLECT'">监测中</span>
-          <span v-if="scope.row.equipmentStatus === 'DEVICE_EXPORT'">待上传</span>
+          <span v-if="scope.row.deviceStatus === 'DEVICE_COLLECT'">监测中</span>
+          <span v-if="scope.row.deviceStatus === 'DEVICE_EXPORT'">待上传</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
         label="监测日期"
-        prop="checkDate">
+        prop="ecgStartTime">
         <template slot-scope="scope">
-          {{parseTime(scope.row.checkDate)}}
+          {{parseTime(scope.row.ecgStartTime)}}
         </template>
       </el-table-column>
     </EleTable>
@@ -122,7 +122,7 @@ export default {
         deviceSn: '',
         name: '',
         phone: '',
-        detectType: '',
+        ecgComingMode: '',
       },
       // 分页区域
       pageSize: 10,
@@ -143,7 +143,7 @@ export default {
           deviceSn: this.searchForm.deviceSn,
           name: this.searchForm.name,
           phone: this.searchForm.phone,
-          detectType: this.searchForm.detectType,
+          ecgComingMode: this.searchForm.ecgComingMode,
         })
         .then((res) => {
           this.list = res.data.elements
