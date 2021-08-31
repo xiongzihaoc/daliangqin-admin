@@ -93,7 +93,7 @@ const archivesRouter = {
         component: () => import('@/views/archivesManagement/usage'),
         meta: {
             title: '设备使用情况',
-            icon: 'shebei'
+            icon: 'shebeiqingkuan'
         }
     },
     // {
