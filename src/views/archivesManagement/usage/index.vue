@@ -27,15 +27,16 @@
             size="small"
             placeholder="请输入设备号"></el-input>
         </el-form-item>
+        <!-- 监测模式和app端统一不用枚举  0 日常 5 24小时-->
         <el-form-item label="监测模式"
           align="left">
           <el-select v-model="searchForm.detectType"
             size="small"
             placeholder="请选择监测模式">
             <el-option label="24小时监测"
-              value="TWENTY_FOUR_HOURS"></el-option>
+              value="5"></el-option>
             <el-option label="日常监测"
-              value="DAILY"></el-option>
+              value="0"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -90,7 +91,8 @@
         label="设备状态"
         prop="equipmentStatus">
         <template slot-scope="scope">
-          <span v-if="scope.row.equipmentStatus === 'MEASURING'">测量中</span>
+          <span v-if="scope.row.equipmentStatus === 'DEVICE_COLLECT'">监测中</span>
+          <span v-if="scope.row.equipmentStatus === 'DEVICE_EXPORT'">待上传</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -116,7 +118,12 @@ export default {
       parseTime,
       list: [],
       tableHeaderBig: [],
-      searchForm: {},
+      searchForm: {
+        deviceSn: '',
+        name: '',
+        phone: '',
+        detectType: '',
+      },
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -136,7 +143,6 @@ export default {
           deviceSn: this.searchForm.deviceSn,
           name: this.searchForm.name,
           phone: this.searchForm.phone,
-          deviceSn: this.searchForm.deviceSn,
           detectType: this.searchForm.detectType,
         })
         .then((res) => {

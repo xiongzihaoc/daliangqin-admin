@@ -294,8 +294,8 @@
                 @change="pastHistoryTypeVChange"
                 v-model="item.pastHistoryType"
                 placeholder="请选择既往史">
-                <el-option v-for="subItem in pastHistoryTypeList"
-                  :key="subItem.id"
+                <el-option v-for="(subItem,index) in pastHistoryTypeList"
+                  :key="index"
                   :label="subItem.label"
                   :value="subItem.value"></el-option>
               </el-select>
