@@ -9,10 +9,15 @@
         <el-form-item label="医院名称"
           align="left"
           prop="hospitalName">
-          <el-input v-model="searchForm.hospitalName"
+          <el-select v-model="searchForm.hospitalId"
             size="small"
-            class="w100">
-          </el-input>
+            filterable
+            placeholder="请选择医院">
+            <el-option v-for="item in searchHospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="医院等级"
           prop="hospitalType">
@@ -105,7 +110,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="110px">
         <el-form-item label="医院名称"
@@ -194,7 +199,7 @@ export default {
       addressJson,
       hospitalClassList,
       // 表单验证规则
-      FormRules: {
+      formRules: {
         adminPhone: [
           { required: true, trigger: 'blur', validator: validatePhone },
         ],
@@ -220,9 +225,10 @@ export default {
       },
       // 搜索表单
       searchForm: {
-        hospitalName: '',
+        hospitalId: '',
         hospitalType: '',
       },
+      searchHospitalList:[],
       // 列表数据
       list: [],
       cateListProps: {
@@ -259,6 +265,7 @@ export default {
   },
   mounted() {
     this.getTreeData(addressJson)
+    this.getSeachHospitalList()
   },
   methods: {
     getList() {
@@ -266,12 +273,21 @@ export default {
         .getHospital({
           page: this.pageNum,
           pageSize: this.pageSize,
-          hospitalName: this.searchForm.hospitalName,
+          hospitalId: this.searchForm.hospitalId,
           hospitalType: this.searchForm.hospitalType,
         })
         .then((res) => {
           this.list = res.data.elements
           this.total = res.data.totalSize
+        })
+    },
+    getSeachHospitalList() {
+      httpAdminHospital
+        .getHospital({
+          pageSize: 10000,
+        })
+        .then((res) => {
+          this.searchHospitalList = res.data.elements
         })
     },
     selectAddrssChange(val) {
@@ -292,7 +308,9 @@ export default {
       }
       return data
     },
-    /***** 搜索区域 *****/
+    /**
+     * 搜索
+     */
     searchBtn() {
       this.pageNum = 1
       this.getList()
@@ -305,11 +323,12 @@ export default {
     },
     // 跳转医生列表
     skipDoctor(val) {
-      console.log(val)
       this.$router.push('/hospitalManagement/doctor')
       localStorage.setItem('hospitalId', val.id)
     },
-    /***** 增删改 *****/
+    /**
+     * CRUD
+     */
     // 新增
     addBtn() {
       this.infoTitle = '新增'
@@ -360,7 +379,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 新增编辑
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
@@ -386,14 +405,18 @@ export default {
         }
       })
     },
-    /***** 表格格式化内容 *****/
+    /**
+     * 表格格式化
+     */
     hospitalTypeFormatter(row) {
       return formatterElement.hospitalType[row.hospitalType]
     },
     addressFormatter(row) {
       return row.province + row.city + row.area + row.detail
     },
-    /***** 分页 *****/
+    /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

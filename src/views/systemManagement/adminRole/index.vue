@@ -84,7 +84,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="选择身份"
@@ -96,6 +96,21 @@
               :key="item.id"
               :label="item.label"
               :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="医院名称"
+          align="left"
+          v-if="this.editAddForm.adminRoleType === 'HOSPITAL_ECG_DOCTOR'"
+          prop="hospitalId">
+          <el-select class="w100"
+            v-model="editAddForm.hospitalId"
+            size="small"
+            filterable
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="姓名"
@@ -122,6 +137,7 @@
 <script>
 import EleTable from '@/components/Untable'
 import { httpAdminRole } from '@/api/admin/httpAdminRole'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import {
   parseTime,
   validatePhone,
@@ -137,9 +153,12 @@ export default {
       parseTime,
       adminRoleTypeList,
       deviceTypeList,
-      FormRules: {
+      formRules: {
         adminRoleType: [
           { required: true, message: '请选择身份', trigger: 'blur' },
+        ],
+        hospitalId: [
+          { required: true, message: '请选择医院', trigger: 'blur' },
         ],
         name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         phone: [{ required: true, validator: validatePhone }],
@@ -149,12 +168,14 @@ export default {
         name: '',
         phone: '',
       },
+      hospitalList: [],
       list: [],
       editAddForm: {
         adminRoleType: '',
         deviceType: '',
         name: '',
         phone: '',
+        hospitalId: '',
       },
       tableHeaderBig: [
         { label: '序号', type: 'index' },
@@ -188,6 +209,9 @@ export default {
   created() {
     this.getList()
   },
+  mounted() {
+    this.getHospitalList()
+  },
   methods: {
     getList() {
       httpAdminRole
@@ -204,7 +228,15 @@ export default {
           this.total = res.data.totalSize
         })
     },
-    /***** 搜索区域 *****/
+    // 获取医院列表
+    getHospitalList() {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+        this.hospitalList = res.data.elements
+      })
+    },
+    /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -216,7 +248,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 增删改 *****/
+    /**
+     * CRUD
+     */
     // 新增
     addBtn() {
       this.infoTitle = '新增'
@@ -225,7 +259,6 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val)
       this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editDialogVisible = true
@@ -255,7 +288,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 新增编辑
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
@@ -281,7 +314,9 @@ export default {
         }
       })
     },
-    /***** 分页 *****/
+    /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

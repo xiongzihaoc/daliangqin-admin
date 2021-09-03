@@ -81,9 +81,9 @@ export function formatTime(time, option) {
 export function param2Obj(url) {
   const search = decodeURIComponent(url.split('?')[1]).replace(/\+/g, ' ')
   if (!search) {
-    return { }
+    return {}
   }
-  const obj = { }
+  const obj = {}
   const searchArr = search.split('&')
   searchArr.forEach(v => {
     const index = v.indexOf('=')
@@ -277,12 +277,21 @@ export const followType = [
   { id: 2, label: "糖尿病", value: "DIABETES" },
 ]
 // 角色类型
+export const auditStatus = [
+  { id: 1, label: "待公司审核", value: "TO_AUDIT" },
+  { id: 2, label: "公司已审核", value: "PLATFORM_COMPLETE_AUDIT" },
+  { id: 3, label: "待医院审核", value: "TO_HOSPITAL_AUDIT" },
+  { id: 4, label: "医院已审核", value: "HOSPITAL_COMPLETE_AUDIT" },
+  { id: 5, label: "已作废", value: "INVALID" },
+]
+// 审核类型
 export const adminRoleTypeList = [
   { id: 1, label: "管理员", value: "ADMIN" },
   { id: 2, label: "运营人员", value: "OPERATOR" },
   { id: 3, label: "数据大图", value: "VIEWER" },
+  { id: 4, label: "医院心电医生", value: "HOSPITAL_ECG_DOCTOR" },
+  { id: 5, label: "公司心电医生", value: "PLAT_FORM_ECG_DOCTOR" },
 ]
-
 // 设备类型
 export const deviceTypeList = [
   { id: 1, label: "苹果", value: "IOS" },
@@ -792,6 +801,11 @@ export const formatterElement = {
     BEFOREGOINGTOBED: "睡前",
     RANDOM: "随机",
   },
+  auditStatus: {
+    TO_AUDIT: "待公司审核",
+    PLATFORM_COMPLETE_AUDIT: "公司已审核",
+    TO_HOSPITAL_AUDIT: "待医院审核",
+    HOSPITAL_COMPLETE_AUDIT: "医院已审核",
+    INVALID: "已作废",
+  },
 }
-
-

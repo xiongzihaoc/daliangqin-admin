@@ -21,11 +21,16 @@
             placeholder="请输入医生手机号"></el-input>
         </el-form-item>
         <el-form-item label="医院名称"
-          align="left"
-          prop="hospitalName">
-          <el-input v-model="searchForm.hospitalName"
+          align="left">
+          <el-select v-model="searchForm.hospitalId"
             size="small"
-            placeholder="请输入医院名称"></el-input>
+            filterable
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <!-- 随访方式 -->
         <el-form-item label="随访方式"
@@ -135,7 +140,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="选择医院"
@@ -251,7 +256,7 @@ export default {
       // 加入方式
       resourceTypeList,
       statusList,
-      FormRules: {
+      formRules: {
         hospitalId: [
           { required: true, message: '请选择医院', trigger: 'blur' },
         ],
@@ -270,7 +275,7 @@ export default {
         doctorUserPhone: '',
         patientUserName: '',
         patientPhone: '',
-        hospitalName: '',
+        hospitalId: '',
         type: '',
         startTime: '',
         endTime: '',
@@ -280,7 +285,6 @@ export default {
       hospitalList: [],
       doctorList: [],
       patientList: [],
-
       editAddForm: {
         hospitalId: '',
         doctorUserId: '',
@@ -396,7 +400,7 @@ export default {
           doctorUserPhone: this.searchForm.doctorUserPhone,
           patientUserName: this.searchForm.patientUserName,
           patientPhone: this.searchForm.patientPhone,
-          hospitalName: this.searchForm.hospitalName,
+          hospitalId: this.searchForm.hospitalId,
           type: this.searchForm.type,
           taskStatus: this.searchForm.status,
           startTime: this.searchForm.startTime,
@@ -443,7 +447,9 @@ export default {
     selectPatient() {
       this.$forceUpdate()
     },
-    /***** 搜索区域 *****/
+    /**
+     * 搜索
+     */
     // 搜索选择时间
     searchTaskTimeChange(val) {
       this.searchForm.startTime = val[0]
@@ -460,7 +466,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 增删改 *****/
+    /**
+     * CRUD
+     */
     // 选择时间
     selectTaskTime(val) {
       this.editAddForm.startTime = val[0]
@@ -508,7 +516,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 新增编辑
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
@@ -584,7 +592,9 @@ export default {
     statusFormatter(row) {
       return formatterElement.status[row.status]
     },
-    /***** 分页 *****/
+    /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

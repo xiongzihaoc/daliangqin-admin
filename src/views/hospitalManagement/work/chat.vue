@@ -126,7 +126,7 @@
         </div>
       </div>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm">
         <el-form-item prop="leaveContent">
           <el-input type="textarea"
@@ -157,7 +157,7 @@ export default {
     return {
       parseTime,
       // 表单验证规则
-      FormRules: {
+      formRules: {
         leaveContent: [
           { required: true, trigger: 'blur', message: '请输入回复内容' },
         ],
@@ -280,7 +280,9 @@ export default {
       this.searchForm.replyStartTime = val[0]
       this.searchForm.replayEndTime = val[1]
     },
-    /***** 搜索区域 *****/
+        /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -292,7 +294,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 增删改 *****/
+        /**
+     * CRUD
+     */
     // 查看
     examineBtn(val) {
       this.val = val
@@ -336,7 +340,9 @@ export default {
         }
       })
     },
-    /***** 分页 *****/
+        /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

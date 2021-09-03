@@ -82,7 +82,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item v-if="this.infoTitle === '新增'"
@@ -186,7 +186,7 @@ export default {
       parseTime,
       appTypeList,
       deviceTypeList,
-      FormRules: {
+      formRules: {
         appType: [
           { required: true, message: '请选择app类型', trigger: 'blur' },
         ],
@@ -277,7 +277,9 @@ export default {
           this.total = res.data.totalSize
         })
     },
-    /***** 搜索区域 *****/
+        /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -295,7 +297,9 @@ export default {
     uploadProgress(percentage) {
       this.percentage = percentage
     },
-    /***** 增删改 *****/
+        /**
+     * CRUD
+     */
     // 新增
     addBtn() {
       this.infoTitle = '新增'
@@ -336,7 +340,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 新增编辑
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
@@ -366,14 +370,18 @@ export default {
         }
       })
     },
-    /***** 表格格式化内容 *****/
+        /**
+     * 表格格式化
+     */
     appTypeFormatter(row) {
       return formatterElement.appType[row.appType]
     },
     deviceTypeFormatter(row) {
       return formatterElement.deviceType[row.deviceType]
     },
-    /***** 分页 *****/
+        /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

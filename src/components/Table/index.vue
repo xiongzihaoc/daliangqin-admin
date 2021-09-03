@@ -13,6 +13,7 @@
         height: '50px',
         color: '#515a6e',
       }"
+      :summary-method="getSummaries"
       :border="option.border"
       :show-summary="showSummary"
       stripe
@@ -53,20 +54,18 @@ export default {
   props: {
     data: {
       default: function () {
-        return [];
+        return []
       },
       type: Array,
     },
     header: {
       default: function () {
-        return [];
+        return []
       },
       type: Array,
     },
     getSummaries: {
-      default: function () {
-        return {};
-      },
+      default: function () {},
       type: Object,
     },
     showSummary: {
@@ -75,13 +74,13 @@ export default {
     },
     option: {
       default: function () {
-        return {};
+        return {}
       },
       type: Object,
     },
     storage: {
       default: function () {
-        return "";
+        return ''
       },
       type: String,
     },
@@ -108,37 +107,37 @@ export default {
         dragging: false, // 是否正在拖动
         direction: undefined, // 拖动方向
       },
-    };
+    }
   },
   watch: {
     header(val) {
-      console.log(val);
-      this.tableHeader = val;
+      console.log(val)
+      this.tableHeader = val
     },
   },
   beforeMount() {
-    this.tableHeader = this.header;
+    this.tableHeader = this.header
   },
   mounted() {
     // 固定列表顺序
-    let tableHeader = JSON.parse(window.localStorage.getItem(this.storage));
+    let tableHeader = JSON.parse(window.localStorage.getItem(this.storage))
     // this.print(window.localStorage.getItem(this.storage))
     function insertionSort(arr) {
-      var len = arr.length;
-      var preIndex, current;
+      var len = arr.length
+      var preIndex, current
       for (var i = 1; i < len; i++) {
-        preIndex = i - 1;
-        current = arr[i];
+        preIndex = i - 1
+        current = arr[i]
         while (
           preIndex >= 0 &&
           parseInt(arr[preIndex].i) > parseInt(current.i)
         ) {
-          arr[preIndex + 1] = arr[preIndex];
-          preIndex--;
+          arr[preIndex + 1] = arr[preIndex]
+          preIndex--
         }
-        arr[preIndex + 1] = current;
+        arr[preIndex + 1] = current
       }
-      return arr;
+      return arr
     }
     // const tableHeaderCopy = insertionSort(tableHeader ? deepClone(tableHeader) : [])
     // const thisTableHeaderCopy = insertionSort(deepClone(this.tableHeader))
@@ -149,145 +148,145 @@ export default {
     //   window.localStorage.setItem(this.storage, JSON.stringify(this.header))
     // }
     this.$nextTick(() => {
-      const virtuals = document.getElementsByClassName("virtual");
+      const virtuals = document.getElementsByClassName('virtual')
       for (let i = 0; i < virtuals.length; i++) {
-        virtuals[i].style.height = this.$refs.wTable.clientHeight + "px";
+        virtuals[i].style.height = this.$refs.wTable.clientHeight + 'px'
       }
-    });
+    })
   },
   methods: {
     handleSizeChange(newSize) {
-      this.$emit("handleSizeChange", newSize);
+      this.$emit('handleSizeChange', newSize)
     },
     handleCurrentChange(newPage) {
-      this.$emit("handleCurrentChange", newPage);
+      this.$emit('handleCurrentChange', newPage)
     },
     tableRowClassName({ row, rowIndex }) {
       if (row.profitAmount && row.profitAmount < 0) {
-        return "warning-row";
+        return 'warning-row'
       } else {
-        return "";
+        return ''
       }
     },
     renderHeader(createElement, { column }) {
       return createElement(
-        "div",
+        'div',
         {
-          class: ["thead-cell"],
+          class: ['thead-cell'],
           on: {
             mousedown: ($event) => {
-              this.handleMouseDown($event, column);
+              this.handleMouseDown($event, column)
             },
             mousemove: ($event) => {
-              this.handleMouseMove($event, column);
+              this.handleMouseMove($event, column)
             },
           },
         },
         [
           // 添加 <a> 用于显示表头 label
-          createElement("a", column.label),
+          createElement('a', column.label),
           // 添加一个空标签用于显示拖动动画
-          createElement("span", {
-            class: ["virtual"],
+          createElement('span', {
+            class: ['virtual'],
           }),
         ]
-      );
+      )
     },
     // 按下鼠标开始拖动
     handleMouseDown(e, column) {
-      this.dragState.dragging = true;
-      this.dragState.start = parseInt(column.columnKey);
+      this.dragState.dragging = true
+      this.dragState.start = parseInt(column.columnKey)
       // 给拖动时的虚拟容器添加宽高
-      let table = document.getElementsByClassName("w-table")[0];
-      let virtual = document.getElementsByClassName("virtual");
+      let table = document.getElementsByClassName('w-table')[0]
+      let virtual = document.getElementsByClassName('virtual')
       for (let item of virtual) {
-        item.style.height = table.clientHeight - 1 + "px";
-        item.style.width = item.parentElement.parentElement.clientWidth + "px";
+        item.style.height = table.clientHeight - 1 + 'px'
+        item.style.width = item.parentElement.parentElement.clientWidth + 'px'
       }
-      document.addEventListener("mouseup", this.handleMouseUp, {
+      document.addEventListener('mouseup', this.handleMouseUp, {
         passive: false,
-      });
+      })
     },
     // 鼠标放开结束拖动
     handleMouseUp() {
-      this.dragColumn(this.dragState);
+      this.dragColumn(this.dragState)
       // 初始化拖动状态
       this.dragState = {
         start: -9,
         end: -9,
         dragging: false,
         direction: undefined,
-      };
-      document.removeEventListener("mouseup", this.handleMouseUp);
+      }
+      document.removeEventListener('mouseup', this.handleMouseUp)
     },
     // 拖动中
     handleMouseMove(e, column) {
       if (this.dragState.dragging) {
-        let index = parseInt(column.columnKey); // 记录起始列
+        let index = parseInt(column.columnKey) // 记录起始列
         if (index - this.dragState.start !== 0) {
           this.dragState.direction =
-            index - this.dragState.start < 0 ? "left" : "right"; // 判断拖动方向
-          this.dragState.end = parseInt(column.columnKey);
+            index - this.dragState.start < 0 ? 'left' : 'right' // 判断拖动方向
+          this.dragState.end = parseInt(column.columnKey)
         } else {
-          this.dragState.direction = undefined;
+          this.dragState.direction = undefined
         }
       } else {
-        return false;
+        return false
       }
     },
     // 拖动易位
     dragColumn({ start, end, direction }) {
-      let tempData = [];
-      let left = direction === "left";
-      let min = left ? end : start - 1;
-      let max = left ? start + 1 : end;
+      let tempData = []
+      let left = direction === 'left'
+      let min = left ? end : start - 1
+      let max = left ? start + 1 : end
       if (!direction) {
-        return;
+        return
       }
       for (let i = 0; i < this.tableHeader.length; i++) {
         if (i === end) {
-          tempData.push(this.tableHeader[start]);
+          tempData.push(this.tableHeader[start])
         } else if (i > min && i < max) {
-          tempData.push(this.tableHeader[left ? i - 1 : i + 1]);
+          tempData.push(this.tableHeader[left ? i - 1 : i + 1])
         } else {
-          tempData.push(this.tableHeader[i]);
+          tempData.push(this.tableHeader[i])
         }
       }
-      this.tableHeader = tempData;
-      this.change(this.tableHeader);
+      this.tableHeader = tempData
+      this.change(this.tableHeader)
     },
     headerCellClassName(col) {
       let active =
         col.columnIndex - 1 === this.dragState.end
           ? `darg_active_${this.dragState.direction}`
-          : "";
+          : ''
       let start =
-        col.columnIndex - 1 === this.dragState.start ? `darg_start` : "";
-      return `${active} ${start}`;
+        col.columnIndex - 1 === this.dragState.start ? `darg_start` : ''
+      return `${active} ${start}`
     },
     cellClassName(col) {
-      return col.columnIndex - 1 === this.dragState.start ? `darg_start` : "";
+      return col.columnIndex - 1 === this.dragState.start ? `darg_start` : ''
     },
     rowClick(row) {
-      this.$emit("row-click", row);
+      this.$emit('row-click', row)
     },
     cellClick(row, column, cell, event) {
-      this.$emit("cell-click", row, column, cell, event);
+      this.$emit('cell-click', row, column, cell, event)
     },
     rowDblClick(row) {
-      this.$emit("row-dblclick", row);
+      this.$emit('row-dblclick', row)
     },
     rowSelect(selection, row) {
-      this.$emit("select", selection, row);
+      this.$emit('select', selection, row)
     },
     selectAll(selection) {
-      this.$emit("select-all", selection);
+      this.$emit('select-all', selection)
     },
     change(arr) {
-      window.localStorage.setItem(this.storage, JSON.stringify(arr));
+      window.localStorage.setItem(this.storage, JSON.stringify(arr))
     },
   },
-};
+}
 </script>
 
 <style lang="scss">
@@ -355,7 +354,7 @@ export default {
     cursor: pointer;
     overflow: initial;
     &:before {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       left: 0;

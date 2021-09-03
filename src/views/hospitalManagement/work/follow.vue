@@ -27,10 +27,17 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="医院名称">
-          <el-input placeholder="请输入医院名称"
-            v-model="searchForm.hospitalName"
-            size="small"></el-input>
+        <el-form-item label="医院名称"
+          align="left">
+          <el-select v-model="searchForm.hospitalId"
+            size="small"
+            filterable
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="随访方式">
           <el-select v-model="searchForm.type"
@@ -156,6 +163,7 @@
 <script>
 import EleTable from '@/components/Untable'
 import { httpAdminFollow } from '@/api/admin/httpAdminFollow'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import {
   doctorTypeList,
   followTypeList,
@@ -197,6 +205,8 @@ export default {
         endTime: '',
         userStatus: '',
       },
+      // 医院列表
+      hospitalList:[],
       // 列表数据
       list: [],
       // 增改表单
@@ -290,6 +300,9 @@ export default {
   created() {
     this.getList()
   },
+  mounted(){
+    this.getHospitalList()
+  },
   methods: {
     getList() {
       httpAdminFollow
@@ -301,7 +314,7 @@ export default {
           doctorPhone: this.searchForm.doctorPhone,
           patientName: this.searchForm.patientUserName,
           patientPhone: this.searchForm.patientPhone,
-          hospitalName: this.searchForm.hospitalName,
+          hospitalId: this.searchForm.hospitalId,
           type: this.searchForm.type,
           diseaseType: this.searchForm.diseaseType,
           highBloodStatus: this.searchForm.highBloodStatus,
@@ -316,11 +329,16 @@ export default {
           this.total = res.data.totalSize
         })
     },
+    // 获取医院列表
+    getHospitalList() {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+        this.hospitalList = res.data.elements
+      })
+    },
     // 日期控件选择事件
     selectFollowTime(val) {
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
-      console.log(this.searchForm)
     },
     addBtn() {
       this.$router.push({
@@ -359,7 +377,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 新增编辑
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
@@ -385,7 +403,9 @@ export default {
         }
       })
     },
-    /***** 搜索区域 *****/
+    /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -397,7 +417,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 表格格式化内容 *****/
+    /**
+     * 表格格式化
+     */
     doctorTypeFormatter(row) {
       return formatterElement.doctorType[row.doctorType]
     },
@@ -455,7 +477,9 @@ export default {
           return `<span class='SERIOUS'>严重</span>`
       }
     },
-    /***** 分页 *****/
+    /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

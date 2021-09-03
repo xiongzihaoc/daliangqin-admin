@@ -148,7 +148,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="内容类型"
@@ -303,7 +303,7 @@ export default {
       newsTypeList,
       newsStatusList,
       appTypeList,
-      FormRules: {
+      formRules: {
         contentType: [
           { required: true, message: '请选择内容类型', trigger: 'blur' },
         ],
@@ -417,7 +417,9 @@ export default {
         }
       })
     },
-    /***** 搜索区域 *****/
+        /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -429,7 +431,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 增删改 *****/
+        /**
+     * CRUD
+     */
     // 新增
     addBtn() {
       this.infoTitle = '新增'
@@ -468,7 +472,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 新增编辑
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
@@ -523,7 +527,9 @@ export default {
     onEditorFocus() {},
     // 内容改变事件
     onEditorChange() {},
-    /***** 表格格式化内容 *****/
+        /**
+     * 表格格式化
+     */
     contentTypeFormatter(row) {
       return formatterElement.contentType[row.contentType]
     },
@@ -537,7 +543,9 @@ export default {
     publishTimeFormatter(row) {
       return parseTime(row.publishTime).slice(0, 10)
     },
-    /***** 分页 *****/
+        /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

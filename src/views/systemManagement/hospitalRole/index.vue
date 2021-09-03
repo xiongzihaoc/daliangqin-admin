@@ -84,7 +84,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="选择医院"
@@ -131,7 +131,7 @@ export default {
   data() {
     return {
       parseTime,
-      FormRules: {
+      formRules: {
         userName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         hospitalId: [
           { required: true, message: '请选择医院', trigger: 'blur' },
@@ -210,19 +210,21 @@ export default {
     selectChange(val) {
       this.hospitalId = val
     },
-    /***** 搜索区域 *****/
-    // 搜索
+    /**
+     * 搜索
+     */
     searchBtn() {
       this.pageNum = 1
       this.getList()
     },
-    // 重置
     searchReset() {
       this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },
-    /***** 增删改 *****/
+    /**
+     * CRUD
+     */
     // 新增
     addBtn() {
       this.infoTitle = '新增'
@@ -262,7 +264,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 新增编辑
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
@@ -288,7 +290,9 @@ export default {
         }
       })
     },
-    /***** 分页 *****/
+    /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

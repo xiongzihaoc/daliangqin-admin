@@ -140,7 +140,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="轮播图名称"
@@ -213,7 +213,7 @@ export default {
       appTypeList,
       // 上下架状态
       typeList,
-      FormRules: {
+      formRules: {
         title: [
           { required: true, message: '请输入轮播图名称', trigger: 'blur' },
         ],
@@ -283,7 +283,9 @@ export default {
         }
       })
     },
-    /***** 搜索区域 *****/
+        /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {this.pageNum = 1
       this.getList()
@@ -293,7 +295,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 增删改 *****/
+        /**
+     * CRUD
+     */
     // 新增
     addBtn() {
       this.infoTitle = '新增'
@@ -331,7 +335,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 新增编辑
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
@@ -374,7 +378,9 @@ export default {
         }
       })
     },
-    /***** 分页 *****/
+        /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

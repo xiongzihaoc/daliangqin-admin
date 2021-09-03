@@ -29,7 +29,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="推荐更新版本">
@@ -80,7 +80,7 @@ export default {
   },
   data() {
     return {
-      FormRules: {},
+      formRules: {},
       list: [],
       versionList: [],
       editAddForm: {
@@ -139,7 +139,9 @@ export default {
           this.versionList = res.data.elements
         })
     },
-    /***** 增删改 *****/
+        /**
+     * CRUD
+     */
     // 弹框开启
     openDialog() {
       this.getVersionList(this.editAddForm.appType, this.editAddForm.deviceType)
@@ -172,7 +174,9 @@ export default {
         }
       })
     },
-    /***** 表格格式化内容 *****/
+        /**
+     * 表格格式化
+     */
     appTypeFormatter(row) {
       return formatterElement.appType[row.appType]
     },

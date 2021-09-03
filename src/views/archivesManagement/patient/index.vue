@@ -301,7 +301,9 @@ export default {
     },
     selectBeginAgeChange(val) {},
     selectEndAgeChange(val) {},
-    /***** 搜索区域 *****/
+        /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -313,7 +315,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 增删改 *****/
+        /**
+     * CRUD
+     */
     // 新增
     addBtn() {
       this.$router.push({
@@ -371,7 +375,9 @@ export default {
           return `<span class='SERIOUS'>稍快</span>`
       }
     },
-    /***** 分页 *****/
+        /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

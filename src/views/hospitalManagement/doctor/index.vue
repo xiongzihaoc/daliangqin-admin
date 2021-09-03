@@ -54,11 +54,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="医院名称"
-          align="left"
-          prop="hospitalName">
-          <el-input v-model="searchForm.hospitalName"
+          align="left">
+          <el-select v-model="searchForm.hospitalId"
             size="small"
-            placeholder="请输入医院名称"></el-input>
+            filterable
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -169,7 +174,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="医生姓名"
@@ -258,7 +263,6 @@ import singleUpload from '@/components/Upload'
 import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import {
-  validateIdCard,
   validatePhone,
   parseTime,
   doctorTypeList,
@@ -275,7 +279,7 @@ export default {
       parseTime,
       doctorTypeList,
       genderList,
-      FormRules: {
+      formRules: {
         name: [{ required: true, message: '请输入医生姓名', trigger: 'blur' }],
         avatarUrl: [{ required: true, message: '请上传头像', trigger: 'blur' }],
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
@@ -294,7 +298,10 @@ export default {
         gender: '',
         type: '',
         hospitalName: '',
+        hospitalId: '',
       },
+      // 搜索医院列表
+      searchHospitalList: [],
       list: [],
       editAddForm: {
         name: '',
@@ -309,8 +316,8 @@ export default {
       tableHeaderBig: [],
       // 医院列表
       hospitalList: [],
-      // 医院跳转医生携带医院id
-      hospitalId: '',
+      // // 医院跳转医生携带医院id
+      // hospitalId: '',
       // 医生类型列表
       editVal: {},
       // 转诊医生列表
@@ -324,13 +331,12 @@ export default {
     }
   },
   created() {
-    this.hospitalId = localStorage.getItem('hospitalId')
+    this.searchForm.hospitalId = localStorage.getItem('hospitalId')
     this.getList()
   },
   mounted() {
     // 获取医院  转诊医生列表
     this.getHospitalList()
-    // this.getToDoctorList()
   },
   //离开当前页面后执行
   destroyed() {
@@ -348,7 +354,7 @@ export default {
           genderType: this.searchForm.gender,
           type: this.searchForm.type,
           hospitalName: this.searchForm.hospitalName,
-          hospitalId: this.hospitalId,
+          hospitalId: this.searchForm.hospitalId,
         })
         .then((res) => {
           this.list = res.data.elements
@@ -356,11 +362,14 @@ export default {
         })
     },
     getHospitalList() {
-      httpAdminHospital.getHospital().then((res) => {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
+        this.searchHospitalList = res.data.elements
       })
     },
-    /***** 搜索区域 *****/
+    /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -390,7 +399,9 @@ export default {
       }
       return data
     },
-    /***** 增删改 *****/
+    /**
+     * CRUD
+     */
     // 新增
     addBtn() {
       this.infoTitle = '新增'
@@ -438,7 +449,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 新增编辑
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
@@ -464,7 +475,9 @@ export default {
         }
       })
     },
-    /***** 表格格式化内容 *****/
+    /**
+     * 表格格式化
+     */
     genderFormatter(row) {
       return formatterElement.gender[row.gender]
     },
@@ -474,7 +487,9 @@ export default {
     birthdayFormatter(row) {
       return Boolean(row.birthday) ? parseTime(row.birthday).slice(0, 10) : ''
     },
-    /***** 分页 *****/
+    /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

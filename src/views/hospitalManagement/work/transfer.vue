@@ -114,7 +114,7 @@ export default {
       // 加入方式
       resourceTypeList,
       transferStatusList,
-      FormRules: {
+      formRules: {
         doctorUserId: [
           { required: true, message: "请选择医生名称", trigger: "blur" },
         ],
@@ -211,7 +211,9 @@ export default {
           this.total = res.data.totalSize
         })
     },
-    /***** 搜索区域 *****/
+        /**
+     * 搜索
+     */
     // 选择转诊时间
     selectTransferTime(val) {
       console.log(val)
@@ -253,7 +255,9 @@ export default {
     transferStatusFormatter(row) {
       return formatterElement.transferStatus[row.transferStatus]
     },
-    /***** 分页 *****/
+        /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-form ref="FormRef"
       :model="form"
-      :rules="FormRules"
+      :rules="formRules"
       label-width="120px">
       <div class="content-box">
         <div class="test">
@@ -239,14 +239,6 @@
               placeholder="请输入空腹血糖"><i slot="suffix"
                 style="font-style: normal; margin-right: 10px">mmol/L</i></el-input>
           </el-form-item>
-          <!-- <el-form-item label="心率">
-            <el-input v-Int
-              v-model="form.heartRate"
-              oninput="if (value > 200) value = 200"
-              maxlength="3"
-              placeholder="请输入心率"><i slot="suffix"
-                style="font-style: normal; margin-right: 10px">bpm</i></el-input>
-          </el-form-item> -->
           <el-form-item label="收缩压">
             <el-input v-Int
               v-model="form.shrinkHighPressure"
@@ -284,7 +276,7 @@
           <div v-for="(item, index) in form.pastHistories"
             :key="index">
             <div style="margin-left:50px"
-              v-if="form.pastHistories.length > 1">
+              v-if="form.pastHistories.length > 0">
               <el-button type="danger"
                 size="mini"
                 @click="deletePastHistories(item,index)">删除</el-button>
@@ -329,7 +321,6 @@
                 v-model="item.remark"
                 placeholder="请输入详细"></el-input>
             </el-form-item>
-
             <el-form-item v-if="item.pastHistoryType === 'DISEASE'"
               label="确诊日期">
               <el-date-picker class="w100"
@@ -376,9 +367,8 @@
             </el-form-item>
           </div>
           <!-- 按钮 -->
-          <div style="margin:0 0 20px 50px">
-            <el-button type="info"
-              plain
+          <div style="margin:0 0 20px 20px">
+            <el-button plain
               size="mini"
               @click="addPastHistories">添加既往史</el-button>
           </div>
@@ -457,7 +447,6 @@
                   :value="item.value"></el-option>
               </el-select>
             </el-form-item>
-
           </div>
           <el-form-item label="遗传病史">
             <el-select class="w100"
@@ -548,7 +537,7 @@ export default {
       diseaseTypeList,
       drugReactionList,
       disabilityTypesList,
-      FormRules: {
+      formRules: {
         name: [{ required: true, message: '请输入用户姓名', trigger: 'blur' }],
         idCard: [
           { required: true, trigger: 'blur', validator: validateIdCard },
@@ -608,14 +597,8 @@ export default {
         diastoleLowPressure: '',
         allergyTypes: [],
         allergyName: '',
-        pastHistories: [
-          {
-            dateTime: '',
-            name: '',
-            pastHistoryType: 'DISEASE',
-            remark: '',
-          },
-        ],
+        // 既往史
+        pastHistories: [],
         exposureTypes: [],
         archivesFamily: {
           father: [],
@@ -763,11 +746,7 @@ export default {
     pastHistoryTypeVChange() {},
     // 删除既往史
     deletePastHistories(val, index) {
-      if (this.form.pastHistories.length <= 1) {
-        return
-      } else {
-        this.form.pastHistories.splice(index, 1)
-      }
+      this.form.pastHistories.splice(index, 1)
     },
     cancel() {
       this.$router.push({ path: '/archivesManagement/patient' })
