@@ -38,7 +38,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item prop="phone"
@@ -91,7 +91,7 @@ export default {
           },
         },
       ],
-      FormRules: {
+      formRules: {
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
       },
       editAddForm: {
@@ -152,7 +152,9 @@ export default {
         }
       })
     },
-    /***** 表格格式化内容 *****/
+        /**
+     * 表格格式化
+     */
     typeFormatter(row) {
       if (row.type === 'LOGIN') {
         return '登录'

@@ -183,23 +183,39 @@
     </div>
     <!-- 操作按钮 -->
     <div class="operationBtn">
-      <el-button type="primary"
+      <el-button size="mini"
+        plain
+        v-debounce="[reset]">重置报告</el-button>
+      <el-button plain
         size="mini"
-        v-debounce="[reset]">重置</el-button>
-      <el-button type="primary"
-        size="mini"
-        v-debounce="[save]">保存</el-button>
-      <el-button type="primary"
+        v-debounce="[passAudit]">审核通过</el-button>
+      <el-button plain
         v-print="printObj"
         size="mini">打印</el-button>
     </div>
+    <div class="operationBtn"
+      style="margin-top:20px;font-size:12px;color:#ccc">
+      <span>将此报告发送给:</span>
+      <el-select size="mini"
+        v-model="hospitalId"
+        style="margin:0 10px;">
+        <el-option v-for="item in hospitalList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"></el-option>
+      </el-select>
+      <el-button type="primary"
+        size="mini"
+        v-debounce="[sendReport]">确定</el-button>
+    </div>
   </div>
-
 </template>
 
 <script>
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
-import { parseTime, formatSeconds, textFormat } from '@/utils/index'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { httpAdminAudit } from '@/api/admin/httpAdminAudit'
+import { parseTime, formatSeconds } from '@/utils/index'
 export default {
   data() {
     return {
@@ -211,6 +227,8 @@ export default {
         extraCss: '',
         extraHead: '',
       },
+      hospitalList: [],
+      hospitalId: '',
       loading: true,
       heartDetail: {},
       userInfo: {},
@@ -218,6 +236,9 @@ export default {
   },
   created() {
     this.getList()
+  },
+  mounted() {
+    this.getHospitalList()
   },
   methods: {
     // 获取信息
@@ -234,8 +255,14 @@ export default {
           this.loading = false
         })
     },
-    // 保存
-    save() {
+    // 获取医院列表
+    getHospitalList() {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+        this.hospitalList = res.data.elements
+      })
+    },
+    // 审核通过
+    passAudit() {
       let thirdForm = {
         recordId: this.$route.query.id,
         avg: Number(this.$refs.avg.innerText),
@@ -253,14 +280,40 @@ export default {
         healthCareAdvice: this.$refs.healthCareAdvice.innerText,
       }
       httpAdminHeartRate.putThirdReport(thirdForm).then((res) => {
-        this.loading = true
-        this.$message.success('保存成功')
-        this.getList()
+        if (res.code === 'OK') {
+          let data = {
+            id: this.$route.query.id,
+            ecgAuditStatus: 'PLATFORM_COMPLETE_AUDIT',
+          }
+          httpAdminAudit.postAudit(data).then((res) => {
+            if (res.code === 'OK') {
+              this.loading = true
+              this.$message.success('审核成功')
+              this.getList()
+            }
+          })
+        }
       })
     },
+    // 重置报告
     reset() {
       location.reload()
-      this.$message.success('重置成功')
+      this.$message.success('重置报告成功')
+    },
+    // 发送报告
+    sendReport() {
+      let data = {
+        id: this.$route.query.id,
+        hospitalId: this.hospitalId,
+        // 待医院审核枚举
+        ecgAuditStatus: 'TO_HOSPITAL_AUDIT',
+      }
+      httpAdminAudit.postAudit(data).then((res) => {
+        if (res.code === 'OK') {
+          this.$message.success('发送成功')
+          this.getList()
+        }
+      })
     },
   },
 }

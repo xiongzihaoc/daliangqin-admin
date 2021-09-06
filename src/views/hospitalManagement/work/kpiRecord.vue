@@ -80,7 +80,7 @@ export default {
         { prop: 'equivalentCount', label: '获得总当量' },
         { prop: 'equivalentAvg', label: '人均总当量' },
       ],
-      FormRules: {},
+      formRules: {},
       editAddForm: {
         userName: '',
         name: '',

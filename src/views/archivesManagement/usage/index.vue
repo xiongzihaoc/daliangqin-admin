@@ -150,7 +150,9 @@ export default {
           this.total = res.data.totalSize
         })
     },
-    /***** 搜索区域 *****/
+        /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -162,7 +164,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 分页 *****/
+        /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

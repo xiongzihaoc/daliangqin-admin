@@ -35,7 +35,7 @@
         </el-form-item>
         <el-form-item label="审核状态"
           align="left">
-          <el-select v-model="searchForm.checkStatus"
+          <el-select v-model="searchForm.auditStatus"
             size="small"
             placeholder="请选择审核状态">
             <el-option label="已审核"
@@ -52,11 +52,16 @@
             placeholder="请输入医师姓名"></el-input>
         </el-form-item>
         <el-form-item label="医院名称"
-          align="left"
-          prop="doctorUserName">
-          <el-input v-model="searchForm.hospitalName"
+          align="left">
+          <el-select v-model="searchForm.hospitalId"
             size="small"
-            placeholder="请输入医院名称"></el-input>
+            filterable
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="监测结果"
           align="left">
@@ -97,7 +102,7 @@
         label="姓名"
         prop="patientUserName">
         <template slot-scope="scope">
-          <span style="color: #1890ff; text-decoration: underline"
+          <span class="skipStyle"
             @click="skipPatient(scope.row)">{{scope.row.patientUserName}}</span>
         </template>
       </el-table-column>
@@ -154,23 +159,19 @@
       </el-table-column>
       <el-table-column align="center"
         label="审核状态"
-        prop="inspectionTime">
-        <template slot-scope="scope">
-          <el-switch @change="changeStatus(scope.row)"
-            v-model="scope.row.checkStatus"
-            :active-value="true"
-            :inactive-value="false"
-            active-color="#13ce66"
-            inactive-color="#ff4949">
-          </el-switch>
-        </template>
+        prop="auditStatus"
+        :formatter="auditStatusFormatter">
       </el-table-column>
       <el-table-column align="center"
         label="审核时间"
-        prop="inspectionTime">
+        prop="auditTime">
         <template slot-scope="scope">
-          {{parseTime(scope.row.checkTime)}}
+          {{parseTime(scope.row.auditTime)}}
         </template>
+      </el-table-column>
+      <el-table-column align="center"
+        label="审核人"
+        prop="auditorName">
       </el-table-column>
       <el-table-column align="center"
         label="医师姓名"
@@ -183,7 +184,7 @@
       <!-- 操作 -->
       <el-table-column align="center"
         label="操作"
-        width="240">
+        width="300">
         <template slot-scope="scope">
           <el-button size="mini"
             @click="examineReport(scope.row)"
@@ -191,6 +192,15 @@
           <el-button size="mini"
             @click="examineElectrocardiograph(scope.row)"
             plain>查看心电图</el-button>
+          <el-button size="mini"
+            type="danger"
+            v-if="scope.row.auditStatus === 'INVALID'"
+            @click="cancelCancellation(scope.row)">取消作废</el-button>
+          <el-button size="mini"
+            type="danger"
+            v-else
+            @click="onCancellation(scope.row)">作废</el-button>
+
         </template>
       </el-table-column>
     </EleTable>
@@ -225,7 +235,14 @@
 <script>
 import EleTable from '@/components/Table'
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
-import { parseTime, formatSeconds,resultStatus } from '@/utils/index'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { httpAdminAudit } from '@/api/admin/httpAdminAudit'
+import {
+  parseTime,
+  formatSeconds,
+  resultStatus,
+  formatterElement,
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -235,13 +252,14 @@ export default {
       parseTime,
       formatSeconds,
       resultStatus,
+      formatterElement,
       searchForm: {
         patientUserName: '',
         patientUserPhone: '',
         detectType: '',
-        checkStatus: '',
+        auditStatus: '',
         doctorUserName: '',
-        hospitalName: '',
+        hospitalId: '',
         resultStatus: 'NORMAL',
       },
       hospitalList: [],
@@ -255,7 +273,7 @@ export default {
         inspectionTime: '',
         heartRateScore: '',
         detectType: '',
-        checkStatus: '',
+        auditStatus: '',
       },
       hospitalForm: {
         recordId: '',
@@ -274,7 +292,15 @@ export default {
     }
   },
   created() {
+    this.searchForm.hospitalId = localStorage.getItem('hospitalId')
     this.getList()
+  },
+  mounted() {
+    this.getHospitalList()
+  },
+  //离开当前页面后执行
+  destroyed() {
+    localStorage.removeItem('hospitalId')
   },
   methods: {
     getList() {
@@ -285,9 +311,9 @@ export default {
           patientUserName: this.searchForm.patientUserName,
           patientUserPhone: this.searchForm.patientUserPhone,
           detectType: this.searchForm.detectType,
-          checkStatus: this.searchForm.checkStatus,
+          auditStatus: this.searchForm.auditStatus,
           doctorUserName: this.searchForm.doctorUserName,
-          hospitalName: this.searchForm.hospitalName,
+          hospitalId: this.searchForm.hospitalId,
           resultStatus: this.searchForm.resultStatus,
         })
         .then((res) => {
@@ -295,7 +321,41 @@ export default {
           this.total = res.data.totalSize
         })
     },
-    /***** 搜索区域 *****/
+    // 获取医院列表
+    getHospitalList() {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+        this.hospitalList = res.data.elements
+      })
+    },
+    // 作废
+    onCancellation(val) {
+      let data = {
+        id: val.id,
+        ecgAuditStatus: 'INVALID',
+      }
+      httpAdminAudit.postAudit(data).then((res) => {
+        if (res.code === 'OK') {
+          this.$message.success('已作废')
+          this.getList()
+        }
+      })
+    },
+    // 取消作废
+    cancelCancellation(val) {
+      let data = {
+        id: val.id,
+        ecgAuditStatus: 'TO_AUDIT',
+      }
+      httpAdminAudit.postAudit(data).then((res) => {
+        if (res.code === 'OK') {
+          this.$message.success('取消作废')
+          this.getList()
+        }
+      })
+    },
+    /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -307,7 +367,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 增删改 *****/
+    /**
+     * CRUD
+     */
     // 查看报告
     examineReport(val) {
       if (val.signUrl != '') {
@@ -336,15 +398,6 @@ export default {
       } else {
         window.open(ecgUrl.replace('vertical', 'one_ecg'))
       }
-    },
-    // 改变审核状态
-    changeStatus(val) {
-      httpAdminHeartRate.putHeartRateStatus(val).then((res) => {
-        if (res.code === 'OK') {
-          this.$message.success('状态更改成功')
-          this.getList()
-        }
-      })
     },
     // 跳转报告详情
     skipReportDetail() {
@@ -377,8 +430,16 @@ export default {
         return formatSeconds(JSON.parse(row.reportResult).body.data.length)
       }
     },
+    /**
+     * 表格格式化
+     */
+    auditStatusFormatter(row) {
+      return formatterElement.auditStatus[row.auditStatus]
+    },
 
-    /***** 分页 *****/
+    /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

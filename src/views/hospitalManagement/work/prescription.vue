@@ -22,9 +22,15 @@
         </el-form-item>
         <el-form-item label="医院名称"
           align="left">
-          <el-input v-model="searchForm.hospitalName"
+          <el-select v-model="searchForm.hospitalId"
             size="small"
-            placeholder="请输入医院名称"></el-input>
+            filterable
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="职位"
           align="left"
@@ -142,7 +148,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="医院名称"
@@ -287,7 +293,7 @@
       @closed="templateSetDialogClosed"
       v-dialogDrag>
       <el-form ref="templateFormRef"
-        :rules="templateFormRules"
+        :rules="templateformRules"
         :model="templateForm"
         label-width="100px">
         <el-form-item label="模板标题"
@@ -338,7 +344,7 @@ export default {
       healthList,
       heartList,
       genderList,
-      FormRules: {
+      formRules: {
         doctorUserId: [
           { required: true, message: '请选择医生', trigger: 'blur' },
         ],
@@ -351,8 +357,8 @@ export default {
         doctorName: '',
         doctorPhone: '',
         doctorType: '',
-        hospitalName: '',
-        patientName: '',
+        hospitalId: '',
+        hospitalId: '',
         patientPhone: '',
         highBloodStatus: '',
         diabetesStatus: '',
@@ -425,7 +431,7 @@ export default {
           },
         },
       ],
-      templateFormRules: {
+      templateformRules: {
         name: [{ required: true, message: '请输入模板标题', trigger: 'blur' }],
         content: [
           { required: true, message: '请输入处方内容', trigger: 'blur' },
@@ -470,7 +476,7 @@ export default {
           doctorName: this.searchForm.doctorName,
           doctorPhone: this.searchForm.doctorPhone,
           doctorType: this.searchForm.doctorType,
-          hospitalName: this.searchForm.hospitalName,
+          hospitalId: this.searchForm.hospitalId,
           patientName: this.searchForm.patientName,
           patientPhone: this.searchForm.patientPhone,
         })
@@ -546,7 +552,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 增删改 *****/
+    /**
+     * CRUD
+     */
     // 新增
     addBtn() {
       this.infoTitle = '新增'
@@ -588,7 +596,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 新增编辑
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
@@ -618,8 +626,7 @@ export default {
         }
       })
     },
-    /***** 模板 *****/
-    // 打开模板配置弹框
+    // 模板设置
     templateSet() {
       this.templateDialogVisible = true
     },
@@ -685,7 +692,10 @@ export default {
         }
       })
     },
-    /***** 表格格式化内容 *****/
+
+    /**
+     * 表格格式化
+     */
     doctorTypeFormatter(row) {
       return formatterElement.doctorType[row.doctorType]
     },
@@ -723,7 +733,9 @@ export default {
           return `<span class='SERIOUS'>稍快</span>`
       }
     },
-    /***** 分页 *****/
+    /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

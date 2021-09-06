@@ -34,11 +34,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="医院名称"
-          align="left"
-          prop="userName">
-          <el-input v-model="searchForm.hospitalName"
+          align="left">
+          <el-select v-model="searchForm.hospitalId"
             size="small"
-            placeholder="请输入医院名称"></el-input>
+            filterable
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="发布时间"
           prop="status">
@@ -123,9 +128,10 @@
   </div>
 </template>
 <script>
-import EleTable from "@/components/Table"
-import { httpAdminNote } from "@/api/admin/httpAdminNote"
-import { parseTime, doctorTypeList, formatterElement } from "@/utils/index"
+import EleTable from '@/components/Table'
+import { httpAdminNote } from '@/api/admin/httpAdminNote'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { parseTime, doctorTypeList, formatterElement } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -135,20 +141,21 @@ export default {
       parseTime,
       doctorTypeList,
       searchForm: {
-        userName: "",
-        userPhone: "",
-        type: "",
-        hospitalName: "",
-        startTime: "",
-        endTime: "",
+        userName: '',
+        userPhone: '',
+        type: '',
+        hospitalId: '',
+        startTime: '',
+        endTime: '',
       },
+      hospitalList:[],
       list: [],
       editAddForm: {
-        userName: "",
-        imageUrl: "",
-        linkUrl: "",
-        type: "",
-        status: "",
+        userName: '',
+        imageUrl: '',
+        linkUrl: '',
+        type: '',
+        status: '',
       },
       tableHeaderBig: [],
       // 分页区域
@@ -157,11 +164,14 @@ export default {
       total: 0,
       //   弹框区域
       editDialogVisible: false,
-      infoTitle: "",
+      infoTitle: '',
     }
   },
   created() {
     this.getList()
+  },
+  mounted() {
+    this.getHospitalList()
   },
   methods: {
     getList() {
@@ -171,7 +181,7 @@ export default {
           pageSize: this.pageSize,
           userName: this.searchForm.userName,
           userPhone: this.searchForm.userPhone,
-          hospitalName: this.searchForm.hospitalName,
+          hospitalId: this.searchForm.hospitalId,
           type: this.searchForm.type,
           startTime: this.searchForm.startTime,
           endTime: this.searchForm.endTime,
@@ -182,26 +192,40 @@ export default {
           this.total = res.data.totalSize
         })
     },
+    // 获取医院列表
+    getHospitalList() {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+        this.hospitalList = res.data.elements
+      })
+    },
     // 日期选择事件
     selectNoteTime(val) {
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
     },
-    /***** 搜索区域 *****/
+    /**
+     * 搜索
+     */
     // 搜索
-    searchBtn() {this.pageNum = 1
+    searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
-    searchReset() {this.pageNum = 1
+    searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },
-    /***** 表格格式化内容 *****/
+    /**
+     * 表格格式化
+     */
     typeFormatter(row) {
       return formatterElement.doctorType[row.type]
     },
-    /***** 分页 *****/
+    /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

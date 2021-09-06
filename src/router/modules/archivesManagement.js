@@ -96,6 +96,15 @@ const archivesRouter = {
             icon: 'shebeiqingkuan'
         }
     },
+    {
+        path: 'monitoring',
+        name: 'monitoring',
+        component: () => import('@/views/archivesManagement/monitoring'),
+        meta: {
+            title: '医院监测统计',
+            icon: 'exit-fullscreen'
+        }
+    },
     // {
     //     path: 'archivesAddress',
     //     name: 'archivesAddress',

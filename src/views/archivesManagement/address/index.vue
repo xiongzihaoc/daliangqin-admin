@@ -112,7 +112,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="110px">
         <el-form-item label="姓名"
@@ -163,7 +163,7 @@ export default {
     return {
       addressJson,
       // 表单验证规则
-      FormRules: {
+      formRules: {
         name: [
           { required: true, message: '请输入收货人名字', trigger: 'blur' },
         ],
@@ -273,7 +273,9 @@ export default {
       }
       return data
     },
-    /***** 搜索区域 *****/
+        /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -285,7 +287,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 增删改 *****/
+        /**
+     * CRUD
+     */
     // 查看收货地址按钮
     detailAddressBtn(val) {
       this.searchForm.userId = val.patientUserId
@@ -326,7 +330,9 @@ export default {
     addressFormatter(row) {
       return row.province + row.city + row.area + row.detail
     },
-    /***** 分页 *****/
+        /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

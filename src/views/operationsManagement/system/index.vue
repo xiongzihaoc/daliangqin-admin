@@ -37,7 +37,7 @@
       @closed="editDialogClosed"
       v-dialogDrag>
       <el-form ref="FormRef"
-        :rules="FormRules"
+        :rules="formRules"
         :model="editAddForm"
         label-width="100px">
         <el-form-item label="key"
@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      FormRules: {
+      formRules: {
         configKey: [{ required: true, message: '请输入key', trigger: 'blur' }],
         configName: [
           { required: true, message: '请输入名称', trigger: 'blur' },
@@ -117,7 +117,9 @@ export default {
           this.total = res.data.totalSize
         })
     },
-    /***** 搜索区域 *****/
+        /**
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -129,7 +131,9 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    /***** 增删改 *****/
+        /**
+     * CRUD
+     */
     // 新增
     add() {
       this.infoTitle = '新增'
@@ -167,7 +171,7 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
-    // 新增编辑确定
+    // 新增编辑
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
@@ -193,7 +197,9 @@ export default {
         }
       })
     },
-    /***** 分页 *****/
+        /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

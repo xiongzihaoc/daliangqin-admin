@@ -81,7 +81,7 @@ export default {
           },
         },
       ],
-      FormRules: {
+      formRules: {
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
       },
       editAddForm: {

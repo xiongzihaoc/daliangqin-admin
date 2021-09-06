@@ -114,7 +114,9 @@ export default {
     diseaseTypeFormatter(row) {
       return formatterElement.diseaseType[row.diseaseType]
     },
-    /***** 分页 *****/
+        /**
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()

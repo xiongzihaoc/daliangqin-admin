@@ -6,7 +6,7 @@
       <div>
         <el-form ref="FormRef"
           :model="form"
-          :rules="FormRules"
+          :rules="formRules"
           label-width="130px">
           <div>
             <h3>随访基本信息</h3>
@@ -232,7 +232,7 @@
         <el-form v-if="diabetesChecked === true"
           ref="diabetesFormRef"
           :model="diabetesForm"
-          :rules="diabetesFormRules"
+          :rules="diabetesformRules"
           label-width="130px">
           <el-form-item label="症状">
             <el-select v-model="diabetesForm.symptomTypes"
@@ -465,7 +465,7 @@
         <el-form v-if="bloodChecked === true"
           ref="bloddFormRef"
           :model="highBloodForm"
-          :rules="highBloodFormRules"
+          :rules="highBloodformRules"
           label-width="130px">
           <el-form-item label="症状">
             <el-select v-model="highBloodForm.symptomTypes"
@@ -674,7 +674,7 @@ export default {
       bloodSymptomTypeList,
       bloodComplicationTypeList,
       BloodReferralReasonStatusesList,
-      FormRules: {
+      formRules: {
         hospitalId: [
           { required: true, message: '请选择医院', trigger: 'change' },
         ],
@@ -709,7 +709,7 @@ export default {
           { required: true, message: '请输入随访备注', trigger: 'change' },
         ],
       },
-      diabetesFormRules: {
+      diabetesformRules: {
         shrinkHighPressure: [
           { required: true, message: '请输入收缩压', trigger: 'blur' },
         ],
@@ -720,7 +720,7 @@ export default {
           { required: true, message: '请输入空腹血糖', trigger: 'blur' },
         ],
       },
-      highBloodFormRules: {
+      highBloodformRules: {
         shrinkHighPressure: [
           { required: true, message: '请输入收缩压', trigger: 'blur' },
         ],
