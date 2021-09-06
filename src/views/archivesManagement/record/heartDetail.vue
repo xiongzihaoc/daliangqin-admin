@@ -303,7 +303,7 @@ export default {
     // 发送报告
     sendReport() {
       let data = {
-        id:this.$route.query.id,
+        id: this.$route.query.id,
         hospitalId: this.hospitalId,
         // 待医院审核枚举
         ecgAuditStatus: 'TO_HOSPITAL_AUDIT',

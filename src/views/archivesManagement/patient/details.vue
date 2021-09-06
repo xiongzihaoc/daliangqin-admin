@@ -666,12 +666,13 @@ export default {
               'avatarUrl',
               'http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png'
             )
+          } else {
+            this.$set(this.form, 'avatarUrl', value?.avatarUrl)
           }
           this.form.province = value?.province
           this.form.city = value?.city
           this.form.area = value?.area
           this.$set(this.form, 'address', value?.address)
-          this.$set(this.form, 'avatarUrl', value?.avatarUrl)
           this.computeBmi()
           this.form.addressDetail = [
             this.form.province,
