@@ -188,6 +188,7 @@
         v-debounce="[reset]">重置报告</el-button>
       <el-button plain
         size="mini"
+        :disabled="isAuditDisabled"
         v-debounce="[passAudit]">审核通过</el-button>
       <el-button plain
         v-print="printObj"
@@ -198,6 +199,7 @@
       <span>将此报告发送给:</span>
       <el-select size="mini"
         v-model="hospitalId"
+        :disabled="isHospitalDisabled"
         style="margin:0 10px;">
         <el-option v-for="item in hospitalList"
           :key="item.id"
@@ -206,6 +208,7 @@
       </el-select>
       <el-button type="primary"
         size="mini"
+        :disabled="isHospitalDisabled"
         v-debounce="[sendReport]">确定</el-button>
     </div>
   </div>
@@ -232,6 +235,8 @@ export default {
       loading: true,
       heartDetail: {},
       userInfo: {},
+      isAuditDisabled: false,
+      isHospitalDisabled: false,
     }
   },
   created() {
@@ -253,6 +258,16 @@ export default {
             res?.data?.elements[0]?.reportResult
           )?.body?.data
           this.loading = false
+          // 根据审核状态判断按钮置灰
+          if (
+            this.userInfo.auditStatus === 'INVALID' ||
+            this.userInfo.auditStatus === 'TO_HOSPITAL_AUDIT' || this.userInfo.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
+          ) {
+            this.isAuditDisabled = true
+            this.isHospitalDisabled = true
+          } else if (this.userInfo.auditStatus === 'PLATFORM_COMPLETE_AUDIT') {
+            this.isHospitalDisabled = true
+          }
         })
     },
     // 获取医院列表

@@ -192,15 +192,14 @@
           <el-button size="mini"
             @click="examineElectrocardiograph(scope.row)"
             plain>查看心电图</el-button>
-          <el-button size="mini"
-            type="danger"
-            v-if="scope.row.auditStatus === 'INVALID'"
-            @click="cancelCancellation(scope.row)">取消作废</el-button>
-          <el-button size="mini"
-            type="danger"
-            v-else
-            @click="onCancellation(scope.row)">作废</el-button>
-
+            <el-button size="mini"
+              type="danger"
+              v-if="scope.row.auditStatus === 'INVALID'"
+              @click="cancelCancellation(scope.row)">取消作废</el-button>
+            <el-button size="mini"
+              type="danger"
+              v-else
+              @click="onCancellation(scope.row)">作废</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -285,7 +284,10 @@ export default {
     }
   },
   created() {
-    this.searchForm.hospitalId = localStorage.getItem('hospitalId')
+    let hospitalId = localStorage.getItem('hospitalId')
+    if (hospitalId) {
+      this.searchForm.hospitalId = hospitalId
+    }
     this.getList()
   },
   mounted() {
