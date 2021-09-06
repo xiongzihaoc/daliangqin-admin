@@ -38,10 +38,10 @@
           <el-select v-model="searchForm.auditStatus"
             size="small"
             placeholder="请选择审核状态">
-            <el-option label="已审核"
-              :value="true"></el-option>
-            <el-option label="未审核"
-              :value="false"></el-option>
+            <el-option v-for="item in auditStatus"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="医师姓名"
@@ -241,6 +241,7 @@ import {
   parseTime,
   formatSeconds,
   resultStatus,
+  auditStatus,
   formatterElement,
 } from '@/utils/index'
 export default {
@@ -252,6 +253,7 @@ export default {
       parseTime,
       formatSeconds,
       resultStatus,
+      auditStatus,
       formatterElement,
       searchForm: {
         patientUserName: '',
@@ -266,15 +268,6 @@ export default {
       doctorList: [],
       patientList: [],
       list: [],
-      editAddForm: {
-        name: '',
-        userId: '',
-        hospitalId: '',
-        inspectionTime: '',
-        heartRateScore: '',
-        detectType: '',
-        auditStatus: '',
-      },
       hospitalForm: {
         recordId: '',
         hospitalName: '',
@@ -329,11 +322,11 @@ export default {
     },
     // 作废
     onCancellation(val) {
-      let data = {
+      let formData = {
         id: val.id,
         ecgAuditStatus: 'INVALID',
       }
-      httpAdminAudit.postAudit(data).then((res) => {
+      httpAdminAudit.postAudit(formData).then((res) => {
         if (res.code === 'OK') {
           this.$message.success('已作废')
           this.getList()
@@ -342,11 +335,11 @@ export default {
     },
     // 取消作废
     cancelCancellation(val) {
-      let data = {
+      let formData = {
         id: val.id,
         ecgAuditStatus: 'TO_AUDIT',
       }
-      httpAdminAudit.postAudit(data).then((res) => {
+      httpAdminAudit.postAudit(formData).then((res) => {
         if (res.code === 'OK') {
           this.$message.success('取消作废')
           this.getList()
@@ -364,7 +357,9 @@ export default {
     // 重置
     searchReset() {
       this.pageNum = 1
-      this.searchForm = {}
+      this.searchForm = {
+        resultStatus: 'NORMAL',
+      }
       this.getList()
     },
     /**
@@ -436,7 +431,6 @@ export default {
     auditStatusFormatter(row) {
       return formatterElement.auditStatus[row.auditStatus]
     },
-
     /**
      * 分页
      */
