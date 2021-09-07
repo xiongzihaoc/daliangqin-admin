@@ -421,6 +421,7 @@ export default {
               this.loading = true
               this.$message.success('审核成功')
               this.getList()
+              this.getAuditList()
             }
           })
         }
@@ -438,7 +439,7 @@ export default {
         if (res.code === 'OK') {
           this.$message.success('发送成功')
           this.getList()
-          console.log(this.userInfo.hospitalName)
+          this.getAuditList()
         }
       })
     },
@@ -452,6 +453,7 @@ export default {
         if (res.code === 'OK') {
           this.$message.success('重审报告成功')
           this.getList()
+          this.getAuditList()
         }
       })
     },
@@ -465,6 +467,7 @@ export default {
         if (res.code === 'OK') {
           this.$message.success('已作废')
           this.getList()
+          this.getAuditList()
         }
       })
     },
