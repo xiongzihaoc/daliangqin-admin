@@ -429,19 +429,23 @@ export default {
     },
     // 发送报告
     sendReport() {
-      let formData = {
-        id: this.$route.query.id,
-        hospitalId: this.hospitalId,
-        // 待医院审核枚举
-        ecgAuditStatus: 'TO_HOSPITAL_AUDIT',
-      }
-      httpAdminAudit.postAudit(formData).then((res) => {
-        if (res.code === 'OK') {
-          this.$message.success('发送成功')
-          this.getList()
-          this.getAuditList()
+      if (this.hospitalId) {
+        let formData = {
+          id: this.$route.query.id,
+          hospitalId: this.hospitalId,
+          // 待医院审核枚举
+          ecgAuditStatus: 'TO_HOSPITAL_AUDIT',
         }
-      })
+        httpAdminAudit.postAudit(formData).then((res) => {
+          if (res.code === 'OK') {
+            this.$message.success('发送成功')
+            this.getList()
+            this.getAuditList()
+          }
+        })
+      } else {
+        return this.$message.error('请选择医院')
+      }
     },
     // 重审报告
     onReviewReport() {
