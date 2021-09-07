@@ -255,6 +255,7 @@
           <div>
             <el-button type="primary"
               size="mini"
+              :disabled="this.userInfo.auditStatus === 'INVALID'?true:false"
               v-print="printObj">打印</el-button>
             <!-- <span class="tooltip">提示：打印即将此报告纸质呈现，可选择是否启用签名</span> -->
           </div>
@@ -484,7 +485,11 @@ export default {
   },
 }
 </script>
-
+<style>
+.el-step__title {
+  font-size: 14px !important;
+}
+</style>
 <style lang="scss" scoped>
 [contenteditable]:focus {
   outline: 0px solid transparent;
