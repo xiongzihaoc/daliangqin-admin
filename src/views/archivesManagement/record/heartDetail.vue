@@ -165,39 +165,45 @@
         </div>
       </div>
       <div class="operate">
+        <!-- 审核 || 重审 || 作废 -->
         <div class="operateList">
           <div class="fw"
             style="margin-bottom:10px">操作区</div>
           <div class="list">
-            <el-button type="primary"
-              :disabled="isAuditDisabled"
-              size="mini"
-              v-debounce="[passAudit]">审核通过</el-button>
-            <span class="tooltip">提示：审核通过即此报告已经经过审核</span>
-          </div>
-          <!-- 作废 -->
-          <div class="list">
+            <!-- 审核通过按钮 -->
+            <el-tooltip class="item"
+              effect="dark"
+              content="提示：审核通过即此报告已经经过审核"
+              placement="top-start">
+              <el-button type="primary"
+                :disabled="isAuditDisabled"
+                size="mini"
+                v-debounce="[passAudit]">审核通过</el-button>
+            </el-tooltip>
+            <el-tooltip class="item"
+              effect="dark"
+              content="提示：将此报告恢复至待公司审核状态"
+              placement="top-start">
+              <el-button plain
+                size="mini"
+                @click="onReviewReport">重审该报告</el-button>
+            </el-tooltip>
             <el-button size="mini"
               type="danger"
               v-if="userInfo.auditStatus === 'INVALID'">已作废</el-button>
-            <el-button type="primary"
-              size="mini"
+            <el-tooltip class="item"
+              effect="dark"
               v-else
-              @click="onCancellation">作废</el-button>
-            <span class="tooltip">提示：将此报告作废，如需取消，则初始化该报告</span>
-          </div>
-        </div>
-        <!-- 重审该报告 -->
-        <div class="operateList">
-          <div class="list">
-            <el-button type="primary"
-              size="mini"
-              @click="onReviewReport">重审该报告</el-button>
-            <span class="tooltip">提示：将此报告恢复至待公司审核状态</span>
+              content="提示：审核通过即此报告已经经过审核"
+              placement="top-start">
+              <el-button plain
+                size="mini"
+                @click="onCancellation">作废</el-button>
+            </el-tooltip>
           </div>
         </div>
         <!-- 将报告发送给其他医院审核 -->
-        <div class="operateList operationBtn">
+        <div class="operateList">
           <div style="margin-bottom:10px">
             <span class="tooltip">将此报告发送给:</span>
             <el-select size="mini"
@@ -209,24 +215,32 @@
                 :label="item.name"
                 :value="item.id"></el-option>
             </el-select>
+          </div>
+          <el-tooltip class="item"
+            effect="dark"
+            content="提示：可将此报告发送给其他医院进行审核"
+            placement="top-start">
             <el-button type="primary"
               size="mini"
               :disabled="isHospitalDisabled"
               v-debounce="[sendReport]">确定</el-button>
-          </div>
-          <span class="tooltip">提示：可将此报告发送给其他医院进行审核</span>
+          </el-tooltip>
         </div>
         <!-- 查看心电图 -->
         <div class="operateList">
           <div class="list">
-            <el-button type="primary"
-              size="mini"
-              @click="examineElectrocardiograph">查看心电图</el-button>
-            <span class="tooltip">提示：查看心电图即查看该用户完整的心电图</span>
+            <el-tooltip class="item"
+              effect="dark"
+              content="提示：查看心电图即查看该用户完整的心电图"
+              placement="top-start">
+              <el-button type="primary"
+                size="mini"
+                @click="examineElectrocardiograph">查看心电图</el-button>
+            </el-tooltip>
           </div>
         </div>
         <!-- 是否启用签名 -->
-        <div class="operateList operationBtn">
+        <div class="operateList">
           <div><span class="tooltip"
               style="margin-right:10px">是否启用签名</span>
             <el-radio-group v-model="isSignature">
@@ -242,7 +256,7 @@
             <el-button type="primary"
               size="mini"
               v-print="printObj">打印</el-button>
-            <span class="tooltip">提示：打印即将此报告纸质呈现，可选择是否启用签名</span>
+            <!-- <span class="tooltip">提示：打印即将此报告纸质呈现，可选择是否启用签名</span> -->
           </div>
         </div>
         <!-- 操作时间线 -->
@@ -320,6 +334,7 @@ export default {
   },
   mounted() {
     this.getHospitalList()
+    this.getAuditList()
   },
   methods: {
     // 获取信息
@@ -334,7 +349,6 @@ export default {
             res?.data?.elements[0]?.reportResult
           )?.body?.data
           this.loading = false
-          console.log(this.userInfo)
           // 根据审核状态判断按钮置灰
           if (
             //如果状态是已作废 || 医院待审核 || 医院已审核
@@ -352,6 +366,12 @@ export default {
             this.isHospitalDisabled = false
           }
         })
+    },
+    // 获取操作时间线信息
+    getAuditList() {
+      httpAdminAudit.getAudit({ id: this.$route.query.id }).then((res) => {
+        console.log(res)
+      })
     },
     // 获取医院列表
     getHospitalList() {
@@ -649,7 +669,6 @@ body {
 }
 .tooltip {
   display: inline-block;
-  margin-left: 10px;
   font-size: 10px;
   color: #ccc;
 }
@@ -679,5 +698,20 @@ body {
 }
 .margin {
   margin: 10px 0;
+}
+/*滚动条样式*/
+.operate::-webkit-scrollbar {
+  width: 4px;
+  /*height: 4px;*/
+}
+.operate::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0);
+}
+.operate::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0);
 }
 </style>

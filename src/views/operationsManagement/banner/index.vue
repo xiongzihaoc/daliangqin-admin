@@ -103,7 +103,7 @@
         label="状态">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.status"
-            @change="statusChange(scope.row)"
+            @change="changeStatus(scope.row)"
             active-value="UP"
             inactive-value="DOWN"
             active-color="#13ce66"
@@ -275,7 +275,7 @@ export default {
         })
     },
     // 开关change事件
-    statusChange(val) {
+    changeStatus(val) {
       httpAdminBanner.putBanner(val).then((res) => {
         if (res.code === 'OK') {
           this.$message.success('状态更改成功')
@@ -283,19 +283,21 @@ export default {
         }
       })
     },
-        /**
+    /**
      * 搜索
      */
     // 搜索
-    searchBtn() {this.pageNum = 1
+    searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 重置
-    searchReset() {this.pageNum = 1
+    searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },
-        /**
+    /**
      * CRUD
      */
     // 新增
@@ -378,7 +380,7 @@ export default {
         }
       })
     },
-        /**
+    /**
      * 分页
      */
     handleSizeChange(newSize) {
