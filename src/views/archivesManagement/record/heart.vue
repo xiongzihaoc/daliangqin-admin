@@ -184,12 +184,12 @@
       <!-- 操作 -->
       <el-table-column align="center"
         label="操作"
-        width="300">
+        width="120">
         <template slot-scope="scope">
           <el-button size="mini"
             @click="examineReport(scope.row)"
             type="primary">查看报告</el-button>
-          <el-button size="mini"
+          <!-- <el-button size="mini"
             @click="examineElectrocardiograph(scope.row)"
             plain>查看心电图</el-button>
             <el-button size="mini"
@@ -199,11 +199,11 @@
             <el-button size="mini"
               type="danger"
               v-else
-              @click="onCancellation(scope.row)">作废</el-button>
+              @click="onCancellation(scope.row)">作废</el-button> -->
         </template>
       </el-table-column>
     </EleTable>
-    <el-dialog title="提示"
+    <!-- <el-dialog title="提示"
       :visible.sync="hospitalDialogVisible"
       width="30%"
       v-dialogDrag>
@@ -228,7 +228,7 @@
         <el-button type="primary"
           @click="skipReportDetail">确 定</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -369,22 +369,30 @@ export default {
      */
     // 查看报告
     examineReport(val) {
-      if (val.signUrl != '') {
-        this.hospitalForm.hospitalName = val.hospitalName
-        this.hospitalForm.name = val.patientUserName
-        this.hospitalForm.signUrl = val.signUrl
-        this.hospitalForm.recordId = val.id
-        this.hospitalDialogVisible = true
-      } else {
-        this.$router.push(
-          '/archivesManagement/record/heartDetail?id=' +
-            val.id +
-            '&name=' +
-            val.patientUserName +
-            '&hospitalName=' +
-            val.hospitalName
-        )
-      }
+      // if (val.signUrl != '') {
+      //   this.hospitalForm.hospitalName = val.hospitalName
+      //   this.hospitalForm.name = val.patientUserName
+      //   this.hospitalForm.signUrl = val.signUrl
+      //   this.hospitalForm.recordId = val.id
+      //   this.hospitalDialogVisible = true
+      // } else {
+      //   this.$router.push(
+      //     '/archivesManagement/record/heartDetail?id=' +
+      //       val.id +
+      //       '&name=' +
+      //       val.patientUserName +
+      //       '&hospitalName=' +
+      //       val.hospitalName
+      //   )
+      // }
+      this.$router.push(
+        '/archivesManagement/record/heartDetail?id=' +
+          val.id +
+          '&name=' +
+          val.patientUserName +
+          '&hospitalName=' +
+          val.hospitalName
+      )
     },
     // 查看心电图
     examineElectrocardiograph(val) {

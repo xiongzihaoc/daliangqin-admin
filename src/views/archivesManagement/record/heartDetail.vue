@@ -11,8 +11,7 @@
           <div class="hospital">
             <span class="title fw">监测医院：</span>
             <span class="content"
-              contenteditable="true"
-              v-html="userInfo.hospitalName"></span>
+              contenteditable="true">{{userInfo.hospitalName}}</span>
           </div>
           <div class="hospital">
             <span class="title fw">监测时间：</span>
@@ -159,57 +158,132 @@
           </div>
           <div class="right">
             <span class="fz14">医生签名：</span>
-            <img v-if="this.$route.query.isSignature ==='1'"
+            <img v-if="isSignature === true"
               class="signature"
-              :src="userInfo.signUrl"
-              alt="">
+              :src="userInfo.signUrl">
           </div>
         </div>
-        <!-- 处置建议模板 -->
-        <div class="advice">
-          <h2>处置建议</h2>
-          <p>1. 建议重新测量</p>
-          <p>2. 建议定期复查</p>
-          <p>3. 建议治疗后复查</p>
-          <p>4. 建议进一步检查治疗</p>
-          <p>5. 建议转诊治疗</p>
-          <p>6. 建议转院治疗</p>
+      </div>
+      <div class="operate">
+        <div class="operateList">
+          <div class="fw"
+            style="margin-bottom:10px">操作区</div>
+          <div class="list">
+            <el-button type="primary"
+              :disabled="isAuditDisabled"
+              size="mini"
+              v-debounce="[passAudit]">审核通过</el-button>
+            <span class="tooltip">提示：审核通过即此报告已经经过审核</span>
+          </div>
+          <!-- 作废 -->
+          <div class="list">
+            <el-button size="mini"
+              type="danger"
+              v-if="userInfo.auditStatus === 'INVALID'">已作废</el-button>
+            <el-button type="primary"
+              size="mini"
+              v-else
+              @click="onCancellation">作废</el-button>
+            <span class="tooltip">提示：将此报告作废，如需取消，则初始化该报告</span>
+          </div>
+        </div>
+        <!-- 重审该报告 -->
+        <div class="operateList">
+          <div class="list">
+            <el-button type="primary"
+              size="mini"
+              @click="onReviewReport">重审该报告</el-button>
+            <span class="tooltip">提示：将此报告恢复至待公司审核状态</span>
+          </div>
+        </div>
+        <!-- 将报告发送给其他医院审核 -->
+        <div class="operateList operationBtn">
+          <div style="margin-bottom:10px">
+            <span class="tooltip">将此报告发送给:</span>
+            <el-select size="mini"
+              v-model="hospitalId"
+              :disabled="isHospitalDisabled"
+              style="margin:0 10px;">
+              <el-option v-for="item in hospitalList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"></el-option>
+            </el-select>
+            <el-button type="primary"
+              size="mini"
+              :disabled="isHospitalDisabled"
+              v-debounce="[sendReport]">确定</el-button>
+          </div>
+          <span class="tooltip">提示：可将此报告发送给其他医院进行审核</span>
+        </div>
+        <!-- 查看心电图 -->
+        <div class="operateList">
+          <div class="list">
+            <el-button type="primary"
+              size="mini"
+              @click="examineElectrocardiograph">查看心电图</el-button>
+            <span class="tooltip">提示：查看心电图即查看该用户完整的心电图</span>
+          </div>
+        </div>
+        <!-- 是否启用签名 -->
+        <div class="operateList operationBtn">
+          <div><span class="tooltip"
+              style="margin-right:10px">是否启用签名</span>
+            <el-radio-group v-model="isSignature">
+              <el-radio :label="true">是</el-radio>
+              <el-radio :label="false">否</el-radio>
+            </el-radio-group>
+          </div>
+          <div class="rightSignature">
+            <img v-if="isSignature === true"
+              :src="this.userInfo.signUrl">
+          </div>
+          <div>
+            <el-button type="primary"
+              size="mini"
+              v-print="printObj">打印</el-button>
+            <span class="tooltip">提示：打印即将此报告纸质呈现，可选择是否启用签名</span>
+          </div>
+        </div>
+        <!-- 操作时间线 -->
+        <div class="operateList">
+          <div class="fw"
+            style="margin-bottom:10px">操作时间线</div>
+          <el-steps direction="vertical"
+            :active="1">
+            <el-step title="步骤 1"
+              description="这是一段很长很长很长的描述性文字"></el-step>
+            <el-step title="步骤 2"
+              description="这是一段很长很长很长的描述性文字"></el-step>
+            <el-step title="步骤 3"
+              description="这是一段很长很长很长的描述性文字"></el-step>
+            <el-step title="步骤 4"
+              description="这是一段很长很长很长的描述性文字"></el-step>
+            <el-step title="步骤 5"
+              description="这是一段很长很长很长的描述性文字"></el-step>
+            <el-step title="步骤 6"
+              description="这是一段很长很长很长的描述性文字"></el-step>
+          </el-steps>
+
+        </div>
+        <!-- 常用话术 -->
+        <div class="operateList">
+          <!-- 处置建议模板 -->
+          <div class="advice">
+            <h2>处置建议</h2>
+            <p>1. 建议重新测量</p>
+            <p>2. 建议定期复查</p>
+            <p>3. 建议治疗后复查</p>
+            <p>4. 建议进一步检查治疗</p>
+            <p>5. 建议转诊治疗</p>
+            <p>6. 建议转院治疗</p>
+          </div>
         </div>
       </div>
     </div>
     <!-- 备注 -->
     <div class="remark">
       提示：监测医院和用户姓名进行修改之后，只用于打印，不做其他用途；其余内容修改后会进行数据更新
-    </div>
-    <!-- 操作按钮 -->
-    <div class="operationBtn">
-      <el-button size="mini"
-        plain
-        v-debounce="[reset]">重置报告</el-button>
-      <el-button plain
-        size="mini"
-        :disabled="isAuditDisabled"
-        v-debounce="[passAudit]">审核通过</el-button>
-      <el-button plain
-        v-print="printObj"
-        size="mini">打印</el-button>
-    </div>
-    <div class="operationBtn"
-      style="margin-top:20px;font-size:12px;color:#ccc">
-      <span>将此报告发送给:</span>
-      <el-select size="mini"
-        v-model="hospitalId"
-        :disabled="isHospitalDisabled"
-        style="margin:0 10px;">
-        <el-option v-for="item in hospitalList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"></el-option>
-      </el-select>
-      <el-button type="primary"
-        size="mini"
-        :disabled="isHospitalDisabled"
-        v-debounce="[sendReport]">确定</el-button>
     </div>
   </div>
 </template>
@@ -233,6 +307,8 @@ export default {
       hospitalList: [],
       hospitalId: '',
       loading: true,
+      // 签名启用
+      isSignature: true,
       heartDetail: {},
       userInfo: {},
       isAuditDisabled: false,
@@ -258,15 +334,22 @@ export default {
             res?.data?.elements[0]?.reportResult
           )?.body?.data
           this.loading = false
+          console.log(this.userInfo)
           // 根据审核状态判断按钮置灰
           if (
+            //如果状态是已作废 || 医院待审核 || 医院已审核
             this.userInfo.auditStatus === 'INVALID' ||
-            this.userInfo.auditStatus === 'TO_HOSPITAL_AUDIT' || this.userInfo.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
+            this.userInfo.auditStatus === 'TO_HOSPITAL_AUDIT' ||
+            this.userInfo.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
           ) {
             this.isAuditDisabled = true
             this.isHospitalDisabled = true
           } else if (this.userInfo.auditStatus === 'PLATFORM_COMPLETE_AUDIT') {
+            // 如果状态是公司已审核
             this.isHospitalDisabled = true
+          } else if (this.userInfo.auditStatus === 'TO_AUDIT') {
+            this.isAuditDisabled = false
+            this.isHospitalDisabled = false
           }
         })
     },
@@ -275,6 +358,16 @@ export default {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
       })
+    },
+    // 查看心电图
+    examineElectrocardiograph() {
+      let deskUrl = JSON.parse(this.userInfo.reportResult).body.data.deskUrl
+      let ecgUrl = JSON.parse(this.userInfo.reportResult).body.data.ecgUrl
+      if (deskUrl) {
+        window.open(deskUrl)
+      } else {
+        window.open(ecgUrl.replace('vertical', 'one_ecg'))
+      }
     },
     // 审核通过
     passAudit() {
@@ -295,11 +388,11 @@ export default {
         healthCareAdvice: this.$refs.healthCareAdvice.innerText,
       }
       httpAdminHeartRate.putThirdReport(thirdForm).then((res) => {
+        let data = {
+          id: this.$route.query.id,
+          ecgAuditStatus: 'PLATFORM_COMPLETE_AUDIT',
+        }
         if (res.code === 'OK') {
-          let data = {
-            id: this.$route.query.id,
-            ecgAuditStatus: 'PLATFORM_COMPLETE_AUDIT',
-          }
           httpAdminAudit.postAudit(data).then((res) => {
             if (res.code === 'OK') {
               this.loading = true
@@ -310,22 +403,44 @@ export default {
         }
       })
     },
-    // 重置报告
-    reset() {
-      location.reload()
-      this.$message.success('重置报告成功')
-    },
     // 发送报告
     sendReport() {
-      let data = {
+      let formData = {
         id: this.$route.query.id,
         hospitalId: this.hospitalId,
         // 待医院审核枚举
         ecgAuditStatus: 'TO_HOSPITAL_AUDIT',
       }
-      httpAdminAudit.postAudit(data).then((res) => {
+      httpAdminAudit.postAudit(formData).then((res) => {
         if (res.code === 'OK') {
           this.$message.success('发送成功')
+          this.getList()
+          console.log(this.userInfo.hospitalName)
+        }
+      })
+    },
+    // 重审报告
+    onReviewReport() {
+      let formData = {
+        id: this.$route.query.id,
+        ecgAuditStatus: 'TO_AUDIT',
+      }
+      httpAdminAudit.postAudit(formData).then((res) => {
+        if (res.code === 'OK') {
+          this.$message.success('重审报告成功')
+          this.getList()
+        }
+      })
+    },
+    // 作废
+    onCancellation() {
+      let formData = {
+        id: this.$route.query.id,
+        ecgAuditStatus: 'INVALID',
+      }
+      httpAdminAudit.postAudit(formData).then((res) => {
+        if (res.code === 'OK') {
+          this.$message.success('已作废')
           this.getList()
         }
       })
@@ -358,6 +473,28 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  .operate {
+    // min-width: 350px;
+    height: 860px;
+    padding: 20px;
+    overflow: hidden;
+    overflow-y: auto;
+    margin-left: 50px;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+    .operateList {
+      padding: 20px 0 10px 0;
+      border-bottom: 1px solid #ccc;
+    }
+    .operationBtn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .list {
+      margin-bottom: 10px;
+    }
+  }
 }
 #printMe {
   position: relative;
@@ -369,7 +506,6 @@ body {
   font-size: 11px;
   padding: 20px;
   box-sizing: border-box;
-  margin: 0 auto;
   h3 {
     text-align: center;
   }
@@ -493,24 +629,28 @@ body {
     min-width: 110px;
   }
 }
-.advice {
-  position: absolute;
-  right: -60%;
-  top: 50%;
-  transform: translateY(-50%);
-  p {
-    font-size: 11px;
+.rightSignature {
+  margin: 10px 0;
+  img {
+    width: 200px;
+    height: 70px;
+    border: 1px dashed #ccc;
+    border-radius: 5px;
   }
 }
-.operationBtn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.advice {
+  font-size: 11px;
 }
 .remark {
   text-align: center;
   margin: 30px 0;
   font-size: 12px;
+  color: #ccc;
+}
+.tooltip {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 10px;
   color: #ccc;
 }
 .flex {
