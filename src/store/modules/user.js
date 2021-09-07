@@ -38,7 +38,7 @@ const user = {
       return new Promise((resolve, reject) => {
         httpPublicLogin.login(userInfo).then(res => {
           if (res.code === 'OK') {
-            if (res.data.adminRoleType) {
+            if (res.data.adminRoleType && res.data.adminRoleType != 'HOSPITAL_ECG_DOCTOR') {
               window.localStorage.setItem('userId', res.data.userId)
               commit('SET_TOKEN', "admin")
               setToken("admin")

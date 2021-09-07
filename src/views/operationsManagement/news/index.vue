@@ -111,7 +111,7 @@
         label="状态">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.deletedStatus"
-            @change="statusChange(scope.row)"
+            @change="changeStatus(scope.row)"
             active-value="SHOW"
             inactive-value="DELETE"
             active-color="#13ce66"
@@ -409,7 +409,7 @@ export default {
         })
     },
     // 开关change事件
-    statusChange(val) {
+    changeStatus(val) {
       httpAdminNews.putNews(val).then((res) => {
         if (res.code === 'OK') {
           this.$message.success('状态更改成功')

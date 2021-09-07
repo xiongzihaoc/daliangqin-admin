@@ -97,7 +97,7 @@
           label="是否默认">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.isDefault"
-              @change="statusChange(scope.row)"
+              @change="changeStatus(scope.row)"
               :active-value="true"
               :disabled="scope.row.isDefault"
               :inactive-value="false"
@@ -275,7 +275,7 @@ export default {
         })
     },
     // 是否默认
-    statusChange(id) {
+    changeStatus(id) {
       httpAdminAddressDoctor.putAddressDefault(id).then((res) => {
         console.log(res)
         if (res.code === 'OK') {

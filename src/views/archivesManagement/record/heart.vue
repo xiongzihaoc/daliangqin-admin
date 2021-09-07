@@ -38,10 +38,10 @@
           <el-select v-model="searchForm.auditStatus"
             size="small"
             placeholder="请选择审核状态">
-            <el-option label="已审核"
-              :value="true"></el-option>
-            <el-option label="未审核"
-              :value="false"></el-option>
+            <el-option v-for="item in auditStatus"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="医师姓名"
@@ -184,27 +184,26 @@
       <!-- 操作 -->
       <el-table-column align="center"
         label="操作"
-        width="300">
+        width="120">
         <template slot-scope="scope">
           <el-button size="mini"
             @click="examineReport(scope.row)"
             type="primary">查看报告</el-button>
-          <el-button size="mini"
+          <!-- <el-button size="mini"
             @click="examineElectrocardiograph(scope.row)"
             plain>查看心电图</el-button>
-          <el-button size="mini"
-            type="danger"
-            v-if="scope.row.auditStatus === 'INVALID'"
-            @click="cancelCancellation(scope.row)">取消作废</el-button>
-          <el-button size="mini"
-            type="danger"
-            v-else
-            @click="onCancellation(scope.row)">作废</el-button>
-
+            <el-button size="mini"
+              type="danger"
+              v-if="scope.row.auditStatus === 'INVALID'"
+              @click="cancelCancellation(scope.row)">取消作废</el-button>
+            <el-button size="mini"
+              type="danger"
+              v-else
+              @click="onCancellation(scope.row)">作废</el-button> -->
         </template>
       </el-table-column>
     </EleTable>
-    <el-dialog title="提示"
+    <!-- <el-dialog title="提示"
       :visible.sync="hospitalDialogVisible"
       width="30%"
       v-dialogDrag>
@@ -229,7 +228,7 @@
         <el-button type="primary"
           @click="skipReportDetail">确 定</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -241,6 +240,7 @@ import {
   parseTime,
   formatSeconds,
   resultStatus,
+  auditStatus,
   formatterElement,
 } from '@/utils/index'
 export default {
@@ -252,6 +252,7 @@ export default {
       parseTime,
       formatSeconds,
       resultStatus,
+      auditStatus,
       formatterElement,
       searchForm: {
         patientUserName: '',
@@ -266,15 +267,6 @@ export default {
       doctorList: [],
       patientList: [],
       list: [],
-      editAddForm: {
-        name: '',
-        userId: '',
-        hospitalId: '',
-        inspectionTime: '',
-        heartRateScore: '',
-        detectType: '',
-        auditStatus: '',
-      },
       hospitalForm: {
         recordId: '',
         hospitalName: '',
@@ -292,7 +284,10 @@ export default {
     }
   },
   created() {
-    this.searchForm.hospitalId = localStorage.getItem('hospitalId')
+    let hospitalId = localStorage.getItem('hospitalId')
+    if (hospitalId) {
+      this.searchForm.hospitalId = hospitalId
+    }
     this.getList()
   },
   mounted() {
@@ -329,11 +324,11 @@ export default {
     },
     // 作废
     onCancellation(val) {
-      let data = {
+      let formData = {
         id: val.id,
         ecgAuditStatus: 'INVALID',
       }
-      httpAdminAudit.postAudit(data).then((res) => {
+      httpAdminAudit.postAudit(formData).then((res) => {
         if (res.code === 'OK') {
           this.$message.success('已作废')
           this.getList()
@@ -342,11 +337,11 @@ export default {
     },
     // 取消作废
     cancelCancellation(val) {
-      let data = {
+      let formData = {
         id: val.id,
         ecgAuditStatus: 'TO_AUDIT',
       }
-      httpAdminAudit.postAudit(data).then((res) => {
+      httpAdminAudit.postAudit(formData).then((res) => {
         if (res.code === 'OK') {
           this.$message.success('取消作废')
           this.getList()
@@ -364,7 +359,9 @@ export default {
     // 重置
     searchReset() {
       this.pageNum = 1
-      this.searchForm = {}
+      this.searchForm = {
+        resultStatus: 'NORMAL',
+      }
       this.getList()
     },
     /**
@@ -372,22 +369,30 @@ export default {
      */
     // 查看报告
     examineReport(val) {
-      if (val.signUrl != '') {
-        this.hospitalForm.hospitalName = val.hospitalName
-        this.hospitalForm.name = val.patientUserName
-        this.hospitalForm.signUrl = val.signUrl
-        this.hospitalForm.recordId = val.id
-        this.hospitalDialogVisible = true
-      } else {
-        this.$router.push(
-          '/archivesManagement/record/heartDetail?id=' +
-            val.id +
-            '&name=' +
-            val.patientUserName +
-            '&hospitalName=' +
-            val.hospitalName
-        )
-      }
+      // if (val.signUrl != '') {
+      //   this.hospitalForm.hospitalName = val.hospitalName
+      //   this.hospitalForm.name = val.patientUserName
+      //   this.hospitalForm.signUrl = val.signUrl
+      //   this.hospitalForm.recordId = val.id
+      //   this.hospitalDialogVisible = true
+      // } else {
+      //   this.$router.push(
+      //     '/archivesManagement/record/heartDetail?id=' +
+      //       val.id +
+      //       '&name=' +
+      //       val.patientUserName +
+      //       '&hospitalName=' +
+      //       val.hospitalName
+      //   )
+      // }
+      this.$router.push(
+        '/archivesManagement/record/heartDetail?id=' +
+          val.id +
+          '&name=' +
+          val.patientUserName +
+          '&hospitalName=' +
+          val.hospitalName
+      )
     },
     // 查看心电图
     examineElectrocardiograph(val) {
@@ -436,7 +441,6 @@ export default {
     auditStatusFormatter(row) {
       return formatterElement.auditStatus[row.auditStatus]
     },
-
     /**
      * 分页
      */

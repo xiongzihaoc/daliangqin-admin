@@ -53,15 +53,11 @@
       </el-table-column>
       <el-table-column align="center"
         label="测量总人数"
-        prop="measureTotalAmount">
+        prop="measureTotalFrequency">
       </el-table-column>
       <el-table-column align="center"
         label="测量总次数"
-        prop="measureTotalFrequency">
-        <!-- <template slot-scope="scope">
-          <span class="skipStyle"
-            @click="skipHeart(scope.row)">{{scope.row.measureTotalFrequency}}</span>
-        </template> -->
+        prop="measureTotalAmount">
       </el-table-column>
       <el-table-column align="center"
         label="公司已审核报告数"
