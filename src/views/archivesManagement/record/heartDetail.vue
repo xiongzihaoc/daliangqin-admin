@@ -164,7 +164,7 @@
           </div>
         </div>
       </div>
-      <div class="operate">
+      <div class="operate removeScroll">
         <!-- 审核 || 重审 || 作废 -->
         <div class="operateList">
           <div class="fw"
@@ -262,23 +262,21 @@
         <!-- 操作时间线 -->
         <div class="operateList">
           <div class="fw"
-            style="margin-bottom:10px">操作时间线</div>
-          <el-steps direction="vertical"
-            :active="1">
-            <el-step title="步骤 1"
-              description="这是一段很长很长很长的描述性文字"></el-step>
-            <el-step title="步骤 2"
-              description="这是一段很长很长很长的描述性文字"></el-step>
-            <el-step title="步骤 3"
-              description="这是一段很长很长很长的描述性文字"></el-step>
-            <el-step title="步骤 4"
-              description="这是一段很长很长很长的描述性文字"></el-step>
-            <el-step title="步骤 5"
-              description="这是一段很长很长很长的描述性文字"></el-step>
-            <el-step title="步骤 6"
-              description="这是一段很长很长很长的描述性文字"></el-step>
-          </el-steps>
+            style="margin-bottom:10px;">操作时间线</div>
+          <div class="removeScroll"
+            style="height:300px;">
+            <el-steps direction="vertical"
+              :active="1">
+              <el-step v-for="(item,index) in stepList"
+                :key="index"
+                :title="formatTitle(item)"
+                :description="item.content"
+                icon="el-icon-s-promotion"></el-step>
+            </el-steps>
+            <div>
 
+            </div>
+          </div>
         </div>
         <!-- 常用话术 -->
         <div class="operateList">
@@ -321,9 +319,13 @@ export default {
       hospitalList: [],
       hospitalId: '',
       loading: true,
+      // 操作时间线列表
+      stepList: [],
       // 签名启用
       isSignature: true,
+      // 心率信息
       heartDetail: {},
+      // 个人信息
       userInfo: {},
       isAuditDisabled: false,
       isHospitalDisabled: false,
@@ -370,7 +372,7 @@ export default {
     // 获取操作时间线信息
     getAuditList() {
       httpAdminAudit.getAudit({ id: this.$route.query.id }).then((res) => {
-        console.log(res)
+        this.stepList = res.data.elements
       })
     },
     // 获取医院列表
@@ -465,6 +467,20 @@ export default {
         }
       })
     },
+    formatTitle(val) {
+      switch (val.auditStatus) {
+        case 'TO_AUDIT':
+          return '待公司审核' + ' - ' + parseTime(val.auditTime)
+        case 'PLATFORM_COMPLETE_AUDIT':
+          return '公司已审核' + ' - ' + parseTime(val.auditTime)
+        case 'TO_HOSPITAL_AUDIT':
+          return '待医院审核' + ' - ' + parseTime(val.auditTime)
+        case 'HOSPITAL_COMPLETE_AUDIT':
+          return '医院已审核' + ' - ' + parseTime(val.auditTime)
+        case 'INVALID':
+          return '已作废' + ' - ' + parseTime(val.auditTime)
+      }
+    },
   },
 }
 </script>
@@ -494,12 +510,9 @@ body {
   justify-content: center;
   align-items: center;
   .operate {
-    // min-width: 350px;
     height: 860px;
-    padding: 20px;
-    overflow: hidden;
-    overflow-y: auto;
     margin-left: 50px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
     .operateList {
@@ -699,17 +712,21 @@ body {
 .margin {
   margin: 10px 0;
 }
+.removeScroll {
+  overflow: hidden;
+  overflow-y: auto;
+}
 /*滚动条样式*/
-.operate::-webkit-scrollbar {
+.removeScroll::-webkit-scrollbar {
   width: 4px;
   /*height: 4px;*/
 }
-.operate::-webkit-scrollbar-thumb {
+.removeScroll::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
   background: rgba(0, 0, 0, 0);
 }
-.operate::-webkit-scrollbar-track {
+.removeScroll::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
   border-radius: 0;
   background: rgba(0, 0, 0, 0);
