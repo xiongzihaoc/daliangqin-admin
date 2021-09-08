@@ -198,7 +198,6 @@
 import EleTable from '@/components/Table'
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
-import { httpAdminAudit } from '@/api/admin/httpAdminAudit'
 import {
   parseTime,
   formatSeconds,
