@@ -159,8 +159,19 @@
       </el-table-column>
       <el-table-column align="center"
         label="审核状态"
-        prop="auditStatus"
-        :formatter="auditStatusFormatter">
+        prop="auditStatus">
+        <template slot-scope="scope">
+          <span class="MEDIUM"
+            v-if="scope.row.auditStatus === 'TO_AUDIT'">待公司审核</span>
+          <span class="HEALTH"
+            v-if="scope.row.auditStatus === 'PLATFORM_COMPLETE_AUDIT'">公司已审核</span>
+          <span class="MEDIUM"
+            v-if="scope.row.auditStatus === 'TO_HOSPITAL_AUDIT'">待医院审核</span>
+          <span class="HEALTH"
+            v-if="scope.row.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'">医院已审核</span>
+          <span class="SERIOUS"
+            v-if="scope.row.auditStatus === 'INVALID'">已作废</span>
+        </template>
       </el-table-column>
       <el-table-column align="center"
         label="审核时间"
@@ -198,6 +209,7 @@
 import EleTable from '@/components/Table'
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { httpAdminAudit } from '@/api/admin/httpAdminAudit'
 import {
   parseTime,
   formatSeconds,
@@ -284,6 +296,32 @@ export default {
         this.hospitalList = res.data.elements
       })
     },
+    // 作废
+    onCancellation(val) {
+      let formData = {
+        id: val.id,
+        ecgAuditStatus: 'INVALID',
+      }
+      httpAdminAudit.postAudit(formData).then((res) => {
+        if (res.code === 'OK') {
+          this.$message.success('已作废')
+          this.getList()
+        }
+      })
+    },
+    // 取消作废
+    cancelCancellation(val) {
+      let formData = {
+        id: val.id,
+        ecgAuditStatus: 'TO_AUDIT',
+      }
+      httpAdminAudit.postAudit(formData).then((res) => {
+        if (res.code === 'OK') {
+          this.$message.success('取消作废')
+          this.getList()
+        }
+      })
+    },
     /**
      * 搜索
      */
@@ -314,6 +352,30 @@ export default {
           val.hospitalName
       )
     },
+    // 查看心电图
+    examineElectrocardiograph(val) {
+      let deskUrl = JSON.parse(val.reportResult).body.data.deskUrl
+      let ecgUrl = JSON.parse(val.reportResult).body.data.ecgUrl
+      if (deskUrl) {
+        window.open(deskUrl)
+      } else {
+        window.open(ecgUrl.replace('vertical', 'one_ecg'))
+      }
+    },
+    // 跳转报告详情
+    skipReportDetail() {
+      this.hospitalDialogVisible = false
+      this.$router.push(
+        '/archivesManagement/record/heartDetail?id=' +
+          this.hospitalForm.recordId +
+          '&name=' +
+          this.hospitalForm.name +
+          '&hospitalName=' +
+          this.hospitalForm.hospitalName +
+          '&isSignature=' +
+          this.hospitalForm.isSignature
+      )
+    },
     // 跳转用户档案
     skipPatient(val) {
       this.$router.push(
@@ -330,12 +392,6 @@ export default {
       if (row.reportResult != '') {
         return formatSeconds(JSON.parse(row.reportResult).body.data.length)
       }
-    },
-    /**
-     * 表格格式化
-     */
-    auditStatusFormatter(row) {
-      return formatterElement.auditStatus[row.auditStatus]
     },
     /**
      * 分页
