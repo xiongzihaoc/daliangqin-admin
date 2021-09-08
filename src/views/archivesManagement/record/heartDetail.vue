@@ -173,12 +173,12 @@
             <!-- 审核通过按钮 -->
             <el-tooltip class="item"
               effect="dark"
-              content="提示：审核通过即此报告已经经过审核"
+              content="提示：审核通过即此报告已经经过审核并保存"
               placement="top-start">
               <el-button type="primary"
                 :disabled="isAuditDisabled"
                 size="mini"
-                v-debounce="[passAudit]">审核通过</el-button>
+                v-debounce="[passAudit]">审核并保存</el-button>
             </el-tooltip>
             <el-tooltip class="item"
               effect="dark"
@@ -458,6 +458,7 @@ export default {
           this.$message.success('重审报告成功')
           this.getList()
           this.getAuditList()
+          this.hospitalId = ''
         }
       })
     },
