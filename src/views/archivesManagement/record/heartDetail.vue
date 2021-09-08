@@ -265,7 +265,7 @@
         <div class="operateList">
           <div class="fw"
             style="margin-bottom:10px;">操作时间线</div>
-          <div class="removeScroll">
+          <div class="removeScroll" style="max-width:300px;">
             <el-steps direction="vertical"
               :active="1">
               <el-step v-for="(item,index) in stepList"
@@ -352,28 +352,49 @@ export default {
             res?.data?.elements[0]?.reportResult
           )?.body?.data
           this.loading = false
-          // 根据审核状态判断按钮置灰
-          if (
-            //如果状态是已作废 || 医院待审核 || 医院已审核
-            this.userInfo.auditStatus === 'INVALID' ||
-            this.userInfo.auditStatus === 'TO_HOSPITAL_AUDIT' ||
-            this.userInfo.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
-          ) {
-            this.isAuditDisabled = true
-            this.isHospitalDisabled = true
-          } else if (this.userInfo.auditStatus === 'PLATFORM_COMPLETE_AUDIT') {
-            // 如果状态是公司已审核
-            this.isHospitalDisabled = true
-          } else if (this.userInfo.auditStatus === 'TO_AUDIT') {
-            this.isAuditDisabled = false
-            this.isHospitalDisabled = false
-          }
         })
     },
     // 获取操作时间线信息
     getAuditList() {
       httpAdminAudit.getAudit({ id: this.$route.query.id }).then((res) => {
         this.stepList = res.data.elements
+        /**
+         * 根据审核状态判断按钮置灰
+         */
+        if (
+          //如果状态是已作废
+          this.userInfo.auditStatus === 'INVALID'
+        ) {
+          this.isAuditDisabled = true
+          this.isHospitalDisabled = true
+        } else if (this.userInfo.auditStatus === 'PLATFORM_COMPLETE_AUDIT') {
+          // 如果状态是公司已审核
+          this.isHospitalDisabled = true
+        } else if (this.userInfo.auditStatus === 'TO_AUDIT') {
+          // 如果状态是公司待审核
+          this.isAuditDisabled = false
+          this.isHospitalDisabled = false
+        } else if (
+          // 状态 医院待审核
+          this.userInfo.auditStatus === 'TO_HOSPITAL_AUDIT'
+        ) {
+          this.isAuditDisabled = true
+          this.isHospitalDisabled = true
+          let step = this.stepList.find((item) => {
+            return item.auditStatus === 'TO_HOSPITAL_AUDIT'
+          })
+          this.hospitalId = step.hospitalId
+        } else if (
+          // 状态 医院已审核
+          this.userInfo.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
+        ) {
+          this.isAuditDisabled = true
+          this.isHospitalDisabled = true
+          let step = this.stepList.find((item) => {
+            return item.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
+          })
+          this.hospitalId = step.hospitalId
+        }
       })
     },
     // 获取医院列表
