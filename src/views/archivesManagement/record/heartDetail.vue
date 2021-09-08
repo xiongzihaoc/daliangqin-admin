@@ -173,7 +173,7 @@
             <!-- 审核通过按钮 -->
             <el-tooltip class="item"
               effect="dark"
-              content="提示：审核通过即此报告已经经过审核并保存"
+              content="提示：审核并保存即此报告已经经过审核并且保存"
               placement="top-start">
               <el-button type="primary"
                 :disabled="isAuditDisabled"
