@@ -59,6 +59,7 @@
         </div>
         <div class="analyse">
           <img class="analyse-img"
+            v-if="heartDetail.fileImagePath && heartDetail.fileImagePath != ''"
             :src="heartDetail.fileImagePath"
             alt="">
           <div class="fz14 analyse-title">心率分析：</div>
@@ -158,7 +159,7 @@
           </div>
           <div class="right">
             <span class="fz14">医生签名：</span>
-            <img v-if="isSignature === true"
+            <img v-if="isSignature === true && userInfo.signUrl && userInfo.signUrl != ''"
               class="signature"
               :src="userInfo.signUrl">
           </div>
@@ -249,7 +250,7 @@
             </el-radio-group>
           </div>
           <div class="rightSignature">
-            <img v-if="isSignature === true"
+            <img v-if="isSignature === true && userInfo.signUrl && userInfo.signUrl != ''"
               :src="this.userInfo.signUrl">
           </div>
           <div>
@@ -264,8 +265,7 @@
         <div class="operateList">
           <div class="fw"
             style="margin-bottom:10px;">操作时间线</div>
-          <div class="removeScroll"
-            style="height:300px;">
+          <div class="removeScroll">
             <el-steps direction="vertical"
               :active="1">
               <el-step v-for="(item,index) in stepList"
