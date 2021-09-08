@@ -189,46 +189,9 @@
           <el-button size="mini"
             @click="examineReport(scope.row)"
             type="primary">查看报告</el-button>
-          <!-- <el-button size="mini"
-            @click="examineElectrocardiograph(scope.row)"
-            plain>查看心电图</el-button>
-            <el-button size="mini"
-              type="danger"
-              v-if="scope.row.auditStatus === 'INVALID'"
-              @click="cancelCancellation(scope.row)">取消作废</el-button>
-            <el-button size="mini"
-              type="danger"
-              v-else
-              @click="onCancellation(scope.row)">作废</el-button> -->
         </template>
       </el-table-column>
     </EleTable>
-    <!-- <el-dialog title="提示"
-      :visible.sync="hospitalDialogVisible"
-      width="30%"
-      v-dialogDrag>
-      <el-form ref="hospitalFormRef"
-        :model="hospitalForm"
-        label-width="120px">
-        <el-form-item label="启用签名">
-          <el-radio-group v-model="hospitalForm.isSignature">
-            <el-radio label="1">是</el-radio>
-            <el-radio label="0">否</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="签名图"
-          v-if="hospitalForm.isSignature === '1'">
-          <img :src="hospitalForm.signUrl"
-            class="signature">
-        </el-form-item>
-      </el-form>
-      <span slot="footer"
-        class="dialog-footer">
-        <el-button @click="hospitalDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="skipReportDetail">确 定</el-button>
-      </span>
-    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -322,32 +285,6 @@ export default {
         this.hospitalList = res.data.elements
       })
     },
-    // 作废
-    onCancellation(val) {
-      let formData = {
-        id: val.id,
-        ecgAuditStatus: 'INVALID',
-      }
-      httpAdminAudit.postAudit(formData).then((res) => {
-        if (res.code === 'OK') {
-          this.$message.success('已作废')
-          this.getList()
-        }
-      })
-    },
-    // 取消作废
-    cancelCancellation(val) {
-      let formData = {
-        id: val.id,
-        ecgAuditStatus: 'TO_AUDIT',
-      }
-      httpAdminAudit.postAudit(formData).then((res) => {
-        if (res.code === 'OK') {
-          this.$message.success('取消作废')
-          this.getList()
-        }
-      })
-    },
     /**
      * 搜索
      */
@@ -369,22 +306,6 @@ export default {
      */
     // 查看报告
     examineReport(val) {
-      // if (val.signUrl != '') {
-      //   this.hospitalForm.hospitalName = val.hospitalName
-      //   this.hospitalForm.name = val.patientUserName
-      //   this.hospitalForm.signUrl = val.signUrl
-      //   this.hospitalForm.recordId = val.id
-      //   this.hospitalDialogVisible = true
-      // } else {
-      //   this.$router.push(
-      //     '/archivesManagement/record/heartDetail?id=' +
-      //       val.id +
-      //       '&name=' +
-      //       val.patientUserName +
-      //       '&hospitalName=' +
-      //       val.hospitalName
-      //   )
-      // }
       this.$router.push(
         '/archivesManagement/record/heartDetail?id=' +
           val.id +
@@ -392,30 +313,6 @@ export default {
           val.patientUserName +
           '&hospitalName=' +
           val.hospitalName
-      )
-    },
-    // 查看心电图
-    examineElectrocardiograph(val) {
-      let deskUrl = JSON.parse(val.reportResult).body.data.deskUrl
-      let ecgUrl = JSON.parse(val.reportResult).body.data.ecgUrl
-      if (deskUrl) {
-        window.open(deskUrl)
-      } else {
-        window.open(ecgUrl.replace('vertical', 'one_ecg'))
-      }
-    },
-    // 跳转报告详情
-    skipReportDetail() {
-      this.hospitalDialogVisible = false
-      this.$router.push(
-        '/archivesManagement/record/heartDetail?id=' +
-          this.hospitalForm.recordId +
-          '&name=' +
-          this.hospitalForm.name +
-          '&hospitalName=' +
-          this.hospitalForm.hospitalName +
-          '&isSignature=' +
-          this.hospitalForm.isSignature
       )
     },
     // 跳转用户档案
