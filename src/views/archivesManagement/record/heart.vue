@@ -197,9 +197,15 @@
         label="操作"
         width="120">
         <template slot-scope="scope">
-          <el-button size="mini"
+          <el-button v-if="scope.row.isAnalysisIng === false"
+            size="mini"
             @click="examineReport(scope.row)"
             type="primary">查看报告</el-button>
+          <!-- 正在分析中 -->
+          <el-button v-else
+            size="mini"
+            disabled
+            plain>正在分析中</el-button>
         </template>
       </el-table-column>
     </EleTable>
