@@ -2,166 +2,168 @@
   <div>
     <!-- 打印区域 -->
     <div class="print-box">
-      <div class="container"
-        id="printMe"
-        v-loading="loading">
-        <h3 class="fz18">院外便携式心电监测</h3>
-        <!-- 监测医院 时间 -->
-        <div class="userInfo top">
-          <div class="hospital">
-            <span class="title fw">监测医院：</span>
-            <span class="content"
-              contenteditable="true">{{userInfo.hospitalName}}</span>
-          </div>
-          <div class="hospital">
-            <span class="title fw">监测时间：</span>
-            <span class="content">{{parseTime(userInfo.inspectionTime)}}</span>
-          </div>
-        </div>
-        <!-- 个人详细信息 -->
-        <div class="userInfo">
-          <div class="userName flex margin">
-            <div class="box"><span class="fw txt-r">姓名</span>：
-              <span contenteditable="true"
-                v-html="userInfo.patientUserName"></span>
+      <div class="print-container">
+        <div class="container"
+          id="printMe"
+          v-loading="loading">
+          <h3 class="fz18">院外便携式心电监测</h3>
+          <!-- 监测医院 时间 -->
+          <div class="userInfo top">
+            <div class="hospital">
+              <span class="title fw">监测医院：</span>
+              <span class="content"
+                contenteditable="true">{{userInfo.hospitalName}}</span>
             </div>
-            <div class="box"><span class="fw txt-r">年龄</span>：
-              <span>{{userInfo.age}}</span>
-            </div>
-            <div class="box"><span class="fw txt-r">身份证号</span>：
-              <span>{{userInfo.idCard}}</span>
+            <div class="hospital">
+              <span class="title fw">监测时间：</span>
+              <span class="content">{{parseTime(userInfo.inspectionTime)}}</span>
             </div>
           </div>
-          <div class="userName flex margin">
-            <div class="box"><span class="fw txt-r">手机号码</span>：
-              <span>{{userInfo.patientUserPhone}}</span>
+          <!-- 个人详细信息 -->
+          <div class="userInfo">
+            <div class="userName flex margin">
+              <div class="box"><span class="fw txt-r">姓名</span>：
+                <span contenteditable="true"
+                  v-html="userInfo.patientUserName"></span>
+              </div>
+              <div class="box"><span class="fw txt-r">年龄</span>：
+                <span>{{userInfo.age}}</span>
+              </div>
+              <div class="box"><span class="fw txt-r">身份证号</span>：
+                <span>{{userInfo.idCard}}</span>
+              </div>
             </div>
-            <div class="box"><span class="fw txt-r">监测设备</span>：
-              <span>{{userInfo.name}}</span>
+            <div class="userName flex margin">
+              <div class="box"><span class="fw txt-r">手机号码</span>：
+                <span>{{userInfo.patientUserPhone}}</span>
+              </div>
+              <div class="box"><span class="fw txt-r">监测设备</span>：
+                <span>{{userInfo.name}}</span>
+              </div>
+              <div class="box"><span class="fw txt-r">监测模式</span>：
+                <span v-if="userInfo.detectType === 'DAILY'">日常监测</span>
+                <span v-else>24小时监测</span>
+              </div>
             </div>
-            <div class="box"><span class="fw txt-r">监测模式</span>：
-              <span v-if="userInfo.detectType === 'DAILY'">日常监测</span>
-              <span v-else>24小时监测</span>
-            </div>
-          </div>
-          <div class="userName flex">
-            <div class="box"><span class="fw txt-r">监测时长</span>：
-              <span>{{formatSeconds(heartDetail.length)}}</span>
-            </div>
-            <div class="box"><span class="fw txt-r">测量结果</span>：
-              <span ref="title"
-                contenteditable="true"
-                v-html="heartDetail.title"></span>
-            </div>
-            <!-- 占位符 -->
-            <div class="over box"><span class="fw"></span></div>
-          </div>
-        </div>
-        <div class="analyse">
-          <img class="analyse-img"
-            v-if="heartDetail.fileImagePath && heartDetail.fileImagePath != ''"
-            :src="heartDetail.fileImagePath"
-            alt="">
-          <div class="fz14 analyse-title">心率分析：</div>
-          <div class="flex margin resultWidth">
-            <div>
-              <span class="fw">平均心率：</span>
-              <span class="fw fz16"
-                contenteditable="true"
-                ref="avg"
-                v-html="heartDetail.avg"></span>
-              <span class="fw">bpm</span>
-            </div>
-            <div>
-              <span class="fw">最高心率：</span>
-              <span class="fw fz16"
-                contenteditable="true"
-                ref="max"
-                v-html="heartDetail.max"></span>
-              <span class="fw">bpm</span>
-            </div>
-            <div>
-              <span class="fw">最低心率：</span>
-              <span class="fw fz16"
-                contenteditable="true"
-                ref="min"
-                v-html="heartDetail.min"></span>
-              <span class="fw">bpm</span>
+            <div class="userName flex">
+              <div class="box"><span class="fw txt-r">监测时长</span>：
+                <span>{{formatSeconds(heartDetail.length)}}</span>
+              </div>
+              <div class="box"><span class="fw txt-r">测量结果</span>：
+                <span ref="title"
+                  contenteditable="true"
+                  v-html="heartDetail.title"></span>
+              </div>
+              <!-- 占位符 -->
+              <div class="over box"><span class="fw"></span></div>
             </div>
           </div>
-          <div class="flex resultWidth">
-            <div>
-              <span class="fw">正常心率：</span>
-              <span class="fw fz16"
-                contenteditable="true"
-                ref="normalRate"
-                v-html="heartDetail.normalRate"></span>
-              <span class="fw">%</span>
+          <div class="analyse">
+            <img class="analyse-img"
+              v-if="heartDetail.fileImagePath && heartDetail.fileImagePath != ''"
+              :src="heartDetail.fileImagePath"
+              alt="">
+            <div class="fz14 analyse-title">心率分析：</div>
+            <div class="flex margin resultWidth">
+              <div>
+                <span class="fw">平均心率：</span>
+                <span class="fw fz16"
+                  contenteditable="true"
+                  ref="avg"
+                  v-html="heartDetail.avg"></span>
+                <span class="fw">bpm</span>
+              </div>
+              <div>
+                <span class="fw">最高心率：</span>
+                <span class="fw fz16"
+                  contenteditable="true"
+                  ref="max"
+                  v-html="heartDetail.max"></span>
+                <span class="fw">bpm</span>
+              </div>
+              <div>
+                <span class="fw">最低心率：</span>
+                <span class="fw fz16"
+                  contenteditable="true"
+                  ref="min"
+                  v-html="heartDetail.min"></span>
+                <span class="fw">bpm</span>
+              </div>
             </div>
-            <div>
-              <span class="fw">心率偏快：</span>
-              <span class="fw fz16"
-                contenteditable="true"
-                ref="heartbeatRate"
-                v-html="heartDetail.heartbeatRate"></span>
-              <span class="fw">%</span>
-            </div>
-            <div>
-              <span class="fw">心率偏慢：</span>
-              <span class="fw fz16"
-                contenteditable="true"
-                ref="slowRate"
-                v-html="heartDetail.slowRate"></span>
-              <span class="fw">%</span>
+            <div class="flex resultWidth">
+              <div>
+                <span class="fw">正常心率：</span>
+                <span class="fw fz16"
+                  contenteditable="true"
+                  ref="normalRate"
+                  v-html="heartDetail.normalRate"></span>
+                <span class="fw">%</span>
+              </div>
+              <div>
+                <span class="fw">心率偏快：</span>
+                <span class="fw fz16"
+                  contenteditable="true"
+                  ref="heartbeatRate"
+                  v-html="heartDetail.heartbeatRate"></span>
+                <span class="fw">%</span>
+              </div>
+              <div>
+                <span class="fw">心率偏慢：</span>
+                <span class="fw fz16"
+                  contenteditable="true"
+                  ref="slowRate"
+                  v-html="heartDetail.slowRate"></span>
+                <span class="fw">%</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="impression">
-          <div class="fz14 impression-title">心电分析印象：</div>
-          <div contenteditable="true"
-            ref="ecgResultTz"
-            v-html="heartDetail.ecgResultTz"></div>
-        </div>
-        <div class="result">
-          <div class="fz14">心电分析结果：</div>
-          <div class="fz11 result-text"
-            contenteditable="true"
-            ref="ecgResult"
-            v-html="heartDetail.ecgResult"></div>
-
-          <div class="result-option">
-            <div class="fw result-title">处置建议：</div>
-            <div class="content"
+          <div class="impression">
+            <div class="fz14 impression-title">心电分析印象：</div>
+            <div contenteditable="true"
+              ref="ecgResultTz"
+              v-html="heartDetail.ecgResultTz"></div>
+          </div>
+          <div class="result">
+            <div class="fz14">心电分析结果：</div>
+            <div class="fz11 result-text"
               contenteditable="true"
-              ref="suggestion"
-              v-html="heartDetail.suggestion"></div>
-          </div>
+              ref="ecgResult"
+              v-html="heartDetail.ecgResult"></div>
 
-          <div class="result-option middle">
-            <div class="fw result-title">原因分析：</div>
-            <div class="content"
-              contenteditable="true"
-              ref="abnorAnalysis"
-              v-html="heartDetail.abnorAnalysis"></div>
-          </div>
+            <div class="result-option">
+              <div class="fw result-title">处置建议：</div>
+              <div class="content"
+                contenteditable="true"
+                ref="suggestion"
+                v-html="heartDetail.suggestion"></div>
+            </div>
 
-          <div class="result-option">
-            <div class="fw result-title">保健建议：</div>
-            <div class="content"
-              contenteditable="true"
-              ref="healthCareAdvice"
-              v-html="heartDetail.healthCareAdvice"></div>
+            <div class="result-option middle">
+              <div class="fw result-title">原因分析：</div>
+              <div class="content"
+                contenteditable="true"
+                ref="abnorAnalysis"
+                v-html="heartDetail.abnorAnalysis"></div>
+            </div>
+
+            <div class="result-option">
+              <div class="fw result-title">保健建议：</div>
+              <div class="content"
+                contenteditable="true"
+                ref="healthCareAdvice"
+                v-html="heartDetail.healthCareAdvice"></div>
+            </div>
           </div>
-        </div>
-        <!-- 底部 -->
-        <div class="footer">
-          <div class="left">
-          </div>
-          <div class="right">
-            <span class="fz14">医生签名：</span>
-            <img v-if="isSignature === true && userInfo.signUrl && userInfo.signUrl != ''"
-              class="signature"
-              :src="userInfo.signUrl">
+          <!-- 底部 -->
+          <div class="footer">
+            <div class="left">
+            </div>
+            <div class="right">
+              <span class="fz14">医生签名：</span>
+              <img v-if="isSignature === true && userInfo.signUrl && userInfo.signUrl != ''"
+                class="signature"
+                :src="userInfo.signUrl">
+            </div>
           </div>
         </div>
       </div>
@@ -573,12 +575,16 @@ body {
     }
   }
 }
+.print-container {
+  width:650px;
+}
 .container {
-  width: 100%;
-  max-width: 770px;
+  width: 90%;
+  margin: 0 auto;
   font-size: 11px;
   padding: 20px;
   box-sizing: border-box;
+  border: 1px solid #ccc;
   h3 {
     text-align: center;
   }
