@@ -226,7 +226,6 @@
                 v-debounce="[sendReport]">确定</el-button>
             </el-tooltip>
           </div>
-
         </div>
         <!-- 查看心电图 -->
         <div class="operateList">
@@ -525,10 +524,6 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-[contenteditable]:focus {
-  outline: 0px solid transparent;
-  caret-color: red;
-}
 @page {
   size: auto; /* auto is the initial value */
   margin: 3mm; /* this affects the margin in the printer settings */
@@ -542,6 +537,10 @@ html {
 body {
   border: solid 1px blue;
   margin: 10mm 15mm 10mm 15mm; /* margin you want for the content */
+}
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+  caret-color: red;
 }
 .print-box {
   margin-top: 50px;
@@ -575,9 +574,7 @@ body {
   }
 }
 #printMe {
-  position: relative;
-  border: 1px solid #ccc;
-  // margin-top: 100px;
+  // border: 1px solid #ccc;
 }
 .container {
   width: 595px;
@@ -595,10 +592,12 @@ body {
       .box {
         display: flex;
         align-items: center;
-        width: 33.3%;
+        width: 33.33%;
         .txt-r {
           display: inline-block;
-          width: 50px;
+          word-break: keep-all;
+          white-space: nowrap;
+          width: 60px;
           text-align-last: justify;
         }
       }
@@ -645,6 +644,8 @@ body {
     .result-option {
       display: flex;
       .result-title {
+        word-break: keep-all;
+        white-space: nowrap;
         line-height: 1.5;
         min-width: 60px;
       }
