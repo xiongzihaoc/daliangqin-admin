@@ -741,8 +741,8 @@ export default {
       this.getList()
     },
     handleCurrentChange(newPage) {
-      this.templatePageNum = newPage
-      this.getTemplateList()
+      this.pageNum = newPage
+      this.getList()
     },
     // 模板配置分页
     templateSizeChange(newSize) {

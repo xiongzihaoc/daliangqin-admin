@@ -178,7 +178,7 @@
               placement="top-start">
               <el-button type="primary"
                 :disabled="isAuditDisabled"
-                size="mini"
+                size="medium"
                 v-debounce="[passAudit]">审核并保存</el-button>
             </el-tooltip>
             <el-tooltip class="item"
@@ -186,10 +186,10 @@
               content="提示：将此报告恢复至待公司审核状态"
               placement="top-start">
               <el-button plain
-                size="mini"
+                size="medium"
                 @click="onReviewReport">重审该报告</el-button>
             </el-tooltip>
-            <el-button size="mini"
+            <el-button size="medium"
               type="danger"
               v-if="userInfo.auditStatus === 'INVALID'">已作废</el-button>
             <el-tooltip class="item"
@@ -198,7 +198,7 @@
               content="提示：审核通过即此报告已经经过审核"
               placement="top-start">
               <el-button plain
-                size="mini"
+                size="medium"
                 @click="onCancellation">作废</el-button>
             </el-tooltip>
           </div>
@@ -207,7 +207,7 @@
         <div class="operateList">
           <div style="margin-bottom:10px">
             <span class="tooltip">将此报告发送给:</span>
-            <el-select size="mini"
+            <el-select size="medium"
               v-model="hospitalId"
               :disabled="isHospitalDisabled"
               style="margin:0 10px;">
@@ -216,16 +216,17 @@
                 :label="item.name"
                 :value="item.id"></el-option>
             </el-select>
+            <el-tooltip class="item"
+              effect="dark"
+              content="提示：可将此报告发送给其他医院进行审核"
+              placement="top-start">
+              <el-button size="medium"
+                plain
+                :disabled="isHospitalDisabled"
+                v-debounce="[sendReport]">确定</el-button>
+            </el-tooltip>
           </div>
-          <el-tooltip class="item"
-            effect="dark"
-            content="提示：可将此报告发送给其他医院进行审核"
-            placement="top-start">
-            <el-button type="primary"
-              size="mini"
-              :disabled="isHospitalDisabled"
-              v-debounce="[sendReport]">确定</el-button>
-          </el-tooltip>
+
         </div>
         <!-- 查看心电图 -->
         <div class="operateList">
@@ -234,38 +235,32 @@
               effect="dark"
               content="提示：查看心电图即查看该用户完整的心电图"
               placement="top-start">
-              <el-button type="primary"
-                size="mini"
+              <el-button size="medium"
+                plain
                 @click="examineElectrocardiograph">查看心电图</el-button>
             </el-tooltip>
           </div>
         </div>
         <!-- 是否启用签名 -->
         <div class="operateList">
-          <div><span class="tooltip"
-              style="margin-right:10px">是否启用签名</span>
-            <el-radio-group v-model="isSignature">
-              <el-radio :label="true">是</el-radio>
-              <el-radio :label="false">否</el-radio>
-            </el-radio-group>
+          <div style="display:flex;align-items:center;">
+            <el-checkbox v-model="isSignature">启用签名</el-checkbox>
+            <div class="rightSignature">
+              <img v-if="isSignature === true && userInfo.signUrl && userInfo.signUrl != ''"
+                :src="this.userInfo.signUrl">
+            </div>
           </div>
-          <div class="rightSignature">
-            <img v-if="isSignature === true && userInfo.signUrl && userInfo.signUrl != ''"
-              :src="this.userInfo.signUrl">
-          </div>
-          <div>
-            <el-button type="primary"
-              size="mini"
-              :disabled="this.userInfo.auditStatus === 'INVALID'?true:false"
-              v-print="printObj">打印</el-button>
-            <!-- <span class="tooltip">提示：打印即将此报告纸质呈现，可选择是否启用签名</span> -->
-          </div>
+          <el-button size="medium"
+            plain
+            style="width:100%;margin-top:10px"
+            :disabled="this.userInfo.auditStatus === 'INVALID'?true:false"
+            v-print="printObj">打印</el-button>
         </div>
         <!-- 操作时间线 -->
         <div class="operateList">
           <div class="fw"
             style="margin-bottom:10px;">操作时间线</div>
-          <div class="removeScroll" style="max-width:300px;">
+          <div class="removeScroll">
             <el-steps direction="vertical"
               :active="1">
               <el-step v-for="(item,index) in stepList"
@@ -275,7 +270,6 @@
                 icon="el-icon-s-promotion"></el-step>
             </el-steps>
             <div>
-
             </div>
           </div>
         </div>
@@ -284,12 +278,22 @@
           <!-- 处置建议模板 -->
           <div class="advice">
             <h2>处置建议</h2>
-            <p>1. 建议重新测量</p>
-            <p>2. 建议定期复查</p>
-            <p>3. 建议治疗后复查</p>
-            <p>4. 建议进一步检查治疗</p>
-            <p>5. 建议转诊治疗</p>
-            <p>6. 建议转院治疗</p>
+            <p>1、建议重新测量</p>
+            <p>2、建议定期复查</p>
+            <p>3、建议治疗后复查</p>
+            <p>4、建议进一步检查治疗</p>
+            <p>5、建议转诊治疗</p>
+            <p>6、建议转院治疗</p>
+          </div>
+        </div>
+        <!-- 测量结果 -->
+        <div class="operateList">
+          <!-- 处置建议模板 -->
+          <div style="height:300px"
+            class="advice removeScroll">
+            <h2>测量结果</h2>
+            <p v-for="(item,index) in measurementList"
+              :key="index">{{item}}</p>
           </div>
         </div>
       </div>
@@ -305,12 +309,13 @@
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import { httpAdminAudit } from '@/api/admin/httpAdminAudit'
-import { parseTime, formatSeconds } from '@/utils/index'
+import { parseTime, formatSeconds, measurementList } from '@/utils/index'
 export default {
   data() {
     return {
       parseTime,
       formatSeconds,
+      measurementList,
       printObj: {
         id: 'printMe',
         popTitle: '',
@@ -337,7 +342,6 @@ export default {
   },
   mounted() {
     this.getHospitalList()
-    this.getAuditList()
   },
   methods: {
     // 获取信息
@@ -352,6 +356,7 @@ export default {
             res?.data?.elements[0]?.reportResult
           )?.body?.data
           this.loading = false
+          this.getAuditList()
         })
     },
     // 获取操作时间线信息
@@ -442,7 +447,7 @@ export default {
               this.loading = true
               this.$message.success('审核成功')
               this.getList()
-              this.getAuditList()
+              // this.getAuditList()
             }
           })
         }
@@ -461,7 +466,7 @@ export default {
           if (res.code === 'OK') {
             this.$message.success('发送成功')
             this.getList()
-            this.getAuditList()
+            // this.getAuditList()
           }
         })
       } else {
@@ -478,7 +483,7 @@ export default {
         if (res.code === 'OK') {
           this.$message.success('重审报告成功')
           this.getList()
-          this.getAuditList()
+          // this.getAuditList()
           this.hospitalId = ''
         }
       })
@@ -493,7 +498,7 @@ export default {
         if (res.code === 'OK') {
           this.$message.success('已作废')
           this.getList()
-          this.getAuditList()
+          // this.getAuditList()
         }
       })
     },
@@ -544,7 +549,8 @@ body {
   justify-content: center;
   align-items: center;
   .operate {
-    height: 860px;
+    max-width: 430px;
+    height: 840px;
     margin-left: 50px;
     padding: 20px;
     border-radius: 10px;
@@ -560,6 +566,11 @@ body {
     }
     .list {
       margin-bottom: 10px;
+      .el-button {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+      }
     }
   }
 }
@@ -697,11 +708,10 @@ body {
   }
 }
 .rightSignature {
-  margin: 10px 0;
+  margin-left: 30px;
   img {
-    width: 200px;
+    width: 260px;
     height: 70px;
-    border: 1px dashed #ccc;
     border-radius: 5px;
   }
 }
