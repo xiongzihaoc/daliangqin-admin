@@ -573,11 +573,9 @@ body {
     }
   }
 }
-#printMe {
-  // border: 1px solid #ccc;
-}
 .container {
-  width: 595px;
+  width: 100%;
+  max-width: 770px;
   font-size: 11px;
   padding: 20px;
   box-sizing: border-box;
@@ -585,10 +583,12 @@ body {
     text-align: center;
   }
   .userInfo {
-    padding: 10px 0;
+    padding: 10px 10px;
     box-sizing: border-box;
     border-top: 2px solid #000;
     .userName {
+      display: flex;
+      justify-content: space-around;
       .box {
         display: flex;
         align-items: center;
@@ -597,7 +597,7 @@ body {
           display: inline-block;
           word-break: keep-all;
           white-space: nowrap;
-          width: 60px;
+          width: 70px;
           text-align-last: justify;
         }
       }
@@ -650,7 +650,6 @@ body {
         min-width: 60px;
       }
       .content {
-        width: 473px;
         line-height: 1.5;
         text-align-last: left;
         text-align: justify;
