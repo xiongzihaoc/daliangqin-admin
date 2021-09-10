@@ -46,10 +46,16 @@
         </el-form-item>
         <el-form-item label="医师姓名"
           align="left"
-          prop="doctorUserName">
-          <el-input v-model="searchForm.doctorUserName"
+          prop="doctorUserId">
+          <el-select v-model="searchForm.doctorUserId"
             size="small"
-            placeholder="请输入医师姓名"></el-input>
+            filterable
+            placeholder="请选择医生">
+            <el-option v-for="item in doctorList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="医院名称"
           align="left">
@@ -215,6 +221,7 @@
 import EleTable from '@/components/Table'
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
 import { httpAdminAudit } from '@/api/admin/httpAdminAudit'
 import {
   parseTime,
@@ -272,6 +279,7 @@ export default {
   },
   mounted() {
     this.getHospitalList()
+    this.getDoctorList()
   },
   //离开当前页面后执行
   destroyed() {
@@ -287,7 +295,7 @@ export default {
           patientUserPhone: this.searchForm.patientUserPhone,
           detectType: this.searchForm.detectType,
           auditStatus: this.searchForm.auditStatus,
-          doctorUserName: this.searchForm.doctorUserName,
+          doctorUserId: this.searchForm.doctorUserId,
           hospitalId: this.searchForm.hospitalId,
           resultStatus: this.searchForm.resultStatus,
         })
@@ -300,6 +308,12 @@ export default {
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
+      })
+    },
+    // 获取医生列表
+    getDoctorList() {
+      httpAdminDoctor.getDoctor({ pageSize: 10000 }).then((res) => {
+        this.doctorList = res.data.elements
       })
     },
     // 作废
