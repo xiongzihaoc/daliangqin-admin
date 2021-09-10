@@ -241,7 +241,7 @@ export default {
         auditStatus: '',
         doctorUserName: '',
         hospitalId: '',
-        resultStatus: 'NORMAL',
+        resultStatus: '',
       },
       hospitalList: [],
       doctorList: [],
@@ -339,9 +339,7 @@ export default {
     // 重置
     searchReset() {
       this.pageNum = 1
-      this.searchForm = {
-        resultStatus: 'NORMAL',
-      }
+      this.searchForm = {}
       this.getList()
     },
     /**
