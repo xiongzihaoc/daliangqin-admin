@@ -663,7 +663,6 @@ export const glucoseDetectType = [
   { id: 9, label: "随机", value: "RANDOM" },
 ]
 export const resultStatus = [
-  { id: 1, label: "全部", value: "ALL" },
   { id: 2, label: "正常", value: "NORMAL" },
   { id: 3, label: "导联脱落", value: "FALL_OFF" },
   { id: 4, label: "数据干扰", value: "INTERFERENCE" },
