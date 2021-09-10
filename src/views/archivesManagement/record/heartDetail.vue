@@ -197,7 +197,7 @@
             <el-tooltip class="item"
               effect="dark"
               v-else
-              content="提示：审核通过即此报告已经经过审核"
+              content="提示：将此报告作废，如需取消，则重审该报告"
               placement="top-start">
               <el-button plain
                 size="medium"
@@ -576,7 +576,7 @@ body {
   }
 }
 .print-container {
-  width:650px;
+  width: 650px;
 }
 .container {
   width: 90%;
