@@ -22,6 +22,9 @@
         width="220">
         <template slot-scope="scope">
           <el-button size="mini"
+            plain
+            @click="examine(scope.row)">查看</el-button>
+          <el-button size="mini"
             type="primary"
             @click="editBtn(scope.row)">编辑</el-button>
           <el-button size="mini"
@@ -50,13 +53,16 @@
         </el-form-item>
         <el-form-item label="值"
           prop="configValue">
-          <el-input v-model="editAddForm.configValue"></el-input>
+          <el-input type="textarea"
+            :rows="5"
+            v-model="editAddForm.configValue"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
         class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
+        <el-button :disabled="infoTitle === '查看'"
+          type="primary"
           @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
@@ -117,7 +123,7 @@ export default {
           this.total = res.data.totalSize
         })
     },
-        /**
+    /**
      * 搜索
      */
     // 搜索
@@ -131,7 +137,7 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-        /**
+    /**
      * CRUD
      */
     // 新增
@@ -143,6 +149,11 @@ export default {
     // 编辑
     editBtn(val) {
       this.infoTitle = '编辑'
+      this.editAddForm = JSON.parse(JSON.stringify(val))
+      this.editDialogVisible = true
+    },
+    examine(val) {
+      this.infoTitle = '查看'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editDialogVisible = true
     },
@@ -197,7 +208,7 @@ export default {
         }
       })
     },
-        /**
+    /**
      * 分页
      */
     handleSizeChange(newSize) {

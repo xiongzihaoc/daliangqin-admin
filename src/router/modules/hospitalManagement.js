@@ -3,7 +3,7 @@ import Layout from '@/layout'
 const hospitalRouter = {
     path: '/hospitalManagement',
     component: Layout,
-    redirect:"/hospitalManagement/hospital",
+    redirect: "/hospitalManagement/hospital",
     meta: {
         title: '医院管理',
         icon: 'banben'
@@ -57,7 +57,7 @@ const hospitalRouter = {
                         title: '随访记录',
                         icon: 'general'
                     },
-                }, 
+                },
                 {
                     path: "followDetail",
                     name: "followDetail",
@@ -143,6 +143,16 @@ const hospitalRouter = {
 
             ],
         },
+        // AI管理
+        // {
+        //     path: 'ai',
+        //     name: 'ai',
+        //     component: () => import('@/views/hospitalManagement/AI'),
+        //     meta: {
+        //         title: 'AI管理',
+        //         icon: 'AI'
+        //     }
+        // },
     ]
 }
 export default hospitalRouter
