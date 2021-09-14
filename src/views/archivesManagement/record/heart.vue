@@ -222,7 +222,6 @@ import EleTable from '@/components/Table'
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
-import { httpAdminAudit } from '@/api/admin/httpAdminAudit'
 import {
   parseTime,
   formatSeconds,
@@ -246,7 +245,7 @@ export default {
         patientUserPhone: '',
         detectType: '',
         auditStatus: '',
-        doctorUserName: '',
+        doctorUserId: '',
         hospitalId: '',
         resultStatus: '',
       },
@@ -289,7 +288,7 @@ export default {
     getList() {
       httpAdminHeartRate
         .getHeartRate({
-          page: this.pageNum,
+          page: this.pageNum, 
           pageSize: this.pageSize,
           patientUserName: this.searchForm.patientUserName,
           patientUserPhone: this.searchForm.patientUserPhone,
@@ -314,32 +313,6 @@ export default {
     getDoctorList() {
       httpAdminDoctor.getDoctor({ pageSize: 10000 }).then((res) => {
         this.doctorList = res.data.elements
-      })
-    },
-    // 作废
-    onCancellation(val) {
-      let formData = {
-        id: val.id,
-        ecgAuditStatus: 'INVALID',
-      }
-      httpAdminAudit.postAudit(formData).then((res) => {
-        if (res.code === 'OK') {
-          this.$message.success('已作废')
-          this.getList()
-        }
-      })
-    },
-    // 取消作废
-    cancelCancellation(val) {
-      let formData = {
-        id: val.id,
-        ecgAuditStatus: 'TO_AUDIT',
-      }
-      httpAdminAudit.postAudit(formData).then((res) => {
-        if (res.code === 'OK') {
-          this.$message.success('取消作废')
-          this.getList()
-        }
       })
     },
     /**

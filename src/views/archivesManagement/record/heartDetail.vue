@@ -240,6 +240,15 @@
                 plain
                 @click="examineElectrocardiograph">查看心电图</el-button>
             </el-tooltip>
+            <el-tooltip class="item"
+              effect="dark"
+              content="提示：查看该用户动态心电图"
+              placement="top-start">
+              <a href=""></a>
+              <el-button size="medium"
+                plain
+                @click="examineDynamicElectrocardiograph">查看动态心电图</el-button>
+            </el-tooltip>
           </div>
         </div>
         <!-- 是否启用签名 -->
@@ -419,6 +428,16 @@ export default {
         window.open(ecgUrl.replace('vertical', 'one_ecg'))
       }
     },
+    // 查看动态心电图
+    examineDynamicElectrocardiograph() {
+      let dynamicElectrocarUrl = JSON.parse(this.userInfo.reportResult).body
+        .data.dynamicPdf
+      if (dynamicElectrocarUrl) {
+        window.open(dynamicElectrocarUrl)
+      } else {
+        return this.$message.error('暂无动态心电图')
+      }
+    },
     // 审核通过
     passAudit() {
       let thirdForm = {
@@ -448,7 +467,6 @@ export default {
               this.loading = true
               this.$message.success('审核成功')
               this.getList()
-              // this.getAuditList()
             }
           })
         }
@@ -467,7 +485,6 @@ export default {
           if (res.code === 'OK') {
             this.$message.success('发送成功')
             this.getList()
-            // this.getAuditList()
           }
         })
       } else {
@@ -484,7 +501,6 @@ export default {
         if (res.code === 'OK') {
           this.$message.success('重审报告成功')
           this.getList()
-          // this.getAuditList()
           this.hospitalId = ''
         }
       })
@@ -499,7 +515,6 @@ export default {
         if (res.code === 'OK') {
           this.$message.success('已作废')
           this.getList()
-          // this.getAuditList()
         }
       })
     },
