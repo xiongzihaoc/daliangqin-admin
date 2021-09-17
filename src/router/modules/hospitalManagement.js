@@ -144,15 +144,15 @@ const hospitalRouter = {
             ],
         },
         // AI管理
-        {
-            path: 'ai',
-            name: 'ai',
-            component: () => import('@/views/hospitalManagement/AI'),
-            meta: {
-                title: 'AI管理',
-                icon: 'AI'
-            }
-        },
+        // {
+        //     path: 'ai',
+        //     name: 'ai',
+        //     component: () => import('@/views/hospitalManagement/AI'),
+        //     meta: {
+        //         title: 'AI管理',
+        //         icon: 'AI'
+        //     }
+        // },
     ]
 }
 export default hospitalRouter
