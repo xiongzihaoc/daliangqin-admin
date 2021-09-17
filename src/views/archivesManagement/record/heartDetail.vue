@@ -390,6 +390,7 @@ export default {
         } else if (this.userInfo.auditStatus === 'PLATFORM_COMPLETE_AUDIT') {
           // 如果状态是公司已审核
           this.isHospitalDisabled = true
+          this.isPrintDisabled = false
         } else if (this.userInfo.auditStatus === 'TO_AUDIT') {
           // 如果状态是公司待审核
           this.isAuditDisabled = false
@@ -412,6 +413,7 @@ export default {
         ) {
           this.isAuditDisabled = true
           this.isHospitalDisabled = true
+          this.isPrintDisabled = false
           let step = this.stepList.find((item) => {
             return item.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
           })
