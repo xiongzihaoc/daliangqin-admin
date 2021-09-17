@@ -263,7 +263,7 @@
           <el-button size="medium"
             plain
             style="width:100%;margin-top:10px"
-            :disabled="this.userInfo.auditStatus === 'INVALID'?true:false"
+            :disabled="isPrintDisabled"
             v-print="printObj">打印</el-button>
         </div>
         <!-- 操作时间线 -->
@@ -343,8 +343,12 @@ export default {
       heartDetail: {},
       // 个人信息
       userInfo: {},
+      // 审核并保存按钮是否禁用
       isAuditDisabled: false,
+      // 发送给医院按钮是否禁用
       isHospitalDisabled: false,
+      // 打印按钮是否禁用
+      isPrintDisabled: false,
     }
   },
   created() {
@@ -382,6 +386,7 @@ export default {
         ) {
           this.isAuditDisabled = true
           this.isHospitalDisabled = true
+          this.isPrintDisabled = true
         } else if (this.userInfo.auditStatus === 'PLATFORM_COMPLETE_AUDIT') {
           // 如果状态是公司已审核
           this.isHospitalDisabled = true
@@ -389,12 +394,14 @@ export default {
           // 如果状态是公司待审核
           this.isAuditDisabled = false
           this.isHospitalDisabled = false
+          this.isPrintDisabled = true
         } else if (
           // 状态 医院待审核
           this.userInfo.auditStatus === 'TO_HOSPITAL_AUDIT'
         ) {
           this.isAuditDisabled = true
           this.isHospitalDisabled = true
+          this.isPrintDisabled = true
           let step = this.stepList.find((item) => {
             return item.auditStatus === 'TO_HOSPITAL_AUDIT'
           })
