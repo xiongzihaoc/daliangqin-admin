@@ -145,7 +145,6 @@
                 ref="abnorAnalysis"
                 v-html="heartDetail.abnorAnalysis"></div>
             </div>
-
             <div class="result-option">
               <div class="fw result-title">保健建议：</div>
               <div class="content"
@@ -397,7 +396,7 @@ export default {
           this.isHospitalDisabled = false
           this.isPrintDisabled = true
         } else if (
-          // 状态 医院待审核
+          // 如果状态是医院待审核
           this.userInfo.auditStatus === 'TO_HOSPITAL_AUDIT'
         ) {
           this.isAuditDisabled = true
@@ -408,7 +407,7 @@ export default {
           })
           this.hospitalId = step.hospitalId
         } else if (
-          // 状态 医院已审核
+          // 如果状态是医院已审核
           this.userInfo.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
         ) {
           this.isAuditDisabled = true
@@ -524,6 +523,7 @@ export default {
         if (res.code === 'OK') {
           this.$message.success('已作废')
           this.getList()
+          this.hospitalId = ''
         }
       })
     },

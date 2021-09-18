@@ -140,18 +140,67 @@ const hospitalRouter = {
                         icon: 'general'
                     },
                 },
-
             ],
         },
+<<<<<<< HEAD
         // AI管理
+=======
+        // AI随访
+>>>>>>> b1602d4caf36c5c420490f93bb38fe8e2332408d
         // {
         //     path: 'ai',
         //     name: 'ai',
         //     component: () => import('@/views/hospitalManagement/AI'),
+<<<<<<< HEAD
         //     meta: {
         //         title: 'AI管理',
         //         icon: 'AI'
         //     }
+=======
+        //     redirect: "/hospitalManagement/AI/task",
+        //     meta: {
+        //         title: 'AI随访',
+        //         icon: 'AI'
+        //     },
+        //     children: [
+        //         {
+        //             path: "task",
+        //             name: "task",
+        //             component: () => import('@/views/hospitalManagement/AI/task'),
+        //             meta: {
+        //                 title: '呼叫任务',
+        //                 icon: 'general'
+        //             },
+        //         },
+        //         {
+        //             path: "history",
+        //             name: "history",
+        //             component: () => import('@/views/hospitalManagement/AI/history'),
+        //             meta: {
+        //                 title: '联系历史',
+        //                 icon: 'general'
+        //             },
+        //         },
+        //         {
+        //             path: "problem",
+        //             name: "problem",
+        //             component: () => import('@/views/hospitalManagement/AI/problem'),
+        //             meta: {
+        //                 title: '通话情况汇总',
+        //                 icon: 'general'
+        //             },
+        //         },
+        //         {
+        //             path: "analysis",
+        //             name: "analysis",
+        //             component: () => import('@/views/hospitalManagement/AI/analysis/analysis'),
+        //             meta: {
+        //                 title: '通话数据统计',
+        //                 icon: 'general'
+        //             },
+        //         }
+        //     ],
+>>>>>>> b1602d4caf36c5c420490f93bb38fe8e2332408d
         // },
     ]
 }
