@@ -1,21 +1,27 @@
 <template>
   <div class="app-container">
     <div class="chart-box">
+      <!-- 外呼数据 -->
       <div class="chart">
         <OneChart />
       </div>
+      <!-- 通话状态 -->
       <div class="chart">
         <TwoChart />
       </div>
+      <!-- 通话时长(s) -->
       <div class="chart">
         <ThreeChart />
       </div>
+      <!-- 通话时长(用户数量) -->
       <div class="chart">
         <FourChart />
       </div>
+      <!-- 对话轮次 -->
       <div class="chart">
         <FiveChart />
       </div>
+      <!-- 接听率 -->
       <div class="chart">
         <SixChart />
       </div>
@@ -55,8 +61,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 800px;
-    height: 800px;
   }
 }
 </style>

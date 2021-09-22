@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
-    <div id="oneChart"></div>
+    <div id="oneChart"
+      :style="{width: '800px', height: '600px'}"></div>
   </div>
 </template>
 
@@ -13,46 +14,27 @@ export default {
   mounted() {
     let myChart = echarts.init(document.getElementById('oneChart'))
     let option = {
-      color: ['#f44'],
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow',
-        },
+      legend: {
+        orient: 'vertical',
+        x: 'right', //可设定图例在左、右、居中
+        y: 'center', //可设定图例在上、下、居中
+        padding: [0, 50, 0, 0], //可设定图例[距上方距离，距右方距离，距下方距离，距左方距离]
+        data: ['直接访问', '微信'],
       },
-      xAxis: [
-        {
-          type: 'category',
-          data: [
-            '1月',
-            '2月',
-            '3月',
-            '4月',
-            '5月',
-            '6月',
-            '7月',
-            '8月',
-            '9月',
-            '10月',
-            '11月',
-            '12月',
-          ],
-          axisTick: {
-            alignWithLabel: true,
-          },
-        },
-      ],
-      yAxis: [
-        {
-          type: 'value',
-        },
-      ],
+      xAxis: {
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      },
+      yAxis: {},
       series: [
         {
-          name: '每月花费',
+          name: '直接访问',
           type: 'bar',
-          barWidth: '60%',
-          data: [995, 666, 444, 858, 654, 236, 645, 546, 846, 225, 547, 356],
+          data: [23, 24, 18, 25, 27, 28, 25],
+        },
+        {
+          name: '微信',
+          type: 'bar',
+          data: [26, 24, 18, 22, 23, 20, 27],
         },
       ],
     }

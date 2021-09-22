@@ -11,7 +11,7 @@
           <div class="userInfo top">
             <div class="hospital">
               <span class="title fw">监测医院：</span>
-              <span class="content"
+              <span class="content minWidth"
                 contenteditable="true">{{userInfo.hospitalName}}</span>
             </div>
             <div class="hospital">
@@ -23,7 +23,7 @@
           <div class="userInfo">
             <div class="userName flex margin">
               <div class="box"><span class="fw txt-r">姓名</span>：
-                <span contenteditable="true"
+                <span contenteditable="true" class="minWidth"
                   v-html="userInfo.patientUserName"></span>
               </div>
               <div class="box"><span class="fw txt-r">年龄</span>：
@@ -50,7 +50,7 @@
                 <span>{{formatSeconds(heartDetail.length)}}</span>
               </div>
               <div class="box"><span class="fw txt-r">测量结果</span>：
-                <span ref="title"
+                <span ref="title" class="minWidth"
                   contenteditable="true"
                   v-html="heartDetail.title"></span>
               </div>
@@ -680,6 +680,7 @@ body {
         min-width: 60px;
       }
       .content {
+        min-width: 200px;
         line-height: 1.5;
         text-align-last: left;
         text-align: justify;
@@ -782,6 +783,10 @@ body {
 }
 .fw {
   font-weight: 700;
+}
+.minWidth {
+  display: inline-block;
+  min-width: 10px;
 }
 .margin {
   margin: 10px 0;
