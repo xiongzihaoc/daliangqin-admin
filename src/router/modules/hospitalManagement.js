@@ -142,7 +142,6 @@ const hospitalRouter = {
                 },
             ],
         },
-
         // AI随访
         // {
         //     path: 'ai',

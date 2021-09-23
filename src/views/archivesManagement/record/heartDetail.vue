@@ -23,7 +23,8 @@
           <div class="userInfo">
             <div class="userName flex margin">
               <div class="box"><span class="fw txt-r">姓名</span>：
-                <span contenteditable="true" class="minWidth"
+                <span contenteditable="true"
+                  class="minWidth"
                   v-html="userInfo.patientUserName"></span>
               </div>
               <div class="box"><span class="fw txt-r">年龄</span>：
@@ -50,7 +51,8 @@
                 <span>{{formatSeconds(heartDetail.length)}}</span>
               </div>
               <div class="box"><span class="fw txt-r">测量结果</span>：
-                <span ref="title" class="minWidth"
+                <span ref="title"
+                  class="minWidth"
                   contenteditable="true"
                   v-html="heartDetail.title"></span>
               </div>
