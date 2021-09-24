@@ -274,6 +274,10 @@ export default {
     if (heartSearchForm) {
       this.searchForm = heartSearchForm
     }
+    let pageNum = JSON.parse(sessionStorage.getItem('pageNum'))
+    if (pageNum) {
+      this.pageNum = pageNum
+    }
     let hospitalId = localStorage.getItem('hospitalId')
     if (hospitalId) {
       this.searchForm.hospitalId = hospitalId
@@ -324,13 +328,13 @@ export default {
      */
     // 搜索
     searchBtn() {
-      sessionStorage.setItem('heartSearchForm', JSON.stringify(this.searchForm))
       this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
       sessionStorage.removeItem('heartSearchForm')
+      sessionStorage.removeItem('pageNum')
       this.pageNum = 1
       this.searchForm = {}
       this.getList()
@@ -340,6 +344,8 @@ export default {
      */
     // 查看报告
     examineReport(val) {
+      sessionStorage.setItem('heartSearchForm', JSON.stringify(this.searchForm))
+      sessionStorage.setItem('pageNum', JSON.stringify(this.pageNum))
       this.$router.push(
         '/archivesManagement/record/heartDetail?id=' +
           val.id +
