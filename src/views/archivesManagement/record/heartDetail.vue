@@ -440,8 +440,8 @@ export default {
     },
     // 查看动态心电图
     examineDynamicElectrocardiograph() {
-      let dynamicElectrocarUrl = JSON.parse(this.userInfo.reportResult).body
-        .data.dynamicPdf
+      let dynamicElectrocarUrl = JSON.parse(this.userInfo.reportResult).body.data.dynamicPdf
+      console.log(dynamicElectrocarUrl);
       if (dynamicElectrocarUrl) {
         window.open(dynamicElectrocarUrl)
       } else {

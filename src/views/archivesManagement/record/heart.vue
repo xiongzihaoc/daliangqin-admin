@@ -270,6 +270,10 @@ export default {
     }
   },
   created() {
+    let heartSearchForm = JSON.parse(sessionStorage.getItem('heartSearchForm'))
+    if (heartSearchForm) {
+      this.searchForm = heartSearchForm
+    }
     let hospitalId = localStorage.getItem('hospitalId')
     if (hospitalId) {
       this.searchForm.hospitalId = hospitalId
@@ -288,7 +292,7 @@ export default {
     getList() {
       httpAdminHeartRate
         .getHeartRate({
-          page: this.pageNum, 
+          page: this.pageNum,
           pageSize: this.pageSize,
           patientUserName: this.searchForm.patientUserName,
           patientUserPhone: this.searchForm.patientUserPhone,
@@ -320,11 +324,13 @@ export default {
      */
     // 搜索
     searchBtn() {
+      sessionStorage.setItem('heartSearchForm', JSON.stringify(this.searchForm))
       this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
+      sessionStorage.removeItem('heartSearchForm')
       this.pageNum = 1
       this.searchForm = {}
       this.getList()
