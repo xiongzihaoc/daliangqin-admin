@@ -361,10 +361,16 @@ export default {
       })
     },
     // 更换签约
-    putArchivesDoctor(obj) {
-      httpAdminArchives.putArchivesDoctor(obj).then((res) => {
-        console.log('更换签约成功', res)
+    putArchivesDoctor(archivesDoctorDTO) {
+      httpAdminArchives.putArchivesDoctor(archivesDoctorDTO).then((res) => {
+        console.log('更换签约成功', res.message)
+        
         this.transferDialogVisible = false
+        if(res.message === '操作成功'){
+          this.openText('success', res.message)
+        }else{
+          this.openText('error', res.message)
+        }
       })
     },
     selectBeginAgeChange(val) { },
@@ -440,7 +446,15 @@ export default {
       })
       // 获取到医生id
       if (arr.length <= 0 || this.transfer.doctorName === undefined)return
-      this.putArchivesDoctor({ patientIds: arr, doctorId: this.transfer.doctorName })
+      this.putArchivesDoctor({ patientUserIds: arr, doctorUserId: this.transfer.doctorName })
+    },
+    // 提示文本
+    openText(type, text){
+       this.$message({
+         message: text,
+         type,
+       })
+        
     },
     // 跳转详细资料
     detailsBtn(val) {
