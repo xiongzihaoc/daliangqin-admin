@@ -16,4 +16,11 @@ export const httpAdminArchives = {
       data,
     })
   },
+  putArchivesDoctor(data) {
+    return request({
+      url: 'archives/putArchivesDoctor',
+      method: 'put',
+      data,
+    })
+  },
 }
