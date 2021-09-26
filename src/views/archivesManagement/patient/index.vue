@@ -364,13 +364,13 @@ export default {
     putArchivesDoctor(archivesDoctorDTO) {
       httpAdminArchives.putArchivesDoctor(archivesDoctorDTO).then((res) => {
         console.log('更换签约成功', res.message)
-        
         this.transferDialogVisible = false
         if(res.message === '操作成功'){
           this.openText('success', res.message)
         }else{
           this.openText('error', res.message)
         }
+        this.getList()
       })
     },
     selectBeginAgeChange(val) { },
