@@ -108,6 +108,11 @@
       @handleCurrentChange="handleCurrentChange"
     >
       <el-table-column align="center" label="序号" type="index"> </el-table-column>
+      <el-table-column align="center" label="医院名称" prop="hospitalName">
+      </el-table-column>
+      <el-table-column align="center" label="医师姓名" prop="doctorUserName">
+      </el-table-column>
+
       <el-table-column align="center" label="姓名" prop="patientUserName">
         <template slot-scope="scope">
           <span class="skipStyle" @click="skipPatient(scope.row)">{{
@@ -118,21 +123,21 @@
       <el-table-column align="center" label="手机号" prop="patientUserPhone">
       </el-table-column>
       <el-table-column align="center" label="身份证号" prop="idCard"> </el-table-column>
-      <el-table-column align="center" label="年龄" prop="age"> </el-table-column>
-      <el-table-column align="center" label="设备名称" prop="name"> </el-table-column>
+      <!-- <el-table-column align="center" label="年龄" prop="age"> </el-table-column> -->
+      <!-- <el-table-column align="center" label="设备名称" prop="name"> </el-table-column> -->
       <el-table-column align="center" label="设备号" prop="serialNumber">
       </el-table-column>
-      <el-table-column align="center" label="监测模式" prop="detectType">
+      <!-- <el-table-column align="center" label="监测模式" prop="detectType">
         <template slot-scope="scope">
           <span v-if="scope.row.detectType === 'DAILY'">日常监测</span>
           <span v-else>24小时监测</span>
         </template>
-      </el-table-column>
-      <el-table-column align="center" label="心率值(bpm)" prop="heartRateScore">
+      </el-table-column> -->
+      <!-- <el-table-column align="center" label="心率值(bpm)" prop="heartRateScore">
         <template slot-scope="scope">
           <span class="fw">{{ scope.row.heartRateScore }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         align="center"
         label="监测时长"
@@ -143,7 +148,7 @@
       <el-table-column align="center" label="测量结果" prop="title"> </el-table-column>
       <el-table-column align="center" label="监测日期" prop="inspectionTime">
         <template slot-scope="scope">
-          {{ parseTime(scope.row.inspectionTime) }}
+          <span style="color: #F56C6C;font-weight:700">{{ parseTime(scope.row.inspectionTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="审核状态" prop="auditStatus">
@@ -165,15 +170,12 @@
       </el-table-column>
       <el-table-column align="center" label="审核时间" prop="auditTime">
         <template slot-scope="scope">
-          {{ parseTime(scope.row.auditTime) }}
+          <span style="color:#67C23A;font-weight:700"> {{ parseTime(scope.row.auditTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="审核人" prop="auditorName">
       </el-table-column>
-      <el-table-column align="center" label="医师姓名" prop="doctorUserName">
-      </el-table-column>
-      <el-table-column align="center" label="医院名称" prop="hospitalName">
-      </el-table-column>
+
       <!-- 操作 -->
       <el-table-column align="center" label="操作" width="120">
         <template slot-scope="scope">
