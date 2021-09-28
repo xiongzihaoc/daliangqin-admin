@@ -101,9 +101,10 @@
           <el-date-picker v-model="searchForm.monitorTime"
             size="small"
             type="daterange"
-            format="yyyy-MM-dd"
+            format="yyyy-MM-dd HH:mm"
             value-format="timestamp"
             range-separator="至"
+            unlink-panels
             @change="changeMonitorTime"
             :picker-options="pickerOptions"
             start-placeholder="开始日期"
@@ -482,60 +483,113 @@ export default {
           '&isArchives=true'
       )
     },
-
-    // 导出excel
     exportExcel() {
-      this.downloadLoading = true
-      import('@/utils/vendor/Export2Excel').then(async (excel) => {
-        const headers = {
-          姓名: 'username',
-          手机号: 'mobile',
-          入职日期: 'timeOfEntry',
-          聘用形式: 'formOfEmployment',
-          转正日期: 'correctionTime',
-          工号: 'workNumber',
-          部门: 'departmentName',
-        }
-        try {
-          const { rows } = await getEmployees({ page: 1, size: this.total })
-          const data = this.formatJson(headers, rows)
-          const multiHeader = [['姓名', '主要信息', '', '', '', '', '部门']]
-          const merges = ['A1:A2', 'B1:F1', 'G1:G2']
-          excel.export_json_to_excel({
-            header: Object.keys(headers),
-            data,
-            filename: '员工数据',
-            multiHeader,
-            merges,
+      // this.DefaultData.exportExcelMax限制一下导出的总条数
+      if (this.total <= 1000) {
+        this.$confirm(
+          '确定要导出当前<strong>' + this.total + '</strong>条数据？',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+          }
+        )
+          .then(() => {
+            this.getExpportData()
           })
-        } catch (err) {
-          console.log(err)
-        }
-        this.downloadLoading = false
-      })
+          .catch(() => {})
+      } else {
+        this.$confirm(
+          '当前要导出的<strong>' +
+            this.total +
+            '</strong>条数据，数据量过大，不能一次导出！<br/>建议分时间段导出所需数据。',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            showCancelButton: false,
+          }
+        )
+          .then(() => {})
+          .catch(() => {})
+      }
     },
-    formatJson(headers, rows) {
-      // 将json数据转换成导出excel参数所需要的数组中包数组的格式
-      return rows.map((v) => {
-        // 先找到每条员工数据
-        return Object.keys(headers).map((key) => {
-          // 找到每个中文表头key，则headers[key]就是中文表头对应的英文
-          if (
-            headers[key] === 'timeOfEntry' ||
-            headers[key] === 'correctionTime'
-          ) {
-            // 转换时间格式
-            return formatDate(v[headers[key]])
-          }
-          if (headers[key] === 'formOfEmployment') {
-            const obj = employeesConstant.hireType.find(
-              (item) => item.id === v[headers[key]]
-            )
-            return obj ? obj.value : '未知'
-          }
-          return v[headers[key]]
-        })
+
+    /**
+     * 对导出数据格式处理
+     */
+    formatJson(filterVal, jsonData) {
+      return jsonData.map((v) => filterVal.map((j) => v[j]))
+    },
+
+    /**
+     * 导出的列表数据
+     */
+    getExpportData: function () {
+      const loading = this.$loading({
+        lock: true,
+        text: '正在导出，请稍等......',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)',
       })
+      const data = {
+        // phoneNo: this.formInline.phoneNo,
+        // userName: this.formInline.userName,
+        // amount: this.formInline.amount,
+        // fee: this.formInline.fee,
+        // currentPage: this.currentPage,
+        // this.DefaultData.exportExcelMax
+        pageSize: 5,
+      }
+      // 这里封装了axios，根据自身情况修改即可
+      this.http(this.ApiSetting.orderExport, data).then(
+        (res) => {
+          // handleDataList这里可以对导出的数据根据需求做下处理
+          const handleDataList = res.data.list
+          for (let i in res.data.list) {
+            handleDataList[i].amount = res.data.list[i].amount * 100
+            handleDataList[i].fee = res.data.list[i].fee + '%'
+          }
+          if (this.list.length > 0) {
+            require.ensure([], () => {
+              /* eslint-disable */
+              // 这里的径路要修改正确
+              const {
+                export_json_to_excel,
+              } = require('@/utils/vendor/Export2Excel')
+              /* eslint-enable  */
+              // 导出的表头
+              const tHeader = ['手机号码', '用户姓名', '交易金额', '手续费']
+              // 导出表头要对应的数据
+              const filterVal = ['phoneNo', 'userName', 'amount', 'fee']
+              // 如果对导出的数据没有可处理的需求，把下面的handleDataList换成res.data.list即可，删掉上面相应的代码
+              const data = this.formatJson(filterVal, handleDataList)
+              // this.DefaultData.formatLongDate.getNow()自己写的一个获取当前时间，方便查找导出后的文件。根据需求自行可处理。
+              export_json_to_excel(
+                tHeader,
+                data,
+                '订单查询列表-' + this.DefaultData.formatLongDate.getNow()
+              )
+              this.$message({
+                message: '导出成功',
+                duration: 2000,
+                type: 'success',
+              })
+            })
+          } else {
+            this.$message({
+              message: '数据出錯，请联系管理员',
+              duration: 2000,
+              type: 'warning',
+            })
+          }
+          loading.close()
+        },
+        (error) => {
+          console.log(error)
+          loading.close()
+        }
+      )
     },
     editDialogClosed() {
       this.$refs.FormRef.resetFields()

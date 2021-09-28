@@ -268,7 +268,8 @@
             v-print="printObj"
             @click="onPrint">
             打印
-            <span style="font-size:10px;color:#ccc" v-if="printCount > 0">已打印({{printCount}})</span>
+            <span style="font-size:10px;color:#ccc"
+              v-if="printCount > 0">已打印({{printCount}})</span>
           </el-button>
         </div>
         <!-- 操作时间线 -->
@@ -553,6 +554,8 @@ export default {
         localStorage.setItem('printCount', 1)
         this.printCount = printCount
       }
+      printCount = localStorage.getItem('printCount')
+      this.printCount = printCount
       this.getList()
     },
     formatTitle(val) {
