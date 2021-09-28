@@ -361,7 +361,7 @@ export default {
     putArchivesDoctor(archivesDoctorDTO) {
       httpAdminArchives.putArchivesDoctor(archivesDoctorDTO).then((res) => {
         this.transferDialogVisible = false
-        if(res.codeNumber === 1000){
+        if(res.code === 'ok'){
           this.$message.success(res.message)
         }else{
           this.$message.error(res.message)
