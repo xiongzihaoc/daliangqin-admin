@@ -1,8 +1,9 @@
 <template>
   <section class="app-main">
-    <transition name="fade-transform" mode="out-in">
+    <transition name="fade-transform"
+      mode="out-in">
       <keep-alive :include="cachedViews">
-          <router-view :key="key" />
+        <router-view :key="key" />
       </keep-alive>
     </transition>
   </section>
@@ -17,8 +18,8 @@ export default {
     },
     key() {
       return this.$route.fullPath
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -29,7 +30,7 @@ export default {
     min-height: calc(100vh - 84px);
   }
 
-  .fixed-header+.app-main {
+  .fixed-header + .app-main {
     padding-top: 84px;
   }
 }
