@@ -662,10 +662,21 @@ export const glucoseDetectType = [
   { id: 8, label: "睡前", value: "BEFOREGOINGTOBED" },
   { id: 9, label: "随机", value: "RANDOM" },
 ]
+// 心率测量结果
 export const resultStatus = [
   { id: 2, label: "正常", value: "NORMAL" },
   { id: 3, label: "导联脱落", value: "FALL_OFF" },
   { id: 4, label: "数据干扰", value: "INTERFERENCE" },
+]
+// 处置建议类型
+export const heartRateAdviceTypeList = [
+  { id: 2, label: "重新测量", value: "REMEASURE" },
+  { id: 3, label: "定期复查", value: "REGULAR_REVIEW" },
+  { id: 4, label: "治疗后复查", value: "AFTER_TREATMENT_REVIEW" },
+  { id: 5, label: "进一步检查治疗", value: "FURTHER_TREATMENT" },
+  { id: 6, label: "转诊治疗", value: "REFERRAL_TREATMENT" },
+  { id: 7, label: "转院治疗", value: "TRANSFER_TREATMENT" },
+  { id: 8, label: "其他", value: "OTHER" },
 ]
 // 测量结果
 export const measurementList = [
