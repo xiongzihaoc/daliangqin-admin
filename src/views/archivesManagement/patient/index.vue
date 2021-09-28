@@ -365,8 +365,8 @@ export default {
         }else{
           this.$message.error(res.message)
         }
-        this.getList()
         this.transferDialogVisible = false
+        this.getList()
       })
     },
     selectBeginAgeChange(val) { },
