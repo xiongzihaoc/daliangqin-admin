@@ -669,7 +669,7 @@ export const resultStatus = [
   { id: 4, label: "数据干扰", value: "INTERFERENCE" },
 ]
 // 处置建议类型
-export const heartRateAdviceTypeList = [
+export const suggestionList = [
   { id: 2, label: "重新测量", value: "REMEASURE" },
   { id: 3, label: "定期复查", value: "REGULAR_REVIEW" },
   { id: 4, label: "治疗后复查", value: "AFTER_TREATMENT_REVIEW" },
