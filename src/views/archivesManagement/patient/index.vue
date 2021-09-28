@@ -421,10 +421,8 @@ export default {
       }else{
         this.affirmBtn = false
       }
-      // console.log('医师姓名', this.transfer.doctorName)
     },
     selectDoctor() {
-      // console.log("医生id",this.transfer.doctorName)
        if (this.checkboxList.length <= 0 || this.transfer.doctorName === undefined) {
         this.affirmBtn = true
       }else{
