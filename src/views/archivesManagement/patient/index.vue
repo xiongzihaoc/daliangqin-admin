@@ -360,13 +360,13 @@ export default {
     // 更换签约
     putArchivesDoctor(archivesDoctorDTO) {
       httpAdminArchives.putArchivesDoctor(archivesDoctorDTO).then((res) => {
-        this.transferDialogVisible = false
-        if(res.code === 'ok'){
+        if(res.code === 'OK'){
           this.$message.success(res.message)
         }else{
           this.$message.error(res.message)
         }
         this.getList()
+        this.transferDialogVisible = false
       })
     },
     selectBeginAgeChange(val) { },
