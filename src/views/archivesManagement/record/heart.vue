@@ -82,10 +82,10 @@
         </el-form-item>
         <el-form-item label="处置建议"
           align="left">
-          <el-select v-model="searchForm.heartRateAdviceType"
+          <el-select v-model="searchForm.suggestion"
             size="small"
             placeholder="请选择监测结果">
-            <el-option v-for="item in heartRateAdviceTypeList"
+            <el-option v-for="item in suggestionList"
               :key="item.id"
               :label="item.label"
               :value="item.value"></el-option>
@@ -100,7 +100,7 @@
         <el-form-item label="监测日期">
           <el-date-picker v-model="searchForm.monitorTime"
             size="small"
-            type="datetimerange"
+            type="daterange"
             format="yyyy-MM-dd"
             value-format="timestamp"
             range-separator="至"
@@ -191,7 +191,7 @@
         prop="title"> </el-table-column>
       <el-table-column align="center"
         label="处置建议"
-        prop="healthCareAdvice"
+        prop="suggestion"
         show-overflow-tooltip> </el-table-column>
       <el-table-column align="center"
         label="心电分析结果"
@@ -261,7 +261,7 @@ import {
   resultStatus,
   auditStatus,
   formatterElement,
-  heartRateAdviceTypeList,
+  suggestionList,
 } from '@/utils/index'
 export default {
   components: {
@@ -273,7 +273,7 @@ export default {
       formatSeconds,
       resultStatus,
       auditStatus,
-      heartRateAdviceTypeList,
+      suggestionList,
       formatterElement,
       // 搜索表单
       searchForm: {
@@ -285,7 +285,7 @@ export default {
         hospitalId: '',
         resultStatus: '',
         ecgResult: '',
-        heartRateAdviceType: '',
+        suggestion: '',
         // 监测时间
         monitorTime: [],
         startTime: '',
@@ -354,27 +354,19 @@ export default {
     }
   },
   created() {
-    // let heartSearchForm = JSON.parse(sessionStorage.getItem('heartSearchForm'))
-    // if (heartSearchForm) {
-    //   this.searchForm = heartSearchForm
-    // }
-    // let pageNum = JSON.parse(sessionStorage.getItem('pageNum'))
-    // if (pageNum) {
-    //   this.pageNum = pageNum
-    // }
-    // let hospitalId = localStorage.getItem('hospitalId')
-    // if (hospitalId) {
-    //   this.searchForm.hospitalId = hospitalId
-    // }
+    let heartSearchForm = JSON.parse(sessionStorage.getItem('heartSearchForm'))
+    if (heartSearchForm) {
+      this.searchForm = heartSearchForm
+    }
+    let pageNum = JSON.parse(sessionStorage.getItem('pageNum'))
+    if (pageNum) {
+      this.pageNum = pageNum
+    }
     this.getList()
   },
   mounted() {
     this.getHospitalList()
     this.getDoctorList()
-  },
-  //离开当前页面后执行
-  destroyed() {
-    localStorage.removeItem('hospitalId')
   },
   methods: {
     getList() {
@@ -390,7 +382,7 @@ export default {
           hospitalId: this.searchForm.hospitalId,
           resultStatus: this.searchForm.resultStatus,
           ecgResult: this.searchForm.ecgResult,
-          heartRateAdviceType: this.searchForm.heartRateAdviceType,
+          heartRateAdviceType: this.searchForm.suggestion,
           startTime: this.searchForm.startTime,
           endTime: this.searchForm.endTime,
         })
@@ -426,8 +418,8 @@ export default {
     },
     // 重置
     searchReset() {
-      // sessionStorage.removeItem('heartSearchForm')
-      // sessionStorage.removeItem('pageNum')
+      sessionStorage.removeItem('heartSearchForm')
+      sessionStorage.removeItem('pageNum')
       this.pageNum = 1
       this.searchForm = {}
       this.getList()
@@ -446,8 +438,8 @@ export default {
         },
       })
       window.open(routeData.href, '_blank')
-      // sessionStorage.setItem('heartSearchForm', JSON.stringify(this.searchForm))
-      // sessionStorage.setItem('pageNum', JSON.stringify(this.pageNum))
+      sessionStorage.setItem('heartSearchForm', JSON.stringify(this.searchForm))
+      sessionStorage.setItem('pageNum', JSON.stringify(this.pageNum))
       // this.$router.push(
       //   '/archivesManagement/record/heartDetail?id=' +
       //     val.id +

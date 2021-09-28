@@ -669,14 +669,13 @@ export const resultStatus = [
   { id: 4, label: "数据干扰", value: "INTERFERENCE" },
 ]
 // 处置建议类型
-export const heartRateAdviceTypeList = [
+export const suggestionList = [
   { id: 2, label: "重新测量", value: "REMEASURE" },
   { id: 3, label: "定期复查", value: "REGULAR_REVIEW" },
   { id: 4, label: "治疗后复查", value: "AFTER_TREATMENT_REVIEW" },
   { id: 5, label: "进一步检查治疗", value: "FURTHER_TREATMENT" },
   { id: 6, label: "转诊治疗", value: "REFERRAL_TREATMENT" },
   { id: 7, label: "转院治疗", value: "TRANSFER_TREATMENT" },
-  { id: 8, label: "其他", value: "OTHER" },
 ]
 // 测量结果
 export const measurementList = [
