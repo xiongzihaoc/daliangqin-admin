@@ -132,7 +132,6 @@
               contenteditable="true"
               ref="ecgResult"
               v-html="heartDetail.ecgResult"></div>
-
             <div class="result-option">
               <div class="fw result-title">处置建议：</div>
               <div class="content"
@@ -140,7 +139,6 @@
                 ref="suggestion"
                 v-html="heartDetail.suggestion"></div>
             </div>
-
             <div class="result-option middle">
               <div class="fw result-title">原因分析：</div>
               <div class="content"
@@ -263,10 +261,15 @@
             </div>
           </div>
           <el-button size="medium"
-            plain
-            style="width:100%;margin-top:10px"
+            :plain="printType === 'primary'?false:true"
+            :type="printType"
+            class="w100 printBtn"
             :disabled="isPrintDisabled"
-            v-print="printObj">打印</el-button>
+            v-print="printObj"
+            @click="onPrint">
+            打印
+            <span style="font-size:10px;color:#ccc" v-if="printCount > 0">已打印({{printCount}})</span>
+          </el-button>
         </div>
         <!-- 操作时间线 -->
         <div class="operateList">
@@ -343,6 +346,9 @@ export default {
       isSignature: true,
       // 心率信息
       heartDetail: {},
+      // 打印次数
+      printCount: null,
+      printType: '',
       // 个人信息
       userInfo: {},
       // 审核并保存按钮是否禁用
@@ -354,6 +360,11 @@ export default {
     }
   },
   created() {
+    let printCount = localStorage.getItem('printCount')
+    if (printCount) {
+      this.printType = 'primary'
+      this.printCount = printCount
+    }
     this.getList()
   },
   mounted() {
@@ -530,6 +541,19 @@ export default {
           this.hospitalId = ''
         }
       })
+    },
+    // 记录打印次数
+    onPrint() {
+      let printCount = localStorage.getItem('printCount')
+      this.printType = 'primary'
+      if (printCount) {
+        localStorage.setItem('printCount', Number(printCount) + 1)
+        this.printCount = printCount
+      } else {
+        localStorage.setItem('printCount', 1)
+        this.printCount = printCount
+      }
+      this.getList()
     },
     formatTitle(val) {
       switch (val.auditStatus) {
@@ -749,6 +773,9 @@ body {
     height: 70px;
     border-radius: 5px;
   }
+}
+.printBtn {
+  margin-top: 10px;
 }
 .ecgResultTz {
   line-height: 1.5;

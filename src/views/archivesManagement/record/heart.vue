@@ -82,10 +82,10 @@
         </el-form-item>
         <el-form-item label="处置建议"
           align="left">
-          <el-select v-model="searchForm.heartRateAdviceType"
+          <el-select v-model="searchForm.suggestion"
             size="small"
             placeholder="请选择监测结果">
-            <el-option v-for="item in heartRateAdviceTypeList"
+            <el-option v-for="item in suggestionList"
               :key="item.id"
               :label="item.label"
               :value="item.value"></el-option>
@@ -191,7 +191,7 @@
         prop="title"> </el-table-column>
       <el-table-column align="center"
         label="处置建议"
-        prop="healthCareAdvice"
+        prop="suggestion"
         show-overflow-tooltip> </el-table-column>
       <el-table-column align="center"
         label="心电分析结果"
@@ -261,7 +261,7 @@ import {
   resultStatus,
   auditStatus,
   formatterElement,
-  heartRateAdviceTypeList,
+  suggestionList,
 } from '@/utils/index'
 export default {
   components: {
@@ -273,7 +273,7 @@ export default {
       formatSeconds,
       resultStatus,
       auditStatus,
-      heartRateAdviceTypeList,
+      suggestionList,
       formatterElement,
       // 搜索表单
       searchForm: {
@@ -285,7 +285,7 @@ export default {
         hospitalId: '',
         resultStatus: '',
         ecgResult: '',
-        heartRateAdviceType: '',
+        suggestion: '',
         // 监测时间
         monitorTime: [],
         startTime: '',
@@ -382,7 +382,7 @@ export default {
           hospitalId: this.searchForm.hospitalId,
           resultStatus: this.searchForm.resultStatus,
           ecgResult: this.searchForm.ecgResult,
-          heartRateAdviceType: this.searchForm.heartRateAdviceType,
+          heartRateAdviceType: this.searchForm.suggestion,
           startTime: this.searchForm.startTime,
           endTime: this.searchForm.endTime,
         })

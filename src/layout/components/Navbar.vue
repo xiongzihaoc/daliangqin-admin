@@ -62,15 +62,19 @@ export default {
   data() {
     return {
       userInfo: {
-        avatarUrl: '',
-        name: '111',
-        hospitalName: '杭州萧山医院',
+        avatarUrl:
+          'http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png',
+        name: 'test',
+        hospitalName: 'test',
         phone: '18682308445',
       },
     }
   },
   created() {
-    this.userInfo = JSON.parse(window.localStorage.getItem('adminUserInfo'))
+    let userInfo = JSON.parse(window.localStorage.getItem('adminUserInfo'))
+    if (userInfo) {
+      this.userInfo = userInfo
+    }
   },
   computed: {
     ...mapGetters(['sidebar', 'avatar', 'device']),
