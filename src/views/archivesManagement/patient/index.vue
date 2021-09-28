@@ -349,27 +349,23 @@ export default {
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
-        console.log(this.hospitalList)
       })
     },
     // 获取医生列表
     getDoctor(hospitalId) {
-      console.log('医院ID', hospitalId)
       httpAdminDoctor.getDoctor({ hospitalId, pageSize: 10000 }).then((res) => {
         this.doctorList = res.data.elements
-        console.log('医生列表', this.doctorList)
       })
     },
     // 更换签约
     putArchivesDoctor(archivesDoctorDTO) {
       httpAdminArchives.putArchivesDoctor(archivesDoctorDTO).then((res) => {
-        console.log('更换签约成功', res.message)
-        this.transferDialogVisible = false
-        if(res.message === '操作成功'){
-          this.openText('success', res.message)
+        if(res.code === 'OK'){
+          this.$message.success(res.message)
         }else{
-          this.openText('error', res.message)
+          this.$message.error(res.message)
         }
+        this.transferDialogVisible = false
         this.getList()
       })
     },
@@ -405,7 +401,6 @@ export default {
     },
     // 列表选择
     selectCheckbox(selection, row) {
-      console.log('列表选择', selection)
       this.checkboxList = selection
       if (selection.length > 0) {
         this.transferBtn = false
@@ -419,7 +414,6 @@ export default {
     },
     // 转移 选择医院
     selectHospital(hospitalId) {
-      console.log('医院ID', hospitalId)
       this.getDoctor(hospitalId)
       this.transfer.doctorName = ''
       if (this.checkboxList.length <= 0 || this.transfer.doctorName === '') {
@@ -427,10 +421,8 @@ export default {
       }else{
         this.affirmBtn = false
       }
-      // console.log('医师姓名', this.transfer.doctorName)
     },
     selectDoctor() {
-      // console.log("医生id",this.transfer.doctorName)
        if (this.checkboxList.length <= 0 || this.transfer.doctorName === undefined) {
         this.affirmBtn = true
       }else{
@@ -447,14 +439,6 @@ export default {
       // 获取到医生id
       if (arr.length <= 0 || this.transfer.doctorName === undefined)return
       this.putArchivesDoctor({ patientUserIds: arr, doctorUserId: this.transfer.doctorName })
-    },
-    // 提示文本
-    openText(type, text){
-       this.$message({
-         message: text,
-         type,
-       })
-        
     },
     // 跳转详细资料
     detailsBtn(val) {

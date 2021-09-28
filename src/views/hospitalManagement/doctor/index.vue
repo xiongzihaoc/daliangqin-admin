@@ -366,12 +366,10 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      console.log(val)
       this.editVal = val
       this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editDialogVisible = true
-      console.log('医生数据', this.editAddForm.patientCount)
     },
     // 删除多个
     deleteMultiple() { },
