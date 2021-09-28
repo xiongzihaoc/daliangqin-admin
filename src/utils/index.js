@@ -676,7 +676,6 @@ export const heartRateAdviceTypeList = [
   { id: 5, label: "进一步检查治疗", value: "FURTHER_TREATMENT" },
   { id: 6, label: "转诊治疗", value: "REFERRAL_TREATMENT" },
   { id: 7, label: "转院治疗", value: "TRANSFER_TREATMENT" },
-  { id: 8, label: "其他", value: "OTHER" },
 ]
 // 测量结果
 export const measurementList = [
