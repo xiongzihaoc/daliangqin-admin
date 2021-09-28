@@ -9,8 +9,8 @@
         <img v-if="logo"
           src="../../../assets/images/logo.png"
           class="sidebar-logo">
-        <!-- <h1 v-else
-          class="sidebar-title">{{ title }} </h1> -->
+        <h1 v-else
+          class="sidebar-title">{{ title }} </h1>
       </router-link>
       <router-link v-else
         key="expand"
@@ -19,7 +19,7 @@
         <img v-if="logo"
           src="../../../assets/images/logo.png"
           class="sidebar-logo">
-        <!-- <h1 class="sidebar-title">{{ title }} </h1> -->
+        <h1 class="sidebar-title">{{ title }} </h1>
       </router-link>
     </transition>
   </div>
@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: "SidebarLogo",
+  name: 'SidebarLogo',
   props: {
     collapse: {
       type: Boolean,
@@ -36,11 +36,11 @@ export default {
   },
   data() {
     return {
-      title: "大良卿",
-      logo: "../../../assets/images/logo.png",
-    };
+      title: '大良卿',
+      logo: '../../../assets/images/logo.png',
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

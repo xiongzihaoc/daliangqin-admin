@@ -97,6 +97,20 @@
             size="small"
             placeholder="请输入心电分析结果"></el-input>
         </el-form-item>
+        <el-form-item label="监测日期">
+          <el-date-picker v-model="searchForm.monitorTime"
+            size="small"
+            type="datetimerange"
+            format="yyyy-MM-dd"
+            value-format="timestamp"
+            range-separator="至"
+            @change="changeMonitorTime"
+            :picker-options="pickerOptions"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+          </el-date-picker>
+        </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
             type="primary"
@@ -247,7 +261,7 @@ import {
   resultStatus,
   auditStatus,
   formatterElement,
-  heartRateAdviceTypeList
+  heartRateAdviceTypeList,
 } from '@/utils/index'
 export default {
   components: {
@@ -261,6 +275,7 @@ export default {
       auditStatus,
       heartRateAdviceTypeList,
       formatterElement,
+      // 搜索表单
       searchForm: {
         patientUserName: '',
         patientUserPhone: '',
@@ -269,13 +284,59 @@ export default {
         doctorUserId: '',
         hospitalId: '',
         resultStatus: '',
-        ecgResult:"",
-        heartRateAdviceType:""
+        ecgResult: '',
+        heartRateAdviceType: '',
+        // 监测时间
+        monitorTime: [],
+        startTime: '',
+        endTime: '',
+      },
+      // 日期选择配置项
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime())
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            },
+          },
+        ],
       },
       hospitalList: [],
       doctorList: [],
       patientList: [],
       list: [],
+      // 跳转携带参数
       hospitalForm: {
         recordId: '',
         hospitalName: '',
@@ -293,18 +354,18 @@ export default {
     }
   },
   created() {
-    let heartSearchForm = JSON.parse(sessionStorage.getItem('heartSearchForm'))
-    if (heartSearchForm) {
-      this.searchForm = heartSearchForm
-    }
-    let pageNum = JSON.parse(sessionStorage.getItem('pageNum'))
-    if (pageNum) {
-      this.pageNum = pageNum
-    }
-    let hospitalId = localStorage.getItem('hospitalId')
-    if (hospitalId) {
-      this.searchForm.hospitalId = hospitalId
-    }
+    // let heartSearchForm = JSON.parse(sessionStorage.getItem('heartSearchForm'))
+    // if (heartSearchForm) {
+    //   this.searchForm = heartSearchForm
+    // }
+    // let pageNum = JSON.parse(sessionStorage.getItem('pageNum'))
+    // if (pageNum) {
+    //   this.pageNum = pageNum
+    // }
+    // let hospitalId = localStorage.getItem('hospitalId')
+    // if (hospitalId) {
+    //   this.searchForm.hospitalId = hospitalId
+    // }
     this.getList()
   },
   mounted() {
@@ -330,6 +391,8 @@ export default {
           resultStatus: this.searchForm.resultStatus,
           ecgResult: this.searchForm.ecgResult,
           heartRateAdviceType: this.searchForm.heartRateAdviceType,
+          startTime: this.searchForm.startTime,
+          endTime: this.searchForm.endTime,
         })
         .then((res) => {
           this.list = res.data.elements
@@ -348,18 +411,23 @@ export default {
         this.doctorList = res.data.elements
       })
     },
+    // 选择监测日期
+    changeMonitorTime(val) {
+      console.log(val)
+      this.searchForm.startTime = val[0]
+      this.searchForm.endTime = val[1]
+    },
     /**
      * 搜索
      */
-    // 搜索
     searchBtn() {
       this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
-      sessionStorage.removeItem('heartSearchForm')
-      sessionStorage.removeItem('pageNum')
+      // sessionStorage.removeItem('heartSearchForm')
+      // sessionStorage.removeItem('pageNum')
       this.pageNum = 1
       this.searchForm = {}
       this.getList()
@@ -378,8 +446,8 @@ export default {
         },
       })
       window.open(routeData.href, '_blank')
-      sessionStorage.setItem('heartSearchForm', JSON.stringify(this.searchForm))
-      sessionStorage.setItem('pageNum', JSON.stringify(this.pageNum))
+      // sessionStorage.setItem('heartSearchForm', JSON.stringify(this.searchForm))
+      // sessionStorage.setItem('pageNum', JSON.stringify(this.pageNum))
       // this.$router.push(
       //   '/archivesManagement/record/heartDetail?id=' +
       //     val.id +
@@ -422,6 +490,7 @@ export default {
           '&isArchives=true'
       )
     },
+
     // 导出excel
     exportExcel() {
       this.downloadLoading = true

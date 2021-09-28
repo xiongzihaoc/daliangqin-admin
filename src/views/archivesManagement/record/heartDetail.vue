@@ -123,6 +123,7 @@
             <div class="fz14 impression-title">心电分析印象：</div>
             <div contenteditable="true"
               ref="ecgResultTz"
+              class="ecgResultTz"
               v-html="heartDetail.ecgResultTz"></div>
           </div>
           <div class="result">
@@ -440,8 +441,9 @@ export default {
     },
     // 查看动态心电图
     examineDynamicElectrocardiograph() {
-      let dynamicElectrocarUrl = JSON.parse(this.userInfo.reportResult).body.data.dynamicPdf
-      console.log(dynamicElectrocarUrl);
+      let dynamicElectrocarUrl = JSON.parse(this.userInfo.reportResult).body
+        .data.dynamicPdf
+      console.log(dynamicElectrocarUrl)
       if (dynamicElectrocarUrl) {
         window.open(dynamicElectrocarUrl)
       } else {
@@ -747,6 +749,9 @@ body {
     height: 70px;
     border-radius: 5px;
   }
+}
+.ecgResultTz {
+  line-height: 1.5;
 }
 .advice {
   font-size: 11px;
