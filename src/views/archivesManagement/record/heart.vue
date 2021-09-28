@@ -100,7 +100,7 @@
         <el-form-item label="监测日期">
           <el-date-picker v-model="searchForm.monitorTime"
             size="small"
-            type="datetimerange"
+            type="daterange"
             format="yyyy-MM-dd"
             value-format="timestamp"
             range-separator="至"
@@ -367,10 +367,6 @@ export default {
   mounted() {
     this.getHospitalList()
     this.getDoctorList()
-  },
-  //离开当前页面后执行
-  destroyed() {
-    localStorage.removeItem('hospitalId')
   },
   methods: {
     getList() {
