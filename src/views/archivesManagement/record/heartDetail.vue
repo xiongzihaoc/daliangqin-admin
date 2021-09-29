@@ -405,6 +405,9 @@ export default {
           this.isAuditDisabled = true
           this.isHospitalDisabled = true
           this.isPrintDisabled = true
+          this.printType = ''
+          this.printCount = null
+          localStorage.removeItem('printCount')
         } else if (this.userInfo.auditStatus === 'PLATFORM_COMPLETE_AUDIT') {
           // 如果状态是公司已审核
           this.isHospitalDisabled = true
@@ -414,6 +417,9 @@ export default {
           this.isAuditDisabled = false
           this.isHospitalDisabled = false
           this.isPrintDisabled = true
+          this.printType = ''
+          this.printCount = null
+          localStorage.removeItem('printCount')
         } else if (
           // 如果状态是医院待审核
           this.userInfo.auditStatus === 'TO_HOSPITAL_AUDIT'
@@ -425,6 +431,9 @@ export default {
             return item.auditStatus === 'TO_HOSPITAL_AUDIT'
           })
           this.hospitalId = step.hospitalId
+                    this.printType = ''
+          this.printCount = null
+          localStorage.removeItem('printCount')
         } else if (
           // 如果状态是医院已审核
           this.userInfo.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
