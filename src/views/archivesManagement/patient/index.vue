@@ -130,7 +130,7 @@
       v-loading="loading"
     >
       <!-- 操作 -->
-      <el-table-column slot="fixed" fixed="left" type="selection"></el-table-column>
+      <el-table-column slot="fixed" fixed="left" type="selection" :selectable="selectable"></el-table-column>
       <el-table-column align="center" slot="fixed" fixed="right" label="操作" width="120">
         <template slot-scope="scope">
           <el-button size="mini" @click="detailsBtn(scope.row)" type="primary">详细资料</el-button>
@@ -429,7 +429,7 @@ export default {
     selectDoctor() {
       const all = (arr, fn = Boolean) => arr.every(fn)
       let doctorIdJudge = all(this.checkboxList, x => x.doctorUserId === this.transfer.doctorName)
-      if(doctorIdJudge === true){
+      if (doctorIdJudge === true) {
         this.affirmBtn = true
         this.$message.error('当前用户的医师未发生改变，请核对')
         return
@@ -441,19 +441,26 @@ export default {
       }
       this.$forceUpdate()
     },
+    // 是否建档
+    selectable(row, index) {
+      console.log('多选框', row.isArchives)
+      return row.isArchives
+    },
     // 转诊确认
     transferAffirm() {
       let arr = []
       this.checkboxList.forEach((val, idx) => {
-        arr.push(val.id)
+        console.log('是否建档', val.isArchives)
+        if (val.isArchives) {
+          arr.push(val.id)
+        }
       })
       // 获取到医生id
       if (arr.length <= 0 || this.transfer.doctorName === undefined) return
-      // return
       this.putArchivesDoctor({ patientUserIds: arr, doctorUserId: this.transfer.doctorName })
     },
     // 转诊取消
-    transferCancel(){
+    transferCancel() {
       this.transferDialogVisible = false
       this.transfer = {}
     },
@@ -465,6 +472,7 @@ export default {
       })
       localStorage.setItem('patientNum', this.pageNum)
     },
+
     /***** 表格格式化内容区域 *****/
     // 出生年月
     genderFormatter(row) {
