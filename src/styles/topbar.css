@@ -1,0 +1,89 @@
+.top-nav {
+  margin-left: 40px;
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.top-nav .log {
+  padding: 0 20px;
+  line-height: 54px;
+  font-size: 24px;
+  font-weight: bold;
+  float: left;
+}
+
+.top-nav .el-menu {
+  float: left;
+  border: none !important;
+  background-color: #fff;
+}
+
+.top-nav .el-menu .nav-item {
+  display: inline-block;
+}
+
+.top-nav .el-menu .nav-item .el-menu-item {
+  color: #bfcbd9;
+  font-size: 16px;
+}
+
+.top-nav .el-menu .nav-item .el-menu-item:hover {
+  background-color: #fff !important;
+}
+
+.top-nav .el-menu .nav-item .el-menu-item:focus {
+  background-color: #fff !important;
+}
+
+.top-nav .right-menu {
+  float: right;
+  height: 100%;
+}
+
+.top-nav .right-menu:focus {
+  outline: none;
+}
+
+.top-nav .right-menu .right-menu-item {
+  display: inline-block;
+  padding: 0 8px;
+  height: 100%;
+  font-size: 18px;
+  color: #5a5e66;
+  vertical-align: text-bottom;
+}
+
+.top-nav .right-menu .right-menu-item.hover-effect {
+  cursor: pointer;
+  transition: background .3s;
+}
+
+.top-nav .right-menu .right-menu-item.hover-effect:hover {
+  background: rgba(0, 0, 0, 0.025);
+}
+
+.top-nav .right-menu .avatar-container {
+  margin-right: 30px;
+}
+
+.top-nav .right-menu .avatar-container .avatar-wrapper {
+  margin-top: 5px;
+  position: relative;
+}
+
+.top-nav .right-menu .avatar-container .avatar-wrapper .user-avatar {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+.top-nav .right-menu .avatar-container .avatar-wrapper .el-icon-caret-bottom {
+  cursor: pointer;
+  position: absolute;
+  right: -20px;
+  top: 25px;
+  font-size: 12px;
+}
