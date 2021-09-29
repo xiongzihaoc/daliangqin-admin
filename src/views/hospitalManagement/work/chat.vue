@@ -21,15 +21,19 @@
         </el-form-item>
         <el-form-item label="留言时间"
           prop="leaveTime">
-          <el-date-picker v-model="searchForm.leaveTime"
+          <el-date-picker class="w100"
+            v-model="searchForm.leaveTime"
+            type="daterange"
             size="small"
-            type="datetimerange"
+            align="right"
+            unlink-panels
+            value-format='timestamp'
             @change="selectLeaveTime"
-            format="yyyy-MM-dd HH:mm"
-            value-format="timestamp"
+            :default-time="defaultTime"
             range-separator="至"
             start-placeholder="开始日期"
-            end-placeholder="结束日期">
+            end-placeholder="结束日期"
+            :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="医生姓名"
@@ -47,15 +51,19 @@
         </el-form-item>
         <el-form-item label="回复时间"
           prop="replyTime">
-          <el-date-picker v-model="searchForm.replyTime"
+          <el-date-picker class="w100"
+            v-model="searchForm.replyTime"
+            type="daterange"
             size="small"
-            type="datetimerange"
+            align="right"
+            unlink-panels
+            value-format='timestamp'
             @change="selectReplyTime"
-            value-format="timestamp"
-            format="yyyy-MM-dd HH:mm"
+            :default-time="defaultTime"
             range-separator="至"
             start-placeholder="开始日期"
-            end-placeholder="结束日期">
+            end-placeholder="结束日期"
+            :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -209,6 +217,39 @@ export default {
           },
         },
       ],
+      defaultTime: ['00:00:00', '23:59:59'],
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              const start = new Date(new Date().toLocaleDateString()).getTime()
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 6
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 30
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+        ],
+      },
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -280,7 +321,7 @@ export default {
       this.searchForm.replyStartTime = val[0]
       this.searchForm.replayEndTime = val[1]
     },
-        /**
+    /**
      * 搜索
      */
     // 搜索
@@ -294,7 +335,7 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-        /**
+    /**
      * CRUD
      */
     // 查看
@@ -340,7 +381,7 @@ export default {
         }
       })
     },
-        /**
+    /**
      * 分页
      */
     handleSizeChange(newSize) {

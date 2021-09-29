@@ -92,15 +92,17 @@
         </el-form-item>
         <el-form-item label="随访时间">
           <el-date-picker v-model="searchForm.followTime"
+            type="daterange"
+            align="right"
             size="small"
+            unlink-panels
+            value-format='timestamp'
             @change="selectFollowTime"
-            type="datetimerange"
-            value-format="timestamp"
-            format="yyyy-MM-dd HH:mm"
+            :default-time="defaultTime"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            align="right">
+            :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="用户状态">
@@ -289,6 +291,39 @@ export default {
           },
         },
       ],
+      defaultTime: ['00:00:00', '23:59:59'],
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              const start = new Date(new Date().toLocaleDateString()).getTime()
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 6
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 30
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+        ],
+      },
       // 分页区域
       pageSize: 10,
       pageNum: 1,

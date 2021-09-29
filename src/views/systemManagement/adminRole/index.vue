@@ -147,10 +147,9 @@
       </span>
     </el-dialog>
     <!-- 二维码放大页面 -->
-    <!-- @closed="QRDialogClosed" -->
     <el-dialog title="二维码"
       :visible.sync="QRDialogVisible"
-      width="40%"
+      width="30%"
       v-dialogDrag>
       <div class="openQRcode">
         <vue-qr :size="288"

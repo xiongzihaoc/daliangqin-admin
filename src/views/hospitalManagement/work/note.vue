@@ -48,14 +48,17 @@
         <el-form-item label="发布时间"
           prop="status">
           <el-date-picker v-model="searchForm.noteTime"
+            type="daterange"
+            align="right"
             size="small"
-            type="datetimerange"
+            unlink-panels
+            value-format='timestamp'
             @change="selectNoteTime"
-            format="yyyy-MM-dd HH:mm"
-            value-format="timestamp"
+            :default-time="defaultTime"
             range-separator="至"
             start-placeholder="开始日期"
-            end-placeholder="结束日期">
+            end-placeholder="结束日期"
+            :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -148,7 +151,7 @@ export default {
         startTime: '',
         endTime: '',
       },
-      hospitalList:[],
+      hospitalList: [],
       list: [],
       editAddForm: {
         userName: '',
@@ -156,6 +159,39 @@ export default {
         linkUrl: '',
         type: '',
         status: '',
+      },
+      defaultTime: ['00:00:00', '23:59:59'],
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              const start = new Date(new Date().toLocaleDateString()).getTime()
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 6
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 30
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+        ],
       },
       tableHeaderBig: [],
       // 分页区域

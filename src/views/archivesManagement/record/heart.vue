@@ -100,15 +100,16 @@
         <el-form-item label="监测日期">
           <el-date-picker v-model="searchForm.monitorTime"
             size="small"
-            type="datetimerange"
-            format="yyyy-MM-dd HH:mm"
-            value-format="timestamp"
-            range-separator="至"
+            type="daterange"
+            align="right"
             unlink-panels
+            value-format='timestamp'
             @change="changeMonitorTime"
+            :default-time="defaultTime"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            align="right">
+            :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -146,7 +147,6 @@
         label="医师姓名"
         prop="doctorUserName">
       </el-table-column>
-
       <el-table-column align="center"
         label="姓名"
         prop="patientUserName">
@@ -304,6 +304,42 @@ export default {
         isSignature: '1',
       },
       tableHeaderBig: [],
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > new Date().getTime()
+        },
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              const start = new Date(new Date().toLocaleDateString()).getTime()
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 6
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 30
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+        ],
+      },
+      defaultTime: ['00:00:00', '23:59:59'],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -376,6 +412,7 @@ export default {
     },
     // 选择监测日期
     changeMonitorTime(val) {
+      console.log(val)
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
     },
