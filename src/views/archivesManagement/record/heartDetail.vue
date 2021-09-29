@@ -371,8 +371,9 @@ export default {
   mounted() {
     this.getHospitalList()
   },
-  destroyed(){
-    
+  destroyed() {
+    window.opener.location.reload()
+    window.close()
   },
   methods: {
     // 获取信息

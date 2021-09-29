@@ -277,7 +277,7 @@ export default {
           this.total = res.data.totalSize
         })
     },
-        /**
+    /**
      * 搜索
      */
     // 搜索
@@ -297,7 +297,7 @@ export default {
     uploadProgress(percentage) {
       this.percentage = percentage
     },
-        /**
+    /**
      * CRUD
      */
     // 新增
@@ -370,7 +370,7 @@ export default {
         }
       })
     },
-        /**
+    /**
      * 表格格式化
      */
     appTypeFormatter(row) {
@@ -379,7 +379,7 @@ export default {
     deviceTypeFormatter(row) {
       return formatterElement.deviceType[row.deviceType]
     },
-        /**
+    /**
      * 分页
      */
     handleSizeChange(newSize) {

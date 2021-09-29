@@ -65,6 +65,18 @@
       <el-table-column align="center"
         slot="fixed"
         fixed="right"
+        label="二维码">
+        <template slot-scope="scope">
+          <vue-qr :size="144"
+            :margin="0"
+            :auto-color="true"
+            :dot-scale="1"
+            :text="scope.row.wxAuthorizationUrl" />
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
         label="操作"
         width="220">
         <template slot-scope="scope">
@@ -135,6 +147,7 @@
   </div>
 </template>
 <script>
+import VueQr from 'vue-qr'
 import EleTable from '@/components/Untable'
 import { httpAdminRole } from '@/api/admin/httpAdminRole'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
@@ -147,6 +160,7 @@ import {
 export default {
   components: {
     EleTable,
+    VueQr,
   },
   data() {
     return {

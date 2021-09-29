@@ -328,13 +328,17 @@ export default {
       this.searchForm.startTime = monitoringStartTime
       this.searchForm.endTime = monitoringEndTime
     }
-    console.log(this.searchForm.monitorTime)
     this.getList()
   },
   mounted() {
     this.getHospitalList()
     this.getDoctorList()
   },
+  // computed:{
+  //   hander(){
+  //     localStorage.getItem('')
+  //   }
+  // },
   methods: {
     getList() {
       httpAdminHeartRate
@@ -450,7 +454,7 @@ export default {
     },
     exportExcel() {
       // this.DefaultData.exportExcelMax限制一下导出的总条数
-      if (this.total <= 1000) {
+      if (this.total <= 3000) {
         this.$confirm(
           '确定要导出当前<strong>' + this.total + '</strong>条数据？',
           '提示',
