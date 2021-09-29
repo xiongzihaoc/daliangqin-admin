@@ -67,11 +67,13 @@
         fixed="right"
         label="二维码">
         <template slot-scope="scope">
-          <vue-qr :size="144"
-            :margin="0"
-            :auto-color="true"
-            :dot-scale="1"
-            :text="scope.row.wxAuthorizationUrl" />
+          <div @click="getQRcode(scope.row.wxAuthorizationUrl)">
+            <vue-qr :size="24"
+              :margin="0"
+              :auto-color="true"
+              :dot-scale="1"
+              :text="scope.row.wxAuthorizationUrl" />
+          </div>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -144,6 +146,21 @@
           @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 二维码放大页面 -->
+    <!-- @closed="QRDialogClosed" -->
+    <el-dialog title="二维码"
+      :visible.sync="QRDialogVisible"
+      width="40%"
+      v-dialogDrag>
+      <div class="openQRcode">
+        <vue-qr :size="288"
+          :margin="0"
+          :auto-color="true"
+          :dot-scale="1"
+          :text="openWxAuthorizationUrl" />
+        <span>微信扫一扫</span>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -211,6 +228,8 @@ export default {
           },
         },
       ],
+      openWxAuthorizationUrl: '',
+      QRDialogVisible: false,
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -251,7 +270,6 @@ export default {
     /**
      * 搜索
      */
-    // 搜索
     searchBtn() {
       this.pageNum = 1
       this.getList()
@@ -328,6 +346,11 @@ export default {
         }
       })
     },
+    // 二维码放大
+    getQRcode(val) {
+      this.QRDialogVisible = true
+      this.openWxAuthorizationUrl = val
+    },
     /**
      * 分页
      */
@@ -343,5 +366,18 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.openQRcode {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  span {
+    display: inline-block;
+    margin-top: 30px;
+    font-size: 20px;
+    font-weight: 700;
+  }
+}
 </style>
