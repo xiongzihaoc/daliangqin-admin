@@ -182,7 +182,6 @@
             v-model="editAddForm.name"
             placeholder="请输入医生真实姓名"></el-input>
         </el-form-item>
-
         <el-form-item label="医生头像"
           prop="avatarUrl">
           <single-upload v-model="editAddForm.avatarUrl"
@@ -201,7 +200,7 @@
         <el-form-item label="身份证号">
           <el-input v-model="editAddForm.idCard"
             maxlength="18"
-            :disabled="this.editAddForm.idCard? true : false"
+            :disabled="idCardIsDisabled"
             placeholder="请输入该医生身份证号"></el-input>
         </el-form-item>
         <el-form-item label="职位"
@@ -311,13 +310,10 @@ export default {
         goodAt: '',
       },
       tableHeaderBig: [],
+      // 身份证是否禁止输入
+      idCardIsDisabled: false,
       // 医院列表
       hospitalList: [],
-      // // 医院跳转医生携带医院id
-      // hospitalId: '',
-      // 医生类型列表
-      editVal: {},
-      // 转诊医生列表
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -413,9 +409,13 @@ export default {
     },
     // 编辑
     editBtn(val) {
-      this.editVal = val
       this.infoTitle = '编辑'
       this.editAddForm = JSON.parse(JSON.stringify(val))
+      if (val.idCard) {
+        this.idCardIsDisabled = true
+      } else {
+        this.idCardIsDisabled = false
+      }
       this.editDialogVisible = true
     },
     // 删除多个
