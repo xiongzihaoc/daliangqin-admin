@@ -15,11 +15,12 @@
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
-            v-model="superviseTime"
+            v-model="searchForm.superviseTime"
             size="small"
             align="right"
             type="daterange"
             unlink-panels
+            :default-value="new Date()"
             value-format="timestamp"
             range-separator="至"
             start-placeholder="开始日期"
@@ -99,6 +100,7 @@ export default {
       tableHeaderBig: [],
       searchForm: {
         hospitalId: '',
+        superviseTime: '',
         // 当天零点时间 
         startTime: new Date(new Date().toLocaleDateString()).getTime(),
         endTime: new Date().getTime(),
@@ -143,6 +145,9 @@ export default {
     }
   },
   created() {
+    let startTime = new Date(new Date().toLocaleDateString()).getTime()
+    let endTime = new Date().getTime()
+    this.searchForm.superviseTime = [startTime, endTime]
     this.getList()
   },
   mounted() {
@@ -174,7 +179,7 @@ export default {
     skipHeart(val) {
       let self = this
       this.$router.push({
-        path: '/archivesManagement/record/heart', 
+        path: '/archivesManagement/record/heart',
         query: {
           monitoringHospitalId: self.searchForm.hospitalId,
           monitoringStartTime: self.searchForm.startTime,
