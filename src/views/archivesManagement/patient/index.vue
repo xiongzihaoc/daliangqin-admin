@@ -360,9 +360,9 @@ export default {
     // 更换签约
     putArchivesDoctor(archivesDoctorDTO) {
       httpAdminArchives.putArchivesDoctor(archivesDoctorDTO).then((res) => {
-        if(res.code === 'OK'){
+        if (res.code === 'OK') {
           this.$message.success(res.message)
-        }else{
+        } else {
           this.$message.error(res.message)
         }
         this.transferDialogVisible = false
@@ -383,6 +383,7 @@ export default {
     searchReset() {
       this.pageNum = 1
       this.searchForm = {}
+      this.transferBtn = true
       this.getList()
     },
     /**
@@ -418,14 +419,22 @@ export default {
       this.transfer.doctorName = ''
       if (this.checkboxList.length <= 0 || this.transfer.doctorName === '') {
         this.affirmBtn = true
-      }else{
+      } else {
         this.affirmBtn = false
       }
     },
+    // 转移 医生选择
     selectDoctor() {
-       if (this.checkboxList.length <= 0 || this.transfer.doctorName === undefined) {
+      const all = (arr, fn = Boolean) => arr.every(fn)
+      let doctorIdJudge = all(this.checkboxList, x => x.doctorUserId === this.transfer.doctorName)
+      if(doctorIdJudge === true){
         this.affirmBtn = true
-      }else{
+        this.$message.error('当前用户的医师未发生改变，请核对')
+        return
+      }
+      if (this.checkboxList.length <= 0 || this.transfer.doctorName === undefined) {
+        this.affirmBtn = true
+      } else {
         this.affirmBtn = false
       }
       this.$forceUpdate()
@@ -437,7 +446,8 @@ export default {
         arr.push(val.id)
       })
       // 获取到医生id
-      if (arr.length <= 0 || this.transfer.doctorName === undefined)return
+      if (arr.length <= 0 || this.transfer.doctorName === undefined) return
+      return
       this.putArchivesDoctor({ patientUserIds: arr, doctorUserId: this.transfer.doctorName })
     },
     // 跳转详细资料
