@@ -147,10 +147,10 @@ export default {
   created() {
     let startTime = new Date(new Date().toLocaleDateString()).getTime()
     let tomorrow = new Date();
-    tomorrow.setTime(tomorrow.getTime() + 24 * 60 * 60 * 1000);
-    let tomorrowTime = tomorrow.getFullYear() + "-" + (tomorrow.getMonth() + 1) + "-" + tomorrow.getDate();
-    tomorrowTime = new Date(tomorrowTime).getTime()
-    this.searchForm.superviseTime = [startTime, tomorrowTime]
+    // tomorrow.setTime(tomorrow.getTime() + 24 * 60 * 60 * 1000);
+    // let tomorrowTime = tomorrow.getFullYear() + "-" + (tomorrow.getMonth() + 1) + "-" + tomorrow.getDate();
+    // tomorrowTime = new Date(tomorrowTime).getTime()
+    this.searchForm.superviseTime = [startTime, tomorrow]
     this.getList()
   },
   mounted() {
