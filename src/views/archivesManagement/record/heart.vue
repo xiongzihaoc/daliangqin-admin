@@ -100,13 +100,12 @@
         <el-form-item label="监测日期">
           <el-date-picker v-model="searchForm.monitorTime"
             size="small"
-            type="daterange"
+            type="datetimerange"
             format="yyyy-MM-dd HH:mm"
             value-format="timestamp"
             range-separator="至"
             unlink-panels
             @change="changeMonitorTime"
-            :picker-options="pickerOptions"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             align="right">
@@ -292,47 +291,6 @@ export default {
         startTime: '',
         endTime: '',
       },
-      // 日期选择配置项
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: '今天',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime())
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            },
-          },
-        ],
-      },
       hospitalList: [],
       doctorList: [],
       patientList: [],
@@ -363,6 +321,14 @@ export default {
     if (pageNum) {
       this.pageNum = pageNum
     }
+    let monitoringStartTime = this.$route.query.monitoringStartTime
+    let monitoringEndTime = this.$route.query.monitoringEndTime
+    if (monitoringStartTime && monitoringEndTime) {
+      this.searchForm.monitorTime = [monitoringStartTime, monitoringEndTime]
+      this.searchForm.startTime = monitoringStartTime
+      this.searchForm.endTime = monitoringEndTime
+    }
+    console.log(this.searchForm.monitorTime)
     this.getList()
   },
   mounted() {
@@ -406,7 +372,6 @@ export default {
     },
     // 选择监测日期
     changeMonitorTime(val) {
-      console.log(val)
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
     },
@@ -499,20 +464,21 @@ export default {
             this.getExpportData()
           })
           .catch(() => {})
-      } else {
-        this.$confirm(
-          '当前要导出的<strong>' +
-            this.total +
-            '</strong>条数据，数据量过大，不能一次导出！<br/>建议分时间段导出所需数据。',
-          '提示',
-          {
-            dangerouslyUseHTMLString: true,
-            showCancelButton: false,
-          }
-        )
-          .then(() => {})
-          .catch(() => {})
       }
+      // else {
+      //   this.$confirm(
+      //     '当前要导出的<strong>' +
+      //       this.total +
+      //       '</strong>条数据，数据量过大，不能一次导出！<br/>建议分时间段导出所需数据。',
+      //     '提示',
+      //     {
+      //       dangerouslyUseHTMLString: true,
+      //       showCancelButton: false,
+      //     }
+      //   )
+      //     .then(() => {})
+      //     .catch(() => {})
+      // }
     },
 
     /**
@@ -525,60 +491,96 @@ export default {
     /**
      * 导出的列表数据
      */
-    getExpportData: function () {
+    getExpportData() {
       const loading = this.$loading({
         lock: true,
         text: '正在导出，请稍等......',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)',
       })
-      const data = {
-        // phoneNo: this.formInline.phoneNo,
-        // userName: this.formInline.userName,
-        // amount: this.formInline.amount,
-        // fee: this.formInline.fee,
-        // currentPage: this.currentPage,
-        // this.DefaultData.exportExcelMax
-        pageSize: 5,
+      // 请求参数
+      let searchForm = {
+        page: 1,
+        pageSize: 50,
+        patientUserName: this.searchForm.patientUserName,
+        patientUserPhone: this.searchForm.patientUserPhone,
+        detectType: this.searchForm.detectType,
+        auditStatus: this.searchForm.auditStatus,
+        doctorUserId: this.searchForm.doctorUserId,
+        hospitalId: this.searchForm.hospitalId,
+        resultStatus: this.searchForm.resultStatus,
+        ecgResult: this.searchForm.ecgResult,
+        heartRateAdviceType: this.searchForm.suggestion,
+        startTime: this.searchForm.startTime,
+        endTime: this.searchForm.endTime,
       }
-      // 这里封装了axios，根据自身情况修改即可
-      this.http(this.ApiSetting.orderExport, data).then(
+      httpAdminHeartRate.getHeartRate(searchForm).then(
         (res) => {
-          // handleDataList这里可以对导出的数据根据需求做下处理
-          const handleDataList = res.data.list
-          for (let i in res.data.list) {
-            handleDataList[i].amount = res.data.list[i].amount * 100
-            handleDataList[i].fee = res.data.list[i].fee + '%'
-          }
-          if (this.list.length > 0) {
+          console.log(res)
+          let handleDataList = this.list
+          handleDataList.forEach((item) => {
+            item.length = formatSeconds(
+              JSON.parse(item.reportResult).body.data.length
+            )
+            item.inspectionTime = parseTime(item.inspectionTime)
+            item.auditTime = parseTime(item.auditTime)
+            if (item.auditStatus === 'TO_AUDIT') {
+              item.auditStatus = '待公司审核'
+            } else if (item.auditStatus === 'PLATFORM_COMPLETE_AUDIT') {
+              item.auditStatus = '公司已审核'
+            } else if (item.auditStatus === 'TO_HOSPITAL_AUDIT') {
+              item.auditStatus = '待医院审核'
+            } else if (item.auditStatus === 'HOSPITAL_COMPLETE_AUDIT') {
+              item.auditStatus = '医院已审核'
+            } else {
+              item.auditStatus = '已作废'
+            }
+          })
+          if (handleDataList.length > 0) {
             require.ensure([], () => {
-              /* eslint-disable */
-              // 这里的径路要修改正确
               const {
                 export_json_to_excel,
               } = require('@/utils/vendor/Export2Excel')
-              /* eslint-enable  */
               // 导出的表头
-              const tHeader = ['手机号码', '用户姓名', '交易金额', '手续费']
+              const tHeader = [
+                '医院名称',
+                '医师姓名',
+                '姓名',
+                '手机号',
+                '身份证号',
+                '设备号',
+                '监测时长',
+                '测量结果',
+                '处置建议',
+                '心电分析结果',
+                '监测日期',
+                '审核状态',
+                '审核时间',
+                '审核人',
+              ]
               // 导出表头要对应的数据
-              const filterVal = ['phoneNo', 'userName', 'amount', 'fee']
-              // 如果对导出的数据没有可处理的需求，把下面的handleDataList换成res.data.list即可，删掉上面相应的代码
+              const filterVal = [
+                'hospitalName',
+                'doctorUserName',
+                'patientUserName',
+                'patientUserPhone',
+                'idCard',
+                'serialNumber',
+                'length',
+                'title',
+                'suggestion',
+                'ecgResult',
+                'inspectionTime',
+                'auditStatus',
+                'auditTime',
+                'auditorName',
+              ]
               const data = this.formatJson(filterVal, handleDataList)
-              // this.DefaultData.formatLongDate.getNow()自己写的一个获取当前时间，方便查找导出后的文件。根据需求自行可处理。
-              export_json_to_excel(
-                tHeader,
-                data,
-                '订单查询列表-' + this.DefaultData.formatLongDate.getNow()
-              )
-              this.$message({
-                message: '导出成功',
-                duration: 2000,
-                type: 'success',
-              })
+              export_json_to_excel(tHeader, data, '心率列表')
             })
           } else {
             this.$message({
-              message: '数据出錯，请联系管理员',
+              message: '数据出錯，请稍后重试',
               duration: 2000,
               type: 'warning',
             })

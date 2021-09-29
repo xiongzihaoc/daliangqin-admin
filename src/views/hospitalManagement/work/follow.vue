@@ -96,6 +96,7 @@
             @change="selectFollowTime"
             type="datetimerange"
             value-format="timestamp"
+            format="yyyy-MM-dd HH:mm"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -206,7 +207,7 @@ export default {
         userStatus: '',
       },
       // 医院列表
-      hospitalList:[],
+      hospitalList: [],
       // 列表数据
       list: [],
       // 增改表单
@@ -300,7 +301,7 @@ export default {
   created() {
     this.getList()
   },
-  mounted(){
+  mounted() {
     this.getHospitalList()
   },
   methods: {
@@ -403,9 +404,6 @@ export default {
         }
       })
     },
-    /**
-     * 搜索
-     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
