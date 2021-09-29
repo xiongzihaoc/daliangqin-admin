@@ -59,7 +59,7 @@
             unlink-panels
             value-format='timestamp'
             @change="searchTaskTimeChange"
-            :default-time="defaultTime"
+            :default-time="['00:00:00', '23:59:59']"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -217,7 +217,7 @@
             unlink-panels
             value-format='timestamp'
             @change="selectTaskTime"
-            :default-time="defaultTime"
+            :default-time="['00:00:00', '23:59:59']"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -378,7 +378,7 @@ export default {
         },
         { prop: 'cancelReason', label: '取消原因' },
       ],
-      defaultTime: ['00:00:00', '23:59:59'],
+
       pickerOptions: {
         shortcuts: [
           {

@@ -27,7 +27,7 @@
             unlink-panels
             value-format="timestamp"
             range-separator="至"
-            :default-time="['00:00:00','23:59:59']"
+            :default-time="['00:00:00', '23:59:59']"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             placeholder="选择日期"
@@ -128,17 +128,13 @@ export default {
       searchForm: {
         hospitalId: "",
         superviseTime: "",
-        // 当天零点时间
-        startTime: new Date(new Date().toLocaleDateString()).getTime(),
-        endTime: new Date().getTime(),
+        startTime: "",
+        endTime: "",
       },
       hospitalList: [],
       // 监测时间
       superviseTime: "",
       pickerOptions: {
-        // disabledDate(time) {
-        //   return time.getTime() > Date.now();
-        // },
         shortcuts: [
           {
             text: "今天",
@@ -205,15 +201,10 @@ export default {
     getSummaries() {},
     // 跳转心率检测
     skipHeart(val) {
-      let self = this;
-      this.$router.push({
-        path: "/archivesManagement/record/heart",
-        query: {
-          monitoringHospitalId: self.searchForm.hospitalId,
-          monitoringStartTime: self.searchForm.startTime,
-          monitoringEndTime: self.searchForm.endTime,
-        },
-      });
+      sessionStorage.setItem("monitoringHospitalId", val.hospitalId);
+      sessionStorage.setItem("monitoringStartTime", this.searchForm.startTime);
+      sessionStorage.setItem("monitoringEndTime", this.searchForm.endTime);
+      this.$router.push("/archivesManagement/record/heart");
     },
     // 用户选择时间
     changeMonitorTime(val) {
