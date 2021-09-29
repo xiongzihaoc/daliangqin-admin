@@ -468,21 +468,20 @@ export default {
             this.getExpportData()
           })
           .catch(() => {})
+      } else {
+        this.$confirm(
+          '当前要导出的<strong>' +
+            this.total +
+            '</strong>条数据，数据量过大，不能一次导出！<br/>建议分时间段导出所需数据。',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            showCancelButton: false,
+          }
+        )
+          .then(() => {})
+          .catch(() => {})
       }
-      // else {
-      //   this.$confirm(
-      //     '当前要导出的<strong>' +
-      //       this.total +
-      //       '</strong>条数据，数据量过大，不能一次导出！<br/>建议分时间段导出所需数据。',
-      //     '提示',
-      //     {
-      //       dangerouslyUseHTMLString: true,
-      //       showCancelButton: false,
-      //     }
-      //   )
-      //     .then(() => {})
-      //     .catch(() => {})
-      // }
     },
 
     /**
@@ -505,7 +504,7 @@ export default {
       // 请求参数
       let searchForm = {
         page: 1,
-        pageSize: 50,
+        pageSize: 3000,
         patientUserName: this.searchForm.patientUserName,
         patientUserPhone: this.searchForm.patientUserPhone,
         detectType: this.searchForm.detectType,
@@ -520,14 +519,19 @@ export default {
       }
       httpAdminHeartRate.getHeartRate(searchForm).then(
         (res) => {
-          console.log(res)
-          let handleDataList = this.list
+          let handleDataList = res.data.elements
           handleDataList.forEach((item) => {
-            item.length = formatSeconds(
-              JSON.parse(item.reportResult).body.data.length
-            )
-            item.inspectionTime = parseTime(item.inspectionTime)
-            item.auditTime = parseTime(item.auditTime)
+            if (item.length) {
+              item.length = formatSeconds(
+                JSON.parse(item.reportResult).body.data.length
+              )
+            }
+            if (item.inspectionTime) {
+              item.inspectionTime = parseTime(item.inspectionTime)
+            }
+            if (item.auditTime) {
+              item.auditTime = parseTime(item.auditTime)
+            }
             if (item.auditStatus === 'TO_AUDIT') {
               item.auditStatus = '待公司审核'
             } else if (item.auditStatus === 'PLATFORM_COMPLETE_AUDIT') {
@@ -539,6 +543,7 @@ export default {
             } else {
               item.auditStatus = '已作废'
             }
+            console.log(555)
           })
           if (handleDataList.length > 0) {
             require.ensure([], () => {
