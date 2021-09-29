@@ -99,8 +99,9 @@ export default {
       tableHeaderBig: [],
       searchForm: {
         hospitalId: '',
-        startTime: '',
-        endTime: '',
+        // 当天零点时间 
+        startTime: new Date(new Date().toLocaleDateString()).getTime(),
+        endTime: new Date().getTime(),
       },
       hospitalList: [],
       // 监测时间
@@ -172,7 +173,6 @@ export default {
     // 跳转心率检测
     skipHeart(val) {
       let self = this
-      console.log('tiaozhuan', this.searchForm)
       this.$router.push({
         path: '/archivesManagement/record/heart', 
         query: {
