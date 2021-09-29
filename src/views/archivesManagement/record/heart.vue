@@ -306,7 +306,7 @@ export default {
       tableHeaderBig: [],
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() > new Date().getTime()
+          return time.getTime() > Date.now()
         },
         shortcuts: [
           {
