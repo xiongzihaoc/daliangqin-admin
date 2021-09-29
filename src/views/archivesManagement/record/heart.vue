@@ -305,9 +305,9 @@ export default {
       },
       tableHeaderBig: [],
       pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() > Date.now()
-        },
+        // disabledDate(time) {
+        //   return time.getTime() > Date.now()
+        // },
         shortcuts: [
           {
             text: '今天',
@@ -556,6 +556,7 @@ export default {
       }
       httpAdminHeartRate.getHeartRate(searchForm).then(
         (res) => {
+          console.log(res.data.elements)
           let handleDataList = res.data.elements
           handleDataList.forEach((item) => {
             if (item.length) {
@@ -580,7 +581,6 @@ export default {
             } else {
               item.auditStatus = '已作废'
             }
-            console.log(555)
           })
           if (handleDataList.length > 0) {
             require.ensure([], () => {

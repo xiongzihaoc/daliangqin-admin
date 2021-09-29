@@ -4,7 +4,12 @@
     <div class="search-box">
       <el-form ref="searchFormRef" :model="searchForm" class="searchForm" :inline="true">
         <el-form-item label="医院名称" align="left">
-          <el-select v-model="searchForm.hospitalId" size="small" filterable placeholder="请选择医院">
+          <el-select
+            v-model="searchForm.hospitalId"
+            size="small"
+            filterable
+            placeholder="请选择医院"
+          >
             <el-option
               v-for="item in hospitalList"
               :key="item.id"
@@ -20,9 +25,9 @@
             align="right"
             type="daterange"
             unlink-panels
-            :default-value="new Date()"
             value-format="timestamp"
             range-separator="至"
+            :default-time="['00:00:00','23:59:59']"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             placeholder="选择日期"
@@ -31,8 +36,12 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search">搜索</el-button>
-          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh">重置</el-button>
+          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
+            >搜索</el-button
+          >
+          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh"
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -53,42 +62,60 @@
           <span class="skipStyle" @click="skipHeart(scope.row)">{{ scope.row.hospitalName }}</span>
         </template>-->
       </el-table-column>
-      <el-table-column align="center" label="测量总人数" prop="measureTotalFrequency"></el-table-column>
-      <el-table-column align="center" label="测量总次数" prop="measureTotalAmount"></el-table-column>
+      <el-table-column
+        align="center"
+        label="测量总人数"
+        prop="measureTotalFrequency"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="测量总次数"
+        prop="measureTotalAmount"
+      ></el-table-column>
       <el-table-column align="center" label="公司已审核报告数" prop="companyAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row)">{{ scope.row.companyAuditNumber }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row)">{{
+            scope.row.companyAuditNumber
+          }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="医院已审核报告数" prop="hospitalAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row)">{{ scope.row.hospitalAuditNumber }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row)">{{
+            scope.row.hospitalAuditNumber
+          }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="公司待审核报告数" prop="companyWaitAuditNumber">
+      <el-table-column
+        align="center"
+        label="公司待审核报告数"
+        prop="companyWaitAuditNumber"
+      >
         <template slot-scope="scope">
-          <span
-            class="skipStyle"
-            @click="skipHeart(scope.row)"
-          >{{ scope.row.companyWaitAuditNumber }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row)">{{
+            scope.row.companyWaitAuditNumber
+          }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="医院待审核报告数" prop="hospitalWaitAuditNumber">
+      <el-table-column
+        align="center"
+        label="医院待审核报告数"
+        prop="hospitalWaitAuditNumber"
+      >
         <template slot-scope="scope">
-          <span
-            class="skipStyle"
-            @click="skipHeart(scope.row)"
-          >{{ scope.row.hospitalWaitAuditNumber }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row)">{{
+            scope.row.hospitalWaitAuditNumber
+          }}</span>
         </template>
       </el-table-column>
     </EleTable>
   </div>
 </template>
 <script>
-import EleTable from '@/components/Table'
-import { httpAdminEquipmentMonitoring } from '@/api/admin/httpAdminEquipmentMonitoring'
-import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
-import { parseTime } from '@/utils/index'
+import EleTable from "@/components/Table";
+import { httpAdminEquipmentMonitoring } from "@/api/admin/httpAdminEquipmentMonitoring";
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
+import { parseTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -99,62 +126,60 @@ export default {
       list: [],
       tableHeaderBig: [],
       searchForm: {
-        hospitalId: '',
-        superviseTime: '',
-        // 当天零点时间 
+        hospitalId: "",
+        superviseTime: "",
+        // 当天零点时间
         startTime: new Date(new Date().toLocaleDateString()).getTime(),
         endTime: new Date().getTime(),
       },
       hospitalList: [],
       // 监测时间
-      superviseTime: '',
+      superviseTime: "",
       pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() > Date.now();
-        },
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime())
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            picker.$emit('pick', [start, end])
-          }
-        }]
+        // disabledDate(time) {
+        //   return time.getTime() > Date.now();
+        // },
+        shortcuts: [
+          {
+            text: "今天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime());
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ],
       },
       // 分页区域
       pageSize: 10,
       pageNum: 1,
       total: 0,
-    }
+    };
   },
   created() {
-    let startTime = new Date(new Date().toLocaleDateString()).getTime()
-    let tomorrow = new Date();
-    // tomorrow.setTime(tomorrow.getTime() + 24 * 60 * 60 * 1000);
-    // let tomorrowTime = tomorrow.getFullYear() + "-" + (tomorrow.getMonth() + 1) + "-" + tomorrow.getDate();
-    // tomorrowTime = new Date(tomorrowTime).getTime()
-    this.searchForm.superviseTime = [startTime, tomorrow]
-    this.getList()
+    this.getList();
   },
   mounted() {
-    this.getHospitalList()
+    this.getHospitalList();
   },
   methods: {
     getList() {
@@ -167,61 +192,60 @@ export default {
           endTime: this.searchForm.endTime,
         })
         .then((res) => {
-          this.list = res.data.elements
-          this.total = res.data.totalSize
-        })
+          this.list = res.data.elements;
+          this.total = res.data.totalSize;
+        });
     },
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
-        this.hospitalList = res.data.elements
-      })
+        this.hospitalList = res.data.elements;
+      });
     },
-    getSummaries() { },
+    getSummaries() {},
     // 跳转心率检测
     skipHeart(val) {
-      let self = this
+      let self = this;
       this.$router.push({
-        path: '/archivesManagement/record/heart',
+        path: "/archivesManagement/record/heart",
         query: {
           monitoringHospitalId: self.searchForm.hospitalId,
           monitoringStartTime: self.searchForm.startTime,
           monitoringEndTime: self.searchForm.endTime,
-        }
-      })
+        },
+      });
     },
     // 用户选择时间
     changeMonitorTime(val) {
-      this.searchForm.startTime = val[0]
-      this.searchForm.endTime = val[1]
+      this.searchForm.startTime = val[0];
+      this.searchForm.endTime = val[1];
     },
     /**
      * 搜索
      */
     searchBtn() {
-      this.pageNum = 1
-      this.getList()
+      this.pageNum = 1;
+      this.getList();
     },
     searchReset() {
-      this.pageNum = 1
-      this.searchForm = {}
-      this.superviseTime = ""
-      this.getList()
+      this.pageNum = 1;
+      this.searchForm = {};
+      this.superviseTime = "";
+      this.getList();
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize
-      this.getList()
+      this.pageSize = newSize;
+      this.getList();
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage
-      this.getList()
+      this.pageNum = newPage;
+      this.getList();
     },
   },
-}
+};
 </script>
 
-<style>
-</style>
+<style></style>
