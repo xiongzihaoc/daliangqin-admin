@@ -175,7 +175,7 @@
       </el-form>
       <div style="color: #c5051c; padding: 0 32px;">注意：转移用户是指将所选择的用户转移至选择的医师名下，请谨慎操作</div>
       <div slot="footer">
-        <el-button @click="transferDialogVisible = false">取 消</el-button>
+        <el-button @click="transferCancel">取 消</el-button>
         <el-button @click="transferAffirm" type="primary" :disabled="affirmBtn">确 定</el-button>
       </div>
     </el-dialog>
@@ -362,6 +362,7 @@ export default {
       httpAdminArchives.putArchivesDoctor(archivesDoctorDTO).then((res) => {
         if (res.code === 'OK') {
           this.$message.success(res.message)
+          this.transfer = {}
         } else {
           this.$message.error(res.message)
         }
@@ -384,6 +385,7 @@ export default {
       this.pageNum = 1
       this.searchForm = {}
       this.transferBtn = true
+      this.transferCancel()
       this.getList()
     },
     /**
@@ -447,8 +449,13 @@ export default {
       })
       // 获取到医生id
       if (arr.length <= 0 || this.transfer.doctorName === undefined) return
-      return
+      // return
       this.putArchivesDoctor({ patientUserIds: arr, doctorUserId: this.transfer.doctorName })
+    },
+    // 转诊取消
+    transferCancel(){
+      this.transferDialogVisible = false
+      this.transfer = {}
     },
     // 跳转详细资料
     detailsBtn(val) {
