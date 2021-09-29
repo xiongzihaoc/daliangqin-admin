@@ -431,7 +431,7 @@ export default {
             return item.auditStatus === 'TO_HOSPITAL_AUDIT'
           })
           this.hospitalId = step.hospitalId
-                    this.printType = ''
+          this.printType = ''
           this.printCount = null
           localStorage.removeItem('printCount')
         } else if (
