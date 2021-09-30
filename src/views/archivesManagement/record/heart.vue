@@ -381,6 +381,12 @@ export default {
     this.searchForm.auditStatus = monitoringAuditStatus
     this.getList()
   },
+  beforeDestroy() {
+    sessionStorage.removeItem('monitoringHospitalId')
+    sessionStorage.removeItem('monitoringStartTime')
+    sessionStorage.removeItem('monitoringEndTime')
+    sessionStorage.removeItem('monitoringAuditStatus')
+  },
   mounted() {
     this.getHospitalList()
     this.getDoctorList()
