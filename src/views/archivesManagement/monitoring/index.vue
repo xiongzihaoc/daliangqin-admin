@@ -191,6 +191,7 @@ export default {
     getSummaries() { },
     // 跳转心率检测
     skipHeart(val, state) {
+      console.log(val)
       sessionStorage.setItem("monitoringAuditStatus", state);
       sessionStorage.setItem("monitoringHospitalId", val.hospitalId);
       sessionStorage.setItem("monitoringStartTime", this.searchForm.startTime);

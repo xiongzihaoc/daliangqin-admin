@@ -358,9 +358,14 @@ export default {
     if (heartSearchForm) {
       this.searchForm = heartSearchForm
     }
-    let pageNum = JSON.parse(sessionStorage.getItem('pageNum'))
+    // 缓存pageNum pageSize
+    let pageNum = sessionStorage.getItem('heartPageNum')
+    let pageSize = sessionStorage.getItem('heartPageSize')
     if (pageNum) {
-      this.pageNum = pageNum
+      this.pageNum = Number(pageNum)
+    }
+    if (pageSize) {
+      this.pageSize = Number(pageSize)
     }
     // 医院监测统计跳转本页面携带参数
     let monitoringStartTime = sessionStorage.getItem('monitoringStartTime')
@@ -431,12 +436,14 @@ export default {
     // 重置
     searchReset() {
       sessionStorage.removeItem('heartSearchForm')
-      sessionStorage.removeItem('pageNum')
+      sessionStorage.removeItem('heartPageNum')
+      sessionStorage.removeItem('heartPageSize')
       sessionStorage.removeItem('monitoringHospitalId')
       sessionStorage.removeItem('monitoringStartTime')
       sessionStorage.removeItem('monitoringEndTime')
       sessionStorage.removeItem('monitoringAuditStatus')
       this.pageNum = 1
+      this.pageSize = 10
       this.searchForm = {}
       this.getList()
     },
@@ -660,10 +667,12 @@ export default {
      */
     handleSizeChange(newSize) {
       this.pageSize = newSize
+      sessionStorage.setItem('heartPageSize', newSize)
       this.getList()
     },
     handleCurrentChange(newPage) {
       this.pageNum = newPage
+      sessionStorage.setItem('heartPageNum', newPage)
       this.getList()
     },
   },
