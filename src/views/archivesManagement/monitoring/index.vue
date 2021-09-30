@@ -111,8 +111,8 @@ export default {
       searchForm: {
         hospitalId: "",
         superviseTime: "",
-        startTime: "",
-        endTime: "",
+        startTime: new Date().getTime(),
+        endTime: new Date().getTime(),
       },
       hospitalList: [],
       // 监测时间
