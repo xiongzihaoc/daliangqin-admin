@@ -53,7 +53,7 @@
               <div class="box"><span class="fw txt-r">测量结果</span>：
                 <span ref="title"
                   class="minWidth"
-                  contenteditable="true"
+                  style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;word-break: break-all;"
                   v-html="heartDetail.title"></span>
               </div>
               <!-- 占位符 -->
@@ -160,9 +160,6 @@
             </div>
             <div class="right">
               <span class="fz14">医生签名：</span>
-              <img v-if="isSignature === true && userInfo.signUrl && userInfo.signUrl != ''"
-                class="signature"
-                :src="userInfo.signUrl">
             </div>
           </div>
         </div>
@@ -253,23 +250,13 @@
         </div>
         <!-- 是否启用签名 -->
         <div class="operateList">
-          <div style="display:flex;align-items:center;">
-            <el-checkbox v-model="isSignature">启用签名</el-checkbox>
-            <div class="rightSignature">
-              <img v-if="isSignature === true && userInfo.signUrl && userInfo.signUrl != ''"
-                :src="this.userInfo.signUrl">
-            </div>
-          </div>
           <el-button size="medium"
-            :plain="printType === 'primary'?false:true"
-            :type="printType"
-            class="w100 printBtn"
+            plain
+            class="w100"
             :disabled="isPrintDisabled"
-            v-print="printObj"
-            @click="onPrint">
+            @click="onPrint"
+            v-print="printObj">
             打印
-            <span style="font-size:10px;color:#ccc"
-              v-if="printCount > 0">已打印({{printCount}})</span>
           </el-button>
         </div>
         <!-- 操作时间线 -->
@@ -302,16 +289,6 @@
             <p>6、建议转院治疗</p>
           </div>
         </div>
-        <!-- 测量结果 -->
-        <div class="operateList">
-          <!-- 处置建议模板 -->
-          <div style="height:300px"
-            class="advice removeScroll">
-            <h2>测量结果</h2>
-            <p v-for="(item,index) in measurementList"
-              :key="index">{{item}}</p>
-          </div>
-        </div>
       </div>
     </div>
     <!-- 备注 -->
@@ -325,13 +302,12 @@
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import { httpAdminAudit } from '@/api/admin/httpAdminAudit'
-import { parseTime, formatSeconds, measurementList } from '@/utils/index'
+import { parseTime, formatSeconds } from '@/utils/index'
 export default {
   data() {
     return {
       parseTime,
       formatSeconds,
-      measurementList,
       printObj: {
         id: 'printMe',
         popTitle: '',
@@ -343,13 +319,8 @@ export default {
       loading: true,
       // 操作时间线列表
       stepList: [],
-      // 签名启用
-      isSignature: true,
       // 心率信息
       heartDetail: {},
-      // 打印次数
-      printCount: null,
-      printType: '',
       // 个人信息
       userInfo: {},
       // 审核并保存按钮是否禁用
@@ -361,15 +332,14 @@ export default {
     }
   },
   created() {
-    let printCount = localStorage.getItem('printCount')
-    if (printCount) {
-      this.printType = 'primary'
-      this.printCount = printCount
-    }
     this.getList()
   },
   mounted() {
     this.getHospitalList()
+  },
+  destroyed() {
+    window.opener.location.reload()
+    window.close()
   },
   methods: {
     // 获取信息
@@ -401,6 +371,7 @@ export default {
           this.isAuditDisabled = true
           this.isHospitalDisabled = true
           this.isPrintDisabled = true
+          this.clearPrint()
         } else if (this.userInfo.auditStatus === 'PLATFORM_COMPLETE_AUDIT') {
           // 如果状态是公司已审核
           this.isHospitalDisabled = true
@@ -410,6 +381,7 @@ export default {
           this.isAuditDisabled = false
           this.isHospitalDisabled = false
           this.isPrintDisabled = true
+          this.clearPrint()
         } else if (
           // 如果状态是医院待审核
           this.userInfo.auditStatus === 'TO_HOSPITAL_AUDIT'
@@ -421,6 +393,7 @@ export default {
             return item.auditStatus === 'TO_HOSPITAL_AUDIT'
           })
           this.hospitalId = step.hospitalId
+          this.clearPrint()
         } else if (
           // 如果状态是医院已审核
           this.userInfo.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
@@ -467,7 +440,7 @@ export default {
       let thirdForm = {
         recordId: this.$route.query.id,
         avg: Number(this.$refs.avg.innerText),
-        title: this.$refs.title.innerText,
+        title: this.$refs.ecgResult.innerText,
         max: Number(this.$refs.max.innerText),
         min: Number(this.$refs.min.innerText),
         normalRate: Number(this.$refs.normalRate.innerText),
@@ -545,18 +518,15 @@ export default {
     },
     // 记录打印次数
     onPrint() {
-      let printCount = localStorage.getItem('printCount')
-      this.printType = 'primary'
-      if (printCount) {
-        localStorage.setItem('printCount', Number(printCount) + 1)
-        this.printCount = printCount
-      } else {
-        localStorage.setItem('printCount', 1)
-        this.printCount = printCount
-      }
-      printCount = localStorage.getItem('printCount')
-      this.printCount = printCount
-      this.getList()
+      httpAdminHeartRate
+        .putHeartRatePrint({ id: this.$route.query.id })
+        .then((res) => {})
+    },
+    // 清空打印次数
+    clearPrint() {
+      httpAdminHeartRate
+        .putHeartRateClear({ id: this.$route.query.id })
+        .then((res) => {})
     },
     formatTitle(val) {
       switch (val.auditStatus) {

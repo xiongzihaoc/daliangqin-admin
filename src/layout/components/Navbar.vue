@@ -106,12 +106,6 @@ export default {
   },
 }
 </script>
-<style>
-/* .navbar-box .el-popper[x-placement^='bottom'] .popper__arrow {
-  border-bottom-color: #304156 !important;
-  right: 50% !important;
-} */
-</style>
 <style lang="scss" scoped>
 .el-dropdown-menu {
   width: 300px;

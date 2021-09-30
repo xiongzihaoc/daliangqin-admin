@@ -1,13 +1,14 @@
 <template>
-  <div :class="classObj"
-    class="app-wrapper">
+  <div :class="classObj" class="app-wrapper">
     <topbar />
-    <div v-if="device==='mobile'&&sidebar.opened"
+    <div
+      v-if="device === 'mobile' && sidebar.opened"
       class="drawer-bg"
-      @click="handleClickOutside" />
+      @click="handleClickOutside"
+    />
     <sidebar class="sidebar-container" />
     <div class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
+      <div :class="{ 'fixed-header': fixedHeader }">
         <navbar />
       </div>
       <tags-view />

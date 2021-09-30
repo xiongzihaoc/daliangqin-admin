@@ -22,6 +22,7 @@
             unlink-panels
             value-format="timestamp"
             range-separator="至"
+            :default-time="['00:00:00', '23:59:59']"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             placeholder="选择日期"
@@ -56,38 +57,48 @@
       <el-table-column align="center" label="测量总次数" prop="measureTotalAmount"></el-table-column>
       <el-table-column align="center" label="公司已审核报告数" prop="companyAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row)">{{ scope.row.companyAuditNumber }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row, 'PLATFORM_COMPLETE_AUDIT')">
+            {{
+              scope.row.companyAuditNumber
+            }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="医院已审核报告数" prop="hospitalAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row)">{{ scope.row.hospitalAuditNumber }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row, 'HOSPITAL_COMPLETE_AUDIT')">
+            {{
+              scope.row.hospitalAuditNumber
+            }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="公司待审核报告数" prop="companyWaitAuditNumber">
         <template slot-scope="scope">
-          <span
-            class="skipStyle"
-            @click="skipHeart(scope.row)"
-          >{{ scope.row.companyWaitAuditNumber }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row, 'TO_AUDIT')">
+            {{
+              scope.row.companyWaitAuditNumber
+            }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="医院待审核报告数" prop="hospitalWaitAuditNumber">
         <template slot-scope="scope">
-          <span
-            class="skipStyle"
-            @click="skipHeart(scope.row)"
-          >{{ scope.row.hospitalWaitAuditNumber }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row, 'TO_HOSPITAL_AUDIT')">
+            {{
+              scope.row.hospitalWaitAuditNumber
+            }}
+          </span>
         </template>
       </el-table-column>
     </EleTable>
   </div>
 </template>
 <script>
-import EleTable from '@/components/Table'
-import { httpAdminEquipmentMonitoring } from '@/api/admin/httpAdminEquipmentMonitoring'
-import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
-import { parseTime } from '@/utils/index'
+import EleTable from "@/components/Table";
+import { httpAdminEquipmentMonitoring } from "@/api/admin/httpAdminEquipmentMonitoring";
+import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
+import { parseTime } from "@/utils/index";
 export default {
   components: {
     EleTable,
@@ -98,54 +109,63 @@ export default {
       list: [],
       tableHeaderBig: [],
       searchForm: {
-        hospitalId: '',
-        startTime: '',
-        endTime: '',
+        hospitalId: "",
+        superviseTime: "",
+        startTime: new Date().getTime(),
+        endTime: new Date().getTime(),
       },
       hospitalList: [],
       // 监测时间
-      superviseTime: '',
+      superviseTime: "",
       pickerOptions: {
-        disabledDate(time) {
-          return time.getTime() > Date.now();
-        },
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime())
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '昨天',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24);
-            picker.$emit('pick', [start, end])
-          }
-        }, {
-          text: '一周前',
-          onClick(picker) {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
-          }
-        }]
+        shortcuts: [
+          {
+            text: "今天",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime());
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "全部",
+            onClick(picker) {
+              picker.$emit("pick", '');
+            },
+          },
+        ],
       },
       // 分页区域
       pageSize: 10,
       pageNum: 1,
       total: 0,
-    }
+    };
   },
   created() {
-    this.getList()
+    this.getTodayTime();
+    this.getList();
   },
   mounted() {
-    this.getHospitalList()
+    this.getHospitalList();
   },
   methods: {
     getList() {
@@ -158,61 +178,66 @@ export default {
           endTime: this.searchForm.endTime,
         })
         .then((res) => {
-          this.list = res.data.elements
-          this.total = res.data.totalSize
-        })
+          this.list = res.data.elements;
+          this.total = res.data.totalSize;
+        });
     },
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
-        this.hospitalList = res.data.elements
-      })
+        this.hospitalList = res.data.elements;
+      });
     },
     getSummaries() { },
     // 跳转心率检测
-    skipHeart(val) {
-      let self = this
-      console.log('tiaozhuan', this.searchForm)
-      this.$router.push({
-        path: '/archivesManagement/record/heart', 
-        query: {
-          monitoringHospitalId: self.searchForm.hospitalId,
-          monitoringStartTime: self.searchForm.startTime,
-          monitoringEndTime: self.searchForm.endTime,
-        }
-      })
+    skipHeart(val, state) {
+      console.log(val)
+      sessionStorage.setItem("monitoringAuditStatus", state);
+      sessionStorage.setItem("monitoringHospitalId", val.hospitalId);
+      sessionStorage.setItem("monitoringStartTime", this.searchForm.startTime);
+      sessionStorage.setItem("monitoringEndTime", this.searchForm.endTime);
+      this.$router.push("/archivesManagement/record/heart");
     },
     // 用户选择时间
     changeMonitorTime(val) {
-      this.searchForm.startTime = val[0]
-      this.searchForm.endTime = val[1]
+      this.searchForm.startTime = val[0];
+      this.searchForm.endTime = val[1];
+    },
+    // 获取当天时间 今天
+    getTodayTime() {
+      let startTime = new Date(new Date().toLocaleDateString()).getTime()
+      let endTime = new Date().getTime()
+      this.superviseTime = [startTime, endTime]
     },
     /**
      * 搜索
      */
     searchBtn() {
-      this.pageNum = 1
-      this.getList()
+      this.pageNum = 1;
+      this.getList();
     },
     searchReset() {
-      this.pageNum = 1
-      this.searchForm = {}
-      this.superviseTime = ""
-      this.getList()
+      this.pageNum = 1;
+      this.searchForm = {
+        startTime: new Date().getTime(),
+        endTime: new Date().getTime(),
+      };
+      this.getTodayTime();
+      this.getList();
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize
-      this.getList()
+      this.pageSize = newSize;
+      this.getList();
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage
-      this.getList()
+      this.pageNum = newPage;
+      this.getList();
     },
   },
-}
+};
 </script>
 
 <style>

@@ -53,15 +53,17 @@
         <!-- 随访时间 -->
         <el-form-item label="随访时间">
           <el-date-picker v-model="searchForm.taskTime"
+            type="daterange"
+            align="right"
             size="small"
-            type="datetimerange"
-            format="yyyy-MM-dd HH:mm"
-            value-format="timestamp"
-            range-separator="至"
+            unlink-panels
+            value-format='timestamp'
             @change="searchTaskTimeChange"
+            :default-time="['00:00:00', '23:59:59']"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            align="right">
+            :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
         <!-- 加入方式 -->
@@ -208,17 +210,18 @@
         </el-form-item>
         <el-form-item label="随访时间"
           prop="taskTime">
-          <el-date-picker style="width:100%;"
+          <el-date-picker class="w100"
             v-model="editAddForm.taskTime"
-            size="small"
+            type="daterange"
+            align="right"
+            unlink-panels
+            value-format='timestamp'
             @change="selectTaskTime"
-            type="datetimerange"
-            format="yyyy-MM-dd HH:mm"
-            value-format="timestamp"
+            :default-time="['00:00:00', '23:59:59']"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            align="right">
+            :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
       </el-form>
@@ -375,6 +378,39 @@ export default {
         },
         { prop: 'cancelReason', label: '取消原因' },
       ],
+
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              const start = new Date(new Date().toLocaleDateString()).getTime()
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 6
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 30
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+        ],
+      },
       // 分页区域
       pageSize: 10,
       pageNum: 1,

@@ -101,15 +101,15 @@
           <el-date-picker v-model="searchForm.monitorTime"
             size="small"
             type="daterange"
-            format="yyyy-MM-dd HH:mm"
-            value-format="timestamp"
-            range-separator="至"
+            align="right"
             unlink-panels
+            value-format="timestamp"
             @change="changeMonitorTime"
-            :picker-options="pickerOptions"
+            :default-time="['00:00:00', '23:59:59']"
+            range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            align="right">
+            :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -147,7 +147,6 @@
         label="医师姓名"
         prop="doctorUserName">
       </el-table-column>
-
       <el-table-column align="center"
         label="姓名"
         prop="patientUserName">
@@ -187,13 +186,12 @@
         prop="length"
         :formatter="lengthFormatter">
       </el-table-column>
-      <el-table-column align="center"
-        label="测量结果"
-        prop="title"> </el-table-column>
+      <!-- <el-table-column align="center" label="测量结果" prop="title"> </el-table-column> -->
       <el-table-column align="center"
         label="处置建议"
         prop="suggestion"
-        show-overflow-tooltip> </el-table-column>
+        show-overflow-tooltip>
+      </el-table-column>
       <el-table-column align="center"
         label="心电分析结果"
         prop="ecgResult"
@@ -202,7 +200,9 @@
         label="监测日期"
         prop="inspectionTime">
         <template slot-scope="scope">
-          <span style="color: #F56C6C;font-weight:700">{{ parseTime(scope.row.inspectionTime) }}</span>
+          <span style="color: #f56c6c; font-weight: 700">{{
+            parseTime(scope.row.inspectionTime)
+          }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -231,6 +231,14 @@
       <el-table-column align="center"
         label="审核人"
         prop="auditorName">
+      </el-table-column>
+      <el-table-column align="center"
+        label="已打印次数"
+        prop="printNumber">
+        <template slot-scope="scope">
+          <span v-if="scope.row.printNumber > 0"
+            style="color:red"> {{ scope.row.printNumber }}</span>
+        </template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
@@ -292,47 +300,6 @@ export default {
         startTime: '',
         endTime: '',
       },
-      // 日期选择配置项
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: '今天',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime())
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            },
-          },
-        ],
-      },
       hospitalList: [],
       doctorList: [],
       patientList: [],
@@ -346,6 +313,38 @@ export default {
         isSignature: '1',
       },
       tableHeaderBig: [],
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '今天',
+            onClick(picker) {
+              const start = new Date(new Date().toLocaleDateString()).getTime()
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 6
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const start =
+                new Date(new Date().toLocaleDateString()).getTime() -
+                3600 * 1000 * 24 * 30
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
+            },
+          },
+        ],
+      },
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -359,10 +358,27 @@ export default {
     if (heartSearchForm) {
       this.searchForm = heartSearchForm
     }
-    let pageNum = JSON.parse(sessionStorage.getItem('pageNum'))
+    // 缓存pageNum pageSize
+    let pageNum = sessionStorage.getItem('heartPageNum')
+    let pageSize = sessionStorage.getItem('heartPageSize')
     if (pageNum) {
-      this.pageNum = pageNum
+      this.pageNum = Number(pageNum)
     }
+    if (pageSize) {
+      this.pageSize = Number(pageSize)
+    }
+    // 医院监测统计跳转本页面携带参数
+    let monitoringStartTime = sessionStorage.getItem('monitoringStartTime')
+    let monitoringEndTime = sessionStorage.getItem('monitoringEndTime')
+    let monitoringHospitalId = sessionStorage.getItem('monitoringHospitalId')
+    let monitoringAuditStatus = sessionStorage.getItem('monitoringAuditStatus')
+    if (monitoringStartTime && monitoringEndTime) {
+      this.searchForm.monitorTime = [monitoringStartTime, monitoringEndTime]
+    }
+    this.searchForm.startTime = monitoringStartTime
+    this.searchForm.endTime = monitoringEndTime
+    this.searchForm.hospitalId = monitoringHospitalId
+    this.searchForm.auditStatus = monitoringAuditStatus
     this.getList()
   },
   mounted() {
@@ -420,8 +436,14 @@ export default {
     // 重置
     searchReset() {
       sessionStorage.removeItem('heartSearchForm')
-      sessionStorage.removeItem('pageNum')
+      sessionStorage.removeItem('heartPageNum')
+      sessionStorage.removeItem('heartPageSize')
+      sessionStorage.removeItem('monitoringHospitalId')
+      sessionStorage.removeItem('monitoringStartTime')
+      sessionStorage.removeItem('monitoringEndTime')
+      sessionStorage.removeItem('monitoringAuditStatus')
       this.pageNum = 1
+      this.pageSize = 10
       this.searchForm = {}
       this.getList()
     },
@@ -485,7 +507,7 @@ export default {
     },
     exportExcel() {
       // this.DefaultData.exportExcelMax限制一下导出的总条数
-      if (this.total <= 1000) {
+      if (this.total <= 3000) {
         this.$confirm(
           '确定要导出当前<strong>' + this.total + '</strong>条数据？',
           '提示',
@@ -525,60 +547,101 @@ export default {
     /**
      * 导出的列表数据
      */
-    getExpportData: function () {
+    getExpportData() {
       const loading = this.$loading({
         lock: true,
         text: '正在导出，请稍等......',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)',
       })
-      const data = {
-        // phoneNo: this.formInline.phoneNo,
-        // userName: this.formInline.userName,
-        // amount: this.formInline.amount,
-        // fee: this.formInline.fee,
-        // currentPage: this.currentPage,
-        // this.DefaultData.exportExcelMax
-        pageSize: 5,
+      // 请求参数
+      let searchForm = {
+        page: 1,
+        pageSize: 3000,
+        patientUserName: this.searchForm.patientUserName,
+        patientUserPhone: this.searchForm.patientUserPhone,
+        detectType: this.searchForm.detectType,
+        auditStatus: this.searchForm.auditStatus,
+        doctorUserId: this.searchForm.doctorUserId,
+        hospitalId: this.searchForm.hospitalId,
+        resultStatus: this.searchForm.resultStatus,
+        ecgResult: this.searchForm.ecgResult,
+        heartRateAdviceType: this.searchForm.suggestion,
+        startTime: this.searchForm.startTime,
+        endTime: this.searchForm.endTime,
       }
-      // 这里封装了axios，根据自身情况修改即可
-      this.http(this.ApiSetting.orderExport, data).then(
+      httpAdminHeartRate.getHeartRate(searchForm).then(
         (res) => {
-          // handleDataList这里可以对导出的数据根据需求做下处理
-          const handleDataList = res.data.list
-          for (let i in res.data.list) {
-            handleDataList[i].amount = res.data.list[i].amount * 100
-            handleDataList[i].fee = res.data.list[i].fee + '%'
-          }
-          if (this.list.length > 0) {
+          let handleDataList = res.data.elements
+          handleDataList.forEach((item) => {
+            if (item.length) {
+              item.length = formatSeconds(
+                JSON.parse(item.reportResult).body.data.length
+              )
+            }
+            if (item.inspectionTime) {
+              item.inspectionTime = parseTime(item.inspectionTime)
+            }
+            if (item.auditTime) {
+              item.auditTime = parseTime(item.auditTime)
+            }
+            if (item.auditStatus === 'TO_AUDIT') {
+              item.auditStatus = '待公司审核'
+            } else if (item.auditStatus === 'PLATFORM_COMPLETE_AUDIT') {
+              item.auditStatus = '公司已审核'
+            } else if (item.auditStatus === 'TO_HOSPITAL_AUDIT') {
+              item.auditStatus = '待医院审核'
+            } else if (item.auditStatus === 'HOSPITAL_COMPLETE_AUDIT') {
+              item.auditStatus = '医院已审核'
+            } else {
+              item.auditStatus = '已作废'
+            }
+          })
+          if (handleDataList.length > 0) {
             require.ensure([], () => {
-              /* eslint-disable */
-              // 这里的径路要修改正确
               const {
                 export_json_to_excel,
               } = require('@/utils/vendor/Export2Excel')
-              /* eslint-enable  */
               // 导出的表头
-              const tHeader = ['手机号码', '用户姓名', '交易金额', '手续费']
+              const tHeader = [
+                '医院名称',
+                '医师姓名',
+                '姓名',
+                '手机号',
+                '身份证号',
+                '设备号',
+                '监测时长',
+                '测量结果',
+                '处置建议',
+                '心电分析结果',
+                '监测日期',
+                '审核状态',
+                '审核时间',
+                '审核人',
+              ]
               // 导出表头要对应的数据
-              const filterVal = ['phoneNo', 'userName', 'amount', 'fee']
-              // 如果对导出的数据没有可处理的需求，把下面的handleDataList换成res.data.list即可，删掉上面相应的代码
+              const filterVal = [
+                'hospitalName',
+                'doctorUserName',
+                'patientUserName',
+                'patientUserPhone',
+                'idCard',
+                'serialNumber',
+                'length',
+                'title',
+                'suggestion',
+                'ecgResult',
+                'inspectionTime',
+                'auditStatus',
+                'auditTime',
+                'auditorName',
+              ]
               const data = this.formatJson(filterVal, handleDataList)
-              // this.DefaultData.formatLongDate.getNow()自己写的一个获取当前时间，方便查找导出后的文件。根据需求自行可处理。
-              export_json_to_excel(
-                tHeader,
-                data,
-                '订单查询列表-' + this.DefaultData.formatLongDate.getNow()
-              )
-              this.$message({
-                message: '导出成功',
-                duration: 2000,
-                type: 'success',
-              })
+              export_json_to_excel(tHeader, data, '心率列表')
             })
           } else {
             this.$message({
-              message: '数据出錯，请联系管理员',
+              message: '数据出錯，请稍后重试',
               duration: 2000,
               type: 'warning',
             })
@@ -604,10 +667,12 @@ export default {
      */
     handleSizeChange(newSize) {
       this.pageSize = newSize
+      sessionStorage.setItem('heartPageSize', newSize)
       this.getList()
     },
     handleCurrentChange(newPage) {
       this.pageNum = newPage
+      sessionStorage.setItem('heartPageNum', newPage)
       this.getList()
     },
   },

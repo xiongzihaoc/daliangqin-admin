@@ -130,7 +130,7 @@
       v-loading="loading"
     >
       <!-- 操作 -->
-      <el-table-column slot="fixed" fixed="left" type="selection"></el-table-column>
+      <el-table-column slot="fixed" fixed="left" type="selection" :selectable="selectable"></el-table-column>
       <el-table-column align="center" slot="fixed" fixed="right" label="操作" width="120">
         <template slot-scope="scope">
           <el-button size="mini" @click="detailsBtn(scope.row)" type="primary">详细资料</el-button>
@@ -175,7 +175,7 @@
       </el-form>
       <div style="color: #c5051c; padding: 0 32px;">注意：转移用户是指将所选择的用户转移至选择的医师名下，请谨慎操作</div>
       <div slot="footer">
-        <el-button @click="transferDialogVisible = false">取 消</el-button>
+        <el-button @click="transferCancel">取 消</el-button>
         <el-button @click="transferAffirm" type="primary" :disabled="affirmBtn">确 定</el-button>
       </div>
     </el-dialog>
@@ -360,9 +360,10 @@ export default {
     // 更换签约
     putArchivesDoctor(archivesDoctorDTO) {
       httpAdminArchives.putArchivesDoctor(archivesDoctorDTO).then((res) => {
-        if(res.code === 'OK'){
+        if (res.code === 'OK') {
           this.$message.success(res.message)
-        }else{
+          this.transfer = {}
+        } else {
           this.$message.error(res.message)
         }
         this.transferDialogVisible = false
@@ -383,6 +384,8 @@ export default {
     searchReset() {
       this.pageNum = 1
       this.searchForm = {}
+      this.transferBtn = true
+      this.transferCancel()
       this.getList()
     },
     /**
@@ -418,27 +421,46 @@ export default {
       this.transfer.doctorName = ''
       if (this.checkboxList.length <= 0 || this.transfer.doctorName === '') {
         this.affirmBtn = true
-      }else{
+      } else {
         this.affirmBtn = false
       }
     },
+    // 转移 医生选择
     selectDoctor() {
-       if (this.checkboxList.length <= 0 || this.transfer.doctorName === undefined) {
+      const all = (arr, fn = Boolean) => arr.every(fn)
+      let doctorIdJudge = all(this.checkboxList, x => x.doctorUserId === this.transfer.doctorName)
+      if (doctorIdJudge === true) {
         this.affirmBtn = true
-      }else{
+        this.$message.error('当前用户的医师未发生改变，请核对')
+        return
+      }
+      if (this.checkboxList.length <= 0 || this.transfer.doctorName === undefined) {
+        this.affirmBtn = true
+      } else {
         this.affirmBtn = false
       }
       this.$forceUpdate()
+    },
+    // 是否建档
+    selectable(row, index) {
+      return row.isArchives
     },
     // 转诊确认
     transferAffirm() {
       let arr = []
       this.checkboxList.forEach((val, idx) => {
-        arr.push(val.id)
+        if (val.isArchives) {
+          arr.push(val.id)
+        }
       })
       // 获取到医生id
-      if (arr.length <= 0 || this.transfer.doctorName === undefined)return
+      if (arr.length <= 0 || this.transfer.doctorName === undefined) return
       this.putArchivesDoctor({ patientUserIds: arr, doctorUserId: this.transfer.doctorName })
+    },
+    // 转诊取消
+    transferCancel() {
+      this.transferDialogVisible = false
+      this.transfer = {}
     },
     // 跳转详细资料
     detailsBtn(val) {
@@ -448,6 +470,7 @@ export default {
       })
       localStorage.setItem('patientNum', this.pageNum)
     },
+
     /***** 表格格式化内容区域 *****/
     // 出生年月
     genderFormatter(row) {
