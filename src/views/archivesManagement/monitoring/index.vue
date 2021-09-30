@@ -56,7 +56,10 @@
       <el-table-column align="center" label="测量总人数" prop="measureTotalFrequency"></el-table-column>
       <el-table-column align="center" label="测量总次数" prop="measureTotalAmount">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row, 'people')">{{ scope.row.measureTotalAmount }}</span>
+          <span
+            class="skipStyle"
+            @click="skipHeart(scope.row, 'people')"
+          >{{ scope.row.measureTotalAmount }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="公司已审核报告数" prop="companyAuditNumber">
@@ -197,8 +200,7 @@ export default {
     getSummaries() { },
     // 跳转心率检测
     skipHeart(val, state) {
-      console.log(val)
-      if(state != 'people'){
+      if (state != 'people') {
         sessionStorage.setItem('monitoringAuditStatus', state)
       }
       sessionStorage.setItem('monitoringHospitalId', val.hospitalId)
@@ -220,6 +222,8 @@ export default {
     },
     searchReset() {
       this.pageNum = 1
+      this.searchForm.startTime = new Date(new Date().toLocaleDateString()).getTime(),
+      this.searchForm.endTime = new Date().getTime(),
       this.getList()
     },
     /**
