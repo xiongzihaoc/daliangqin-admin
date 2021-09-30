@@ -227,6 +227,7 @@ export default {
       this.pageNum = 1
       this.searchForm.startTime = new Date( new Date().toLocaleDateString()).getTime()
       this.searchForm.endTime = new Date().getTime()
+      this.searchForm.superviseTime = [new Date(), new Date()]
       this.getList()
     },
     /**
