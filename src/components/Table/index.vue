@@ -22,7 +22,7 @@
       :cell-class-name="cellClassName"
       :header-cell-class-name="headerCellClassName"
       :row-class-name="tableRowClassName">
-      <slot name="fixed"></slot>
+      <slot></slot>
       <el-table-column v-for="(col, index) in tableHeader"
         :key="index"
         align="center"
