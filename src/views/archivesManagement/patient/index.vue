@@ -443,14 +443,12 @@ export default {
     },
     // 是否建档
     selectable(row, index) {
-      console.log('多选框', row.isArchives)
       return row.isArchives
     },
     // 转诊确认
     transferAffirm() {
       let arr = []
       this.checkboxList.forEach((val, idx) => {
-        console.log('是否建档', val.isArchives)
         if (val.isArchives) {
           arr.push(val.id)
         }
