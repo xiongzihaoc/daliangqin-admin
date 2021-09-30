@@ -31,4 +31,18 @@ export const httpAdminHeartRate = {
       data
     })
   },
+  // 记录打印次数
+  putHeartRatePrint(data) {
+    return request({
+      url: 'equipment/heartRate/print/' + data.id,
+      method: 'put',
+    })
+  },
+  // 清空打印次数
+  putHeartRateClear(data) {
+    return request({
+      url: 'equipment/heartRate/clear/' + data.id,
+      method: 'put',
+    })
+  },
 }
