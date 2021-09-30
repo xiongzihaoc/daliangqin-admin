@@ -4,12 +4,7 @@
     <div class="search-box">
       <el-form ref="searchFormRef" :model="searchForm" class="searchForm" :inline="true">
         <el-form-item label="医院名称" align="left">
-          <el-select
-            v-model="searchForm.hospitalId"
-            size="small"
-            filterable
-            placeholder="请选择医院"
-          >
+          <el-select v-model="searchForm.hospitalId" size="small" filterable placeholder="请选择医院">
             <el-option
               v-for="item in hospitalList"
               :key="item.id"
@@ -36,12 +31,8 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh"
-            >重置</el-button
-          >
+          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -62,50 +53,42 @@
           <span class="skipStyle" @click="skipHeart(scope.row)">{{ scope.row.hospitalName }}</span>
         </template>-->
       </el-table-column>
-      <el-table-column
-        align="center"
-        label="测量总人数"
-        prop="measureTotalFrequency"
-      ></el-table-column>
-      <el-table-column
-        align="center"
-        label="测量总次数"
-        prop="measureTotalAmount"
-      ></el-table-column>
+      <el-table-column align="center" label="测量总人数" prop="measureTotalFrequency"></el-table-column>
+      <el-table-column align="center" label="测量总次数" prop="measureTotalAmount"></el-table-column>
       <el-table-column align="center" label="公司已审核报告数" prop="companyAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row)">{{
-            scope.row.companyAuditNumber
-          }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row, 'PLATFORM_COMPLETE_AUDIT')">
+            {{
+              scope.row.companyAuditNumber
+            }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="医院已审核报告数" prop="hospitalAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row)">{{
-            scope.row.hospitalAuditNumber
-          }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row, 'HOSPITAL_COMPLETE_AUDIT')">
+            {{
+              scope.row.hospitalAuditNumber
+            }}
+          </span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        label="公司待审核报告数"
-        prop="companyWaitAuditNumber"
-      >
+      <el-table-column align="center" label="公司待审核报告数" prop="companyWaitAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row)">{{
-            scope.row.companyWaitAuditNumber
-          }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row, 'TO_AUDIT')">
+            {{
+              scope.row.companyWaitAuditNumber
+            }}
+          </span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        label="医院待审核报告数"
-        prop="hospitalWaitAuditNumber"
-      >
+      <el-table-column align="center" label="医院待审核报告数" prop="hospitalWaitAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row)">{{
-            scope.row.hospitalWaitAuditNumber
-          }}</span>
+          <span class="skipStyle" @click="skipHeart(scope.row, 'TO_HOSPITAL_AUDIT')">
+            {{
+              scope.row.hospitalWaitAuditNumber
+            }}
+          </span>
         </template>
       </el-table-column>
     </EleTable>
@@ -198,9 +181,10 @@ export default {
         this.hospitalList = res.data.elements;
       });
     },
-    getSummaries() {},
+    getSummaries() { },
     // 跳转心率检测
-    skipHeart(val) {
+    skipHeart(val, state) {
+      sessionStorage.setItem("monitoringAuditStatus", state);
       sessionStorage.setItem("monitoringHospitalId", val.hospitalId);
       sessionStorage.setItem("monitoringStartTime", this.searchForm.startTime);
       sessionStorage.setItem("monitoringEndTime", this.searchForm.endTime);
@@ -239,4 +223,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>
