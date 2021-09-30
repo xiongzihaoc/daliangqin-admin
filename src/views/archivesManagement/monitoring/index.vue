@@ -42,6 +42,7 @@
             size="small"
             plain
             icon="el-icon-refresh">重置</el-button>
+            <el-button type="success" size="small" @click="getAll">全部</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -231,6 +232,12 @@ export default {
     changeMonitorTime(val) {
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
+    },
+    // 获取全部数据
+    getAll(){
+      this.searchForm.startTime = ''
+      this.searchForm.endTime = ''
+      this.getList()
     },
     /**
      * 搜索
