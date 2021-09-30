@@ -235,6 +235,7 @@ export default {
     },
     // 获取全部数据
     getAll(){
+      this.searchForm.superviseTime = ''
       this.searchForm.startTime = ''
       this.searchForm.endTime = ''
       this.getList()
