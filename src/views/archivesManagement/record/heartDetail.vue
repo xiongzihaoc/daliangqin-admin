@@ -50,7 +50,7 @@
               <div class="box"><span class="fw txt-r">监测时长</span>：
                 <span>{{formatSeconds(heartDetail.length)}}</span>
               </div>
-              <div class="box"><span class="fw txt-r">测量结果</span>：
+              <div class="over box"><span class="fw txt-r">测量结果</span>：
                 <span ref="title"
                   class="minWidth"
                   style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;word-break: break-all;"
@@ -440,7 +440,7 @@ export default {
       let thirdForm = {
         recordId: this.$route.query.id,
         avg: Number(this.$refs.avg.innerText),
-        title: this.$refs.ecgResult.innerText,
+        // title: this.$refs.ecgResult.innerText,
         max: Number(this.$refs.max.innerText),
         min: Number(this.$refs.min.innerText),
         normalRate: Number(this.$refs.normalRate.innerText),

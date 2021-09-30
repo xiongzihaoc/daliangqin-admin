@@ -138,7 +138,7 @@
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
         label="序号"
-        type="index"> </el-table-column>
+        type="index"></el-table-column>
       <el-table-column align="center"
         label="医院名称"
         prop="hospitalName">
