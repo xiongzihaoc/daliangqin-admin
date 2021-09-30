@@ -138,7 +138,7 @@
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
         label="序号"
-        type="index"> </el-table-column>
+        type="index"></el-table-column>
       <el-table-column align="center"
         label="医院名称"
         prop="hospitalName">
@@ -422,6 +422,7 @@ export default {
     },
     // 选择监测日期
     changeMonitorTime(val) {
+      console.log(val)
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
     },
