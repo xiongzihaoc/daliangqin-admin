@@ -53,7 +53,7 @@
               <div class="box"><span class="fw txt-r">测量结果</span>：
                 <span ref="title"
                   class="minWidth"
-                  contenteditable="true"
+                  style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;word-break: break-all;"
                   v-html="heartDetail.title"></span>
               </div>
               <!-- 占位符 -->
@@ -261,15 +261,11 @@
             </div>
           </div>
           <el-button size="medium"
-            :plain="printType === 'primary'?false:true"
-            :type="printType"
-            class="w100 printBtn"
+            plain
+            class="w100"
             :disabled="isPrintDisabled"
-            v-print="printObj"
-            @click="onPrint">
+            v-print="printObj">
             打印
-            <span style="font-size:10px;color:#ccc"
-              v-if="printCount > 0">已打印({{printCount}})</span>
           </el-button>
         </div>
         <!-- 操作时间线 -->
@@ -361,11 +357,6 @@ export default {
     }
   },
   created() {
-    let printCount = localStorage.getItem('printCount')
-    if (printCount) {
-      this.printType = 'primary'
-      this.printCount = printCount
-    }
     this.getList()
   },
   mounted() {
@@ -480,7 +471,7 @@ export default {
       let thirdForm = {
         recordId: this.$route.query.id,
         avg: Number(this.$refs.avg.innerText),
-        title: this.$refs.title.innerText,
+        title: this.$refs.ecgResult.innerText,
         max: Number(this.$refs.max.innerText),
         min: Number(this.$refs.min.innerText),
         normalRate: Number(this.$refs.normalRate.innerText),
@@ -555,21 +546,6 @@ export default {
           this.hospitalId = ''
         }
       })
-    },
-    // 记录打印次数
-    onPrint() {
-      let printCount = localStorage.getItem('printCount')
-      this.printType = 'primary'
-      if (printCount) {
-        localStorage.setItem('printCount', Number(printCount) + 1)
-        this.printCount = printCount
-      } else {
-        localStorage.setItem('printCount', 1)
-        this.printCount = printCount
-      }
-      printCount = localStorage.getItem('printCount')
-      this.printCount = printCount
-      this.getList()
     },
     formatTitle(val) {
       switch (val.auditStatus) {
