@@ -15,7 +15,7 @@
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
-            v-model="searchForm.superviseTime"
+            v-model="superviseTime"
             size="small"
             align="right"
             type="daterange"
@@ -146,6 +146,12 @@ export default {
               picker.$emit("pick", [start, end]);
             },
           },
+          {
+            text: "全部",
+            onClick(picker) {
+              picker.$emit("pick", '');
+            },
+          },
         ],
       },
       // 分页区域
@@ -155,9 +161,7 @@ export default {
     };
   },
   created() {
-    let startTime = new Date(new Date().toLocaleDateString()).getTime()
-    let endTime = new Date().getTime()
-    this.searchForm.superviseTime = [startTime, endTime]
+    this.getTodayTime();
     this.getList();
   },
   mounted() {
@@ -198,6 +202,12 @@ export default {
       this.searchForm.startTime = val[0];
       this.searchForm.endTime = val[1];
     },
+    // 获取当天时间 今天
+    getTodayTime() {
+      let startTime = new Date(new Date().toLocaleDateString()).getTime()
+      let endTime = new Date().getTime()
+      this.superviseTime = [startTime, endTime]
+    },
     /**
      * 搜索
      */
@@ -207,8 +217,11 @@ export default {
     },
     searchReset() {
       this.pageNum = 1;
-      this.searchForm = {};
-      this.superviseTime = "";
+      this.searchForm = {
+        startTime: new Date().getTime(),
+        endTime: new Date().getTime(),
+      };
+      this.getTodayTime();
       this.getList();
     },
     /**
