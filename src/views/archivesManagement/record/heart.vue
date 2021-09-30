@@ -236,7 +236,8 @@
         label="已打印次数"
         prop="printNumber">
         <template slot-scope="scope">
-          <span v-if="scope.row.printNumber > 0" style="color:red"> {{ scope.row.printNumber }}</span>
+          <span v-if="scope.row.printNumber > 0"
+            style="color:red"> {{ scope.row.printNumber }}</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
@@ -362,8 +363,8 @@ export default {
       this.pageNum = pageNum
     }
     // 医院监测统计跳转本页面携带参数
-    let monitoringStartTime = Number(sessionStorage.getItem('monitoringStartTime'))
-    let monitoringEndTime = Number(sessionStorage.getItem('monitoringEndTime'))
+    let monitoringStartTime = sessionStorage.getItem('monitoringStartTime')
+    let monitoringEndTime = sessionStorage.getItem('monitoringEndTime')
     let monitoringHospitalId = sessionStorage.getItem('monitoringHospitalId')
     let monitoringAuditStatus = sessionStorage.getItem('monitoringAuditStatus')
     if (monitoringStartTime && monitoringEndTime) {
