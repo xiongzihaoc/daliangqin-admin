@@ -381,6 +381,12 @@ export default {
     this.searchForm.auditStatus = monitoringAuditStatus
     this.getList()
   },
+  beforeDestroy() {
+    sessionStorage.removeItem('monitoringHospitalId')
+    sessionStorage.removeItem('monitoringStartTime')
+    sessionStorage.removeItem('monitoringEndTime')
+    sessionStorage.removeItem('monitoringAuditStatus')
+  },
   mounted() {
     this.getHospitalList()
     this.getDoctorList()
@@ -422,7 +428,6 @@ export default {
     },
     // 选择监测日期
     changeMonitorTime(val) {
-      console.log(val)
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
     },
