@@ -155,6 +155,9 @@ export default {
     };
   },
   created() {
+    let startTime = new Date(new Date().toLocaleDateString()).getTime()
+    let endTime = new Date().getTime()
+    this.searchForm.superviseTime = [startTime, endTime]
     this.getList();
   },
   mounted() {
