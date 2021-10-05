@@ -353,11 +353,6 @@ export default {
       hospitalDialogVisible: false,
     };
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      console.log(from)
-    });
-  },
   created() {
     let heartSearchForm = JSON.parse(sessionStorage.getItem("heartSearchForm"));
     if (heartSearchForm) {
