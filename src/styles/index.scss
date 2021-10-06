@@ -7,6 +7,9 @@
 
 body {
   height: 100%;
+  // 解决element dialog打开抖动问题
+  padding-right: 0px !important;
+  overflow: hidden;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
