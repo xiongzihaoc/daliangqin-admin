@@ -328,7 +328,7 @@ export default {
             onClick(picker) {
               const start =
                 new Date(new Date().toLocaleDateString()).getTime() -
-                3600 * 1000 * 24 * 6;
+                3600 * 1000 * 24 * 7;
               const end = new Date().getTime();
               picker.$emit("pick", [start, end]);
             },
