@@ -384,6 +384,9 @@ export default {
   },
 
   beforeDestroy() {
+    sessionStorage.removeItem('heartSearchForm')
+    sessionStorage.removeItem('heartPageNum')
+    sessionStorage.removeItem('heartPageSize')
     sessionStorage.removeItem('monitoringHospitalId')
     sessionStorage.removeItem('monitoringStartTime')
     sessionStorage.removeItem('monitoringEndTime')
@@ -430,7 +433,6 @@ export default {
     },
     // 选择监测日期
     changeMonitorTime(val) {
-      console.log(val)
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
     },
@@ -515,7 +517,6 @@ export default {
       )
     },
     exportExcel() {
-      // this.DefaultData.exportExcelMax限制一下导出的总条数
       if (this.total <= 3000) {
         this.$confirm(
           '确定要导出当前<strong>' + this.total + '</strong>条数据？',
