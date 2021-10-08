@@ -382,7 +382,6 @@ export default {
     this.searchForm.auditStatus = monitoringAuditStatus
     this.getList()
   },
-
   beforeDestroy() {
     sessionStorage.removeItem('heartSearchForm')
     sessionStorage.removeItem('heartPageNum')
@@ -480,12 +479,10 @@ export default {
           getList()
         }
       }, 1000)
-      sessionStorage.setItem('heartSearchForm', JSON.stringify(this.searchForm))
-      sessionStorage.setItem('pageNum', JSON.stringify(this.pageNum))
     },
     // 查看心电图
     examineElectrocardiograph(val) {
-      let deskUrl = JSON.parse(val.reportResult).body.data.deskUrl
+      let deskUrl = JSON.parse(val.reportResult).body.data.deskUrl1
       let ecgUrl = JSON.parse(val.reportResult).body.data.ecgUrl
       if (deskUrl) {
         window.open(deskUrl)

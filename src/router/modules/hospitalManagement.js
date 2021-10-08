@@ -143,54 +143,54 @@ const hospitalRouter = {
             ],
         },
         // AI随访
-        // {
-        //     path: 'ai',
-        //     name: 'ai',
-        //     component: () => import('@/views/hospitalManagement/AI'),
-        //     redirect: "/hospitalManagement/AI/task",
-        //     meta: {
-        //         title: 'AI随访',
-        //         icon: 'AI'
-        //     },
-        //     children: [
-        //         {
-        //             path: "Aitask",
-        //             name: "Aitask",
-        //             component: () => import('@/views/hospitalManagement/AI/task'),
-        //             meta: {
-        //                 title: '呼叫任务',
-        //                 icon: 'general'
-        //             },
-        //         },
-        //         {
-        //             path: "history",
-        //             name: "history",
-        //             component: () => import('@/views/hospitalManagement/AI/history'),
-        //             meta: {
-        //                 title: '联系历史',
-        //                 icon: 'general'
-        //             },
-        //         },
-        //         {
-        //             path: "problem",
-        //             name: "problem",
-        //             component: () => import('@/views/hospitalManagement/AI/problem'),
-        //             meta: {
-        //                 title: '通话情况汇总',
-        //                 icon: 'general'
-        //             },
-        //         },
-        //         {
-        //             path: "analysis",
-        //             name: "analysis",
-        //             component: () => import('@/views/hospitalManagement/AI/analysis/analysis'),
-        //             meta: {
-        //                 title: '通话数据统计',
-        //                 icon: 'general'
-        //             },
-        //         }
-        //     ],
-        // },
+        {
+            path: 'ai',
+            name: 'ai',
+            component: () => import('@/views/hospitalManagement/AI'),
+            redirect: "/hospitalManagement/AI/task",
+            meta: {
+                title: 'AI随访',
+                icon: 'AI'
+            },
+            children: [
+                {
+                    path: "Aitask",
+                    name: "Aitask",
+                    component: () => import('@/views/hospitalManagement/AI/task'),
+                    meta: {
+                        title: '呼叫任务',
+                        icon: 'general'
+                    },
+                },
+                {
+                    path: "history",
+                    name: "history",
+                    component: () => import('@/views/hospitalManagement/AI/history'),
+                    meta: {
+                        title: '联系历史',
+                        icon: 'general'
+                    },
+                },
+                {
+                    path: "problem",
+                    name: "problem",
+                    component: () => import('@/views/hospitalManagement/AI/problem'),
+                    meta: {
+                        title: '通话情况汇总',
+                        icon: 'general'
+                    },
+                },
+                {
+                    path: "analysis",
+                    name: "analysis",
+                    component: () => import('@/views/hospitalManagement/AI/analysis/analysis'),
+                    meta: {
+                        title: '通话数据统计',
+                        icon: 'general'
+                    },
+                }
+            ],
+        },
     ]
 }
 export default hospitalRouter
