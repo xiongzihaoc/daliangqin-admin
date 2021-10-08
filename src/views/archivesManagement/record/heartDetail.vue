@@ -415,7 +415,7 @@ export default {
       //   e.returnValue = "关闭提示";
       // }
       // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
-      return;
+      return e
     },
     // 获取信息
     getList() {
