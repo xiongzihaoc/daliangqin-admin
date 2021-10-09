@@ -3,7 +3,6 @@
         <!-- 搜索区域 -->
         <div class="search-box">
             <el-form class="searchForm" ref="searchFormRef" :model="searchForm" :inline="true">
-                <!-- 医院名称 -->
                 <el-form-item label="医院名称">
                     <el-select
                         v-model="searchForm.hospitalId"
@@ -19,7 +18,6 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <!-- 任务期名 -->
                 <el-form-item>
                     <el-select v-model="searchForm.task" size="small" placeholder="请选择任务名称">
                         <el-option label="期名" value="item.value"></el-option>
@@ -28,30 +26,26 @@
                         <el-option label="一期" value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <!-- 任务状态 -->
                 <el-form-item label="任务状态">
                     <el-select v-model="searchForm.taskState" size="small" filterable>
                         <el-option
-                            v-for="item in taskState"
+                            v-for="item in AiTaskStatus"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value"
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <!-- 完成时间 -->
                 <el-form-item label="完成时间">
                     <el-select v-model="searchForm.completionTime" size="small" filterable>
                         <el-option label="完成时间" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <!-- 创建时间 -->
                 <el-form-item label="创建时间">
                     <el-select v-model="searchForm.creationTime" size="small" filterable>
                         <el-option label="创建时间" value="1"></el-option>
                     </el-select>
                 </el-form-item>
-                <!-- bottom -->
                 <el-form-item>
                     <el-button
                         @click="searchBtn"
@@ -85,21 +79,51 @@
         >
             <el-table-column align="center" type="index" label="序号"></el-table-column>
             <el-table-column align="center" label="医院名称" prop="hospitalName"></el-table-column>
-            <el-table-column align="center" label="BOT名称" prop></el-table-column>
-            <el-table-column align="center" label="任务状态"></el-table-column>
-            <el-table-column align="center" label="总外呼人数"></el-table-column>
-            <el-table-column align="center" label="已呼人数"></el-table-column>
-            <el-table-column align="center" label="未呼人数"></el-table-column>
-            <el-table-column align="center" label="已接听人数"></el-table-column>
-            <el-table-column align="center" label="未接听人数"></el-table-column>
-            <el-table-column align="center" label="并发数量"></el-table-column>
-            <el-table-column align="center" label="启动时间"></el-table-column>
-            <el-table-column align="center" label="完成时间"></el-table-column>
-            <el-table-column align="center" label="创建人"></el-table-column>
-            <el-table-column align="center" label="创建时间"></el-table-column>
+            <el-table-column align="center" label="任务名称" prop="aiName"></el-table-column>
+            <el-table-column align="center" label="期名" prop="taskStage"></el-table-column>
+            <el-table-column align="center" label="BOT名称" prop="dialogFlowName"></el-table-column>
+            <el-table-column align="center" label="任务状态" prop="status" :formatter="statusFormatter"></el-table-column>
+            <el-table-column align="center" label="总外呼人数" prop="taskTotalNumber">
+                <template slot-scope="scope">
+                    <span class="skipStyle" @click>{{ scope.row.taskTotalNumber }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="已呼人数" prop="alreadyNumber">
+                <template slot-scope="scope">
+                    <span class="skipStyle" @click>{{ scope.row.alreadyNumber }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="未呼人数" prop="notNumber">
+                <template slot-scope="scope">
+                    <span class="skipStyle" @click>{{ scope.row.notNumber }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="已接听人数" prop="alreadyPeopleNumber">
+                <template slot-scope="scope">
+                    <span class="skipStyle" @click>{{ scope.row.alreadyPeopleNumber }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="未接听人数" prop="notPeopleNumber">
+                <template slot-scope="scope">
+                    <span class="skipStyle" @click="">{{ scope.row.notPeopleNumber }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="并发数量" prop="concurrentQuantity"></el-table-column>
+            <el-table-column align="center" label="启动时间" prop="startTime">
+                <template slot-scope="scope">
+                    <span>{{ parseTime(scope.row.startTime) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="完成时间" prop="completeTime">
+                <template slot-scope="scope">
+                    <span>{{ parseTime(scope.row.completeTime) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" label="创建人" prop="taskUserJson"></el-table-column>
+            <el-table-column align="center" label="创建时间" prop="createName"></el-table-column>
             <el-table-column align="center" label="操作"></el-table-column>
         </EleTable>
-        <!-- 添加用户 -->
+        <!-- 弹出框 -->
         <el-dialog title="添加" :visible.sync="userVisible" width="40%">
             <el-form :rules="formRules" :model="addUserFrom" label-width="100px">
                 <el-form-item label="选择医院" prop="name">
@@ -151,7 +175,7 @@
         </el-dialog>
         <!-- ai时间段 -->
         <el-dialog title="时间添加" :visible.sync="timeVisible" width="40%">
-            <el-form>
+            <el-form label-width="auto">
                 <el-form-item label="可拨打时间段">
                     <el-time-picker
                         is-range
@@ -161,11 +185,11 @@
                         start-placeholder="开始时间"
                         end-placeholder="结束时间"
                         placeholder="选择时间范围"
-                        @change="time"
+                        @change="getDialable"
                     ></el-time-picker>
                 </el-form-item>
-                <el-form-item label="不可拨打时间段" style="display: flex;">
-                    <div>
+                <el-form-item label="不可拨打时间段">
+                    <div style="display: flex">
                         <el-time-picker
                             is-range
                             format="HH:mm:ss"
@@ -174,13 +198,38 @@
                             start-placeholder="开始时间"
                             end-placeholder="结束时间"
                             placeholder="选择时间范围"
-                            @change="time"
+                            @change="getDialable"
                         ></el-time-picker>
+                        <el-button type="primary">添加</el-button>
                     </div>
-                     <el-button type="primary" size="small">添加</el-button>
                 </el-form-item>
-                <el-form-item label="重复周期"></el-form-item>
-                <el-form-item label="不可拨打日期"></el-form-item>
+                <el-form-item label="重复周期">
+                    <el-checkbox-group v-model="timeForm.checkListPeriod" @change="getPeriod">
+                        <el-checkbox label="周一"></el-checkbox>
+                        <el-checkbox label="周二"></el-checkbox>
+                        <el-checkbox label="周三"></el-checkbox>
+                        <el-checkbox label="周四"></el-checkbox>
+                        <el-checkbox label="周五"></el-checkbox>
+                        <el-checkbox label="周六"></el-checkbox>
+                        <el-checkbox label="周日"></el-checkbox>
+                    </el-checkbox-group>
+                </el-form-item>
+                <!-- <el-form-item label="结束日期">
+                    <el-date-picker v-model="timeForm.endTime" type="date" placeholder="选择日期时间"></el-date-picker>
+                </el-form-item>-->
+                <el-form-item label="不可拨打日期">
+                    <div style="display: flex">
+                        <el-date-picker
+                            v-model="timeForm.notDial"
+                            format="yyyy-MM-dd"
+                            type="datetimerange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                        ></el-date-picker>
+                        <el-button type="primary">添加</el-button>
+                    </div>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="timeVisible = false">取 消</el-button>
@@ -194,12 +243,19 @@
 import EleTable from '@/components/Table'
 import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import {
+    parseTime,
+    AiTaskStatus,
+    formatterElement,
+} from '@/utils/index'
 export default {
     components: {
         EleTable
     },
     data() {
         return {
+            parseTime,
+            AiTaskStatus,
             formRules: {
                 name: [{ required: true, message: '请选择医院', trigger: 'change' }],
             },
@@ -214,47 +270,21 @@ export default {
             addUserFrom: {
                 time: '',
             },
+            timeForm: {
+                checkListPeriod: [],
+                endTime: '',
+            },
             dialForm: [new Date(new Date().toLocaleDateString()), new Date()],
             list: [],
             hospitalList: [],
-            taskState: [
-                {
-                    label: '未开始',
-                    value: '0'
-                },
-                {
-                    label: '进行中',
-                    value: '1'
-                },
-                {
-                    label: '用户暂停',
-                    value: '2'
-                },
-                {
-                    label: '系统暂停',
-                    value: '3'
-                },
-                {
-                    label: '已完成',
-                    value: '4'
-                },
-                {
-                    label: '系统挂起',
-                    value: '5'
-                },
-                {
-                    label: '已终止',
-                    value: '6'
-                },
-            ],
             tableHeaderBig: [],
             // 分页区域
             pageSize: 10,
             pageNum: 1,
             total: 0,
             // 弹框区域
-            userVisible: true,
-            timeVisible: true,
+            userVisible: false,
+            timeVisible: false,
         }
     },
     mounted() {
@@ -262,9 +292,6 @@ export default {
         this.getAiCallList()
     },
     methods: {
-        time() {
-            console.log(this.dialForm)
-        },
         /* 列表数据 */
         getAiCallList() {
             httpAdminAiCall.getAiCallList().then(res => {
@@ -283,6 +310,7 @@ export default {
         searchBtn() {
 
         },
+
         /* 重置 */
         searchReset() {
 
@@ -291,9 +319,23 @@ export default {
         taskAdd() {
             this.userVisible = true
         },
+        /* 可拨打时间段 */
+        getDialable() {
+            console.log(this.dialForm)
+        },
         /* 时间设置 */
         userSetTime() {
             this.timeVisible = true
+        },
+        /* 时间添加 周期选择 checkbox */
+        getPeriod() {
+            console.log('周期', this.checkListPeriod)
+        },
+        /**
+        * 表格格式化
+        */
+        statusFormatter(row) {
+            return formatterElement.transitionStatus[row.status]
         },
         /**
          * 分页
