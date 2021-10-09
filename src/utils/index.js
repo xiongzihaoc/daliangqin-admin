@@ -677,6 +677,36 @@ export const suggestionList = [
   { id: 6, label: "转诊治疗", value: "REFERRAL_TREATMENT" },
   { id: 7, label: "转院治疗", value: "TRANSFER_TREATMENT" },
 ]
+// Ai任务状态
+export const AiTaskStatus = [
+  { id: 2, label: "未开始", value: "NOT_STARTED" },
+  { id: 3, label: "进行中", value: "IN_PROCESS" },
+  { id: 4, label: "已完成", value: "COMPLETED" },
+  { id: 5, label: "可运行", value: "RUNNABLE" },
+  { id: 6, label: "用户暂停", value: "USER_PAUSE" },
+  { id: 7, label: "系统暂停", value: "SYSTEM_SUSPENDED" },
+  { id: 8, label: "已终止", value: "TERMINATE" },
+  { id: 9, label: "排队中", value: "IN_QUEUE" },
+  { id: 10, label: "系统挂起", value: "SYSTEM_HANG_UP" },
+  { id: 11, label: "等待重呼", value: "WAITING_FOR_REDIAL" },
+  { id: 12, label: "账户禁用", value: "ACCOUNT_DISABLE" },
+  { id: 13, label: "系统维护", value: "MAINTAIN" },
+]
+// 通话 状态
+export const AiResultStatus = [
+  { id: 2, label: "已接听", value: "ANSWERED" },
+  { id: 3, label: "无应答", value: "NO_ANSWER" },
+  { id: 4, label: "忙线中", value: "BUSY" },
+  { id: 5, label: "关机", value: "POWER_OFF" },
+  { id: 6, label: "停机", value: "OUT_OF_SERVICE" },
+  { id: 7, label: "拒接", value: "REFUSED" },
+  { id: 8, label: "空号 ", value: "VACANT_NUMBER" },
+  { id: 9, label: "无法接通", value: "CAN_NOT_CONNECT" },
+  { id: 10, label: "主叫欠费", value: "FROM_PHONE_ERROR" },
+  { id: 11, label: "外呼失败", value: "SYSTEM_ERROR" },
+  { id: 12, label: "多并发呼损", value: "CALL_LOSS" },
+  { id: 13, label: "转人工呼损", value: "TRANSFER_ARTIFICIAL" },
+]
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式
@@ -817,4 +847,19 @@ export const formatterElement = {
     HOSPITAL_COMPLETE_AUDIT: "医院已审核",
     INVALID: "已作废",
   },
+  // Ai任务状态
+  transitionStatus: {
+    NOT_STARTED: "未开始",
+    IN_PROCESS: "进行中",
+    COMPLETED: "已完成",
+    RUNNABLE: "可运行",
+    USER_PAUSE: "用户暂停",
+    SYSTEM_SUSPENDED: "系统暂停",
+    TERMINATE: "已终止",
+    IN_QUEUE: "排队中",
+    SYSTEM_HANG_UP: "系统挂起",
+    WAITING_FOR_REDIAL: "已终等待重呼止",
+    ACCOUNT_DISABLE: "账户禁用",
+    MAINTAIN: "系统维护",
+  }
 }
