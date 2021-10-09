@@ -213,6 +213,7 @@ export default {
       this.searchForm.superviseTime = ''
       this.searchForm.startTime = ''
       this.searchForm.endTime = ''
+      this.searchForm.hospitalId = ''
       this.getList()
     },
     /**
@@ -223,11 +224,11 @@ export default {
       this.getList()
     },
     searchReset() {
-      //待优化
       this.pageNum = 1
       this.searchForm.startTime = new Date( new Date().toLocaleDateString()).getTime()
       this.searchForm.endTime = new Date().getTime()
       this.searchForm.superviseTime = [new Date(), new Date()]
+      this.searchForm.hospitalId = ''
       this.getList()
     },
     /**

@@ -3,48 +3,36 @@
     <div class="chart-box">
       <!-- 外呼数据 -->
       <div class="chart">
-        <OneChart />
+        <Outbound />
       </div>
       <!-- 通话状态 -->
       <div class="chart">
-        <TwoChart />
+        <Outbound />
       </div>
       <!-- 通话时长(s) -->
       <div class="chart">
-        <ThreeChart />
+        <Outbound />
       </div>
       <!-- 通话时长(用户数量) -->
       <div class="chart">
-        <FourChart />
+        <Outbound />
       </div>
       <!-- 对话轮次 -->
       <div class="chart">
-        <FiveChart />
+        <Outbound />
       </div>
       <!-- 接听率 -->
       <div class="chart">
-        <SixChart />
+        <Outbound />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import OneChart from './oneChart'
-import TwoChart from './twoChart'
-import ThreeChart from './threeChart'
-import FourChart from './fourChart'
-import FiveChart from './fiveChart'
-import SixChart from './sixChart'
+import Outbound from './outbound'
 export default {
-  components: {
-    OneChart,
-    TwoChart,
-    ThreeChart,
-    FourChart,
-    FiveChart,
-    SixChart,
-  },
+  components: {Outbound},
   data() {
     return {}
   },

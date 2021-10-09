@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-container">
     <!-- 打印区域 -->
     <div class="print-box">
       <div class="print-container">
