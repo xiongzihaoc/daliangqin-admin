@@ -125,6 +125,10 @@
             type="success"
             icon="el-icon-upload2"
             @click="exportExcel">导出excel</el-button>
+          <!-- <el-button size="small"
+            type="success"
+            icon="el-icon-folder-checked"
+            @click="bulkPrint">批量打印</el-button> -->
         </el-form-item>
       </el-form>
     </div>
@@ -444,15 +448,7 @@ export default {
     },
     // 重置
     searchReset() {
-      sessionStorage.removeItem('heartSearchForm')
-      sessionStorage.removeItem('heartPageNum')
-      sessionStorage.removeItem('heartPageSize')
-      sessionStorage.removeItem('monitoringHospitalId')
-      sessionStorage.removeItem('monitoringStartTime')
-      sessionStorage.removeItem('monitoringEndTime')
-      sessionStorage.removeItem('monitoringAuditStatus')
       this.pageNum = 1
-      this.pageSize = 10
       this.searchForm = {}
       this.getList()
     },
@@ -461,6 +457,7 @@ export default {
      */
     // 查看报告
     examineReport(val) {
+      // 跳转心率详情新窗口打开
       const routeData = this.$router.resolve({
         path: '/archivesManagement/record/heartDetail',
         query: {
@@ -543,7 +540,6 @@ export default {
           .catch(() => {})
       }
     },
-
     /**
      * 对导出数据格式处理
      */
@@ -664,6 +660,10 @@ export default {
     editDialogClosed() {
       this.$refs.FormRef.resetFields()
     },
+    /**
+     * 批量打印
+     */
+    bulkPrint() {},
     lengthFormatter(row) {
       if (row.reportResult != '') {
         return formatSeconds(JSON.parse(row.reportResult).body.data.length)
