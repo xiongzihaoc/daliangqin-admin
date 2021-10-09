@@ -141,17 +141,21 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
+        fixed="left"
         label="序号"
         type="index"></el-table-column>
       <el-table-column align="center"
+        fixed="left"
         label="医院名称"
         prop="hospitalName">
       </el-table-column>
       <el-table-column align="center"
+        fixed="left"
         label="医师姓名"
         prop="doctorUserName">
       </el-table-column>
       <el-table-column align="center"
+        fixed="left"
         label="姓名"
         prop="patientUserName">
         <template slot-scope="scope">
@@ -248,6 +252,7 @@
       <!-- 操作 -->
       <el-table-column align="center"
         label="操作"
+        fixed="right"
         width="120">
         <template slot-scope="scope">
           <el-button v-if="scope.row.isAnalysisIng === false"
