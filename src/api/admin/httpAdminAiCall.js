@@ -12,7 +12,6 @@ export const httpAdminAiCall = {
     return request({
       url: 'ai/information',
       method: 'post',
-      params: data
     })
   },
   // 话术
