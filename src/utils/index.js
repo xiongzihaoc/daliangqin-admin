@@ -118,7 +118,7 @@ export function textFormat(e) {
     }
   }
 }
-//  根据身份证获取出生日期（yyyy-MM-dd）
+// 根据身份证获取出生日期（yyyy-MM-dd）
 export function GetBirthday(psidno) {
   var birthdayno, birthdaytemp
   if (psidno.length == 18) {
@@ -133,7 +133,7 @@ export function GetBirthday(psidno) {
   return birthday
 }
 
-//  根据输入的身份证获取性别代码
+// 根据输入的身份证获取性别代码
 export function Getsex(psidno) {
   var sexno, sex
   if (psidno.length == 18) {
