@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- 打印区域 -->
     <div class="print-box">
       <div class="print-container">
         <div class="container" id="printMe" v-loading="loading">
@@ -309,19 +308,6 @@
             </el-tooltip>
           </div>
         </div>
-        <!-- 是否启用签名 -->
-        <div class="operateList">
-          <el-button
-            size="medium"
-            plain
-            class="w100"
-            :disabled="isPrintDisabled"
-            @click="onPrint"
-            v-print="printObj"
-          >
-            打印
-          </el-button>
-        </div>
         <!-- 操作时间线 -->
         <div class="operateList">
           <div class="fw" style="margin-bottom: 10px">操作时间线</div>
@@ -397,26 +383,9 @@ export default {
     this.getList();
   },
   mounted() {
-    window.addEventListener("beforeunload", this.beforeunloadHandler);
     this.getHospitalList();
   },
-  destroyed() {
-    // 销毁监听事件
-    // window.removeEventListener("beforeunload", this.beforeunloadHandler);
-  },
   methods: {
-    beforeunloadHandler(e) {
-      const routeData = this.$router.resolve({
-        path: "/archivesManagement/record/heartDetail",
-      });
-      window.location.href = routeData; //载入新文档替换当前页面
-      // 兼容IE8和Firefox 4之前的版本
-      // if (e) {
-      //   e.returnValue = "关闭提示";
-      // }
-      // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
-      return e
-    },
     // 获取信息
     getList() {
       httpAdminHeartRate.getHeartRate({ id: this.$route.query.id }).then((res) => {
@@ -586,18 +555,6 @@ export default {
           this.hospitalId = "";
         }
       });
-    },
-    // 记录打印次数
-    onPrint() {
-      httpAdminHeartRate
-        .putHeartRatePrint({ id: this.$route.query.id })
-        .then((res) => {});
-    },
-    // 清空打印次数
-    clearPrint() {
-      httpAdminHeartRate
-        .putHeartRateClear({ id: this.$route.query.id })
-        .then((res) => {});
     },
     formatTitle(val) {
       switch (val.auditStatus) {

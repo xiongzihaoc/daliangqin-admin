@@ -707,6 +707,13 @@ export const AiResultStatus = [
   { id: 12, label: "多并发呼损", value: "CALL_LOSS" },
   { id: 13, label: "转人工呼损", value: "TRANSFER_ARTIFICIAL" },
 ]
+
+// 打印 状态
+export const printStatusList = [
+  { id: 2, label: "已打印", value: "HAVE_PRINT" },
+  { id: 3, label: "未打印", value: "NOT_PRINT" },
+
+]
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式
