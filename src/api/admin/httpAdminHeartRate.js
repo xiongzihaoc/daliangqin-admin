@@ -15,6 +15,14 @@ export const httpAdminHeartRate = {
       data
     })
   },
+  // 新增ai心电数据(假数据)
+  postHeartRateAi(data) {
+    return request({
+      url: 'equipment/heartRate/ai',
+      method: 'post',
+      data
+    })
+  },
   // 修改审核状态
   putHeartRateStatus(data) {
     return request({

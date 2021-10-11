@@ -154,7 +154,7 @@ const operationsRouter = {
         title: '短信管理',
         icon: 'duanxin'
       }
-    }, // 取消原因
+    },
     {
       path: 'system',
       name: 'system',
@@ -162,6 +162,15 @@ const operationsRouter = {
       meta: {
         title: '全局配置',
         icon: 'peizhi'
+      }
+    },
+    {
+      path: 'ai',
+      name: 'ai',
+      component: () => import('@/views/operationsManagement/ai'),
+      meta: {
+        title: '心电数据',
+        icon: 'aishuju'
       }
     },
   ]
