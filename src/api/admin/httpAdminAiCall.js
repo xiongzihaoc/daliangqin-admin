@@ -8,7 +8,6 @@ export const httpAdminAiCall = {
       params: data
     })
   },
-  
   postInformation(data) {
     return request({
       url: 'ai/information',
@@ -16,4 +15,17 @@ export const httpAdminAiCall = {
       params: data
     })
   },
+  // 话术
+  getAiSpeech(){
+    return request({
+      url: 'ai/speech',
+      method: 'get',
+    })
+  },
+  getAiDownload(){
+    return request({
+      url: 'ai/information/download',
+      method: 'get',
+    })
+  }
 }
