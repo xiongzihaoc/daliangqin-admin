@@ -157,6 +157,7 @@
     </div>
     <EleTable :data="list"
       :header="tableHeaderBig"
+      @cell-dblclick="cellDblClick"
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
@@ -263,8 +264,7 @@
         label="已打印次数"
         prop="printNumber">
         <template slot-scope="scope">
-          <span v-if="scope.row.printNumber > 0"
-            style="color: red">{{ scope.row.printNumber }}</span>
+          <span v-if="scope.row.printNumber > 0"> {{ scope.row.printNumber }}</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
@@ -559,6 +559,7 @@ export default {
         extraCss: '',
         extraHead: '',
       },
+      // printNumber: '', // 自定义打印次数
       printId: '', // 打印某条记录的Id
       userInfo: {}, // 个人信息
       heartDetail: {}, // 心率建议信息
@@ -627,6 +628,10 @@ export default {
         .then((res) => {
           this.list = res.data.elements
           this.total = res.data.totalSize
+          // 遍历添加是否编辑属性
+          this.list.map((item) => {
+            item.isEdit = false
+          })
         })
     },
     // 获取医院列表
@@ -889,11 +894,46 @@ export default {
         .then((res) => {})
     },
     // 重置打印次数
-    resetPrintCount() {
-      console.log(this.list)
-    },
+    resetPrintCount() {},
     // 批量打印
     bulkPrint() {},
+    // 双击自定义打印次数
+    cellDblClick(row, column, cell, event) {
+      if (column.label === '已打印次数') {
+        // 取出单元格的值
+        let beforeVal = event.target.textContent
+        // 置空单元格容器内元素
+        event.target.innerHTML = ''
+        // 替换成el-input
+        let str = `<div class='cell'>
+            <div class='el-input'>
+              <input type='text' placeholder='请输入' class='el-input__inner'>
+            </div>
+        </div>`
+        cell.innerHTML = str
+        //  获取双击后生成的input  根据层级嵌套会有所变化
+        let cellInput = cell.children[0].children[0].children[0]
+        cellInput.value = beforeVal
+        cellInput.focus() // input自动聚焦
+        // 失去焦点后  将input移除
+        cellInput.onblur = function () {
+          // 调用接口保存输入内容
+          httpAdminHeartRate
+            .putHeartRatePrint({
+              recordId: row.id,
+              printNumber: cellInput.value,
+            })
+            .then((res) => {
+              let onblurCont = `<div class='cell'>${cellInput.value}</div>`
+              cell.innerHTML = onblurCont // 换成原有的显示内容
+            })
+        }
+      }
+    },
+    // 输入完失去焦点
+    onPrintBlur(index, row) {
+      row.isEdit = false
+    },
     /**
      * 表格格式化
      */
