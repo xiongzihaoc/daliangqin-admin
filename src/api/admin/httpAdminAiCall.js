@@ -8,4 +8,12 @@ export const httpAdminAiCall = {
       params: data
     })
   },
+  
+  postInformation(data) {
+    return request({
+      url: 'ai/information',
+      method: 'post',
+      params: data
+    })
+  },
 }
