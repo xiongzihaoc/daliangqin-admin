@@ -150,7 +150,6 @@
                         filterable
                         style="width: 100%"
                         placeholder="请选择医院"
-                        @change="aa"
                     >
                         <el-option
                             v-for="item in hospitalList"
@@ -169,7 +168,6 @@
                         filterable
                         style="width: 100%"
                         placeholder="请选择BOT名称"
-                        @change="aa"
                     >
                         <el-option
                             v-for="item in aiSpeechList"
@@ -186,7 +184,17 @@
                     <el-input @focus="userSetTime" v-model="searchForm.setTime"></el-input>
                 </el-form-item>
                 <el-form-item label="导入用户:">
-                    <div class="skipStyle">上传文件</div>
+                    <div class="skipStyle" @click="importExcel">
+                        <!-- {{ searchForm.excelName }} -->
+                        <input
+                            class="skipStyle"
+                            type="file"
+                            id="uploadExcel"
+                            ref="uploadExcel"
+                            accept=".xls, .xlsx, .excel"
+                            @change="readExcel"
+                        />
+                    </div>
                     <div>
                         仅支持上传Excel格式的文件，且不超过10万条。
                         <span class="skipStyle" @click="getAiDownload">下载模板</span>
@@ -195,7 +203,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="userVisible = false">取 消</el-button>
-                <el-button type="primary" @click="userVisible = false">确 定</el-button>
+                <el-button type="primary" @click="aa">确 定</el-button>
             </span>
         </el-dialog>
         <!-- ai时间段 -->
@@ -255,7 +263,11 @@
                     ></el-button>
                 </el-form-item>
                 <el-form-item label="重复周期">
-                    <el-checkbox-group v-model="timeForm.checkListPeriod" @change="getPeriod" :min="1">
+                    <el-checkbox-group
+                        v-model="timeForm.checkListPeriod"
+                        @change="getPeriod"
+                        :min="1"
+                    >
                         <el-checkbox label="MONDAY">周一</el-checkbox>
                         <el-checkbox label="TUESDAY">周二</el-checkbox>
                         <el-checkbox label="WEDNESDAY">周三</el-checkbox>
@@ -334,12 +346,14 @@ export default {
             },
             // 搜索表单
             searchForm: {
+                excelName: '上传文件',
+                excelFile: '',
                 hospitalId: '',
                 completionTime: '',
                 creationTime: '',
                 aiName: '',
                 setTime: '',
-                daily: ['09:00', '20:00']
+                daily: ['09:00', '20:00'],
             },
             taskForm: {
                 task: '',
@@ -349,7 +363,7 @@ export default {
                 time: '',
             },
             timeForm: {
-                checkListPeriod: ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY' ],
+                checkListPeriod: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'],
                 endTime: '',
             },
             dialForm: {
@@ -378,7 +392,10 @@ export default {
     },
     methods: {
         aa() {
-            console.log('a', this.addUserFrom)
+            let formData = new FormData()
+            formData.append('file', this.searchForm.excelFile);
+            console.log('formData', formData)
+            // this.postInformation()
         },
         // 列表数据 查询
         getAiCallList() {
@@ -388,13 +405,15 @@ export default {
                     completeStartTime: this.searchForm.completeStartTime,
                     completeEndTime: this.searchForm.completeEndTime,
                     status: this.searchForm.status,
+                    aiName: this.searchForm.aiName,
+                    taskStage: this.searchForm.taskStage,
                 })
                 .then((res) => {
                     console.log('ai列表', res)
                     this.list = res.data.elements
                 })
         },
-        //
+        // 添加
         postInformation() {
             let notDialTimeArr = this.notDialTimeArr
             let notDial = this.timeForm.notDial
@@ -416,22 +435,26 @@ export default {
                 { startDate: notDialDateArr[0]?.callDate[0], endDate: notDialDateArr[0]?.callDate[1] },
                 { startDate: notDialDateArr[1]?.callDate[0], endDate: notDialDateArr[1]?.callDate[1] },
             ]
-            console.log('obj', inactiveTimeList, '--', inactiveDateList, '--1', this.searchForm)
-            return
+            console.log('不可拨打时间', inactiveTimeList)
+            console.log('不可拨打日期', inactiveDateList,)
+            console.log( '表单数据', this.searchForm)
+            console.log( '周期', this.timeForm.checkListPeriod)
+
             httpAdminAiCall.postInformation({
                 // 添加
                 hospitalId: this.addUserFrom.hospitalId,
                 hospitalName: '',
                 name: this.addUserFrom.name,
-                dialogFlowId: '话术id',
+                dialogFlowId: this.addUserFrom.BOT,
                 // 时间添加
                 dailyStartTime: this.searchForm.daily[0],
                 dailyEndTime: this.searchForm.daily[1],
-                inactiveTimeList: inactiveTimeList,
-                inactiveDateList: inactiveDateList,
+                inactiveTimeList,
+                inactiveDateList,
                 daysOfWeek: this.timeForm.checkListPeriod,
+                file: ''
             }).then((res) => {
-
+                console.log('添加', res)
             })
         },
         // 获取医院列表
@@ -451,9 +474,17 @@ export default {
         // 获取模板
         getAiDownload() {
             window.open('http://test-api.daliangqing.com/admin/ai/information/download')
-            // httpAdminAiCall.getAiDownload().then((res) => {
-            //     console.log('下载',res)
-            // })
+        },
+        // 上传模板
+        importExcel() {
+            // this.$refs.uploadExcel.click()
+        },
+        // 读取
+        readExcel(e) {
+            let fileList = e.target.files;
+            this.searchForm.excelName = fileList[0].name
+            this.searchForm.excelFile = this.$refs.uploadExcel.files[0];
+            console.log(123,fileList, this.searchForm.excelFile)
         },
         // 添加任务
         taskAdd() {
@@ -498,8 +529,7 @@ export default {
         },
         // 确认
         confirmCallTime() {
-            // this.timeVisible = false
-            this.postInformation()
+            this.timeVisible = false
             let period = []
             this.timeForm.checkListPeriod.forEach((val) => {
                 switch (val) {
