@@ -47,9 +47,6 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="完成时间">
-                    <!-- <el-select v-model="searchForm.completionTime" size="small" filterable>
-                        <el-option label="完成时间" value="1"></el-option>
-                    </el-select>-->
                     <el-date-picker
                         v-model="searchForm.completionTime"
                         type="datetime"
@@ -59,9 +56,6 @@
                     ></el-date-picker>
                 </el-form-item>
                 <el-form-item label="创建时间">
-                    <!-- <el-select v-model="searchForm.creationTime" size="small" filterable>
-                        <el-option label="创建时间" value="1"></el-option>
-                    </el-select>-->
                     <el-date-picker
                         v-model="searchForm.creationTime"
                         type="datetime"
@@ -109,31 +103,27 @@
             <el-table-column align="center" label="任务状态" prop="status" :formatter="statusFormatter"></el-table-column>
             <el-table-column align="center" label="总外呼人数" prop="taskTotalNumber">
                 <template slot-scope="scope">
-                    <span class="skipStyle" @click>{{ scope.row.taskTotalNumber }}</span>
+                    <span class="skipStyle">{{ scope.row.taskTotalNumber }}</span>
                 </template>
             </el-table-column>
             <el-table-column align="center" label="已呼人数" prop="alreadyNumber">
                 <template slot-scope="scope">
-                    <span class="skipStyle" @click>{{ scope.row.alreadyNumber }}</span>
+                    <span class="skipStyle">{{ scope.row.alreadyNumber }}</span>
                 </template>
             </el-table-column>
             <el-table-column align="center" label="未呼人数" prop="notNumber">
                 <template slot-scope="scope">
-                    <span class="skipStyle" @click>{{ scope.row.notNumber }}</span>
+                    <span class="skipStyle">{{ scope.row.notNumber }}</span>
                 </template>
             </el-table-column>
             <el-table-column align="center" label="已接听人数" prop="alreadyPeopleNumber">
                 <template slot-scope="scope">
-                    <span class="skipStyle" @click>
-                        {{
-                            scope.row.alreadyPeopleNumber
-                        }}
-                    </span>
+                    <span class="skipStyle">{{ scope.row.alreadyPeopleNumber }}</span>
                 </template>
             </el-table-column>
             <el-table-column align="center" label="未接听人数" prop="notPeopleNumber">
                 <template slot-scope="scope">
-                    <span class="skipStyle" @click>{{ scope.row.notPeopleNumber }}</span>
+                    <span class="skipStyle">{{ scope.row.notPeopleNumber }}</span>
                 </template>
             </el-table-column>
             <el-table-column align="center" label="并发数量" prop="concurrentQuantity"></el-table-column>
@@ -154,12 +144,13 @@
         <!-- 弹出区域 -->
         <el-dialog title="添加" :visible.sync="userVisible" width="40%">
             <el-form :rules="formRules" :model="addUserFrom" label-width="100px">
-                <el-form-item label="选择医院" prop="name">
+                <el-form-item label="选择医院:" prop="hospitalId">
                     <el-select
                         v-model="addUserFrom.hospitalId"
                         filterable
                         style="width: 100%"
                         placeholder="请选择医院"
+                        @change="aa"
                     >
                         <el-option
                             v-for="item in hospitalList"
@@ -169,31 +160,37 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-            </el-form>
-            <el-form :model="addUserFrom" label-width="100px">
-                <el-form-item label="任务名称">
-                    <el-input placeholder="请输入任务名称和"></el-input>
+                <el-form-item label="任务名称:" prop="name">
+                    <el-input v-model="addUserFrom.name" placeholder="请输入任务名称和"></el-input>
                 </el-form-item>
-            </el-form>
-            <el-form :model="addUserFrom" label-width="100px">
-                <el-form-item label="BOT名称">
+                <el-form-item label="BOT名称:" prop="BOT">
                     <el-select
                         v-model="addUserFrom.BOT"
                         filterable
                         style="width: 100%"
                         placeholder="请选择BOT名称"
+                        @change="aa"
                     >
-                        <el-option label="BOT名称" value="item.id"></el-option>
+                        <el-option
+                            v-for="item in aiSpeechList"
+                            :label="item.name"
+                            :value="item.dialogFlowId"
+                            :key="item.dialogFlowId"
+                        ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="并发数量">
+                <!-- <el-form-item label="并发数量" prop="concurrencyQuota">
                     <el-input placeholder="请输入并发数量"></el-input>
+                </el-form-item>-->
+                <el-form-item label="时间设置:">
+                    <el-input @focus="userSetTime" v-model="searchForm.setTime"></el-input>
                 </el-form-item>
-                <el-form-item label="并发数量">
-                    <el-input placeholder="请输入并发数量"></el-input>
-                </el-form-item>
-                <el-form-item label="时间设置">
-                    <el-input @focus="userSetTime"></el-input>
+                <el-form-item label="导入用户:">
+                    <div class="skipStyle">上传文件</div>
+                    <div>
+                        仅支持上传Excel格式的文件，且不超过10万条。
+                        <span class="skipStyle" @click="getAiDownload">下载模板</span>
+                    </div>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -202,12 +199,12 @@
             </span>
         </el-dialog>
         <!-- ai时间段 -->
-        <el-dialog title="时间添加" :visible.sync="timeVisible" width="40%">
-            <el-form label-width="auto">
-                <el-form-item label="可拨打时间段">
+        <el-dialog title="时间添加" :visible.sync="timeVisible" :model="dialForm" width="40%">
+            <el-form label-width="120px" label-position="left" :rules="formRules" :model="dialForm">
+                <el-form-item label="可拨打时间段" prop="notCallTime">
                     <el-time-picker
                         is-range
-                        format="HH:mm:ss"
+                        format="HH:mm"
                         value-format="HH:mm"
                         v-model="searchForm.daily"
                         range-separator="至"
@@ -223,7 +220,7 @@
                             is-range
                             format="HH:mm"
                             value-format="HH:mm"
-                            v-model="dialForm"
+                            v-model="dialForm.notCallTime"
                             range-separator="至"
                             start-placeholder="开始时间"
                             end-placeholder="结束时间"
@@ -240,7 +237,7 @@
                 <el-form-item v-for="(item, index) in notDialTimeArr" :key="item.id">
                     <el-time-picker
                         is-range
-                        format="HH:mm:ss"
+                        format="HH:mm"
                         value-format="HH:mm"
                         v-model="item.callTime"
                         range-separator="至"
@@ -258,19 +255,16 @@
                     ></el-button>
                 </el-form-item>
                 <el-form-item label="重复周期">
-                    <el-checkbox-group v-model="timeForm.checkListPeriod" @change="getPeriod">
-                        <el-checkbox label="周一"></el-checkbox>
-                        <el-checkbox label="周二"></el-checkbox>
-                        <el-checkbox label="周三"></el-checkbox>
-                        <el-checkbox label="周四"></el-checkbox>
-                        <el-checkbox label="周五"></el-checkbox>
-                        <el-checkbox label="周六"></el-checkbox>
-                        <el-checkbox label="周日"></el-checkbox>
+                    <el-checkbox-group v-model="timeForm.checkListPeriod" @change="getPeriod" :min="1">
+                        <el-checkbox label="MONDAY">周一</el-checkbox>
+                        <el-checkbox label="TUESDAY">周二</el-checkbox>
+                        <el-checkbox label="WEDNESDAY">周三</el-checkbox>
+                        <el-checkbox label="THURSDAY">周四</el-checkbox>
+                        <el-checkbox label="FRIDAY">周五</el-checkbox>
+                        <el-checkbox label="SATURDAY">周六</el-checkbox>
+                        <el-checkbox label="SUNDAY">周日</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
-                <!-- <el-form-item label="结束日期">
-                    <el-date-picker v-model="timeForm.endTime" type="date" placeholder="选择日期时间"></el-date-picker>
-                </el-form-item>-->
                 <el-form-item label="不可拨打日期">
                     <div style="display: flex">
                         <el-date-picker
@@ -332,7 +326,11 @@ export default {
             parseTime,
             AiTaskStatus,
             formRules: {
-                name: [{ required: true, message: '请选择医院', trigger: 'change' }],
+                hospitalId: [{ required: true, message: '请选择医院', trigger: 'change' }],
+                name: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
+                BOT: [{ required: true, message: '请输入BOT名称', trigger: 'change' }],
+                concurrencyQuota: [{ required: true, message: '请输入并发数', trigger: 'blur' }],
+                notCallTime: [{ required: true, message: '请选择可拨打时间段', trigger: 'change' }],
             },
             // 搜索表单
             searchForm: {
@@ -340,6 +338,8 @@ export default {
                 completionTime: '',
                 creationTime: '',
                 aiName: '',
+                setTime: '',
+                daily: ['09:00', '20:00']
             },
             taskForm: {
                 task: '',
@@ -349,12 +349,15 @@ export default {
                 time: '',
             },
             timeForm: {
-                checkListPeriod: [],
+                checkListPeriod: ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY' ],
                 endTime: '',
             },
-            dialForm: ['9:00', '20:00'],
+            dialForm: {
+                notCallTime: ['', ''],
+            },
             list: [],
             hospitalList: [],
+            aiSpeechList: [],
             tableHeaderBig: [],
             // 不可拨打时间
             notDialTimeArr: [],
@@ -364,16 +367,20 @@ export default {
             pageNum: 1,
             total: 0,
             // 弹框区域
-            userVisible: false,
+            userVisible: true,
             timeVisible: true,
         }
     },
     mounted() {
         this.getHospitalList()
         this.getAiCallList()
+        this.getAiSpeech()
     },
     methods: {
-        // 列表数据
+        aa() {
+            console.log('a', this.addUserFrom)
+        },
+        // 列表数据 查询
         getAiCallList() {
             httpAdminAiCall
                 .getAiCallList({
@@ -389,28 +396,40 @@ export default {
         },
         //
         postInformation() {
-            let inactiveTimeList = [
-                { startTime: this.dialForm[0], endTime: this.dialForm[1] },
-                { startTime: this.notDialTimeArr[0]?.callTime[0], endTime: this.notDialTimeArr[0]?.callTime[1] },
-                { startTime: this.notDialTimeArr[1]?.callTime[0], endTime: this.notDialTimeArr[1]?.callTime[1] },
-            ]
+            let notDialTimeArr = this.notDialTimeArr
             let notDial = this.timeForm.notDial
-            let notDialDateArr =  this.notDialDateArr
+            let notDialDateArr = this.notDialDateArr
+            console.log(notDialTimeArr)
+            if (this.dialForm.notCallTime === undefined || this.dialForm.notCallTime === null) {
+                this.dialForm.notCallTime = ['', '']
+            }
+            if (notDial === undefined || notDial === null) {
+                notDial = []
+            }
+            let inactiveTimeList = [
+                { startTime: this.dialForm.notCallTime[0], endTime: this.dialForm.notCallTime[1] },
+                { startTime: notDialTimeArr[0]?.callTime[0], endTime: notDialTimeArr[0]?.callTime[1] },
+                { startTime: notDialTimeArr[1]?.callTime[0], endTime: notDialTimeArr[1]?.callTime[1] },
+            ]
             let inactiveDateList = [
                 { startDate: notDial[0], endDate: notDial[1] },
                 { startDate: notDialDateArr[0]?.callDate[0], endDate: notDialDateArr[0]?.callDate[1] },
                 { startDate: notDialDateArr[1]?.callDate[0], endDate: notDialDateArr[1]?.callDate[1] },
             ]
-            console.log('不可拨打日期', inactiveDateList)
+            console.log('obj', inactiveTimeList, '--', inactiveDateList, '--1', this.searchForm)
             return
             httpAdminAiCall.postInformation({
-                hospitalId: '',
+                // 添加
+                hospitalId: this.addUserFrom.hospitalId,
                 hospitalName: '',
-                name: '',
+                name: this.addUserFrom.name,
+                dialogFlowId: '话术id',
+                // 时间添加
                 dailyStartTime: this.searchForm.daily[0],
                 dailyEndTime: this.searchForm.daily[1],
                 inactiveTimeList: inactiveTimeList,
-                inactiveDateList: [{ startDate: notDial[0], endDate: notDial[1] }],
+                inactiveDateList: inactiveDateList,
+                daysOfWeek: this.timeForm.checkListPeriod,
             }).then((res) => {
 
             })
@@ -422,7 +441,20 @@ export default {
                 this.hospitalList = res.data.elements
             })
         },
-
+        // 获取话术
+        getAiSpeech() {
+            httpAdminAiCall.getAiSpeech().then((res) => {
+                console.log('话术', res.data.elements)
+                this.aiSpeechList = res.data.elements
+            })
+        },
+        // 获取模板
+        getAiDownload() {
+            window.open('http://test-api.daliangqing.com/admin/ai/information/download')
+            // httpAdminAiCall.getAiDownload().then((res) => {
+            //     console.log('下载',res)
+            // })
+        },
         // 添加任务
         taskAdd() {
             this.userVisible = true
@@ -451,23 +483,55 @@ export default {
         },
         // 时间添加 周期选择 checkbox
         getPeriod() {
-            console.log('周期', this.checkListPeriod)
+            console.log('周期', this.timeForm.checkListPeriod)
         },
         notDialTime(val) {
             let notDialTimeArr = this.notDialTimeArr
             let notDialDateArr = this.notDialDateArr
             if (val === 'time') {
                 if (this.notDialTimeArr.length >= 2) return
-                notDialTimeArr.push({ id: notDialTimeArr.length + 2, })
+                notDialTimeArr.push({ id: notDialTimeArr.length + 2, callTime: ['09:00', '20:00'] })
             } else {
                 if (this.notDialDateArr.length >= 2) return
-                notDialDateArr.push({ id: notDialDateArr.length + 4, callDate: ''})
+                notDialDateArr.push({ id: notDialDateArr.length + 4, callDate: '' })
             }
         },
         // 确认
         confirmCallTime() {
-            this.timeVisible = false
+            // this.timeVisible = false
             this.postInformation()
+            let period = []
+            this.timeForm.checkListPeriod.forEach((val) => {
+                switch (val) {
+                    case 'MONDAY':
+                        period.push('周一')
+                        break;
+                    case 'TUESDAY':
+                        period.push('周二')
+                        break;
+                    case 'WEDNESDAY':
+                        period.push('周三')
+                        break;
+                    case 'THURSDAY':
+                        period.push('周四')
+                        break;
+                    case 'FRIDAY':
+                        period.push('周五')
+                        break;
+                    case 'SATURDAY':
+                        period.push('周六')
+                        break;
+                    case 'SUNDAY':
+                        period.push('周日')
+                        break;
+                }
+            })
+            console.log('显示周期', this.timeForm.checkListPeriod, period)
+            if (period.length === 7) {
+                this.searchForm.setTime = '每天/'
+            } else {
+                this.searchForm.setTime = `${period.join('、')}/${this.searchForm.daily[0]}~${this.searchForm.daily[1]}`
+            }
         },
         // 任务选择
         getTask() {
