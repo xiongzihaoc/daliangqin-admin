@@ -257,7 +257,8 @@
             <el-upload
               class="upload-demo"
               accept=".xls, .xlsx, .excel"
-              action="UploadUrl()"
+              :auto-upload="false"
+              :action="UploadUrl()"
               :before-upload="beforeUploadFile"
               :on-change="handle"
               multiple
@@ -497,9 +498,9 @@ export default {
   methods: {
     /* 测试用函数 */
     aa() {
-      //   let formData = new FormData()
-      //   formData.append('file', this.searchForm.excelFile)
-      //   console.log('formData', formData)
+      // let formData = new FormData()
+      // formData.append('file', this.searchForm.excelFile)
+      // console.log('formData', formData)
       // this.postInformation()
       let form = new FormData()
       form.append('file', this.fileList)
@@ -564,8 +565,7 @@ export default {
       console.log('不可拨打日期', inactiveDateList)
       console.log('表单数据', this.searchForm)
       console.log('周期', this.timeForm.checkListPeriod)
-      let form = new FormData()
-      form.append('file', this.fileList)
+      return
       httpAdminAiCall
         .postInformation({
           // 添加
@@ -622,8 +622,12 @@ export default {
         } 个`
       )
     },
-    handle(e){
-        console.log('事件触发',e)
+    handle(e) {
+      console.log('事件触发', e.raw)
+      // this.fileList = e.raw
+      // let form = new FormData()
+      // form.append('file', this.fileList)
+      // console.log('form',form)
     },
     // 读取
     readExcel(e) {
