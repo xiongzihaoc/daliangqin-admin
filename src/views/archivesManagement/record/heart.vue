@@ -22,17 +22,6 @@
             v-Int
             placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="监测模式"
-          align="left">
-          <el-select v-model="searchForm.detectType"
-            size="small"
-            placeholder="请选择监测模式">
-            <el-option label="24小时监测"
-              value="TWENTY_FOUR_HOURS"></el-option>
-            <el-option label="日常监测"
-              value="DAILY"></el-option>
-          </el-select>
-        </el-form-item>-->
         <el-form-item label="审核状态"
           align="left">
           <el-select v-model="searchForm.auditStatus"
@@ -61,6 +50,7 @@
           align="left">
           <el-select multiple
             clearable
+             collapse-tags
             v-model="searchForm.hospitalId"
             size="small"
             filterable
@@ -583,7 +573,7 @@ export default {
     }
     this.searchForm.startTime = monitoringStartTime
     this.searchForm.endTime = monitoringEndTime
-    this.searchForm.hospitalId = monitoringHospitalId
+    this.searchForm.hospitalId = JSON.parse(monitoringHospitalId)
     this.searchForm.auditStatus = monitoringAuditStatus
     this.getList()
   },

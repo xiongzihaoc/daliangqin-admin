@@ -59,6 +59,7 @@ const user = {
     }) {
       return new Promise((resolve, reject) => {
         httpPublicLogin.logout(state.token).then(() => {
+          console.log(333)
           window.localStorage.clear()
           window.sessionStorage.clear()
           commit('SET_TOKEN', '')

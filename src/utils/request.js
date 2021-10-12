@@ -1,11 +1,10 @@
 import axios from 'axios'
-
+import { removeToken } from '@/utils/auth'
 import {
-  Notification,
-  MessageBox,
   Message
 } from 'element-ui'
 import store from '@/store'
+import router from '@/router'
 import {
   getToken
 } from '@/utils/auth'
@@ -65,8 +64,16 @@ service.interceptors.response.use(res => {
   const code = res.data.code || 'OK';
   // 获取错误信息
   if (code !== "OK") {
-    Message.error(res.data.message)
-    return res.data
+    // 如果没有登录或者没有权限
+    if (code === 'NO_AUTH' || code === 'FORBIDDEN') {
+      window.localStorage.clear()
+      window.sessionStorage.clear()
+      removeToken()
+      window.location.href = '/login'
+    } else { // 其他错误报出错误信息
+      Message.error(res.data.message)
+      return res.data
+    }
   } else {
     return res.data
   }
