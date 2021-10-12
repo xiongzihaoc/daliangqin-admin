@@ -886,7 +886,11 @@ export default {
     // 双击自定义打印次数
     cellDblClick(row, column, cell, event) {
       let that = this
-      if (column.label === '已打印次数') {
+      if (
+        (column.label === '已打印次数' &&
+          row.auditStatus === 'PLATFORM_COMPLETE_AUDIT') ||
+        row.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
+      ) {
         // 取出单元格的值
         let beforeVal = event.target.textContent
         // 置空单元格容器内元素
