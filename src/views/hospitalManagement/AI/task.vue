@@ -330,7 +330,8 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="timeVisible = false">取 消</el-button>
-                <el-button type="primary" @click="confirmCallTime">确 定</el-button>
+                <el-button type="primary" @click="disposeNotTime">确 定</el-button>
+                <!-- confirmCallTime -->
             </span>
         </el-dialog>
     </div>
@@ -442,7 +443,18 @@ export default {
         // 处理不可拨打时间段
         disposeNotTime(){
             let inactiveTimeList = []
-            console.log('不可拨打时间', this.dialForm.notCallTime)
+            let notCallTime = this.dialForm.notCallTime
+            let callTime = this.notDialTimeArr[0]
+            let callTimeOne = this.notDialTimeArr[1]
+            if(notCallTime[0] != '' && notCallTime[1] != ''){
+                inactiveTimeList.push({ startTime: notCallTime[0], endTime: notCallTime[1] })
+            }
+            if(callTime != undefined && callTime.callTime[0] != '' ){
+               inactiveTimeList.push({ startTime: callTime.callTime[0], endTime: callTime.callTime[1] })
+            }
+             if(callTimeOne != undefined && callTimeOne.callTime[0] != '' ){
+               inactiveTimeList.push({ startTime: callTimeOne.callTime[0], endTime: callTimeOne.callTime[1] })
+            }
             return inactiveTimeList
         },
         // 处理不可拨打日期
@@ -464,20 +476,9 @@ export default {
             if (notDial === undefined || notDial === null) {
                 notDial = []
             }
-            let inactiveTimeList = [
-                {
-                    startTime: this.dialForm.notCallTime[0],
-                    endTime: this.dialForm.notCallTime[1],
-                },
-                {
-                    startTime: notDialTimeArr[0]?.callTime[0],
-                    endTime: notDialTimeArr[0]?.callTime[1],
-                },
-                {
-                    startTime: notDialTimeArr[1]?.callTime[0],
-                    endTime: notDialTimeArr[1]?.callTime[1],
-                },
-            ]
+            // 开始
+            let inactiveTimeList = this.disposeNotTime()
+            console.log('最后', inactiveTimeList)
             let inactiveDateList = [
                 { startDate: notDial[0], endDate: notDial[1] },
                 {
