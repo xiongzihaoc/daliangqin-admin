@@ -221,7 +221,8 @@ export default {
       if(state === 'stayPrintNumber' && val.stayPrintNumber !== 0){
         sessionStorage.setItem('monitoringStayPrintNumber', val.stayPrintNumber)
       }
-      sessionStorage.setItem('monitoringHospitalId', val.hospitalId)
+      let hospitalId = [ val.hospitalId ] 
+      sessionStorage.setItem('monitoringHospitalId', JSON.stringify(hospitalId))
       sessionStorage.setItem('monitoringStartTime', this.searchForm.startTime)
       sessionStorage.setItem('monitoringEndTime', this.searchForm.endTime)
       if (val.measureTotalAmount !== 0 && state === 'people') {
@@ -243,7 +244,7 @@ export default {
         this.$router.push('/archivesManagement/record/heart')
       }
       if (val.stayUploadNumber !== null && state === 'stayUploadNumber') {
-        this.$router.push('/archivesManagement/record/heart')
+        this.$router.push('/archivesManagement/usage')
       }
     },
     // 用户选择时间

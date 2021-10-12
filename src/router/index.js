@@ -56,6 +56,12 @@ export const constantRoutes = [
       }
     }]
   },
+  {
+    path: '/logout',
+    component: Layout,
+    redirect: 'login',
+    hidden: true,
+  },
   // 引用分组路由
   operationsRouter,
   hospitalRouter,
