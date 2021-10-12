@@ -54,4 +54,12 @@ export const httpAdminHeartRate = {
       method: 'put',
     })
   },
+  // 批量清空打印次数
+  putHeartRateClearBatch(data) {
+    return request({
+      url: 'equipment/heartRate/clear/batch',
+      method: 'put',
+      data
+    })
+  },
 }

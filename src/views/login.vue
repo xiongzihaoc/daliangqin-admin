@@ -7,7 +7,7 @@
       auto-complete="on"
       label-position="left">
       <div class="title-container">
-        <h3 class="title">大良卿科技</h3>
+        <h3 class="title">大良卿管理后台</h3>
       </div>
       <!-- 手机号 -->
       <el-form-item prop="phone">
