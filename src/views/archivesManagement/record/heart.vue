@@ -32,7 +32,7 @@
             <el-option label="日常监测"
               value="DAILY"></el-option>
           </el-select>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item label="审核状态"
           align="left">
           <el-select v-model="searchForm.auditStatus"
@@ -59,7 +59,9 @@
         </el-form-item>
         <el-form-item label="医院名称"
           align="left">
-          <el-select v-model="searchForm.hospitalId"
+          <el-select multiple
+            clearable
+            v-model="searchForm.hospitalId"
             size="small"
             filterable
             placeholder="请选择医院">
@@ -97,6 +99,18 @@
             size="small"
             placeholder="请输入心电分析结果"></el-input>
         </el-form-item>
+        <el-form-item label="是否打印"
+          align="left">
+          <el-select class="w100"
+            v-model="searchForm.printStatus"
+            size="small"
+            placeholder="请选择是否打印">
+            <el-option v-for="item in printStatusList"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="监测日期">
           <el-date-picker v-model="searchForm.monitorTime"
             size="small"
@@ -109,8 +123,7 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :picker-options="pickerOptions">
-          </el-date-picker>
+            :picker-options="pickerOptions"></el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn"
@@ -124,17 +137,28 @@
           <el-button size="small"
             type="success"
             icon="el-icon-upload2"
-            @click="exportExcel">导出excel</el-button>
+            @click="exportExcel">导出Excel</el-button>
           <!-- <el-button size="small"
             type="success"
             icon="el-icon-folder-checked"
-            @click="bulkPrint">批量打印</el-button> -->
+          @click="bulkPrint">批量打印</el-button>-->
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格区域 -->
+    <div style="text-align: right; margin-bottom: 10px">
+      <el-tooltip class="item"
+        effect="dark"
+        content="注意：重置次数是指将筛选后的列表打印次数重置为0"
+        placement="top-start">
+        <el-button plain
+          @click="resetPrintCount"
+          size="small">重置打印次数</el-button>
+      </el-tooltip>
+    </div>
     <EleTable :data="list"
       :header="tableHeaderBig"
+      @cell-dblclick="cellDblClick"
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
@@ -147,59 +171,53 @@
       <el-table-column align="center"
         fixed="left"
         label="医院名称"
-        prop="hospitalName">
-      </el-table-column>
+        prop="hospitalName"></el-table-column>
       <el-table-column align="center"
         fixed="left"
         label="医师姓名"
-        prop="doctorUserName">
-      </el-table-column>
+        prop="doctorUserName"></el-table-column>
       <el-table-column align="center"
         fixed="left"
         label="姓名"
         prop="patientUserName">
         <template slot-scope="scope">
           <span class="skipStyle"
-            @click="skipPatient(scope.row)">{{
-            scope.row.patientUserName
-          }}</span>
+            @click="skipPatient(scope.row)">
+            {{ scope.row.patientUserName }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column align="center"
         label="手机号"
-        prop="patientUserPhone">
-      </el-table-column>
+        prop="patientUserPhone"></el-table-column>
       <el-table-column align="center"
         label="身份证号"
-        prop="idCard"> </el-table-column>
+        prop="idCard"></el-table-column>
       <!-- <el-table-column align="center" label="年龄" prop="age"> </el-table-column> -->
       <!-- <el-table-column align="center" label="设备名称" prop="name"> </el-table-column> -->
       <el-table-column align="center"
         label="设备号"
-        prop="serialNumber">
-      </el-table-column>
+        prop="serialNumber"></el-table-column>
       <!-- <el-table-column align="center" label="监测模式" prop="detectType">
         <template slot-scope="scope">
           <span v-if="scope.row.detectType === 'DAILY'">日常监测</span>
           <span v-else>24小时监测</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>-->
       <!-- <el-table-column align="center" label="心率值(bpm)" prop="heartRateScore">
         <template slot-scope="scope">
           <span class="fw">{{ scope.row.heartRateScore }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>-->
       <el-table-column align="center"
         label="监测时长"
         prop="length"
-        :formatter="lengthFormatter">
-      </el-table-column>
+        :formatter="lengthFormatter"></el-table-column>
       <!-- <el-table-column align="center" label="测量结果" prop="title"> </el-table-column> -->
       <el-table-column align="center"
         label="处置建议"
         prop="suggestion"
-        show-overflow-tooltip>
-      </el-table-column>
+        show-overflow-tooltip></el-table-column>
       <el-table-column align="center"
         label="心电分析结果"
         prop="ecgResult"
@@ -208,9 +226,9 @@
         label="监测日期"
         prop="inspectionTime">
         <template slot-scope="scope">
-          <span style="color: #f56c6c; font-weight: 700">{{
-            parseTime(scope.row.inspectionTime)
-          }}</span>
+          <span style="color: #f56c6c; font-weight: 700">
+            {{ parseTime(scope.row.inspectionTime) }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column align="center"
@@ -233,40 +251,207 @@
         label="审核时间"
         prop="auditTime">
         <template slot-scope="scope">
-          <span class="HEALTH"> {{ parseTime(scope.row.auditTime) }}</span>
+          <span class="HEALTH">{{ parseTime(scope.row.auditTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
         label="审核人"
-        prop="auditorName">
-      </el-table-column>
+        prop="auditorName"></el-table-column>
       <el-table-column align="center"
         label="已打印次数"
         prop="printNumber">
         <template slot-scope="scope">
-          <span v-if="scope.row.printNumber > 0"
-            style="color: red">
-            {{ scope.row.printNumber }}</span>
+          <span v-if="scope.row.printNumber > 0"> {{ scope.row.printNumber }}</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
       <el-table-column align="center"
         label="操作"
         fixed="right"
-        width="120">
+        width="180">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.isAnalysisIng === false"
-            size="mini"
-            @click="examineReport(scope.row)"
-            type="primary">查看报告</el-button>
-          <!-- 正在分析中 -->
-          <el-button v-else
-            size="mini"
-            disabled
-            plain>正在分析中</el-button>
+          <div v-if="scope.row.isAnalysisIng === false">
+            <el-button size="mini"
+              @click="examineReport(scope.row)"
+              type="primary">查看报告</el-button>
+            <!-- 打印按钮 只有审核完毕才能打印 -->
+            <el-button plain
+              size="mini"
+              @click="openPrintDialog(scope.row)"
+              :disabled="
+                scope.row.auditStatus === 'TO_AUDIT' ||
+                scope.row.auditStatus === 'TO_HOSPITAL_AUDIT' ||
+                scope.row.auditStatus === 'INVALID'
+              ">打印</el-button>
+          </div>
+          <div v-else>
+            <el-button size="mini"
+              disabled
+              plain>正在分析中</el-button>
+          </div>
         </template>
       </el-table-column>
     </EleTable>
+    <!-- 打印弹框 -->
+    <el-dialog title="打印页面"
+      :visible.sync="printDialogVisible"
+      width="35%"
+      @close="closePrintDialog"
+      v-dialogDrag>
+      <div class="print-container">
+        <div class="container"
+          id="printMe">
+          <h3 class="fz18">院外便携式心电监测</h3>
+          <!-- 监测医院 时间 -->
+          <div class="userInfo top">
+            <div class="hospital">
+              <span class="title fw">监测医院：</span>
+              <span class="content minWidth">{{ userInfo.hospitalName }}</span>
+            </div>
+            <div class="hospital">
+              <span class="title fw">监测时间：</span>
+              <span class="content">{{ parseTime(userInfo.inspectionTime) }}</span>
+            </div>
+          </div>
+          <!-- 个人详细信息 -->
+          <div class="userInfo">
+            <div class="userName flex margin">
+              <div class="box">
+                <span class="fw txt-r">姓名</span>：
+                <span contenteditable="true"
+                  class="minWidth"
+                  v-html="userInfo.patientUserName"></span>
+              </div>
+              <div class="box">
+                <span class="fw txt-r">年龄</span>：
+                <span>{{ userInfo.age }}</span>
+              </div>
+              <div class="box">
+                <span class="fw txt-r">身份证号</span>：
+                <span>{{ userInfo.idCard }}</span>
+              </div>
+            </div>
+            <div class="userName flex margin">
+              <div class="box">
+                <span class="fw txt-r">手机号码</span>：
+                <span>{{ userInfo.patientUserPhone }}</span>
+              </div>
+              <div class="box">
+                <span class="fw txt-r">监测设备</span>：
+                <span>{{ userInfo.name }}</span>
+              </div>
+              <div class="box">
+                <span class="fw txt-r">监测模式</span>：
+                <span v-if="userInfo.detectType === 'DAILY'">日常监测</span>
+                <span v-else>24小时监测</span>
+              </div>
+            </div>
+            <div class="userName flex">
+              <div class="box">
+                <span class="fw txt-r">监测时长</span>：
+                <span>{{ formatSeconds(heartDetail.length) }}</span>
+              </div>
+              <div class="over box">
+                <span class="fw txt-r">测量结果</span>：
+                <span ref="title"
+                  class="minWidth"
+                  style="
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    word-break: break-all;
+                  "
+                  v-html="heartDetail.title"></span>
+              </div>
+              <!-- 占位符 -->
+              <div class="over box"><span class="fw"></span></div>
+            </div>
+          </div>
+          <div class="analyse">
+            <img class="analyse-img"
+              v-if="heartDetail.fileImagePath && heartDetail.fileImagePath != ''"
+              :src="heartDetail.fileImagePath" />
+            <div class="fz14 analyse-title">心率分析：</div>
+            <div class="flex margin resultWidth">
+              <div>
+                <span class="fw">平均心率：</span>
+                <span class="fw fz16"
+                  v-html="heartDetail.avg"></span>
+                <span class="fw">bpm</span>
+              </div>
+              <div>
+                <span class="fw">最高心率：</span>
+                <span class="fw fz16"
+                  v-html="heartDetail.max"></span>
+                <span class="fw">bpm</span>
+              </div>
+              <div>
+                <span class="fw">最低心率：</span>
+                <span class="fw fz16"
+                  v-html="heartDetail.min"></span>
+                <span class="fw">bpm</span>
+              </div>
+            </div>
+            <div class="flex resultWidth">
+              <div>
+                <span class="fw">正常心率：</span>
+                <span class="fw fz16"
+                  v-html="heartDetail.normalRate"></span>
+                <span class="fw">%</span>
+              </div>
+              <div>
+                <span class="fw">心率偏快：</span>
+                <span class="fw fz16"
+                  v-html="heartDetail.heartbeatRate"></span>
+                <span class="fw">%</span>
+              </div>
+              <div>
+                <span class="fw">心率偏慢：</span>
+                <span class="fw fz16"
+                  v-html="heartDetail.slowRate"></span>
+                <span class="fw">%</span>
+              </div>
+            </div>
+          </div>
+          <div class="impression">
+            <div class="fz14 impression-title">心电分析印象：</div>
+            <div class="ecgResultTz"
+              v-html="heartDetail.ecgResultTz"></div>
+          </div>
+          <div class="result">
+            <div class="fz14">心电分析结果：</div>
+            <div class="fz11 result-text"
+              v-html="heartDetail.ecgResult"></div>
+            <div class="result-option">
+              <div class="fw result-title">处置建议：</div>
+              <div class="content"
+                v-html="heartDetail.suggestion"></div>
+            </div>
+            <div class="result-option middle">
+              <div class="fw result-title">原因分析：</div>
+              <div class="content"
+                v-html="heartDetail.abnorAnalysis"></div>
+            </div>
+            <div class="result-option">
+              <div class="fw result-title">保健建议：</div>
+              <div class="content"
+                v-html="heartDetail.healthCareAdvice"></div>
+            </div>
+          </div>
+          <!-- 底部 -->
+          <div class="footer">
+            <div class="left"></div>
+            <div class="right">
+              <span class="fz14">医生签名：</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <el-button type="primary"
+        @click="onPrint"
+        v-print="printObj"
+        style="display: block; width: 50%; margin: 20px auto">打印</el-button>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -281,6 +466,7 @@ import {
   auditStatus,
   formatterElement,
   suggestionList,
+  printStatusList,
 } from '@/utils/index'
 export default {
   components: {
@@ -294,6 +480,7 @@ export default {
       auditStatus,
       suggestionList,
       formatterElement,
+      printStatusList,
       // 搜索表单
       searchForm: {
         patientUserName: '',
@@ -301,14 +488,14 @@ export default {
         detectType: '',
         auditStatus: '',
         doctorUserId: '',
-        hospitalId: '',
+        hospitalId: [],
         resultStatus: '',
         ecgResult: '',
         suggestion: '',
-        // 监测时间
-        monitorTime: [],
+        monitorTime: [], // 监测时间
         startTime: '',
         endTime: '',
+        printStatus: '', // 打印状态
       },
       hospitalList: [],
       doctorList: [],
@@ -359,8 +546,17 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-      //   弹框区域
-      hospitalDialogVisible: false,
+      printDialogVisible: false, // 打印弹框
+      printObj: {
+        // 打印配置
+        id: 'printMe',
+        popTitle: '',
+        extraCss: '',
+        extraHead: '',
+      },
+      printId: '', // 打印某条记录的Id
+      userInfo: {}, // 个人信息
+      heartDetail: {}, // 心率建议信息
     }
   },
   created() {
@@ -404,6 +600,7 @@ export default {
     this.getHospitalList()
     this.getDoctorList()
   },
+  watch: {},
   methods: {
     getList() {
       httpAdminHeartRate
@@ -415,12 +612,13 @@ export default {
           detectType: this.searchForm.detectType,
           auditStatus: this.searchForm.auditStatus,
           doctorUserId: this.searchForm.doctorUserId,
-          hospitalId: this.searchForm.hospitalId,
+          hospitalIdList: JSON.stringify(this.searchForm.hospitalId),
           resultStatus: this.searchForm.resultStatus,
           ecgResult: this.searchForm.ecgResult,
           heartRateAdviceType: this.searchForm.suggestion,
           startTime: this.searchForm.startTime,
           endTime: this.searchForm.endTime,
+          printStatus: this.searchForm.printStatus,
         })
         .then((res) => {
           this.list = res.data.elements
@@ -494,7 +692,6 @@ export default {
     },
     // 跳转报告详情
     skipReportDetail() {
-      this.hospitalDialogVisible = false
       this.$router.push(
         '/archivesManagement/record/heartDetail?id=' +
           this.hospitalForm.recordId +
@@ -515,6 +712,9 @@ export default {
           '&isArchives=true'
       )
     },
+    /**
+     * 导出excel
+     */
     exportExcel() {
       if (this.total <= 3000) {
         this.$confirm(
@@ -545,16 +745,12 @@ export default {
           .catch(() => {})
       }
     },
-    /**
-     * 对导出数据格式处理
-     */
+    //  对导出数据格式处理
     formatJson(filterVal, jsonData) {
       return jsonData.map((v) => filterVal.map((j) => v[j]))
     },
 
-    /**
-     * 导出的列表数据
-     */
+    // 导出的列表数据
     getExpportData() {
       const loading = this.$loading({
         lock: true,
@@ -666,9 +862,82 @@ export default {
       this.$refs.FormRef.resetFields()
     },
     /**
+     * 打印
      * 批量打印
      */
+    openPrintDialog(val) {
+      this.printDialogVisible = true
+      this.printId = val.id
+      // 个人信息
+      this.userInfo = val
+      // 心率建议信息
+      this.heartDetail = JSON.parse(val.reportResult)?.body?.data
+    },
+    // 打印弹框关闭刷新列表
+    closePrintDialog() {
+      this.getList()
+    },
+    // 记录打印次数
+    onPrint() {
+      httpAdminHeartRate
+        .putHeartRatePrint({ recordId: this.printId })
+        .then((res) => {})
+    },
+    // 重置打印次数
+    resetPrintCount() {
+      httpAdminHeartRate.putHeartRateClearBatch(this.searchForm).then((res) => {
+        if (res.code === 'OK') {
+          this.getList()
+          this.$message.success('操作成功')
+        }
+      })
+    },
+    // 批量打印
     bulkPrint() {},
+    // 双击自定义打印次数
+    cellDblClick(row, column, cell, event) {
+      let that = this
+      if (column.label === '已打印次数') {
+        // 取出单元格的值
+        let beforeVal = event.target.textContent
+        // 置空单元格容器内元素
+        event.target.innerHTML = ''
+        // 替换成el-input
+        let str = `<div class='cell'>
+            <div class='el-input'>
+              <input type='text' placeholder='请输入' class='el-input__inner'>
+            </div>
+        </div>`
+        cell.innerHTML = str
+        console.log(str)
+        //  获取双击后生成的input  根据层级嵌套会有所变化
+        let cellInput = cell.children[0].children[0].children[0]
+        cellInput.value = beforeVal
+        cellInput.focus() // input自动聚焦
+        // 失去焦点后  将input移除
+        cellInput.onblur = function () {
+          cellInput.value = cellInput.value.replace(/[^0-9]/g, '')
+          // 调用接口保存输入内容
+          httpAdminHeartRate
+            .putHeartRatePrint({
+              recordId: row.id,
+              printNumber: Number(cellInput.value),
+            })
+            .then((res) => {
+              console.log(res)
+              if (res.code === 'OK') {
+                let onblurCont = `<div class='cell'>${cellInput.value}</div>`
+                cell.innerHTML = onblurCont // 换成原有的显示内容
+                that.getList()
+                that.$message.success('操作成功')
+              }
+            })
+        }
+      }
+    },
+    /**
+     * 表格格式化
+     */
     lengthFormatter(row) {
       if (row.reportResult != '') {
         return formatSeconds(JSON.parse(row.reportResult).body.data.length)
@@ -691,5 +960,246 @@ export default {
 }
 </script>
 
+<style>
+.el-step__title {
+  font-size: 14px !important;
+}
+</style>
 <style lang="scss" scoped>
+@page {
+  size: auto; /* auto is the initial value */
+  margin: 3mm; /* this affects the margin in the printer settings */
+}
+
+html {
+  background-color: #ffffff;
+  margin: 0; /* this affects the margin on the html before sending to printer */
+}
+
+body {
+  border: solid 1px blue;
+  margin: 10mm 15mm 10mm 15mm; /* margin you want for the content */
+}
+[contenteditable]:focus {
+  outline: 0px solid transparent;
+  caret-color: red;
+}
+.print-container {
+  width: 100%;
+  margin: 0 auto;
+}
+.container {
+  width: 90%;
+  margin: 0 auto;
+  font-size: 11px;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  h3 {
+    text-align: center;
+  }
+  .userInfo {
+    padding: 10px 10px;
+    box-sizing: border-box;
+    border-top: 2px solid #000;
+    .userName {
+      display: flex;
+      justify-content: space-around;
+      .box {
+        display: flex;
+        align-items: center;
+        width: 33.33%;
+        .txt-r {
+          display: inline-block;
+          word-break: keep-all;
+          white-space: nowrap;
+          width: 70px;
+          text-align-last: justify;
+        }
+      }
+    }
+  }
+  .top {
+    display: flex;
+    align-items: center;
+    border-bottom: none;
+    justify-content: space-between;
+  }
+  .analyse {
+    padding: 0 10px 10px;
+    box-sizing: border-box;
+    border-bottom: 2px solid #000;
+    .analyse-img {
+      display: block;
+      margin: 0 auto;
+      width: 100%;
+      height: 120px;
+    }
+    .analyse-title {
+      margin: 5px 0;
+    }
+  }
+  .impression {
+    padding: 8px 10px;
+    box-sizing: border-box;
+    border-bottom: 2px solid #000;
+    .impression-title {
+      margin-bottom: 5px;
+    }
+  }
+  .result {
+    padding: 8px 10px;
+    box-sizing: border-box;
+    border-bottom: 2px solid #000;
+    .result-text {
+      margin: 10px 0;
+    }
+    .middle {
+      margin: 10px 0;
+    }
+    .result-option {
+      display: flex;
+      .result-title {
+        word-break: keep-all;
+        white-space: nowrap;
+        line-height: 1.5;
+        min-width: 60px;
+      }
+      .content {
+        min-width: 200px;
+        line-height: 1.5;
+        text-align-last: left;
+        text-align: justify;
+        text-justify: distribute-all-lines;
+      }
+    }
+  }
+  .variation-box {
+    padding: 8px 10px;
+    box-sizing: border-box;
+    .variation {
+      margin: 5px 0;
+    }
+    .variation-text {
+      line-height: 18px;
+      text-align-last: left;
+      text-align: justify;
+      text-justify: distribute-all-lines;
+    }
+  }
+  .footer {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    padding: 8px 10px;
+    .left,
+    .right {
+      flex: 1;
+    }
+    .left {
+      display: flex;
+      span {
+        flex: 1;
+        flex-wrap: nowrap;
+      }
+      .date {
+        min-width: 120px;
+      }
+    }
+    .right {
+      display: flex;
+      align-items: center;
+      span {
+        min-width: 80px;
+      }
+      .signature {
+        vertical-align: bottom;
+        width: 200px;
+        height: 70px;
+        margin-left: -20px;
+      }
+    }
+  }
+  .resultWidth div {
+    min-width: 110px;
+  }
+}
+.rightSignature {
+  margin-left: 30px;
+  img {
+    width: 260px;
+    height: 70px;
+    border-radius: 5px;
+  }
+}
+.printBtn {
+  margin-top: 10px;
+}
+.ecgResultTz {
+  line-height: 1.5;
+}
+.advice {
+  font-size: 11px;
+}
+.remark {
+  text-align: center;
+  margin: 30px 0;
+  font-size: 12px;
+  color: #ccc;
+}
+.tooltip {
+  display: inline-block;
+  font-size: 10px;
+  color: #ccc;
+}
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.over {
+  visibility: hidden;
+}
+.fz11 {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.fz14 {
+  font-size: 14px;
+  font-weight: 700;
+}
+.fz18 {
+  font-size: 18px;
+  font-weight: 700;
+}
+.fw {
+  font-weight: 700;
+}
+.minWidth {
+  display: inline-block;
+  min-width: 10px;
+}
+.margin {
+  margin: 10px 0;
+}
+.removeScroll {
+  overflow: hidden;
+  overflow-y: auto;
+}
+/*滚动条样式*/
+.removeScroll::-webkit-scrollbar {
+  width: 4px;
+  /*height: 4px;*/
+}
+.removeScroll::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0);
+}
+.removeScroll::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0);
+}
 </style>

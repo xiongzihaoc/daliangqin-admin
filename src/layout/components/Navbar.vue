@@ -9,10 +9,10 @@
       </div>
       <topbar />
       <div class="right-menu">
-        <template v-if="device !== 'mobile'">
+        <!-- <template v-if="device !== 'mobile'">
           <screenfull id="screenfull"
             class="right-menu-item hover-effect" />
-        </template>
+        </template> -->
         <el-dropdown class="avatar-container"
           trigger="click">
           <div class="avatar-wrapper">

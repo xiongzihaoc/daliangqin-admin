@@ -22,6 +22,24 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="任务">
+                    <el-input
+                        placeholder="请输入内容"
+                        v-model="searchForm.taskContent"
+                        class="input-with-select"
+                        size="small"
+                    >
+                        <el-select
+                            v-model="searchForm.task"
+                            slot="prepend"
+                            placeholder="请选择"
+                            style="width: 100px"
+                        >
+                            <el-option label="任务名称" value="aiName"></el-option>
+                            <el-option label="期名" value="taskStage"></el-option>
+                        </el-select>
+                    </el-input>
+                </el-form-item>
                 <el-form-item label="统计日期">
                     <el-date-picker
                         v-model="searchForm.statistics"
@@ -55,18 +73,18 @@
             @handleCurrentChange="handleCurrentChange"
         >
             <el-table-column align="center" label="序号" type="index"></el-table-column>
-            <el-table-column align="center" label="日期" ></el-table-column>
-            <el-table-column align="center" label="医院名称" ></el-table-column>
-            <el-table-column align="center" label="任务名称" ></el-table-column>
-            <el-table-column align="center" label="期名" ></el-table-column>
-            <el-table-column align="center" label="外呼总量(位)" ></el-table-column>
-            <el-table-column align="center" label="接听总量(位)" ></el-table-column>
-            <el-table-column align="center" label="挂机总量(位)" ></el-table-column>
-            <el-table-column align="center" label="总接听率(%)" ></el-table-column>
-            <el-table-column align="center" label="总挂机率(%)" ></el-table-column>
-            <el-table-column align="center" label="对话总轮次" ></el-table-column>
-            <el-table-column align="center" label="总通话时长(s)" ></el-table-column>
-            <el-table-column align="center" label="平均通话时长(s)" ></el-table-column>
+            <el-table-column align="center" label="日期"></el-table-column>
+            <el-table-column align="center" label="医院名称"></el-table-column>
+            <el-table-column align="center" label="任务名称"></el-table-column>
+            <el-table-column align="center" label="期名"></el-table-column>
+            <el-table-column align="center" label="外呼总量(位)"></el-table-column>
+            <el-table-column align="center" label="接听总量(位)"></el-table-column>
+            <el-table-column align="center" label="挂机总量(位)"></el-table-column>
+            <el-table-column align="center" label="总接听率(%)"></el-table-column>
+            <el-table-column align="center" label="总挂机率(%)"></el-table-column>
+            <el-table-column align="center" label="对话总轮次"></el-table-column>
+            <el-table-column align="center" label="总通话时长(s)"></el-table-column>
+            <el-table-column align="center" label="平均通话时长(s)"></el-table-column>
         </EleTable>
     </div>
 </template>
@@ -110,7 +128,11 @@ export default {
          * 搜索
          */
         searchBtn() {
-
+            if (this.searchForm.task === 'aiName') {
+                this.searchForm.aiName = this.searchForm.taskContent
+            } else {
+                this.searchForm.taskStage = this.searchForm.taskContent
+            }
         },
         searchReset() {
 

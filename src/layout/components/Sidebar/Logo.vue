@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      title: '大良卿',
+      title: '大良卿管理后台',
       logo: '../../../assets/images/logo.png',
     }
   },

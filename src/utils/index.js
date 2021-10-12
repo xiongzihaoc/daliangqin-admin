@@ -118,7 +118,7 @@ export function textFormat(e) {
     }
   }
 }
-//  根据身份证获取出生日期（yyyy-MM-dd）
+// 根据身份证获取出生日期（yyyy-MM-dd）
 export function GetBirthday(psidno) {
   var birthdayno, birthdaytemp
   if (psidno.length == 18) {
@@ -133,7 +133,7 @@ export function GetBirthday(psidno) {
   return birthday
 }
 
-//  根据输入的身份证获取性别代码
+// 根据输入的身份证获取性别代码
 export function Getsex(psidno) {
   var sexno, sex
   if (psidno.length == 18) {
@@ -706,6 +706,13 @@ export const AiResultStatus = [
   { id: 11, label: "外呼失败", value: "SYSTEM_ERROR" },
   { id: 12, label: "多并发呼损", value: "CALL_LOSS" },
   { id: 13, label: "转人工呼损", value: "TRANSFER_ARTIFICIAL" },
+]
+
+// 打印 状态
+export const printStatusList = [
+  { id: 2, label: "已打印", value: "HAVE_PRINT" },
+  { id: 3, label: "未打印", value: "NOT_PRINT" },
+
 ]
 // 所有枚举类型转义
 export const formatterElement = {

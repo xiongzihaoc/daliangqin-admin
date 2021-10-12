@@ -44,7 +44,6 @@ const archivesRouter = {
                 meta: {
                     title: '心率监测',
                     icon: 'general',
-                    noCache: true
                 },
             },
             {
@@ -54,7 +53,6 @@ const archivesRouter = {
                 meta: {
                     title: '血压监测',
                     icon: 'general',
-                    noCache: true
                 },
             },
             {
@@ -78,15 +76,15 @@ const archivesRouter = {
             },
         ],
     },
-    {
-        path: 'equipment',
-        name: 'equipment',
-        component: () => import('@/views/archivesManagement/equipment'),
-        meta: {
-            title: '设备管理',
-            icon: 'shebei'
-        }
-    },
+    // {
+    //     path: 'equipment',
+    //     name: 'equipment',
+    //     component: () => import('@/views/archivesManagement/equipment'),
+    //     meta: {
+    //         title: '设备管理',
+    //         icon: 'shebei'
+    //     }
+    // },
     {
         path: 'usage',
         name: 'usage',

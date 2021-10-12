@@ -5,6 +5,7 @@
     <el-table :data="data"
       @row-click="rowClick"
       @cell-click="cellClick"
+      @cell-dblclick="cellDblClick"
       @row-dblclick="rowDblClick"
       @select="rowSelect"
       @select-all="selectAll"
@@ -272,6 +273,9 @@ export default {
     },
     cellClick(row, column, cell, event) {
       this.$emit('cell-click', row, column, cell, event)
+    },
+    cellDblClick(row, column, cell, event) {
+      this.$emit('cell-dblclick', row, column, cell, event)
     },
     rowDblClick(row) {
       this.$emit('row-dblclick', row)

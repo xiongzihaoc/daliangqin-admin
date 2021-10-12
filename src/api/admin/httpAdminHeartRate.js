@@ -15,6 +15,14 @@ export const httpAdminHeartRate = {
       data
     })
   },
+  // 新增ai心电数据(假数据)
+  postHeartRateAi(data) {
+    return request({
+      url: 'equipment/heartRate/ai',
+      method: 'post',
+      data
+    })
+  },
   // 修改审核状态
   putHeartRateStatus(data) {
     return request({
@@ -34,8 +42,9 @@ export const httpAdminHeartRate = {
   // 记录打印次数
   putHeartRatePrint(data) {
     return request({
-      url: 'equipment/heartRate/print/' + data.id,
+      url: 'equipment/heartRate/print/' + data.recordId,
       method: 'put',
+      data
     })
   },
   // 清空打印次数
@@ -43,6 +52,14 @@ export const httpAdminHeartRate = {
     return request({
       url: 'equipment/heartRate/clear/' + data.id,
       method: 'put',
+    })
+  },
+  // 批量清空打印次数
+  putHeartRateClearBatch(data) {
+    return request({
+      url: 'equipment/heartRate/clear/batch',
+      method: 'put',
+      data
     })
   },
 }
