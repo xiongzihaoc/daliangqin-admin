@@ -3,8 +3,6 @@ import { removeToken } from '@/utils/auth'
 import {
   Message
 } from 'element-ui'
-import store from '@/store'
-import router from '@/router'
 import {
   getToken
 } from '@/utils/auth'
