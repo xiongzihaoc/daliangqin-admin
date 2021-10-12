@@ -29,6 +29,24 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="任务">
+                    <el-input
+                        placeholder="请输入内容"
+                        v-model="searchForm.taskContent"
+                        class="input-with-select"
+                        size="small"
+                    >
+                        <el-select
+                            v-model="searchForm.task"
+                            slot="prepend"
+                            placeholder="请选择"
+                            style="width: 100px"
+                        >
+                            <el-option label="任务名称" value="aiName"></el-option>
+                            <el-option label="期名" value="taskStage"></el-option>
+                        </el-select>
+                    </el-input>
+                </el-form-item>
                 <el-form-item label="呼叫时间">
                     <el-date-picker
                         v-model="searchForm.callDuration"
@@ -122,6 +140,7 @@ export default {
         this.getHospitalList()
     },
     methods: {
+
         /* 获取医院列表 */
         getHospitalList() {
             httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
@@ -133,6 +152,12 @@ export default {
          * 搜索
          */
         searchBtn() {
+            if(this.searchForm.task === 'aiName'){
+                this.searchForm.aiName = this.searchForm.taskContent
+            }else{
+                this.searchForm.taskStage = this.searchForm.taskContent
+            }
+            console.log('搜索', this.searchForm)
         },
         searchReset() {
         },
