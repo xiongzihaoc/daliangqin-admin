@@ -464,6 +464,7 @@ export default {
     },
     // 跳转详细资料
     detailsBtn(val) {
+      console.log(val)
       this.$router.push({
         path: '/archivesManagement/details',
         query: { id: val.id, type: 'edit', isArchives: val.isArchives },
