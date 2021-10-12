@@ -3,8 +3,6 @@ import { removeToken } from '@/utils/auth'
 import {
   Message
 } from 'element-ui'
-import store from '@/store'
-import router from '@/router'
 import {
   getToken
 } from '@/utils/auth'
@@ -66,9 +64,9 @@ service.interceptors.response.use(res => {
   if (code !== "OK") {
     // 如果没有登录或者没有权限
     if (code === 'NO_AUTH' || code === 'FORBIDDEN') {
+      removeToken()
       window.localStorage.clear()
       window.sessionStorage.clear()
-      removeToken()
       window.location.href = '/login'
     } else { // 其他错误报出错误信息
       Message.error(res.data.message)

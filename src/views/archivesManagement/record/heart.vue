@@ -50,7 +50,7 @@
           align="left">
           <el-select multiple
             clearable
-             collapse-tags
+            collapse-tags
             v-model="searchForm.hospitalId"
             size="small"
             filterable
@@ -128,6 +128,15 @@
             type="success"
             icon="el-icon-upload2"
             @click="exportExcel">导出Excel</el-button>
+          <el-tooltip class="item"
+            effect="dark"
+            content="注意：重置次数是指将筛选后的列表打印次数重置为0"
+            placement="top-start">
+            <el-button type="success"
+              @click="resetPrintCount"
+              size="small"
+              icon="el-icon-refresh">重置打印次数</el-button>
+          </el-tooltip>
           <!-- <el-button size="small"
             type="success"
             icon="el-icon-folder-checked"
@@ -136,16 +145,6 @@
       </el-form>
     </div>
     <!-- 表格区域 -->
-    <div style="text-align: right; margin-bottom: 10px">
-      <el-tooltip class="item"
-        effect="dark"
-        content="注意：重置次数是指将筛选后的列表打印次数重置为0"
-        placement="top-start">
-        <el-button plain
-          @click="resetPrintCount"
-          size="small">重置打印次数</el-button>
-      </el-tooltip>
-    </div>
     <EleTable :data="list"
       :header="tableHeaderBig"
       @cell-dblclick="cellDblClick"
@@ -953,6 +952,21 @@ export default {
 <style>
 .el-step__title {
   font-size: 14px !important;
+}
+.el-select__tags {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.el-select__tags-text {
+  display: inline-block;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.el-select .el-tag__close.el-icon-close {
+  top: -7px;
+  right: -4px;
 }
 </style>
 <style lang="scss" scoped>
