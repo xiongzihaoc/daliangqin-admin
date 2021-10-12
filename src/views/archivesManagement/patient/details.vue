@@ -765,7 +765,8 @@ export default {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 编辑
-          if (this.$route.query.isArchives == true) {
+          if (this.$route.query.isArchives === 'true') {
+            console.log('put')
             httpAdminArchives.putArchives(this.form).then((res) => {
               if (res.code === 'OK') {
                 this.$message.success('编辑成功')
@@ -775,6 +776,7 @@ export default {
           } else {
             // 新增
             httpAdminArchives.postArchives(this.form).then((res) => {
+            console.log('post')
               if (res.code === 'OK') {
                 this.$message.success('新增成功')
                 this.$router.push({ path: '/archivesManagement/patient' })
