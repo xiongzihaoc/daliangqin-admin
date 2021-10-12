@@ -33,7 +33,6 @@
         <el-form-item>
           <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search">搜索</el-button>
           <el-button @click="searchReset" size="small" plain icon="el-icon-refresh">重置</el-button>
-          <el-button type="success" size="small" @click="getAll">全部</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -58,14 +57,14 @@
       <el-table-column align="center" label="测量总次数" prop="measureTotalAmount">
         <template slot-scope="scope">
           <span
-            class="skipStyle"
+            :class="[scope.row.measureTotalAmount === 0 ? '' : 'skipStyle' ]"
             @click="skipHeart(scope.row, 'people')"
           >{{ scope.row.measureTotalAmount }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="公司已审核报告数" prop="companyAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row, 'PLATFORM_COMPLETE_AUDIT')">
+          <span :class="[scope.row.companyAuditNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'PLATFORM_COMPLETE_AUDIT')">
             {{
               scope.row.companyAuditNumber
             }}
@@ -74,7 +73,7 @@
       </el-table-column>
       <el-table-column align="center" label="医院已审核报告数" prop="hospitalAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row, 'HOSPITAL_COMPLETE_AUDIT')">
+          <span :class="[ scope.row.hospitalAuditNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'HOSPITAL_COMPLETE_AUDIT')">
             {{
               scope.row.hospitalAuditNumber
             }}
@@ -83,7 +82,7 @@
       </el-table-column>
       <el-table-column align="center" label="公司待审核报告数" prop="companyWaitAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row, 'TO_AUDIT')">
+          <span :class="[scope.row.companyWaitAuditNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'TO_AUDIT')">
             {{
               scope.row.companyWaitAuditNumber
             }}
@@ -92,9 +91,28 @@
       </el-table-column>
       <el-table-column align="center" label="医院待审核报告数" prop="hospitalWaitAuditNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipHeart(scope.row, 'TO_HOSPITAL_AUDIT')">
+          <span :class="[scope.row.hospitalWaitAuditNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'TO_HOSPITAL_AUDIT')">
             {{
               scope.row.hospitalWaitAuditNumber
+            }}
+          </span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="待打印报告数" prop="stayPrintNumber">
+        <template slot-scope="scope">
+          <span :class="[scope.row.stayPrintNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'stayPrintNumber')">
+            {{
+              scope.row.stayPrintNumber
+            }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="	待上传报告数" prop="stayUploadNumber">
+        <template slot-scope="scope">
+          <span :class="[scope.row.stayUploadNumber === null ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'stayUploadNumber')">
+            {{
+              scope.row.stayUploadNumber === null ? 0 : scope.row.stayUploadNumber
             }}
           </span>
         </template>
@@ -119,8 +137,10 @@ export default {
       searchForm: {
         hospitalId: '',
         superviseTime: '',
-        startTime: new Date(new Date().toLocaleDateString()).getTime(),
-        endTime: new Date().getTime(),
+        startTime: '',
+        // new Date(new Date().toLocaleDateString()).getTime()
+        endTime: '',
+        // new Date().getTime()
       },
       hospitalList: [],
       // 监测时间
@@ -163,9 +183,6 @@ export default {
     }
   },
   created() {
-    let startTime = new Date(new Date().toLocaleDateString()).getTime()
-    let endTime = new Date().getTime()
-    this.searchForm.superviseTime = [startTime, endTime]
     this.getList()
   },
   mounted() {
@@ -195,26 +212,44 @@ export default {
     getSummaries() { },
     // 跳转心率检测
     skipHeart(val, state) {
-      if (state != 'people') {
+      if (state != 'people' && state != 'stayPrintNumber' && state != 'stayUploadNumber') {
         sessionStorage.setItem('monitoringAuditStatus', state)
+      }
+      if(state === 'stayUploadNumber' && val.stayUploadNumber !== null){
+        sessionStorage.setItem('monitoringStayUploadNumber', val.stayUploadNumber)
+      }
+      if(state === 'stayPrintNumber' && val.stayPrintNumber !== 0){
+        sessionStorage.setItem('monitoringStayPrintNumber', val.stayPrintNumber)
       }
       sessionStorage.setItem('monitoringHospitalId', val.hospitalId)
       sessionStorage.setItem('monitoringStartTime', this.searchForm.startTime)
       sessionStorage.setItem('monitoringEndTime', this.searchForm.endTime)
-      this.$router.push('/archivesManagement/record/heart')
+      if (val.measureTotalAmount !== 0 && state === 'people') {
+        this.$router.push('/archivesManagement/record/heart')
+      }
+      if (val.companyAuditNumber !== 0 && state === 'PLATFORM_COMPLETE_AUDIT') {
+        this.$router.push('/archivesManagement/record/heart')
+      }
+      if (val.hospitalAuditNumber !== 0 && state === 'HOSPITAL_COMPLETE_AUDIT') {
+        this.$router.push('/archivesManagement/record/heart')
+      }
+      if (val.companyWaitAuditNumber !== 0 && state === 'TO_AUDIT') {
+        this.$router.push('/archivesManagement/record/heart')
+      }
+      if (val.hospitalWaitAuditNumber !== 0 && state === 'TO_HOSPITAL_AUDIT') {
+        this.$router.push('/archivesManagement/record/heart')
+      }
+      if (val.stayPrintNumber !== 0 && state === 'stayPrintNumber') {
+        this.$router.push('/archivesManagement/record/heart')
+      }
+      if (val.stayUploadNumber !== null && state === 'stayUploadNumber') {
+        this.$router.push('/archivesManagement/record/heart')
+      }
     },
     // 用户选择时间
     changeMonitorTime(val) {
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
-    },
-    // 获取全部数据
-    getAll() {
-      this.searchForm.superviseTime = ''
-      this.searchForm.startTime = ''
-      this.searchForm.endTime = ''
-      this.searchForm.hospitalId = ''
-      this.getList()
     },
     /**
      * 搜索
@@ -225,9 +260,9 @@ export default {
     },
     searchReset() {
       this.pageNum = 1
-      this.searchForm.startTime = new Date( new Date().toLocaleDateString()).getTime()
-      this.searchForm.endTime = new Date().getTime()
-      this.searchForm.superviseTime = [new Date(), new Date()]
+      this.searchForm.startTime = ''
+      this.searchForm.endTime = ''
+      this.searchForm.superviseTime = []
       this.searchForm.hospitalId = ''
       this.getList()
     },
