@@ -244,7 +244,7 @@ export default {
         this.$router.push('/archivesManagement/record/heart')
       }
       if (val.stayUploadNumber !== null && state === 'stayUploadNumber') {
-        this.$router.push('/archivesManagement/record/heart')
+        this.$router.push('/archivesManagement/usage')
       }
     },
     // 用户选择时间
