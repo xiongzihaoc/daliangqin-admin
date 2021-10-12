@@ -439,6 +439,17 @@ export default {
                     this.list = res.data.elements
                 })
         },
+        // 处理不可拨打时间段
+        disposeNotTime(){
+            let inactiveTimeList = []
+            console.log('不可拨打时间', this.dialForm.notCallTime)
+            return inactiveTimeList
+        },
+        // 处理不可拨打日期
+        disposeNotDate(){
+            let inactiveDateList = []
+            return inactiveDateList
+        },
         // 添加
         postInformation() {
             let notDialTimeArr = this.notDialTimeArr
@@ -484,9 +495,7 @@ export default {
             console.log('周期', this.timeForm.checkListPeriod)
             console.log('可拨打时间', this.searchForm.daily)
             console.log('周期', this.timeForm.checkListPeriod)
-            let formData = new FormData()
-            formData.append('file', this.searchForm.excelFile)
-            console.log('formData', formData)
+            return
             httpAdminAiCall
                 .postInformation({
                     // 添加
@@ -549,7 +558,7 @@ export default {
             //1.dialForm 2.notDialTimeArr
             // console.log('获取不可拨打时间', this.notDialTimeArr[0].callTime[0],)
             // 不可拨打日期  1.this.timeForm.notDial 2.notDialDateArr
-            console.log('不可拨打日期', this.notDialDateArr)
+            console.log('不可拨打日期', this.dialForm.notCallTime)
         },
         deleteNotCall(val, index) {
             if (val === 'time') {
@@ -573,7 +582,7 @@ export default {
                 if (this.notDialTimeArr.length >= 2) return
                 notDialTimeArr.push({
                     id: notDialTimeArr.length + 2,
-                    callTime: ['09:00', '20:00'],
+                    callTime: ['', ''],
                 })
             } else {
                 if (this.notDialDateArr.length >= 2) return
@@ -629,7 +638,7 @@ export default {
         /**
          * 操作
          */
-        operation(val){
+        operation(val) {
             console.log(val)
         },
         /**
