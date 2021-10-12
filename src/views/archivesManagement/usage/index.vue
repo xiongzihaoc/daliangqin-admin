@@ -122,11 +122,9 @@ export default {
     },
     // 跳转用户档案
     skipPatient(val) {
-      console.log('跳转', val)
-      return
       this.$router.push(
         "/archivesManagement/details?id=" +
-        val.id +
+        val.patientUserId +
         "&type=edit" +
         "&isArchives=true"
       );
