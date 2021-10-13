@@ -330,8 +330,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="timeVisible = false">取 消</el-button>
-                <el-button type="primary" @click="disposeNotTime">确 定</el-button>
-                <!-- confirmCallTime -->
+                <el-button type="primary" @click="confirmCallTime">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -460,6 +459,23 @@ export default {
         // 处理不可拨打日期
         disposeNotDate(){
             let inactiveDateList = []
+            let notDial = this.timeForm.notDial
+            let notDialDateArr = this.notDialDateArr[0]
+            let notDialDateArrOne = this.notDialDateArr[1]
+            if(notDial != undefined && notDial[0] != ''){
+                inactiveDateList.push({ startDate: notDial[0], endDate: notDial[1] })
+            }
+            if(notDialDateArr != undefined && notDialDateArr.callDate != ''){
+                if(notDialDateArr.callDate != null ){
+                    inactiveDateList.push({ startDate: notDialDateArr.callDate[0], endDate: notDialDateArr.callDate[1] })
+                }
+            }
+            if(notDialDateArrOne != undefined && notDialDateArrOne.callDate != ''){
+                if(notDialDateArrOne.callDate != null){
+                    inactiveDateList.push({ startDate: notDialDateArrOne.callDate[0], endDate: notDialDateArrOne.callDate[1] })
+                }
+            }
+            console.log('not日期', inactiveDateList)
             return inactiveDateList
         },
         // 添加
@@ -478,25 +494,27 @@ export default {
             }
             // 开始
             let inactiveTimeList = this.disposeNotTime()
-            console.log('最后', inactiveTimeList)
-            let inactiveDateList = [
-                { startDate: notDial[0], endDate: notDial[1] },
-                {
-                    startDate: notDialDateArr[0]?.callDate[0],
-                    endDate: notDialDateArr[0]?.callDate[1],
-                },
-                {
-                    startDate: notDialDateArr[1]?.callDate[0],
-                    endDate: notDialDateArr[1]?.callDate[1],
-                },
-            ]
+            let inactiveDateList = this.disposeNotDate()
+            return
+            // console.log('最后', inactiveTimeList)
+            // [
+            //     { startDate: notDial[0], endDate: notDial[1] },
+            //     {
+            //         startDate: notDialDateArr[0]?.callDate[0],
+            //         endDate: notDialDateArr[0]?.callDate[1],
+            //     },
+            //     {
+            //         startDate: notDialDateArr[1]?.callDate[0],
+            //         endDate: notDialDateArr[1]?.callDate[1],
+            //     },
+            // ]
             console.log('不可拨打时间', inactiveTimeList)
             console.log('不可拨打日期', inactiveDateList)
             console.log('表单数据', this.searchForm)
             console.log('周期', this.timeForm.checkListPeriod)
             console.log('可拨打时间', this.searchForm.daily)
             console.log('周期', this.timeForm.checkListPeriod)
-            return
+            
             httpAdminAiCall
                 .postInformation({
                     // 添加
