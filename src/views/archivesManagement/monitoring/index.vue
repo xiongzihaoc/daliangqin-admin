@@ -101,7 +101,7 @@
 
       <el-table-column align="center" label="待打印报告数" prop="stayPrintNumber">
         <template slot-scope="scope">
-          <span :class="[scope.row.stayPrintNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'stayPrintNumber')">
+          <span :class="[scope.row.stayPrintNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'NOT_PRINT')">
             {{
               scope.row.stayPrintNumber
             }}
@@ -213,14 +213,14 @@ export default {
     getSummaries() { },
     // 跳转心率检测
     skipHeart(val, state) {
-      if (state != 'people' && state != 'stayPrintNumber' && state != 'stayUploadNumber') {
+      if (state != 'people' && state != 'NOT_PRINT' && state != 'stayUploadNumber') {
         sessionStorage.setItem('monitoringAuditStatus', state)
       }
-      if(state === 'stayUploadNumber' && val.stayUploadNumber !== null){
-        sessionStorage.setItem('monitoringStayUploadNumber', val.stayUploadNumber)
-      }
-      if(state === 'stayPrintNumber' && val.stayPrintNumber !== 0){
-        sessionStorage.setItem('monitoringStayPrintNumber', val.stayPrintNumber)
+      // if(state === 'stayUploadNumber' && val.stayUploadNumber !== null){
+      //   sessionStorage.setItem('monitoringStayUploadNumber', val.stayUploadNumber)
+      // }
+      if(state === 'NOT_PRINT' && val.stayPrintNumber !== 0){
+        sessionStorage.setItem('monitoringNotPrint', state) 
       }
       let hospitalId = [ val.hospitalId ] 
       sessionStorage.setItem('monitoringHospitalId', JSON.stringify(hospitalId))
@@ -241,7 +241,7 @@ export default {
       if (val.hospitalWaitAuditNumber !== 0 && state === 'TO_HOSPITAL_AUDIT') {
         this.$router.push('/archivesManagement/record/heart')
       }
-      if (val.stayPrintNumber !== 0 && state === 'stayPrintNumber') {
+      if (val.stayPrintNumber !== 0 && state === 'NOT_PRINT') {
         this.$router.push('/archivesManagement/record/heart')
       }
       if (val.stayUploadNumber !== null && state === 'stayUploadNumber') {
