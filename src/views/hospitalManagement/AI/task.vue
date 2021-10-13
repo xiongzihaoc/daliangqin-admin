@@ -439,6 +439,45 @@ export default {
                     this.list = res.data.elements
                 })
         },
+        // 处理不可拨打时间段
+        disposeNotTime(){
+            let inactiveTimeList = []
+            let notCallTime = this.dialForm.notCallTime
+            let callTime = this.notDialTimeArr[0]
+            let callTimeOne = this.notDialTimeArr[1]
+            if(notCallTime[0] != '' && notCallTime[1] != ''){
+                inactiveTimeList.push({ startTime: notCallTime[0], endTime: notCallTime[1] })
+            }
+            if(callTime != undefined && callTime.callTime[0] != '' ){
+               inactiveTimeList.push({ startTime: callTime.callTime[0], endTime: callTime.callTime[1] })
+            }
+             if(callTimeOne != undefined && callTimeOne.callTime[0] != '' ){
+               inactiveTimeList.push({ startTime: callTimeOne.callTime[0], endTime: callTimeOne.callTime[1] })
+            }
+            return inactiveTimeList
+        },
+        // 处理不可拨打日期
+        disposeNotDate(){
+            let inactiveDateList = []
+            let notDial = this.timeForm.notDial
+            let notDialDateArr = this.notDialDateArr[0]
+            let notDialDateArrOne = this.notDialDateArr[1]
+            if(notDial != undefined && notDial[0] != ''){
+                inactiveDateList.push({ startDate: notDial[0], endDate: notDial[1] })
+            }
+            if(notDialDateArr != undefined && notDialDateArr.callDate != ''){
+                if(notDialDateArr.callDate != null ){
+                    inactiveDateList.push({ startDate: notDialDateArr.callDate[0], endDate: notDialDateArr.callDate[1] })
+                }
+            }
+            if(notDialDateArrOne != undefined && notDialDateArrOne.callDate != ''){
+                if(notDialDateArrOne.callDate != null){
+                    inactiveDateList.push({ startDate: notDialDateArrOne.callDate[0], endDate: notDialDateArrOne.callDate[1] })
+                }
+            }
+            console.log('not日期', inactiveDateList)
+            return inactiveDateList
+        },
         // 添加
         postInformation() {
             let notDialTimeArr = this.notDialTimeArr
@@ -453,40 +492,29 @@ export default {
             if (notDial === undefined || notDial === null) {
                 notDial = []
             }
-            let inactiveTimeList = [
-                {
-                    startTime: this.dialForm.notCallTime[0],
-                    endTime: this.dialForm.notCallTime[1],
-                },
-                {
-                    startTime: notDialTimeArr[0]?.callTime[0],
-                    endTime: notDialTimeArr[0]?.callTime[1],
-                },
-                {
-                    startTime: notDialTimeArr[1]?.callTime[0],
-                    endTime: notDialTimeArr[1]?.callTime[1],
-                },
-            ]
-            let inactiveDateList = [
-                { startDate: notDial[0], endDate: notDial[1] },
-                {
-                    startDate: notDialDateArr[0]?.callDate[0],
-                    endDate: notDialDateArr[0]?.callDate[1],
-                },
-                {
-                    startDate: notDialDateArr[1]?.callDate[0],
-                    endDate: notDialDateArr[1]?.callDate[1],
-                },
-            ]
+            // 开始
+            let inactiveTimeList = this.disposeNotTime()
+            let inactiveDateList = this.disposeNotDate()
+            return
+            // console.log('最后', inactiveTimeList)
+            // [
+            //     { startDate: notDial[0], endDate: notDial[1] },
+            //     {
+            //         startDate: notDialDateArr[0]?.callDate[0],
+            //         endDate: notDialDateArr[0]?.callDate[1],
+            //     },
+            //     {
+            //         startDate: notDialDateArr[1]?.callDate[0],
+            //         endDate: notDialDateArr[1]?.callDate[1],
+            //     },
+            // ]
             console.log('不可拨打时间', inactiveTimeList)
             console.log('不可拨打日期', inactiveDateList)
             console.log('表单数据', this.searchForm)
             console.log('周期', this.timeForm.checkListPeriod)
             console.log('可拨打时间', this.searchForm.daily)
             console.log('周期', this.timeForm.checkListPeriod)
-            let formData = new FormData()
-            formData.append('file', this.searchForm.excelFile)
-            console.log('formData', formData)
+            
             httpAdminAiCall
                 .postInformation({
                     // 添加
@@ -549,7 +577,7 @@ export default {
             //1.dialForm 2.notDialTimeArr
             // console.log('获取不可拨打时间', this.notDialTimeArr[0].callTime[0],)
             // 不可拨打日期  1.this.timeForm.notDial 2.notDialDateArr
-            console.log('不可拨打日期', this.notDialDateArr)
+            console.log('不可拨打日期', this.dialForm.notCallTime)
         },
         deleteNotCall(val, index) {
             if (val === 'time') {
@@ -573,7 +601,7 @@ export default {
                 if (this.notDialTimeArr.length >= 2) return
                 notDialTimeArr.push({
                     id: notDialTimeArr.length + 2,
-                    callTime: ['09:00', '20:00'],
+                    callTime: ['', ''],
                 })
             } else {
                 if (this.notDialDateArr.length >= 2) return
@@ -629,7 +657,7 @@ export default {
         /**
          * 操作
          */
-        operation(val){
+        operation(val) {
             console.log(val)
         },
         /**

@@ -247,7 +247,7 @@
         label="审核人"
         prop="auditorName"></el-table-column>
       <el-table-column align="center"
-        label="已打印次数"
+        label="已打印次数(双击输入)"
         prop="printNumber">
         <template slot-scope="scope">
           <span v-if="scope.row.printNumber > 0"> {{ scope.row.printNumber }}</span>
@@ -567,6 +567,7 @@ export default {
     let monitoringEndTime = sessionStorage.getItem('monitoringEndTime')
     let monitoringHospitalId = sessionStorage.getItem('monitoringHospitalId')
     let monitoringAuditStatus = sessionStorage.getItem('monitoringAuditStatus')
+    let monitoringNotPrint = sessionStorage.getItem('monitoringNotPrint')
     if (monitoringStartTime && monitoringEndTime) {
       this.searchForm.monitorTime = [monitoringStartTime, monitoringEndTime]
     }
@@ -574,6 +575,7 @@ export default {
     this.searchForm.endTime = monitoringEndTime
     this.searchForm.hospitalId = JSON.parse(monitoringHospitalId)
     this.searchForm.auditStatus = monitoringAuditStatus
+    this.searchForm.printStatus = monitoringNotPrint
     this.getList()
   },
   beforeDestroy() {
@@ -887,7 +889,7 @@ export default {
     cellDblClick(row, column, cell, event) {
       let that = this
       if (
-        (column.label === '已打印次数' &&
+        (column.label === '已打印次数(双击输入)' &&
           row.auditStatus === 'PLATFORM_COMPLETE_AUDIT') ||
         row.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
       ) {

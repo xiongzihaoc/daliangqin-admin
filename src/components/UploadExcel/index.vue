@@ -36,7 +36,6 @@ export default {
         host: "",
         name: "",
       },
-      
       percentage: 0,
       infoList: [],
     };
@@ -84,7 +83,7 @@ export default {
     },
     handleUploadSuccess(response, file, fileList) {
       let value = "https://cdn.daliangqing.com/" + this.dataObj.key;
-      this.uploadValue = "https://cdn.daliangqing.com/" + this.dataObj.key;
+      this.uploadValue = this.dataObj.name;
       let name = this.dataObj.name
       console.log(this.dataObj.key,this.dataObj.name)
       this.$emit("uploadFinish", {value, name});
