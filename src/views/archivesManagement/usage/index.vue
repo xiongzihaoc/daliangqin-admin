@@ -104,8 +104,15 @@ export default {
     this.getList()
   },
   mounted() { },
+  beforeDestroy() {
+    sessionStorage.removeItem('monitoringHospitalId')
+  },
   methods: {
     getList() {
+      let hospitalId = JSON.parse(sessionStorage.getItem("monitoringHospitalId"))
+      if (hospitalId !== null) {
+        hospitalId = hospitalId[0]
+      }
       httpAdminUsage
         .getUsage({
           page: this.pageNum,
@@ -114,6 +121,7 @@ export default {
           name: this.searchForm.name,
           phone: this.searchForm.phone,
           ecgComingMode: this.searchForm.ecgComingMode,
+          hospitalId: hospitalId,
         })
         .then((res) => {
           this.list = res.data.elements
