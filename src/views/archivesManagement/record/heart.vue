@@ -586,6 +586,7 @@ export default {
     sessionStorage.removeItem('monitoringStartTime')
     sessionStorage.removeItem('monitoringEndTime')
     sessionStorage.removeItem('monitoringAuditStatus')
+    sessionStorage.removeItem('monitoringNotPrint')
   },
   mounted() {
     this.getHospitalList()
@@ -642,6 +643,14 @@ export default {
     },
     // 重置
     searchReset() {
+      sessionStorage.removeItem('heartSearchForm')
+      sessionStorage.removeItem('heartPageNum')
+      sessionStorage.removeItem('heartPageSize')
+      sessionStorage.removeItem('monitoringHospitalId')
+      sessionStorage.removeItem('monitoringStartTime')
+      sessionStorage.removeItem('monitoringEndTime')
+      sessionStorage.removeItem('monitoringAuditStatus')
+      sessionStorage.removeItem('monitoringNotPrint')
       this.pageNum = 1
       this.searchForm = {}
       this.getList()
