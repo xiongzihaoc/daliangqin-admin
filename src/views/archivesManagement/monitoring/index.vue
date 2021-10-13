@@ -125,6 +125,7 @@ import EleTable from '@/components/Table'
 import { httpAdminEquipmentMonitoring } from '@/api/admin/httpAdminEquipmentMonitoring'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import { parseTime } from '@/utils/index'
+import { list } from '@/api/public/httpPublicBanner'
 export default {
   components: {
     EleTable,
@@ -151,7 +152,7 @@ export default {
             text: '今天',
             onClick(picker) {
               const end = new Date()
-              const start = new Date()
+              const start = new Date(new Date().toLocaleDateString())
               start.setTime(start.getTime())
               picker.$emit('pick', [start, end])
             },
