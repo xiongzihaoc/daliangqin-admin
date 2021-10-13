@@ -740,7 +740,6 @@ export default {
     formatJson(filterVal, jsonData) {
       return jsonData.map((v) => filterVal.map((j) => v[j]))
     },
-
     // 导出的列表数据
     getExpportData() {
       const loading = this.$loading({
@@ -876,12 +875,23 @@ export default {
     },
     // 重置打印次数
     resetPrintCount() {
-      httpAdminHeartRate.putHeartRateClearBatch(this.searchForm).then((res) => {
-        if (res.code === 'OK') {
-          this.getList()
-          this.$message.success('操作成功')
-        }
+      const loading = this.$loading({
+        lock: true,
+        text: '正在重置，请稍等......',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)',
       })
+      httpAdminHeartRate
+        .putHeartRateClearBatch({ ...this.searchForm, pageSize: this.total })
+        .then((res) => {
+          if (res.code === 'OK') {
+            this.getList()
+            this.$message.success('重置成功')
+            loading.close()
+          } else {
+            loading.close()
+          }
+        })
     },
     // 批量打印
     bulkPrint() {},
