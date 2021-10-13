@@ -53,8 +53,8 @@
           <span class="skipStyle" @click="skipHeart(scope.row)">{{ scope.row.hospitalName }}</span>
         </template>-->
       </el-table-column>
-      <el-table-column align="center" label="测量总人数" prop="measureTotalFrequency"></el-table-column>
-      <el-table-column align="center" label="测量总次数" prop="measureTotalAmount">
+      <el-table-column align="center" label="已监测总人数" prop="measureTotalFrequency"></el-table-column>
+      <el-table-column align="center" label="已监测总次数" prop="measureTotalAmount">
         <template slot-scope="scope">
           <span
             :class="[scope.row.measureTotalAmount === 0 ? '' : 'skipStyle' ]"
