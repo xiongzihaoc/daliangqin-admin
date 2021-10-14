@@ -200,6 +200,15 @@ const hospitalRouter = {
                 title: '外呼总人数',
             },
         },
+        {
+            path: "notcall",
+            name: "notcall",
+            hidden: true,
+            component: () => import('@/views/hospitalManagement/AI/callout/notcall'),
+            meta: {
+                title: '未呼用户',
+            },
+        },
     ]
 }
 export default hospitalRouter
