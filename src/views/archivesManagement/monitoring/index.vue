@@ -110,9 +110,9 @@
       </el-table-column>
       <el-table-column align="center" label="	待上传报告数" prop="stayUploadNumber">
         <template slot-scope="scope">
-          <span :class="[scope.row.stayUploadNumber === null ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'stayUploadNumber')">
+          <span :class="[scope.row.stayUploadNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'stayUploadNumber')">
             {{
-              scope.row.stayUploadNumber === null ? 0 : scope.row.stayUploadNumber
+              scope.row.stayUploadNumber
             }}
           </span>
         </template>
@@ -244,7 +244,7 @@ export default {
       if (val.stayPrintNumber !== 0 && state === 'NOT_PRINT') {
         this.$router.push('/archivesManagement/record/heart')
       }
-      if (val.stayUploadNumber !== null && state === 'stayUploadNumber') {
+      if (val.stayUploadNumber !== 0 && state === 'stayUploadNumber') {
         this.$router.push('/archivesManagement/usage')
       }
     },
