@@ -97,6 +97,7 @@
         icon="el-icon-plus"
         >添加任务</el-button
       >
+      <el-button @click="$router.push({name: 'notcall'})">跳转</el-button>
     </div>
     <!-- 表格 -->
     <EleTable
@@ -141,7 +142,7 @@
       ></el-table-column>
       <el-table-column align="center" label="总外呼人数" prop="taskTotalNumber">
         <template slot-scope="scope">
-          <span class="skipStyle">{{ scope.row.taskTotalNumber }}</span>
+          <span class="skipStyle" @click="$router.push({name: 'addcall', query: {robotCallJobId: scope.row.robotCallJobId} })">{{ scope.row.taskTotalNumber }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="已呼人数" prop="alreadyNumber">
@@ -231,7 +232,7 @@
       </el-table-column>
     </EleTable>
     <!-- 弹出区域 -->
-    <el-dialog title="添加" :visible.sync="userVisible" width="40%">
+    <el-dialog :title="title" :visible.sync="userVisible" width="40%">
       <el-form :rules="formRules" :model="addUserFrom" label-width="100px">
         <el-form-item label="选择医院:" prop="hospitalId">
           <el-select
@@ -256,7 +257,7 @@
             placeholder="请输入任务名称和"
           ></el-input>
         </el-form-item>
-        <el-form-item label="BOT名称:" prop="BOT">
+        <el-form-item label="BOT名称:" prop="dialogFlowId">
           <el-select
             v-model="addUserFrom.dialogFlowId"
             filterable
@@ -284,6 +285,7 @@
           <div class="skipStyle">
             <!-- 上传组件 -->
             <single-upload
+              v-model="addUserFrom.fileName"
               @uploadFinish="uploadFinish"
               uploadType="BANNER"
             ></single-upload>
@@ -301,7 +303,7 @@
     </el-dialog>
     <!-- ai时间段 -->
     <el-dialog
-      title="时间添加"
+      :title="timeTitle"
       :visible.sync="timeVisible"
       :model="dialForm"
       width="40%"
@@ -449,7 +451,9 @@ export default {
           { required: true, message: '请选择医院', trigger: 'change' },
         ],
         name: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-        dialogFlowId: [{ required: true, message: '请输入BOT名称', trigger: 'change' }],
+        dialogFlowId: [
+          { required: true, message: '请输入BOT名称', trigger: 'change' },
+        ],
         concurrencyQuota: [
           { required: true, message: '请输入并发数', trigger: 'blur' },
         ],
@@ -457,6 +461,8 @@ export default {
           { required: true, message: '请选择可拨打时间段', trigger: 'change' },
         ],
       },
+      title: '添加',
+      timeTitle: '时间添加',
       // 搜索表单
       searchForm: {
         excelFile: '',
@@ -617,15 +623,14 @@ export default {
       console.log('周期', this.timeForm.checkListPeriod)
       console.log('可拨打时间', this.searchForm.daily)
       console.log('周期', this.timeForm.checkListPeriod)
-      console.log('医院id',this.addUserFrom.hospitalId)
+      console.log('医院id', this.addUserFrom.hospitalId)
       console.log('医院名称', this.addUserFrom)
       httpAdminAiCall
         .postInformation({
           // 添加
           hospitalId: this.addUserFrom.hospitalId,
-          hospitalName: '',
           name: this.addUserFrom.name,
-          dialogFlowId: this.addUserFrom.BOT,
+          dialogFlowId: this.addUserFrom.dialogFlowId,
           // 时间添加
           dailyStartTime: this.searchForm.daily[0],
           dailyEndTime: this.searchForm.daily[1],
@@ -673,10 +678,12 @@ export default {
       console.log('上传Excel', val)
       this.searchForm.fileUrl = val.value
       this.searchForm.fileName = val.name
-      console.log(this.searchForm.url)
     },
     // 添加任务
     addTask() {
+      this.addUserFrom = {}
+      this.title = '添加'
+      this.timeTitle = '时间添加'
       this.userVisible = true
     },
     /**
@@ -688,9 +695,9 @@ export default {
     },
     notDialable() {
       //1.dialForm 2.notDialTimeArr
-      // console.log('获取不可拨打时间', this.notDialTimeArr[0].callTime[0],)
+      console.log('获取不可拨打时间', this.notDialTimeArr,)
       // 不可拨打日期  1.this.timeForm.notDial 2.notDialDateArr
-      console.log('不可拨打日期', this.dialForm.notCallTime)
+    //   console.log('不可拨打日期', this.notDialTimeArr)
     },
     deleteNotCall(val, index) {
       if (val === 'time') {
@@ -712,13 +719,10 @@ export default {
       let notDialDateArr = this.notDialDateArr
       if (val === 'time') {
         if (this.notDialTimeArr.length >= 2) return
-        notDialTimeArr.push({
-          id: notDialTimeArr.length + 2,
-          callTime: ['', ''],
-        })
+        notDialTimeArr.push({ callTime: ['', ''] })
       } else {
         if (this.notDialDateArr.length >= 2) return
-        notDialDateArr.push({ id: notDialDateArr.length + 4, callDate: '' })
+        notDialDateArr.push({ callDate: '' })
       }
     },
     // 确认
@@ -752,9 +756,6 @@ export default {
       let [everyday, notTime, notDate] = ['', '', '']
       let inactiveTimeList = this.disposeNotTime()
       let inactiveDateList = this.disposeNotDate()
-      // console.log('显示周期', this.timeForm.checkListPeriod, period)
-      // console.log('不可拨打日期', inactiveDateList)
-      // console.log('不可拨打时间', inactiveTimeList[0].startTime)
       let callTime = this.searchForm.daily
       if (period.length === 7) {
         everyday = `每天/${callTime.join('~')}`
@@ -788,14 +789,32 @@ export default {
     },
     // 获取任务详情 显示 编辑
     async showTaskdetail(val) {
+      this.title = '编辑'
+      this.timeTitle = '时间编辑'
       const { data: res } = await this.getInformationTask(val.robotCallJobId)
-      console.log(res);
-    //   dialogFlowId
+      // dialogFlowId
       this.addUserFrom = JSON.parse(JSON.stringify(res))
-      //   this.getHospitalList(informationTask.hospitalId)
-      //   this.addUserFrom = informationTask
-      //   let informationTask = this.informationTask
-      //   console.log(1, this.addUserFrom)
+      this.timeForm.checkListPeriod = JSON.parse(JSON.stringify(res.daysOfWeek))
+      this.searchForm.fileUrl = JSON.parse(JSON.stringify(res.fileUrl))
+      this.searchForm.daily = [ res.dailyStartTime,  res.dailyEndTime] //可拨打时间
+      console.log('回显', res)
+
+      if (res.inactiveTimeList.length >= 1) {
+        this.dialForm.notCallTime = [ res.inactiveTimeList[0].startTime, res.inactiveTimeList[0].endTime ]
+        console.log(1+'时间',this.dialForm.notCallTimes)
+      }
+      if(res.inactiveTimeList.length === 2){
+        this.notDialTimeArr = [{callTime: [res.inactiveTimeList[1].startTime, res.inactiveTimeList[1].endTime]}]
+      }
+      if(res.inactiveTimeList.length === 3){
+        this.notDialTimeArr = [
+            {callTime: [res.inactiveTimeList[1].startTime, res.inactiveTimeList[1].endTime]},
+            {callTime: [res.inactiveTimeList[2].startTime, res.inactiveTimeList[2].endTime]}
+        ]
+      }
+      if(res.inactiveDateList.length >= 1){
+          this.dialForm.notCallDate = [ res.inactiveDateList[0].startDate, res.inactiveDateList[0].endDate ]
+      }
     },
     /**
      * 搜索
