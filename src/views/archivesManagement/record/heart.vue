@@ -710,6 +710,7 @@ export default {
     },
     // 跳转用户档案
     skipPatient(val) {
+      console.log(val)
       this.$router.push(
         '/archivesManagement/details?id=' +
           val.patientUserId +

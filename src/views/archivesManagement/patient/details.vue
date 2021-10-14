@@ -557,6 +557,7 @@ export default {
       // 医生列表
       doctorList: [],
       hospitalList: [],
+      isArchives:false,
       form: {
         // 基本信息
         name: '',
@@ -649,6 +650,7 @@ export default {
           let value = res.data.elements[0]
           // 如果建档
           if (value.archivesMongo) {
+            this.isArchives = true // 是否建档调用接口需要用到判断
             this.getDoctorList(value.archivesMongo.hospitalId)
             this.form = value?.archivesMongo
             if (value?.archivesMongo?.archivesFamily) {
@@ -765,7 +767,7 @@ export default {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 编辑
-          if (this.$route.query.type === "edit") {
+          if (this.isArchives) {
             httpAdminArchives.putArchives(this.form).then((res) => {
               if (res.code === 'OK') {
                 this.$message.success('编辑成功')
