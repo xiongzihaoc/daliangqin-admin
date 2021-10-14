@@ -128,6 +128,10 @@
             type="success"
             icon="el-icon-upload2"
             @click="exportExcel">导出Excel</el-button>
+          <el-button size="small"
+            type="success"
+            icon="el-icon-folder-checked"
+            @click="bulkPrint">批量打印</el-button>
           <el-tooltip class="item"
             effect="dark"
             content="注意：重置次数是指将筛选后的列表打印次数重置为0"
@@ -137,10 +141,6 @@
               size="small"
               icon="el-icon-refresh">重置打印次数</el-button>
           </el-tooltip>
-          <!-- <el-button size="small"
-            type="success"
-            icon="el-icon-folder-checked"
-          @click="bulkPrint">批量打印</el-button>-->
         </el-form-item>
       </el-form>
     </div>
@@ -182,22 +182,9 @@
       <el-table-column align="center"
         label="身份证号"
         prop="idCard"></el-table-column>
-      <!-- <el-table-column align="center" label="年龄" prop="age"> </el-table-column> -->
-      <!-- <el-table-column align="center" label="设备名称" prop="name"> </el-table-column> -->
       <el-table-column align="center"
         label="设备号"
         prop="serialNumber"></el-table-column>
-      <!-- <el-table-column align="center" label="监测模式" prop="detectType">
-        <template slot-scope="scope">
-          <span v-if="scope.row.detectType === 'DAILY'">日常监测</span>
-          <span v-else>24小时监测</span>
-        </template>
-      </el-table-column>-->
-      <!-- <el-table-column align="center" label="心率值(bpm)" prop="heartRateScore">
-        <template slot-scope="scope">
-          <span class="fw">{{ scope.row.heartRateScore }}</span>
-        </template>
-      </el-table-column>-->
       <el-table-column align="center"
         label="监测时长"
         prop="length"
@@ -247,7 +234,7 @@
         label="审核人"
         prop="auditorName"></el-table-column>
       <el-table-column align="center"
-        label="已打印次数(双击输入)"
+        label="已打印次数(双击)"
         prop="printNumber">
         <template slot-scope="scope">
           <span v-if="scope.row.printNumber > 0"> {{ scope.row.printNumber }}</span>
@@ -441,6 +428,22 @@
         v-print="printObj"
         style="display: block; width: 50%; margin: 20px auto">打印</el-button>
     </el-dialog>
+    <!-- 自定义修改打印次数弹框 -->
+    <el-dialog title="修改打印次数"
+      :visible.sync="printNumberDialogVisible"
+      width="35%"
+      @close="closePrintNumberDialog"
+      v-dialogDrag>
+      <el-input  v-Int
+        maxlength="2"
+        v-model="customPrintNumber"></el-input>
+      <span slot="footer"
+        class="dialog-footer">
+        <el-button @click="printNumberDialogVisible = false">取 消</el-button>
+        <el-button type="primary"
+          @click="customPrint">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -544,6 +547,9 @@ export default {
         extraHead: '',
       },
       printId: '', // 打印某条记录的Id
+      printNumberDialogVisible: false, // 自定义修改打印次数弹框
+      customPrintNumber: '', // 自定义修改的数量
+      customPrintId: '', // 自定义修改单条数据的id
       userInfo: {}, // 个人信息
       heartDetail: {}, // 心率建议信息
     }
@@ -745,7 +751,7 @@ export default {
           .catch(() => {})
       }
     },
-    //  对导出数据格式处理
+    // 对导出数据格式处理
     formatJson(filterVal, jsonData) {
       return jsonData.map((v) => filterVal.map((j) => v[j]))
     },
@@ -884,71 +890,68 @@ export default {
     },
     // 重置打印次数
     resetPrintCount() {
-      const loading = this.$loading({
-        lock: true,
-        text: '正在重置，请稍等......',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)',
-      })
-      httpAdminHeartRate
-        .putHeartRateClearBatch({ ...this.searchForm, pageSize: this.total })
-        .then((res) => {
-          if (res.code === 'OK') {
-            this.getList()
-            this.$message.success('重置成功')
-            loading.close()
-          } else {
-            loading.close()
-          }
+      this.$confirm(
+        '确定要重置当前<strong>' + this.total + '</strong>条数据的打印次数？',
+        '提示',
+        {
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }
+      )
+        .then(() => {
+          const loading = this.$loading({
+            lock: true,
+            text: '正在重置，请稍等......',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)',
+          })
+          httpAdminHeartRate
+            .putHeartRateClearBatch({
+              ...this.searchForm,
+              pageSize: this.total,
+            })
+            .then((res) => {
+              if (res.code === 'OK') {
+                this.getList()
+                this.$message.success('重置成功')
+                loading.close()
+              } else {
+                loading.close()
+              }
+            })
         })
+        .catch(() => {})
     },
     // 批量打印
     bulkPrint() {},
     // 双击自定义打印次数
     cellDblClick(row, column, cell, event) {
-      let that = this
       if (
-        (column.label === '已打印次数(双击输入)' &&
+        (column.property === 'printNumber' &&
           row.auditStatus === 'PLATFORM_COMPLETE_AUDIT') ||
         row.auditStatus === 'HOSPITAL_COMPLETE_AUDIT'
       ) {
-        // 取出单元格的值
-        let beforeVal = event.target.textContent
-        // 置空单元格容器内元素
-        event.target.innerHTML = ''
-        // 替换成el-input
-        let str = `<div class='cell'>
-            <div class='el-input'>
-              <input type='text' placeholder='请输入' class='el-input__inner'>
-            </div>
-        </div>`
-        cell.innerHTML = str
-        console.log(str)
-        //  获取双击后生成的input  根据层级嵌套会有所变化
-        let cellInput = cell.children[0].children[0].children[0]
-        cellInput.value = beforeVal
-        cellInput.focus() // input自动聚焦
-        // 失去焦点后  将input移除
-        cellInput.onblur = function () {
-          cellInput.value = cellInput.value.replace(/[^0-9]/g, '')
-          // 调用接口保存输入内容
-          httpAdminHeartRate
-            .putHeartRatePrint({
-              recordId: row.id,
-              printNumber: Number(cellInput.value),
-            })
-            .then((res) => {
-              console.log(res)
-              if (res.code === 'OK') {
-                let onblurCont = `<div class='cell'>${cellInput.value}</div>`
-                cell.innerHTML = onblurCont // 换成原有的显示内容
-                that.getList()
-                that.$message.success('操作成功')
-              }
-            })
-        }
+        this.printNumberDialogVisible = true
+        this.customPrintNumber = row[column.property]
+        this.customPrintId = row.id
       }
     },
+    customPrint() {
+      httpAdminHeartRate
+        .putHeartRatePrint({
+          recordId: this.customPrintId,
+          printNumber: Number(this.customPrintNumber),
+        })
+        .then((res) => {
+          if (res.code === 'OK') {
+            this.getList()
+            this.printNumberDialogVisible = false
+            this.$message.success('操作成功')
+          }
+        })
+    },
+    closePrintNumberDialog() {},
     /**
      * 表格格式化
      */
