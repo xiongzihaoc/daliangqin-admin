@@ -41,6 +41,7 @@ export default {
     };
   },
   mounted() {
+    
     httpAdminUploadApi
       .postAliyunSignAdmin({ adminUpload: this.uploadType })
       .then((res) => {
@@ -69,13 +70,12 @@ export default {
       });
     },
     beforeUpload(file) {
-      console.log(file);
       const _self = this;
-      _self.dataObj.name = file.name
+      _self.dataObj.name = file.name;
       _self.dataObj.policy = this.infoList.policy;
       _self.dataObj.signature = this.infoList.signature;
       _self.dataObj.ossaccessKeyId = this.infoList.accessId;
-      _self.dataObj.key = this.infoList.key + file.name;
+      _self.dataObj.key = this.infoList.key + this.getUUID() + file.name;
       _self.dataObj.host = this.infoList.endPoint;
     },
     handleUploadProgress(event, file, fileList) {
@@ -85,7 +85,6 @@ export default {
       let value = "https://cdn.daliangqing.com/" + this.dataObj.key;
       this.uploadValue = this.dataObj.name;
       let name = this.dataObj.name
-      console.log(this.dataObj.key,this.dataObj.name)
       this.$emit("uploadFinish", {value, name});
     },
   },
