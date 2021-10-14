@@ -182,22 +182,9 @@
       <el-table-column align="center"
         label="身份证号"
         prop="idCard"></el-table-column>
-      <!-- <el-table-column align="center" label="年龄" prop="age"> </el-table-column> -->
-      <!-- <el-table-column align="center" label="设备名称" prop="name"> </el-table-column> -->
       <el-table-column align="center"
         label="设备号"
         prop="serialNumber"></el-table-column>
-      <!-- <el-table-column align="center" label="监测模式" prop="detectType">
-        <template slot-scope="scope">
-          <span v-if="scope.row.detectType === 'DAILY'">日常监测</span>
-          <span v-else>24小时监测</span>
-        </template>
-      </el-table-column>-->
-      <!-- <el-table-column align="center" label="心率值(bpm)" prop="heartRateScore">
-        <template slot-scope="scope">
-          <span class="fw">{{ scope.row.heartRateScore }}</span>
-        </template>
-      </el-table-column>-->
       <el-table-column align="center"
         label="监测时长"
         prop="length"
@@ -884,23 +871,38 @@ export default {
     },
     // 重置打印次数
     resetPrintCount() {
-      const loading = this.$loading({
-        lock: true,
-        text: '正在重置，请稍等......',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)',
-      })
-      httpAdminHeartRate
-        .putHeartRateClearBatch({ ...this.searchForm, pageSize: this.total })
-        .then((res) => {
-          if (res.code === 'OK') {
-            this.getList()
-            this.$message.success('重置成功')
-            loading.close()
-          } else {
-            loading.close()
-          }
+      this.$confirm(
+        '确定要重置当前<strong>' + this.total + '</strong>条数据的打印次数？',
+        '提示',
+        {
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }
+      )
+        .then(() => {
+          const loading = this.$loading({
+            lock: true,
+            text: '正在重置，请稍等......',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)',
+          })
+          httpAdminHeartRate
+            .putHeartRateClearBatch({
+              ...this.searchForm,
+              pageSize: this.total,
+            })
+            .then((res) => {
+              if (res.code === 'OK') {
+                this.getList()
+                this.$message.success('重置成功')
+                loading.close()
+              } else {
+                loading.close()
+              }
+            })
         })
+        .catch(() => {})
     },
     // 批量打印
     bulkPrint() {},
