@@ -63,13 +63,13 @@
       ></el-table-column>
       <!-- 操作 -->
       <el-table-column label="操作" align="center" width="220">
-          <template slot-scope="scope">
-          <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
-          <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button>
+        <template slot-scope="scope">
+          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
+            >编辑</el-button
+          >
+          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </EleTable>
@@ -78,6 +78,8 @@
 
 <script>
 import EleTable from '@/components/Table'
+import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall'
+
 export default {
   components: {
     EleTable,
@@ -95,7 +97,19 @@ export default {
       total: 0,
     }
   },
+  created() {
+    this.getStatisticsList()
+  },
   methods: {
+    /**
+     * 获取外呼总人数
+     */
+    getStatisticsList() {
+      let robotCallJobId = this.$route.query.robotCallJobId
+      httpAdminAiCall.getStatisticsList({ robotCallJobId }).then((res) => {
+        this.list = res.data
+      })
+    },
     /**
      * 搜索
      */
