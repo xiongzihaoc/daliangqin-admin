@@ -434,7 +434,7 @@
       width="35%"
       @close="closePrintNumberDialog"
       v-dialogDrag>
-      <el-input  v-Int
+      <el-input v-Int
         maxlength="2"
         v-model="customPrintNumber"></el-input>
       <span slot="footer"
@@ -598,7 +598,6 @@ export default {
     this.getHospitalList()
     this.getDoctorList()
   },
-  watch: {},
   methods: {
     getList() {
       httpAdminHeartRate
