@@ -713,8 +713,7 @@ export default {
       this.$router.push(
         '/archivesManagement/details?id=' +
           val.patientUserId +
-          '&type=edit' +
-          '&isArchives=true'
+          '&type=edit'
       )
     },
     /**

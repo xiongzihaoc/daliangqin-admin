@@ -765,8 +765,7 @@ export default {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 编辑
-          if (this.$route.query.isArchives === 'true') {
-            console.log('put')
+          if (this.$route.query.type === "edit") {
             httpAdminArchives.putArchives(this.form).then((res) => {
               if (res.code === 'OK') {
                 this.$message.success('编辑成功')
