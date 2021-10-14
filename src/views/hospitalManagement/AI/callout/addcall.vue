@@ -9,10 +9,10 @@
         :inline="true"
       >
         <el-form-item label="用户姓名">
-          <el-input v-model="searchForm.name" size="small"></el-input>
+          <el-input v-model="searchForm.customerPersonName" size="small"></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
-          <el-input v-model="searchForm.name" size="small"></el-input>
+          <el-input v-model="searchForm.calledPhoneNumber" size="small"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -29,7 +29,7 @@
             icon="el-icon-refresh"
             >重置</el-button
           >
-          <el-button @click="searchBtn" type="primary" size="small"
+          <el-button @click="searchAddBtn" type="primary" size="small"
             >单个导入</el-button
           >
         </el-form-item>
@@ -42,7 +42,6 @@
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
-      show-summary
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     >
@@ -54,12 +53,12 @@
       <el-table-column
         align="center"
         label="用户名"
-        prop="aiName"
+        prop="customerPersonName"
       ></el-table-column>
       <el-table-column
         align="center"
         label="用户手机号"
-        prop="aiName"
+        prop="calledPhoneNumber"
       ></el-table-column>
       <!-- 操作 -->
       <el-table-column label="操作" align="center" width="220">
@@ -73,6 +72,29 @@
         </template>
       </el-table-column>
     </EleTable>
+    <!-- 弹出层 -->
+    <el-dialog title="导入单个用户" :visible.sync="importVisible" width="40%">
+      <el-form
+        label-width="100px"
+        :rules="formRules"
+        ref="importForm"
+        :model="importForm"
+        label-position="left"
+      >
+        <el-form-item label="用户姓名" prop="name">
+          <el-input v-model="importForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="用户手机号" prop="phoneNumber">
+          <el-input v-model="importForm.phoneNumber"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="importVisible = false">取 消</el-button>
+        <el-button type="primary" @click="postInformation('importForm')"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -86,8 +108,26 @@ export default {
   },
   data() {
     return {
+      formRules: {
+        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+        phoneNumber: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          {
+            pattern: /^1[3|4|5|7|8][0-9]\d{8}$/,
+            message: '手机号格式不对',
+            trigger: 'blur',
+          },
+        ],
+      },
       searchForm: {
+        customerPersonName : '',
+        calledPhoneNumber: '',
+        robotCallJobId: '',
+      },
+      importForm: {
         name: '',
+        phoneNumber: '',
+        robotCallJobId: '',
       },
       list: [],
       tableHeaderBig: [],
@@ -95,31 +135,68 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
+      // 弹窗区域
+      importVisible: false,
     }
   },
   created() {
+    this.importForm.robotCallJobId = this.$route.query.robotCallJobId
+    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
     this.getStatisticsList()
   },
   methods: {
     /**
-     * 获取外呼总人数
+     * 获取外呼接口数据
      */
     getStatisticsList() {
       let robotCallJobId = this.$route.query.robotCallJobId
-      httpAdminAiCall.getStatisticsList({ robotCallJobId }).then((res) => {
-        this.list = res.data
+      httpAdminAiCall.getStatisticsList(this.searchForm).then((res) => {
+        this.list = res.data.elements
+        this.total = res.data.totalSize
       })
     },
+    postAiStatistics() {
+      console.log(this.importForm)
+      httpAdminAiCall.postAiStatistics(this.importForm).then((res) => {
+        if (res.code === 'OK') {
+            this.$message.success(res.message)
+        }else{
+            this.$message.error(res.message)
+        }
+        this.getStatisticsList()
+        this.importVisible = false
+      })
+    },
+    postInformation(importForm) {
+      this.$refs[importForm].validate((valid) => {
+        console.log('ok')
+        if (valid) {
+          this.postAiStatistics()
+        }
+      })
+    },
+    /**
+     * 按钮
+     */
+    searchAddBtn() {
+      this.importVisible = true
+    },
+
     /**
      * 搜索
      */
     searchBtn() {
       this.pageNum = 1
-      this.getAiCallList()
-      this.getTask()
-      console.log('期名', this.searchForm)
+      this.getStatisticsList()
     },
-    searchReset() {},
+    searchReset() {
+        this.searchForm.customerPersonName = ''
+        this.searchForm.calledPhoneNumber = ''
+    },
+    importFormReset(){
+        this.importForm.name = ''
+        this.importForm.phoneNumber = ''
+    },
     /**
      * 分页
      */
