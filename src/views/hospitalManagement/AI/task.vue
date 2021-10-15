@@ -97,7 +97,6 @@
         icon="el-icon-plus"
         >添加任务</el-button
       >
-      <el-button @click="$router.push({name: 'notcall'})">跳转</el-button>
     </div>
     <!-- 表格 -->
     <EleTable
@@ -142,17 +141,32 @@
       ></el-table-column>
       <el-table-column align="center" label="总外呼人数" prop="taskTotalNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="$router.push({name: 'addcall', query: {robotCallJobId: scope.row.robotCallJobId} })">{{ scope.row.taskTotalNumber }}</span>
+          <!-- $router.push({name: 'addcall', query: {robotCallJobId: scope.row.robotCallJobId} }) -->
+          <span
+            class="skipStyle"
+            @click="skipRouter('addcall', scope.row.robotCallJobId)"
+            >{{ scope.row.taskTotalNumber }}</span
+          >
         </template>
       </el-table-column>
       <el-table-column align="center" label="已呼人数" prop="alreadyNumber">
         <template slot-scope="scope">
-          <span class="skipStyle">{{ scope.row.alreadyNumber }}</span>
+          <!-- $router.push({ name: 'fulfillcall', query: { robotCallJobId: scope.row.robotCallJobId },}) -->
+          <span
+            class="skipStyle"
+            @click="skipRouter('fulfillcall', scope.row.robotCallJobId)"
+            >{{ scope.row.alreadyNumber }}</span
+          >
         </template>
       </el-table-column>
       <el-table-column align="center" label="未呼人数" prop="notNumber">
         <template slot-scope="scope">
-          <span class="skipStyle">{{ scope.row.notNumber }}</span>
+          <!-- $router.push({ name: 'notcall', query: { robotCallJobId: scope.row.robotCallJobId }, }) -->
+          <span
+            class="skipStyle"
+            @click="skipRouter('notcall', scope.row.robotCallJobId)"
+            >{{ scope.row.notNumber }}</span
+          >
         </template>
       </el-table-column>
       <el-table-column
@@ -161,7 +175,14 @@
         prop="alreadyPeopleNumber"
       >
         <template slot-scope="scope">
-          <span class="skipStyle">{{ scope.row.alreadyPeopleNumber }}</span>
+          <!-- $router.push({ name: 'fulfillcall', query: { robotCallJobId: scope.row.robotCallJobId }, }) -->
+          <span
+            class="skipStyle"
+            @click="
+              skipRouter('fulfillcall', scope.row.robotCallJobId, 'ANSWERED')
+            "
+            >{{ scope.row.alreadyPeopleNumber }}</span
+          >
         </template>
       </el-table-column>
       <el-table-column align="center" label="未接听人数" prop="notPeopleNumber">
@@ -223,7 +244,7 @@
               <el-dropdown-item @click.native="compile(scope.row)"
                 >运营概况</el-dropdown-item
               >
-              <el-dropdown-item @click.native="compile(scope.row)"
+              <el-dropdown-item @click.native="compile(scope.row, 'issueStatistics')"
                 >问题统计</el-dropdown-item
               >
             </el-dropdown-menu>
@@ -625,6 +646,10 @@ export default {
       console.log('周期', this.timeForm.checkListPeriod)
       console.log('医院id', this.addUserFrom.hospitalId)
       console.log('医院名称', this.addUserFrom)
+      // 编辑接口
+      
+      return
+      // 添加接口
       httpAdminAiCall
         .postInformation({
           // 添加
@@ -695,9 +720,9 @@ export default {
     },
     notDialable() {
       //1.dialForm 2.notDialTimeArr
-      console.log('获取不可拨打时间', this.notDialTimeArr,)
+      console.log('获取不可拨打时间', this.notDialTimeArr)
       // 不可拨打日期  1.this.timeForm.notDial 2.notDialDateArr
-    //   console.log('不可拨打日期', this.notDialTimeArr)
+      //   console.log('不可拨打日期', this.notDialTimeArr)
     },
     deleteNotCall(val, index) {
       if (val === 'time') {
@@ -785,6 +810,9 @@ export default {
           this.userVisible = true
           this.showTaskdetail(val)
           break
+        case 'issueStatistics':
+            this.$router.push({ name: 'problemstatistics', params:val })
+          break
       }
     },
     // 获取任务详情 显示 编辑
@@ -792,29 +820,61 @@ export default {
       this.title = '编辑'
       this.timeTitle = '时间编辑'
       const { data: res } = await this.getInformationTask(val.robotCallJobId)
-      // dialogFlowId
       this.addUserFrom = JSON.parse(JSON.stringify(res))
       this.timeForm.checkListPeriod = JSON.parse(JSON.stringify(res.daysOfWeek))
       this.searchForm.fileUrl = JSON.parse(JSON.stringify(res.fileUrl))
-      this.searchForm.daily = [ res.dailyStartTime,  res.dailyEndTime] //可拨打时间
+      this.searchForm.daily = [res.dailyStartTime, res.dailyEndTime] //可拨打时间
       console.log('回显', res)
 
       if (res.inactiveTimeList.length >= 1) {
-        this.dialForm.notCallTime = [ res.inactiveTimeList[0].startTime, res.inactiveTimeList[0].endTime ]
-        console.log(1+'时间',this.dialForm.notCallTimes)
+        this.dialForm.notCallTime = [
+          res.inactiveTimeList[0].startTime,
+          res.inactiveTimeList[0].endTime,
+        ]
+        console.log(1 + '时间', this.dialForm.notCallTimes)
       }
-      if(res.inactiveTimeList.length === 2){
-        this.notDialTimeArr = [{callTime: [res.inactiveTimeList[1].startTime, res.inactiveTimeList[1].endTime]}]
-      }
-      if(res.inactiveTimeList.length === 3){
+      if (res.inactiveTimeList.length === 2) {
         this.notDialTimeArr = [
-            {callTime: [res.inactiveTimeList[1].startTime, res.inactiveTimeList[1].endTime]},
-            {callTime: [res.inactiveTimeList[2].startTime, res.inactiveTimeList[2].endTime]}
+          {
+            callTime: [
+              res.inactiveTimeList[1].startTime,
+              res.inactiveTimeList[1].endTime,
+            ],
+          },
         ]
       }
-      if(res.inactiveDateList.length >= 1){
-          this.dialForm.notCallDate = [ res.inactiveDateList[0].startDate, res.inactiveDateList[0].endDate ]
+      if (res.inactiveTimeList.length === 3) {
+        this.notDialTimeArr = [
+          {
+            callTime: [
+              res.inactiveTimeList[1].startTime,
+              res.inactiveTimeList[1].endTime,
+            ],
+          },
+          {
+            callTime: [
+              res.inactiveTimeList[2].startTime,
+              res.inactiveTimeList[2].endTime,
+            ],
+          },
+        ]
       }
+      if (res.inactiveDateList.length >= 1) {
+        this.dialForm.notCallDate = [
+          res.inactiveDateList[0].startDate,
+          res.inactiveDateList[0].endDate,
+        ]
+      }
+    },
+    /**
+     * 路由跳转
+     */
+    skipRouter(name, robotCallJobId, state) {
+      console.log(state)
+      if (state !== undefined) {
+        sessionStorage.setItem('taskPhoneState', state)
+      }
+      this.$router.push({ name, query: { robotCallJobId } })
     },
     /**
      * 搜索
