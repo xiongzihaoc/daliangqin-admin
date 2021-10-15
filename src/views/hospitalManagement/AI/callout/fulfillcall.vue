@@ -160,8 +160,15 @@ export default {
     }
   },
   created() {
+    let taskPhoneState = sessionStorage.getItem('taskPhoneState')
+    if(taskPhoneState ){
+        this.searchForm.resultStatus = taskPhoneState
+    }
     this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
     this.getAlreadyStatisticsList()
+  },
+  beforeDestroy(){
+      sessionStorage.removeItem('taskPhoneState')
   },
   methods: {
     /**
