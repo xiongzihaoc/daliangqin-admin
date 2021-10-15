@@ -868,5 +868,26 @@ export const formatterElement = {
     WAITING_FOR_REDIAL: "已终等待重呼止",
     ACCOUNT_DISABLE: "账户禁用",
     MAINTAIN: "系统维护",
+  },
+  // 已呼用户 通话状态
+  phoneState: {
+    ANSWERED: '已接听',
+    NO_ANSWER: '无应答',
+    BUSY: '忙线中',
+    POWER_OFF: '关机',
+    OUT_OF_SERVICE: '停机',
+    REFUSED: '拒接',
+    VACANT_NUMBER: '空号',
+    CAN_NOT_CONNECT: '无法接通',
+    FROM_PHONE_ERROR: '主叫欠费',
+    SYSTEM_ERROR: '外呼失败',
+    CALL_LOSS: '多并发呼损',
+    TRANSFER_ARTIFICIAL: '转人工呼损',
+  },
+  hangUpState: {
+    REMOTE_HANGUP: '客户挂断',
+    INITIAL_HANGUP: 'AI挂断',
+    CS_HANGUP: '人工坐席挂断',
+    OTHER_HANGUP: '未知原因',
   }
 }
