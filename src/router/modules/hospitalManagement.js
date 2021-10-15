@@ -209,6 +209,24 @@ const hospitalRouter = {
                 title: '未呼用户',
             },
         },
+        {
+            path: "fulfillcall",
+            name: "fulfillcall",
+            hidden: true,
+            component: () => import('@/views/hospitalManagement/AI/callout/fulfillcall'),
+            meta: {
+                title: '已呼用户',
+            },
+        },
+        {
+            path: "problemstatistics/:id",
+            name: "problemstatistics",
+            hidden: true,
+            component: () => import('@/views/hospitalManagement/AI/callout/problem'),
+            meta: {
+                title: '问题统计',
+            },
+        },
     ]
 }
 export default hospitalRouter
