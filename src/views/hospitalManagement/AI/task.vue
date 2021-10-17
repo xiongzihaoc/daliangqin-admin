@@ -244,7 +244,8 @@
               <el-dropdown-item @click.native="compile(scope.row)"
                 >运营概况</el-dropdown-item
               >
-              <el-dropdown-item @click.native="compile(scope.row, 'issueStatistics')"
+              <el-dropdown-item
+                @click.native="compile(scope.row, 'issueStatistics')"
                 >问题统计</el-dropdown-item
               >
             </el-dropdown-menu>
@@ -319,7 +320,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="userVisible = false">取 消</el-button>
-        <el-button type="primary" @click="postInformation">确 定</el-button>
+        <el-button type="primary" @click="judgeBtn">确 定</el-button>
       </span>
     </el-dialog>
     <!-- ai时间段 -->
@@ -546,10 +547,9 @@ export default {
     this.getAiSpeech()
   },
   methods: {
-    /* 测试用函数 */
-    aa(val) {
-      console.log('上传', val)
-    },
+    /**
+     * 接口
+     */
     // 列表数据 查询
     getAiCallList() {
       httpAdminAiCall
@@ -566,6 +566,130 @@ export default {
           this.list = res.data.elements
         })
     },
+    // 获取医院列表
+    getHospitalList(hospitalId) {
+      httpAdminHospital
+        .getHospital({ pageSize: 10000, hospitalId })
+        .then((res) => {
+          console.log(res)
+          this.hospitalList = res.data.elements
+        })
+    },
+    gethospitalName(val) {
+      console.log(val)
+    },
+    // 获取话术
+    getAiSpeech() {
+      httpAdminAiCall.getAiSpeech().then((res) => {
+        this.aiSpeechList = res.data.elements
+      })
+    },
+    // 获取随访任务详情
+    async getInformationTask(robotCallJobId) {
+      let res = await httpAdminAiCall.getInformationTask({ robotCallJobId })
+      return res
+    },
+    // 添加
+    postInformation() {
+      let notDial = this.timeForm.notDial
+      if (
+        this.dialForm.notCallTime === undefined ||
+        this.dialForm.notCallTime === null
+      ) {
+        this.dialForm.notCallTime = ['', '']
+      }
+      if (notDial === undefined || notDial === null) {
+        notDial = []
+      }
+      // 开始
+      let inactiveTimeList = this.disposeNotTime()
+      let inactiveDateList = this.disposeNotDate()
+      console.log('不可拨打时间', inactiveTimeList)
+      console.log('不可拨打日期', inactiveDateList)
+      console.log('表单数据', this.searchForm)
+      console.log('周期', this.timeForm.checkListPeriod)
+      console.log('可拨打时间', this.searchForm.daily)
+      console.log('周期', this.timeForm.checkListPeriod)
+      console.log('医院id', this.addUserFrom.hospitalId)
+      console.log('医院名称', this.addUserFrom)
+      // 添加接口
+      httpAdminAiCall
+        .postInformation({
+          // 添加
+          hospitalId: this.addUserFrom.hospitalId,
+          name: this.addUserFrom.name,
+          dialogFlowId: this.addUserFrom.dialogFlowId,
+          // 时间添加
+          dailyStartTime: this.searchForm.daily[0],
+          dailyEndTime: this.searchForm.daily[1],
+          inactiveTimeList,
+          inactiveDateList,
+          daysOfWeek: this.timeForm.checkListPeriod,
+          fileName: this.searchForm.fileName,
+          fileUrl: this.searchForm.fileUrl,
+        })
+        .then((res) => {
+          console.log('添加', res)
+        })
+    },
+    // 编辑接口
+    putInformation() {
+      let notDial = this.timeForm.notDial
+      if (
+        this.dialForm.notCallTime === undefined ||
+        this.dialForm.notCallTime === null
+      ) {
+        this.dialForm.notCallTime = ['', '']
+      }
+      if (notDial === undefined || notDial === null) {
+        notDial = []
+      }
+      let inactiveTimeList = this.disposeNotTime()
+      let inactiveDateList = this.disposeNotDate()
+      console.log('不可拨打时间', inactiveTimeList)
+      console.log('不可拨打日期', inactiveDateList)
+      console.log('表单数据', this.searchForm)
+      console.log('周期', this.timeForm.checkListPeriod)
+      console.log('可拨打时间', this.searchForm.daily)
+      console.log('周期', this.timeForm.checkListPeriod)
+      console.log('医院id', this.addUserFrom.hospitalId)
+      console.log('医院名称', this.addUserFrom)
+      console.log('编辑数据',this)
+      return
+      httpAdminAiCall.putInformation().then((res)=>{
+        console.log(res)
+      })
+    },
+    // 获取模板
+    getAiDownload() {
+      window.open(
+        'http://test-api.daliangqing.com/admin/ai/information/download'
+      )
+    },
+    // 上传excel 阿里
+    uploadFinish(val) {
+      console.log('上传Excel', val)
+      this.searchForm.fileUrl = val.value
+      this.searchForm.fileName = val.name
+    },
+    // 添加任务
+    addTask() {
+      this.addUserFrom = {}
+      this.title = '添加'
+      this.timeTitle = '时间添加'
+      this.userVisible = true
+    },
+    // 添加 编辑任务
+    judgeBtn(){
+      if(this.title === '添加'){
+        this.postInformation()
+      }else{
+        this.putInformation()
+      }
+    },
+    /**
+     * 处理提交时间
+     */
     // 处理不可拨打时间段
     disposeNotTime() {
       let inactiveTimeList = []
@@ -622,94 +746,6 @@ export default {
       }
       console.log('not日期', inactiveDateList)
       return inactiveDateList
-    },
-    // 添加
-    postInformation() {
-      let notDial = this.timeForm.notDial
-      if (
-        this.dialForm.notCallTime === undefined ||
-        this.dialForm.notCallTime === null
-      ) {
-        this.dialForm.notCallTime = ['', '']
-      }
-      if (notDial === undefined || notDial === null) {
-        notDial = []
-      }
-      // 开始
-      let inactiveTimeList = this.disposeNotTime()
-      let inactiveDateList = this.disposeNotDate()
-      console.log('不可拨打时间', inactiveTimeList)
-      console.log('不可拨打日期', inactiveDateList)
-      console.log('表单数据', this.searchForm)
-      console.log('周期', this.timeForm.checkListPeriod)
-      console.log('可拨打时间', this.searchForm.daily)
-      console.log('周期', this.timeForm.checkListPeriod)
-      console.log('医院id', this.addUserFrom.hospitalId)
-      console.log('医院名称', this.addUserFrom)
-      // 编辑接口
-      
-      return
-      // 添加接口
-      httpAdminAiCall
-        .postInformation({
-          // 添加
-          hospitalId: this.addUserFrom.hospitalId,
-          name: this.addUserFrom.name,
-          dialogFlowId: this.addUserFrom.dialogFlowId,
-          // 时间添加
-          dailyStartTime: this.searchForm.daily[0],
-          dailyEndTime: this.searchForm.daily[1],
-          inactiveTimeList,
-          inactiveDateList,
-          daysOfWeek: this.timeForm.checkListPeriod,
-          fileName: this.searchForm.fileName,
-          fileUrl: this.searchForm.fileUrl,
-        })
-        .then((res) => {
-          console.log('添加', res)
-        })
-    },
-    // 获取医院列表
-    getHospitalList(hospitalId) {
-      httpAdminHospital
-        .getHospital({ pageSize: 10000, hospitalId })
-        .then((res) => {
-          console.log(res)
-          this.hospitalList = res.data.elements
-        })
-    },
-    gethospitalName(val) {
-      console.log(val)
-    },
-    // 获取话术
-    getAiSpeech() {
-      httpAdminAiCall.getAiSpeech().then((res) => {
-        this.aiSpeechList = res.data.elements
-      })
-    },
-    // 获取随访任务详情
-    async getInformationTask(robotCallJobId) {
-      let res = await httpAdminAiCall.getInformationTask({ robotCallJobId })
-      return res
-    },
-    // 获取模板
-    getAiDownload() {
-      window.open(
-        'http://test-api.daliangqing.com/admin/ai/information/download'
-      )
-    },
-    // 上传excel 阿里
-    uploadFinish(val) {
-      console.log('上传Excel', val)
-      this.searchForm.fileUrl = val.value
-      this.searchForm.fileName = val.name
-    },
-    // 添加任务
-    addTask() {
-      this.addUserFrom = {}
-      this.title = '添加'
-      this.timeTitle = '时间添加'
-      this.userVisible = true
     },
     /**
      * ai时间添加区域
@@ -811,7 +847,7 @@ export default {
           this.showTaskdetail(val)
           break
         case 'issueStatistics':
-            this.$router.push({ name: 'problemstatistics', params:val })
+          this.$router.push({ name: 'problemstatistics', params: val })
           break
       }
     },
