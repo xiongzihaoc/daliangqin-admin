@@ -228,7 +228,7 @@ export default {
         hospitalId: '',
         hospitalType: '',
       },
-      searchHospitalList:[],
+      searchHospitalList: [],
       // 列表数据
       list: [],
       cateListProps: {
@@ -262,10 +262,10 @@ export default {
   },
   created() {
     this.getList()
+    this.getSeachHospitalList()
   },
   mounted() {
     this.getTreeData(addressJson)
-    this.getSeachHospitalList()
   },
   methods: {
     getList() {
