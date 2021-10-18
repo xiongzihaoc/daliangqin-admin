@@ -23,6 +23,20 @@ export const httpAdminHeartRate = {
       data
     })
   },
+  // 删除系统新增ai数据
+  deleteHeartRateAiAll() {
+    return request({
+      url: 'equipment/heartRate/ai/all',
+      method: 'delete',
+    })
+  },
+  // 删除医院新增ai数据
+  deleteHeartRateAi(hospitalId) {
+    return request({
+      url: 'equipment/heartRate/ai/' + hospitalId,
+      method: 'delete',
+    })
+  },
   // 修改审核状态
   putHeartRateStatus(data) {
     return request({
