@@ -174,7 +174,7 @@ export default {
         .then((res) => {
           if (res.code === 'OK') {
             this.$message.success('删除成功')
-            location.reload()
+            this.removeHospitalId = ''
           }
         })
     },
