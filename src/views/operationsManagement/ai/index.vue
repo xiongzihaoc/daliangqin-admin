@@ -157,7 +157,19 @@ export default {
       })
     },
     // 系统删除
-    removeSystem() {
+    async removeSystem() {
+      const confirmResult = await this.$confirm(
+        '你确定要执行此操作, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      ).catch((err) => console.log(err))
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
+      }
       httpAdminHeartRate.deleteHeartRateAiAll().then((res) => {
         if (res.code === 'OK') {
           this.$message.success('删除成功')
@@ -165,7 +177,19 @@ export default {
       })
     },
     // 医院删除
-    removeHospital() {
+    async removeHospital() {
+      const confirmResult = await this.$confirm(
+        '你确定要执行此操作, 是否继续?',
+        '提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      ).catch((err) => console.log(err))
+      if (confirmResult != 'confirm') {
+        return this.$message.info('取消删除')
+      }
       if (!this.removeHospitalId) {
         return this.$message.error('请选择医院')
       }
