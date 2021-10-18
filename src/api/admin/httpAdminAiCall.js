@@ -51,6 +51,14 @@ export const httpAdminAiCall = {
       data
     })
   },
+  // 编辑
+  putInformation(data){
+    return request({
+      url: 'ai/statistics',
+      method: 'put',
+      data
+    })
+  },
   // 未完成列表
   getNotStatisticsList(data) {
     return request({
