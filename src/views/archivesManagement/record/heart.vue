@@ -128,10 +128,10 @@
             type="success"
             icon="el-icon-upload2"
             @click="exportExcel">导出Excel</el-button>
-          <el-button size="small"
+          <!-- <el-button size="small"
             type="success"
             icon="el-icon-folder-checked"
-            @click="bulkPrint">批量打印</el-button>
+            @click="bulkPrint">批量打印</el-button> -->
           <el-tooltip class="item"
             effect="dark"
             content="注意：重置次数是指将筛选后的列表打印次数重置为0"
