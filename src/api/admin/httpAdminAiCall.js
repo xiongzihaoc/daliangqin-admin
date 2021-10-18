@@ -54,9 +54,24 @@ export const httpAdminAiCall = {
   // 编辑
   putInformation(data){
     return request({
-      url: 'ai/statistics',
+      url: 'ai/information/' + data.robotCallJobId,
       method: 'put',
       data
+    })
+  },
+  // 删除
+  deleteInformation(data){
+    return request({
+      url: 'ai/information/' + data.taskId,
+      method: 'delete',
+    })
+  },
+  // 开始任务
+  getInformationStart(data){
+    return request({
+      url: 'ai/information/start',
+      method: 'get',
+      params: data
     })
   },
   // 未完成列表
