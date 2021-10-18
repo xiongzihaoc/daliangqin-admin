@@ -18,6 +18,16 @@
         <el-form-item label="设备号" align="left" prop="deviceSn">
           <el-input v-model="searchForm.deviceSn" size="small" placeholder="请输入设备号"></el-input>
         </el-form-item>
+        <el-form-item label="医院名称" align="left">
+          <el-select v-model="searchForm.hospitalId" size="small" filterable placeholder="请选择医院">
+            <el-option
+              v-for="item in hospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <!-- 监测模式和app端统一不用枚举  0 日常 5 24小时-->
         <!-- <el-form-item label="监测模式"
           align="left">
@@ -78,6 +88,7 @@
 <script>
 import EleTable from '@/components/Table'
 import { httpAdminUsage } from '@/api/admin/httpAdminUsage'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import { parseTime } from '@/utils/index'
 export default {
   components: {
@@ -88,6 +99,7 @@ export default {
       parseTime,
       list: [],
       tableHeaderBig: [],
+      hospitalList: [],
       searchForm: {
         deviceSn: '',
         name: '',
@@ -102,6 +114,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getHospitalList()
   },
   mounted() { },
   beforeDestroy() {
@@ -111,7 +124,7 @@ export default {
     getList() {
       let hospitalId = JSON.parse(sessionStorage.getItem("monitoringHospitalId"))
       if (hospitalId !== null) {
-        hospitalId = hospitalId[0]
+        this.searchForm.hospitalId = hospitalId[0]
       }
       httpAdminUsage
         .getUsage({
@@ -121,12 +134,18 @@ export default {
           name: this.searchForm.name,
           phone: this.searchForm.phone,
           ecgComingMode: this.searchForm.ecgComingMode,
-          hospitalId: hospitalId,
+          hospitalId: this.searchForm.hospitalId,
         })
         .then((res) => {
           this.list = res.data.elements
           this.total = res.data.totalSize
         })
+    },
+    // 获取医院列表
+    getHospitalList() {
+      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+        this.hospitalList = res.data.elements
+      })
     },
     // 跳转用户档案
     skipPatient(val) {
