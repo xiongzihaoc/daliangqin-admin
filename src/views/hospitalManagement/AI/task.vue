@@ -673,6 +673,12 @@ export default {
         hospitalId: this.addUserFrom.hospitalId,
       }).then((res) => {
         console.log('编辑',res)
+        if(res.code === 'OK'){
+          this.$message.success(res.message)
+        }else{
+          this.$message.error(res.message)
+        }
+        this.userVisible = false
       })
     },
     // 删除
