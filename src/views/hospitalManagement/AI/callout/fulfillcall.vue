@@ -115,10 +115,42 @@
       ></el-table-column>
       <el-table-column align="center" label="通话详情" prop="calledPhoneNumber">
         <template slot-scope="scope">
-          <el-button type="primary" size="small">查看</el-button>
+          <el-button
+            type="primary"
+            size="small"
+            @click="getAlCallDetailList(scope.row)"
+            >查看</el-button
+          >
         </template>
       </el-table-column>
     </EleTable>
+    <!-- 弹出层 -->
+    <el-dialog title="通话详情" :visible.sync="dialogVisible" width="50%">
+      <div class="chat">
+        <div>
+          <p>{{ telephoneMessage.uname }} - {{ telephoneMessage.phone }}</p>
+          <p>
+            通话ID：{{ telephoneMessage.callRecordId }} 通话时长：{{
+              formatSeconds(telephoneMessage.chatDuration)
+            }}
+          </p>
+        </div>
+        <JwChat
+          class="chatPage"
+          width="100%"
+          :taleList="chatList"
+          v-model="inputMsg"
+          :showRightBox="true"
+          scrollType="noroll"
+        >
+        </JwChat>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -141,6 +173,7 @@ export default {
       parseTime,
       formatSeconds,
       AiResultStatus,
+      inputMsg: '',
       searchForm: {
         patientUserName: '',
         customerPersonName: '',
@@ -150,42 +183,77 @@ export default {
         hospitalId: '',
         resultStatus: '',
       },
+      telephoneMessage: {
+        uname: '',
+        phone: '',
+        calltime: '',
+        callRecordId: '',
+        chatDuration: '',
+      },
       time: [],
       list: [],
+      chatList: [],
       tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
       total: 0,
+      dialogVisible: false,
     }
   },
   created() {
-    let taskPhoneState = sessionStorage.getItem('taskPhoneState')
-    if(taskPhoneState ){
-        this.searchForm.resultStatus = taskPhoneState
-    }
-    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
+    // let taskPhoneState = sessionStorage.getItem('taskPhoneState')
+    // if (taskPhoneState) {
+    //   this.searchForm.resultStatus = taskPhoneState
+    // }
+    // this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
     this.getAlreadyStatisticsList()
   },
-  beforeDestroy(){
-      sessionStorage.removeItem('taskPhoneState')
+  beforeDestroy() {
+    sessionStorage.removeItem('taskPhoneState')
   },
   methods: {
+    aa() {},
     /**
      * 接口
      */
     getAlreadyStatisticsList() {
       httpAdminAiCall.getAlreadyStatisticsList(this.searchForm).then((res) => {
-        console.log(res)
         this.list = res.data.elements
         this.total = res.data.totalSize
       })
+    },
+    getAlCallDetailList(val) {
+      // console.log(val)
+      httpAdminAiCall
+        .getAlCallDetailList({
+          callRecordId: '2377292791',
+          phone: '13759701205',
+        })
+        .then((res) => {
+          this.chatList = []
+          let callDetailList = JSON.parse(res.data.thirdJson)
+          let uname = callDetailList.data.customerPersonName
+          this.telephoneMessage.uname = uname
+          this.telephoneMessage.phone = callDetailList.data.calledPhoneNumber
+          this.telephoneMessage.callRecordId = callDetailList.data.callRecordId
+          this.telephoneMessage.chatDuration = callDetailList.data.chatDuration
+          callDetailList.data.callDetailList.forEach((val) => {
+            this.chatList.push({
+              date: val.startTime,
+              text: { text: val.text },
+              mine: val.type === 'ROBOT' ? true : false,
+              name: val.type === 'ROBOT' ? 'Ai机器人' : uname,
+              img: val.type === 'ROBOT' ? '' : res.data.avatarUrl,
+            })
+          })
+          this.dialogVisible = true
+        })
     },
     /**
      * 逻辑
      */
     callTime(val) {
-      console.log(val)
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
     },
@@ -223,5 +291,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.chatPage /deep/ .toolBox {
+  height: 0;
+  display: none;
+}
+.chatPage /deep/ .taleBox {
+  height: 100%;
+}
+.chatPage /deep/ .wrapper {
+  height: 100% !important;
+}
 </style>

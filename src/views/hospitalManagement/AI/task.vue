@@ -222,7 +222,7 @@
               <el-dropdown-item @click.native="compile(scope.row, 'edit')"
                 >编辑</el-dropdown-item
               >
-              <el-dropdown-item @click.native="compile(scope.row)"
+              <el-dropdown-item @click.native="compile(scope.row, 'copy')"
                 >复制</el-dropdown-item
               >
               <el-dropdown-item @click.native="compile(scope.row, 'delete')"
@@ -673,6 +673,12 @@ export default {
         hospitalId: this.addUserFrom.hospitalId,
       }).then((res) => {
         console.log('编辑',res)
+        if(res.code === 'OK'){
+          this.$message.success(res.message)
+        }else{
+          this.$message.error(res.message)
+        }
+        this.userVisible = false
       })
     },
     // 删除
@@ -686,8 +692,13 @@ export default {
     getInformationStart(robotCallJobId){
       console.log('robotCallJobId', robotCallJobId)
       httpAdminAiCall.getInformationStart({robotCallJobId}).then((res)=>{
-        console.log('开始任务', res)
       })
+    },
+    // 复制任务
+    getCopy(robotCallJobId){
+        httpAdminAiCall.getInformationCopy({robotCallJobId}).then((res)=>{
+          this.getAiCallList()
+        })
     },
     // 获取模板
     getAiDownload() {
@@ -887,63 +898,62 @@ export default {
         case 'startTask' : 
           this.getInformationStart(val.robotCallJobId)
           break
+        case 'copy' :
+          this.getCopy(val.robotCallJobId)
+          break
       }
     },
     // 获取任务详情 显示 编辑
     async showTaskdetail(val) {
-      
       this.title = '编辑'
       this.timeTitle = '时间编辑'
       // 不可拨打时间 置空
       this.dialForm.notCallTime = []
       this.notDialTimeArr = []
       // 不可拨打日期 置空
-      // this.timeForm.notDial = []
       delete this.timeForm.notDial
       const { data: res } = await this.getInformationTask(val.robotCallJobId)
       this.addUserFrom = JSON.parse(JSON.stringify(res))
-      console.log('表单数据',this.addUserFrom)
-      this.timeForm.checkListPeriod = JSON.parse(JSON.stringify(res.daysOfWeek))
-      this.searchForm.fileUrl = JSON.parse(JSON.stringify(res.fileUrl))
-      this.searchForm.daily = [res.dailyStartTime, res.dailyEndTime] //可拨打时间
-      this.timeForm.checkListPeriod = res.daysOfWeek
+      this.$set(this.addUserFrom, 'name', JSON.parse(JSON.stringify(res.aiName)))
+      this.timeForm.checkListPeriod = JSON.parse(JSON.stringify(res.aiParameter.daysOfWeek))
+      // this.searchForm.fileUrl = JSON.parse(JSON.stringify(res.fileUrl))
+      this.searchForm.daily = [res.aiParameter.dailyStartTime, res.aiParameter.dailyEndTime] //可拨打时间
+      this.timeForm.checkListPeriod = res.aiParameter.daysOfWeek
       this.addUserFrom.hospitalName = res.hospitalName
       this.addUserFrom.id = val.id
       this.addUserFrom.robotCallJobId = val.robotCallJobId
-      console.log('robotCallJobId',this.addUserFrom.robotCallJobId)
-      console.log('回显数据', res)
       // 判断时间
-      if(res.inactiveTimeList.length === 0){
+      if(res.aiParameter.inactiveTimeList.length === 0){
        this.dialForm.notCallTime = ['','']
       }
-      if (res.inactiveTimeList.length >= 1) {
+      if (res.aiParameter.inactiveTimeList.length >= 1) {
         this.dialForm.notCallTime = [
-          res.inactiveTimeList[0].startTime,
-          res.inactiveTimeList[0].endTime,
+          res.aiParameter.inactiveTimeList[0].startTime,
+          res.aiParameter.inactiveTimeList[0].endTime,
         ]
       }
-      if (res.inactiveTimeList.length === 2) {
+      if (res.aiParameter.inactiveTimeList.length === 2) {
         this.notDialTimeArr = [
           {
             callTime: [
-              res.inactiveTimeList[1].startTime,
-              res.inactiveTimeList[1].endTime,
+              res.aiParameter.inactiveTimeList[1].startTime,
+              res.aiParameter.inactiveTimeList[1].endTime,
             ],
           },
         ]
       }
-      if (res.inactiveTimeList.length === 3) {
+      if (res.aiParameter.inactiveTimeList.length === 3) {
         this.notDialTimeArr = [
           {
             callTime: [
-              res.inactiveTimeList[1].startTime,
-              res.inactiveTimeList[1].endTime,
+              res.aiParameter.inactiveTimeList[1].startTime,
+              res.aiParameter.inactiveTimeList[1].endTime,
             ],
           },
           {
             callTime: [
-              res.inactiveTimeList[2].startTime,
-              res.inactiveTimeList[2].endTime,
+              res.aiParameter.inactiveTimeList[2].startTime,
+              res.aiParameter.inactiveTimeList[2].endTime,
             ],
           },
         ]
@@ -951,34 +961,34 @@ export default {
       // 日期
       delete this.timeForm.notDial
       console.log('编辑不可拨打日期',  this.timeForm.notDial)
-      if(res.inactiveDateList.length <= 0){
+      if(res.aiParameter.inactiveDateList.length <= 0){
         delete this.timeForm.notDial 
       }
-      if (res.inactiveDateList.length >= 1) {
+      if (res.aiParameter.inactiveDateList.length >= 1) {
         this.$set(this.timeForm,'notDial',[res.inactiveDateList[0].startDate, res.inactiveDateList[0].endDate,])
       }
-      if (res.inactiveDateList.length === 2) {
+      if (res.aiParameter.inactiveDateList.length === 2) {
         this.notDialDateArr = [
           {
             callDate: [
-              res.inactiveDateList[1].startDate,
-              res.inactiveDateList[1].endDate,
+              res.aiParameter.inactiveDateList[1].startDate,
+              res.aiParameter.inactiveDateList[1].endDate,
             ],
           },
         ]
       }
-      if (res.inactiveDateList.length === 3) {
+      if (res.aiParameter.inactiveDateList.length === 3) {
         this.notDialDateArr = [
           {
             callDate: [
-              res.inactiveDateList[1].startDate,
+              res.aiParameter.inactiveDateList[1].startDate,
               res.inactiveDateList[1].endDate,
             ],
           },
           {
             callDate: [
-              res.inactiveDateList[2].startDate,
-              res.inactiveDateList[2].endDate,
+              res.aiParameter.inactiveDateList[2].startDate,
+              res.aiParameter.inactiveDateList[2].endDate,
             ],
           },
         ]

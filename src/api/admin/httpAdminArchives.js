@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 用户档案
+ */
 export const httpAdminArchives = {
   postArchives(data) {
     return request({

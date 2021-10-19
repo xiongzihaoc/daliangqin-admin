@@ -25,7 +25,7 @@
 </template>
 <script>
 import EleTable from '@/components/Table'
-import { httpAdminAIProblem } from '@/api/admin/httpAdminAIProblem'
+import { httpAdminAiProblem } from '@/api/admin/httpAdminAiProblem'
 export default {
   components: {
     EleTable,
@@ -48,7 +48,7 @@ export default {
      * 接口
      */
     getAiProblemList() {
-      httpAdminAIProblem.getAiProblemList().then((res) => {
+      httpAdminAiProblem.getAiProblemList().then((res) => {
           
       })
     },
