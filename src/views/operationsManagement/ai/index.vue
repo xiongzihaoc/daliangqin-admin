@@ -75,6 +75,9 @@
                 :label="item.name"
                 :value="item.id"></el-option>
             </el-select>
+            <div><span style="color:red">最新建档:</span> {{parseTime(item.beginDate)}}</div>
+            <div><span style="color:red">最后建档:</span> {{parseTime(item.endOfDate)}}</div>
+            <div><span style="color:red">医院人数:</span> {{item.num}}</div>
           </el-form-item>
           <el-form-item label="数量">
             <el-input v-model="item.number"></el-input>
@@ -99,9 +102,11 @@
 <script>
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { parseTime } from '@/utils/index'
 export default {
   data() {
     return {
+      parseTime,
       formRules: {
         time: [{ required: true, message: '请选择时间', trigger: 'blur' }],
         hospitalId: [
@@ -132,7 +137,14 @@ export default {
     },
     // 选择医院
     selectHospital(val) {
-      this.form.equipmentHeartRateAis = val
+      httpAdminHeartRate
+        .getHeartRateAiSuggest({ id: val[val.length - 1].id })
+        .then((res) => {
+          val[val.length - 1].beginDate = res.data.beginDate
+          val[val.length - 1].endOfDate = res.data.endOfDate
+          val[val.length - 1].num = res.data.num
+          this.form.equipmentHeartRateAis = val
+        })
     },
     // 选择操作类型
     selectOperation(val) {
@@ -152,7 +164,6 @@ export default {
           httpAdminHeartRate.postHeartRateAi(this.form).then((res) => {
             if (res.code === 'OK') {
               this.$message.success('新增成功')
-              location.reload()
             }
           })
         }

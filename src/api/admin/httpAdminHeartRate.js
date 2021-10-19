@@ -23,6 +23,13 @@ export const httpAdminHeartRate = {
       data
     })
   },
+  // 新增ai心电数据展示建议
+  getHeartRateAiSuggest(data) {
+    return request({
+      url: 'equipment/heartRate/ai/suggest/' + data.id,
+      method: 'get',
+    })
+  },
   // 删除系统新增ai数据
   deleteHeartRateAiAll() {
     return request({
