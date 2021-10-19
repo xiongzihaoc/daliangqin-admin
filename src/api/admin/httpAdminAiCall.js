@@ -90,4 +90,19 @@ export const httpAdminAiCall = {
       params: data
     })
   },
+  // 获取通话详情
+  getAlCallDetailList(data) {
+    return request({
+      url: 'ai/callDetail/' + data.callRecordId + '/' + data.phone,
+      method: 'get',
+    })
+  },
+  // 复制ai随访任务
+  getInformationCopy(data) {
+    return request({
+      url: 'ai/information/copy',
+      method: 'get',
+      params: data
+    })
+  },
 }

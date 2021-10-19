@@ -222,7 +222,7 @@
               <el-dropdown-item @click.native="compile(scope.row, 'edit')"
                 >编辑</el-dropdown-item
               >
-              <el-dropdown-item @click.native="compile(scope.row)"
+              <el-dropdown-item @click.native="compile(scope.row, 'copy')"
                 >复制</el-dropdown-item
               >
               <el-dropdown-item @click.native="compile(scope.row, 'delete')"
@@ -686,8 +686,13 @@ export default {
     getInformationStart(robotCallJobId){
       console.log('robotCallJobId', robotCallJobId)
       httpAdminAiCall.getInformationStart({robotCallJobId}).then((res)=>{
-        console.log('开始任务', res)
       })
+    },
+    // 复制任务
+    getCopy(robotCallJobId){
+        httpAdminAiCall.getInformationCopy({robotCallJobId}).then((res)=>{
+          this.getAiCallList()
+        })
     },
     // 获取模板
     getAiDownload() {
@@ -886,6 +891,9 @@ export default {
           break
         case 'startTask' : 
           this.getInformationStart(val.robotCallJobId)
+          break
+        case 'copy' :
+          this.getCopy(val.robotCallJobId)
           break
       }
     },
