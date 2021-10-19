@@ -1,31 +1,32 @@
 <template>
   <div class="app-container">
     <!-- 表格 -->
-    <EleTable
-      :data="list"
+    <EleTable :data="list"
       :header="tableHeaderBig"
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
       @handleSizeChange="handleSizeChange"
-      @handleCurrentChange="handleCurrentChange"
-    >
-      <el-table-column
-        align="center"
+      @handleCurrentChange="handleCurrentChange">
+      <el-table-column align="center"
         type="index"
-        label="序号"
-      ></el-table-column>
-      <el-table-column align="center" label="问题名称"></el-table-column>
-      <el-table-column align="center" label="是"></el-table-column>
-      <el-table-column align="center" label="否"></el-table-column>
-      <el-table-column align="center" label="不知道"></el-table-column>
-      <el-table-column align="center" label="不明确"></el-table-column>
+        label="序号"></el-table-column>
+      <el-table-column align="center"
+        label="问题名称"></el-table-column>
+      <el-table-column align="center"
+        label="是"></el-table-column>
+      <el-table-column align="center"
+        label="否"></el-table-column>
+      <el-table-column align="center"
+        label="不知道"></el-table-column>
+      <el-table-column align="center"
+        label="不明确"></el-table-column>
     </EleTable>
   </div>
 </template>
 <script>
 import EleTable from '@/components/Table'
-import { httpAdminAiProblem } from '@/api/admin/httpAdminAiProblem'
+// import { httpAdminAiProblem } from '@/api/admin/httpAdminAiProblem'
 export default {
   components: {
     EleTable,
@@ -41,17 +42,15 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.params)
+    // console.log(this.$route.params)
   },
   methods: {
     /**
      * 接口
      */
-    getAiProblemList() {
-      httpAdminAiProblem.getAiProblemList().then((res) => {
-          
-      })
-    },
+    // getAiProblemList() {
+    //   httpAdminAiProblem.getAiProblemList().then((res) => {})
+    // },
     /**
      * 分页
      */
