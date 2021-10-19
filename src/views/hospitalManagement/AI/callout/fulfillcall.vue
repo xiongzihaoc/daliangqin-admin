@@ -129,7 +129,11 @@
       <div class="chat">
         <div>
           <p>{{ telephoneMessage.uname }} - {{ telephoneMessage.phone }}</p>
-          <p>通话ID：{{ telephoneMessage.callRecordId }} 通话时长：{{ formatSeconds(telephoneMessage.chatDuration) }}</p>
+          <p>
+            通话ID：{{ telephoneMessage.callRecordId }} 通话时长：{{
+              formatSeconds(telephoneMessage.chatDuration)
+            }}
+          </p>
         </div>
         <JwChat
           class="chatPage"
@@ -142,7 +146,9 @@
         </JwChat>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -219,7 +225,6 @@ export default {
     },
     getAlCallDetailList(val) {
       // console.log(val)
-      this.dialogVisible = true
       httpAdminAiCall
         .getAlCallDetailList({
           callRecordId: '2377292791',
@@ -242,6 +247,7 @@ export default {
               img: val.type === 'ROBOT' ? '' : res.data.avatarUrl,
             })
           })
+          this.dialogVisible = true
         })
     },
     /**
@@ -285,7 +291,7 @@ export default {
 }
 </script>
 
-<style  scoped>
+<style scoped>
 .chatPage /deep/ .toolBox {
   height: 0;
   display: none;
