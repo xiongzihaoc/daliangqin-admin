@@ -16,10 +16,6 @@ import '@/permission' // permission control
 import 'default-passive-events'  // Passive Event Listeners——让页面滑动更加流畅的新特性
 Vue.use(ElementUI)
 
-// 全局引入jwchat
-import JwChat from 'jwchat'
-Vue.use(JwChat)
-
 // 全局引入echarts
 import * as echarts from 'echarts'  // 5.x引用方式
 Vue.prototype.$echarts = echarts
