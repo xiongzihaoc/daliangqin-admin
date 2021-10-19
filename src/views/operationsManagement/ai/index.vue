@@ -61,23 +61,25 @@
             :value="item.id"></el-option>
         </el-select>
       </el-form-item>
-      <div v-for="(item,index) in form.equipmentHeartRateAis"
-        :key="index">
-        <div style="margin: 0 0 20px 30px;color:#1890FF"
-          class="fw">{{item.name}}</div>
-        <el-form-item label="医院名称">
-          <el-select class="w100"
-            disabled
-            v-model="item.id">
-            <el-option v-for="item in hospitalList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="数量">
-          <el-input v-model="item.number"></el-input>
-        </el-form-item>
+      <div v-if="operationType === 'ai新增'">
+        <div v-for="(item,index) in form.equipmentHeartRateAis"
+          :key="index">
+          <div style="margin: 0 0 20px 30px;color:#1890FF"
+            class="fw">{{item.name}}</div>
+          <el-form-item label="医院名称">
+            <el-select class="w100"
+              disabled
+              v-model="item.id">
+              <el-option v-for="item in hospitalList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="数量">
+            <el-input v-model="item.number"></el-input>
+          </el-form-item>
+        </div>
       </div>
       <el-form-item>
         <el-button type="primary"
@@ -100,7 +102,6 @@ import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 export default {
   data() {
     return {
-      time: '',
       formRules: {
         time: [{ required: true, message: '请选择时间', trigger: 'blur' }],
         hospitalId: [
@@ -111,6 +112,7 @@ export default {
       operationType: 'ai新增',
       removeHospitalId: '', // 删除医院的id
       form: {
+        time: '',
         beginDate: '',
         endDate: '',
         equipmentHeartRateAis: [],
