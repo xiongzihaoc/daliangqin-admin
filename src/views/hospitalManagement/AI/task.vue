@@ -900,7 +900,7 @@ export default {
       delete this.timeForm.notDial
       const { data: res } = await this.getInformationTask(val.robotCallJobId)
       this.addUserFrom = JSON.parse(JSON.stringify(res))
-      this.addUserFrom.name = JSON.parse(JSON.stringify(res.aiName))
+      this.$set(this.addUserFrom, 'name', JSON.parse(JSON.stringify(res.aiName)))
       this.timeForm.checkListPeriod = JSON.parse(JSON.stringify(res.aiParameter.daysOfWeek))
       // this.searchForm.fileUrl = JSON.parse(JSON.stringify(res.fileUrl))
       this.searchForm.daily = [res.aiParameter.dailyStartTime, res.aiParameter.dailyEndTime] //可拨打时间
