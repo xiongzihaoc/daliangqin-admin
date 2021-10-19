@@ -80,7 +80,6 @@
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
-      show-summary
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
@@ -91,10 +90,10 @@
         prop="hospitalName"></el-table-column>
       <el-table-column align="center"
         label="用户姓名"
-        prop="hospitalName"></el-table-column>
+        prop="patientUserName"></el-table-column>
       <el-table-column align="center"
         label="用户手机号"
-        prop="hospitalName"></el-table-column>
+        prop="calledPhoneNumber"></el-table-column>
       <el-table-column align="center"
         label="任务名称"
         prop="hospitalName"></el-table-column>
@@ -103,22 +102,32 @@
         prop="hospitalName"></el-table-column>
       <el-table-column align="center"
         label="期名"
-        prop="hospitalName"></el-table-column>
+        prop="taskStage"></el-table-column>
       <el-table-column align="center"
         label="通话时长"
-        prop="hospitalName"></el-table-column>
+        prop="chatDuration">
+        <template slot-scope="scope">
+          <span>{{ formatSeconds(scope.row.chatDuration) }}</span>
+        </template>
+        </el-table-column>
       <el-table-column align="center"
         label="对话轮次"
-        prop="hospitalName"></el-table-column>
-      <el-table-column align="center"
+        prop="chatRound"></el-table-column>
+      <el-table-column width="150px" align="center"
         label="呼叫时间"
-        prop="hospitalName"></el-table-column>
+        prop="startTime">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.startTime) }}</span>
+        </template>
+        </el-table-column>
       <el-table-column align="center"
         label="通话状态"
-        prop="hospitalName"></el-table-column>
+        prop="resultStatus"
+        :formatter="phoneState"></el-table-column>
       <el-table-column align="center"
-        label="挂断状态"
-        prop="hospitalName"></el-table-column>
+        label="挂断 状态"
+        prop="hangupBy"
+        :formatter="hangupState"></el-table-column>
       <el-table-column align="center"
         label="通话详情"
         prop="hospitalName"></el-table-column>
@@ -129,13 +138,16 @@
 <script>
 import EleTable from '@/components/Table'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
-import { parseTime, AiResultStatus, formatterElement } from '@/utils/index'
+import { httpAdminAiHistory } from '@/api/admin/httpAdminAiHistory'
+import { parseTime, formatSeconds, AiResultStatus, formatterElement } from '@/utils/index'
 export default {
   components: {
     EleTable,
   },
   data() {
     return {
+      parseTime,
+      formatSeconds,
       AiResultStatus,
       searchForm: {},
       hospitalList: [],
@@ -149,14 +161,24 @@ export default {
   },
   created() {
     this.getHospitalList()
+    this.getAiHistoryList()
   },
   methods: {
-    /* 获取医院列表 */
+    /**
+     * 接口
+     */
+    // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         console.log(res)
         this.hospitalList = res.data.elements
       })
+    },
+    getAiHistoryList(){
+     httpAdminAiHistory.getAiHistoryList().then((res)=>{
+       console.log('回调记录', res)
+      this.list = res.data.elements
+     })
     },
     /**
      * 搜索
@@ -168,6 +190,15 @@ export default {
         this.searchForm.taskStage = this.searchForm.taskContent
       }
       console.log('搜索', this.searchForm)
+    },
+    /**
+     * 表格格式化
+     */
+    phoneState(row){
+      return formatterElement.phoneState[row.resultStatus]
+    },
+    hangupState(row){
+      return formatterElement.hangUpState[row.hangupBy]
     },
     searchReset() {},
     /**
