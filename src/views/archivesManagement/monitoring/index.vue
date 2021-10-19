@@ -53,13 +53,13 @@
           <span class="skipStyle" @click="skipHeart(scope.row)">{{ scope.row.hospitalName }}</span>
         </template>-->
       </el-table-column>
-      <el-table-column align="center" label="已监测总人数" prop="measureTotalFrequency"></el-table-column>
-      <el-table-column align="center" label="已监测总次数" prop="measureTotalAmount">
+      <el-table-column align="center" label="已监测总人数" prop="totalCount"></el-table-column>
+      <el-table-column align="center" label="已监测总次数" prop="totalNumber">
         <template slot-scope="scope">
           <span
-            :class="[scope.row.measureTotalAmount === 0 ? '' : 'skipStyle' ]"
+            :class="[scope.row.totalNumber === 0 ? '' : 'skipStyle' ]"
             @click="skipHeart(scope.row, 'people')"
-          >{{ scope.row.measureTotalAmount }}</span>
+          >{{ scope.row.totalNumber }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="公司已审核报告数" prop="companyAuditNumber">
@@ -99,20 +99,20 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="待打印报告数" prop="stayPrintNumber">
+      <el-table-column align="center" label="待打印报告数" prop="printNumber">
         <template slot-scope="scope">
-          <span :class="[scope.row.stayPrintNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'NOT_PRINT')">
+          <span :class="[scope.row.printNumber === null ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'NOT_PRINT')">
             {{
-              scope.row.stayPrintNumber
+              scope.row.printNumber === null ? 0 : scope.row.printNumber
             }}
           </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="	待上传报告数" prop="stayUploadNumber">
+      <el-table-column align="center" label="	待上传报告数" prop="uploadNumber">
         <template slot-scope="scope">
-          <span :class="[scope.row.stayUploadNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'stayUploadNumber')">
+          <span :class="[scope.row.uploadNumber === null ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'uploadNumber')">
             {{
-              scope.row.stayUploadNumber
+              scope.row.uploadNumber === null ? 0 : scope.row.uploadNumber
             }}
           </span>
         </template>
@@ -200,6 +200,7 @@ export default {
           endTime: this.searchForm.endTime,
         })
         .then((res) => {
+          console.log(res)
           this.list = res.data.elements
           this.total = res.data.totalSize
         })
@@ -213,20 +214,20 @@ export default {
     getSummaries() { },
     // 跳转心率检测
     skipHeart(val, state) {
-      if (state != 'people' && state != 'NOT_PRINT' && state != 'stayUploadNumber') {
+      if (state != 'people' && state != 'NOT_PRINT' && state != 'uploadNumber') {
         sessionStorage.setItem('monitoringAuditStatus', state)
       }
       // if(state === 'stayUploadNumber' && val.stayUploadNumber !== null){
       //   sessionStorage.setItem('monitoringStayUploadNumber', val.stayUploadNumber)
       // }
-      if(state === 'NOT_PRINT' && val.stayPrintNumber !== 0){
+      if(state === 'NOT_PRINT' && val.printNumber !== null){
         sessionStorage.setItem('monitoringNotPrint', state) 
       }
       let hospitalId = [ val.hospitalId ] 
       sessionStorage.setItem('monitoringHospitalId', JSON.stringify(hospitalId))
       sessionStorage.setItem('monitoringStartTime', this.searchForm.startTime)
       sessionStorage.setItem('monitoringEndTime', this.searchForm.endTime)
-      if (val.measureTotalAmount !== 0 && state === 'people') {
+      if (val.totalNumber !== 0 && state === 'people') {
         this.$router.push('/archivesManagement/record/heart')
       }
       if (val.companyAuditNumber !== 0 && state === 'PLATFORM_COMPLETE_AUDIT') {
@@ -241,10 +242,10 @@ export default {
       if (val.hospitalWaitAuditNumber !== 0 && state === 'TO_HOSPITAL_AUDIT') {
         this.$router.push('/archivesManagement/record/heart')
       }
-      if (val.stayPrintNumber !== 0 && state === 'NOT_PRINT') {
+      if (val.printNumber !== null && state === 'NOT_PRINT') {
         this.$router.push('/archivesManagement/record/heart')
       }
-      if (val.stayUploadNumber !== 0 && state === 'stayUploadNumber') {
+      if (val.uploadNumber !== null && state === 'uploadNumber') {
         this.$router.push('/archivesManagement/usage')
       }
     },
