@@ -135,15 +135,37 @@
             }}
           </p>
         </div>
-        <JwChat
-          class="chatPage"
-          width="100%"
-          :taleList="chatList"
-          v-model="inputMsg"
-          :showRightBox="true"
-          scrollType="noroll"
-        >
-        </JwChat>
+        <div class="chat-content">
+          <!-- 聊天记录数组-->
+          <div v-for="(item, index) in messageList" :key="index">
+            <!-- 对方 -->
+            <div class="word" v-if="!item.isSelf">
+              <!-- 如果头像不为空 -->
+              <img v-if="toInfo.avatarUrl != ''" :src="toInfo.avatarUrl" />
+              <img
+                v-else
+                src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png"
+              />
+              <div class="info">
+                <p class="time">
+                  {{ toInfo.userName }} {{ item.createTime }}
+                </p>
+                <div class="info-content">{{ item.leaveContent }}</div>
+              </div>
+            </div>
+            <!-- 我的 -->
+            <div class="word-my" v-else>
+              <div class="info">
+                <p class="time">
+                  Ai机器人 {{ item.createTime }}
+                </p>
+                <div class="info-content">{{ item.leaveContent }}</div>
+              </div>
+              <img src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png" />
+            </div>
+          </div>
+        </div>
+
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false"
@@ -190,10 +212,13 @@ export default {
         callRecordId: '',
         chatDuration: '',
       },
+      selfInfo: {},
+      toInfo: {},
       time: [],
       list: [],
       chatList: [],
       tableHeaderBig: [],
+      messageList: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -213,7 +238,6 @@ export default {
     sessionStorage.removeItem('taskPhoneState')
   },
   methods: {
-    aa() {},
     /**
      * 接口
      */
@@ -238,13 +262,13 @@ export default {
           this.telephoneMessage.phone = callDetailList.data.calledPhoneNumber
           this.telephoneMessage.callRecordId = callDetailList.data.callRecordId
           this.telephoneMessage.chatDuration = callDetailList.data.chatDuration
+          this.toInfo.userName = callDetailList.data.customerPersonName
+          this.toInfo.avatarUrl = res.data.avatarUrl
           callDetailList.data.callDetailList.forEach((val) => {
-            this.chatList.push({
-              date: val.startTime,
-              text: { text: val.text },
-              mine: val.type === 'ROBOT' ? true : false,
-              name: val.type === 'ROBOT' ? 'Ai机器人' : uname,
-              img: val.type === 'ROBOT' ? '' : res.data.avatarUrl,
+            this.messageList.push({
+              createTime: val.startTime,
+              isSelf: val.type === 'ROBOT' ? true : false,
+              leaveContent: val.text
             })
           })
           this.dialogVisible = true
@@ -291,15 +315,104 @@ export default {
 }
 </script>
 
-<style scoped>
-.chatPage /deep/ .toolBox {
-  height: 0;
-  display: none;
+<style lang="scss" scoped>
+.chat-content {
+  width: 100%;
+  height: 600px;
+  overflow-y: scroll;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  .word {
+    display: flex;
+    margin-bottom: 20px;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .info {
+      margin-left: 10px;
+      .time {
+        font-size: 12px;
+        color: rgba(51, 51, 51, 0.8);
+        margin: 0;
+        height: 20px;
+        line-height: 20px;
+        margin-top: -5px;
+      }
+      .info-content {
+        max-width: 600px;
+        padding: 10px;
+        font-size: 14px;
+        float: left;
+        margin-right: 10px;
+        position: relative;
+        left: 0;
+        margin-top: 8px;
+        background: #fff;
+        color: #000;
+        border-radius: 5px;
+      }
+      //小三角形
+      .info-content::before {
+        position: absolute;
+        left: -8px;
+        top: 8px;
+        content: "";
+        border-right: 10px solid #fff;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+      }
+    }
+  }
+
+  .word-my {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .info {
+      width: 90%;
+      margin-left: 10px;
+      text-align: right;
+      .time {
+        font-size: 12px;
+        color: rgba(51, 51, 51, 0.8);
+        margin: 0;
+        height: 20px;
+        line-height: 20px;
+        margin-top: -5px;
+        margin-right: 10px;
+      }
+      .info-content {
+        max-width: 70%;
+        padding: 10px;
+        font-size: 14px;
+        float: right;
+        margin-right: 10px;
+        position: relative;
+        margin-top: 8px;
+        background: #425c5a;
+        color: #fff;
+        border-radius: 5px;
+        text-align: left;
+      }
+      .info-content::after {
+        position: absolute;
+        right: -8px;
+        top: 8px;
+        content: "";
+        border-left: 10px solid #425c5a;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+      }
+    }
+  }
 }
-.chatPage /deep/ .taleBox {
-  height: 100%;
-}
-.chatPage /deep/ .wrapper {
-  height: 100% !important;
-}
+
 </style>
