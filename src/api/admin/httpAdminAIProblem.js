@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 // ai呼叫任务
-export const httpAdminAIProblem = {
+export const httpAdminAiProblem = {
   getAiProblemList(data) {
     return request({
       url: 'ai/problem',
