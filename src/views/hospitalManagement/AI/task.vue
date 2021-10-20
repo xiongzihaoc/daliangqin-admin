@@ -65,6 +65,7 @@
             v-model="searchForm.completeStartTime"
             type="datetimerange"
             value-format="timestamp"
+            format="yyyy-MM-dd HH:mm"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -76,6 +77,7 @@
             v-model="searchForm.creationTime"
             type="datetimerange"
             value-format="timestamp"
+            format="yyyy-MM-dd HH:mm"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -195,7 +197,7 @@
         label="创建时间"
         prop="createTime"
       ></el-table-column>
-      <el-table-column align="center" label="操作" width="150">
+      <el-table-column align="center" label="操作" width="150" fixed="right">
         <template slot-scope="scope">
           <el-dropdown>
             <el-button type="primary" size="mini">
@@ -242,7 +244,7 @@
             clearable
             style="width: 100%"
             placeholder="请选择医院"
-            @change="gethospitalName"
+            @change="getHospitalName"
           >
             <el-option
               v-for="item in hospitalList"
@@ -562,9 +564,7 @@ export default {
         this.hospitalList = res.data.elements;
       });
     },
-    gethospitalName(val) {
-      console.log(val);
-    },
+    getHospitalName(val) {},
     // 获取任务与期数
     getAiStageList() {
       httpAdminAiHistory.getAiStageList().then((res) => {
