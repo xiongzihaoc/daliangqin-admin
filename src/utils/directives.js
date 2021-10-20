@@ -1,4 +1,3 @@
-
 import Vue from 'vue';
 
 // v-dialogDrag: 弹窗拖拽
@@ -104,18 +103,18 @@ Vue.directive('Int', {
 })
 
 /***
-*  节流 每单位时间可触发一次
-*  第一次瞬间触发，最后一次不管是否达到间隔时间依然触发
-* 【考虑到input的change事件】
-*  @param {?Number|300} time - 间隔时间
-*  @param {Function} fn - 执行事件
-*  @param {?String|"click"} event - 事件类型 例："click"
-*  @param {Array} binding.value - [fn,event,time]
-*  @date  2020-1-31
-*  @author aChuan
-*  例：<el-button v-throttle="[reset,`click`,300]">刷新</el-button>
-*  传递参数则：<el-button v-throttle="[()=>reset(param),`click`,300]">刷新</el-button>
-*/
+ *  节流 每单位时间可触发一次
+ *  第一次瞬间触发，最后一次不管是否达到间隔时间依然触发
+ * 【考虑到input的change事件】
+ *  @param {?Number|300} time - 间隔时间
+ *  @param {Function} fn - 执行事件
+ *  @param {?String|"click"} event - 事件类型 例："click"
+ *  @param {Array} binding.value - [fn,event,time]
+ *  @date  2020-1-31
+ *  @author aChuan
+ *  例：<el-button v-throttle="[reset,`click`,300]">刷新</el-button>
+ *  传递参数则：<el-button v-throttle="[()=>reset(param),`click`,300]">刷新</el-button>
+ */
 Vue.directive('throttle', {
   inserted: function (el, binding) {
     let [fn, event = "click", time = 300] = binding.value
@@ -132,16 +131,16 @@ Vue.directive('throttle', {
 })
 
 /***
-* 防抖 单位时间只触发最后一次
-*  @param {?Number|300} time - 间隔时间
-*  @param {Function} fn - 执行事件
-*  @param {?String|"click"} event - 事件类型 例："click"
-*  @param {Array} binding.value - [fn,event,time]
-*  @date  2020-1-29
-*  @author aChuan
-*  例：<el-button v-debounce="[reset,`click`,300]">刷新</el-button>
-*  也可简写成：<el-button v-debounce="[reset]">刷新</el-button>
-*/
+ * 防抖 单位时间只触发最后一次
+ *  @param {?Number|300} time - 间隔时间
+ *  @param {Function} fn - 执行事件
+ *  @param {?String|"click"} event - 事件类型 例："click"
+ *  @param {Array} binding.value - [fn,event,time]
+ *  @date  2020-1-29
+ *  @author aChuan
+ *  例：<el-button v-debounce="[reset,`click`,300]">刷新</el-button>
+ *  也可简写成：<el-button v-debounce="[reset]">刷新</el-button>
+ */
 Vue.directive('debounce', {
   inserted: function (el, binding) {
     let [fn, event = "click", time = 300] = binding.value
@@ -150,5 +149,20 @@ Vue.directive('debounce', {
       timer && clearTimeout(timer)
       timer = setTimeout(() => fn(), time)
     })
+  }
+})
+
+// element select 下拉加载更多
+Vue.directive('el-select-loadmore', {
+  inserted(el, binding) {
+    const SELECTWRAP_DOM = el.querySelector(
+      '.el-select-dropdown .el-select-dropdown__wrap'
+    );
+    SELECTWRAP_DOM.addEventListener('scroll', function () {
+      const condition = this.scrollHeight - this.scrollTop <= this.clientHeight;
+      if (condition) {
+        binding.value();
+      }
+    });
   }
 })
