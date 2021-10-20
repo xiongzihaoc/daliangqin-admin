@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 新闻
+ */
 export const httpAdminNews = {
   getNews(data) {
     return request({

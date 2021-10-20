@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * admin管理员权限
+ */
 export const httpAdminRole = {
   getAdminRole(data) {
     return request({

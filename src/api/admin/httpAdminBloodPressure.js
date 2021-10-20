@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 血压
+ */
 export const httpAdminBloodPressure = {
   getBloodPressure(data) {
     return request({

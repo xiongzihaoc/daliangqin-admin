@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 
+ */
 export const httpAdminPush = {
   getPush(data) {
     return request({

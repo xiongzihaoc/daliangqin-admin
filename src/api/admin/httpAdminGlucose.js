@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 血糖
+ */
 export const httpAdminGlucose = {
   getGlucose(data) {
     return request({

@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 留言板
+ */
 export const httpAdminChat = {
   getChat(data) {
     return request({

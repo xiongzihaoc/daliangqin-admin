@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 全局配置
+ */
 export const httpAdminSystem = {
   getSystem(data) {
     return request({

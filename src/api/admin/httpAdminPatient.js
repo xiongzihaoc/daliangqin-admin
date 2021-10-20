@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 用户
+ */
 export const httpAdminPatient = {
   getPatient(data) {
     return request({
