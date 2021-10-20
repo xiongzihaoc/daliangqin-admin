@@ -196,12 +196,22 @@
         label="并发数量"
         prop="concurrentQuantity"
       ></el-table-column>
-      <el-table-column width="150px" align="center" label="启动时间" prop="startTime">
+      <el-table-column
+        width="150px"
+        align="center"
+        label="启动时间"
+        prop="startTime"
+      >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="完成时间" prop="completeTime">
+      <el-table-column
+        width="150px"
+        align="center"
+        label="完成时间"
+        prop="completeTime"
+      >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.completeTime) }}</span>
         </template>
@@ -715,9 +725,9 @@ export default {
         .deleteInformation({ taskId: val.robotCallJobId })
         .then((res) => {
           console.log('删除', res)
-          if(res.code === 'OK'){
+          if (res.code === 'OK') {
             this.$message.success(res.message)
-          }else{
+          } else {
             this.$message.error(res.message)
           }
           this.getAiCallList()
@@ -729,10 +739,26 @@ export default {
       httpAdminAiCall.getInformationStart({ robotCallJobId }).then((res) => {})
     },
     // 复制任务
-    getCopy(robotCallJobId) {
-      httpAdminAiCall.getInformationCopy({ robotCallJobId }).then((res) => {
-        this.getAiCallList()
-      })
+    getCopy(val) {
+      let [aiName, hospitalId, robotCallJobId] = [
+        val.aiName,
+        val.hospitalId,
+        val.robotCallJobId,
+      ]
+      if (
+        aiName &&
+        aiName !== '' &&
+        hospitalId &&
+        hospitalId !== '' &&
+        robotCallJobId &&
+        robotCallJobId !== ''
+      ) {
+        httpAdminAiCall
+          .getInformationCopy({ aiName, hospitalId, robotCallJobId })
+          .then((res) => {
+            this.getAiCallList()
+          })
+      }
     },
     // 获取模板
     getAiDownload() {
@@ -942,7 +968,7 @@ export default {
           this.getInformationStart(val.robotCallJobId)
           break
         case 'copy':
-          this.getCopy(val.robotCallJobId)
+          this.getCopy(val)
           break
       }
     },
