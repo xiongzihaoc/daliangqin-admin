@@ -2,12 +2,7 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        class="searchForm"
-        ref="searchFormRef"
-        :model="searchForm"
-        :inline="true"
-      >
+      <el-form class="searchForm" ref="searchFormRef" :model="searchForm" :inline="true">
         <el-form-item label="用户姓名">
           <el-input v-model="searchForm.customerPersonName" size="small"></el-input>
         </el-form-item>
@@ -15,18 +10,10 @@
           <el-input v-model="searchForm.calledPhoneNumber" size="small"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
-            type="primary"
-            size="small"
-            icon="el-icon-search"
+          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
             >搜索</el-button
           >
-          <el-button
-            @click="searchReset"
-            size="small"
-            plain
-            icon="el-icon-refresh"
+          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh"
             >重置</el-button
           >
           <el-button @click="searchAddBtn" type="primary" size="small"
@@ -45,11 +32,7 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     >
-      <el-table-column
-        align="center"
-        type="index"
-        label="序号"
-      ></el-table-column>
+      <el-table-column align="center" type="index" label="序号"></el-table-column>
       <el-table-column
         align="center"
         label="用户名"
@@ -90,17 +73,15 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="importVisible = false">取 消</el-button>
-        <el-button type="primary" @click="postInformation('importForm')"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="postInformation('importForm')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import EleTable from '@/components/Table'
-import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall'
+import EleTable from "@/components/Table";
+import { httpAdminAiCall } from "@/api/admin/httpAdminAiCall";
 
 export default {
   components: {
@@ -109,25 +90,25 @@ export default {
   data() {
     return {
       formRules: {
-        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         phoneNumber: [
-          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { required: true, message: "请输入手机号", trigger: "blur" },
           {
             pattern: /^1[3|4|5|7|8][0-9]\d{8}$/,
-            message: '手机号格式不对',
-            trigger: 'blur',
+            message: "手机号格式不对",
+            trigger: "blur",
           },
         ],
       },
       searchForm: {
-        customerPersonName : '',
-        calledPhoneNumber: '',
-        robotCallJobId: '',
+        customerPersonName: "",
+        calledPhoneNumber: "",
+        robotCallJobId: "",
       },
       importForm: {
-        name: '',
-        phoneNumber: '',
-        robotCallJobId: '',
+        name: "",
+        phoneNumber: "",
+        robotCallJobId: "",
       },
       list: [],
       tableHeaderBig: [],
@@ -137,80 +118,79 @@ export default {
       total: 0,
       // 弹窗区域
       importVisible: false,
-    }
+    };
   },
   created() {
-    this.importForm.robotCallJobId = this.$route.query.robotCallJobId
-    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
-    this.getStatisticsList()
+    this.importForm.robotCallJobId = this.$route.query.robotCallJobId;
+    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId;
+    this.getStatisticsList();
   },
   methods: {
     /**
      * 获取外呼接口数据
      */
     getStatisticsList() {
-      let robotCallJobId = this.$route.query.robotCallJobId
+      let robotCallJobId = this.$route.query.robotCallJobId;
       httpAdminAiCall.getStatisticsList(this.searchForm).then((res) => {
-        this.list = res.data.elements
-        this.total = res.data.totalSize
-      })
+        this.list = res.data.elements;
+        this.total = res.data.totalSize;
+      });
     },
     postAiStatistics() {
-      console.log(this.importForm)
+      console.log(this.importForm);
       httpAdminAiCall.postAiStatistics(this.importForm).then((res) => {
-        if (res.code === 'OK') {
-            this.$message.success(res.message)
-        }else{
-            this.$message.error(res.message)
+        if (res.code === "OK") {
+          this.$message.success(res.message);
+        } else {
+          this.$message.error(res.message);
         }
-        this.getStatisticsList()
-        this.importVisible = false
-      })
+        this.getStatisticsList();
+        this.importVisible = false;
+      });
     },
     postInformation(importForm) {
       this.$refs[importForm].validate((valid) => {
-        console.log('ok')
+        console.log("ok");
         if (valid) {
-          this.postAiStatistics()
+          this.postAiStatistics();
         }
-      })
+      });
     },
     /**
      * 按钮
      */
     searchAddBtn() {
-      this.importVisible = true
+      this.importVisible = true;
     },
 
     /**
      * 搜索
      */
     searchBtn() {
-      this.pageNum = 1
-      this.getStatisticsList()
+      this.pageNum = 1;
+      this.getStatisticsList();
     },
     searchReset() {
-        this.searchForm.customerPersonName = ''
-        this.searchForm.calledPhoneNumber = ''
+      this.searchForm.customerPersonName = "";
+      this.searchForm.calledPhoneNumber = "";
     },
-    importFormReset(){
-        this.importForm.name = ''
-        this.importForm.phoneNumber = ''
+    importFormReset() {
+      this.importForm.name = "";
+      this.importForm.phoneNumber = "";
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize
-      this.getAiCallList()
+      this.pageSize = newSize;
+      this.getAiCallList();
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage
-      this.getAiCallList()
+      this.pageNum = newPage;
+      this.getAiCallList();
     },
   },
-}
+};
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
