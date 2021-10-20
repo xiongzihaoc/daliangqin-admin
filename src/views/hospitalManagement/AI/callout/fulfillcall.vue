@@ -227,11 +227,11 @@ export default {
     }
   },
   created() {
-    // let taskPhoneState = sessionStorage.getItem('taskPhoneState')
-    // if (taskPhoneState) {
-    //   this.searchForm.resultStatus = taskPhoneState
-    // }
-    // this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
+    let taskPhoneState = sessionStorage.getItem('taskPhoneState')
+    if (taskPhoneState) {
+      this.searchForm.resultStatus = taskPhoneState
+    }
+    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
     this.getAlreadyStatisticsList()
   },
   beforeDestroy() {
@@ -248,11 +248,10 @@ export default {
       })
     },
     getAlCallDetailList(val) {
-      // console.log(val)
       httpAdminAiCall
         .getAlCallDetailList({
-          callRecordId: '2377292791',
-          phone: '13759701205',
+          callRecordId: val.callRecordId,
+          phone: val.calledPhoneNumber,
         })
         .then((res) => {
           this.chatList = []
