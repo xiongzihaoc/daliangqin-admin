@@ -212,12 +212,12 @@
           prop="taskTime">
           <el-date-picker class="w100"
             v-model="editAddForm.taskTime"
-            type="daterange"
+            type="datetimerange"
             align="right"
             unlink-panels
+            format="yyyy-MM-dd HH:mm"
             value-format='timestamp'
             @change="selectTaskTime"
-            :default-time="['00:00:00', '23:59:59']"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
