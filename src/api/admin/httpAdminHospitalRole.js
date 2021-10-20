@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 医院权限
+ */
 export const httpAdminHospitalRole = {
     getRole(data) {
         return request({

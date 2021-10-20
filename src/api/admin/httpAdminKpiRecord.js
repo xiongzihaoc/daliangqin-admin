@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * kpi
+ */
 export const httpAdminKpiRecord = {
   getKpiRecord(data) {
     return request({

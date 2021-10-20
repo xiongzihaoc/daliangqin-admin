@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 随访
+ */
 export const httpAdminFollow = {
   getFollow(data) {
     return request({

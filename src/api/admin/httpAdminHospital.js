@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 医院相关
+ */
 export const httpAdminHospital = {
   getHospital(data) {
     return request({

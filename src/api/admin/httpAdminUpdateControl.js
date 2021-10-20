@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 更新管理/更新控制
+ */
 export const httpAdminUpdateControl = {
   getUpdateControl(data) {
     return request({

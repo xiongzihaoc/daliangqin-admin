@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 轮播图
+ */
 export const httpAdminBanner = {
   getBanner(data) {
     return request({

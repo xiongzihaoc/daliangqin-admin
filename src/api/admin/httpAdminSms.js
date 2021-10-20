@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 短信管理
+ */
 export const httpAdminSms = {
   getSms(data) {
     return request({

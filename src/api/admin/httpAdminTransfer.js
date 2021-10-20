@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 转诊
+ */
 export const httpAdminTransfer = {
   getTransfer(data) {
     return request({

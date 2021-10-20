@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 健康教育处方/处方内容
+ */
 export const httpAdminUserTemplate = {
   getUserTemplate(data) {
     return request({

@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 心率相关
+ */
 export const httpAdminHeartRate = {
   getHeartRate(data) {
     return request({

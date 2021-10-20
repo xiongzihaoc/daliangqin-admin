@@ -1,5 +1,8 @@
 import request from '@/utils/request'
 
+/**
+ * 更新管理/更新记录
+ */
 export const httpAdminUpdateVersion = {
   getUpdateVersion(data) {
     return request({
