@@ -2,136 +2,248 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form :model="searchForm"
-        class="searchForm"
-        :inline="true">
+      <el-form :model="searchForm" class="searchForm" :inline="true">
         <el-form-item label="用户姓名">
-          <el-input v-model="searchForm.name"
+          <el-input
+            v-model="searchForm.patientUserName"
             size="small"
-            placeholder="请输入用户姓名"></el-input>
+            placeholder="请输入用户姓名"
+          ></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
-          <el-input v-model="searchForm.phone"
+          <el-input
+            v-model="searchForm.calledPhoneNumber"
             maxlength="11"
             size="small"
-            placeholder="请输入用户手机号"></el-input>
+            placeholder="请输入用户手机号"
+          ></el-input>
         </el-form-item>
         <el-form-item label="医院名称">
-          <el-select v-model="searchForm.hospitalId"
+          <el-select
+            v-model="searchForm.hospitalId"
             size="small"
             filterable
-            placeholder="请选择医院">
-            <el-option v-for="item in hospitalList"
+            placeholder="请选择医院"
+          >
+            <el-option
+              v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="任务">
-          <el-input placeholder="请输入内容"
-            v-model="searchForm.taskContent"
-            class="input-with-select"
-            size="small">
-            <el-select v-model="searchForm.task"
-              slot="prepend"
-              placeholder="请选择"
-              style="width: 100px">
-              <el-option label="任务名称"
-                value="aiName"></el-option>
-              <el-option label="期名"
-                value="taskStage"></el-option>
-            </el-select>
-          </el-input>
+          <el-select
+            v-model="getSearchForm.getTaskStage"
+            size="small"
+            filterable
+            value-key="name"
+            placeholder="请选择任务与期数"
+            @change="selectTaskStage"
+          >
+            <el-option
+              v-for="item in taskStage"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+          <el-select
+            v-model="getSearchForm.selectTaskStage"
+            size="small"
+            filterable
+            value-key="text"
+            placeholder="请选择任务与期数名称"
+            @change="getTaskStage"
+          >
+            <el-option
+              v-for="item in aiTaskList"
+              :key="item.text"
+              :label="item.text"
+              :value="item"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="呼叫时间">
-          <el-date-picker v-model="searchForm.callDuration"
-            type="daterange"
+          <el-date-picker
+            v-model="getSearchForm.callDuration"
+            value-format="timestamp"
+            type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            size="small"></el-date-picker>
+            size="small"
+            @change="getSearchFormTime"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item label="通话状态">
-          <el-select v-model="searchForm.hospitalId"
+          <el-select
+            v-model="searchForm.call"
             size="small"
             filterable
-            placeholder="请选择医院">
-            <el-option v-for="item in AiResultStatus"
+            placeholder="请选择医院"
+          >
+            <el-option
+              v-for="item in AiResultStatus"
               :key="item.id"
               :label="item.label"
-              :value="item.value"></el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn"
+          <el-button
+            @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search">搜索</el-button>
-          <el-button @click="searchReset"
+            icon="el-icon-search"
+            >搜索</el-button
+          >
+          <el-button
+            @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh">重置</el-button>
+            icon="el-icon-refresh"
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list"
+    <EleTable
+      :data="list"
       :header="tableHeaderBig"
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
       @handleSizeChange="handleSizeChange"
-      @handleCurrentChange="handleCurrentChange">
-      <el-table-column align="center"
+      @handleCurrentChange="handleCurrentChange"
+    >
+      <el-table-column
+        align="center"
         label="序号"
-        type="index"></el-table-column>
-      <el-table-column align="center"
+        type="index"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         label="医院名称"
-        prop="hospitalName"></el-table-column>
-      <el-table-column align="center"
+        prop="hospitalName"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         label="用户姓名"
-        prop="patientUserName"></el-table-column>
-      <el-table-column align="center"
+        prop="patientUserName"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         label="用户手机号"
-        prop="calledPhoneNumber"></el-table-column>
-      <el-table-column align="center"
+        prop="calledPhoneNumber"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         label="任务名称"
-        prop="hospitalName"></el-table-column>
-      <el-table-column align="center"
+        prop="aiName"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         label="BOT名称"
-        prop="hospitalName"></el-table-column>
-      <el-table-column align="center"
+        prop="dialogFlowName"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         label="期名"
-        prop="taskStage"></el-table-column>
-      <el-table-column align="center"
-        label="通话时长"
-        prop="chatDuration">
+        prop="taskStage"
+      ></el-table-column>
+      <el-table-column align="center" label="通话时长" prop="chatDuration">
         <template slot-scope="scope">
           <span>{{ formatSeconds(scope.row.chatDuration) }}</span>
         </template>
-        </el-table-column>
-      <el-table-column align="center"
+      </el-table-column>
+      <el-table-column
+        align="center"
         label="对话轮次"
-        prop="chatRound"></el-table-column>
-      <el-table-column width="150px" align="center"
+        prop="chatRound"
+      ></el-table-column>
+      <el-table-column
+        width="150px"
+        align="center"
         label="呼叫时间"
-        prop="startTime">
+        prop="startTime"
+      >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime) }}</span>
         </template>
-        </el-table-column>
-      <el-table-column align="center"
+      </el-table-column>
+      <el-table-column
+        align="center"
         label="通话状态"
         prop="resultStatus"
-        :formatter="phoneState"></el-table-column>
-      <el-table-column align="center"
-        label="挂断 状态"
+        :formatter="phoneState"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="挂断状态"
         prop="hangupBy"
-        :formatter="hangupState"></el-table-column>
-      <el-table-column align="center"
-        label="通话详情"
-        prop="hospitalName"></el-table-column>
+        :formatter="hangupState"
+      ></el-table-column>
+      <el-table-column align="center" label="通话详情" prop="hospitalName">
+        <template slot-scope="scope">
+          <el-button
+            type="primary"
+            size="small"
+            @click="getAlCallDetailList(scope.row)"
+            >查看</el-button
+          >
+        </template>
+      </el-table-column>
     </EleTable>
+    <!-- 弹出层 -->
+    <el-dialog title="通话详情" :visible.sync="dialogVisible" width="50%">
+      <div class="chat">
+        <div>
+          <p>{{ telephoneMessage.uname }} - {{ telephoneMessage.phone }}</p>
+          <p>
+            通话ID：{{ telephoneMessage.callRecordId }} 通话时长：{{
+              formatSeconds(telephoneMessage.chatDuration)
+            }}
+          </p>
+        </div>
+        <div class="chat-content">
+          <!-- 聊天记录数组-->
+          <div v-for="(item, index) in messageList" :key="index">
+            <!-- 对方 -->
+            <div class="word" v-if="!item.isSelf">
+              <!-- 如果头像不为空 -->
+              <img v-if="toInfo.avatarUrl != ''" :src="toInfo.avatarUrl" />
+              <img
+                v-else
+                src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png"
+              />
+              <div class="info">
+                <p class="time">{{ toInfo.userName }} {{ item.createTime }}</p>
+                <div class="info-content">{{ item.leaveContent }}</div>
+              </div>
+            </div>
+            <!-- 我的 -->
+            <div class="word-my" v-else>
+              <div class="info">
+                <p class="time">Ai机器人 {{ item.createTime }}</p>
+                <div class="info-content">{{ item.leaveContent }}</div>
+              </div>
+              <img
+                src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -139,7 +251,14 @@
 import EleTable from '@/components/Table'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import { httpAdminAiHistory } from '@/api/admin/httpAdminAiHistory'
-import { parseTime, formatSeconds, AiResultStatus, formatterElement } from '@/utils/index'
+import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall'
+
+import {
+  parseTime,
+  formatSeconds,
+  AiResultStatus,
+  formatterElement,
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -149,20 +268,38 @@ export default {
       parseTime,
       formatSeconds,
       AiResultStatus,
+      value: '',
       searchForm: {},
+      getSearchForm: {
+        getTaskStage: '',
+        selectTaskStage: '',
+        callDuration: '',
+      },
+      telephoneMessage: {},
+      selfInfo: {},
+      toInfo: {},
+      taskStage: [
+        { id: 'robotCallJobId', name: '任务' },
+        { id: 'taskStage', name: '期数' },
+      ],
       hospitalList: [],
       list: [],
+      messageList: [],
       tableHeaderBig: [],
+      aiTaskList: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
       total: 0,
+      // 弹出层
+      dialogVisible: false,
     }
   },
   created() {
     this.getHospitalList()
     this.getAiHistoryList()
   },
+  mounted() {},
   methods: {
     /**
      * 接口
@@ -174,33 +311,109 @@ export default {
         this.hospitalList = res.data.elements
       })
     },
-    getAiHistoryList(){
-     httpAdminAiHistory.getAiHistoryList().then((res)=>{
-       console.log('回调记录', res)
-      this.list = res.data.elements
-     })
+    getAiHistoryList() {
+      httpAdminAiHistory.getAiHistoryList(this.searchForm).then((res) => {
+        console.log('回调记录', res)
+        this.list = res.data.elements
+        this.total = res.data.totalSize
+      })
+    },
+    // 聊天详情
+    getAlCallDetailList(val) {
+      console.log('聊天', val)
+      httpAdminAiCall
+        .getAlCallDetailList({
+          callRecordId: val.callRecordId,
+          phone: val.calledPhoneNumber,
+        })
+        .then((res) => {
+          this.chatList = []
+          let callDetailList = JSON.parse(res.data.thirdJson)
+          let uname = callDetailList.data.customerPersonName
+          this.telephoneMessage.uname = uname
+          this.telephoneMessage.phone = callDetailList.data.calledPhoneNumber
+          this.telephoneMessage.callRecordId = callDetailList.data.callRecordId
+          this.telephoneMessage.chatDuration = callDetailList.data.chatDuration
+          this.toInfo.userName = callDetailList.data.customerPersonName
+          this.toInfo.avatarUrl = res.data.avatarUrl
+          callDetailList.data.callDetailList.forEach((val) => {
+            this.messageList.push({
+              createTime: val.startTime,
+              isSelf: val.type === 'ROBOT' ? true : false,
+              leaveContent: val.text,
+            })
+          })
+          this.dialogVisible = true
+        })
+    },
+    getAiStageList() {
+      httpAdminAiHistory.getAiStageList().then((res) => {
+        this.aiTaskList = []
+        res.data.forEach((val) => {
+          this.aiTaskList.push({ text: val.taskStage })
+        })
+      })
+    },
+    getAiTaskNameList() {
+      httpAdminAiHistory.getAiTaskNameList().then((res) => {
+        this.aiTaskList = []
+        res.data.forEach((val) => {
+          this.aiTaskList.push({
+            text: val.aiName,
+            robotCallJobId: val.robotCallJobId,
+          })
+        })
+      })
+    },
+    /**
+     * 逻辑
+     */
+    handleChange(val) {
+      console.log(val)
+    },
+    selectTaskStage(val) {
+      console.log('任务期数函数', val)
+      this.$set(this.getSearchForm, 'selectTaskStage', '')
+      if (val === 'robotCallJobId') {
+        this.getAiTaskNameList()
+      } else {
+        this.getAiStageList()
+      }
+    },
+    getTaskStage(val) {
+      console.log('获取选择任务与期数', val)
+      console.log(this.searchForm.taskStage)
+      if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
+        this.$set(this.searchForm, 'taskStage', '')
+        this.searchForm.robotCallJobId = val.robotCallJobId
+      } else {
+        this.$set(this.searchForm, 'robotCallJobId', '')
+        this.searchForm.taskStage = val.text
+      }
+    },
+    getSearchFormTime(val) {
+      this.searchForm.startTime = val[0]
+      this.searchForm.endTime = val[1]
     },
     /**
      * 搜索
      */
     searchBtn() {
-      if (this.searchForm.task === 'aiName') {
-        this.searchForm.aiName = this.searchForm.taskContent
-      } else {
-        this.searchForm.taskStage = this.searchForm.taskContent
-      }
-      console.log('搜索', this.searchForm)
+      this.getAiHistoryList()
+    },
+    searchReset(){
+      this.$set(this, 'searchForm', {})
+      this.$set(this, 'getSearchForm', {})
     },
     /**
      * 表格格式化
      */
-    phoneState(row){
+    phoneState(row) {
       return formatterElement.phoneState[row.resultStatus]
     },
-    hangupState(row){
+    hangupState(row) {
       return formatterElement.hangUpState[row.hangupBy]
     },
-    searchReset() {},
     /**
      * 分页
      */
@@ -216,5 +429,103 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.chat-content {
+  width: 100%;
+  height: 600px;
+  overflow-y: scroll;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f5f5f5;
+  .word {
+    display: flex;
+    margin-bottom: 20px;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .info {
+      margin-left: 10px;
+      .time {
+        font-size: 12px;
+        color: rgba(51, 51, 51, 0.8);
+        margin: 0;
+        height: 20px;
+        line-height: 20px;
+        margin-top: -5px;
+      }
+      .info-content {
+        max-width: 600px;
+        padding: 10px;
+        font-size: 14px;
+        float: left;
+        margin-right: 10px;
+        position: relative;
+        left: 0;
+        margin-top: 8px;
+        background: #fff;
+        color: #000;
+        border-radius: 5px;
+      }
+      //小三角形
+      .info-content::before {
+        position: absolute;
+        left: -8px;
+        top: 8px;
+        content: '';
+        border-right: 10px solid #fff;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+      }
+    }
+  }
+
+  .word-my {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .info {
+      width: 90%;
+      margin-left: 10px;
+      text-align: right;
+      .time {
+        font-size: 12px;
+        color: rgba(51, 51, 51, 0.8);
+        margin: 0;
+        height: 20px;
+        line-height: 20px;
+        margin-top: -5px;
+        margin-right: 10px;
+      }
+      .info-content {
+        max-width: 70%;
+        padding: 10px;
+        font-size: 14px;
+        float: right;
+        margin-right: 10px;
+        position: relative;
+        margin-top: 8px;
+        background: #425c5a;
+        color: #fff;
+        border-radius: 5px;
+        text-align: left;
+      }
+      .info-content::after {
+        position: absolute;
+        right: -8px;
+        top: 8px;
+        content: '';
+        border-left: 10px solid #425c5a;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+      }
+    }
+  }
+}
 </style>
