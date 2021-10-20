@@ -24,23 +24,36 @@
           </el-select>
         </el-form-item>
         <el-form-item label="任务">
-          <el-input
-            placeholder="请输入内容"
-            v-model="taskForm.taskContent"
-            class="input-with-select"
+          <el-select
+            v-model="getSearchForm.getTaskStage"
             size="small"
+            filterable
+            value-key="name"
+            placeholder="请选择任务与期数"
+            @change="selectTaskStage"
           >
-            <el-select
-              v-model="taskForm.task"
-              slot="prepend"
-              placeholder="请选择"
-              style="width: 100px"
-              @change="selectTask"
-            >
-              <el-option label="任务名称" value="aiName"></el-option>
-              <el-option label="期名" value="taskStage"></el-option>
-            </el-select>
-          </el-input>
+            <el-option
+              v-for="item in taskStage"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+          <el-select
+            v-model="getSearchForm.selectTaskStage"
+            size="small"
+            filterable
+            value-key="text"
+            placeholder="请选择任务与期数名称"
+            @change="getTaskStage"
+          >
+            <el-option
+              v-for="item in aiTaskList"
+              :key="item.text"
+              :label="item.text"
+              :value="item"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="任务状态">
           <el-select v-model="searchForm.status" size="small" filterable>
@@ -196,12 +209,22 @@
         label="并发数量"
         prop="concurrentQuantity"
       ></el-table-column>
-      <el-table-column width="150px" align="center" label="启动时间" prop="startTime">
+      <el-table-column
+        width="150px"
+        align="center"
+        label="启动时间"
+        prop="startTime"
+      >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" label="完成时间" prop="completeTime">
+      <el-table-column
+        width="150px"
+        align="center"
+        label="完成时间"
+        prop="completeTime"
+      >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.completeTime) }}</span>
         </template>
@@ -460,6 +483,7 @@ import EleTable from '@/components/Table'
 import singleUpload from '@/components/UploadExcel'
 import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { httpAdminAiHistory } from '@/api/admin/httpAdminAiHistory'
 import { parseTime, AiTaskStatus, formatterElement } from '@/utils/index'
 export default {
   components: {
@@ -497,6 +521,11 @@ export default {
         setTime: '',
         daily: ['09:00', '20:00'],
       },
+      getSearchForm: {
+        getTaskStage: '',
+        selectTaskStage: '',
+        callDuration: '',
+      },
       taskForm: {
         task: '',
         taskContent: '',
@@ -533,6 +562,11 @@ export default {
       // 不可拨打时间
       notDialTimeArr: [],
       notDialDateArr: [],
+      aiTaskList: [],
+      taskStage: [
+        { id: 'robotCallJobId', name: '任务名称' },
+        { id: 'taskStage', name: '期数' },
+      ],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -599,6 +633,26 @@ export default {
     gethospitalName(val) {
       console.log(val)
     },
+    // 获取任务与期数
+    getAiStageList() {
+      httpAdminAiHistory.getAiStageList().then((res) => {
+        this.aiTaskList = []
+        res.data.forEach((val) => {
+          this.aiTaskList.push({ text: val.taskStage })
+        })
+      })
+    },
+    getAiTaskNameList() {
+      httpAdminAiHistory.getAiTaskNameList().then((res) => {
+        this.aiTaskList = []
+        res.data.forEach((val) => {
+          this.aiTaskList.push({
+            text: val.aiName,
+            robotCallJobId: val.robotCallJobId,
+          })
+        })
+      })
+    },
     // 获取话术
     getAiSpeech() {
       httpAdminAiCall.getAiSpeech().then((res) => {
@@ -624,14 +678,6 @@ export default {
       }
       let inactiveTimeList = this.disposeNotTime()
       let inactiveDateList = this.disposeNotDate()
-      console.log('不可拨打时间', inactiveTimeList)
-      console.log('不可拨打日期', inactiveDateList)
-      console.log('表单数据', this.searchForm)
-      console.log('周期', this.timeForm.checkListPeriod)
-      console.log('可拨打时间', this.searchForm.daily)
-      console.log('周期', this.timeForm.checkListPeriod)
-      console.log('医院id', this.addUserFrom.hospitalId)
-      console.log('医院名称', this.addUserFrom)
       // 添加接口
       httpAdminAiCall
         .postInformation({
@@ -649,7 +695,6 @@ export default {
           fileUrl: this.searchForm.fileUrl,
         })
         .then((res) => {
-          console.log('添加', res)
           if (res.code === 'OK') {
             this.$message.success(res.message)
             this.getAiCallList()
@@ -673,16 +718,6 @@ export default {
       }
       let inactiveTimeList = this.disposeNotTime()
       let inactiveDateList = this.disposeNotDate()
-      console.log('编辑数据')
-      console.log('不可拨打时间', inactiveTimeList)
-      console.log('不可拨打日期', inactiveDateList)
-      console.log('表单数据', this.searchForm)
-      console.log('周期', this.timeForm.checkListPeriod)
-      console.log('可拨打时间', this.searchForm.daily)
-      console.log('周期', this.timeForm.checkListPeriod)
-      console.log('医院id', this.addUserFrom.hospitalId)
-      console.log('医院名称', this.addUserFrom.hospitalName)
-      console.log('任务名', this.addUserFrom.name)
       httpAdminAiCall
         .putInformation({
           aiName: this.addUserFrom.name,
@@ -698,7 +733,6 @@ export default {
           hospitalId: this.addUserFrom.hospitalId,
         })
         .then((res) => {
-          console.log('编辑', res)
           if (res.code === 'OK') {
             this.$message.success(res.message)
           } else {
@@ -710,14 +744,12 @@ export default {
     },
     // 删除
     deleteInformation(val) {
-      console.log('删除', val)
       httpAdminAiCall
         .deleteInformation({ taskId: val.robotCallJobId })
         .then((res) => {
-          console.log('删除', res)
-          if(res.code === 'OK'){
+          if (res.code === 'OK') {
             this.$message.success(res.message)
-          }else{
+          } else {
             this.$message.error(res.message)
           }
           this.getAiCallList()
@@ -725,14 +757,49 @@ export default {
     },
     // 开始任务
     getInformationStart(robotCallJobId) {
-      console.log('robotCallJobId', robotCallJobId)
       httpAdminAiCall.getInformationStart({ robotCallJobId }).then((res) => {})
     },
     // 复制任务
-    getCopy(robotCallJobId) {
-      httpAdminAiCall.getInformationCopy({ robotCallJobId }).then((res) => {
-        this.getAiCallList()
-      })
+    getCopy(val) {
+      let [aiName, hospitalId, robotCallJobId] = [
+        val.aiName,
+        val.hospitalId,
+        val.robotCallJobId,
+      ]
+      if (
+        aiName &&
+        aiName !== '' &&
+        hospitalId &&
+        hospitalId !== '' &&
+        robotCallJobId &&
+        robotCallJobId !== ''
+      ) {
+        httpAdminAiCall
+          .getInformationCopy({ aiName, hospitalId, robotCallJobId })
+          .then((res) => {
+            this.getAiCallList()
+          })
+      }
+    },
+    /**
+     * 逻辑
+     */
+    selectTaskStage(val) {
+      this.$set(this.getSearchForm, 'selectTaskStage', '')
+      if (val === 'robotCallJobId') {
+        this.getAiTaskNameList()
+      } else {
+        this.getAiStageList()
+      }
+    },
+    getTaskStage(val) {
+      if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
+        this.$set(this.searchForm, 'taskStage', '')
+        this.searchForm.aiName = val.text
+      } else {
+        this.$set(this.searchForm, 'aiName', '')
+        this.searchForm.taskStage = val.text
+      }
     },
     // 获取模板
     getAiDownload() {
@@ -742,7 +809,6 @@ export default {
     },
     // 上传excel 阿里
     uploadFinish(val) {
-      console.log('上传Excel', val)
       this.searchForm.fileUrl = val.value
       this.searchForm.fileName = val.name
     },
@@ -773,7 +839,6 @@ export default {
       let notCallTime = this.dialForm.notCallTime
       let callTime = this.notDialTimeArr[0]
       let callTimeOne = this.notDialTimeArr[1]
-      console.log('null', callTime)
       if (notCallTime != null) {
         if (notCallTime[0] != '' && notCallTime[1] != '') {
           inactiveTimeList.push({
@@ -828,14 +893,14 @@ export default {
      */
     getDialable() {
       //开始searchForm.daily[0] 结束[1]
-      console.log('获取可拨打时间', this.searchForm.daily)
+      // console.log('获取可拨打时间', this.searchForm.daily)
     },
     notDialable() {
       //1.dialForm 2.notDialTimeArr
       // console.log('获取不可拨打时间', this.notDialTimeArr)
       // 不可拨打日期  1.this.timeForm.notDial 2.notDialDateArr
-      console.log('1不可拨打日期修改', this.timeForm.notDial)
-      console.log('2不可拨打日期修改', this.notDialDateArr)
+      // console.log('1不可拨打日期修改', this.timeForm.notDial)
+      // console.log('2不可拨打日期修改', this.notDialDateArr)
     },
     deleteNotCall(val, index) {
       if (val === 'time') {
@@ -850,7 +915,7 @@ export default {
     },
     // 时间添加 周期选择 checkbox
     getPeriod() {
-      console.log('周期', this.timeForm.checkListPeriod)
+      // console.log('周期', this.timeForm.checkListPeriod)
     },
     notDialTime(val) {
       let notDialTimeArr = this.notDialTimeArr
@@ -904,25 +969,6 @@ export default {
       this.timeVisible = false
     },
     /**
-     * 任务选择
-     */
-    selectTask(val) {
-      this.taskForm.taskContent = ''
-      if (val === 'aiName') {
-        this.searchForm.taskStage = ''
-      } else {
-        this.searchForm.aiName = ''
-      }
-    },
-    getTask() {
-      console.log('任务选择', this.taskForm.taskContent)
-      if (this.taskForm.task === 'taskStage') {
-        this.searchForm.taskStage = this.taskForm.taskContent
-      } else {
-        this.searchForm.aiName = this.taskForm.taskContent
-      }
-    },
-    /**
      * 操作
      */
     compile(val, name) {
@@ -932,7 +978,6 @@ export default {
           this.showTaskdetail(val)
           break
         case 'issueStatistics':
-          console.log('问题统计', val)
           this.$router.push({ name: 'problemstatistics', params: val })
           break
         case 'delete':
@@ -942,7 +987,7 @@ export default {
           this.getInformationStart(val.robotCallJobId)
           break
         case 'copy':
-          this.getCopy(val.robotCallJobId)
+          this.getCopy(val)
           break
       }
     },
@@ -1065,7 +1110,6 @@ export default {
     searchBtn() {
       console.log('期名', this.searchForm)
       this.pageNum = 1
-      this.getTask()
       this.getAiCallList()
     },
     searchReset() {
