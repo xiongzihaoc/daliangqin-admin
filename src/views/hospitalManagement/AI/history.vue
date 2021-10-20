@@ -79,10 +79,10 @@
         </el-form-item>
         <el-form-item label="通话状态">
           <el-select
-            v-model="searchForm.call"
+            v-model="searchForm.resultStatus"
             size="small"
             filterable
-            placeholder="请选择医院"
+            placeholder="通话状态"
           >
             <el-option
               v-for="item in AiResultStatus"
@@ -307,20 +307,17 @@ export default {
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
-        console.log(res)
         this.hospitalList = res.data.elements
       })
     },
     getAiHistoryList() {
       httpAdminAiHistory.getAiHistoryList(this.searchForm).then((res) => {
-        console.log('回调记录', res)
         this.list = res.data.elements
         this.total = res.data.totalSize
       })
     },
     // 聊天详情
     getAlCallDetailList(val) {
-      console.log('聊天', val)
       httpAdminAiCall
         .getAlCallDetailList({
           callRecordId: val.callRecordId,
@@ -368,11 +365,7 @@ export default {
     /**
      * 逻辑
      */
-    handleChange(val) {
-      console.log(val)
-    },
     selectTaskStage(val) {
-      console.log('任务期数函数', val)
       this.$set(this.getSearchForm, 'selectTaskStage', '')
       if (val === 'robotCallJobId') {
         this.getAiTaskNameList()
@@ -381,8 +374,6 @@ export default {
       }
     },
     getTaskStage(val) {
-      console.log('获取选择任务与期数', val)
-      console.log(this.searchForm.taskStage)
       if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
         this.$set(this.searchForm, 'taskStage', '')
         this.searchForm.robotCallJobId = val.robotCallJobId
@@ -404,6 +395,7 @@ export default {
     searchReset(){
       this.$set(this, 'searchForm', {})
       this.$set(this, 'getSearchForm', {})
+      this.getAiHistoryList()
     },
     /**
      * 表格格式化
