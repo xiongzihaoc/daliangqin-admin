@@ -112,7 +112,7 @@
       <el-table-column align="center" label="接听总量(位)" prop="answeredTotal"></el-table-column>
       <el-table-column align="center" label="挂机总量(位)" prop="hangupByTotal"></el-table-column>
       <el-table-column align="center" label="总接听率(%)" prop="answerRate"></el-table-column>
-      <el-table-column align="center" label="总挂机率(%)" prop=""></el-table-column>
+      <el-table-column align="center" label="总挂机率(%)" prop="hangupRate"></el-table-column>
       <el-table-column align="center" label="对话总轮次" prop="chatRoundTotal"></el-table-column>
       <el-table-column align="center" label="总通话时长(s)" prop="chatDurationTotal">
         <template slot-scope="scope">
