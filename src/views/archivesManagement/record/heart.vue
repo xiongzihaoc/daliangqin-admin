@@ -712,9 +712,7 @@ export default {
     skipPatient(val) {
       console.log(val)
       this.$router.push(
-        '/archivesManagement/details?id=' +
-          val.patientUserId +
-          '&type=edit'
+        '/archivesManagement/details?id=' + val.patientUserId + '&type=edit'
       )
     },
     /**
@@ -889,38 +887,53 @@ export default {
     },
     // 重置打印次数
     resetPrintCount() {
-      this.$confirm(
-        '确定要重置当前<strong>' + this.total + '</strong>条数据的打印次数？',
-        '提示',
-        {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-        }
-      )
-        .then(() => {
-          const loading = this.$loading({
-            lock: true,
-            text: '正在重置，请稍等......',
-            spinner: 'el-icon-loading',
-            background: 'rgba(0, 0, 0, 0.7)',
+      if (this.total <= 3000) {
+        this.$confirm(
+          '确定要重置当前<strong>' + this.total + '</strong>条数据的打印次数？',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+          }
+        )
+          .then(() => {
+            const loading = this.$loading({
+              lock: true,
+              text: '正在重置，请稍等......',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0, 0, 0, 0.7)',
+            })
+            httpAdminHeartRate
+              .putHeartRateClearBatch({
+                ...this.searchForm,
+                pageSize: this.total,
+              })
+              .then((res) => {
+                if (res.code === 'OK') {
+                  this.getList()
+                  this.$message.success('重置成功')
+                  loading.close()
+                } else {
+                  loading.close()
+                }
+              })
           })
-          httpAdminHeartRate
-            .putHeartRateClearBatch({
-              ...this.searchForm,
-              pageSize: this.total,
-            })
-            .then((res) => {
-              if (res.code === 'OK') {
-                this.getList()
-                this.$message.success('重置成功')
-                loading.close()
-              } else {
-                loading.close()
-              }
-            })
-        })
-        .catch(() => {})
+          .catch(() => {})
+      } else {
+        this.$confirm(
+          '当前要重置的<strong>' +
+            this.total +
+            '</strong>条数据，数据量过大，不能一次重置！<br/>建议分时间段重置所需数据。',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            showCancelButton: false,
+          }
+        )
+          .then(() => {})
+          .catch(() => {})
+      }
     },
     // 批量打印
     bulkPrint() {},
