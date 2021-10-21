@@ -204,33 +204,49 @@
               更多菜单
               <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="compile(scope.row, 'edit')"
-                >编辑</el-dropdown-item
-              >
-              <el-dropdown-item @click.native="compile(scope.row, 'copy')"
-                >复制</el-dropdown-item
-              >
-              <el-dropdown-item @click.native="compile(scope.row, 'delete')"
-                >删除</el-dropdown-item
-              >
-              <el-dropdown-item @click.native="compile(scope.row, 'startTask')"
-                >开始任务</el-dropdown-item
-              >
-              <el-dropdown-item @click.native="compile(scope.row)"
-                >暂停任务</el-dropdown-item
-              >
-              <el-dropdown-item @click.native="compile(scope.row)"
-                >中止任务</el-dropdown-item
-              >
-              <el-dropdown-item @click.native="compile(scope.row)"
-                >运营概况</el-dropdown-item
-              >
-              <el-dropdown-item @click.native="compile(scope.row, 'issueStatistics')"
-                >问题统计</el-dropdown-item
-              >
-            </el-dropdown-menu>
-          </el-dropdown>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item
+                  v-show="moreMenus(scope.row.status, 'edit')"
+                  @click.native="compile(scope.row, 'edit')"
+                  >编辑</el-dropdown-item
+                >
+                <el-dropdown-item
+                  v-show="moreMenus(scope.row.status, 'copy')"
+                  @click.native="compile(scope.row, 'copy')"
+                  >复制</el-dropdown-item
+                >
+                <el-dropdown-item
+                  v-show="moreMenus(scope.row.status, 'delete')"
+                  @click.native="compile(scope.row, 'delete')"
+                  >删除</el-dropdown-item
+                >
+                <el-dropdown-item
+                  v-show="moreMenus(scope.row.status, 'startTask')"
+                  @click.native="compile(scope.row, 'startTask')"
+                  >开始任务</el-dropdown-item
+                >
+                <el-dropdown-item
+                  v-show="moreMenus(scope.row.status, '暂停任务')"
+                  @click.native="compile(scope.row)"
+                  >暂停任务</el-dropdown-item
+                >
+                <el-dropdown-item
+                  v-show="moreMenus(scope.row.status, '中止任务')"
+                  @click.native="compile(scope.row)"
+                  >中止任务</el-dropdown-item
+                >
+                <el-dropdown-item
+                  v-show="moreMenus(scope.row.status, '运营概况')"
+                  @click.native="compile(scope.row)"
+                  >运营概况</el-dropdown-item
+                >
+                <el-dropdown-item
+                  v-show="moreMenus(scope.row.status, 'issueStatistics')"
+                  @click.native="compile(scope.row, 'issueStatistics')"
+                  >问题统计</el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </el-dropdown>
         </template>
       </el-table-column>
     </EleTable>
@@ -475,9 +491,10 @@ export default {
         time: "",
         hospitalId: "",
         name: "",
-        dialogFlowId: "",
+        dialogFlowId: "", 
         time: "",
       },
+      // 周期选择
       timeForm: {
         checkListPeriod: [
           "MONDAY",
@@ -518,7 +535,7 @@ export default {
     };
   },
   created() {
-    this.getAiCallList();
+    this.getList();
   },
   mounted() {
     this.getHospitalList();
@@ -526,7 +543,7 @@ export default {
   },
   methods: {
     // 列表数据 查询
-    getAiCallList() {
+    getList() {
       let [completeStartTime, completeEndTime] = ["", ""];
       let [createStartTime, createEndTime] = ["", ""];
       if (this.searchForm.completeStartTime) {
@@ -543,6 +560,8 @@ export default {
       }
       httpAdminAiCall
         .getAiCallList({
+          page: this.pageNum,
+          pageSize: this.pageSize,
           hospitalId: this.searchForm.hospitalId,
           status: this.searchForm.status,
           aiName: this.searchForm.aiName,
@@ -555,6 +574,7 @@ export default {
         .then((res) => {
           console.log("ai列表", res);
           this.list = res.data.elements;
+          this.total = res.data.totalSize
         });
     },
     // 获取医院列表
@@ -626,7 +646,7 @@ export default {
         .then((res) => {
           if (res.code === "OK") {
             this.$message.success(res.message);
-            this.getAiCallList();
+            this.getList();
             this.userVisible = false;
           } else {
             this.$message.warning(res.message);
@@ -660,11 +680,11 @@ export default {
         })
         .then((res) => {
           if (res.code === "OK") {
-            this.$message.success(res.message);
+            this.$message.success('操作成功');
           } else {
             this.$message.error(res.message);
           }
-          this.getAiCallList();
+          this.getList();
           this.userVisible = false;
         });
     },
@@ -676,7 +696,7 @@ export default {
         } else {
           this.$message.error(res.message);
         }
-        this.getAiCallList();
+        this.getList();
       });
     },
     // 开始任务
@@ -701,12 +721,12 @@ export default {
         httpAdminAiCall
           .getInformationCopy({ aiName, hospitalId, robotCallJobId })
           .then((res) => {
-            this.getAiCallList();
+            this.getList();
           });
       }
     },
     /**
-     * 逻辑
+     * 任务与期数选择
      */
     selectTaskStage(val) {
       this.$set(this.getSearchForm, "selectTaskStage", "");
@@ -725,7 +745,10 @@ export default {
         this.searchForm.taskStage = val.text;
       }
     },
-    // 获取模板
+    /**
+     * excel上传
+     */
+    // 下载表格
     getAiDownload() {
       window.open("http://test-api.daliangqing.com/admin/ai/information/download");
     },
@@ -893,6 +916,7 @@ export default {
     /**
      * 操作
      */
+    // 点击操作
     compile(val, name) {
       switch (name) {
         case "edit":
@@ -913,14 +937,57 @@ export default {
           break;
       }
     },
+    // 根据任务状态显示操作
+    moreMenus(val, state) {
+      switch (state) {
+        case 'edit':
+          if (val === 'IN_PROCESS' || val === 'COMPLETED') {
+            return false
+          } else {
+            return true
+          }
+          break
+        case 'copy':
+          return true
+          break
+        case 'delete':
+          if (val === 'NOT_STARTED') {
+            return false
+          } else {
+            return true
+          }
+          break
+        case 'startTask':
+          if (val === 'IN_PROCESS' || val === 'COMPLETED') {
+            return false
+          } else {
+            return true
+          }
+          break
+        case '暂停任务':
+          return true
+          break
+        case '终止任务':
+          return true
+          break
+        case '运营概况':
+          return true
+          break
+        case 'issueStatistics':
+          return true
+          break
+      }
+    },
+    /**
+     * 任务编辑
+     */
     // 获取任务详情 显示 编辑
     async showTaskdetail(val) {
       this.title = "编辑";
       this.timeTitle = "时间编辑";
-      // 不可拨打时间 置空
+      // 不可拨打时间、日期 置空
       this.dialForm.notCallTime = [];
       this.notDialTimeArr = [];
-      // 不可拨打日期 置空
       delete this.timeForm.notDial;
       const { data: res } = await this.getInformationTask(val.robotCallJobId);
       this.addUserFrom = JSON.parse(JSON.stringify(res));
@@ -1024,7 +1091,7 @@ export default {
      */
     searchBtn() {
       this.pageNum = 1;
-      this.getAiCallList();
+      this.getList();
     },
     searchReset() {
       this.$set(this.searchForm, "completeStartTime", "");
@@ -1035,7 +1102,7 @@ export default {
       this.searchForm.taskStage = "";
       this.taskForm.task = "";
       this.taskForm.taskContent = "";
-      this.getAiCallList();
+      this.getList();
     },
     /**
      * 表格格式化
@@ -1048,11 +1115,11 @@ export default {
      */
     handleSizeChange(newSize) {
       this.pageSize = newSize;
-      this.getAiCallList();
+      this.getList();
     },
     handleCurrentChange(newPage) {
       this.pageNum = newPage;
-      this.getAiCallList();
+      this.getList();
     },
   },
 };
