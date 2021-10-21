@@ -74,6 +74,13 @@ export const httpAdminAiCall = {
       params: data
     })
   },
+  // 暂停任务
+  getSuspendTask(data){
+    return request({
+      url: 'ai/suspendTask/' + data.robotCallJobId,
+      method: 'get',
+    })
+  },
   // 未完成列表
   getNotStatisticsList(data) {
     return request({
@@ -101,6 +108,21 @@ export const httpAdminAiCall = {
   getInformationCopy(data) {
     return request({
       url: 'ai/information/copy',
+      method: 'get',
+      params: data
+    })
+  },
+  // 删除ai外呼总人数
+  getInformationCopy(data) {
+    return request({
+      url: `ai/deleteAiUser/${data.robotCallJobId}/${data.calledPhoneNumber}`,
+      method: 'get',
+    })
+  },
+  // 导出ai已呼人数
+  getAlreadyStatisticsExcel(data) {
+    return request({
+      url: 'ai/alreadyStatisticsExcel',
       method: 'get',
       params: data
     })
