@@ -70,6 +70,10 @@ export default {
     this.searchForm.robotCallJobId = this.$route.query.robotCallJobId;
     this.getNotStatisticsList();
   },
+  beforeDestroy() {
+    sessionStorage.removeItem('taskPhoneState');
+    sessionStorage.removeItem('taskHospitalId');
+  },
   methods: {
     /**
      * 接口

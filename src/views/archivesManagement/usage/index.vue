@@ -75,6 +75,10 @@
         label="序号"
         type="index"></el-table-column>
       <el-table-column align="center"
+        label="医院名称"
+        prop="hospitalName">
+      </el-table-column>
+      <el-table-column align="center"
         label="姓名"
         prop="name">
         <template slot-scope="scope">

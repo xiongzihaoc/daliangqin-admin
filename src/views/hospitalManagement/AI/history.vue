@@ -288,6 +288,7 @@ export default {
         })
         .then((res) => {
           this.chatList = [];
+          this.messageList = []
           let callDetailList = JSON.parse(res.data.thirdJson);
           let uname = callDetailList.data.customerPersonName;
           this.telephoneMessage.uname = uname;

@@ -67,17 +67,12 @@
       </el-card>
     </div>
     <div class="chart">
-      <MonitoringNumber />
-      <MonitoringNumber />
-      <MonitoringNumber />
-      <MonitoringNumber />
-      <MonitoringNumber />
-      <MonitoringNumber />
+      <MonitoringNumber :equipmentDimensionType="this.searchForm.equipmentDimensionType" />
     </div>
   </div>
 </template>
 <script>
-import { httpAdminEquipmentHeartStatistical } from '@/api/admin/httpAdminEquipmentHeartStatistical';
+// import { httpAdminEquipmentHeartStatistical } from '@/api/admin/httpAdminEquipmentHeartStatistical';
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital';
 import MonitoringNumber from './chart/monitoringNumber';
 export default {
@@ -133,7 +128,7 @@ export default {
     };
   },
   created() {
-    this.getList();
+    // this.getList();
     this.getHospitalList();
   },
   mounted() {},
@@ -146,6 +141,7 @@ export default {
         .then((res) => {
           console.log(res)
           this.list = res.data.elements;
+          
         });
     },
     // 获取医院列表

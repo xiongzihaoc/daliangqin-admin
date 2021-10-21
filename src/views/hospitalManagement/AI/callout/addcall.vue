@@ -49,7 +49,7 @@
           <el-button size="mini" type="primary" @click="editBtn(scope.row)"
             >编辑</el-button
           >
-          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
+          <el-button size="mini" type="danger" @click="deleteBtn(scope.row)"
             >删除</el-button
           >
         </template>
@@ -164,7 +164,15 @@ export default {
     searchAddBtn() {
       this.importVisible = true;
     },
-
+    /**
+     * 操作
+     */
+    deleteBtn(val){
+      let [calledPhoneNumber, robotCallJobId] = [val.calledPhoneNumber, val.robotCallJobId]
+      httpAdminAiCall.getInformationCopy({calledPhoneNumber, robotCallJobId}).then((res)=>{
+        console.log(res)
+      })
+    },
     /**
      * 搜索
      */
