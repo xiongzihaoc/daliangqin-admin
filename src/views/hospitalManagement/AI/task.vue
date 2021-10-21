@@ -711,7 +711,6 @@ export default {
     },
     // 暂停任务
     getSuspendTask(val){
-      console.log('暂停任务',val)
       httpAdminAiCall.getSuspendTask({robotCallJobId: val.robotCallJobId}).then((res)=>{
         if(res.code === "OK"){
           this.$message.success('操作成功')
@@ -923,18 +922,16 @@ export default {
       let callTime = this.searchForm.daily;
       console.log('不可拨打时间', inactiveTimeList)
       // 拼接周期
-      // if (period.length === 7) {
-      //   everyday = `每天/${callTime.join("~")}`;
-      //   this.searchForm.setTime = everyday;
-      // } else {
-      //   this.searchForm.setTime = `${period.join("、")}/${callTime.join("~")}`;
-      // }
-  
-      if(inactiveTimeList.length === 1){
-        everyday = `每天/${callTime[0]}~${inactiveTimeList[0].startTime}和${inactiveTimeList[0].endTime}~${callTime[1]}`;
-        this.searchForm.setTime = everyday
+      if (period.length === 7) {
+        everyday = `每天/${callTime.join("~")}`;
+        this.searchForm.setTime = everyday;
+      } else {
+        this.searchForm.setTime = `${period.join("、")}/${callTime.join("~")}`;
       }
-      return
+      // if(inactiveTimeList.length === 1){
+      //   everyday = `每天/${callTime[0]}~${inactiveTimeList[0].startTime}和${inactiveTimeList[0].endTime}~${callTime[1]}`;
+      //   this.searchForm.setTime = everyday
+      // }
       this.timeVisible = false;
     },
     /**

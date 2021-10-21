@@ -141,9 +141,9 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="对话轮次" prop="chatRound"></el-table-column>
-      <el-table-column width="150px" align="center" label="呼叫时间" prop="startTime">
+      <el-table-column width="150px" align="center" label="呼叫时间" prop="callStartTime">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.startTime) }}</span>
+          <span>{{ parseTime(scope.row.callStartTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column
