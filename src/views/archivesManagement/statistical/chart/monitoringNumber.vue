@@ -5,12 +5,14 @@
     </div>
   </div>
 </template>
-
 <script>
+import { httpAdminEquipmentHeartStatistical } from '@/api/admin/httpAdminEquipmentHeartStatistical';
 import Chart from '@/components/Echarts/chart';
 export default {
+  props: { equipmentDimensionType: String },
   data() {
     return {
+      list: [],
       cdata: {
         tooltip: {
           trigger: 'axis',
@@ -25,6 +27,10 @@ export default {
             fontSize: 14,
           },
           padding: 20,
+        },
+        legend: {
+          show: true,
+          color:[],
         },
         grid: {
           left: '15%',
@@ -61,16 +67,25 @@ export default {
         },
         series: [
           {
+            name: '人数',
             data: [
               8800, 10000, 10500, 11500, 12000, 13500, 14000, 14500, 15000,
               16000,
             ],
             type: 'bar',
             itemStyle: {
-              color: new this.$echarts.graphic.LinearGradient(1, 0, 0, 0, [
-                { offset: 0, color: '#B5CA19' },
-                { offset: 1, color: '#333' },
-              ]),
+              color: '#5470C6',
+            },
+          },
+          {
+            name: '次数',
+            data: [
+              8800, 10000, 10500, 11500, 12000, 13500, 14000, 14500, 15000,
+              16000,
+            ],
+            type: 'line',
+            itemStyle: {
+              color: '#73DEB3',
             },
           },
         ],
@@ -80,8 +95,21 @@ export default {
   components: {
     Chart,
   },
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.getList();
+  },
+  methods: {
+    getList() {
+      httpAdminEquipmentHeartStatistical
+        .getEquipmentHeartStatistical({
+          equipmentDimensionType: 'HOSPITAL',
+        })
+        .then((res) => {
+          console.log(res);
+          this.list = res.data.equipmentHeartRateMonitorStatisticalVOList;
+        });
+    },
+  },
 };
 </script>
 
