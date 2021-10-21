@@ -59,7 +59,7 @@
             >重置</el-button
           >
           <el-button
-            @click="searchExport"
+            @click="exportExcel"
             type="success"
             size="small"
             plain
@@ -303,10 +303,66 @@ export default {
       this.searchForm.hospitalId = sessionStorage.getItem('hospitalId');
       this.getAlreadyStatisticsList();
     },
-    searchExport() {
-      httpAdminAiCall.getAiAlreadyStatistics(this.searchForm).then((res) => {
-        console.log(res);
-        window.open(res);
+    /**
+     * 导出excel
+     */
+    exportExcel() {
+      if (this.total <= 3000) {
+        this.$confirm(
+          '确定要导出当前<strong>' + this.total + '</strong>条数据？',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+          }
+        )
+          .then(() => {
+            this.getExpportData()
+          })
+          .catch(() => {})
+      }else{
+           this.$confirm(
+          '当前要导出的<strong>' +
+            this.total +
+            '</strong>条数据，数据量过大，不能一次导出！<br/>建议分时间段导出所需数据。',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            showCancelButton: false,
+          }
+        )
+          .then(() => {})
+          .catch(() => {})
+      }
+      // httpAdminAiCall.getAlreadyStatisticsExcel(this.searchForm).then((res) => {
+      //   console.log(res);
+      //   if(res.code === 'OK'){
+      //     this.$message.success('导出成功')
+      //   }
+      // });
+    },
+    // 对导出数据格式处理
+    formatJson(filterVal, jsonData) {
+      return jsonData.map((v) => filterVal.map((j) => v[j]))
+    },
+    getExpportData() {
+      const loading = this.$loading({
+        lock: true,
+        text: '正在导出，请稍等......',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)',
+      })
+      httpAdminAiCall.getAlreadyStatisticsList(this.searchForm).then((res) => {
+        console.log('导出Excel', res)
+        let handleDataList = res.data.elements
+        handleDataList.forEach((item) => {
+          if(item.length) {
+            item.length = formatSeconds(
+                JSON.parse(item.reportResult).body.data.length
+              )
+          }
+        })
       });
     },
     /**
