@@ -30,7 +30,7 @@ export default {
         },
         legend: {
           show: true,
-          color:[],
+          
         },
         grid: {
           left: '15%',
