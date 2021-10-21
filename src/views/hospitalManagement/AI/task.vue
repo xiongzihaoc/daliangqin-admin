@@ -156,7 +156,7 @@
         <template slot-scope="scope">
           <span
             class="skipStyle"
-            @click="skipRouter('notcall', scope.row.robotCallJobId)"
+            @click="skipRouter('notcall', scope.row,)"
             >{{ scope.row.notNumber }}</span
           >
         </template>
@@ -165,7 +165,7 @@
         <template slot-scope="scope">
           <span
             class="skipStyle"
-            @click="skipRouter('fulfillcall', scope.row.robotCallJobId, 'ANSWERED')"
+            @click="skipRouter('fulfillcall', scope.row, 'ANSWERED')"
             >{{ scope.row.alreadyPeopleNumber }}</span
           >
         </template>
@@ -1112,17 +1112,12 @@ export default {
     /**
      * 路由跳转
      */
-    skipRouter(name, robotCallJobId, state) {
-      console.log(robotCallJobId)
+    skipRouter(name, val, state) {
       if (state !== undefined && state !== 'cause') {
         sessionStorage.setItem("taskPhoneState", state);
+        sessionStorage.setItem("taskHospitalId", val.hospitalId);
       }
-      if(state === 'cause'){
-        sessionStorage.setItem("taskHospitalId", robotCallJobId.hospitalId);
-        this.$router.push({ name, query: { robotCallJobId: robotCallJobId.robotCallJobId } });
-      }else{
-        this.$router.push({ name, query: { robotCallJobId } });
-      }
+      this.$router.push({ name, query: { robotCallJobId: val.robotCallJobId } });
     },
     /**
      * 搜索
