@@ -147,7 +147,7 @@
         <template slot-scope="scope">
           <span
             class="skipStyle"
-            @click="skipRouter('fulfillcall', scope.row.robotCallJobId)"
+            @click="skipRouter('fulfillcall', scope.row, 'cause')"
             >{{ scope.row.alreadyNumber }}</span
           >
         </template>
@@ -226,8 +226,8 @@
                   >开始任务</el-dropdown-item
                 >
                 <el-dropdown-item
-                  v-show="moreMenus(scope.row.status, '暂停任务')"
-                  @click.native="compile(scope.row)"
+                  v-show="moreMenus(scope.row.status, 'USER_PAUSE')"
+                  @click.native="compile(scope.row, 'USER_PAUSE')"
                   >暂停任务</el-dropdown-item
                 >
                 <el-dropdown-item
@@ -363,6 +363,7 @@
         </el-form-item>
         <el-form-item v-for="(item, index) in notDialTimeArr" :key="item.id">
           <el-time-picker
+          :picker-options="{ selectableRange: '18:30:00 - 20:30:00' }"
             is-range
             format="HH:mm"
             value-format="HH:mm"
@@ -701,7 +702,22 @@ export default {
     },
     // 开始任务
     getInformationStart(robotCallJobId) {
-      httpAdminAiCall.getInformationStart({ robotCallJobId }).then((res) => {});
+      httpAdminAiCall.getInformationStart({ robotCallJobId }).then((res) => {
+        if(res.code === "OK"){
+          this.$message.success('操作成功')
+          this.getList()
+        }
+      });
+    },
+    // 暂停任务
+    getSuspendTask(val){
+      console.log('暂停任务',val)
+      httpAdminAiCall.getSuspendTask({robotCallJobId: val.robotCallJobId}).then((res)=>{
+        if(res.code === "OK"){
+          this.$message.success('操作成功')
+          this.getList()
+        }
+      })
     },
     // 复制任务
     getCopy(val) {
@@ -905,12 +921,20 @@ export default {
       let inactiveTimeList = this.disposeNotTime();
       let inactiveDateList = this.disposeNotDate();
       let callTime = this.searchForm.daily;
-      if (period.length === 7) {
-        everyday = `每天/${callTime.join("~")}`;
-        this.searchForm.setTime = everyday;
-      } else {
-        this.searchForm.setTime = `${period.join("、")}/${callTime.join("~")}`;
+      console.log('不可拨打时间', inactiveTimeList)
+      // 拼接周期
+      // if (period.length === 7) {
+      //   everyday = `每天/${callTime.join("~")}`;
+      //   this.searchForm.setTime = everyday;
+      // } else {
+      //   this.searchForm.setTime = `${period.join("、")}/${callTime.join("~")}`;
+      // }
+  
+      if(inactiveTimeList.length === 1){
+        everyday = `每天/${callTime[0]}~${inactiveTimeList[0].startTime}和${inactiveTimeList[0].endTime}~${callTime[1]}`;
+        this.searchForm.setTime = everyday
       }
+      return
       this.timeVisible = false;
     },
     /**
@@ -920,7 +944,7 @@ export default {
     compile(val, name) {
       switch (name) {
         case "edit":
-          this.userVisible = true;
+          // this.userVisible = true;
           this.showTaskdetail(val);
           break;
         case "issueStatistics":
@@ -934,6 +958,9 @@ export default {
           break;
         case "copy":
           this.getCopy(val);
+          break;
+        case "USER_PAUSE":
+          this.getSuspendTask(val)
           break;
       }
     },
@@ -952,9 +979,9 @@ export default {
           break
         case 'delete':
           if (val === 'NOT_STARTED') {
-            return false
-          } else {
             return true
+          } else {
+            return false
           }
           break
         case 'startTask':
@@ -964,8 +991,12 @@ export default {
             return true
           }
           break
-        case '暂停任务':
-          return true
+        case 'USER_PAUSE':
+          if(val === 'RUNNABLE'){
+            return true
+          }else{
+            return false
+          }
           break
         case '终止任务':
           return true
@@ -1076,15 +1107,22 @@ export default {
           },
         ];
       }
+      this.userVisible = true;
     },
     /**
      * 路由跳转
      */
     skipRouter(name, robotCallJobId, state) {
-      if (state !== undefined) {
+      console.log(robotCallJobId)
+      if (state !== undefined && state !== 'cause') {
         sessionStorage.setItem("taskPhoneState", state);
       }
-      this.$router.push({ name, query: { robotCallJobId } });
+      if(state === 'cause'){
+        sessionStorage.setItem("taskHospitalId", robotCallJobId.hospitalId);
+        this.$router.push({ name, query: { robotCallJobId: robotCallJobId.robotCallJobId } });
+      }else{
+        this.$router.push({ name, query: { robotCallJobId } });
+      }
     },
     /**
      * 搜索
@@ -1102,6 +1140,7 @@ export default {
       this.searchForm.taskStage = "";
       this.taskForm.task = "";
       this.taskForm.taskContent = "";
+      this.$set(this, 'getSearchForm', {})
       this.getList();
     },
     /**

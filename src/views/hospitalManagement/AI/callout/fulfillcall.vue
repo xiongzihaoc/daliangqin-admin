@@ -2,12 +2,23 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form class="searchForm" ref="searchFormRef" :model="searchForm" :inline="true">
+      <el-form
+        class="searchForm"
+        ref="searchFormRef"
+        :model="searchForm"
+        :inline="true"
+      >
         <el-form-item label="用户姓名">
-          <el-input v-model="searchForm.patientUserName" size="small"></el-input>
+          <el-input
+            v-model="searchForm.patientUserName"
+            size="small"
+          ></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
-          <el-input v-model="searchForm.customerPersonName" size="small"></el-input>
+          <el-input
+            v-model="searchForm.customerPersonName"
+            size="small"
+          ></el-input>
         </el-form-item>
         <el-form-item label="呼叫时间">
           <el-date-picker
@@ -33,11 +44,27 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
+          <el-button
+            @click="searchBtn"
+            type="primary"
+            size="small"
+            icon="el-icon-search"
             >搜索</el-button
           >
-          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh"
+          <el-button
+            @click="searchReset"
+            size="small"
+            plain
+            icon="el-icon-refresh"
             >重置</el-button
+          >
+          <el-button
+            @click="searchExport"
+            type="success"
+            size="small"
+            plain
+            icon="el-icon-upload2"
+            >导出</el-button
           >
         </el-form-item>
       </el-form>
@@ -52,7 +79,11 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     >
-      <el-table-column align="center" type="index" label="序号"></el-table-column>
+      <el-table-column
+        align="center"
+        type="index"
+        label="序号"
+      ></el-table-column>
       <el-table-column
         align="center"
         label="用户名"
@@ -68,7 +99,11 @@
           <span>{{ formatSeconds(scope.row.chatDuration) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="对话轮次" prop="chatRound"></el-table-column>
+      <el-table-column
+        align="center"
+        label="对话轮次"
+        prop="chatRound"
+      ></el-table-column>
       <el-table-column align="center" label="呼叫时间" prop="startTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime) }}</span>
@@ -88,7 +123,10 @@
       ></el-table-column>
       <el-table-column align="center" label="通话详情" prop="calledPhoneNumber">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="getAlCallDetailList(scope.row)"
+          <el-button
+            type="primary"
+            size="small"
+            @click="getAlCallDetailList(scope.row)"
             >查看</el-button
           >
         </template>
@@ -135,21 +173,23 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import EleTable from "@/components/Table";
-import { httpAdminAiCall } from "@/api/admin/httpAdminAiCall";
+import EleTable from '@/components/Table';
+import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall';
 import {
   parseTime,
   formatSeconds,
   formatterElement,
   AiResultStatus,
-} from "@/utils/index";
+} from '@/utils/index';
 
 export default {
   components: {
@@ -160,22 +200,22 @@ export default {
       parseTime,
       formatSeconds,
       AiResultStatus,
-      inputMsg: "",
+      inputMsg: '',
       searchForm: {
-        patientUserName: "",
-        customerPersonName: "",
-        robotCallJobId: "",
-        startTime: "",
-        endTime: "",
-        hospitalId: "",
-        resultStatus: "",
+        patientUserName: '',
+        customerPersonName: '',
+        robotCallJobId: '',
+        startTime: '',
+        endTime: '',
+        hospitalId: '',
+        resultStatus: '',
       },
       telephoneMessage: {
-        uname: "",
-        phone: "",
-        calltime: "",
-        callRecordId: "",
-        chatDuration: "",
+        uname: '',
+        phone: '',
+        calltime: '',
+        callRecordId: '',
+        chatDuration: '',
       },
       selfInfo: {},
       toInfo: {},
@@ -192,15 +232,20 @@ export default {
     };
   },
   created() {
-    let taskPhoneState = sessionStorage.getItem("taskPhoneState");
+    let taskPhoneState = sessionStorage.getItem('taskPhoneState');
+    let taskHospitalId = sessionStorage.getItem('taskHospitalId');
     if (taskPhoneState) {
       this.searchForm.resultStatus = taskPhoneState;
+    }
+    if (taskHospitalId) {
+      this.searchForm.hospitalId = taskHospitalId;
     }
     this.searchForm.robotCallJobId = this.$route.query.robotCallJobId;
     this.getAlreadyStatisticsList();
   },
   beforeDestroy() {
-    sessionStorage.removeItem("taskPhoneState");
+    sessionStorage.removeItem('taskPhoneState');
+    sessionStorage.removeItem('taskHospitalId');
   },
   methods: {
     /**
@@ -231,7 +276,7 @@ export default {
           callDetailList.data.callDetailList.forEach((val) => {
             this.messageList.push({
               createTime: val.startTime,
-              isSelf: val.type === "ROBOT" ? true : false,
+              isSelf: val.type === 'ROBOT' ? true : false,
               leaveContent: val.text,
             });
           });
@@ -255,7 +300,14 @@ export default {
     searchReset() {
       this.searchForm = {};
       this.searchForm.robotCallJobId = this.$route.query.robotCallJobId;
+      this.searchForm.hospitalId = sessionStorage.getItem('hospitalId');
       this.getAlreadyStatisticsList();
+    },
+    searchExport() {
+      httpAdminAiCall.getAiAlreadyStatistics(this.searchForm).then((res) => {
+        console.log(res);
+        window.open(res);
+      });
     },
     /**
      * 表格格式化
@@ -323,7 +375,7 @@ export default {
         position: absolute;
         left: -8px;
         top: 8px;
-        content: "";
+        content: '';
         border-right: 10px solid #fff;
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
@@ -370,7 +422,7 @@ export default {
         position: absolute;
         right: -8px;
         top: 8px;
-        content: "";
+        content: '';
         border-left: 10px solid #425c5a;
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
