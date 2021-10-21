@@ -37,6 +37,10 @@
             <el-form-item label="选择用户"
               prop="patientUserId">
               <el-select v-model="form.patientUserId"
+                clearable
+                filterable
+                :filter-method="filterPatient"
+                @clear="clearSelectPatient"
                 placeholder="请选择用户"
                 @change="selectPatient"
                 :disabled="$route.query.type === 'edit'?true:false">
@@ -317,31 +321,6 @@
               v-model="diabetesForm.otherComplication"
               placeholder="请输入并发症症状"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="转诊原因">
-            <el-select v-model="diabetesForm.referralReasonStatuses"
-              multiple
-              clearable
-              placeholder="请选择转诊原因">
-              <el-option v-for="item in referralReasonStatusesList"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="其他转诊原因">
-            <el-input v-model="diabetesForm.otherReferralReason"
-              type="textarea"
-              maxlength="140"
-              placeholder="请输入其他转诊原因"></el-input>
-          </el-form-item>
-          <el-form-item label="转诊机构">
-            <el-input v-model="diabetesForm.referralAgency"
-              placeholder="请输入转诊机构"></el-input>
-          </el-form-item>
-          <el-form-item label="转诊科别">
-            <el-input v-model="diabetesForm.referralDepartment"
-              placeholder="请输入转诊科别"></el-input>
-          </el-form-item> -->
           <el-form-item label="药物名称">
             <el-input v-model="diabetesForm.drugName"
               placeholder="请输入药物名称"></el-input>
@@ -528,30 +507,6 @@
               v-model="highBloodForm.otherComplication"
               placeholder="请输入并发症症状"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="转诊原因">
-            <el-select v-model="highBloodForm.referralReasonStatuses"
-              placeholder="请选择转诊原因"
-              multiple
-              clearable>
-              <el-option v-for="item in BloodReferralReasonStatusesList"
-                :key="item.id"
-                :label="item.label"
-                :value="item.value"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="其他转诊原因">
-            <el-input type="textarea"
-              v-model="highBloodForm.otherReferralReason"
-              placeholder="请输入其他转诊原因"></el-input>
-          </el-form-item>
-          <el-form-item label="转诊机构">
-            <el-input v-model="highBloodForm.referralAgency"
-              placeholder="请输入转诊机构"></el-input>
-          </el-form-item>
-          <el-form-item label="转诊科别">
-            <el-input v-model="highBloodForm.referralDepartment"
-              placeholder="请输入转诊科别"></el-input>
-          </el-form-item> -->
           <el-form-item label="药物名称">
             <el-input v-model="highBloodForm.drugName"
               placeholder="请输入药物名称"></el-input>
@@ -629,10 +584,10 @@
 </template>
 
 <script>
-import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
-import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
-import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
-import { httpAdminFollow } from '@/api/admin/httpAdminFollow'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital';
+import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor';
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient';
+import { httpAdminFollow } from '@/api/admin/httpAdminFollow';
 import {
   followType,
   followTypeList,
@@ -642,7 +597,6 @@ import {
   symptomTypeList,
   dorsalArteryStatusList,
   complicationTypeList,
-  // referralReasonStatusesList,
   insulinVarietiesTypeList,
   insulinUsingsList,
   medicationStatusList,
@@ -652,7 +606,7 @@ import {
   bloodSymptomTypeList,
   bloodComplicationTypeList,
   BloodReferralReasonStatusesList,
-} from '@/utils/index'
+} from '@/utils/index';
 export default {
   data() {
     return {
@@ -664,7 +618,6 @@ export default {
       symptomTypeList,
       dorsalArteryStatusList,
       complicationTypeList,
-      // referralReasonStatusesList,
       insulinVarietiesTypeList,
       insulinUsingsList,
       medicationStatusList,
@@ -731,6 +684,8 @@ export default {
       hospitalList: [],
       doctorList: [],
       patientList: [],
+      selectDoctorId: '', // 选择医生的id
+      selectPatientUserName: '', // 搜索用户的姓名
       diabetesChecked: false,
       bloodChecked: false,
       loading: true,
@@ -776,10 +731,6 @@ export default {
         otherInspection: '',
         complicationType: [],
         otherComplication: '',
-        // referralReasonStatuses: [],
-        // otherReferralReason: '',
-        // referralAgency: '',
-        // referralDepartment: '',
         drugName: '',
         drugDosage: '',
         companyName: '',
@@ -807,10 +758,6 @@ export default {
         otherInspection: '',
         complicationType: [],
         otherComplication: '',
-        // referralReasonStatuses: [],
-        // otherReferralReason: '',
-        // referralAgency: '',
-        // referralDepartment: '',
         drugName: '',
         drugDosage: '',
         companyName: '',
@@ -822,19 +769,19 @@ export default {
         healthEducationTypes: [],
         otherHealthEducation: '',
       },
-    }
+    };
   },
   created() {
     // 判断是编辑还是新增
     if (this.$route.query.type === 'edit') {
-      this.getList()
+      this.getList();
     } else {
-      this.loading = false
+      this.loading = false;
     }
   },
   mounted() {
-    this.getHospitalList()
-    this.computeBmi()
+    this.getHospitalList();
+    this.computeBmi();
   },
   methods: {
     // 列表数据
@@ -842,19 +789,24 @@ export default {
       httpAdminFollow
         .getFollowDetail({ id: this.$route.query.id })
         .then((res) => {
-          this.form = res.data
+          this.form = res.data;
           if (Boolean(res.data.followDiabetesMongo)) {
-            this.diabetesChecked = true
-            this.diabetesForm = res?.data?.followDiabetesMongo
+            this.diabetesChecked = true;
+            this.diabetesForm = res?.data?.followDiabetesMongo;
           }
           if (Boolean(res.data.followBloodMongo)) {
-            this.bloodChecked = true
-            this.highBloodForm = res?.data?.followBloodMongo
+            this.bloodChecked = true;
+            this.highBloodForm = res?.data?.followBloodMongo;
           }
-          this.getDoctorList(res.data.hospitalId)
-          this.getPatientList(res.data.doctorUserId)
-          this.computeBmi()
-        })
+          this.doctorList = [ // 回显医生信息
+            { id: res.data.doctorUserId, name: res.data.doctorUserName },
+          ];
+          this.patientList = [ // 回显用户信息
+            { id: res.data.patientUserId, name: res.data.patientUserName },
+          ];
+          this.loading = false;
+          this.computeBmi();
+        });
     },
     // 根据身高体重计算BMI
     computeBmi() {
@@ -862,17 +814,17 @@ export default {
         let bmi = (
           this.form.nowWeight /
           ((this.form.nowHeight / 100) * (this.form.nowHeight / 100))
-        ).toFixed(1)
-        this.$set(this.form, 'bmi', bmi)
+        ).toFixed(1);
+        this.$set(this.form, 'bmi', bmi);
       } else {
-        this.$set(this.form, 'bmi', '')
+        this.$set(this.form, 'bmi', '');
       }
     },
     startTimeBlur() {
       if (this.form.endTime != '') {
         if (this.form.endTime <= this.form.startTime) {
-          this.form.endTime = ''
-          return this.$message.error('结束时间不能小于或等于开始时间')
+          this.form.endTime = '';
+          return this.$message.error('结束时间不能小于或等于开始时间');
         }
       }
     },
@@ -880,93 +832,110 @@ export default {
     endTimeBlur() {
       if (this.form.startTime != '') {
         if (this.form.endTime <= this.form.startTime) {
-          this.form.endTime = ''
-          return this.$message.error('结束时间不能小于或等于开始时间')
+          this.form.endTime = '';
+          return this.$message.error('结束时间不能小于或等于开始时间');
         }
       }
     },
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
-        this.hospitalList = res.data.elements
-      })
+        this.hospitalList = res.data.elements;
+      });
     },
     getDoctorList(val) {
-      console.log(val)
+      console.log(val);
       httpAdminDoctor
         .getDoctor({ hospitalId: val, pageSize: 10000 })
         .then((res) => {
-          console.log(res)
-          this.doctorList = res.data.elements
-        })
+          console.log(res);
+          this.doctorList = res.data.elements;
+        });
     },
     getPatientList(val) {
       httpAdminPatient
-        .getPatient({ doctorUserId: val, pageSize: 10000 })
-        .then((res) => {
-          this.patientList = res.data.elements
-          this.loading = false
+        .getPatient({
+          doctorUserId: this.selectDoctorId,
+          name: this.selectPatientUserName,
         })
+        .then((res) => {
+          this.patientList = res.data.elements;
+        });
+    },
+    // 远程搜索用户
+    filterPatient(val) {
+      if (val) {
+        this.selectPatientUserName = val;
+        this.getPatientList();
+      }
+    },
+    // 清空搜索用户重置列表
+    clearSelectPatient() {
+      this.getPatientList();
+      this.form.patientUserId = '';
+      this.form.patientIdCard = '';
     },
     selectHospital(val) {
-      this.getDoctorList(val)
-      this.form.doctorUserId = ''
-      this.form.patientUserId = ''
-      this.form.patientIdCard = ''
+      this.getDoctorList(val);
+      this.form.doctorUserId = '';
+      this.form.patientUserId = '';
+      this.form.patientIdCard = '';
     },
-    selectDoctor(val) {
-      this.getPatientList(val)
-      this.form.patientUserId = ''
-      this.form.patientIdCard = ''
+    async selectDoctor(val) {
+      this.$forceUpdate();
+      this.selectDoctorId = val;
+      await this.getPatientList();
+      this.form.patientUserId = '';
+      this.form.patientIdCard = '';
     },
     selectPatient(val) {
       httpAdminPatient.getPatient({ userId: val }).then((res) => {
-        this.form.patientIdCard = res.data.elements[0].idCard
-      })
+        this.form.patientIdCard = res.data.elements[0].idCard;
+      });
     },
     cancel() {
-      this.$router.push({ path: '/hospitalManagement/follow' })
+      this.$router.push({ path: '/hospitalManagement/follow' });
     },
     confirm() {
-      let form = this.form
+      let form = this.form;
       // 必须选一个随访类型
       if (this.diabetesChecked === false && this.bloodChecked === false) {
-        return this.$message.error('未添加随访')
+        return this.$message.error('未添加随访');
       } else {
         if (this.diabetesChecked === true) {
-          form.followDiabetesDTO = this.diabetesForm
+          form.followDiabetesDTO = this.diabetesForm;
         }
         if (this.bloodChecked === true) {
-          form.followBloodDTO = this.highBloodForm
+          form.followBloodDTO = this.highBloodForm;
         }
       }
 
       let FormRef = new Promise((resolve, reject) => {
         this.$refs.FormRef.validate((valid) => {
           if (valid) {
-            resolve()
+            resolve();
           }
-        })
-      })
-      let refArr = [FormRef]
+        });
+      });
+      let refArr = [FormRef];
       if (this.diabetesChecked === true) {
         let diabetesFormRef = new Promise((resolve, reject) => {
           this.$refs.diabetesFormRef.validate((valid) => {
             if (valid) {
-              resolve()
+              resolve();
             }
-          })
-        })
-        refArr.push(diabetesFormRef)
+          });
+        });
+        refArr.push(diabetesFormRef);
       }
       if (this.bloodChecked === true) {
         let bloddFormRef = new Promise((resolve, reject) => {
           this.$refs.bloddFormRef.validate((valid) => {
             if (valid) {
-              resolve()
+              resolve();
             }
-          })
-        })
-        refArr.push(bloddFormRef)
+          });
+        });
+        refArr.push(bloddFormRef);
       }
       Promise.all(refArr).then(() => {
         // 编辑
@@ -975,21 +944,21 @@ export default {
             if (res.code === 'OK') {
               this.$router.push({
                 path: '/hospitalManagement/work/follow',
-              })
+              });
             }
-          })
+          });
         } else {
           // 新增
           httpAdminFollow.postFollow(form).then((res) => {
             if (res.code === 'OK') {
-              this.$router.push({ path: '/hospitalManagement/work/follow' })
+              this.$router.push({ path: '/hospitalManagement/work/follow' });
             }
-          })
+          });
         }
-      })
+      });
     },
   },
-}
+};
 </script>
 <style>
 .el-checkbox {

@@ -178,6 +178,10 @@
         <el-form-item label="用户姓名"
           prop="patientUserId">
           <el-select v-model="editAddForm.patientUserId"
+            clearable
+            filterable
+            :filter-method="filterPatient"
+            @clear="clearSelectPatient"
             @change="selectPatient"
             :disabled="this.infoTitle == '编辑' ? true : false"
             style="width: 100%">
@@ -319,12 +323,12 @@
   </div>
 </template>
 <script>
-import EleTable from '@/components/Untable'
-import { httpAdminUserTemplate } from '@/api/admin/httpAdminUserTemplate'
-import { httpAdminTemplate } from '@/api/admin/httpAdminTemplate'
-import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
-import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
-import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
+import EleTable from '@/components/Untable';
+import { httpAdminUserTemplate } from '@/api/admin/httpAdminUserTemplate';
+import { httpAdminTemplate } from '@/api/admin/httpAdminTemplate';
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital';
+import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor';
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient';
 import {
   parseTime,
   doctorTypeList,
@@ -332,7 +336,7 @@ import {
   healthList,
   heartList,
   formatterElement,
-} from '@/utils/index'
+} from '@/utils/index';
 export default {
   components: {
     EleTable,
@@ -377,6 +381,8 @@ export default {
         templates: [],
         content: '',
       },
+      selectDoctorId: '', // 选择医生的id
+      selectPatientUserName: '', // 搜索用户的姓名
       tableHeaderBig: [
         { type: 'index', label: '序号' },
         { prop: 'doctorName', label: '医生姓名' },
@@ -386,14 +392,14 @@ export default {
           prop: 'doctorType',
           label: '职位',
           formatter: (row) => {
-            return this.doctorTypeFormatter(row)
+            return this.doctorTypeFormatter(row);
           },
         },
         {
           prop: 'createTime',
           label: '开具时间',
           formatter: (row) => {
-            return parseTime(row.createTime)
+            return parseTime(row.createTime);
           },
         },
         { prop: 'templateNames', label: '选用模板', isTooltip: true },
@@ -404,7 +410,7 @@ export default {
           prop: 'highBloodStatus',
           label: '高血压',
           formatter: (row) => {
-            return this.highBloodStatusFormatter(row)
+            return this.highBloodStatusFormatter(row);
           },
         },
         {
@@ -412,7 +418,7 @@ export default {
           label: '糖尿病',
 
           formatter: (row) => {
-            return this.diabetesStatusFormatter(row)
+            return this.diabetesStatusFormatter(row);
           },
         },
         {
@@ -420,14 +426,14 @@ export default {
           label: '心率',
 
           formatter: (row) => {
-            return this.heartRateStatusFormatter(row)
+            return this.heartRateStatusFormatter(row);
           },
         },
         {
           prop: 'updateTime',
           label: '最近修改时间',
           formatter: (row) => {
-            return parseTime(row.updateTime)
+            return parseTime(row.updateTime);
           },
         },
       ],
@@ -454,15 +460,15 @@ export default {
       infoTitle: '',
       templateDialogVisible: false,
       templateSetDialogVisible: false,
-    }
+    };
   },
   created() {
-    this.userId = window.localStorage.getItem('userId')
-    this.getList()
+    this.userId = window.localStorage.getItem('userId');
+    this.getList();
   },
   mounted() {
-    this.getTemplateList()
-    this.getHospitalList()
+    this.getTemplateList();
+    this.getHospitalList();
   },
   methods: {
     getList() {
@@ -481,9 +487,9 @@ export default {
           patientPhone: this.searchForm.patientPhone,
         })
         .then((res) => {
-          this.list = res.data.elements
-          this.total = res.data.totalSize
-        })
+          this.list = res.data.elements;
+          this.total = res.data.totalSize;
+        });
     },
     // 获取模板列表
     getTemplateList() {
@@ -493,83 +499,100 @@ export default {
           pageSize: this.templatePageSize,
         })
         .then((res) => {
-          this.templateList = res.data.elements
-          this.templateTotal = res.data.totalSize
-        })
+          this.templateList = res.data.elements;
+          this.templateTotal = res.data.totalSize;
+        });
     },
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
-        this.hospitalList = res.data.elements
-      })
+        this.hospitalList = res.data.elements;
+      });
     },
     // 获取医生列表
     getDoctorList(val) {
       httpAdminDoctor
         .getDoctor({ hospitalId: val, pageSize: 10000 })
         .then((res) => {
-          this.doctorList = res.data.elements
-        })
+          this.doctorList = res.data.elements;
+        });
     },
     // 获取用户列表
-    getPatientList(val) {
+    getPatientList() {
       httpAdminPatient
-        .getPatient({ doctorUserId: val, pageSize: 10000 })
-        .then((res) => {
-          this.patientList = res.data.elements
+        .getPatient({
+          doctorUserId: this.selectDoctorId,
+          name: this.selectPatientUserName,
         })
+        .then((res) => {
+          this.patientList = res.data.elements;
+        });
+    },
+    // 远程搜索用户
+    filterPatient(val) {
+      if (val) {
+        this.selectPatientUserName = val;
+        this.getPatientList();
+      }
+    },
+    // 清空搜索用户重置列表
+    clearSelectPatient() {
+      this.selectPatientUserName = '';
+      this.getPatientList();
     },
     // 选择模板
     selectTemplate(val) {
-      this.editAddForm.templates = val
+      this.editAddForm.templates = val;
       this.$set(
         this.editAddForm,
         'content',
         JSON.stringify(this.editAddForm.templates)
-      )
+      );
     },
     selectHospital(val) {
-      this.getDoctorList(val)
-      this.editAddForm.doctorUserId = ''
-      this.editAddForm.patientUserId = ''
+      this.getDoctorList(val);
+      this.editAddForm.doctorUserId = '';
+      this.editAddForm.patientUserId = '';
     },
-    selectDoctor(val) {
-      this.getPatientList(val)
-      this.$forceUpdate()
-      this.editAddForm.patientUserId = ''
+    async selectDoctor(val) {
+      this.$forceUpdate();
+      this.selectDoctorId = val;
+      await this.getPatientList();
+      this.editAddForm.patientUserId = '';
     },
     selectPatient() {
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
     // 搜索
     searchBtn() {
-      this.pageNum = 1
-      this.getList()
+      this.pageNum = 1;
+      this.getList();
     },
     // 重置
     searchReset() {
-      this.pageNum = 1
-      this.searchForm = {}
-      this.getList()
+      this.pageNum = 1;
+      this.searchForm = {};
+      this.getList();
     },
     /**
      * CRUD
      */
     // 新增
     addBtn() {
-      this.infoTitle = '新增'
-      this.editAddForm = {}
-      this.doctorList = []
-      this.patientList = []
-      this.editDialogVisible = true
+      this.infoTitle = '新增';
+      this.editAddForm = {};
+      this.doctorList = [];
+      this.patientList = [];
+      this.editDialogVisible = true;
     },
     // 编辑
     editBtn(val) {
-      this.getDoctorList(val.hospitalId)
-      this.getPatientList(val.doctorUserId)
-      this.infoTitle = '编辑'
-      this.editAddForm = val
-      this.editDialogVisible = true
+      console.log(val);
+      this.doctorList = [{ id: val.doctorUserId, name: val.doctorName }];
+      this.patientList = [{ id: val.patientUserId, name: val.patientName }];
+      this.infoTitle = '编辑';
+      this.editAddForm = val;
+      this.editDialogVisible = true;
     },
     // 删除单个
     async deleteBtn(id) {
@@ -581,20 +604,20 @@ export default {
           cancelButtonText: '取消',
           type: 'warning',
         }
-      ).catch((err) => console.log(err))
+      ).catch((err) => console.log(err));
       if (confirmResult != 'confirm') {
-        return this.$message.info('取消删除')
+        return this.$message.info('取消删除');
       }
       // 发送请求
       httpAdminUserTemplate.deleteUserTemplate(id).then((res) => {
         if (res.code === 'OK') {
-          this.$message.success('删除成功')
-          this.getList()
+          this.$message.success('删除成功');
+          this.getList();
         }
-      })
+      });
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields()
+      this.$refs.FormRef.resetFields();
     },
     // 新增编辑
     editPageEnter() {
@@ -606,40 +629,40 @@ export default {
               .postUserTemplate(this.editAddForm)
               .then((res) => {
                 if (res.code === 'OK') {
-                  this.$message.success('新增成功')
-                  this.getList()
-                  this.editDialogVisible = false
+                  this.$message.success('新增成功');
+                  this.getList();
+                  this.editDialogVisible = false;
                 }
-              })
+              });
           } else {
             // 发送请求
             httpAdminUserTemplate
               .putUserTemplate(this.editAddForm)
               .then((res) => {
                 if (res.code === 'OK') {
-                  this.$message.success('编辑成功')
-                  this.getList()
-                  this.editDialogVisible = false
+                  this.$message.success('编辑成功');
+                  this.getList();
+                  this.editDialogVisible = false;
                 }
-              })
+              });
           }
         }
-      })
+      });
     },
     // 模板设置
     templateSet() {
-      this.templateDialogVisible = true
+      this.templateDialogVisible = true;
     },
     templateAdd() {
-      this.templateSetTitle = '新增'
-      this.templateForm = {}
-      this.templateSetDialogVisible = true
+      this.templateSetTitle = '新增';
+      this.templateForm = {};
+      this.templateSetDialogVisible = true;
     },
     // 修改
     editTemplateBtn(val) {
-      this.templateSetTitle = '编辑'
-      this.templateSetDialogVisible = true
-      this.templateForm = JSON.parse(JSON.stringify(val))
+      this.templateSetTitle = '编辑';
+      this.templateSetDialogVisible = true;
+      this.templateForm = JSON.parse(JSON.stringify(val));
     },
     async deleteTemplateBtn(id) {
       const confirmResult = await this.$confirm(
@@ -650,111 +673,111 @@ export default {
           cancelButtonText: '取消',
           type: 'warning',
         }
-      ).catch((err) => console.log(err))
+      ).catch((err) => console.log(err));
       if (confirmResult != 'confirm') {
-        return this.$message.info('取消删除')
+        return this.$message.info('取消删除');
       }
       // 发送请求
       httpAdminTemplate.deleteTemplate(id).then((res) => {
         if (res.code === 'OK') {
-          this.$message.success('删除成功')
-          this.getTemplateList()
-          this.templateSetDialogVisible = false
+          this.$message.success('删除成功');
+          this.getTemplateList();
+          this.templateSetDialogVisible = false;
         }
-      })
+      });
     },
     templateSetDialogClosed() {
-      this.$refs.templateFormRef.resetFields()
+      this.$refs.templateFormRef.resetFields();
     },
     templateSetDialogEnter() {
-      this.templateForm.userId = this.userId
+      this.templateForm.userId = this.userId;
       this.$refs.templateFormRef.validate((valid) => {
         if (valid) {
           if (this.templateSetTitle === '新增') {
             // 发送请求
             httpAdminTemplate.postTemplate(this.templateForm).then((res) => {
               if (res.code === 'OK') {
-                this.$message.success('新增成功')
-                this.getTemplateList()
-                this.templateSetDialogVisible = false
+                this.$message.success('新增成功');
+                this.getTemplateList();
+                this.templateSetDialogVisible = false;
               }
-            })
+            });
           } else {
             // 发送请求
             httpAdminTemplate.putTemplate(this.templateForm).then((res) => {
               if (res.code === 'OK') {
-                this.$message.success('编辑成功')
-                this.getTemplateList()
-                this.templateSetDialogVisible = false
+                this.$message.success('编辑成功');
+                this.getTemplateList();
+                this.templateSetDialogVisible = false;
               }
-            })
+            });
           }
         }
-      })
+      });
     },
 
     /**
      * 表格格式化
      */
     doctorTypeFormatter(row) {
-      return formatterElement.doctorType[row.doctorType]
+      return formatterElement.doctorType[row.doctorType];
     },
     highBloodStatusFormatter(row) {
       switch (row.highBloodStatus) {
         case 'HEALTH':
-          return `<span class='HEALTH'>健康</span>`
+          return `<span class='HEALTH'>健康</span>`;
         case 'SLIGHT':
-          return `<span class='SLIGHT'>轻度</span>`
+          return `<span class='SLIGHT'>轻度</span>`;
         case 'MEDIUM':
-          return `<span class='MEDIUM'>中度</span>`
+          return `<span class='MEDIUM'>中度</span>`;
         case 'SERIOUS':
-          return `<span class='SERIOUS'>重度</span>`
+          return `<span class='SERIOUS'>重度</span>`;
       }
     },
     diabetesStatusFormatter(row) {
       switch (row.diabetesStatus) {
         case 'HEALTH':
-          return `<span class='HEALTH'>健康</span>`
+          return `<span class='HEALTH'>健康</span>`;
         case 'SLIGHT':
-          return `<span class='SLIGHT'>轻度</span>`
+          return `<span class='SLIGHT'>轻度</span>`;
         case 'MEDIUM':
-          return `<span class='MEDIUM'>中度</span>`
+          return `<span class='MEDIUM'>中度</span>`;
         case 'SERIOUS':
-          return `<span class='SERIOUS'>重度</span>`
+          return `<span class='SERIOUS'>重度</span>`;
       }
     },
     heartRateStatusFormatter(row) {
       switch (row.heartRateStatus) {
         case 'NORMAL':
-          return `<span class='HEALTH'>正常</span>`
+          return `<span class='HEALTH'>正常</span>`;
         case 'SLOW':
-          return `<span class='MEDIUM'>稍慢</span>`
+          return `<span class='MEDIUM'>稍慢</span>`;
         case 'FAST':
-          return `<span class='SERIOUS'>稍快</span>`
+          return `<span class='SERIOUS'>稍快</span>`;
       }
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize
-      this.getList()
+      this.pageSize = newSize;
+      this.getList();
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage
-      this.getList()
+      this.pageNum = newPage;
+      this.getList();
     },
     // 模板配置分页
     templateSizeChange(newSize) {
-      this.templatePageSize = newSize
-      this.getTemplateList()
+      this.templatePageSize = newSize;
+      this.getTemplateList();
     },
     templateCurrentChange(newPage) {
-      this.templatePageNum = newPage
-      this.getTemplateList()
+      this.templatePageNum = newPage;
+      this.getTemplateList();
     },
   },
-}
+};
 </script>
 
 <style>
