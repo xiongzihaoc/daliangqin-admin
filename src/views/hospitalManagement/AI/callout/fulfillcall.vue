@@ -2,23 +2,12 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        class="searchForm"
-        ref="searchFormRef"
-        :model="searchForm"
-        :inline="true"
-      >
+      <el-form class="searchForm" ref="searchFormRef" :model="searchForm" :inline="true">
         <el-form-item label="用户姓名">
-          <el-input
-            v-model="searchForm.patientUserName"
-            size="small"
-          ></el-input>
+          <el-input v-model="searchForm.patientUserName" size="small"></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
-          <el-input
-            v-model="searchForm.customerPersonName"
-            size="small"
-          ></el-input>
+          <el-input v-model="searchForm.customerPersonName" size="small"></el-input>
         </el-form-item>
         <el-form-item label="呼叫时间">
           <el-date-picker
@@ -44,18 +33,10 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
-            type="primary"
-            size="small"
-            icon="el-icon-search"
+          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
             >搜索</el-button
           >
-          <el-button
-            @click="searchReset"
-            size="small"
-            plain
-            icon="el-icon-refresh"
+          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh"
             >重置</el-button
           >
         </el-form-item>
@@ -71,11 +52,7 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     >
-      <el-table-column
-        align="center"
-        type="index"
-        label="序号"
-      ></el-table-column>
+      <el-table-column align="center" type="index" label="序号"></el-table-column>
       <el-table-column
         align="center"
         label="用户名"
@@ -91,11 +68,7 @@
           <span>{{ formatSeconds(scope.row.chatDuration) }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
-        label="对话轮次"
-        prop="chatRound"
-      ></el-table-column>
+      <el-table-column align="center" label="对话轮次" prop="chatRound"></el-table-column>
       <el-table-column align="center" label="呼叫时间" prop="startTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime) }}</span>
@@ -115,10 +88,7 @@
       ></el-table-column>
       <el-table-column align="center" label="通话详情" prop="calledPhoneNumber">
         <template slot-scope="scope">
-          <el-button
-            type="primary"
-            size="small"
-            @click="getAlCallDetailList(scope.row)"
+          <el-button type="primary" size="small" @click="getAlCallDetailList(scope.row)"
             >查看</el-button
           >
         </template>
@@ -147,44 +117,39 @@
                 src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png"
               />
               <div class="info">
-                <p class="time">
-                  {{ toInfo.userName }} {{ item.createTime }}
-                </p>
+                <p class="time">{{ toInfo.userName }} {{ item.createTime }}</p>
                 <div class="info-content">{{ item.leaveContent }}</div>
               </div>
             </div>
             <!-- 我的 -->
             <div class="word-my" v-else>
               <div class="info">
-                <p class="time">
-                  Ai机器人 {{ item.createTime }}
-                </p>
+                <p class="time">Ai机器人 {{ item.createTime }}</p>
                 <div class="info-content">{{ item.leaveContent }}</div>
               </div>
-              <img src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png" />
+              <img
+                src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png"
+              />
             </div>
           </div>
         </div>
-
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import EleTable from '@/components/Table'
-import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall'
+import EleTable from "@/components/Table";
+import { httpAdminAiCall } from "@/api/admin/httpAdminAiCall";
 import {
   parseTime,
   formatSeconds,
   formatterElement,
   AiResultStatus,
-} from '@/utils/index'
+} from "@/utils/index";
 
 export default {
   components: {
@@ -195,22 +160,22 @@ export default {
       parseTime,
       formatSeconds,
       AiResultStatus,
-      inputMsg: '',
+      inputMsg: "",
       searchForm: {
-        patientUserName: '',
-        customerPersonName: '',
-        robotCallJobId: '',
-        startTime: '',
-        endTime: '',
-        hospitalId: '',
-        resultStatus: '',
+        patientUserName: "",
+        customerPersonName: "",
+        robotCallJobId: "",
+        startTime: "",
+        endTime: "",
+        hospitalId: "",
+        resultStatus: "",
       },
       telephoneMessage: {
-        uname: '',
-        phone: '',
-        calltime: '',
-        callRecordId: '',
-        chatDuration: '',
+        uname: "",
+        phone: "",
+        calltime: "",
+        callRecordId: "",
+        chatDuration: "",
       },
       selfInfo: {},
       toInfo: {},
@@ -224,18 +189,18 @@ export default {
       pageNum: 1,
       total: 0,
       dialogVisible: false,
-    }
+    };
   },
   created() {
-    let taskPhoneState = sessionStorage.getItem('taskPhoneState')
+    let taskPhoneState = sessionStorage.getItem("taskPhoneState");
     if (taskPhoneState) {
-      this.searchForm.resultStatus = taskPhoneState
+      this.searchForm.resultStatus = taskPhoneState;
     }
-    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
-    this.getAlreadyStatisticsList()
+    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId;
+    this.getAlreadyStatisticsList();
   },
   beforeDestroy() {
-    sessionStorage.removeItem('taskPhoneState')
+    sessionStorage.removeItem("taskPhoneState");
   },
   methods: {
     /**
@@ -243,9 +208,9 @@ export default {
      */
     getAlreadyStatisticsList() {
       httpAdminAiCall.getAlreadyStatisticsList(this.searchForm).then((res) => {
-        this.list = res.data.elements
-        this.total = res.data.totalSize
-      })
+        this.list = res.data.elements;
+        this.total = res.data.totalSize;
+      });
     },
     getAlCallDetailList(val) {
       httpAdminAiCall
@@ -254,64 +219,64 @@ export default {
           phone: val.calledPhoneNumber,
         })
         .then((res) => {
-          this.chatList = []
-          let callDetailList = JSON.parse(res.data.thirdJson)
-          let uname = callDetailList.data.customerPersonName
-          this.telephoneMessage.uname = uname
-          this.telephoneMessage.phone = callDetailList.data.calledPhoneNumber
-          this.telephoneMessage.callRecordId = callDetailList.data.callRecordId
-          this.telephoneMessage.chatDuration = callDetailList.data.chatDuration
-          this.toInfo.userName = callDetailList.data.customerPersonName
-          this.toInfo.avatarUrl = res.data.avatarUrl
+          this.chatList = [];
+          let callDetailList = JSON.parse(res.data.thirdJson);
+          let uname = callDetailList.data.customerPersonName;
+          this.telephoneMessage.uname = uname;
+          this.telephoneMessage.phone = callDetailList.data.calledPhoneNumber;
+          this.telephoneMessage.callRecordId = callDetailList.data.callRecordId;
+          this.telephoneMessage.chatDuration = callDetailList.data.chatDuration;
+          this.toInfo.userName = callDetailList.data.customerPersonName;
+          this.toInfo.avatarUrl = res.data.avatarUrl;
           callDetailList.data.callDetailList.forEach((val) => {
             this.messageList.push({
               createTime: val.startTime,
-              isSelf: val.type === 'ROBOT' ? true : false,
-              leaveContent: val.text
-            })
-          })
-          this.dialogVisible = true
-        })
+              isSelf: val.type === "ROBOT" ? true : false,
+              leaveContent: val.text,
+            });
+          });
+          this.dialogVisible = true;
+        });
     },
     /**
      * 逻辑
      */
     callTime(val) {
-      this.searchForm.startTime = val[0]
-      this.searchForm.endTime = val[1]
+      this.searchForm.startTime = val[0];
+      this.searchForm.endTime = val[1];
     },
     /**
      * 搜索
      */
     searchBtn() {
-      this.pageNum = 1
-      this.getAlreadyStatisticsList()
+      this.pageNum = 1;
+      this.getAlreadyStatisticsList();
     },
     searchReset() {
-      this.searchForm = {}
-      this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
-      this.getAlreadyStatisticsList()
+      this.searchForm = {};
+      this.searchForm.robotCallJobId = this.$route.query.robotCallJobId;
+      this.getAlreadyStatisticsList();
     },
     /**
      * 表格格式化
      */
     phoneState(row) {
-      return formatterElement.phoneState[row.resultStatus]
+      return formatterElement.phoneState[row.resultStatus];
     },
     hangupByState(row) {
-      return formatterElement.hangUpState[row.hangupBy]
+      return formatterElement.hangUpState[row.hangupBy];
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize
+      this.pageSize = newSize;
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage
+      this.pageNum = newPage;
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -413,5 +378,4 @@ export default {
     }
   }
 }
-
 </style>

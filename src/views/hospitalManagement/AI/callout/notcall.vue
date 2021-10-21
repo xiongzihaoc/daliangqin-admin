@@ -2,37 +2,18 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        class="searchForm"
-        ref="searchFormRef"
-        :model="searchForm"
-        :inline="true"
-      >
+      <el-form class="searchForm" ref="searchFormRef" :model="searchForm" :inline="true">
         <el-form-item label="用户姓名">
-          <el-input
-            v-model="searchForm.calledPhoneNumber"
-            size="small"
-          ></el-input>
+          <el-input v-model="searchForm.calledPhoneNumber" size="small"></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
-          <el-input
-            v-model="searchForm.customerPersonName"
-            size="small"
-          ></el-input>
+          <el-input v-model="searchForm.customerPersonName" size="small"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
-            type="primary"
-            size="small"
-            icon="el-icon-search"
+          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
             >搜索</el-button
           >
-          <el-button
-            @click="searchReset"
-            size="small"
-            plain
-            icon="el-icon-refresh"
+          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh"
             >重置</el-button
           >
         </el-form-item>
@@ -48,11 +29,7 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     >
-      <el-table-column
-        align="center"
-        type="index"
-        label="序号"
-      ></el-table-column>
+      <el-table-column align="center" type="index" label="序号"></el-table-column>
       <el-table-column
         align="center"
         label="用户名"
@@ -68,8 +45,8 @@
 </template>
 
 <script>
-import EleTable from '@/components/Table'
-import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall'
+import EleTable from "@/components/Table";
+import { httpAdminAiCall } from "@/api/admin/httpAdminAiCall";
 export default {
   components: {
     EleTable,
@@ -77,9 +54,9 @@ export default {
   data() {
     return {
       searchForm: {
-        calledPhoneNumber: '',
-        customerPersonName: '',
-        robotCallJobId: '',
+        calledPhoneNumber: "",
+        customerPersonName: "",
+        robotCallJobId: "",
       },
       list: [],
       tableHeaderBig: [],
@@ -87,11 +64,11 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-    }
+    };
   },
   created() {
-    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
-    this.getNotStatisticsList()
+    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId;
+    this.getNotStatisticsList();
   },
   methods: {
     /**
@@ -99,35 +76,34 @@ export default {
      */
     getNotStatisticsList() {
       httpAdminAiCall.getNotStatisticsList(this.searchForm).then((res) => {
-        console.log(res)
-        this.list = res.data.elements
-        this.total = res.data.totalSize
-      })
+        console.log(res);
+        this.list = res.data.elements;
+        this.total = res.data.totalSize;
+      });
     },
     /**
      * 搜索
      */
     searchBtn() {
-      this.pageNum = 1
-      this.getNotStatisticsList()
+      this.pageNum = 1;
+      this.getNotStatisticsList();
     },
     searchReset() {
-      this.searchForm.calledPhoneNumber = ''
-      this.searchForm.customerPersonName = ''
-      this.getNotStatisticsList()
+      this.searchForm.calledPhoneNumber = "";
+      this.searchForm.customerPersonName = "";
+      this.getNotStatisticsList();
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize
+      this.pageSize = newSize;
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage
+      this.pageNum = newPage;
     },
   },
-}
+};
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
