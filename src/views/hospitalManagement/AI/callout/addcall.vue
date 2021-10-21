@@ -82,6 +82,7 @@
 <script>
 import EleTable from "@/components/Table";
 import { httpAdminAiCall } from "@/api/admin/httpAdminAiCall";
+import { validatePhone } from "@/utils/index";
 
 export default {
   components: {
@@ -89,12 +90,13 @@ export default {
   },
   data() {
     return {
+      validatePhone,
       formRules: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         phoneNumber: [
           { required: true, message: "请输入手机号", trigger: "blur" },
           {
-            pattern: /^1[3|4|5|7|8][0-9]\d{8}$/,
+            validator: validatePhone,
             message: "手机号格式不对",
             trigger: "blur",
           },
