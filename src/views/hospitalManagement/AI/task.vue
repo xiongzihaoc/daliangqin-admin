@@ -163,7 +163,7 @@
         <template slot-scope="scope">
           <span
             class="skipStyle"
-            @click="skipRouter('addcall', scope.row.robotCallJobId)"
+            @click="skipRouter('addcall', scope.row)"
             >{{ scope.row.taskTotalNumber }}</span
           >
         </template>
@@ -1037,13 +1037,8 @@ export default {
       });
       let [everyday, notTime, notDate] = ['', '', ''];
       console.log('val', val);
-      // if (val !== 'add') {
       let inactiveTimeList = this.disposeNotTime();
       let inactiveDateList = this.disposeNotDate();
-      // } else {
-      //    inactiveTimeList = [];
-      //    inactiveDateList = [];
-      // }
       let callTime = this.searchForm.daily;
       // 拼接周期
       if (period.length === 7) {
@@ -1103,7 +1098,8 @@ export default {
           this.showTaskdetail(val);
           break;
         case 'issueStatistics':
-          this.$router.push({ name: 'problemstatistics', params: val });
+          sessionStorage.setItem('taskHospitalId', val.hospitalId)
+          this.$router.push({ name: 'problemstatistics', params: { id: val.robotCallJobId} });
           break;
         case 'delete':
           this.deleteInformation(val);

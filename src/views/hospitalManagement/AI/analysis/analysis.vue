@@ -2,7 +2,12 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form ref="searchFormRef" :model="searchForm" class="searchForm" :inline="true">
+      <el-form
+        ref="searchFormRef"
+        :model="searchForm"
+        class="searchForm"
+        :inline="true"
+      >
         <el-form-item label="医院名称" align="left" prop="title">
           <el-select class="w100" size="small" v-model="searchForm.hospitalId">
             <el-option
@@ -13,11 +18,51 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="任务">
+          <el-select
+            v-model="getSearchForm.getTaskStage"
+            size="small"
+            filterable
+            value-key="name"
+            placeholder="请选择任务与期数"
+            @change="selectTaskStage"
+          >
+            <el-option
+              v-for="item in taskStage"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+          <el-select
+            v-model="getSearchForm.selectTaskStage"
+            size="small"
+            filterable
+            value-key="text"
+            placeholder="请选择任务与期数名称"
+            @change="getTaskStage"
+          >
+            <el-option
+              v-for="item in aiTaskList"
+              :key="item.text"
+              :label="item.text"
+              :value="item"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
+          <el-button
+            @click="searchBtn"
+            type="primary"
+            size="small"
+            icon="el-icon-search"
             >搜索</el-button
           >
-          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh"
+          <el-button
+            @click="searchReset"
+            size="small"
+            plain
+            icon="el-icon-refresh"
             >重置</el-button
           >
         </el-form-item>
@@ -25,11 +70,16 @@
     </div>
     <!-- 数字展示 -->
     <div class="show-card">
-      <el-card class="box-card" v-for="(item, index) in 5" :key="index">
+      <el-card
+        class="box-card"
+        v-for="(item, index) in outboundList"
+        :key="index"
+      >
         <div class="title">
-          <span>总外呼人数</span>
+          <span>{{ item.title }}</span>
         </div>
-        <div class="title">9位</div>
+        <p class="title">{{ item.ratio }}</p>
+        <span>{{ item.minuteNumber }}</span>
       </el-card>
     </div>
     <!-- 图表区域 -->
@@ -63,27 +113,42 @@
 </template>
 
 <script>
-import Outbound from "./outbound";
-import { httpAdminAiAnalysis } from "@/api/admin/httpAdminAiAnalysis";
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
+import Outbound from './outbound';
+import { httpAdminAiHistory } from '@/api/admin/httpAdminAiHistory';
+import { httpAdminAiAnalysis } from '@/api/admin/httpAdminAiAnalysis';
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital';
+import { formatSeconds } from '@/utils/index';
 export default {
   components: { Outbound },
   data() {
     return {
+      formatSeconds,
       hospitalList: [], // 医院列表
+      outboundList: [], // 外呼列表
       chartList: [], // 图表数据
       searchForm: {
-        hospitalId: "",
+        hospitalId: '',
         infoObj: {}, // 单个医院具体信息
+      },
+      // 任务名称与期数
+      aiTaskList: [],
+      taskStage: [
+        { id: 'robotCallJobId', name: '任务' },
+        { id: 'taskStage', name: '期数' },
+      ],
+      getSearchForm: {
+        getTaskStage: '',
+        selectTaskStage: '',
+        callDuration: '',
       },
     };
   },
   created() {
-    this.getList();
+    this.getJobStats();
   },
   mounted() {
-    this.getHospitalList();
-    this.getJobStats();
+    // this.getHospitalList();
+    // this.getJobStats();
   },
   methods: {
     // 获取列表
@@ -101,10 +166,79 @@ export default {
     },
     // 获取图表数据
     getJobStats() {
-      httpAdminAiAnalysis.getJobStats({ robotCallJobId: 491276 }).then((res) => {
-        console.log(JSON.parse(res.data?.thirdJson).data);
+      httpAdminAiAnalysis.getJobStats().then((res) => {
+        let outboundList = res.data.aiHistoryStatisticalVO;
+        console.log('res',res)
+        this.outboundList = [
+          { title: '总外呼人数', ratio: `${outboundList.peopleNumber}位` },
+          {
+            title: '已接听率',
+            ratio: `${outboundList.answerRate}%`,
+            minuteNumber: `已接听人数${outboundList.answerNumber}位`,
+          },
+          {
+            title: '未接听率',
+            ratio: `${outboundList.noAnswerRate}%`,
+            minuteNumber: `未接听人数${outboundList.noAnswerNumber}位`,
+          },
+          {
+            title: '挂机率',
+            ratio: `${outboundList.hangupRate}`,
+            minuteNumber: `挂机人数${outboundList.hangupNumber}位`,
+          },
+          {
+            title: '总通话时长',
+            ratio: `${formatSeconds(outboundList.sumTalkTime)}`,
+            minuteNumber: `平均通话时长${formatSeconds(
+              outboundList.avgTalkTime
+            )}`,
+          },
+        ];
       });
     },
+    /**
+     * 接口 任务与期数
+     */
+    getAiStageList() {
+      httpAdminAiHistory.getAiStageList().then((res) => {
+        this.aiTaskList = [];
+        res.data.forEach((val) => {
+          this.aiTaskList.push({ text: val.taskStage });
+        });
+      });
+    },
+    getAiTaskNameList() {
+      httpAdminAiHistory.getAiTaskNameList().then((res) => {
+        this.aiTaskList = [];
+        res.data.forEach((val) => {
+          this.aiTaskList.push({
+            text: val.aiName,
+            robotCallJobId: val.robotCallJobId,
+          });
+        });
+      });
+    },
+    /**
+     * 任务与期数选择
+     */
+    selectTaskStage(val) {
+      this.$set(this.getSearchForm, 'selectTaskStage', '');
+      if (val === 'robotCallJobId') {
+        this.getAiTaskNameList();
+      } else {
+        this.getAiStageList();
+      }
+    },
+    getTaskStage(val) {
+      if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
+        this.$set(this.searchForm, 'taskStage', '');
+        this.searchForm.robotCallJobId = val.robotCallJobId;
+      } else {
+        this.$set(this.searchForm, 'robotCallJobId', '');
+        this.searchForm.taskStage = val.text;
+      }
+    },
+
     /**
      * 搜索
      */
@@ -120,6 +254,10 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  .box-card {
+    min-width: 180px;
+    min-height: 130px;
+  }
 }
 .chart-box {
   display: grid;

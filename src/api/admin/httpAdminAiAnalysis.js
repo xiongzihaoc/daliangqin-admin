@@ -24,7 +24,7 @@ export const httpAdminAiAnalysis = {
     // 通话数据统计
     getJobStats(data) {
         return request({
-            url: 'ai/analysis/jobStats/' + data.robotCallJobId,
+            url: 'ai/analysis/jobStats',
             method: 'get',
         })
     },
