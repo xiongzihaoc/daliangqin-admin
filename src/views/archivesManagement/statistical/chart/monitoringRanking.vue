@@ -85,14 +85,13 @@ export default {
   watch: {
     listData(newValue, oldValue) {
       const list = newValue.equipmentHeartRateDoctorTopStatisticalVOList;
-      console.log(list);
       const xAxisData = list.map((item) => {
         return item.doctorUserName;
       });
       const seriesData1 = list.map((item) => {
         return item.monitorNumber;
       });
-      this.cdata.xAxis.data = xAxisData;
+      this.cdata.yAxis.data = xAxisData;
       this.cdata.series[0].data = seriesData1;
     },
   },

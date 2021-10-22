@@ -185,6 +185,7 @@ export default {
         })
         .then((res) => {
           this.listData = res.data;
+          console.log(res)
         });
     },
     // 获取医院列表
