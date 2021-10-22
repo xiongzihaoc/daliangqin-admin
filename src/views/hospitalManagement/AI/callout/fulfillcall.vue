@@ -104,9 +104,9 @@
         label="对话轮次"
         prop="chatRound"
       ></el-table-column>
-      <el-table-column align="center" label="呼叫时间" prop="startTime">
+      <el-table-column align="center" label="呼叫时间" prop="callStartTime">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.startTime) }}</span>
+          <span>{{ parseTime(scope.row.callStartTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -336,12 +336,6 @@ export default {
           .then(() => {})
           .catch(() => {});
       }
-      // httpAdminAiCall.getAlreadyStatisticsExcel(this.searchForm).then((res) => {
-      //   console.log(res);
-      //   if(res.code === 'OK'){
-      //     this.$message.success('导出成功')
-      //   }
-      // });
     },
     // 对导出数据格式处理
     formatJson(filterVal, jsonData) {
@@ -357,16 +351,89 @@ export default {
       httpAdminAiCall.getAlreadyStatisticsList(this.searchForm).then(
         (res) => {
           console.log('导出Excel', res);
-          let handleDataList = res.data.elements
+          let handleDataList = res.data.elements;
+          handleDataList.forEach((item) => {
+            if (item.chatDuration) {
+              item.chatDuration = formatSeconds(item.chatDuration);
+            }
+            if (item.callStartTime) {
+              item.callStartTime = parseTime(item.callStartTime);
+            }
+            switch (item.resultStatus) {
+              case 'ANSWERED':
+                item.resultStatus = '已接听';
+                break;
+              case 'NO_ANSWER':
+                item.resultStatus = '无应答';
+                break;
+              case 'BUSY':
+                item.resultStatus = '忙线中';
+                break;
+              case 'POWER_OFF':
+                item.resultStatus = '关机';
+                break;
+              case 'OUT_OF_SERVICE':
+                item.resultStatus = '停机';
+                break;
+              case 'REFUSED':
+                item.resultStatus = '拒接';
+                break;
+              case 'VACANT_NUMBER':
+                item.resultStatus = '空号';
+                break;
+              case 'CAN_NOT_CONNECT':
+                item.resultStatus = '无法接通';
+                break;
+              case 'FROM_PHONE_ERROR':
+                item.resultStatus = '主叫欠费';
+                break;
+              case 'SYSTEM_ERROR':
+                item.resultStatus = '外呼失败';
+                break;
+              case 'CALL_LOSS':
+                item.resultStatus = '转人工呼损';
+                break;
+            }
+            switch (item.hangupBy) {
+              case 'REMOTE_HANGUP':
+                item.hangupBy = '客户挂断';
+                break;
+              case 'INITIAL_HANGUP':
+                item.hangupBy = 'AI挂断';
+                break;
+              case 'CS_HANGUP':
+                item.hangupBy = '人工坐席挂断';
+                break;
+              case 'OTHER_HANGUP':
+                item.hangupBy = '未知原因';
+                break;
+            }
+          });
           if (handleDataList.length > 0) {
             require.ensure([], () => {
               const {
                 export_json_to_excel,
               } = require('@/utils/vendor/Export2Excel');
               // 导出的表头
-              const tHeader = ['用户名', '用户手机号'];
+              const tHeader = [
+                '用户名',
+                '用户手机号',
+                '通话时长',
+                '对话轮次',
+                '呼叫时间',
+                '通话状态',
+                '挂断状态',
+              ];
               // 导出表头要对应的数据
-              const filterVal = ['patientUserName', 'calledPhoneNumber'];
+              const filterVal = [
+                'patientUserName',
+                'calledPhoneNumber',
+                'chatDuration',
+                'chatRound',
+                'callStartTime',
+                'resultStatus',
+                'hangupBy',
+              ];
               const data = this.formatJson(filterVal, handleDataList);
               export_json_to_excel(tHeader, data, '已呼用户列表');
             });

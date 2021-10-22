@@ -97,10 +97,10 @@
         width="150px"
         align="center"
         label="日期"
-        prop="startTime"
+        prop="callStartTime"
       >
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.startTime) }}</span>
+          <span>{{ parseTime(scope.row.callStartTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column

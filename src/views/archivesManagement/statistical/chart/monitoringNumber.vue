@@ -6,86 +6,83 @@
   </div>
 </template>
 <script>
-import { httpAdminEquipmentHeartStatistical } from '@/api/admin/httpAdminEquipmentHeartStatistical';
-import Chart from '@/components/Echarts/chart';
+import Chart from "@/components/Echarts/chart";
 export default {
-  props: { equipmentDimensionType: String },
+  props: {
+    listData: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
       list: [],
       cdata: {
         tooltip: {
-          trigger: 'axis',
+          trigger: "axis",
           axisPointer: {
-            type: 'none',
+            type: "none",
           },
         },
         title: {
-          text: '已监测数量统计图 Top15',
+          text: "已监测数量统计图 Top15",
           textStyle: {
-            color: '#000',
+            color: "#000",
             fontSize: 14,
           },
           padding: 20,
         },
         legend: {
           show: true,
-          
         },
         grid: {
-          left: '15%',
+          left: "15%",
         },
         xAxis: {
           axisLine: false,
-          type: 'category',
+          type: "category",
           axisLabel: {
             textStyle: {
-              color: '#ccc',
+              color: "#ccc",
             },
           },
           data: [
-            '夏家',
-            '杨墩',
-            '塘北',
-            '洛舍镇',
-            '戈亭',
-            '石泉',
-            '光辉',
-            '雷甸',
-            '城东',
-            '辖东港',
+            "夏家",
+            "杨墩",
+            "塘北",
+            "洛舍镇",
+            "戈亭",
+            "石泉",
+            "光辉",
+            "雷甸",
+            "城东",
+            "辖东港",
           ],
         },
         yAxis: {
           axisLine: false,
-          type: 'value',
+          type: "value",
           axisLabel: {
             textStyle: {
-              color: '#ccc',
+              color: "#ccc",
             },
           },
         },
         series: [
           {
-            name: '人数',
-            data: [
-              8800, 10000, 10500, 11500, 12000, 13500, 14000, 14500, 15000,
-              16000,
-            ],
-            type: 'bar',
+            name: "人数",
+            data: [8800, 10000, 10500, 11500, 12000, 13500, 14000, 14500, 15000, 16000],
+            type: "bar",
             itemStyle: {
-              color: '#5470C6',
+              color: "#5470C6",
             },
           },
           {
-            name: '次数',
-            data: [
-              8800, 10000, 10500, 11500, 12000, 13500, 14000, 14500, 15000,
-              16000,
-            ],
-            type: 'line',
+            name: "次数",
+            data: [8800, 10000, 10500, 11500, 12000, 13500, 14000, 14500, 15000, 16000],
+            type: "line",
             itemStyle: {
-              color: '#73DEB3',
+              color: "#73DEB3",
             },
           },
         ],
@@ -95,19 +92,17 @@ export default {
   components: {
     Chart,
   },
-  mounted() {
-    this.getList();
+  created() {
+    console.log(this.listData);
   },
-  methods: {
-    getList() {
-      httpAdminEquipmentHeartStatistical
-        .getEquipmentHeartStatistical({
-          equipmentDimensionType: 'HOSPITAL',
-        })
-        .then((res) => {
-          console.log(res);
-          this.list = res.data.equipmentHeartRateMonitorStatisticalVOList;
-        });
+
+  mounted() {},
+  methods: {},
+  // 监听父组件传过来的参数
+  watch: {
+    listData(newValue, oldValue) {
+      this.list = newValue.equipmentHeartRateGenderStatisticalVOList;
+      console.log(this.list)
     },
   },
 };
