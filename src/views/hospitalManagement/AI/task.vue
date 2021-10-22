@@ -293,7 +293,12 @@
     </EleTable>
     <!-- 弹出区域 -->
     <el-dialog :title="title" :visible.sync="userVisible" width="40%">
-      <el-form :rules="formRules" :model="addUserFrom" label-width="100px">
+      <el-form
+        :rules="formRules"
+        ref="addUserFrom"
+        :model="addUserFrom"
+        label-width="100px"
+      >
         <el-form-item label="选择医院:" prop="hospitalId">
           <el-select
             v-model="addUserFrom.hospitalId"
@@ -342,7 +347,7 @@
             v-model="searchForm.setTime"
           ></el-input>
         </el-form-item>
-        <el-form-item label="导入用户:">
+        <el-form-item label="导入用户:" prop="fileName">
           <div class="skipStyle">
             <!-- 上传组件 -->
             <single-upload
@@ -359,7 +364,9 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="userVisible = false">取 消</el-button>
-        <el-button type="primary" @click="judgeBtn">确 定</el-button>
+        <el-button type="primary" @click="judgeBtn('addUserFrom')"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
     <!-- ai时间段 -->
@@ -526,6 +533,9 @@ export default {
         notCallTime: [
           { required: true, message: '请选择可拨打时间段', trigger: 'change' },
         ],
+        // fileName: [
+        //   {  required: true, message: '请导入用户', trigger: 'blur' }
+        // ],
       },
       title: '添加',
       timeTitle: '时间添加',
@@ -845,6 +855,7 @@ export default {
     uploadFinish(val) {
       this.searchForm.fileUrl = val.value;
       this.searchForm.fileName = val.name;
+      // this.addUserFrom.fileName = val.value;
     },
     // 添加任务
     addTask() {
@@ -865,15 +876,21 @@ export default {
       this.userVisible = true;
     },
     // 添加 编辑任务
-    judgeBtn() {
-      if (this.title === '添加') {
-        delete this.addUserFrom.id;
-        delete this.addUserFrom.hospitalName;
-        delete this.addUserFrom.robotCallJobId;
-        this.postInformation();
-      } else {
-        this.putInformation();
-      }
+    judgeBtn(val) {
+      this.$refs[val].validate((valid) => {
+        if (valid) {
+          if (this.title === '添加') {
+            delete this.addUserFrom.id;
+            delete this.addUserFrom.hospitalName;
+            delete this.addUserFrom.robotCallJobId;
+            this.postInformation();
+          } else {
+            this.putInformation();
+          }
+        } else {
+          return false;
+        }
+      });
     },
     /**
      * 处理提交时间
