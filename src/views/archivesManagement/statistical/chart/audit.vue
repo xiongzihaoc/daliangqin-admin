@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="monitoringNumber">
+    <div id="print">
       <Chart :cdata="cdata" />
     </div>
   </div>
@@ -24,7 +24,7 @@ export default {
           },
         },
         title: {
-          text: '已监测数量统计图 Top15',
+          text: '审核状态统计图 Top15',
           textStyle: {
             color: '#000',
             fontSize: 14,
@@ -60,29 +60,16 @@ export default {
             type: 'value',
             axisLabel: {
               show: true,
-              formatter: '{value}人',
-              textStyle: {
-                color: '#B8BBC2',
-              },
-            },
-          },
-          {
-            type: 'value',
-            axisLabel: {
-              show: true,
               formatter: '{value}次',
               textStyle: {
                 color: '#B8BBC2',
               },
             },
-            splitLine: {
-              show: false,
-            },
           },
         ],
         series: [
           {
-            name: '人数',
+            name: '已审核',
             data: [],
             type: 'bar',
             itemStyle: {
@@ -90,14 +77,13 @@ export default {
             },
           },
           {
-            name: '次数',
+            name: '待审核',
             data: [],
-            type: 'line',
+            type: 'bar',
             smooth: false,
             itemStyle: {
               color: '#73DEB3',
             },
-            yAxisIndex: '1',
           },
         ],
       },
@@ -106,21 +92,18 @@ export default {
   components: {
     Chart,
   },
-  created() {},
-  mounted() {},
-  methods: {},
   // 监听父组件传过来的参数
   watch: {
     listData(newValue, oldValue) {
-      const list = newValue.equipmentHeartRateMonitorStatisticalVOList;
+      const list = newValue.equipmentHeartRateAuditStatusStatisticalVOList;
       const xAxisData = list.map((item) => {
         return item.hospitalName;
       });
       const seriesData1 = list.map((item) => {
-        return item.hospitalPeopleCount;
+        return item.audited;
       });
       const seriesData2 = list.map((item) => {
-        return item.heartRateCount;
+        return item.pendingReview;
       });
       this.cdata.xAxis.data = xAxisData;
       this.cdata.series[0].data = seriesData1;
