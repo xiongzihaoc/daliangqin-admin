@@ -88,11 +88,8 @@ export default {
     this.searchForm.hospitalId = taskHospitalId;
     this.getList();
   },
-  onunload() {
-    console.log('关闭');
-  },
   beforeDestroy() {
-    // sessionStorage.removeItem('taskHospitalId');
+    sessionStorage.removeItem('taskHospitalId');
   },
   methods: {
     getList() {
@@ -109,7 +106,6 @@ export default {
      * 路由跳转
      */
     skipRouter(val) {
-      console.log(val);
       this.$router.push({
         name: 'fulfillcall',
         query: { robotCallJobId: this.searchForm.robotCallJobId },
