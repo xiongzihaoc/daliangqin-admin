@@ -101,18 +101,18 @@
 
       <el-table-column align="center" label="待打印报告数" prop="printNumber">
         <template slot-scope="scope">
-          <span :class="[scope.row.printNumber === null ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'NOT_PRINT')">
+          <span :class="[scope.row.printNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'NOT_PRINT')">
             {{
-              scope.row.printNumber === null ? 0 : scope.row.printNumber
+              scope.row.printNumber
             }}
           </span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="	待上传报告数" prop="uploadNumber">
         <template slot-scope="scope">
-          <span :class="[scope.row.uploadNumber === null ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'uploadNumber')">
+          <span :class="[scope.row.uploadNumber === 0 ? '' : 'skipStyle' ]" @click="skipHeart(scope.row, 'uploadNumber')">
             {{
-              scope.row.uploadNumber === null ? 0 : scope.row.uploadNumber
+              scope.row.uploadNumber
             }}
           </span>
         </template>
