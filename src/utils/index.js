@@ -118,6 +118,21 @@ export function textFormat(e) {
     }
   }
 }
+/**
+ * @param {Function} fn 防抖函数
+ * @param {Number} delay 延迟时间
+ */
+export function debounce(fn, delay) {
+  var timer;
+  return function () {
+    var context = this;
+    var args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      fn.apply(context, args);
+    }, delay);
+  };
+}
 // 根据身份证获取出生日期（yyyy-MM-dd）
 export function GetBirthday(psidno) {
   var birthdayno, birthdaytemp

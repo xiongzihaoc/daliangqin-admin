@@ -62,8 +62,19 @@ export default {
         series: [
           {
             data: [
-              8800, 10000, 10500, 11500, 12000, 13500, 14000, 14500, 15000,
-              16000,
+              10,20,30,40,50,60,70
+            ],
+            type: 'bar',
+            itemStyle: {
+              color: new this.$echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                { offset: 0, color: '#B5CA19' },
+                { offset: 1, color: '#333' },
+              ]),
+            },
+          },
+          {
+            data: [
+              10,20,30,40,50,60,70
             ],
             type: 'bar',
             itemStyle: {

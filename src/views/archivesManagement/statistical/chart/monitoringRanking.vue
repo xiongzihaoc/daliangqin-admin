@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="monitoringNumber">
+    <div id="print">
       <Chart :cdata="cdata" />
     </div>
   </div>
@@ -24,7 +24,7 @@ export default {
           },
         },
         title: {
-          text: '已监测数量统计图 Top15',
+          text: '医师监测人数排行 Top15',
           textStyle: {
             color: '#000',
             fontSize: 14,
@@ -42,62 +42,37 @@ export default {
         },
         xAxis: {
           axisLine: {
+            show: false,
+          },
+          type: 'value',
+          axisLabel: {
             show: true,
+            textStyle: {
+              color: '#B8BBC2',
+            },
+          },
+        },
+        yAxis: {
+          axisLine: {
+            show: false,
           },
           type: 'category',
           axisLabel: {
             show: true,
-            interval: 0,
-            rotate: 20,
             textStyle: {
               color: '#ccc',
             },
           },
           data: [],
         },
-        yAxis: [
-          {
-            type: 'value',
-            axisLabel: {
-              show: true,
-              formatter: '{value}人',
-              textStyle: {
-                color: '#B8BBC2',
-              },
-            },
-          },
-          {
-            type: 'value',
-            axisLabel: {
-              show: true,
-              formatter: '{value}次',
-              textStyle: {
-                color: '#B8BBC2',
-              },
-            },
-            splitLine: {
-              show: false,
-            },
-          },
-        ],
         series: [
           {
-            name: '人数',
             data: [],
+            label: { show: true, position: 'right', color: '#5470C6' },
             type: 'bar',
             itemStyle: {
               color: '#5470C6',
             },
-          },
-          {
-            name: '次数',
-            data: [],
-            type: 'line',
-            smooth: false,
-            itemStyle: {
-              color: '#73DEB3',
-            },
-            yAxisIndex: '1',
           },
         ],
       },
@@ -106,25 +81,18 @@ export default {
   components: {
     Chart,
   },
-  created() {},
-  mounted() {},
-  methods: {},
   // 监听父组件传过来的参数
   watch: {
     listData(newValue, oldValue) {
-      const list = newValue.equipmentHeartRateMonitorStatisticalVOList;
+      const list = newValue.equipmentHeartRateDoctorTopStatisticalVOList;
       const xAxisData = list.map((item) => {
-        return item.hospitalName;
+        return item.doctorUserName;
       });
       const seriesData1 = list.map((item) => {
-        return item.hospitalPeopleCount;
+        return item.monitorNumber;
       });
-      const seriesData2 = list.map((item) => {
-        return item.heartRateCount;
-      });
-      this.cdata.xAxis.data = xAxisData;
+      this.cdata.yAxis.data = xAxisData;
       this.cdata.series[0].data = seriesData1;
-      this.cdata.series[1].data = seriesData2;
     },
   },
 };
