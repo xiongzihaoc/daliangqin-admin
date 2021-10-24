@@ -6,18 +6,18 @@
   </div>
 </template>
 <script>
-import Chart from '@/components/Echarts/chart';
+import Chart from "@/components/Echarts/chart";
 // 颜色集合
 const colors = [
-  '#C32B33',
-  '#A65A78',
-  '#C1C5D8',
-  '#42A87F',
-  '#5470C6',
-  '#E5C5B7',
-  '#AB8783',
-  '#E0B3AE',
-  '#E3886B',
+  "#C32B33",
+  "#A65A78",
+  "#C1C5D8",
+  "#42A87F",
+  "#5470C6",
+  "#E5C5B7",
+  "#AB8783",
+  "#E0B3AE",
+  "#E3886B",
 ];
 export default {
   props: {
@@ -30,39 +30,39 @@ export default {
     return {
       cdata: {
         tooltip: {
-          trigger: 'axis',
+          trigger: "axis",
           axisPointer: {
-            type: 'none',
+            type: "none",
           },
         },
         title: {
-          text: '监测时长统计图 Top15',
+          text: "监测时长统计图 Top15",
           textStyle: {
-            color: '#000',
+            color: "#000",
             fontSize: 14,
           },
-          padding: 20,
         },
         legend: {
           show: true,
           textStyle: {
-            color: '#000',
+            color: "#000",
           },
+          padding: [30, 0, 0, 0],
         },
         grid: {
-          left: '15%',
+          left: "15%",
         },
         xAxis: {
           axisLine: {
             show: true,
           },
-          type: 'category',
+          type: "category",
           axisLabel: {
             show: true,
             interval: 0,
             rotate: 20,
             textStyle: {
-              color: '#ccc',
+              color: "#ccc",
             },
           },
           data: [],
@@ -71,21 +71,21 @@ export default {
           axisLine: {
             show: true,
           },
-          type: 'value',
+          type: "value",
           axisLabel: {
-            formatter: '{value}人',
+            formatter: "{value}人",
             textStyle: {
-              color: '#ccc',
+              color: "#ccc",
             },
           },
         },
         series: [
           {
-            name: '<1h',
-            type: 'bar',
-            stack: 'total',
+            name: "<1h",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[0],
@@ -93,11 +93,11 @@ export default {
             data: [],
           },
           {
-            name: '1h~3h',
-            type: 'bar',
-            stack: 'total',
+            name: "1h~3h",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[1],
@@ -105,11 +105,11 @@ export default {
             data: [],
           },
           {
-            name: '3h~6h',
-            type: 'bar',
-            stack: 'total',
+            name: "3h~6h",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[2],
@@ -117,11 +117,11 @@ export default {
             data: [],
           },
           {
-            name: '6h~9h',
-            type: 'bar',
-            stack: 'total',
+            name: "6h~9h",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[3],
@@ -129,11 +129,11 @@ export default {
             data: [],
           },
           {
-            name: '9h~12h',
-            type: 'bar',
-            stack: 'total',
+            name: "9h~12h",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[4],
@@ -141,11 +141,11 @@ export default {
             data: [],
           },
           {
-            name: '12h~15h',
-            type: 'bar',
-            stack: 'total',
+            name: "12h~15h",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[5],
@@ -153,11 +153,11 @@ export default {
             data: [],
           },
           {
-            name: '15h~18h',
-            type: 'bar',
-            stack: 'total',
+            name: "15h~18h",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[6],
@@ -165,11 +165,11 @@ export default {
             data: [],
           },
           {
-            name: '18h~21h',
-            type: 'bar',
-            stack: 'total',
+            name: "18h~21h",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[7],
@@ -177,11 +177,11 @@ export default {
             data: [],
           },
           {
-            name: '21h~24h',
-            type: 'bar',
-            stack: 'total',
+            name: "21h~24h",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[8],

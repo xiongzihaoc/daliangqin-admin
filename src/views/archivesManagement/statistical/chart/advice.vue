@@ -6,15 +6,15 @@
   </div>
 </template>
 <script>
-import Chart from '@/components/Echarts/chart';
+import Chart from "@/components/Echarts/chart";
 const colors = [
-  '#C32B33',
-  '#A65A78',
-  '#C1C5D8',
-  '#42A87F',
-  '#5470C6',
-  '#E5C5B7',
-  '#AB8783',
+  "#C32B33",
+  "#A65A78",
+  "#C1C5D8",
+  "#42A87F",
+  "#5470C6",
+  "#E5C5B7",
+  "#AB8783",
 ];
 export default {
   props: {
@@ -27,39 +27,39 @@ export default {
     return {
       cdata: {
         tooltip: {
-          trigger: 'axis',
+          trigger: "axis",
           axisPointer: {
-            type: 'none',
+            type: "none",
           },
         },
         title: {
-          text: '处置建议统计图 Top15',
+          text: "处置建议统计图 Top15",
           textStyle: {
-            color: '#000',
+            color: "#000",
             fontSize: 14,
           },
-          padding: 20,
         },
         legend: {
           show: true,
           textStyle: {
-            color: '#000',
+            color: "#000",
           },
+          padding: [30, 0, 0, 0],
         },
         grid: {
-          left: '15%',
+          left: "15%",
         },
         xAxis: {
           axisLine: {
             show: true,
           },
-          type: 'category',
+          type: "category",
           axisLabel: {
             show: true,
             interval: 0,
             rotate: 20,
             textStyle: {
-              color: '#ccc',
+              color: "#ccc",
             },
           },
           data: [],
@@ -68,21 +68,21 @@ export default {
           axisLine: {
             show: true,
           },
-          type: 'value',
+          type: "value",
           axisLabel: {
-            formatter: '{value}人',
+            formatter: "{value}人",
             textStyle: {
-              color: '#ccc',
+              color: "#ccc",
             },
           },
         },
         series: [
           {
-            name: '重新测量',
-            type: 'bar',
-            stack: 'total',
+            name: "重新测量",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[0],
@@ -90,11 +90,11 @@ export default {
             data: [],
           },
           {
-            name: '定期复查',
-            type: 'bar',
-            stack: 'total',
+            name: "定期复查",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[1],
@@ -102,11 +102,11 @@ export default {
             data: [],
           },
           {
-            name: '治疗后复查',
-            type: 'bar',
-            stack: 'total',
+            name: "治疗后复查",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[2],
@@ -114,11 +114,11 @@ export default {
             data: [],
           },
           {
-            name: '进一步检查治疗',
-            type: 'bar',
-            stack: 'total',
+            name: "进一步检查治疗",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[3],
@@ -126,11 +126,11 @@ export default {
             data: [],
           },
           {
-            name: '转诊治疗',
-            type: 'bar',
-            stack: 'total',
+            name: "转诊治疗",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[4],
@@ -138,11 +138,11 @@ export default {
             data: [],
           },
           {
-            name: '转院治疗',
-            type: 'bar',
-            stack: 'total',
+            name: "转院治疗",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[5],
@@ -150,11 +150,11 @@ export default {
             data: [],
           },
           {
-            name: '未知',
-            type: 'bar',
-            stack: 'total',
+            name: "未知",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[6],
