@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div id="print">
-      <Chart :cdata="cdata" />
+    <div>
+      <Chart :cdata="cdata"  id="print" />
     </div>
   </div>
 </template>
@@ -114,10 +114,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$box-height: 500px;
-#outbound {
-  width: 800px;
-  height: $box-height;
-  border-radius: 10px;
-}
 </style>

@@ -217,10 +217,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$box-height: 500px;
-#outbound {
-  width: 800px;
-  height: $box-height;
-  border-radius: 10px;
-}
 </style>

@@ -103,15 +103,15 @@ const archivesRouter = {
             icon: 'exit-fullscreen'
         }
     },
-    {
-        path: 'statistical',
-        name: 'statistical',
-        component: () => import('@/views/archivesManagement/statistical/index'),
-        meta: {
-            title: '心率监测统计',
-            icon: 'xinlvtongji'
-        }
-    },
+    // {
+    //     path: 'statistical',
+    //     name: 'statistical',
+    //     component: () => import('@/views/archivesManagement/statistical/index'),
+    //     meta: {
+    //         title: '心率监测统计',
+    //         icon: 'xinlvtongji'
+    //     }
+    // },
     {
         path: 'details',
         name: 'details',
