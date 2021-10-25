@@ -1,5 +1,7 @@
 <template>
-  <div :id="id" :class="className" :style="{ height: height, width: width }" />
+  <div :id="id"
+    :class="className"
+    :style="{ height: height, width: width }" />
 </template>
 
 <script>
@@ -10,50 +12,50 @@ export default {
   props: {
     className: {
       type: String,
-      default: 'chart'
+      default: 'chart',
     },
     id: {
       type: String,
-      default: 'chart'
+      default: 'chart',
     },
     width: {
       type: String,
-      default: '100%'
+      default: '100%',
     },
     height: {
       type: String,
-      default: '2.5rem'
+      default: '2.5rem',
     },
     options: {
       type: Object,
-      default: ()=>({})
-    }
+      default: () => ({}),
+    },
   },
-  data () {
+  data() {
     return {
-      chart: null
+      chart: null,
     }
   },
   watch: {
     options: {
-      handler (options) {
+      handler(options) {
         // 设置true清空echart缓存
         this.chart.setOption(options, true)
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
-  mounted () {
-    this.$echarts.registerTheme('tdTheme', tdTheme); // 覆盖默认主题
-    this.initChart();
+  mounted() {
+    this.$echarts.registerTheme('tdTheme', tdTheme) // 覆盖默认主题
+    this.initChart()
   },
   methods: {
-    initChart () {
+    initChart() {
       // 初始化echart
       this.chart = this.$echarts.init(this.$el, 'tdTheme')
       this.chart.setOption(this.options, true)
-    }
-  }
+    },
+  },
 }
 </script>
 
