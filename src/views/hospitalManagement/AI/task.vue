@@ -317,7 +317,7 @@
         <el-form-item label="任务名称:" prop="name">
           <el-input
             v-model="addUserFrom.name"
-            placeholder="请输入任务名称和"
+            placeholder="请输入任务名称"
           ></el-input>
         </el-form-item>
         <el-form-item label="BOT名称:" prop="dialogFlowId">
@@ -767,6 +767,7 @@ export default {
     },
     // 删除
     deleteInformation(val) {
+      console.log('deletr',val);
       httpAdminAiCall
         .deleteInformation({ taskId: val.robotCallJobId })
         .then((res) => {
@@ -949,7 +950,6 @@ export default {
           })
         }
       }
-      console.log('处理不可拨打日期', inactiveDateList)
       return inactiveDateList
     },
     /**
@@ -1103,12 +1103,14 @@ export default {
           })
           break
         case 'delete':
+          console.log('delete')
           this.deleteInformation(val)
           break
         case 'startTask':
           this.getInformationStart(val.robotCallJobId)
           break
         case 'copy':
+          console.log('copy')
           this.getCopy(val)
           break
         case 'USER_PAUSE':
@@ -1117,10 +1119,8 @@ export default {
         case 'operation':
           sessionStorage.setItem('taskHospitalId', val.hospitalId)
           sessionStorage.setItem('taskTaskStage', val.taskStage)
-          this.$router.push({
-            name: 'analysis',
-            params: { id: val.robotCallJobId },
-          })
+          sessionStorage.setItem('taskRobotCallJobId', val.robotCallJobId)
+          this.$router.push({ name: 'analysis' })
           break
       }
     },
