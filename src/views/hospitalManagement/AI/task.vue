@@ -23,13 +23,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="任务">
+        <el-form-item label="任务名称">
           <el-select
             v-model="getSearchForm.getTaskStage"
             size="small"
             filterable
             value-key="name"
-            placeholder="请选择任务与期数"
+            placeholder="请选择任务名称或期名"
             @change="selectTaskStage"
           >
             <el-option
@@ -44,7 +44,7 @@
             size="small"
             filterable
             value-key="text"
-            placeholder="请选择任务与期数名称"
+            placeholder="请选择任务名称或期名"
             @change="getTaskStage"
           >
             <el-option
@@ -1143,7 +1143,7 @@ export default {
           }
           break;
         case 'USER_PAUSE':
-          if (val === 'RUNNABLE') {
+          if (val === 'RUNNABLE' || val === 'IN_PROCESS') {
             return true;
           } else {
             return false;
