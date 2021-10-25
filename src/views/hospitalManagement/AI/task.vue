@@ -594,7 +594,7 @@ export default {
       aiTaskList: [],
       taskStage: [
         { id: 'robotCallJobId', name: '任务名称' },
-        { id: 'taskStage', name: '期数' },
+        { id: 'taskStage', name: '期名' },
       ],
       // 分页区域
       pageSize: 10,

@@ -86,46 +86,54 @@
     <div class="chart-box">
       <!-- 外呼数据 -->
       <div class="chart">
-        <Outbound />
+        <Print :listData="listData" />
       </div>
       <!-- 通话状态 -->
       <div class="chart">
-        <Outbound />
+        <Callstate :listData="listData" />
       </div>
       <!-- 通话时长(s) -->
       <div class="chart">
-        <Outbound />
+        <!-- <Outbound /> -->
+        <Calltimes :listData="listData" />
       </div>
       <!-- 通话时长(用户数量) -->
       <div class="chart">
-        <Outbound />
+        <Timequantum :listData="listData" />
       </div>
       <!-- 对话轮次 -->
       <div class="chart">
-        <Outbound />
+        <Dialog :listData="listData" />
       </div>
       <!-- 接听率 -->
       <div class="chart">
-        <Outbound />
+        <Audience :listData="listData" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Outbound from './outbound';
-import { httpAdminAiHistory } from '@/api/admin/httpAdminAiHistory';
-import { httpAdminAiAnalysis } from '@/api/admin/httpAdminAiAnalysis';
-import { httpAdminHospital } from '@/api/admin/httpAdminHospital';
-import { formatSeconds } from '@/utils/index';
+import Print from './chart/print'
+import Callstate from './chart/callstate'
+import Calltimes from './chart/calltimes'
+import Timequantum from './chart/calltimequantum'
+import Dialog from './chart/dialog'
+import Audience from './chart/audience'
+
+import { httpAdminAiHistory } from '@/api/admin/httpAdminAiHistory'
+import { httpAdminAiAnalysis } from '@/api/admin/httpAdminAiAnalysis'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { formatSeconds } from '@/utils/index'
 export default {
-  components: { Outbound },
+  components: { Print, Callstate, Calltimes, Timequantum, Dialog, Audience },
   data() {
     return {
       formatSeconds,
       hospitalList: [], // 医院列表
       outboundList: [], // 外呼列表
       chartList: [], // 图表数据
+      listData: {}, // 全图表数据
       searchForm: {
         hospitalId: '',
         infoObj: {}, // 单个医院具体信息
@@ -141,10 +149,10 @@ export default {
         selectTaskStage: '',
         callDuration: '',
       },
-    };
+    }
   },
   created() {
-    this.getJobStats();
+    this.getJobStats()
   },
   mounted() {
     // this.getHospitalList();
@@ -154,21 +162,21 @@ export default {
     // 获取列表
     getList() {
       httpAdminAiAnalysis.getAnalysisList().then((res) => {
-        this.infoObj = res.data.elements[0];
-        console.log(this.infoObj);
-      });
+        this.infoObj = res.data.elements[0]
+        console.log(this.infoObj)
+      })
     },
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
-        this.hospitalList = res.data.elements;
-      });
+        this.hospitalList = res.data.elements
+      })
     },
     // 获取图表数据
     getJobStats() {
       httpAdminAiAnalysis.getJobStats().then((res) => {
-        let outboundList = res.data.aiHistoryStatisticalVO;
-        console.log('res',res)
+        let outboundList = res.data.aiHistoryStatisticalVO
+        this.listData = res.data
         this.outboundList = [
           { title: '总外呼人数', ratio: `${outboundList.peopleNumber}位` },
           {
@@ -193,49 +201,49 @@ export default {
               outboundList.avgTalkTime
             )}`,
           },
-        ];
-      });
+        ]
+      })
     },
     /**
      * 接口 任务与期数
      */
     getAiStageList() {
       httpAdminAiHistory.getAiStageList().then((res) => {
-        this.aiTaskList = [];
+        this.aiTaskList = []
         res.data.forEach((val) => {
-          this.aiTaskList.push({ text: val.taskStage });
-        });
-      });
+          this.aiTaskList.push({ text: val.taskStage })
+        })
+      })
     },
     getAiTaskNameList() {
       httpAdminAiHistory.getAiTaskNameList().then((res) => {
-        this.aiTaskList = [];
+        this.aiTaskList = []
         res.data.forEach((val) => {
           this.aiTaskList.push({
             text: val.aiName,
             robotCallJobId: val.robotCallJobId,
-          });
-        });
-      });
+          })
+        })
+      })
     },
     /**
      * 任务与期数选择
      */
     selectTaskStage(val) {
-      this.$set(this.getSearchForm, 'selectTaskStage', '');
+      this.$set(this.getSearchForm, 'selectTaskStage', '')
       if (val === 'robotCallJobId') {
-        this.getAiTaskNameList();
+        this.getAiTaskNameList()
       } else {
-        this.getAiStageList();
+        this.getAiStageList()
       }
     },
     getTaskStage(val) {
       if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
-        this.$set(this.searchForm, 'taskStage', '');
-        this.searchForm.robotCallJobId = val.robotCallJobId;
+        this.$set(this.searchForm, 'taskStage', '')
+        this.searchForm.robotCallJobId = val.robotCallJobId
       } else {
-        this.$set(this.searchForm, 'robotCallJobId', '');
-        this.searchForm.taskStage = val.text;
+        this.$set(this.searchForm, 'robotCallJobId', '')
+        this.searchForm.taskStage = val.text
       }
     },
 
@@ -246,7 +254,7 @@ export default {
     // 重置
     searchReset() {},
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -254,19 +262,15 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  margin-bottom: 20px;
   .box-card {
     min-width: 180px;
     min-height: 130px;
   }
 }
-.chart-box {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 10px;
-  .chart {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.chart-box{
+  width: 100%;
+  display: inline-grid;
+  grid-template-columns: repeat(2,45%);
 }
 </style>
