@@ -6,16 +6,16 @@
   </div>
 </template>
 <script>
-import Chart from '@/components/Echarts/chart';
+import Chart from "@/components/Echarts/chart";
 const colors = [
-  '#C32B33',
-  '#A65A78',
-  '#C1C5D8',
-  '#42A87F',
-  '#5470C6',
-  '#E5C5B7',
-  '#AB8783',
-  '#E0B3AE',
+  "#C32B33",
+  "#A65A78",
+  "#C1C5D8",
+  "#42A87F",
+  "#5470C6",
+  "#E5C5B7",
+  "#AB8783",
+  "#E0B3AE",
 ];
 export default {
   props: {
@@ -28,39 +28,39 @@ export default {
     return {
       cdata: {
         tooltip: {
-          trigger: 'axis',
+          trigger: "axis",
           axisPointer: {
-            type: 'none',
+            type: "none",
           },
         },
         title: {
-          text: '已监测用户年龄统计图 Top15',
+          text: "已监测用户年龄统计图 Top15",
           textStyle: {
-            color: '#000',
+            color: "#000",
             fontSize: 14,
           },
-          padding: 20,
         },
         legend: {
           show: true,
           textStyle: {
-            color: '#000',
+            color: "#000",
           },
+          padding: [30, 0, 0, 0],
         },
         grid: {
-          left: '15%',
+          left: "15%",
         },
         xAxis: {
           axisLine: {
             show: true,
           },
-          type: 'category',
+          type: "category",
           axisLabel: {
             show: true,
             interval: 0,
             rotate: 20,
             textStyle: {
-              color: '#ccc',
+              color: "#ccc",
             },
           },
           data: [],
@@ -69,21 +69,21 @@ export default {
           axisLine: {
             show: true,
           },
-          type: 'value',
+          type: "value",
           axisLabel: {
-            formatter: '{value}人',
+            formatter: "{value}人",
             textStyle: {
-              color: '#ccc',
+              color: "#ccc",
             },
           },
         },
         series: [
           {
-            name: '<=30岁',
-            type: 'bar',
-            stack: 'total',
+            name: "<=30岁",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[0],
@@ -91,11 +91,11 @@ export default {
             data: [],
           },
           {
-            name: '31-40岁',
-            type: 'bar',
-            stack: 'total',
+            name: "31-40岁",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[1],
@@ -103,11 +103,11 @@ export default {
             data: [],
           },
           {
-            name: '41-50岁',
-            type: 'bar',
-            stack: 'total',
+            name: "41-50岁",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[2],
@@ -115,11 +115,11 @@ export default {
             data: [],
           },
           {
-            name: '51-60岁',
-            type: 'bar',
-            stack: 'total',
+            name: "51-60岁",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[3],
@@ -127,11 +127,11 @@ export default {
             data: [],
           },
           {
-            name: '61-70岁',
-            type: 'bar',
-            stack: 'total',
+            name: "61-70岁",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[4],
@@ -139,11 +139,11 @@ export default {
             data: [],
           },
           {
-            name: '71-80岁',
-            type: 'bar',
-            stack: 'total',
+            name: "71-80岁",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[5],
@@ -151,11 +151,11 @@ export default {
             data: [],
           },
           {
-            name: '81-90岁',
-            type: 'bar',
-            stack: 'total',
+            name: "81-90岁",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[6],
@@ -163,11 +163,11 @@ export default {
             data: [],
           },
           {
-            name: '>=91岁',
-            type: 'bar',
-            stack: 'total',
+            name: ">=91岁",
+            type: "bar",
+            stack: "total",
             emphasis: {
-              focus: 'series',
+              focus: "series",
             },
             itemStyle: {
               color: colors[7],
