@@ -161,11 +161,9 @@
       ></el-table-column>
       <el-table-column align="center" label="总外呼人数" prop="taskTotalNumber">
         <template slot-scope="scope">
-          <span
-            class="skipStyle"
-            @click="skipRouter('addcall', scope.row)"
-            >{{ scope.row.taskTotalNumber }}</span
-          >
+          <span class="skipStyle" @click="skipRouter('addcall', scope.row)">{{
+            scope.row.taskTotalNumber
+          }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="已呼人数" prop="alreadyNumber">
@@ -278,7 +276,7 @@
               >
               <el-dropdown-item
                 v-show="moreMenus(scope.row.status, '运营概况')"
-                @click.native="compile(scope.row)"
+                @click.native="compile(scope.row, 'operation')"
                 >运营概况</el-dropdown-item
               >
               <el-dropdown-item
@@ -467,7 +465,7 @@
             <el-button
               type="primary"
               style="margin-left: 15px"
-              @click="notDialTime()"
+              @click="notDialTime('date')"
               >按时间顺序添加</el-button
             >
           </div>
@@ -503,12 +501,12 @@
 </template>
 
 <script>
-import EleTable from '@/components/Table';
-import singleUpload from '@/components/UploadExcel';
-import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall';
-import { httpAdminHospital } from '@/api/admin/httpAdminHospital';
-import { httpAdminAiHistory } from '@/api/admin/httpAdminAiHistory';
-import { parseTime, AiTaskStatus, formatterElement } from '@/utils/index';
+import EleTable from '@/components/Table'
+import singleUpload from '@/components/UploadExcel'
+import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { httpAdminAiHistory } from '@/api/admin/httpAdminAiHistory'
+import { parseTime, AiTaskStatus, formatterElement } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -603,31 +601,31 @@ export default {
       // 弹框区域
       userVisible: false,
       timeVisible: false,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   mounted() {
-    this.getHospitalList();
-    this.getAiSpeech();
+    this.getHospitalList()
+    this.getAiSpeech()
   },
   methods: {
     // 列表数据 查询
     getList() {
-      let [completeStartTime, completeEndTime] = ['', ''];
-      let [createStartTime, createEndTime] = ['', ''];
+      let [completeStartTime, completeEndTime] = ['', '']
+      let [createStartTime, createEndTime] = ['', '']
       if (this.searchForm.completeStartTime) {
-        [completeStartTime, completeEndTime] = [
+        ;[completeStartTime, completeEndTime] = [
           this.searchForm.completeStartTime[0],
           this.searchForm.completeStartTime[1],
-        ];
+        ]
       }
       if (this.searchForm.creationTime) {
-        [createStartTime, createEndTime] = [
+        ;[createStartTime, createEndTime] = [
           this.searchForm.creationTime[0],
           this.searchForm.creationTime[1],
-        ];
+        ]
       }
       httpAdminAiCall
         .getAiCallList({
@@ -643,66 +641,66 @@ export default {
           createEndTime,
         })
         .then((res) => {
-          console.log('ai列表', res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log('ai列表', res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 获取医院列表
     getHospitalList(hospitalId) {
       httpAdminHospital
         .getHospital({ pageSize: 10000, hospitalId })
         .then((res) => {
-          console.log(res);
-          this.hospitalList = res.data.elements;
-        });
+          console.log(res)
+          this.hospitalList = res.data.elements
+        })
     },
     getHospitalName(val) {},
     // 获取任务与期数
     getAiStageList() {
       httpAdminAiHistory.getAiStageList().then((res) => {
-        this.aiTaskList = [];
+        this.aiTaskList = []
         res.data.forEach((val) => {
-          this.aiTaskList.push({ text: val.taskStage });
-        });
-      });
+          this.aiTaskList.push({ text: val.taskStage })
+        })
+      })
     },
     getAiTaskNameList() {
       httpAdminAiHistory.getAiTaskNameList().then((res) => {
-        this.aiTaskList = [];
+        this.aiTaskList = []
         res.data.forEach((val) => {
           this.aiTaskList.push({
             text: val.aiName,
             robotCallJobId: val.robotCallJobId,
-          });
-        });
-      });
+          })
+        })
+      })
     },
     // 获取话术
     getAiSpeech() {
       httpAdminAiCall.getAiSpeech().then((res) => {
-        this.aiSpeechList = res.data.elements;
-      });
+        this.aiSpeechList = res.data.elements
+      })
     },
     // 获取随访任务详情
     async getInformationTask(robotCallJobId) {
-      let res = await httpAdminAiCall.getInformationTask({ robotCallJobId });
-      return res;
+      let res = await httpAdminAiCall.getInformationTask({ robotCallJobId })
+      return res
     },
     // 添加
     postInformation() {
-      let notDial = this.timeForm.notDial;
+      let notDial = this.timeForm.notDial
       if (
         this.dialForm.notCallTime === undefined ||
         this.dialForm.notCallTime === null
       ) {
-        this.dialForm.notCallTime = ['', ''];
+        this.dialForm.notCallTime = ['', '']
       }
       if (notDial === undefined || notDial === null) {
-        notDial = [];
+        notDial = []
       }
-      let inactiveTimeList = this.disposeNotTime();
-      let inactiveDateList = this.disposeNotDate();
+      let inactiveTimeList = this.disposeNotTime()
+      let inactiveDateList = this.disposeNotDate()
       // 添加接口
       httpAdminAiCall
         .postInformation({
@@ -721,28 +719,28 @@ export default {
         })
         .then((res) => {
           if (res.code === 'OK') {
-            this.$message.success(res.message);
-            this.getList();
-            this.userVisible = false;
+            this.$message.success(res.message)
+            this.getList()
+            this.userVisible = false
           } else {
-            this.$message.warning(res.message);
+            this.$message.warning(res.message)
           }
-        });
+        })
     },
     // 编辑接口
     putInformation() {
-      let notDial = this.timeForm.notDial;
+      let notDial = this.timeForm.notDial
       if (
         this.dialForm.notCallTime === undefined ||
         this.dialForm.notCallTime === null
       ) {
-        this.dialForm.notCallTime = ['', ''];
+        this.dialForm.notCallTime = ['', '']
       }
       if (notDial === undefined || notDial === null) {
-        notDial = [];
+        notDial = []
       }
-      let inactiveTimeList = this.disposeNotTime();
-      let inactiveDateList = this.disposeNotDate();
+      let inactiveTimeList = this.disposeNotTime()
+      let inactiveDateList = this.disposeNotDate()
       httpAdminAiCall
         .putInformation({
           aiName: this.addUserFrom.name,
@@ -759,13 +757,13 @@ export default {
         })
         .then((res) => {
           if (res.code === 'OK') {
-            this.$message.success('操作成功');
+            this.$message.success('操作成功')
           } else {
-            this.$message.error(res.message);
+            this.$message.error(res.message)
           }
-          this.getList();
-          this.userVisible = false;
-        });
+          this.getList()
+          this.userVisible = false
+        })
     },
     // 删除
     deleteInformation(val) {
@@ -773,21 +771,21 @@ export default {
         .deleteInformation({ taskId: val.robotCallJobId })
         .then((res) => {
           if (res.code === 'OK') {
-            this.$message.success(res.message);
+            this.$message.success(res.message)
           } else {
-            this.$message.error(res.message);
+            this.$message.error(res.message)
           }
-          this.getList();
-        });
+          this.getList()
+        })
     },
     // 开始任务
     getInformationStart(robotCallJobId) {
       httpAdminAiCall.getInformationStart({ robotCallJobId }).then((res) => {
         if (res.code === 'OK') {
-          this.$message.success('操作成功');
-          this.getList();
+          this.$message.success('操作成功')
+          this.getList()
         }
-      });
+      })
     },
     // 暂停任务
     getSuspendTask(val) {
@@ -795,10 +793,10 @@ export default {
         .getSuspendTask({ robotCallJobId: val.robotCallJobId })
         .then((res) => {
           if (res.code === 'OK') {
-            this.$message.success('操作成功');
-            this.getList();
+            this.$message.success('操作成功')
+            this.getList()
           }
-        });
+        })
     },
     // 复制任务
     getCopy(val) {
@@ -806,7 +804,7 @@ export default {
         val.aiName,
         val.hospitalId,
         val.robotCallJobId,
-      ];
+      ]
       if (
         aiName &&
         aiName !== '' &&
@@ -818,28 +816,28 @@ export default {
         httpAdminAiCall
           .getInformationCopy({ aiName, hospitalId, robotCallJobId })
           .then((res) => {
-            this.getList();
-          });
+            this.getList()
+          })
       }
     },
     /**
      * 任务与期数选择
      */
     selectTaskStage(val) {
-      this.$set(this.getSearchForm, 'selectTaskStage', '');
+      this.$set(this.getSearchForm, 'selectTaskStage', '')
       if (val === 'robotCallJobId') {
-        this.getAiTaskNameList();
+        this.getAiTaskNameList()
       } else {
-        this.getAiStageList();
+        this.getAiStageList()
       }
     },
     getTaskStage(val) {
       if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
-        this.$set(this.searchForm, 'taskStage', '');
-        this.searchForm.aiName = val.text;
+        this.$set(this.searchForm, 'taskStage', '')
+        this.searchForm.aiName = val.text
       } else {
-        this.$set(this.searchForm, 'aiName', '');
-        this.searchForm.taskStage = val.text;
+        this.$set(this.searchForm, 'aiName', '')
+        this.searchForm.taskStage = val.text
       }
     },
     /**
@@ -849,20 +847,20 @@ export default {
     getAiDownload() {
       window.open(
         'http://test-api.daliangqing.com/admin/ai/information/download'
-      );
+      )
     },
     // 上传excel 阿里
     uploadFinish(val) {
-      this.searchForm.fileUrl = val.value;
-      this.searchForm.fileName = val.name;
+      this.searchForm.fileUrl = val.value
+      this.searchForm.fileName = val.name
       // this.addUserFrom.fileName = val.value;
     },
     // 添加任务
     addTask() {
-      this.editBot = false;
-      this.addUserFrom = {};
-      this.title = '添加';
-      this.timeTitle = '时间添加';
+      this.editBot = false
+      this.addUserFrom = {}
+      this.title = '添加'
+      this.timeTitle = '时间添加'
       this.timeForm.checkListPeriod = [
         'MONDAY',
         'TUESDAY',
@@ -871,88 +869,88 @@ export default {
         'FRIDAY',
         'SATURDAY',
         'SUNDAY',
-      ];
-      this.confirmCallTime('add');
-      this.userVisible = true;
+      ]
+      this.confirmCallTime('add')
+      this.userVisible = true
     },
     // 添加 编辑任务
     judgeBtn(val) {
       this.$refs[val].validate((valid) => {
         if (valid) {
           if (this.title === '添加') {
-            delete this.addUserFrom.id;
-            delete this.addUserFrom.hospitalName;
-            delete this.addUserFrom.robotCallJobId;
-            this.postInformation();
+            delete this.addUserFrom.id
+            delete this.addUserFrom.hospitalName
+            delete this.addUserFrom.robotCallJobId
+            this.postInformation()
           } else {
-            this.putInformation();
+            this.putInformation()
           }
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
     /**
      * 处理提交时间
      */
     // 处理不可拨打时间段
     disposeNotTime() {
-      let inactiveTimeList = [];
-      let notCallTime = this.dialForm.notCallTime;
-      let callTime = this.notDialTimeArr[0];
-      let callTimeOne = this.notDialTimeArr[1];
+      let inactiveTimeList = []
+      let notCallTime = this.dialForm.notCallTime
+      let callTime = this.notDialTimeArr[0]
+      let callTimeOne = this.notDialTimeArr[1]
       if (notCallTime != null && notCallTime != '') {
         if (notCallTime[0] != '' && notCallTime[1] != '') {
           inactiveTimeList.push({
             startTime: notCallTime[0],
             endTime: notCallTime[1],
-          });
+          })
         }
       }
       if (callTime != undefined && callTime.callTime[0] != '') {
         inactiveTimeList.push({
           startTime: callTime.callTime[0],
           endTime: callTime.callTime[1],
-        });
+        })
       }
       if (callTimeOne != undefined && callTimeOne.callTime[0] != '') {
         inactiveTimeList.push({
           startTime: callTimeOne.callTime[0],
           endTime: callTimeOne.callTime[1],
-        });
+        })
       }
-      return inactiveTimeList;
+      return inactiveTimeList
     },
     // 处理不可拨打日期
     disposeNotDate() {
-      let inactiveDateList = [];
-      let notDial = this.timeForm.notDial;
-      let notDialDateArr = this.notDialDateArr[0];
-      let notDialDateArrOne = this.notDialDateArr[1];
+      let inactiveDateList = []
+      let notDial = this.timeForm.notDial
+      let notDialDateArr = this.notDialDateArr[0]
+      let notDialDateArrOne = this.notDialDateArr[1]
       if (notDial != undefined && notDial != '' && notDial[0] != '') {
-        console.log(1);
-        inactiveDateList.push({ startDate: notDial[0], endDate: notDial[1] });
+        console.log(1)
+        inactiveDateList.push({ startDate: notDial[0], endDate: notDial[1] })
       }
       if (notDialDateArr != undefined && notDialDateArr.callDate != '') {
         if (notDialDateArr.callDate != null) {
-          console.log(2);
+          console.log(2)
           inactiveDateList.push({
             startDate: notDialDateArr.callDate[0],
             endDate: notDialDateArr.callDate[1],
-          });
+          })
         }
       }
       if (notDialDateArrOne != undefined && notDialDateArrOne.callDate != '') {
         if (notDialDateArrOne.callDate != null) {
-          console.log(3);
+          console.log(3)
           inactiveDateList.push({
             startDate: notDialDateArrOne.callDate[0],
             endDate: notDialDateArrOne.callDate[1],
-          });
+          })
         }
       }
-      console.log('处理不可拨打日期', inactiveDateList);
-      return inactiveDateList;
+      console.log('处理不可拨打日期', inactiveDateList)
+      return inactiveDateList
     },
     /**
      * ai时间添加区域
@@ -970,104 +968,106 @@ export default {
     },
     deleteNotCall(val, index) {
       if (val === 'time') {
-        this.notDialTimeArr.splice(index, 1);
+        this.notDialTimeArr.splice(index, 1)
       } else {
-        this.notDialDateArr.splice(index, 1);
+        this.notDialDateArr.splice(index, 1)
       }
     },
     // 时间设置 弹窗开关
     userSetTime() {
-      this.timeVisible = true;
+      this.timeVisible = true
     },
     // 时间添加 周期选择 checkbox
     getPeriod() {
       // console.log('周期', this.timeForm.checkListPeriod)
     },
     notDialTime(val) {
-      let notDialTimeArr = this.notDialTimeArr;
-      let notDialDateArr = this.notDialDateArr;
-      let dialForm = this.dialForm.notCallTime;
-      if (!dialForm || dialForm[0] === '') {
-        this.$message.error('请选择不可拨打时间段');
-        return;
+      let notDialTimeArr = this.notDialTimeArr
+      let notDialDateArr = this.notDialDateArr
+      let dialForm = this.dialForm.notCallTime
+      if (val === 'time') {
+        if (!dialForm || dialForm[0] === '') {
+          this.$message.error('请选择不可拨打时间段')
+          return
+        }
       }
       if (val === 'time') {
-        if (this.notDialTimeArr.length >= 2) return;
-        notDialTimeArr.push({ callTime: [dialForm[0], dialForm[1]] });
+        if (this.notDialTimeArr.length >= 2) return
+        notDialTimeArr.push({ callTime: [dialForm[0], dialForm[1]] })
       } else {
-        if (this.notDialDateArr.length >= 2) return;
-        notDialDateArr.push({ callDate: '' });
+        if (this.notDialDateArr.length >= 2) return
+        notDialDateArr.push({ callDate: '' })
       }
     },
     // 确认
     confirmCallTime(val) {
       if (val === 'add') {
         // 添加任务置空 时间与日期
-        this.$set(this.dialForm, 'notCallTime', '');
-        this.$set(this, 'notDialTimeArr', []);
+        this.$set(this.dialForm, 'notCallTime', '')
+        this.$set(this, 'notDialTimeArr', [])
 
-        this.$set(this.timeForm, 'notDial', []);
-        this.$set(this, 'notDialDateArr', []);
+        this.$set(this.timeForm, 'notDial', [])
+        this.$set(this, 'notDialDateArr', [])
       }
-      let period = [];
+      let period = []
       this.timeForm.checkListPeriod.forEach((val) => {
         switch (val) {
           case 'MONDAY':
-            period.push('周一');
-            break;
+            period.push('周一')
+            break
           case 'TUESDAY':
-            period.push('周二');
-            break;
+            period.push('周二')
+            break
           case 'WEDNESDAY':
-            period.push('周三');
-            break;
+            period.push('周三')
+            break
           case 'THURSDAY':
-            period.push('周四');
-            break;
+            period.push('周四')
+            break
           case 'FRIDAY':
-            period.push('周五');
-            break;
+            period.push('周五')
+            break
           case 'SATURDAY':
-            period.push('周六');
-            break;
+            period.push('周六')
+            break
           case 'SUNDAY':
-            period.push('周日');
-            break;
+            period.push('周日')
+            break
         }
-      });
-      let [everyday, notTime, notDate] = ['', '', ''];
-      console.log('val', val);
-      let inactiveTimeList = this.disposeNotTime();
-      let inactiveDateList = this.disposeNotDate();
-      let callTime = this.searchForm.daily;
+      })
+      let [everyday, notTime, notDate] = ['', '', '']
+      console.log('val', val)
+      let inactiveTimeList = this.disposeNotTime()
+      let inactiveDateList = this.disposeNotDate()
+      let callTime = this.searchForm.daily
       // 拼接周期
       if (period.length === 7) {
         if (inactiveTimeList.length === 1 && inactiveTimeList[0].startTime) {
-          everyday = `每天/${callTime[0]}~${inactiveTimeList[0].startTime}和${inactiveTimeList[0].endTime}~${callTime[1]}`;
-          this.searchForm.setTime = everyday;
+          everyday = `每天/${callTime[0]}~${inactiveTimeList[0].startTime}和${inactiveTimeList[0].endTime}~${callTime[1]}`
+          this.searchForm.setTime = everyday
         } else if (inactiveTimeList.length === 2) {
-          everyday = `每天/${callTime[0]}~${inactiveTimeList[0].startTime}和${inactiveTimeList[0].endTime}~${inactiveTimeList[1].startTime}和${inactiveTimeList[1].endTime}~${callTime[1]}`;
-          this.searchForm.setTime = everyday;
+          everyday = `每天/${callTime[0]}~${inactiveTimeList[0].startTime}和${inactiveTimeList[0].endTime}~${inactiveTimeList[1].startTime}和${inactiveTimeList[1].endTime}~${callTime[1]}`
+          this.searchForm.setTime = everyday
         } else if (inactiveTimeList.length === 3) {
-          everyday = `每天/${callTime[0]}~${inactiveTimeList[0].startTime}和${inactiveTimeList[0].endTime}~${inactiveTimeList[1].startTime}和${inactiveTimeList[1].endTime}~${inactiveTimeList[2].startTime}和${inactiveTimeList[2].endTime}~${callTime[1]}`;
-          this.searchForm.setTime = everyday;
+          everyday = `每天/${callTime[0]}~${inactiveTimeList[0].startTime}和${inactiveTimeList[0].endTime}~${inactiveTimeList[1].startTime}和${inactiveTimeList[1].endTime}~${inactiveTimeList[2].startTime}和${inactiveTimeList[2].endTime}~${callTime[1]}`
+          this.searchForm.setTime = everyday
         } else {
-          everyday = `每天/${callTime.join('~')}`;
-          this.searchForm.setTime = everyday;
+          everyday = `每天/${callTime.join('~')}`
+          this.searchForm.setTime = everyday
         }
       } else {
         if (inactiveTimeList.length === 1) {
           everyday = `${period.join('、')}/${callTime[0]}~${
             inactiveTimeList[0].startTime
-          }和${inactiveTimeList[0].endTime}~${callTime[1]}`;
-          this.searchForm.setTime = everyday;
+          }和${inactiveTimeList[0].endTime}~${callTime[1]}`
+          this.searchForm.setTime = everyday
         } else if (inactiveTimeList.length === 2) {
           everyday = `${period.join('、')}/${callTime[0]}~${
             inactiveTimeList[0].startTime
           }和${inactiveTimeList[0].endTime}~${inactiveTimeList[1].startTime}和${
             inactiveTimeList[1].endTime
-          }~${callTime[1]}`;
-          this.searchForm.setTime = everyday;
+          }~${callTime[1]}`
+          this.searchForm.setTime = everyday
         } else if (inactiveTimeList.length === 3) {
           everyday = `${period.join('、')}/${callTime[0]}~${
             inactiveTimeList[0].startTime
@@ -1075,16 +1075,14 @@ export default {
             inactiveTimeList[1].endTime
           }~${inactiveTimeList[2].startTime}和${inactiveTimeList[2].endTime}~${
             callTime[1]
-          }`;
-          this.searchForm.setTime = everyday;
+          }`
+          this.searchForm.setTime = everyday
         } else {
-          this.searchForm.setTime = `${period.join('、')}/${callTime.join(
-            '~'
-          )}`;
+          this.searchForm.setTime = `${period.join('、')}/${callTime.join('~')}`
         }
       }
       if (val) {
-        this.timeVisible = false;
+        this.timeVisible = false
       }
     },
     /**
@@ -1095,24 +1093,35 @@ export default {
       switch (name) {
         case 'edit':
           // this.userVisible = true;
-          this.showTaskdetail(val);
-          break;
+          this.showTaskdetail(val)
+          break
         case 'issueStatistics':
           sessionStorage.setItem('taskHospitalId', val.hospitalId)
-          this.$router.push({ name: 'problemstatistics', params: { id: val.robotCallJobId} });
-          break;
+          this.$router.push({
+            name: 'problemstatistics',
+            params: { id: val.robotCallJobId },
+          })
+          break
         case 'delete':
-          this.deleteInformation(val);
-          break;
+          this.deleteInformation(val)
+          break
         case 'startTask':
-          this.getInformationStart(val.robotCallJobId);
-          break;
+          this.getInformationStart(val.robotCallJobId)
+          break
         case 'copy':
-          this.getCopy(val);
-          break;
+          this.getCopy(val)
+          break
         case 'USER_PAUSE':
-          this.getSuspendTask(val);
-          break;
+          this.getSuspendTask(val)
+          break
+        case 'operation':
+          sessionStorage.setItem('taskHospitalId', val.hospitalId)
+          sessionStorage.setItem('taskTaskStage', val.taskStage)
+          this.$router.push({
+            name: 'analysis',
+            params: { id: val.robotCallJobId },
+          })
+          break
       }
     },
     // 根据任务状态显示操作
@@ -1120,44 +1129,44 @@ export default {
       switch (state) {
         case 'edit':
           if (val === 'IN_PROCESS' || val === 'COMPLETED') {
-            return false;
+            return false
           } else {
-            return true;
+            return true
           }
-          break;
+          break
         case 'copy':
-          return true;
-          break;
+          return true
+          break
         case 'delete':
           if (val === 'NOT_STARTED') {
-            return true;
+            return true
           } else {
-            return false;
+            return false
           }
-          break;
+          break
         case 'startTask':
           if (val === 'IN_PROCESS' || val === 'COMPLETED') {
-            return false;
+            return false
           } else {
-            return true;
+            return true
           }
-          break;
+          break
         case 'USER_PAUSE':
           if (val === 'RUNNABLE' || val === 'IN_PROCESS') {
-            return true;
+            return true
           } else {
-            return false;
+            return false
           }
-          break;
+          break
         case '终止任务':
-          return true;
-          break;
+          return true
+          break
         case '运营概况':
-          return true;
-          break;
+          return true
+          break
         case 'issueStatistics':
-          return true;
-          break;
+          return true
+          break
       }
     },
     /**
@@ -1165,40 +1174,40 @@ export default {
      */
     // 获取任务详情 显示 编辑
     async showTaskdetail(val) {
-      this.title = '编辑';
-      this.timeTitle = '时间编辑';
-      this.editBot = true;
+      this.title = '编辑'
+      this.timeTitle = '时间编辑'
+      this.editBot = true
       // 不可拨打时间、日期 置空
-      this.dialForm.notCallTime = [];
-      this.notDialTimeArr = [];
-      delete this.timeForm.notDial;
-      const { data: res } = await this.getInformationTask(val.robotCallJobId);
-      this.addUserFrom = JSON.parse(JSON.stringify(res));
+      this.dialForm.notCallTime = []
+      this.notDialTimeArr = []
+      delete this.timeForm.notDial
+      const { data: res } = await this.getInformationTask(val.robotCallJobId)
+      this.addUserFrom = JSON.parse(JSON.stringify(res))
       this.$set(
         this.addUserFrom,
         'name',
         JSON.parse(JSON.stringify(res.aiName))
-      );
+      )
       this.timeForm.checkListPeriod = JSON.parse(
         JSON.stringify(res.aiParameter.daysOfWeek)
-      );
+      )
       this.searchForm.daily = [
         res.aiParameter.dailyStartTime,
         res.aiParameter.dailyEndTime,
-      ]; //可拨打时间
-      this.timeForm.checkListPeriod = res.aiParameter.daysOfWeek;
-      this.addUserFrom.hospitalName = res.hospitalName;
-      this.addUserFrom.id = val.id;
-      this.addUserFrom.robotCallJobId = val.robotCallJobId;
+      ] //可拨打时间
+      this.timeForm.checkListPeriod = res.aiParameter.daysOfWeek
+      this.addUserFrom.hospitalName = res.hospitalName
+      this.addUserFrom.id = val.id
+      this.addUserFrom.robotCallJobId = val.robotCallJobId
       // 判断时间
       if (res.aiParameter.inactiveTimeList.length === 0) {
-        this.dialForm.notCallTime = ['', ''];
+        this.dialForm.notCallTime = ['', '']
       }
       if (res.aiParameter.inactiveTimeList.length >= 1) {
         this.dialForm.notCallTime = [
           res.aiParameter.inactiveTimeList[0].startTime,
           res.aiParameter.inactiveTimeList[0].endTime,
-        ];
+        ]
       }
       if (res.aiParameter.inactiveTimeList.length === 2) {
         this.notDialTimeArr = [
@@ -1208,7 +1217,7 @@ export default {
               res.aiParameter.inactiveTimeList[1].endTime,
             ],
           },
-        ];
+        ]
       }
       if (res.aiParameter.inactiveTimeList.length === 3) {
         this.notDialTimeArr = [
@@ -1224,19 +1233,19 @@ export default {
               res.aiParameter.inactiveTimeList[2].endTime,
             ],
           },
-        ];
+        ]
       }
       // 日期
-      delete this.timeForm.notDial;
+      delete this.timeForm.notDial
       if (res.aiParameter.inactiveDateList.length <= 0) {
-        delete this.timeForm.notDial;
+        delete this.timeForm.notDial
       }
-      console.log(res.aiParameter.inactiveDateList.length >= 1);
+      console.log(res.aiParameter.inactiveDateList.length >= 1)
       if (res.aiParameter.inactiveDateList.length >= 1) {
         this.$set(this.timeForm, 'notDial', [
           res.aiParameter.inactiveDateList[0].startDate,
           res.aiParameter.inactiveDateList[0].endDate,
-        ]);
+        ])
       }
       if (res.aiParameter.inactiveDateList.length === 2) {
         this.notDialDateArr = [
@@ -1246,7 +1255,7 @@ export default {
               res.aiParameter.inactiveDateList[1].endDate,
             ],
           },
-        ];
+        ]
       }
       if (res.aiParameter.inactiveDateList.length === 3) {
         this.notDialDateArr = [
@@ -1262,62 +1271,63 @@ export default {
               res.aiParameter.inactiveDateList[2].endDate,
             ],
           },
-        ];
+        ]
       }
-      this.confirmCallTime(true);
-      this.userVisible = true;
+      this.confirmCallTime(true)
+      this.userVisible = true
     },
     /**
      * 路由跳转
      */
     skipRouter(name, val, state) {
       if (state !== undefined && state !== 'cause') {
-        sessionStorage.setItem('taskPhoneState', state);
-        sessionStorage.setItem('taskHospitalId', val.hospitalId);
+        sessionStorage.setItem('taskPhoneState', state)
+        sessionStorage.setItem('taskHospitalId', val.hospitalId)
       }
       this.$router.push({
         name,
         query: { robotCallJobId: val.robotCallJobId },
-      });
+      })
     },
     /**
      * 搜索
      */
     searchBtn() {
-      this.pageNum = 1;
-      this.getList();
+      this.pageNum = 1
+      this.getList()
     },
     searchReset() {
-      this.$set(this.searchForm, 'completeStartTime', '');
-      this.searchForm.creationTime = '';
-      this.searchForm.hospitalId = '';
-      this.$set(this.searchForm, 'status', '');
-      this.searchForm.aiName = '';
-      this.searchForm.taskStage = '';
-      this.taskForm.task = '';
-      this.taskForm.taskContent = '';
-      this.$set(this, 'getSearchForm', {});
-      this.getList();
+      this.$set(this.searchForm, 'completeStartTime', '')
+      this.searchForm.creationTime = ''
+      this.searchForm.hospitalId = ''
+      this.$set(this.searchForm, 'status', '')
+      this.searchForm.aiName = ''
+      this.searchForm.taskStage = ''
+      this.taskForm.task = ''
+      this.taskForm.taskContent = ''
+      this.$set(this, 'getSearchForm', {})
+      this.$set(this, 'aiTaskList', [])
+      this.getList()
     },
     /**
      * 表格格式化
      */
     statusFormatter(row) {
-      return formatterElement.transitionStatus[row.status];
+      return formatterElement.transitionStatus[row.status]
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style scoped></style>
