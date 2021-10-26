@@ -889,17 +889,7 @@ export default {
      */
     // 下载表格
     getAiDownload() {
-      // window.open(
-      //   'http://test-api.daliangqing.com/admin/ai/information/download'
-      // )
-        var newTab = window.open('http://test-api.daliangqing.com/admin/ai/information/download')
-        // this.$ajax({
-        //   sucss: function (data) {
-        //     if (data) {
-        //       newTab.location.href = 'null'
-        //     }
-        //   },
-        // })
+       location.href = 'http://test-api.daliangqing.com/admin/ai/information/download'
     },
     // 上传excel 阿里
     uploadFinish(val) {
