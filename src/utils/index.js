@@ -719,8 +719,8 @@ export const AiResultStatus = [
   { id: 9, label: "无法接通", value: "CAN_NOT_CONNECT" },
   { id: 10, label: "主叫欠费", value: "FROM_PHONE_ERROR" },
   { id: 11, label: "外呼失败", value: "SYSTEM_ERROR" },
-  { id: 12, label: "多并发呼损", value: "CALL_LOSS" },
-  { id: 13, label: "转人工呼损", value: "TRANSFER_ARTIFICIAL" },
+  // { id: 12, label: "多并发呼损", value: "CALL_LOSS" },
+  // { id: 13, label: "转人工呼损", value: "TRANSFER_ARTIFICIAL" },
 ]
 
 // 打印 状态
@@ -896,8 +896,8 @@ export const formatterElement = {
     CAN_NOT_CONNECT: '无法接通',
     FROM_PHONE_ERROR: '主叫欠费',
     SYSTEM_ERROR: '外呼失败',
-    CALL_LOSS: '多并发呼损',
-    TRANSFER_ARTIFICIAL: '转人工呼损',
+    // CALL_LOSS: '多并发呼损',
+    // TRANSFER_ARTIFICIAL: '转人工呼损',
   },
   hangUpState: {
     REMOTE_HANGUP: '客户挂断',

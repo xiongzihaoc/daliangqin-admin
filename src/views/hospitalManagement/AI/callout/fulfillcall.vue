@@ -12,18 +12,21 @@
           <el-input
             v-model="searchForm.patientUserName"
             size="small"
+            placeholder="请输入姓名"
           ></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
           <el-input
             v-model="searchForm.customerPersonName"
             size="small"
+            placeholder="请输入手机号"
           ></el-input>
         </el-form-item>
         <el-form-item label="呼叫时间">
           <el-date-picker
             v-model="time"
             value-format="timestamp"
+            format="yyyy-MM-dd HH:mm"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -34,7 +37,13 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="通话状态">
-          <el-select v-model="searchForm.resultStatus" size="small" filterable>
+          <el-select
+            v-model="searchForm.resultStatusList"
+            multiple
+            collapse-tags
+            size="small"
+            filterable
+          >
             <el-option
               v-for="(item, index) in AiResultStatus"
               :key="index"
@@ -216,7 +225,7 @@ export default {
         startTime: '',
         endTime: '',
         hospitalId: '',
-        resultStatus: '',
+        resultStatusList: [],
       },
       telephoneMessage: {
         uname: '',
@@ -240,10 +249,11 @@ export default {
     }
   },
   created() {
-    let taskPhoneState = sessionStorage.getItem('taskPhoneState')
+    let taskPhoneState = JSON.parse(sessionStorage.getItem('taskPhoneState'))
+    console.log(taskPhoneState)
     let taskHospitalId = sessionStorage.getItem('taskHospitalId')
     if (taskPhoneState) {
-      this.searchForm.resultStatus = taskPhoneState
+      this.searchForm.resultStatusList = taskPhoneState
     }
     if (taskHospitalId) {
       this.searchForm.hospitalId = taskHospitalId
@@ -264,6 +274,7 @@ export default {
         page: this.pageNum,
         pageSize: this.pageSize,
       })
+      console.log('list', list)
       httpAdminAiCall.getAlreadyStatisticsList(list).then((res) => {
         this.list = res.data.elements
         this.total = res.data.totalSize
@@ -325,9 +336,12 @@ export default {
       this.getList()
     },
     searchReset() {
-      this.searchForm = {}
+      this.$set(this, 'searchForm', {})
+      this.$set(this, 'time', [])
       this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
       this.searchForm.hospitalId = sessionStorage.getItem('hospitalId')
+      sessionStorage.removeItem('taskPhoneState')
+      sessionStorage.removeItem('taskHospitalId')
       this.getList()
     },
     /**
@@ -500,7 +514,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.flex-bet{
+.flex-bet {
   display: flex;
   justify-content: space-between;
   align-content: center;
