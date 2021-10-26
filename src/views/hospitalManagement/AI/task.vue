@@ -163,7 +163,13 @@
         <template slot-scope="scope">
           <span
             :class="[scope.row.taskTotalNumber ? 'skipStyle' : '']"
-            @click="[scope.row.taskTotalNumber?skipRouter('addcall', scope.row):'']"
+            @click="
+              ;[
+                scope.row.taskTotalNumber
+                  ? skipRouter('addcall', scope.row)
+                  : '',
+              ]
+            "
             >{{ scope.row.taskTotalNumber }}</span
           >
         </template>
@@ -172,7 +178,13 @@
         <template slot-scope="scope">
           <span
             :class="[scope.row.alreadyNumber ? 'skipStyle' : '']"
-            @click="[scope.row.alreadyNumber?skipRouter('fulfillcall', scope.row, 'cause'):'']"
+            @click="
+              ;[
+                scope.row.alreadyNumber
+                  ? skipRouter('fulfillcall', scope.row, 'cause')
+                  : '',
+              ]
+            "
             >{{ scope.row.alreadyNumber }}</span
           >
         </template>
@@ -181,7 +193,9 @@
         <template slot-scope="scope">
           <span
             :class="[scope.row.notNumber ? 'skipStyle' : '']"
-            @click="[scope.row.notNumber?skipRouter('notcall', scope.row):'']"
+            @click="
+              ;[scope.row.notNumber ? skipRouter('notcall', scope.row) : '']
+            "
             >{{ scope.row.notNumber }}</span
           >
         </template>
@@ -193,8 +207,14 @@
       >
         <template slot-scope="scope">
           <span
-            :class="[ scope.row.alreadyPeopleNumber  ? 'skipStyle' : '' ]"
-            @click="[scope.row.alreadyPeopleNumber?skipRouter('fulfillcall', scope.row, ['ANSWERED']):'']"
+            :class="[scope.row.alreadyPeopleNumber ? 'skipStyle' : '']"
+            @click="
+              ;[
+                scope.row.alreadyPeopleNumber
+                  ? skipRouter('fulfillcall', scope.row, ['ANSWERED'])
+                  : '',
+              ]
+            "
             >{{ scope.row.alreadyPeopleNumber }}</span
           >
         </template>
@@ -202,19 +222,23 @@
       <el-table-column align="center" label="未接听人数" prop="notPeopleNumber">
         <template slot-scope="scope">
           <span
-            :class="[ scope.row.notPeopleNumber ? 'skipStyle' : '' ]"
-            @click="[scope.row.notPeopleNumber?
-              skipRouter('fulfillcall', scope.row, [
-                'NO_ANSWER',
-                'BUSY',
-                'POWER_OFF',
-                'OUT_OF_SERVICE',
-                'REFUSED',
-                'VACANT_NUMBER',
-                'CAN_NOT_CONNECT',
-                'FROM_PHONE_ERROR',
-                'SYSTEM_ERROR',
-              ]):'']
+            :class="[scope.row.notPeopleNumber ? 'skipStyle' : '']"
+            @click="
+              ;[
+                scope.row.notPeopleNumber
+                  ? skipRouter('fulfillcall', scope.row, [
+                      'NO_ANSWER',
+                      'BUSY',
+                      'POWER_OFF',
+                      'OUT_OF_SERVICE',
+                      'REFUSED',
+                      'VACANT_NUMBER',
+                      'CAN_NOT_CONNECT',
+                      'FROM_PHONE_ERROR',
+                      'SYSTEM_ERROR',
+                    ])
+                  : '',
+              ]
             "
             >{{ scope.row.notPeopleNumber }}</span
           >
@@ -375,7 +399,7 @@
               @uploadFinish="uploadFinish"
               uploadType="BANNER"
             ></single-upload>
-            <div slot="tip" class="el-upload__tip">
+            <div slot="tip" class="el-upload__tip" style="font-size: 13px;">
               仅支持上传Excel格式的文件，且不超过10万条。
               <span class="skipStyle" @click="getAiDownload">下载模板</span>
             </div>
@@ -865,9 +889,17 @@ export default {
      */
     // 下载表格
     getAiDownload() {
-      window.open(
-        'http://test-api.daliangqing.com/admin/ai/information/download'
-      )
+      // window.open(
+      //   'http://test-api.daliangqing.com/admin/ai/information/download'
+      // )
+        var newTab = window.open('http://test-api.daliangqing.com/admin/ai/information/download')
+        // this.$ajax({
+        //   sucss: function (data) {
+        //     if (data) {
+        //       newTab.location.href = 'null'
+        //     }
+        //   },
+        // })
     },
     // 上传excel 阿里
     uploadFinish(val) {
