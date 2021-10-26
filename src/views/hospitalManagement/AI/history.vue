@@ -54,7 +54,7 @@
             size="small"
             filterable
             value-key="text"
-            placeholder="请选择任务与期数名称"
+            placeholder="请选择任务名称与期名"
             @change="getTaskStage"
           >
             <el-option
@@ -246,7 +246,7 @@ export default {
       toInfo: {},
       taskStage: [
         { id: "robotCallJobId", name: "任务" },
-        { id: "taskStage", name: "期数" },
+        { id: "taskStage", name: "期名" },
       ],
       hospitalList: [],
       list: [],

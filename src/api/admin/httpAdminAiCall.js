@@ -113,10 +113,10 @@ export const httpAdminAiCall = {
     })
   },
   // 删除ai外呼总人数
-  getInformationCopy(data) {
+  deleteInformation(data) {
     return request({
-      url: `ai/deleteAiUser/${data.robotCallJobId}/${data.calledPhoneNumber}`,
-      method: 'get',
+      url: `ai/information/${data.taskId}`,
+      method: 'delete',
     })
   },
   // 导出ai已呼人数

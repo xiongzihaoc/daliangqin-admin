@@ -1,13 +1,14 @@
 <template>
   <div>
-    <div>
-      <Chart :cdata="cdata"
-        ref="monitoringNumber" />
+    <div id="print">
+      <Chart :cdata="cdata" />
     </div>
   </div>
 </template>
 <script>
 import Chart from '@/components/Echarts/chart'
+import { parseTime } from '@/utils/index'
+
 export default {
   props: {
     listData: {
@@ -17,6 +18,7 @@ export default {
   },
   data() {
     return {
+      parseTime,
       cdata: {
         tooltip: {
           trigger: 'axis',
@@ -25,7 +27,7 @@ export default {
           },
         },
         title: {
-          text: '已监测数量统计图 Top15',
+          text: '外呼数据统计图',
           textStyle: {
             color: '#000',
             fontSize: 14,
@@ -48,8 +50,6 @@ export default {
           type: 'category',
           axisLabel: {
             show: true,
-            interval: 0,
-            rotate: 20,
             textStyle: {
               color: '#ccc',
             },
@@ -59,6 +59,7 @@ export default {
         yAxis: [
           {
             type: 'value',
+            minInterval:1,
             axisLabel: {
               show: true,
               formatter: '{value}人',
@@ -67,38 +68,26 @@ export default {
               },
             },
           },
-          {
-            type: 'value',
-            axisLabel: {
-              show: true,
-              formatter: '{value}次',
-              textStyle: {
-                color: '#B8BBC2',
-              },
-            },
-            splitLine: {
-              show: false,
-            },
-          },
         ],
         series: [
           {
-            name: '人数',
+            name: '已接听',
             data: [],
             type: 'bar',
+            barWidth: 30,
             itemStyle: {
               color: '#5470C6',
             },
           },
           {
-            name: '次数',
+            name: '未接听',
             data: [],
-            type: 'line',
+            type: 'bar',
+            barWidth: 30,
             smooth: false,
             itemStyle: {
               color: '#73DEB3',
             },
-            yAxisIndex: '1',
           },
         ],
       },
@@ -107,19 +96,18 @@ export default {
   components: {
     Chart,
   },
-  methods: {},
   // 监听父组件传过来的参数
   watch: {
     listData(newValue, oldValue) {
-      const list = newValue.equipmentHeartRateMonitorStatisticalVOList
+      const list = newValue.aiHistoryAnsweredStatusStatisticalVOList
       const xAxisData = list.map((item) => {
-        return item.hospitalName
+        return parseTime(item.callStartTime).substring(0,10)
       })
       const seriesData1 = list.map((item) => {
-        return item.hospitalPeopleCount
+        return item.answerNumber
       })
       const seriesData2 = list.map((item) => {
-        return item.heartRateCount
+        return item.noAnswerNumber
       })
       this.cdata.xAxis.data = xAxisData
       this.cdata.series[0].data = seriesData1

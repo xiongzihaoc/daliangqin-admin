@@ -32,7 +32,7 @@
             size="small"
             filterable
             value-key="name"
-            placeholder="请选择任务与期数"
+            placeholder="请选择任务名称与期名"
             @change="selectTaskStage"
           >
             <el-option
@@ -47,7 +47,7 @@
             size="small"
             filterable
             value-key="text"
-            placeholder="请选择任务与期数名称"
+            placeholder="请选择任务名称与期名"
             @change="getTaskStage"
           >
             <el-option
@@ -184,7 +184,7 @@ export default {
       list: [],
       taskStage: [
         { id: "robotCallJobId", name: "任务名称" },
-        { id: "taskStage", name: "期数" },
+        { id: "taskStage", name: "期名" },
       ],
       aiTaskList: [],
       tableHeaderBig: [],
