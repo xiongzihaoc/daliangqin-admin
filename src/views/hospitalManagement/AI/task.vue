@@ -297,11 +297,12 @@
         :model="addUserFrom"
         label-width="100px"
       >
-        <el-form-item label="选择医院:" prop="hospitalId">
+        <el-form-item label="选择医院:" prop="hospitalId" >
           <el-select
             v-model="addUserFrom.hospitalId"
             filterable
             clearable
+            :disabled="editBot"
             style="width: 100%"
             placeholder="请选择医院"
             @change="getHospitalName"
@@ -316,6 +317,7 @@
         </el-form-item>
         <el-form-item label="任务名称:" prop="name">
           <el-input
+            :disabled="editBot"
             v-model="addUserFrom.name"
             placeholder="请输入任务名称"
           ></el-input>
@@ -641,7 +643,6 @@ export default {
           createEndTime,
         })
         .then((res) => {
-          console.log('ai列表', res)
           this.list = res.data.elements
           this.total = res.data.totalSize
         })
@@ -651,7 +652,6 @@ export default {
       httpAdminHospital
         .getHospital({ pageSize: 10000, hospitalId })
         .then((res) => {
-          console.log(res)
           this.hospitalList = res.data.elements
         })
     },
@@ -767,7 +767,6 @@ export default {
     },
     // 删除
     deleteInformation(val) {
-      console.log('deletr',val);
       httpAdminAiCall
         .deleteInformation({ taskId: val.robotCallJobId })
         .then((res) => {
@@ -929,12 +928,10 @@ export default {
       let notDialDateArr = this.notDialDateArr[0]
       let notDialDateArrOne = this.notDialDateArr[1]
       if (notDial != undefined && notDial != '' && notDial[0] != '') {
-        console.log(1)
         inactiveDateList.push({ startDate: notDial[0], endDate: notDial[1] })
       }
       if (notDialDateArr != undefined && notDialDateArr.callDate != '') {
         if (notDialDateArr.callDate != null) {
-          console.log(2)
           inactiveDateList.push({
             startDate: notDialDateArr.callDate[0],
             endDate: notDialDateArr.callDate[1],
@@ -943,7 +940,6 @@ export default {
       }
       if (notDialDateArrOne != undefined && notDialDateArrOne.callDate != '') {
         if (notDialDateArrOne.callDate != null) {
-          console.log(3)
           inactiveDateList.push({
             startDate: notDialDateArrOne.callDate[0],
             endDate: notDialDateArrOne.callDate[1],
@@ -981,6 +977,7 @@ export default {
     getPeriod() {
       // console.log('周期', this.timeForm.checkListPeriod)
     },
+    // 不可拨打时间段添加
     notDialTime(val) {
       let notDialTimeArr = this.notDialTimeArr
       let notDialDateArr = this.notDialDateArr
@@ -1036,7 +1033,6 @@ export default {
         }
       })
       let [everyday, notTime, notDate] = ['', '', '']
-      console.log('val', val)
       let inactiveTimeList = this.disposeNotTime()
       let inactiveDateList = this.disposeNotDate()
       let callTime = this.searchForm.daily
@@ -1103,14 +1099,12 @@ export default {
           })
           break
         case 'delete':
-          console.log('delete')
           this.deleteInformation(val)
           break
         case 'startTask':
           this.getInformationStart(val.robotCallJobId)
           break
         case 'copy':
-          console.log('copy')
           this.getCopy(val)
           break
         case 'USER_PAUSE':
@@ -1240,7 +1234,6 @@ export default {
       if (res.aiParameter.inactiveDateList.length <= 0) {
         delete this.timeForm.notDial
       }
-      console.log(res.aiParameter.inactiveDateList.length >= 1)
       if (res.aiParameter.inactiveDateList.length >= 1) {
         this.$set(this.timeForm, 'notDial', [
           res.aiParameter.inactiveDateList[0].startDate,
