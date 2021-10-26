@@ -889,7 +889,7 @@ export default {
      */
     // 下载表格
     getAiDownload() {
-       location.href = 'http://test-api.daliangqing.com/admin/ai/information/download'
+       window.location.href = 'https://test-api.daliangqing.com/admin/ai/information/download'
     },
     // 上传excel 阿里
     uploadFinish(val) {
