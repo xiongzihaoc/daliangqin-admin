@@ -250,7 +250,6 @@ export default {
   },
   created() {
     let taskPhoneState = JSON.parse(sessionStorage.getItem('taskPhoneState'))
-    console.log(taskPhoneState)
     let taskHospitalId = sessionStorage.getItem('taskHospitalId')
     if (taskPhoneState) {
       this.searchForm.resultStatusList = taskPhoneState
@@ -274,7 +273,6 @@ export default {
         page: this.pageNum,
         pageSize: this.pageSize,
       })
-      console.log('list', list)
       httpAdminAiCall.getAlreadyStatisticsList(list).then((res) => {
         this.list = res.data.elements
         this.total = res.data.totalSize
