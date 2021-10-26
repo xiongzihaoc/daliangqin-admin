@@ -161,25 +161,29 @@
       ></el-table-column>
       <el-table-column align="center" label="总外呼人数" prop="taskTotalNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipRouter('addcall', scope.row)">{{
-            scope.row.taskTotalNumber
-          }}</span>
+          <span
+            :class="[scope.row.taskTotalNumber ? 'skipStyle' : '']"
+            @click="[scope.row.taskTotalNumber?skipRouter('addcall', scope.row):'']"
+            >{{ scope.row.taskTotalNumber }}</span
+          >
         </template>
       </el-table-column>
       <el-table-column align="center" label="已呼人数" prop="alreadyNumber">
         <template slot-scope="scope">
           <span
-            class="skipStyle"
-            @click="skipRouter('fulfillcall', scope.row, 'cause')"
+            :class="[scope.row.alreadyNumber ? 'skipStyle' : '']"
+            @click="[scope.row.alreadyNumber?skipRouter('fulfillcall', scope.row, 'cause'):'']"
             >{{ scope.row.alreadyNumber }}</span
           >
         </template>
       </el-table-column>
       <el-table-column align="center" label="未呼人数" prop="notNumber">
         <template slot-scope="scope">
-          <span class="skipStyle" @click="skipRouter('notcall', scope.row)">{{
-            scope.row.notNumber
-          }}</span>
+          <span
+            :class="[scope.row.notNumber ? 'skipStyle' : '']"
+            @click="[scope.row.notNumber?skipRouter('notcall', scope.row):'']"
+            >{{ scope.row.notNumber }}</span
+          >
         </template>
       </el-table-column>
       <el-table-column
@@ -189,15 +193,31 @@
       >
         <template slot-scope="scope">
           <span
-            class="skipStyle"
-            @click="skipRouter('fulfillcall', scope.row, 'ANSWERED')"
+            :class="[ scope.row.alreadyPeopleNumber  ? 'skipStyle' : '' ]"
+            @click="[scope.row.alreadyPeopleNumber?skipRouter('fulfillcall', scope.row, ['ANSWERED']):'']"
             >{{ scope.row.alreadyPeopleNumber }}</span
           >
         </template>
       </el-table-column>
       <el-table-column align="center" label="未接听人数" prop="notPeopleNumber">
         <template slot-scope="scope">
-          <span class="skipStyle">{{ scope.row.notPeopleNumber }}</span>
+          <span
+            :class="[ scope.row.notPeopleNumber ? 'skipStyle' : '' ]"
+            @click="[scope.row.notPeopleNumber?
+              skipRouter('fulfillcall', scope.row, [
+                'NO_ANSWER',
+                'BUSY',
+                'POWER_OFF',
+                'OUT_OF_SERVICE',
+                'REFUSED',
+                'VACANT_NUMBER',
+                'CAN_NOT_CONNECT',
+                'FROM_PHONE_ERROR',
+                'SYSTEM_ERROR',
+              ]):'']
+            "
+            >{{ scope.row.notPeopleNumber }}</span
+          >
         </template>
       </el-table-column>
       <el-table-column
@@ -297,7 +317,7 @@
         :model="addUserFrom"
         label-width="100px"
       >
-        <el-form-item label="选择医院:" prop="hospitalId" >
+        <el-form-item label="选择医院:" prop="hospitalId">
           <el-select
             v-model="addUserFrom.hospitalId"
             filterable
@@ -401,6 +421,7 @@
               is-range
               format="HH:mm"
               value-format="HH:mm"
+              :default-time="['09:00', '20:00']"
               v-model="dialForm.notCallTime"
               range-separator="至"
               start-placeholder="开始时间"
@@ -704,7 +725,6 @@ export default {
       // 添加接口
       httpAdminAiCall
         .postInformation({
-          // 添加
           hospitalId: this.addUserFrom.hospitalId,
           name: this.addUserFrom.name,
           dialogFlowId: this.addUserFrom.dialogFlowId,
@@ -1274,8 +1294,9 @@ export default {
      */
     skipRouter(name, val, state) {
       if (state !== undefined && state !== 'cause') {
-        sessionStorage.setItem('taskPhoneState', state)
-        sessionStorage.setItem('taskHospitalId', val.hospitalId)
+        sessionStorage.setItem('taskPhoneState', JSON.stringify(state))
+        // 跳转已呼用户 暂时不带医院id
+        // sessionStorage.setItem('taskHospitalId', val.hospitalId)
       }
       this.$router.push({
         name,
