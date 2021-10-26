@@ -12,18 +12,21 @@
           <el-input
             v-model="searchForm.patientUserName"
             size="small"
+            placeholder="请输入姓名"
           ></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
           <el-input
             v-model="searchForm.customerPersonName"
             size="small"
+            placeholder="请输入手机号"
           ></el-input>
         </el-form-item>
         <el-form-item label="呼叫时间">
           <el-date-picker
             v-model="time"
             value-format="timestamp"
+            format="yyyy-MM-dd HH:mm"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -34,7 +37,13 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="通话状态">
-          <el-select v-model="searchForm.resultStatus" size="small" filterable>
+          <el-select
+            v-model="searchForm.resultStatusList"
+            multiple
+            collapse-tags
+            size="small"
+            filterable
+          >
             <el-option
               v-for="(item, index) in AiResultStatus"
               :key="index"
@@ -135,13 +144,20 @@
     <!-- 弹出层 -->
     <el-dialog title="通话详情" :visible.sync="dialogVisible" width="50%">
       <div class="chat">
-        <div>
-          <p>{{ telephoneMessage.uname }} - {{ telephoneMessage.phone }}</p>
-          <p>
-            通话ID：{{ telephoneMessage.callRecordId }} 通话时长：{{
-              formatSeconds(telephoneMessage.chatDuration)
-            }}
-          </p>
+        <div class="flex-bet">
+          <div>
+            <p>{{ telephoneMessage.uname }} - {{ telephoneMessage.phone }}</p>
+            <p>
+              通话ID：{{ telephoneMessage.callRecordId }} 通话时长：{{
+                formatSeconds(telephoneMessage.chatDuration)
+              }}
+            </p>
+          </div>
+          <div>
+            <audio autoplay="autoplay" controls="controls" ref="audio">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
         </div>
         <div class="chat-content">
           <!-- 聊天记录数组-->
@@ -182,14 +198,14 @@
 </template>
 
 <script>
-import EleTable from '@/components/Table';
-import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall';
+import EleTable from '@/components/Table'
+import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall'
 import {
   parseTime,
   formatSeconds,
   formatterElement,
   AiResultStatus,
-} from '@/utils/index';
+} from '@/utils/index'
 
 export default {
   components: {
@@ -201,6 +217,7 @@ export default {
       formatSeconds,
       AiResultStatus,
       inputMsg: '',
+      src: '', // 语音播放路径
       searchForm: {
         patientUserName: '',
         customerPersonName: '',
@@ -208,7 +225,7 @@ export default {
         startTime: '',
         endTime: '',
         hospitalId: '',
-        resultStatus: '',
+        resultStatusList: [],
       },
       telephoneMessage: {
         uname: '',
@@ -229,33 +246,37 @@ export default {
       pageNum: 1,
       total: 0,
       dialogVisible: false,
-    };
+    }
   },
   created() {
-    let taskPhoneState = sessionStorage.getItem('taskPhoneState');
-    let taskHospitalId = sessionStorage.getItem('taskHospitalId');
+    let taskPhoneState = JSON.parse(sessionStorage.getItem('taskPhoneState'))
+    let taskHospitalId = sessionStorage.getItem('taskHospitalId')
     if (taskPhoneState) {
-      this.searchForm.resultStatus = taskPhoneState;
+      this.searchForm.resultStatusList = taskPhoneState
     }
     if (taskHospitalId) {
-      this.searchForm.hospitalId = taskHospitalId;
+      this.searchForm.hospitalId = taskHospitalId
     }
-    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId;
-    this.getAlreadyStatisticsList();
+    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
+    this.getList()
   },
   beforeDestroy() {
-    sessionStorage.removeItem('taskPhoneState');
-    sessionStorage.removeItem('taskHospitalId');
+    sessionStorage.removeItem('taskPhoneState')
+    sessionStorage.removeItem('taskHospitalId')
   },
   methods: {
     /**
-     * 接口
+     * 列表
      */
-    getAlreadyStatisticsList() {
-      httpAdminAiCall.getAlreadyStatisticsList(this.searchForm).then((res) => {
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+    getList() {
+      let list = Object.assign(this.searchForm, {
+        page: this.pageNum,
+        pageSize: this.pageSize,
+      })
+      httpAdminAiCall.getAlreadyStatisticsList(list).then((res) => {
+        this.list = res.data.elements
+        this.total = res.data.totalSize
+      })
     },
     getAlCallDetailList(val) {
       httpAdminAiCall
@@ -264,45 +285,62 @@ export default {
           phone: val.calledPhoneNumber,
         })
         .then((res) => {
-          this.chatList = [];
-          this.messageList = [];
-          let callDetailList = JSON.parse(res.data.thirdJson);
-          let uname = callDetailList.data.customerPersonName;
-          this.telephoneMessage.uname = uname;
-          this.telephoneMessage.phone = callDetailList.data.calledPhoneNumber;
-          this.telephoneMessage.callRecordId = callDetailList.data.callRecordId;
-          this.telephoneMessage.chatDuration = callDetailList.data.chatDuration;
-          this.toInfo.userName = callDetailList.data.customerPersonName;
-          this.toInfo.avatarUrl = res.data.avatarUrl;
+          this.chatList = []
+          this.messageList = []
+          let callDetailList = JSON.parse(res.data.thirdJson)
+          let uname = callDetailList.data.customerPersonName
+          this.telephoneMessage.uname = uname
+          this.telephoneMessage.phone = callDetailList.data.calledPhoneNumber
+          this.telephoneMessage.callRecordId = callDetailList.data.callRecordId
+          this.telephoneMessage.chatDuration = callDetailList.data.chatDuration
+          this.toInfo.userName = callDetailList.data.customerPersonName
+          this.toInfo.avatarUrl = res.data.avatarUrl
           callDetailList.data.callDetailList.forEach((val) => {
             this.messageList.push({
               createTime: val.startTime,
               isSelf: val.type === 'ROBOT' ? true : false,
               leaveContent: val.text,
-            });
-          });
-          this.dialogVisible = true;
-        });
+            })
+          })
+          this.handlePlay(callDetailList.data)
+          this.dialogVisible = true
+        })
     },
     /**
      * 选择时间
      */
     callTime(val) {
-      this.searchForm.startTime = val[0];
-      this.searchForm.endTime = val[1];
+      this.searchForm.startTime = val[0]
+      this.searchForm.endTime = val[1]
+    },
+    /**
+     * 播放语音
+     */
+    handlePlay(val) {
+      setTimeout(() => {
+        this.$refs.audio.src = val.fullAudioUrl
+        this.$refs.audio.pause()
+        this.$refs.audio.currentTime = 0
+      }, 0)
+    },
+    stop() {
+      this.$refs.audio.pause()
     },
     /**
      * 搜索
      */
     searchBtn() {
-      this.pageNum = 1;
-      this.getAlreadyStatisticsList();
+      this.pageNum = 1
+      this.getList()
     },
     searchReset() {
-      this.searchForm = {};
-      this.searchForm.robotCallJobId = this.$route.query.robotCallJobId;
-      this.searchForm.hospitalId = sessionStorage.getItem('hospitalId');
-      this.getAlreadyStatisticsList();
+      this.$set(this, 'searchForm', {})
+      this.$set(this, 'time', [])
+      this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
+      this.searchForm.hospitalId = sessionStorage.getItem('hospitalId')
+      sessionStorage.removeItem('taskPhoneState')
+      sessionStorage.removeItem('taskHospitalId')
+      this.getList()
     },
     /**
      * 导出excel
@@ -319,9 +357,9 @@ export default {
           }
         )
           .then(() => {
-            this.getExpportData();
+            this.getExpportData()
           })
-          .catch(() => {});
+          .catch(() => {})
       } else {
         this.$confirm(
           '当前要导出的<strong>' +
@@ -334,12 +372,12 @@ export default {
           }
         )
           .then(() => {})
-          .catch(() => {});
+          .catch(() => {})
       }
     },
     // 对导出数据格式处理
     formatJson(filterVal, jsonData) {
-      return jsonData.map((v) => filterVal.map((j) => v[j]));
+      return jsonData.map((v) => filterVal.map((j) => v[j]))
     },
     getExpportData() {
       const loading = this.$loading({
@@ -347,73 +385,72 @@ export default {
         text: '正在导出，请稍等......',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)',
-      });
+      })
       httpAdminAiCall.getAlreadyStatisticsList(this.searchForm).then(
         (res) => {
-          console.log('导出Excel', res);
-          let handleDataList = res.data.elements;
+          let handleDataList = res.data.elements
           handleDataList.forEach((item) => {
             if (item.chatDuration) {
-              item.chatDuration = formatSeconds(item.chatDuration);
+              item.chatDuration = formatSeconds(item.chatDuration)
             }
             if (item.callStartTime) {
-              item.callStartTime = parseTime(item.callStartTime);
+              item.callStartTime = parseTime(item.callStartTime)
             }
             switch (item.resultStatus) {
               case 'ANSWERED':
-                item.resultStatus = '已接听';
-                break;
+                item.resultStatus = '已接听'
+                break
               case 'NO_ANSWER':
-                item.resultStatus = '无应答';
-                break;
+                item.resultStatus = '无应答'
+                break
               case 'BUSY':
-                item.resultStatus = '忙线中';
-                break;
+                item.resultStatus = '忙线中'
+                break
               case 'POWER_OFF':
-                item.resultStatus = '关机';
-                break;
+                item.resultStatus = '关机'
+                break
               case 'OUT_OF_SERVICE':
-                item.resultStatus = '停机';
-                break;
+                item.resultStatus = '停机'
+                break
               case 'REFUSED':
-                item.resultStatus = '拒接';
-                break;
+                item.resultStatus = '拒接'
+                break
               case 'VACANT_NUMBER':
-                item.resultStatus = '空号';
-                break;
+                item.resultStatus = '空号'
+                break
               case 'CAN_NOT_CONNECT':
-                item.resultStatus = '无法接通';
-                break;
+                item.resultStatus = '无法接通'
+                break
               case 'FROM_PHONE_ERROR':
-                item.resultStatus = '主叫欠费';
-                break;
+                item.resultStatus = '主叫欠费'
+                break
               case 'SYSTEM_ERROR':
-                item.resultStatus = '外呼失败';
-                break;
+                item.resultStatus = '外呼失败'
+                break
               case 'CALL_LOSS':
-                item.resultStatus = '转人工呼损';
-                break;
+                item.resultStatus = '转人工呼损'
+                break
             }
             switch (item.hangupBy) {
               case 'REMOTE_HANGUP':
-                item.hangupBy = '客户挂断';
-                break;
+                item.hangupBy = '客户挂断'
+                break
               case 'INITIAL_HANGUP':
-                item.hangupBy = 'AI挂断';
-                break;
+                item.hangupBy = 'AI挂断'
+                break
               case 'CS_HANGUP':
-                item.hangupBy = '人工坐席挂断';
-                break;
+                item.hangupBy = '人工坐席挂断'
+                break
               case 'OTHER_HANGUP':
-                item.hangupBy = '未知原因';
-                break;
+                item.hangupBy = '未知原因'
+                break
             }
-          });
+          })
           if (handleDataList.length > 0) {
             require.ensure([], () => {
               const {
                 export_json_to_excel,
-              } = require('@/utils/vendor/Export2Excel');
+              } = require('@/utils/vendor/Export2Excel')
               // 导出的表头
               const tHeader = [
                 '用户名',
@@ -423,7 +460,7 @@ export default {
                 '呼叫时间',
                 '通话状态',
                 '挂断状态',
-              ];
+              ]
               // 导出表头要对应的数据
               const filterVal = [
                 'patientUserName',
@@ -433,48 +470,53 @@ export default {
                 'callStartTime',
                 'resultStatus',
                 'hangupBy',
-              ];
-              const data = this.formatJson(filterVal, handleDataList);
-              export_json_to_excel(tHeader, data, '已呼用户列表');
-            });
+              ]
+              const data = this.formatJson(filterVal, handleDataList)
+              export_json_to_excel(tHeader, data, '已呼用户列表')
+            })
           } else {
             this.$message({
               message: '数据出錯，请稍后重试',
               duration: 2000,
               type: 'warning',
-            });
+            })
           }
-          loading.close();
+          loading.close()
         },
         (error) => {
-          console.log(error);
-          loading.close();
+          console.log(error)
+          loading.close()
         }
-      );
+      )
     },
     /**
      * 表格格式化
      */
     phoneState(row) {
-      return formatterElement.phoneState[row.resultStatus];
+      return formatterElement.phoneState[row.resultStatus]
     },
     hangupByState(row) {
-      return formatterElement.hangUpState[row.hangupBy];
+      return formatterElement.hangUpState[row.hangupBy]
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
+      this.pageSize = newSize
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
+      this.pageNum = newPage
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
+.flex-bet {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}
 .chat-content {
   width: 100%;
   height: 600px;

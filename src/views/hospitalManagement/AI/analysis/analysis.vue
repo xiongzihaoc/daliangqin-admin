@@ -152,11 +152,22 @@ export default {
     }
   },
   created() {
+    console.log('router', this.$route.params.id)
+    this.searchForm.robotCallJobIds = this.$route.params.id
+    this.searchForm.hospitalId = sessionStorage.getItem('taskHospitalId')
+    this.searchForm.taskStage = sessionStorage.getItem('taskTaskStage')
+    this.searchForm.robotCallJobIds = sessionStorage.getItem('robotCallJobId')
     this.getJobStats()
   },
   mounted() {
-    // this.getHospitalList();
     // this.getJobStats();
+    this.getHospitalList()
+  },
+  beforeDestroy() {
+    // sessionStorage.removeItem('taskHospitalId')
+    // sessionStorage.removeItem('taskTaskStage')
+    // sessionStorage.removeItem('taskRobotCallJobId')
+    this.removeSession()
   },
   methods: {
     // 获取列表
@@ -174,32 +185,47 @@ export default {
     },
     // 获取图表数据
     getJobStats() {
-      httpAdminAiAnalysis.getJobStats().then((res) => {
+      httpAdminAiAnalysis.getJobStats(this.searchForm).then((res) => {
         let outboundList = res.data.aiHistoryStatisticalVO
         this.listData = res.data
         this.outboundList = [
-          { title: '总外呼人数', ratio: `${outboundList.peopleNumber}位` },
+          {
+            title: '总外呼人数',
+            ratio: `${
+              outboundList.peopleNumber ? outboundList.peopleNumber : '0'
+            }位`,
+          },
           {
             title: '已接听率',
-            ratio: `${outboundList.answerRate}%`,
+            ratio: `${
+              outboundList.answerRate ? outboundList.answerRate : '0'
+            }%`,
             minuteNumber: `已接听人数${outboundList.answerNumber}位`,
           },
           {
             title: '未接听率',
-            ratio: `${outboundList.noAnswerRate}%`,
+            ratio: `${
+              outboundList.noAnswerRate ? outboundList.noAnswerRate : '0'
+            }%`,
             minuteNumber: `未接听人数${outboundList.noAnswerNumber}位`,
           },
           {
             title: '挂机率',
-            ratio: `${outboundList.hangupRate}`,
+            ratio: `${outboundList.hangupRate ? outboundList.hangupRate : '0'}`,
             minuteNumber: `挂机人数${outboundList.hangupNumber}位`,
           },
           {
             title: '总通话时长',
-            ratio: `${formatSeconds(outboundList.sumTalkTime)}`,
-            minuteNumber: `平均通话时长${formatSeconds(
+            ratio: `${
+              outboundList.sumTalkTime
+                ? formatSeconds(outboundList.sumTalkTime)
+                : '0'
+            }`,
+            minuteNumber: `平均通话时长${
               outboundList.avgTalkTime
-            )}`,
+                ? formatSeconds(outboundList.avgTalkTime)
+                : '0'
+            }`,
           },
         ]
       })
@@ -246,13 +272,24 @@ export default {
         this.searchForm.taskStage = val.text
       }
     },
-
+    /**
+     * 清除缓存
+     */
+    removeSession() {
+      sessionStorage.removeItem('taskHospitalId')
+      sessionStorage.removeItem('taskTaskStage')
+      sessionStorage.removeItem('taskRobotCallJobId')
+    },
     /**
      * 搜索
      */
     searchBtn() {},
     // 重置
-    searchReset() {},
+    searchReset() {
+      this.removeSession()
+      this.$set(this, 'searchForm', {})
+      this.getJobStats()
+    },
   },
 }
 </script>
@@ -268,9 +305,9 @@ export default {
     min-height: 130px;
   }
 }
-.chart-box{
+.chart-box {
   width: 100%;
   display: inline-grid;
-  grid-template-columns: repeat(2,45%);
+  grid-template-columns: repeat(2, 45%);
 }
 </style>
