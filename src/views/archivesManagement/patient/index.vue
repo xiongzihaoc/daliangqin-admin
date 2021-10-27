@@ -148,6 +148,13 @@
           <el-button size="small" type="success" icon="el-icon-download"
             >导入</el-button
           >
+          <el-button
+            @click="excelVisible = true"
+            size="small"
+            type="success"
+            icon="el-icon-upload2"
+            >导出Excel</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -257,6 +264,34 @@
         >
       </div>
     </el-dialog>
+    <!-- 导出excel -->
+    <el-dialog title="选择导出内容" :visible.sync="excelVisible" width="30%">
+      <div>
+        <el-checkbox-group style="line-height: 30px" v-model="checkExcelList">
+          <el-checkbox label="姓名"></el-checkbox>
+          <el-checkbox label="身份证号"></el-checkbox>
+          <el-checkbox label="性别"></el-checkbox>
+          <el-checkbox label="出生日期"></el-checkbox>
+          <el-checkbox label="年龄"></el-checkbox>
+          <el-checkbox label="本人电话"></el-checkbox>
+          <el-checkbox label="高血压"></el-checkbox>
+          <el-checkbox label="糖尿病"></el-checkbox>
+          <el-checkbox label="心率"></el-checkbox>
+          <el-checkbox label="两慢指数"></el-checkbox>
+          <el-checkbox label="对应医师"></el-checkbox>
+          <el-checkbox label="医师手机号"></el-checkbox>
+          <el-checkbox label="创建时间"></el-checkbox>
+          <el-checkbox label="创建人"></el-checkbox>
+        </el-checkbox-group>
+        <p style="color: #c5051c">
+          注意：导出需先勾选需要导出的内容，一次最多可导出3000条
+        </p>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="excelVisible = false">取 消</el-button>
+        <el-button type="primary" @click="exportExcel">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -309,6 +344,7 @@ export default {
       doctorList: [],
       hospitalList: [],
       checkboxList: [], //转移用户数据
+      checkExcelList: [],
       tableHeaderBig: [
         { type: 'index', label: '序号' },
         { prop: 'name', label: '姓名' },
@@ -378,6 +414,7 @@ export default {
       total: 0,
       //   弹框区域
       transferDialogVisible: false,
+      excelVisible: false,
       infoTitle: '',
     }
   },
@@ -461,11 +498,13 @@ export default {
      */
     // 搜索
     searchBtn() {
+      this.$set(this, 'checkExcelList', [])
       this.pageNum = 1
       this.getList()
     },
     // 重置
     searchReset() {
+      this.$set(this, 'checkExcelList', [])
       sessionStorage.removeItem('skipHospitalId')
       this.pageNum = 1
       this.searchForm = {}
@@ -564,11 +603,187 @@ export default {
       })
       localStorage.setItem('patientNum', this.pageNum)
     },
-
+    /**
+     *  导出excel
+     */
+    titleExcel() {
+      let titleExcel = [] // 表头
+      this.checkExcelList.forEach((item) => {
+        switch (item) {
+          case '姓名':
+            titleExcel.push('name')
+            break
+          case '身份证号':
+            titleExcel.push('idCard')
+            break
+          case '性别':
+            titleExcel.push('gender')
+            break
+          case '出生日期':
+            titleExcel.push('birthday')
+            break
+          case '年龄':
+            titleExcel.push('age')
+            break
+          case '本人电话':
+            titleExcel.push('phone')
+            break
+          case '高血压':
+            titleExcel.push('highBloodStatus')
+            break
+          case '糖尿病':
+            titleExcel.push('diabetesStatus')
+            break
+          case '心率':
+            titleExcel.push('heartRateStatus')
+            break
+          case '两慢指数':
+            titleExcel.push('healthScore')
+            break
+          case '对应医师':
+            titleExcel.push('doctorUserName')
+            break
+          case '医师手机号':
+            titleExcel.push('doctorUserPhone')
+            break
+          case '创建时间':
+            titleExcel.push('createTime')
+            break
+          case '创建人':
+            titleExcel.push('createUserName')
+            break
+        }
+      })
+      return titleExcel
+    },
+    exportExcel() {
+      if (this.total <= 3000) {
+        this.$confirm(
+          '确定要导出当前<strong>' + this.total + '</strong>条数据？',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+          }
+        )
+          .then(() => {
+            this.getExpportData()
+          })
+          .catch(() => {})
+      } else {
+        this.$confirm(
+          '当前要导出的<strong>' +
+            this.total +
+            '</strong>条数据，数据量过大，不能一次导出！<br/>建议分段导出所需数据。',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            showCancelButton: false,
+          }
+        )
+          .then(() => {})
+          .catch(() => {})
+      }
+    },
+    // 对导出数据格式处理
+    formatJson(filterVal, jsonData) {
+      return jsonData.map((v) => filterVal.map((j) => v[j]))
+    },
+    // 导出的列表数据
+    getExpportData() {
+      let titleExcel = this.titleExcel()
+      const loading = this.$loading({
+        lock: true,
+        text: '正在导出，请稍等......',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)',
+      })
+      // 请求参数
+      let searchForm = {
+        page: 1,
+        pageSize: 3000,
+        name: this.searchForm.name,
+        phone: this.searchForm.phone,
+        idCard: this.searchForm.idCard,
+        gender: this.searchForm.gender,
+        highBloodStatus: this.searchForm.highBloodStatus,
+        diabetesStatus: this.searchForm.diabetesStatus,
+        heartRateStatus: this.searchForm.heartRateStatus,
+        doctorUserName: this.searchForm.doctorUserName,
+        doctorUserId: this.doctorId,
+        collectionDoctorUserId: this.collectionDoctorUserId,
+        doctorUserPhone: this.searchForm.doctorUserPhone,
+        hospitalIds: this.searchForm.hospitalIds,
+      }
+      httpAdminPatient.getPatient(searchForm).then(
+        (res) => {
+          let handleDataList = res.data.elements
+          handleDataList.forEach((item) => {
+            if (item.gender) {
+              item.gender = this.genderFormatter(item)
+            }
+            if (item.birthday) {
+              item.birthday = parseTime(item.birthday)?.slice(0, 10)
+            }
+            if (item.highBloodStatus) {
+              item.highBloodStatus = this.diseaseState(item, 'highBloodStatus')
+            }
+            if (item.diabetesStatus) {
+              item.diabetesStatus = this.diseaseState(item, 'diabetesStatus')
+            }
+            if (item.heartRateStatus) {
+              item.heartRateStatus = this.getHeart(item)
+            }
+            // 创建时间
+            if (item.archivesMongo?.createTime) {
+              item.createTime = parseTime(item.archivesMongo?.createTime)
+            }
+            if (item.archivesMongo?.createUserName) {
+              item.createUserName = item.archivesMongo?.createUserName
+            }
+          })
+          if (handleDataList.length > 0) {
+            require.ensure([], () => {
+              const {
+                export_json_to_excel,
+              } = require('@/utils/vendor/Export2Excel')
+              // 导出的表头
+              const tHeader = this.checkExcelList
+              // 导出表头要对应的数据
+              const filterVal = titleExcel
+              const data = this.formatJson(filterVal, handleDataList)
+              export_json_to_excel(tHeader, data, '档案管理列表')
+            })
+          } else {
+            this.$message({
+              message: '数据出錯，请稍后重试',
+              duration: 2000,
+              type: 'warning',
+            })
+          }
+          loading.close()
+        },
+        (error) => {
+          console.log(error)
+          loading.close()
+        }
+      )
+    },
     /***** 表格格式化内容区域 *****/
     // 出生年月
     genderFormatter(row) {
       return formatterElement.gender[row.gender]
+    },
+    diseaseState(row, state) {
+      if (state === 'highBloodStatus') {
+        return formatterElement.highBlood[row.highBloodStatus]
+      } else {
+        return formatterElement.diabetes[row.diabetesStatus]
+      }
+    },
+    getHeart(row) {
+      return formatterElement.heart[row.heartRateStatus]
     },
     highBloodStatusFormatter(row) {
       // return formatterElement.highBlood[row.highBloodStatus]
