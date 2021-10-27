@@ -755,6 +755,7 @@ export default {
               const data = this.formatJson(filterVal, handleDataList)
               export_json_to_excel(tHeader, data, '档案管理列表')
             })
+            this.excelVisible = false
           } else {
             this.$message({
               message: '数据出錯，请稍后重试',
