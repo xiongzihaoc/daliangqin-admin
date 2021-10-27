@@ -200,17 +200,16 @@
         type="selection"
         :selectable="selectable"
       ></el-table-column>
-      <el-table-column
-        align="center"
-        slot="fixed"
-        fixed="right"
-        label="操作"
-        width="120"
-      >
+      <el-table-column align="center" slot="fixed" fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <el-button size="mini" @click="detailsBtn(scope.row)" type="primary"
-            >详细资料</el-button
-          >
+          <div>
+            <el-button size="mini" @click="unlockBtn(scope.row)" type="success" :disabled="unlockFn(scope.row)"
+              >解锁</el-button
+            >
+            <el-button size="mini" @click="detailsBtn(scope.row)" type="primary"
+              >详细资料</el-button
+            >
+          </div>
         </template>
       </el-table-column>
     </EleTable>
@@ -602,6 +601,25 @@ export default {
         query: { id: val.id, type: 'edit', isArchives: val.isArchives },
       })
       localStorage.setItem('patientNum', this.pageNum)
+    },
+    /**
+     * 解锁
+     */
+    unlockBtn(val){
+      let phone = val.phone
+      httpAdminPatient.putUserUnLock({phone}).then((res)=>{
+        if(res.code === "OK"){
+          this.$message.success('解锁成功')
+        }
+        this.getList()
+      })
+    },
+    unlockFn(val){
+      if(val.phone === '' || val.phone === undefined){
+        return true
+      }else{
+        return false
+      }
     },
     /**
      *  导出excel
