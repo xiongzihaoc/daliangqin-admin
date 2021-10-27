@@ -167,10 +167,20 @@ export default {
     /**
      * 操作
      */
+    editBtn(val){
+      console.log('编辑',val)
+      return
+      httpAdminAiCall.putInformationUser({id, name, phoneNumber}).then((res)=>{
+        console.log(res)
+      })
+    },
     deleteBtn(val){
       let [calledPhoneNumber, robotCallJobId] = [val.calledPhoneNumber, val.robotCallJobId]
-      httpAdminAiCall.getInformationCopy({calledPhoneNumber, robotCallJobId}).then((res)=>{
-        console.log(res)
+      httpAdminAiCall.getInformationUser({calledPhoneNumber, robotCallJobId}).then((res)=>{
+        if(res.code === 'OK'){
+          this.$message.success('删除成功')
+        }
+        this.getStatisticsList()
       })
     },
     /**

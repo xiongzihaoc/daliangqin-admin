@@ -119,6 +119,21 @@ export const httpAdminAiCall = {
       method: 'delete',
     })
   },
+  // 删除外呼用户
+  getInformationUser(data) {
+    return request({
+      url: `ai/deleteAiUser/${data.robotCallJobId}/${data.calledPhoneNumber}`,
+      method: 'get',
+    })
+  },
+  // 编辑外呼用户
+  putInformationUser(data) {
+    return request({
+      url: `ai/editUser/${data.robotCallJobId}`,
+      method: 'put',
+      data
+    })
+  },
   // 导出ai已呼人数
   getAlreadyStatisticsExcel(data) {
     return request({
