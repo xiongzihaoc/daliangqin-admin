@@ -8,22 +8,6 @@
         :inline="true"
         class="searchForm"
       >
-        <el-form-item label="医院名称">
-          <el-select
-            v-model="searchForm.hospitalIds"
-            multiple
-            collapse-tags
-            size="small"
-            filterable
-          >
-            <el-option
-              v-for="(item, index) in hospitalList"
-              :key="index"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="姓名" align="left" prop="name">
           <el-input
             v-model.trim="searchForm.name"
@@ -111,6 +95,22 @@
               :key="item.id"
               :label="item.label"
               :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="医院名称">
+          <el-select
+            v-model="searchForm.hospitalIds"
+            multiple
+            collapse-tags
+            size="small"
+            filterable
+          >
+            <el-option
+              v-for="(item, index) in hospitalList"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
