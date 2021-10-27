@@ -32,6 +32,12 @@ export const httpAdminPatient = {
       method: 'put',
       data
     })
-  }
-
+  },
+  putUserUnLock(data) {
+    return request({
+      url: `user/unLock/${data.phone}`,
+      method: 'put',
+      data
+    })
+  },
 }
