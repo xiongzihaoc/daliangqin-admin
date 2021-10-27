@@ -2,9 +2,34 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form ref="searchFormRef" :model="searchForm" :inline="true" class="searchForm">
+      <el-form
+        ref="searchFormRef"
+        :model="searchForm"
+        :inline="true"
+        class="searchForm"
+      >
+        <el-form-item label="医院名称">
+          <el-select
+            v-model="searchForm.hospitalIds"
+            multiple
+            collapse-tags
+            size="small"
+            filterable
+          >
+            <el-option
+              v-for="(item, index) in hospitalList"
+              :key="index"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="姓名" align="left" prop="name">
-          <el-input v-model.trim="searchForm.name" size="small" placeholder="请输入姓名"></el-input>
+          <el-input
+            v-model.trim="searchForm.name"
+            size="small"
+            placeholder="请输入姓名"
+          ></el-input>
         </el-form-item>
         <el-form-item label="身份证号" align="left" prop="idCard">
           <el-input
@@ -48,7 +73,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="高血压" align="left" prop="highBloodStatus">
-          <el-select v-model="searchForm.highBloodStatus" size="small" placeholder="请选择状态">
+          <el-select
+            v-model="searchForm.highBloodStatus"
+            size="small"
+            placeholder="请选择状态"
+          >
             <el-option
               v-for="item in healthList"
               :key="item.id"
@@ -58,7 +87,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="糖尿病" align="left" prop="diabetesStatus">
-          <el-select v-model="searchForm.diabetesStatus" size="small" placeholder="请选择状态">
+          <el-select
+            v-model="searchForm.diabetesStatus"
+            size="small"
+            placeholder="请选择状态"
+          >
             <el-option
               v-for="item in healthList"
               :key="item.id"
@@ -68,7 +101,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="心率" align="left" prop="heartRateStatus">
-          <el-select v-model="searchForm.heartRateStatus" size="small" placeholder="请选择状态">
+          <el-select
+            v-model="searchForm.heartRateStatus"
+            size="small"
+            placeholder="请选择状态"
+          >
             <el-option
               v-for="item in heartList"
               :key="item.id"
@@ -78,7 +115,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="对应医师" align="left" prop="doctorUserName">
-          <el-input placeholder="请输入对应医师" v-model.trim="searchForm.doctorUserName" size="small"></el-input>
+          <el-input
+            placeholder="请输入对应医师"
+            v-model.trim="searchForm.doctorUserName"
+            size="small"
+          ></el-input>
         </el-form-item>
         <el-form-item label="医师手机号" align="left" prop="doctorUserPhone">
           <el-input
@@ -90,9 +131,23 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search">搜索</el-button>
-          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh">重置</el-button>
-          <el-button size="small" type="success" icon="el-icon-download">导入</el-button>
+          <el-button
+            @click="searchBtn"
+            type="primary"
+            size="small"
+            icon="el-icon-search"
+            >搜索</el-button
+          >
+          <el-button
+            @click="searchReset"
+            size="small"
+            plain
+            icon="el-icon-refresh"
+            >重置</el-button
+          >
+          <el-button size="small" type="success" icon="el-icon-download"
+            >导入</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -105,7 +160,8 @@
         size="small"
         plain
         icon="el-icon-plus"
-      >新增</el-button>
+        >新增</el-button
+      >
       <el-button
         @click="transferUser"
         type="primary"
@@ -114,7 +170,8 @@
         plain
         icon="el-icon-sort"
         :disabled="transferBtn"
-      >转移用户</el-button>
+        >转移用户</el-button
+      >
     </div>
     <!-- 表格区域 -->
     <EleTable
@@ -130,21 +187,38 @@
       v-loading="loading"
     >
       <!-- 操作 -->
-      <el-table-column slot="fixed" fixed="left" type="selection" :selectable="selectable"></el-table-column>
-      <el-table-column align="center" slot="fixed" fixed="right" label="操作" width="120">
+      <el-table-column
+        slot="fixed"
+        fixed="left"
+        type="selection"
+        :selectable="selectable"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        slot="fixed"
+        fixed="right"
+        label="操作"
+        width="120"
+      >
         <template slot-scope="scope">
-          <el-button size="mini" @click="detailsBtn(scope.row)" type="primary">详细资料</el-button>
+          <el-button size="mini" @click="detailsBtn(scope.row)" type="primary"
+            >详细资料</el-button
+          >
         </template>
       </el-table-column>
     </EleTable>
     <!-- 转移用户  -->
-    <el-dialog title="转移用户" :visible.sync="transferDialogVisible" width="40%">
+    <el-dialog
+      title="转移用户"
+      :visible.sync="transferDialogVisible"
+      width="40%"
+    >
       <el-form :model="transferForm" label-width="100px">
         <el-form-item label="选择医院" v-model.trim="transferForm.hospitalId">
           <el-select
             v-model="transfer.hospitalId"
             filterable
-            style="width:100%;"
+            style="width: 100%"
             placeholder="请选择医院"
             @change="selectHospital"
           >
@@ -160,7 +234,7 @@
           <el-select
             v-model="transfer.doctorName"
             filterable
-            style="width:100%;"
+            style="width: 100%"
             placeholder="请选择医师"
             @change="selectDoctor"
           >
@@ -173,10 +247,14 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <div style="color: #c5051c; padding: 0 32px;">注意：转移用户是指将所选择的用户转移至选择的医师名下，请谨慎操作</div>
+      <div style="color: #c5051c; padding: 0 32px">
+        注意：转移用户是指将所选择的用户转移至选择的医师名下，请谨慎操作
+      </div>
       <div slot="footer">
         <el-button @click="transferCancel">取 消</el-button>
-        <el-button @click="transferAffirm" type="primary" :disabled="affirmBtn">确 定</el-button>
+        <el-button @click="transferAffirm" type="primary" :disabled="affirmBtn"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
   </div>
@@ -187,7 +265,6 @@ import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
 import { httpAdminArchives } from '@/api/admin/httpAdminArchives'
-
 
 import {
   parseTime,
@@ -211,7 +288,7 @@ export default {
       transferBtn: true,
       affirmBtn: true,
       transferForm: {
-        hospitalId: ''
+        hospitalId: '',
       },
       searchForm: {
         name: '',
@@ -221,11 +298,12 @@ export default {
         highBloodStatus: '',
         diabetesStatus: '',
         heartRateStatus: '',
+        hospitalIds: [],
         beginAge: 1,
         endAge: 120,
       },
       transfer: {
-        name: ''
+        name: '',
       },
       list: [],
       doctorList: [],
@@ -274,6 +352,7 @@ export default {
           },
         },
         { prop: 'healthScore', label: '两慢指数' },
+        { prop: 'hospitalName', label: '医院名称' },
         { prop: 'doctorUserName', label: '对应医师' },
         { prop: 'doctorUserPhone', label: '医师手机号' },
         {
@@ -306,6 +385,9 @@ export default {
     this.doctorId = localStorage.getItem('doctorId')
     this.collectionDoctorUserId = localStorage.getItem('collectionDoctorUserId')
     let pageNum = localStorage.getItem('patientNum')
+    this.searchForm.hospitalIds = sessionStorage.getItem('skipHospitalId')
+      ? JSON.parse(sessionStorage.getItem('skipHospitalId'))
+      : ''
     if (pageNum) {
       this.pageNum = pageNum
     }
@@ -318,6 +400,7 @@ export default {
     localStorage.removeItem('doctorId')
     localStorage.removeItem('collectionDoctorUserId')
     localStorage.removeItem('patientNum')
+    sessionStorage.removeItem('skipHospitalId')
   },
   methods: {
     getList() {
@@ -336,6 +419,7 @@ export default {
           doctorUserId: this.doctorId,
           collectionDoctorUserId: this.collectionDoctorUserId,
           doctorUserPhone: this.searchForm.doctorUserPhone,
+          hospitalIds: this.searchForm.hospitalIds,
           // beginAge: this.searchForm.beginAge,
           // endAge: this.searchForm.endAge,
         })
@@ -370,11 +454,11 @@ export default {
         this.getList()
       })
     },
-    selectBeginAgeChange(val) { },
-    selectEndAgeChange(val) { },
+    selectBeginAgeChange(val) {},
+    selectEndAgeChange(val) {},
     /**
- * 搜索
- */
+     * 搜索
+     */
     // 搜索
     searchBtn() {
       this.pageNum = 1
@@ -382,6 +466,7 @@ export default {
     },
     // 重置
     searchReset() {
+      sessionStorage.removeItem('skipHospitalId')
       this.pageNum = 1
       this.searchForm = {}
       this.transferBtn = true
@@ -389,8 +474,8 @@ export default {
       this.getList()
     },
     /**
- * CRUD
- */
+     * CRUD
+     */
     // 新增
     addBtn() {
       this.$router.push({
@@ -428,13 +513,19 @@ export default {
     // 转移 医生选择
     selectDoctor() {
       const all = (arr, fn = Boolean) => arr.every(fn)
-      let doctorIdJudge = all(this.checkboxList, x => x.doctorUserId === this.transfer.doctorName)
+      let doctorIdJudge = all(
+        this.checkboxList,
+        (x) => x.doctorUserId === this.transfer.doctorName
+      )
       if (doctorIdJudge === true) {
         this.affirmBtn = true
         this.$message.error('当前用户的医师未发生改变，请核对')
         return
       }
-      if (this.checkboxList.length <= 0 || this.transfer.doctorName === undefined) {
+      if (
+        this.checkboxList.length <= 0 ||
+        this.transfer.doctorName === undefined
+      ) {
         this.affirmBtn = true
       } else {
         this.affirmBtn = false
@@ -455,7 +546,10 @@ export default {
       })
       // 获取到医生id
       if (arr.length <= 0 || this.transfer.doctorName === undefined) return
-      this.putArchivesDoctor({ patientUserIds: arr, doctorUserId: this.transfer.doctorName })
+      this.putArchivesDoctor({
+        patientUserIds: arr,
+        doctorUserId: this.transfer.doctorName,
+      })
     },
     // 转诊取消
     transferCancel() {
@@ -464,7 +558,6 @@ export default {
     },
     // 跳转详细资料
     detailsBtn(val) {
-      console.log(val)
       this.$router.push({
         path: '/archivesManagement/details',
         query: { id: val.id, type: 'edit', isArchives: val.isArchives },
@@ -515,8 +608,8 @@ export default {
       }
     },
     /**
- * 分页
- */
+     * 分页
+     */
     handleSizeChange(newSize) {
       this.pageSize = newSize
       this.getList()
