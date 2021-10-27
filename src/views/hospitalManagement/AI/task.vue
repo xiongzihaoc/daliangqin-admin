@@ -1164,7 +1164,7 @@ export default {
     moreMenus(val, state) {
       switch (state) {
         case 'edit':
-          if (val === 'IN_PROCESS' || val === 'COMPLETED') {
+          if (val === 'IN_PROCESS' || val === 'COMPLETED' || val === 'SYSTEM_SUSPENDED') {
             return false
           } else {
             return true
