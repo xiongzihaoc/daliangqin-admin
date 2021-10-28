@@ -13,6 +13,7 @@
             v-model="searchForm.hospitalId"
             size="small"
             filterable
+            value-key="id"
             placeholder="请选择医院"
           >
             <el-option
@@ -351,6 +352,7 @@
             filterable
             clearable
             :disabled="editBot"
+            value-key="id"
             style="width: 100%"
             placeholder="请选择医院"
             @change="getHospitalName"
@@ -359,7 +361,7 @@
               v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
+              :value="item"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -371,17 +373,19 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="BOT名称:" prop="dialogFlowId">
-          <el-select
+          <el-select 
             v-model="addUserFrom.dialogFlowId"
+            value-key="dialogFlowId"
             filterable
             style="width: 100%"
             placeholder="请选择BOT名称"
             :disabled="editBot"
+            @change="getBotName"
           >
             <el-option
               v-for="item in aiSpeechList"
               :label="item.name"
-              :value="item.dialogFlowId"
+              :value="item"
               :key="item.dialogFlowId"
             ></el-option>
           </el-select>
@@ -603,13 +607,20 @@ export default {
         selectTaskStage: '',
         callDuration: '',
       },
+      botFrom: {
+        dialogFlowId: '',
+        dialogFlowName: '',
+      },
+      hospitalFrom: {
+        id: '',
+        name: '',
+      },
       taskForm: {
         task: '',
         taskContent: '',
       },
       addUserFrom: {
         time: '',
-        hospitalId: '',
         name: '',
         dialogFlowId: '',
         time: '',
@@ -704,7 +715,6 @@ export default {
           this.hospitalList = res.data.elements
         })
     },
-    getHospitalName(val) {},
     // 获取任务与期数
     getAiStageList() {
       httpAdminAiHistory.getAiStageList().then((res) => {
@@ -753,9 +763,11 @@ export default {
       // 添加接口
       httpAdminAiCall
         .postInformation({
-          hospitalId: this.addUserFrom.hospitalId,
+          hospitalId: this.hospitalFrom.id,
+          hospitalName: this.hospitalFrom.name,
           name: this.addUserFrom.name,
           dialogFlowId: this.addUserFrom.dialogFlowId,
+          dialogFlowName: this.addUserFrom.dialogFlowName,
           // 时间添加
           dailyStartTime: this.searchForm.daily[0],
           dailyEndTime: this.searchForm.daily[1],
@@ -795,13 +807,15 @@ export default {
           dailyStartTime: this.searchForm.daily[0],
           dailyEndTime: this.searchForm.daily[1],
           daysOfWeek: this.timeForm.checkListPeriod,
-          hospitalName: this.addUserFrom.hospitalName,
+          hospitalName: this.hospitalFrom.name,
           id: this.addUserFrom.id,
           inactiveDateList,
           inactiveTimeList,
           robotCallJobId: this.addUserFrom.robotCallJobId,
           robotCount: 2,
           hospitalId: this.addUserFrom.hospitalId,
+          fileName: this.searchForm.fileName,
+          fileUrl: this.searchForm.fileUrl,
         })
         .then((res) => {
           if (res.code === 'OK') {
@@ -916,6 +930,7 @@ export default {
         'SATURDAY',
         'SUNDAY',
       ]
+      this.$set(this.botFrom, 'dialogFlowId', {}) 
       this.confirmCallTime('add')
       this.userVisible = true
     },
@@ -935,6 +950,18 @@ export default {
           return false
         }
       })
+    },
+    /**
+     * 获取 select 话术名称 医院名称
+     */
+    getBotName(val){
+      this.addUserFrom.dialogFlowId = val.dialogFlowId
+      this.addUserFrom.dialogFlowName = val.name
+    },
+    getHospitalName(val) {
+      this.hospitalFrom.id = val.id
+      this.hospitalFrom.name = val.name
+      // name id
     },
     /**
      * 处理提交时间
@@ -1048,7 +1075,6 @@ export default {
         // 添加任务置空 时间与日期
         this.$set(this.dialForm, 'notCallTime', '')
         this.$set(this, 'notDialTimeArr', [])
-
         this.$set(this.timeForm, 'notDial', [])
         this.$set(this, 'notDialDateArr', [])
       }
@@ -1223,6 +1249,9 @@ export default {
       delete this.timeForm.notDial
       const { data: res } = await this.getInformationTask(val.robotCallJobId)
       this.addUserFrom = JSON.parse(JSON.stringify(res))
+      // 回显 BOT名称
+      this.addUserFrom.dialogFlowId = { dialogFlowId: res.dialogFlowId, name: res.dialogFlowName }
+      this.addUserFrom.hospitalId = { id: res.hospitalId,  name: res.hospitalName }
       this.$set(
         this.addUserFrom,
         'name',

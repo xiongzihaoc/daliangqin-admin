@@ -255,6 +255,7 @@ export default {
     searchReset() {
       this.searchForm.customerPersonName = ''
       this.searchForm.calledPhoneNumber = ''
+      this.getList()
     },
     importFormReset() {
       this.importForm.name = ''
