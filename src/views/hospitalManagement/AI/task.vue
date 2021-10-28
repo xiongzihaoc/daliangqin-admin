@@ -279,7 +279,11 @@
         align="center"
         label="创建时间"
         prop="createTime"
-      ></el-table-column>
+      >
+      <template slot-scope="scope">
+        <span>{{ parseTime(scope.row.createTime) }}</span>
+      </template>
+      </el-table-column>
       <el-table-column align="center" label="操作" width="150" fixed="right">
         <template slot-scope="scope">
           <el-dropdown>
