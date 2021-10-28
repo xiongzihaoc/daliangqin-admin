@@ -153,7 +153,14 @@
         align="center"
         label="BOT名称"
         prop="dialogFlowName"
-      ></el-table-column>
+        width="200"
+      >
+        <template slot-scope="scope">
+          <el-tooltip class="item" effect="dark" :content="scope.row.dialogFlowName" placement="top">
+            <span class="hidden">{{ scope.row.dialogFlowName }}</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
       <el-table-column
         align="center"
         label="任务状态"
@@ -739,7 +746,6 @@ export default {
     getAiSpeech() {
       httpAdminAiCall.getAiSpeech().then((res) => {
         this.aiSpeechList = res.data.elements
-        console.log(this.aiSpeechList)
       })
     },
     // 获取随访任务详情
@@ -808,13 +814,12 @@ export default {
           dailyStartTime: this.searchForm.daily[0],
           dailyEndTime: this.searchForm.daily[1],
           daysOfWeek: this.timeForm.checkListPeriod,
-          hospitalName: this.hospitalFrom.name,
           id: this.addUserFrom.id,
           inactiveDateList,
           inactiveTimeList,
           robotCallJobId: this.addUserFrom.robotCallJobId,
           robotCount: 2,
-          hospitalId: this.addUserFrom.hospitalId,
+          hospitalId: this.hospitalFrom.hospitalId,
           fileName: this.searchForm.fileName,
           fileUrl: this.searchForm.fileUrl,
         })
@@ -1400,4 +1405,10 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.hidden{
+	overflow: hidden;  
+	text-overflow: ellipsis;     
+	white-space:nowrap ;
+}
+</style>
