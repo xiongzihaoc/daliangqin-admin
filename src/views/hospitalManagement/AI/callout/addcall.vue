@@ -2,18 +2,37 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form class="searchForm" ref="searchFormRef" :model="searchForm" :inline="true">
+      <el-form
+        class="searchForm"
+        ref="searchFormRef"
+        :model="searchForm"
+        :inline="true"
+      >
         <el-form-item label="用户姓名">
-          <el-input v-model="searchForm.customerPersonName" size="small"></el-input>
+          <el-input
+            v-model="searchForm.customerPersonName"
+            size="small"
+          ></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
-          <el-input v-model="searchForm.calledPhoneNumber" size="small"></el-input>
+          <el-input
+            v-model="searchForm.calledPhoneNumber"
+            size="small"
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
+          <el-button
+            @click="searchBtn"
+            type="primary"
+            size="small"
+            icon="el-icon-search"
             >搜索</el-button
           >
-          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh"
+          <el-button
+            @click="searchReset"
+            size="small"
+            plain
+            icon="el-icon-refresh"
             >重置</el-button
           >
           <el-button @click="searchAddBtn" type="primary" size="small"
@@ -32,7 +51,11 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     >
-      <el-table-column align="center" type="index" label="序号"></el-table-column>
+      <el-table-column
+        align="center"
+        type="index"
+        label="序号"
+      ></el-table-column>
       <el-table-column
         align="center"
         label="用户名"
@@ -56,7 +79,7 @@
       </el-table-column>
     </EleTable>
     <!-- 弹出层 -->
-    <el-dialog title="导入单个用户" :visible.sync="importVisible" width="40%">
+    <el-dialog :title="title" :visible.sync="importVisible" width="40%">
       <el-form
         label-width="100px"
         :rules="formRules"
@@ -73,16 +96,18 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="importVisible = false">取 消</el-button>
-        <el-button type="primary" @click="postInformation('importForm')">确 定</el-button>
+        <el-button type="primary" @click="postInformation('importForm')"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import EleTable from "@/components/Table";
-import { httpAdminAiCall } from "@/api/admin/httpAdminAiCall";
-import { validatePhone } from "@/utils/index";
+import EleTable from '@/components/Table'
+import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall'
+import { validatePhone } from '@/utils/index'
 
 export default {
   components: {
@@ -91,26 +116,27 @@ export default {
   data() {
     return {
       validatePhone,
+      title: '导入单个用户',
       formRules: {
-        name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         phoneNumber: [
-          { required: true, message: "请输入手机号", trigger: "blur" },
+          { required: true, message: '请输入手机号', trigger: 'blur' },
           {
             validator: validatePhone,
-            message: "手机号格式不对",
-            trigger: "blur",
+            message: '手机号格式不对',
+            trigger: 'blur',
           },
         ],
       },
       searchForm: {
-        customerPersonName: "",
-        calledPhoneNumber: "",
-        robotCallJobId: "",
+        customerPersonName: '',
+        calledPhoneNumber: '',
+        robotCallJobId: '',
       },
       importForm: {
-        name: "",
-        phoneNumber: "",
-        robotCallJobId: "",
+        name: '',
+        phoneNumber: '',
+        robotCallJobId: '',
       },
       list: [],
       tableHeaderBig: [],
@@ -120,87 +146,134 @@ export default {
       total: 0,
       // 弹窗区域
       importVisible: false,
-    };
+    }
   },
   created() {
-    this.importForm.robotCallJobId = this.$route.query.robotCallJobId;
-    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId;
-    this.getStatisticsList();
+    this.importForm.robotCallJobId = this.$route.query.robotCallJobId
+    this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
+    this.getList()
   },
   methods: {
     /**
      * 获取外呼接口数据
      */
-    getStatisticsList() {
-      let robotCallJobId = this.$route.query.robotCallJobId;
-      httpAdminAiCall.getStatisticsList(this.searchForm).then((res) => {
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+    getList() {
+      let robotCallJobId = this.$route.query.robotCallJobId
+      let data = Object.assign(this.searchForm, {
+        page: this.pageNum,
+        pageSize: this.pageSize,
+      })
+      httpAdminAiCall.getStatisticsList(data).then((res) => {
+        this.list = res.data.elements
+        this.total = res.data.totalSize
+      })
     },
     postAiStatistics() {
-      console.log(this.importForm);
+      console.log(this.importForm)
       httpAdminAiCall.postAiStatistics(this.importForm).then((res) => {
-        if (res.code === "OK") {
-          this.$message.success(res.message);
+        if (res.code === 'OK') {
+          this.$message.success(res.message)
         } else {
-          this.$message.error(res.message);
+          this.$message.error(res.message)
         }
-        this.getStatisticsList();
-        this.importVisible = false;
-      });
+        this.getList()
+        this.importVisible = false
+      })
+    },
+    // 编辑用户信息
+    putInformationUser() {
+      let data = {
+        id: this.importForm.id,
+        name: this.importForm.name,
+        phoneNumber: this.importForm.phoneNumber,
+        robotCallJobId: this.importForm.robotCallJobId,
+      }
+      httpAdminAiCall.putInformationUser(data).then((res) => {
+        console.log('编辑', res)
+        if (res.code === 'OK') {
+          this.$message.success('编辑成功')
+        }
+        this.getList()
+        this.importVisible = false
+      })
     },
     postInformation(importForm) {
       this.$refs[importForm].validate((valid) => {
-        console.log("ok");
-        if (valid) {
-          this.postAiStatistics();
+        if (this.title != '编辑用户') {
+          if (valid) {
+            this.postAiStatistics()
+          }
+        } else {
+          if (valid) {
+            this.putInformationUser()
+          }
         }
-      });
+      })
     },
     /**
      * 按钮
      */
     searchAddBtn() {
-      this.importVisible = true;
+      this.title = '导入单个用户'
+      delete this.importForm.name
+      delete this.importForm.phoneNumber
+      delete this.importForm.id
+      console.log(this.importForm)
+      this.importVisible = true
     },
     /**
      * 操作
      */
-    deleteBtn(val){
-      let [calledPhoneNumber, robotCallJobId] = [val.calledPhoneNumber, val.robotCallJobId]
-      httpAdminAiCall.getInformationCopy({calledPhoneNumber, robotCallJobId}).then((res)=>{
-        console.log(res)
-      })
+    editBtn(val) {
+      this.importVisible = true
+      this.title = '编辑用户'
+      this.importForm.name = val.customerPersonName
+      this.importForm.phoneNumber = val.calledPhoneNumber
+      this.importForm.id = val.id
+    },
+    deleteBtn(val) {
+      let [calledPhoneNumber, robotCallJobId] = [
+        val.calledPhoneNumber,
+        val.robotCallJobId,
+      ]
+      httpAdminAiCall
+        .getInformationUser({ calledPhoneNumber, robotCallJobId })
+        .then((res) => {
+          if (res.code === 'OK') {
+            this.$message.success('删除成功')
+          }
+          this.getList()
+        })
     },
     /**
      * 搜索
      */
     searchBtn() {
-      this.pageNum = 1;
-      this.getStatisticsList();
+      this.pageNum = 1
+      this.getList()
     },
     searchReset() {
-      this.searchForm.customerPersonName = "";
-      this.searchForm.calledPhoneNumber = "";
+      this.searchForm.customerPersonName = ''
+      this.searchForm.calledPhoneNumber = ''
+      this.getList()
     },
     importFormReset() {
-      this.importForm.name = "";
-      this.importForm.phoneNumber = "";
+      this.importForm.name = ''
+      this.importForm.phoneNumber = ''
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getAiCallList();
+      this.pageSize = newSize
+      this.getAiCallList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getAiCallList();
+      this.pageNum = newPage
+      this.getAiCallList()
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -112,6 +112,64 @@ const archivesRouter = {
             icon: 'xinlvtongji'
         }
     },
+    // 商城模块
+    // {
+    //     path: 'mall',
+    //     name: 'mall',
+    //     component: () => import('@/views/archivesManagement/mall/index'),
+    //     redirect: "/archivesManagement/mall/commodity",
+    //     meta: {
+    //         title: '积分商城',
+    //         icon: 'mall',
+    //     },
+    //     children: [
+    //         {
+    //             path: "commodity",
+    //             name: "commodity",
+    //             component: () => import('@/views/archivesManagement/mall/commodity'),
+    //             meta: {
+    //                 title: '积分商品',
+    //                 icon: 'general',
+    //             },
+    //         },
+    //         {
+    //             path: "task",
+    //             name: "task",
+    //             component: () => import('@/views/archivesManagement/mall/task'),
+    //             meta: {
+    //                 title: '积分任务',
+    //                 icon: 'general',
+    //             },
+    //         },
+    //         {
+    //             path: "account",
+    //             name: "account",
+    //             component: () => import('@/views/archivesManagement/mall/account'),
+    //             meta: {
+    //                 title: '积分账户',
+    //                 icon: 'general',
+    //             },
+    //         },
+    //         {
+    //             path: "particulars",
+    //             name: "particulars",
+    //             component: () => import('@/views/archivesManagement/mall/particulars'),
+    //             meta: {
+    //                 title: '积分明细',
+    //                 icon: 'general',
+    //             },
+    //         },
+    //         {
+    //             path: "orde",
+    //             name: "orde",
+    //             component: () => import('@/views/archivesManagement/mall/orde'),
+    //             meta: {
+    //                 title: '积分订单',
+    //                 icon: 'general',
+    //             },
+    //         },
+    //     ],
+    // },
     {
         path: 'details',
         name: 'details',

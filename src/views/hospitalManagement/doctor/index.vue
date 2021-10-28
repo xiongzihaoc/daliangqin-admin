@@ -2,253 +2,297 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form ref="searchFormRef"
+      <el-form
+        ref="searchFormRef"
         :model="searchForm"
         :inline="true"
-        class="searchForm">
-        <el-form-item label="姓名"
-          align="left"
-          prop="name">
-          <el-input v-model="searchForm.name"
+        class="searchForm"
+      >
+        <el-form-item label="姓名" align="left" prop="name">
+          <el-input
+            v-model="searchForm.name"
             size="small"
-            placeholder="请输入姓名"></el-input>
+            placeholder="请输入姓名"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="手机号"
-          align="left"
-          prop="phone">
-          <el-input v-model="searchForm.phone"
+        <el-form-item label="手机号" align="left" prop="phone">
+          <el-input
+            v-model="searchForm.phone"
             v-Int
             size="small"
             maxlength="11"
-            placeholder="请输入手机号"></el-input>
+            placeholder="请输入手机号"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="身份证号"
-          align="left"
-          prop="idCard">
-          <el-input v-model="searchForm.idCard"
+        <el-form-item label="身份证号" align="left" prop="idCard">
+          <el-input
+            v-model="searchForm.idCard"
             size="small"
             placeholder="请输入身份证号"
-            maxlength="18"></el-input>
+            maxlength="18"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="性别"
-          align="left"
-          prop="gender">
-          <el-select v-model="searchForm.gender"
-            size="small">
-            <el-option v-for="item in genderList"
+        <el-form-item label="性别" align="left" prop="gender">
+          <el-select v-model="searchForm.gender" size="small">
+            <el-option
+              v-for="item in genderList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"></el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="职位"
-          align="left"
-          prop="type">
-          <el-select v-model="searchForm.type"
+        <el-form-item label="职位" align="left" prop="type">
+          <el-select
+            v-model="searchForm.type"
             placeholder="请选择职位"
-            size="small">
-            <el-option v-for="item in doctorTypeList"
+            size="small"
+          >
+            <el-option
+              v-for="item in doctorTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"></el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="医院名称"
-          align="left">
-          <el-select v-model="searchForm.hospitalId"
+        <el-form-item label="医院名称" align="left">
+          <el-select
+            v-model="searchForm.hospitalId"
             size="small"
             filterable
-            placeholder="请选择医院">
-            <el-option v-for="item in hospitalList"
+            placeholder="请选择医院"
+          >
+            <el-option
+              v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn"
+          <el-button
+            @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search">搜索</el-button>
-          <el-button @click="searchReset"
+            icon="el-icon-search"
+            >搜索</el-button
+          >
+          <el-button
+            @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh">重置</el-button>
-          <el-button size="small"
-            type="success"
-            icon="el-icon-download">导入</el-button>
+            icon="el-icon-refresh"
+            >重置</el-button
+          >
+          <el-button size="small" type="success" icon="el-icon-download"
+            >导入</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格操作按钮 -->
     <div>
-      <el-button @click="addBtn"
+      <el-button
+        @click="addBtn"
         type="primary"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-plus">新增</el-button>
+        icon="el-icon-plus"
+        >新增</el-button
+      >
     </div>
     <!-- 表格区域 -->
-    <EleTable :data="list"
+    <EleTable
+      :data="list"
       :header="tableHeaderBig"
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
       @handleSizeChange="handleSizeChange"
-      @handleCurrentChange="handleCurrentChange">
-      <el-table-column align="center"
+      @handleCurrentChange="handleCurrentChange"
+    >
+      <el-table-column
+        align="center"
         type="index"
-        label="序号"></el-table-column>
-      <el-table-column align="center"
+        label="序号"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         label="姓名"
-        prop="name"></el-table-column>
-      <el-table-column align="center"
-        label="头像"
-        prop="avatarUrl">
+        prop="name"
+      ></el-table-column>
+      <el-table-column align="center" label="头像" prop="avatarUrl">
         <template slot-scope="scope">
-          <img class="tableImg"
-            :src="scope.row.avatarUrl" />
+          <img class="tableImg" :src="scope.row.avatarUrl" />
         </template>
       </el-table-column>
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         label="手机号"
-        prop="phone"></el-table-column>
-      <el-table-column align="center"
+        prop="phone"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         label="身份证号"
-        prop="idCard"></el-table-column>
-      <el-table-column align="center"
+        prop="idCard"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         label="出生日期"
         prop="birthday"
-        :formatter="birthdayFormatter"></el-table-column>
-      <el-table-column align="center"
-        label="年龄"
-        prop="age"></el-table-column>
-      <el-table-column align="center"
+        :formatter="birthdayFormatter"
+      ></el-table-column>
+      <el-table-column align="center" label="年龄" prop="age"></el-table-column>
+      <el-table-column
+        align="center"
         label="性别"
         prop="gender"
-        :formatter="genderFormatter"></el-table-column>
-      <el-table-column align="center"
+        :formatter="genderFormatter"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         label="职位"
         prop="type"
-        :formatter="typeFormatter"></el-table-column>
-      <el-table-column align="center"
+        :formatter="typeFormatter"
+      ></el-table-column>
+      <el-table-column
+        align="center"
         label="医院名称"
-        prop="hospitalName"></el-table-column>
-      <el-table-column align="center"
-        label="用户数量"
-        prop="patientCount">
+        prop="hospitalName"
+      ></el-table-column>
+      <el-table-column align="center" label="用户数量" prop="patientCount">
         <template slot-scope="scope">
-          <span @click="skipPatient(scope.row)"
-            style="color: #1890ff; text-decoration: underline">{{ scope.row.patientCount }}</span>
+          <span
+            @click="skipPatient(scope.row)"
+            style="color: #1890ff; text-decoration: underline"
+            >{{ scope.row.patientCount }}</span
+          >
         </template>
       </el-table-column>
-      <el-table-column align="center"
+      <el-table-column
+        align="center"
         label="创建人"
-        prop="createUserName"></el-table-column>
-      <el-table-column align="center"
-        label="创建时间"
-        prop="createTime">
-        <template slot-scope="scope">{{ parseTime(scope.row.createTime) }}</template>
+        prop="createUserName"
+      ></el-table-column>
+      <el-table-column align="center" label="创建时间" prop="createTime">
+        <template slot-scope="scope">{{
+          parseTime(scope.row.createTime)
+        }}</template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column align="center"
-        label="操作"
-        width="220">
+      <el-table-column align="center" label="操作" width="220">
         <template slot-scope="scope">
-          <el-button size="mini"
-            type="primary"
-            @click="editBtn(scope.row)">编辑</el-button>
-          <el-button size="mini"
-            type="danger"
-            @click="deleteBtn(scope.row.id)">删除</el-button>
+          <el-button size="mini" type="success" :disabled="unlockFn(scope.row)" @click="unlockBtn(scope.row)"
+            >解锁</el-button
+          >
+          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
+            >编辑</el-button
+          >
+          <el-button size="mini" type="danger" @click="deleteBtn(scope.row.id)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </EleTable>
     <!-- 增改页面 -->
-    <el-dialog :title="infoTitle"
+    <el-dialog
+      :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
-      v-dialogDrag>
-      <el-form ref="FormRef"
+      v-dialogDrag
+    >
+      <el-form
+        ref="FormRef"
         :rules="formRules"
         :model="editAddForm"
-        label-width="100px">
-        <el-form-item label="医生姓名"
-          prop="name">
+        label-width="100px"
+      >
+        <el-form-item label="医生姓名" prop="name">
           <!-- 编辑阻止修改医生姓名 -->
-          <el-input :disabled="this.infoTitle === '编辑' ? true : false"
+          <el-input
+            :disabled="this.infoTitle === '编辑' ? true : false"
             v-model="editAddForm.name"
-            placeholder="请输入医生真实姓名"></el-input>
+            placeholder="请输入医生真实姓名"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医生头像"
-          prop="avatarUrl">
-          <single-upload v-model="editAddForm.avatarUrl"
-            uploadType="AVATAR" />
+        <el-form-item label="医生头像" prop="avatarUrl">
+          <single-upload v-model="editAddForm.avatarUrl" uploadType="AVATAR" />
         </el-form-item>
         <!-- 编辑阻止修改医生手机号-->
-        <el-form-item label="手机号"
-          prop="phone">
-          <el-input :disabled="this.infoTitle === '编辑' ? true : false"
+        <el-form-item label="手机号" prop="phone">
+          <el-input
+            :disabled="this.infoTitle === '编辑' ? true : false"
             v-model="editAddForm.phone"
             v-Int
             maxlength="11"
-            placeholder="请输入该医生手机号"></el-input>
+            placeholder="请输入该医生手机号"
+          ></el-input>
         </el-form-item>
         <!-- 编辑阻止修改医生身份证号 -->
         <el-form-item label="身份证号">
-          <el-input v-model="editAddForm.idCard"
+          <el-input
+            v-model="editAddForm.idCard"
             maxlength="18"
             :disabled="idCardIsDisabled"
-            placeholder="请输入该医生身份证号"></el-input>
+            placeholder="请输入该医生身份证号"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="职位"
-          prop="type">
-          <el-select :disabled="this.infoTitle === '编辑' ? true : false"
+        <el-form-item label="职位" prop="type">
+          <el-select
+            :disabled="this.infoTitle === '编辑' ? true : false"
             v-model="editAddForm.type"
             placeholder="请选择职位"
-            style="width: 100%">
-            <el-option v-for="item in doctorTypeList"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in doctorTypeList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"></el-option>
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="医院名称"
-          prop="hospitalId">
-          <el-select v-model="editAddForm.hospitalId"
+        <el-form-item label="医院名称" prop="hospitalId">
+          <el-select
+            v-model="editAddForm.hospitalId"
             :disabled="editAddForm.patientCount > 0 ? true : false"
             placeholder="请选择医院"
-            style="width: 100%">
-            <el-option v-for="item in hospitalList"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="item in hospitalList"
               :key="item.id"
               :value="item.id"
-              :label="item.name"></el-option>
+              :label="item.name"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="个人简介"
-          prop="introduction">
-          <el-input type="textarea"
+        <el-form-item label="个人简介" prop="introduction">
+          <el-input
+            type="textarea"
             v-model="editAddForm.introduction"
             :rows="5"
             maxlength="140"
-            placeholder="请输入个人简介"></el-input>
+            placeholder="请输入个人简介"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="医生擅长"
-          prop="goodAt">
-          <el-input type="textarea"
+        <el-form-item label="医生擅长" prop="goodAt">
+          <el-input
+            type="textarea"
             :rows="5"
             v-model="editAddForm.goodAt"
             maxlength="140"
-            placeholder="请输入医生擅长"></el-input>
+            placeholder="请输入医生擅长"
+          ></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer"
-        class="dialog-footer">
+      <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-          @click="editPageEnter">确 定</el-button>
+        <el-button type="primary" @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -256,6 +300,7 @@
 <script>
 import EleTable from '@/components/Table'
 import singleUpload from '@/components/Upload'
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
 import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import {
@@ -417,6 +462,23 @@ export default {
         this.idCardIsDisabled = false
       }
       this.editDialogVisible = true
+    },
+    // 解锁
+    unlockBtn(val) {
+      let phone = val.phone
+      httpAdminPatient.putUserUnLock({ phone }).then((res) => {
+        if (res.code === 'OK') {
+          this.$message.success('解锁成功')
+        }
+        this.getList()
+      })
+    },
+    unlockFn(val) {
+      if (val.phone === '' || val.phone === undefined) {
+        return true
+      } else {
+        return false
+      }
     },
     // 删除多个
     deleteMultiple() {},

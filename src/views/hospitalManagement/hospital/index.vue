@@ -85,6 +85,14 @@
         label="医院等级"
         :formatter="hospitalTypeFormatter"></el-table-column>
       <el-table-column align="center"
+        prop="patientCount"
+        label="用户数量"
+        >
+        <template slot-scope="scope">
+          <span :class="[scope.row.patientCount ? 'skipStyle' : '']" @click="skipRoute(scope.row)">{{ scope.row.patientCount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center"
         prop="doctorCount"
         label="医生数量">
         <template slot-scope="scope">
@@ -325,6 +333,11 @@ export default {
     skipDoctor(val) {
       this.$router.push('/hospitalManagement/doctor')
       localStorage.setItem('hospitalId', val.id)
+    },
+    // 跳转档案管理
+    skipRoute(val){
+      sessionStorage.setItem('skipHospitalId', JSON.stringify([val.id]))
+      this.$router.push('/archivesManagement/patient')
     },
     /**
      * CRUD
