@@ -808,9 +808,25 @@ export default {
       }
       let inactiveTimeList = this.disposeNotTime()
       let inactiveDateList = this.disposeNotDate()
+      let obj = {
+         aiName: this.addUserFrom.name,
+          dailyStartTime: this.searchForm.daily[0],
+          dailyEndTime: this.searchForm.daily[1],
+          daysOfWeek: this.timeForm.checkListPeriod,
+          id: this.addUserFrom.id,
+          inactiveDateList,
+          inactiveTimeList,
+          robotCallJobId: this.addUserFrom.robotCallJobId,
+          robotCount: 2,
+          hospitalId: this.hospitalFrom.hospitalId,
+          fileName: this.searchForm.fileName,
+          fileUrl: this.searchForm.fileUrl,
+      }
+      console.log(obj);
+      // return
       httpAdminAiCall
         .putInformation({
-          aiName: this.addUserFrom.name,
+          // aiName: this.addUserFrom.name,
           dailyStartTime: this.searchForm.daily[0],
           dailyEndTime: this.searchForm.daily[1],
           daysOfWeek: this.timeForm.checkListPeriod,
