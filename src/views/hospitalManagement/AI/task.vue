@@ -739,6 +739,7 @@ export default {
     getAiSpeech() {
       httpAdminAiCall.getAiSpeech().then((res) => {
         this.aiSpeechList = res.data.elements
+        console.log(this.aiSpeechList)
       })
     },
     // 获取随访任务详情
@@ -766,8 +767,8 @@ export default {
           hospitalId: this.hospitalFrom.id,
           hospitalName: this.hospitalFrom.name,
           name: this.addUserFrom.name,
-          dialogFlowId: this.addUserFrom.dialogFlowId,
-          dialogFlowName: this.addUserFrom.dialogFlowName,
+          dialogFlowId: this.botFrom.dialogFlowId,
+          dialogFlowName: this.botFrom.dialogFlowName,
           // 时间添加
           dailyStartTime: this.searchForm.daily[0],
           dailyEndTime: this.searchForm.daily[1],
@@ -955,8 +956,8 @@ export default {
      * 获取 select 话术名称 医院名称
      */
     getBotName(val){
-      this.addUserFrom.dialogFlowId = val.dialogFlowId
-      this.addUserFrom.dialogFlowName = val.name
+      this.botFrom.dialogFlowId = val.dialogFlowId
+      this.botFrom.dialogFlowName = val.name
     },
     getHospitalName(val) {
       this.hospitalFrom.id = val.id
