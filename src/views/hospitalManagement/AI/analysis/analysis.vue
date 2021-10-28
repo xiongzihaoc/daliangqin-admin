@@ -164,9 +164,6 @@ export default {
     this.getHospitalList()
   },
   beforeDestroy() {
-    // sessionStorage.removeItem('taskHospitalId')
-    // sessionStorage.removeItem('taskTaskStage')
-    // sessionStorage.removeItem('taskRobotCallJobId')
     this.removeSession()
   },
   methods: {
@@ -266,7 +263,7 @@ export default {
     getTaskStage(val) {
       if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
         this.$set(this.searchForm, 'taskStage', '')
-        this.searchForm.robotCallJobId = val.robotCallJobId
+        this.searchForm.robotCallJobIds = val.robotCallJobId
       } else {
         this.$set(this.searchForm, 'robotCallJobId', '')
         this.searchForm.taskStage = val.text
@@ -283,7 +280,9 @@ export default {
     /**
      * 搜索
      */
-    searchBtn() {},
+    searchBtn() {
+      this.getJobStats()
+    },
     // 重置
     searchReset() {
       this.removeSession()
@@ -307,7 +306,8 @@ export default {
 }
 .chart-box {
   width: 100%;
-  display: inline-grid;
-  grid-template-columns: repeat(2, 45%);
+  display: flex;
+  flex-direction: column;
+  // grid-template-columns: repeat(2, 45%);
 }
 </style>
