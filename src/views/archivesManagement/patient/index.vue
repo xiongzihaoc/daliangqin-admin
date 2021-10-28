@@ -675,6 +675,10 @@ export default {
       return titleExcel
     },
     exportExcel() {
+      if(this.checkExcelList.length <= 0){
+        this.$message.warning('请选择要导出的内容')
+        return
+      }
       if (this.total <= 3000) {
         this.$confirm(
           '确定要导出当前<strong>' + this.total + '</strong>条数据？',
