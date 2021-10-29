@@ -703,22 +703,18 @@ export default {
     },
     judgeTimeSize(time) {
       let [getOkTime, oneTime, twoTime, threeTime] = [arguments[0], arguments[1],arguments[2], arguments[3]]
-      console.log(getOkTime[0] >= oneTime[0], twoTime)
       if(oneTime === ''){ return false }
       if( getOkTime[0] >= oneTime[0] || getOkTime[1] <= oneTime[1]){
-        console.log(getOkTime[1]);
         this.$message.warning("不可拨打时间不能超过可拨打时间")
         return true
       }
       if(twoTime === ''){ return false }
         if( oneTime[1] >= twoTime[0] || oneTime[1] >= twoTime[1]){
-        console.log(2);
         this.$message.warning("请按时间顺序添加不可拨打时间")
         return true
       }
       if(threeTime === ''){ return false }
         if( twoTime[1] >= threeTime[0] || twoTime[1] >= threeTime[1]){
-        console.log(3);
         this.$message.warning("请按时间顺序添加不可拨打时间")
         return true
       }
@@ -1244,7 +1240,7 @@ export default {
           break
         case 'operation':
           sessionStorage.setItem('taskHospitalId', val.hospitalId)
-          sessionStorage.setItem('taskTaskStage', val.taskStage)
+          // sessionStorage.setItem('taskTaskStage', val.taskStage)
           sessionStorage.setItem('taskRobotCallJobId', val.robotCallJobId)
           this.$router.push({ name: 'analysis' })
           break
@@ -1411,7 +1407,6 @@ export default {
           },
         ]
       }
-      console.log(this.addUserFrom.fileName)
       this.confirmCallTime(true)
       this.userVisible = true
     },
