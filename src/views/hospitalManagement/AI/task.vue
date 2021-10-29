@@ -428,7 +428,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="userVisible = false">取 消</el-button>
-        <el-button type="primary" @click="judgeBtn('addUserFrom')"
+        <el-button type="primary" :disabled="addSubmit" @click="judgeBtn('addUserFrom')"
           >确 定</el-button
         >
       </span>
@@ -584,6 +584,7 @@ export default {
       parseTime,
       AiTaskStatus,
       editBot: false,
+      addSubmit: false,
       formRules: {
         hospitalId: [
           { required: true, message: '请选择医院', trigger: 'change' },
@@ -797,6 +798,7 @@ export default {
     },
     // 添加
     postInformation() {
+      this.addSubmit = true
       let notDial = this.timeForm.notDial
       if (
         this.dialForm.notCallTime === undefined ||
@@ -831,6 +833,7 @@ export default {
             this.$message.success(res.message)
             this.getList()
             this.userVisible = false
+            this.addSubmit = false
           } else {
             this.$message.warning(res.message)
           }
@@ -838,6 +841,7 @@ export default {
     },
     // 编辑接口
     putInformation() {
+      this.addSubmit = true
       let notDial = this.timeForm.notDial
       if (
         this.dialForm.notCallTime === undefined ||
@@ -872,6 +876,7 @@ export default {
           }
           this.getList()
           this.userVisible = false
+          this.addSubmit = false
         })
     },
     // 删除
@@ -1162,7 +1167,6 @@ export default {
       let twoTime = inactiveTimeList[1]?.startTime ? this.disposeTime(inactiveTimeList[1]) : ''
       let threeTime = inactiveTimeList[2]?.startTime ? this.disposeTime(inactiveTimeList[2]) : ''
       let switchState = this.judgeTimeSize(getOkTime, oneTime, twoTime, threeTime)
-      console.log(inactiveTimeList[0]?.startTime);
       if(switchState){ return }
       // 拼接周期
       if (period.length === 7) {
