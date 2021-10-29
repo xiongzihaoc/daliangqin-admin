@@ -178,12 +178,12 @@
         <template slot-scope="scope">
           <div>
             <el-button size="mini"
-            plain
-              @click="unlockBtn(scope.row)"
-              :disabled="unlockFn(scope.row)">解锁</el-button>
-            <el-button size="mini"
               @click="detailsBtn(scope.row)"
               type="primary">详细资料</el-button>
+            <el-button size="mini"
+              plain
+              @click="unlockBtn(scope.row)"
+              :disabled="unlockFn(scope.row)">解锁</el-button>
           </div>
         </template>
       </el-table-column>
