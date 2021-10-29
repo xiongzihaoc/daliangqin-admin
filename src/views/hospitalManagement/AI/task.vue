@@ -713,13 +713,13 @@ export default {
       if(twoTime === ''){ return false }
         if( oneTime[1] >= twoTime[0] || oneTime[1] >= twoTime[1]){
         console.log(2);
-        this.$message.warning("请按时间循序添加不可拨打时间")
+        this.$message.warning("请按时间顺序添加不可拨打时间")
         return true
       }
       if(threeTime === ''){ return false }
         if( twoTime[1] >= threeTime[0] || twoTime[1] >= threeTime[1]){
         console.log(3);
-        this.$message.warning("请按时间循序添加不可拨打时间")
+        this.$message.warning("请按时间顺序添加不可拨打时间")
         return true
       }
     },
