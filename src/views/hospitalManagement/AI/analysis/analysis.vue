@@ -155,8 +155,8 @@ export default {
     console.log('router', this.$route.params.id)
     this.searchForm.robotCallJobIds = this.$route.params.id
     this.searchForm.hospitalId = sessionStorage.getItem('taskHospitalId')
-    this.searchForm.taskStage = sessionStorage.getItem('taskTaskStage')
-    this.searchForm.robotCallJobIds = sessionStorage.getItem('robotCallJobId')
+    // this.searchForm.taskStage = sessionStorage.getItem('taskTaskStage')
+    this.searchForm.robotCallJobIds = sessionStorage.getItem('taskRobotCallJobId')
     this.getJobStats()
   },
   mounted() {
@@ -182,6 +182,7 @@ export default {
     },
     // 获取图表数据
     getJobStats() {
+      console.log(this.searchForm);
       httpAdminAiAnalysis.getJobStats(this.searchForm).then((res) => {
         let outboundList = res.data.aiHistoryStatisticalVO
         this.listData = res.data
@@ -287,6 +288,7 @@ export default {
     searchReset() {
       this.removeSession()
       this.$set(this, 'searchForm', {})
+      this.$set(this, 'getSearchForm', {})
       this.getJobStats()
     },
   },
