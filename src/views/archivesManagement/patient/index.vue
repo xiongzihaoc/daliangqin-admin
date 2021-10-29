@@ -2,35 +2,34 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        ref="searchFormRef"
+      <el-form ref="searchFormRef"
         :model="searchForm"
         :inline="true"
-        class="searchForm"
-      >
-        <el-form-item label="姓名" align="left" prop="name">
-          <el-input
-            v-model.trim="searchForm.name"
+        class="searchForm">
+        <el-form-item label="姓名"
+          align="left"
+          prop="name">
+          <el-input v-model.trim="searchForm.name"
             size="small"
-            placeholder="请输入姓名"
-          ></el-input>
+            placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="身份证号" align="left" prop="idCard">
-          <el-input
-            v-model.trim="searchForm.idCard"
+        <el-form-item label="身份证号"
+          align="left"
+          prop="idCard">
+          <el-input v-model.trim="searchForm.idCard"
             maxlength="18"
             size="small"
-            placeholder="请输入身份证号"
-          ></el-input>
+            placeholder="请输入身份证号"></el-input>
         </el-form-item>
-        <el-form-item label="性别" align="left" prop="gender">
-          <el-select v-model="searchForm.gender" size="small">
-            <el-option
-              v-for="item in genderList"
+        <el-form-item label="性别"
+          align="left"
+          prop="gender">
+          <el-select v-model="searchForm.gender"
+            size="small">
+            <el-option v-for="item in genderList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="年龄"
@@ -47,142 +46,116 @@
             :max="120"
             size="small"></el-input-number>
         </el-form-item>-->
-        <el-form-item label="本人电话" align="left" prop="phone">
-          <el-input
-            v-model.trim="searchForm.phone"
+        <el-form-item label="本人电话"
+          align="left"
+          prop="phone">
+          <el-input v-model.trim="searchForm.phone"
             size="small"
             v-Int
             maxlength="11"
-            placeholder="请输入本人电话"
-          ></el-input>
+            placeholder="请输入本人电话"></el-input>
         </el-form-item>
-        <el-form-item label="高血压" align="left" prop="highBloodStatus">
-          <el-select
-            v-model="searchForm.highBloodStatus"
+        <el-form-item label="高血压"
+          align="left"
+          prop="highBloodStatus">
+          <el-select v-model="searchForm.highBloodStatus"
             size="small"
-            placeholder="请选择状态"
-          >
-            <el-option
-              v-for="item in healthList"
+            placeholder="请选择状态">
+            <el-option v-for="item in healthList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="糖尿病" align="left" prop="diabetesStatus">
-          <el-select
-            v-model="searchForm.diabetesStatus"
+        <el-form-item label="糖尿病"
+          align="left"
+          prop="diabetesStatus">
+          <el-select v-model="searchForm.diabetesStatus"
             size="small"
-            placeholder="请选择状态"
-          >
-            <el-option
-              v-for="item in healthList"
+            placeholder="请选择状态">
+            <el-option v-for="item in healthList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="心率" align="left" prop="heartRateStatus">
-          <el-select
-            v-model="searchForm.heartRateStatus"
+        <el-form-item label="心率"
+          align="left"
+          prop="heartRateStatus">
+          <el-select v-model="searchForm.heartRateStatus"
             size="small"
-            placeholder="请选择状态"
-          >
-            <el-option
-              v-for="item in heartList"
+            placeholder="请选择状态">
+            <el-option v-for="item in heartList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="医院名称">
-          <el-select
-            v-model="searchForm.hospitalIds"
+          <el-select v-model="searchForm.hospitalIds"
             multiple
             collapse-tags
             size="small"
-            filterable
-          >
-            <el-option
-              v-for="(item, index) in hospitalList"
+            filterable>
+            <el-option v-for="(item, index) in hospitalList"
               :key="index"
               :label="item.name"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="对应医师" align="left" prop="doctorUserName">
-          <el-input
-            placeholder="请输入对应医师"
+        <el-form-item label="对应医师"
+          align="left"
+          prop="doctorUserName">
+          <el-input placeholder="请输入对应医师"
             v-model.trim="searchForm.doctorUserName"
-            size="small"
-          ></el-input>
+            size="small"></el-input>
         </el-form-item>
-        <el-form-item label="医师手机号" align="left" prop="doctorUserPhone">
-          <el-input
-            placeholder="请输入医师手机号"
+        <el-form-item label="医师手机号"
+          align="left"
+          prop="doctorUserPhone">
+          <el-input placeholder="请输入医师手机号"
             v-Int
             maxlength="11"
             size="small"
-            v-model.trim="searchForm.doctorUserPhone"
-          ></el-input>
+            v-model.trim="searchForm.doctorUserPhone"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
-          <el-button size="small" type="success" icon="el-icon-download"
-            >导入</el-button
-          >
-          <el-button
-            @click="excelVisible = true"
+            icon="el-icon-refresh">重置</el-button>
+          <el-button size="small"
+            type="success"
+            icon="el-icon-download">导入</el-button>
+          <el-button @click="excelVisible = true"
             size="small"
             type="success"
-            icon="el-icon-upload2"
-            >导出Excel</el-button
-          >
+            icon="el-icon-upload2">导出Excel</el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格操作按钮 -->
     <div>
-      <el-button
-        @click="addBtn"
+      <el-button @click="addBtn"
         type="primary"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-plus"
-        >新增</el-button
-      >
-      <el-button
-        @click="transferUser"
+        icon="el-icon-plus">新增</el-button>
+      <el-button @click="transferUser"
         type="primary"
         class="tableAdd"
         size="small"
         plain
         icon="el-icon-sort"
-        :disabled="transferBtn"
-        >转移用户</el-button
-      >
+        :disabled="transferBtn">转移用户</el-button>
     </div>
     <!-- 表格区域 -->
-    <EleTable
-      :data="list"
+    <EleTable :data="list"
       :header="tableHeaderBig"
       :pageNum="pageNum"
       :pageSize="pageSize"
@@ -191,65 +164,59 @@
       @handleCurrentChange="handleCurrentChange"
       @select="selectCheckbox"
       @select-all="selectAll"
-      v-loading="loading"
-    >
+      v-loading="loading">
       <!-- 操作 -->
-      <el-table-column
-        slot="fixed"
+      <el-table-column slot="fixed"
         fixed="left"
         type="selection"
-        :selectable="selectable"
-      ></el-table-column>
-      <el-table-column align="center" slot="fixed" fixed="right" label="操作" width="200">
+        :selectable="selectable"></el-table-column>
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        label="操作"
+        width="200">
         <template slot-scope="scope">
           <div>
-            <el-button size="mini" @click="unlockBtn(scope.row)" type="success" :disabled="unlockFn(scope.row)"
-              >解锁</el-button
-            >
-            <el-button size="mini" @click="detailsBtn(scope.row)" type="primary"
-              >详细资料</el-button
-            >
+            <el-button size="mini"
+            plain
+              @click="unlockBtn(scope.row)"
+              :disabled="unlockFn(scope.row)">解锁</el-button>
+            <el-button size="mini"
+              @click="detailsBtn(scope.row)"
+              type="primary">详细资料</el-button>
           </div>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 转移用户  -->
-    <el-dialog
-      title="转移用户"
+    <el-dialog title="转移用户"
       :visible.sync="transferDialogVisible"
-      width="40%"
-    >
-      <el-form :model="transferForm" label-width="100px">
-        <el-form-item label="选择医院" v-model.trim="transferForm.hospitalId">
-          <el-select
-            v-model="transfer.hospitalId"
+      width="40%">
+      <el-form :model="transferForm"
+        label-width="100px">
+        <el-form-item label="选择医院"
+          v-model.trim="transferForm.hospitalId">
+          <el-select v-model="transfer.hospitalId"
             filterable
             style="width: 100%"
             placeholder="请选择医院"
-            @change="selectHospital"
-          >
-            <el-option
-              v-for="item in hospitalList"
+            @change="selectHospital">
+            <el-option v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="选择医师">
-          <el-select
-            v-model="transfer.doctorName"
+          <el-select v-model="transfer.doctorName"
             filterable
             style="width: 100%"
             placeholder="请选择医师"
-            @change="selectDoctor"
-          >
-            <el-option
-              v-for="item in doctorList"
+            @change="selectDoctor">
+            <el-option v-for="item in doctorList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -258,15 +225,18 @@
       </div>
       <div slot="footer">
         <el-button @click="transferCancel">取 消</el-button>
-        <el-button @click="transferAffirm" type="primary" :disabled="affirmBtn"
-          >确 定</el-button
-        >
+        <el-button @click="transferAffirm"
+          type="primary"
+          :disabled="affirmBtn">确 定</el-button>
       </div>
     </el-dialog>
     <!-- 导出excel -->
-    <el-dialog title="选择导出内容" :visible.sync="excelVisible" width="30%">
+    <el-dialog title="选择导出内容"
+      :visible.sync="excelVisible"
+      width="30%">
       <div>
-        <el-checkbox-group style="line-height: 30px" v-model="checkExcelList">
+        <el-checkbox-group style="line-height: 30px"
+          v-model="checkExcelList">
           <el-checkbox label="姓名"></el-checkbox>
           <el-checkbox label="身份证号"></el-checkbox>
           <el-checkbox label="性别"></el-checkbox>
@@ -286,9 +256,11 @@
           注意：导出需先勾选需要导出的内容，一次最多可导出3000条
         </p>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="excelVisible = false">取 消</el-button>
-        <el-button type="primary" @click="exportExcel">确 定</el-button>
+        <el-button type="primary"
+          @click="exportExcel">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -605,19 +577,19 @@ export default {
     /**
      * 解锁
      */
-    unlockBtn(val){
+    unlockBtn(val) {
       let phone = val.phone
-      httpAdminPatient.putUserUnLock({phone}).then((res)=>{
-        if(res.code === "OK"){
+      httpAdminPatient.putUserUnLock({ phone }).then((res) => {
+        if (res.code === 'OK') {
           this.$message.success('解锁成功')
         }
         this.getList()
       })
     },
-    unlockFn(val){
-      if(val.phone === '' || val.phone === undefined){
+    unlockFn(val) {
+      if (val.phone === '' || val.phone === undefined) {
         return true
-      }else{
+      } else {
         return false
       }
     },
@@ -675,7 +647,7 @@ export default {
       return titleExcel
     },
     exportExcel() {
-      if(this.checkExcelList.length <= 0){
+      if (this.checkExcelList.length <= 0) {
         this.$message.warning('请选择要导出的内容')
         return
       }
