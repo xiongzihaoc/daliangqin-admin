@@ -93,10 +93,18 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
+          <el-button
+            @click="searchBtn"
+            type="primary"
+            size="small"
+            icon="el-icon-search"
             >搜索</el-button
           >
-          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh"
+          <el-button
+            @click="searchReset"
+            size="small"
+            plain
+            icon="el-icon-refresh"
             >重置</el-button
           >
         </el-form-item>
@@ -112,7 +120,11 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     >
-      <el-table-column align="center" label="序号" type="index"></el-table-column>
+      <el-table-column
+        align="center"
+        label="序号"
+        type="index"
+      ></el-table-column>
       <el-table-column
         align="center"
         label="医院名称"
@@ -128,20 +140,37 @@
         label="用户手机号"
         prop="calledPhoneNumber"
       ></el-table-column>
-      <el-table-column align="center" label="任务名称" prop="aiName"></el-table-column>
+      <el-table-column
+        align="center"
+        label="任务名称"
+        prop="aiName"
+      ></el-table-column>
       <el-table-column
         align="center"
         label="BOT名称"
         prop="dialogFlowName"
       ></el-table-column>
-      <el-table-column align="center" label="期名" prop="taskStage"></el-table-column>
+      <el-table-column
+        align="center"
+        label="期名"
+        prop="taskStage"
+      ></el-table-column>
       <el-table-column align="center" label="通话时长" prop="chatDuration">
         <template slot-scope="scope">
           <span>{{ formatSeconds(scope.row.chatDuration) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="对话轮次" prop="chatRound"></el-table-column>
-      <el-table-column width="150px" align="center" label="呼叫时间" prop="callStartTime">
+      <el-table-column
+        align="center"
+        label="对话轮次"
+        prop="chatRound"
+      ></el-table-column>
+      <el-table-column
+        width="150px"
+        align="center"
+        label="呼叫时间"
+        prop="callStartTime"
+      >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.callStartTime) }}</span>
         </template>
@@ -160,7 +189,10 @@
       ></el-table-column>
       <el-table-column align="center" label="通话详情" prop="hospitalName">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="getAlCallDetailList(scope.row)"
+          <el-button
+            type="primary"
+            size="small"
+            @click="getAlCallDetailList(scope.row)"
             >查看</el-button
           >
         </template>
@@ -169,13 +201,20 @@
     <!-- 弹出层 -->
     <el-dialog title="通话详情" :visible.sync="dialogVisible" width="50%">
       <div class="chat">
-        <div>
-          <p>{{ telephoneMessage.uname }} - {{ telephoneMessage.phone }}</p>
-          <p>
-            通话ID：{{ telephoneMessage.callRecordId }} 通话时长：{{
-              formatSeconds(telephoneMessage.chatDuration)
-            }}
-          </p>
+        <div class="flex-bet">
+          <div>
+            <p>{{ telephoneMessage.uname }} - {{ telephoneMessage.phone }}</p>
+            <p>
+              通话ID：{{ telephoneMessage.callRecordId }} 通话时长：{{
+                formatSeconds(telephoneMessage.chatDuration)
+              }}
+            </p>
+          </div>
+          <div>
+            <audio autoplay="autoplay" controls="controls" ref="audio">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
         </div>
         <div class="chat-content">
           <!-- 聊天记录数组-->
@@ -207,24 +246,26 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import EleTable from "@/components/Table";
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
-import { httpAdminAiHistory } from "@/api/admin/httpAdminAiHistory";
-import { httpAdminAiCall } from "@/api/admin/httpAdminAiCall";
+import EleTable from '@/components/Table'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { httpAdminAiHistory } from '@/api/admin/httpAdminAiHistory'
+import { httpAdminAiCall } from '@/api/admin/httpAdminAiCall'
 
 import {
   parseTime,
   formatSeconds,
   AiResultStatus,
   formatterElement,
-} from "@/utils/index";
+} from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -234,19 +275,20 @@ export default {
       parseTime,
       formatSeconds,
       AiResultStatus,
-      value: "",
+      value: '',
+      src: '', // 语音播放路径
       searchForm: {},
       getSearchForm: {
-        getTaskStage: "",
-        selectTaskStage: "",
-        callDuration: "",
+        getTaskStage: '',
+        selectTaskStage: '',
+        callDuration: '',
       },
       telephoneMessage: {},
       selfInfo: {},
       toInfo: {},
       taskStage: [
-        { id: "robotCallJobId", name: "任务" },
-        { id: "taskStage", name: "期名" },
+        { id: 'robotCallJobId', name: '任务' },
+        { id: 'taskStage', name: '期名' },
       ],
       hospitalList: [],
       list: [],
@@ -259,25 +301,25 @@ export default {
       total: 0,
       // 弹出层
       dialogVisible: false,
-    };
+    }
   },
   created() {
-    this.getHospitalList();
-    this.getAiHistoryList();
+    this.getHospitalList()
+    this.getAiHistoryList()
   },
   mounted() {},
   methods: {
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
-        this.hospitalList = res.data.elements;
-      });
+        this.hospitalList = res.data.elements
+      })
     },
     getAiHistoryList() {
       httpAdminAiHistory.getAiHistoryList(this.searchForm).then((res) => {
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+        this.list = res.data.elements
+        this.total = res.data.totalSize
+      })
     },
     // 聊天详情
     getAlCallDetailList(val) {
@@ -287,105 +329,125 @@ export default {
           phone: val.calledPhoneNumber,
         })
         .then((res) => {
-          this.chatList = [];
+          this.chatList = []
           this.messageList = []
-          let callDetailList = JSON.parse(res.data.thirdJson);
-          let uname = callDetailList.data.customerPersonName;
-          this.telephoneMessage.uname = uname;
-          this.telephoneMessage.phone = callDetailList.data.calledPhoneNumber;
-          this.telephoneMessage.callRecordId = callDetailList.data.callRecordId;
-          this.telephoneMessage.chatDuration = callDetailList.data.chatDuration;
-          this.toInfo.userName = callDetailList.data.customerPersonName;
-          this.toInfo.avatarUrl = res.data.avatarUrl;
+          let callDetailList = JSON.parse(res.data.thirdJson)
+          let uname = callDetailList.data.customerPersonName
+          this.telephoneMessage.uname = uname
+          this.telephoneMessage.phone = callDetailList.data.calledPhoneNumber
+          this.telephoneMessage.callRecordId = callDetailList.data.callRecordId
+          this.telephoneMessage.chatDuration = callDetailList.data.chatDuration
+          this.toInfo.userName = callDetailList.data.customerPersonName
+          this.toInfo.avatarUrl = res.data.avatarUrl
           callDetailList.data.callDetailList.forEach((val) => {
             this.messageList.push({
               createTime: val.startTime,
-              isSelf: val.type === "ROBOT" ? true : false,
+              isSelf: val.type === 'ROBOT' ? true : false,
               leaveContent: val.text,
-            });
-          });
-          this.dialogVisible = true;
-        });
+            })
+          })
+          this.handlePlay(callDetailList.data)
+          this.dialogVisible = true
+        })
     },
     getAiStageList() {
       httpAdminAiHistory.getAiStageList().then((res) => {
-        this.aiTaskList = [];
+        this.aiTaskList = []
         res.data.forEach((val) => {
-          this.aiTaskList.push({ text: val.taskStage });
-        });
-      });
+          this.aiTaskList.push({ text: val.taskStage })
+        })
+      })
     },
     getAiTaskNameList() {
       httpAdminAiHistory.getAiTaskNameList().then((res) => {
-        this.aiTaskList = [];
+        this.aiTaskList = []
         res.data.forEach((val) => {
           this.aiTaskList.push({
             text: val.aiName,
             robotCallJobId: val.robotCallJobId,
-          });
-        });
-      });
+          })
+        })
+      })
     },
     /**
      * 任务与期数选择
      */
     selectTaskStage(val) {
-      this.$set(this.getSearchForm, "selectTaskStage", "");
-      if (val === "robotCallJobId") {
-        this.getAiTaskNameList();
+      this.$set(this.getSearchForm, 'selectTaskStage', '')
+      if (val === 'robotCallJobId') {
+        this.getAiTaskNameList()
       } else {
-        this.getAiStageList();
+        this.getAiStageList()
       }
     },
     getTaskStage(val) {
-      if (this.getSearchForm.getTaskStage === "robotCallJobId") {
-        this.$set(this.searchForm, "taskStage", "");
-        this.searchForm.robotCallJobId = val.robotCallJobId;
+      if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
+        this.$set(this.searchForm, 'taskStage', '')
+        this.searchForm.robotCallJobId = val.robotCallJobId
       } else {
-        this.$set(this.searchForm, "robotCallJobId", "");
-        this.searchForm.taskStage = val.text;
+        this.$set(this.searchForm, 'robotCallJobId', '')
+        this.searchForm.taskStage = val.text
       }
     },
     getSearchFormTime(val) {
-      this.searchForm.startTime = val[0];
-      this.searchForm.endTime = val[1];
+      this.searchForm.startTime = val[0]
+      this.searchForm.endTime = val[1]
     },
     /**
      * 搜索
      */
     searchBtn() {
-      this.getAiHistoryList();
+      this.getAiHistoryList()
     },
     searchReset() {
-      this.$set(this, "searchForm", {});
-      this.$set(this, "getSearchForm", {});
-      this.getAiHistoryList();
+      this.$set(this, 'searchForm', {})
+      this.$set(this, 'getSearchForm', {})
+      this.getAiHistoryList()
+    },
+    /**
+     * 播放语音
+     */
+    handlePlay(val) {
+      console.log('语音',val);
+      setTimeout(() => {
+        this.$refs.audio.src = val.fullAudioUrl
+        this.$refs.audio.pause()
+        this.$refs.audio.currentTime = 0
+      }, 0)
+    },
+    stop() {
+      this.$refs.audio.pause()
     },
     /**
      * 表格格式化
      */
     phoneState(row) {
-      return formatterElement.phoneState[row.resultStatus];
+      return formatterElement.phoneState[row.resultStatus]
     },
     hangupState(row) {
-      return formatterElement.hangUpState[row.hangupBy];
+      return formatterElement.hangUpState[row.hangupBy]
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
+.flex-bet {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}
 .chat-content {
   width: 100%;
   height: 600px;
@@ -429,7 +491,7 @@ export default {
         position: absolute;
         left: -8px;
         top: 8px;
-        content: "";
+        content: '';
         border-right: 10px solid #fff;
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
@@ -476,7 +538,7 @@ export default {
         position: absolute;
         right: -8px;
         top: 8px;
-        content: "";
+        content: '';
         border-left: 10px solid #425c5a;
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
