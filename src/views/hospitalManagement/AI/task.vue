@@ -156,7 +156,12 @@
         width="200"
       >
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" :content="scope.row.dialogFlowName" placement="top">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="scope.row.dialogFlowName"
+            placement="top"
+          >
             <span class="hidden">{{ scope.row.dialogFlowName }}</span>
           </el-tooltip>
         </template>
@@ -288,9 +293,9 @@
         label="创建时间"
         prop="createTime"
       >
-      <template slot-scope="scope">
-        <span>{{ parseTime(scope.row.createTime) }}</span>
-      </template>
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime) }}</span>
+        </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="150" fixed="right">
         <template slot-scope="scope">
@@ -380,7 +385,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="BOT名称:" prop="dialogFlowId">
-          <el-select 
+          <el-select
             v-model="addUserFrom.dialogFlowId"
             value-key="dialogFlowId"
             filterable
@@ -414,7 +419,7 @@
               @uploadFinish="uploadFinish"
               uploadType="BANNER"
             ></single-upload>
-            <div slot="tip" class="el-upload__tip" style="font-size: 13px;">
+            <div slot="tip" class="el-upload__tip" style="font-size: 13px">
               仅支持上传Excel格式的文件，且不超过10万条。
               <span class="skipStyle" @click="getAiDownload">下载模板</span>
             </div>
@@ -680,6 +685,43 @@ export default {
     this.getAiSpeech()
   },
   methods: {
+    /**
+     * 处理时间 比较大小
+     */
+    disposeTime(time) {
+      let startTime =
+        time.startTime.substring(0, 2) + time.startTime.substring(3, 5)
+      let endTime = time.endTime.substring(0, 2) + time.endTime.substring(3, 5)
+      return [startTime, endTime]
+    },
+    // 处理可拨打时间 比较大小
+    disposeDaily(time) {
+      let startTime = time[0].substring(0, 2) + time[0].substring(3, 5)
+      let endTime = time[1].substring(0, 2) + time[1].substring(3, 5)
+      return [startTime, endTime]
+    },
+    judgeTimeSize(time) {
+      let [getOkTime, oneTime, twoTime, threeTime] = [arguments[0], arguments[1],arguments[2], arguments[3]]
+      console.log(getOkTime[0] >= oneTime[0], twoTime)
+      if(oneTime === ''){ return false }
+      if( getOkTime[0] >= oneTime[0] || getOkTime[1] <= oneTime[1]){
+        console.log(getOkTime[1]);
+        this.$message.warning("不可拨打时间不能超过可拨打时间")
+        return true
+      }
+      if(twoTime === ''){ return false }
+        if( oneTime[1] >= twoTime[0] || oneTime[1] >= twoTime[1]){
+        console.log(2);
+        this.$message.warning("请按时间循序添加不可拨打时间")
+        return true
+      }
+      if(threeTime === ''){ return false }
+        if( twoTime[1] >= threeTime[0] || twoTime[1] >= threeTime[1]){
+        console.log(3);
+        this.$message.warning("请按时间循序添加不可拨打时间")
+        return true
+      }
+    },
     // 列表数据 查询
     getList() {
       let [completeStartTime, completeEndTime] = ['', '']
@@ -912,7 +954,8 @@ export default {
      */
     // 下载表格
     getAiDownload() {
-       window.location.href = 'https://test-api.daliangqing.com/admin/ai/information/download'
+      window.location.href =
+        'https://test-api.daliangqing.com/admin/ai/information/download'
     },
     // 上传excel 阿里
     uploadFinish(val) {
@@ -935,7 +978,7 @@ export default {
         'SATURDAY',
         'SUNDAY',
       ]
-      this.$set(this.botFrom, 'dialogFlowId', {}) 
+      this.$set(this.botFrom, 'dialogFlowId', {})
       this.confirmCallTime('add')
       this.userVisible = true
     },
@@ -959,7 +1002,7 @@ export default {
     /**
      * 获取 select 话术名称 医院名称
      */
-    getBotName(val){
+    getBotName(val) {
       this.botFrom.dialogFlowId = val.dialogFlowId
       this.botFrom.dialogFlowName = val.name
     },
@@ -1068,7 +1111,7 @@ export default {
       }
       if (val === 'time') {
         if (this.notDialTimeArr.length >= 2) return
-        notDialTimeArr.push({ callTime: [dialForm[0], dialForm[1]] })
+        notDialTimeArr.push({ callTime: [ '', '' ] })
       } else {
         if (this.notDialDateArr.length >= 2) return
         notDialDateArr.push({ callDate: '' })
@@ -1113,6 +1156,14 @@ export default {
       let inactiveTimeList = this.disposeNotTime()
       let inactiveDateList = this.disposeNotDate()
       let callTime = this.searchForm.daily
+      // 是否正确添加不可拨打时间
+      let getOkTime = this.disposeDaily(this.searchForm.daily)
+      let oneTime = inactiveTimeList[0]?.startTime ? this.disposeTime(inactiveTimeList[0]) : ''
+      let twoTime = inactiveTimeList[1]?.startTime ? this.disposeTime(inactiveTimeList[1]) : ''
+      let threeTime = inactiveTimeList[2]?.startTime ? this.disposeTime(inactiveTimeList[2]) : ''
+      let switchState = this.judgeTimeSize(getOkTime, oneTime, twoTime, threeTime)
+      console.log(inactiveTimeList[0]?.startTime);
+      if(switchState){ return }
       // 拼接周期
       if (period.length === 7) {
         if (inactiveTimeList.length === 1 && inactiveTimeList[0].startTime) {
@@ -1199,7 +1250,11 @@ export default {
     moreMenus(val, state) {
       switch (state) {
         case 'edit':
-          if (val === 'IN_PROCESS' || val === 'COMPLETED' || val === 'SYSTEM_SUSPENDED') {
+          if (
+            val === 'IN_PROCESS' ||
+            val === 'COMPLETED' ||
+            val === 'SYSTEM_SUSPENDED'
+          ) {
             return false
           } else {
             return true
@@ -1255,8 +1310,14 @@ export default {
       const { data: res } = await this.getInformationTask(val.robotCallJobId)
       this.addUserFrom = JSON.parse(JSON.stringify(res))
       // 回显 BOT名称
-      this.addUserFrom.dialogFlowId = { dialogFlowId: res.dialogFlowId, name: res.dialogFlowName }
-      this.addUserFrom.hospitalId = { id: res.hospitalId,  name: res.hospitalName }
+      this.addUserFrom.dialogFlowId = {
+        dialogFlowId: res.dialogFlowId,
+        name: res.dialogFlowName,
+      }
+      this.addUserFrom.hospitalId = {
+        id: res.hospitalId,
+        name: res.hospitalName,
+      }
       this.$set(
         this.addUserFrom,
         'name',
@@ -1346,6 +1407,7 @@ export default {
           },
         ]
       }
+      console.log(this.addUserFrom.fileName)
       this.confirmCallTime(true)
       this.userVisible = true
     },
@@ -1405,9 +1467,9 @@ export default {
 </script>
 
 <style scoped>
-.hidden{
-	overflow: hidden;  
-	text-overflow: ellipsis;     
-	white-space:nowrap ;
+.hidden {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
