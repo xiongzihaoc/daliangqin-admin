@@ -68,6 +68,7 @@
         <el-form-item label="呼叫时间">
           <el-date-picker
             v-model="getSearchForm.callDuration"
+            format="yyyy-MM-dd HH:mm"
             value-format="timestamp"
             type="datetimerange"
             range-separator="至"
@@ -408,7 +409,6 @@ export default {
      * 播放语音
      */
     handlePlay(val) {
-      console.log('语音',val);
       setTimeout(() => {
         this.$refs.audio.src = val.fullAudioUrl
         this.$refs.audio.pause()
