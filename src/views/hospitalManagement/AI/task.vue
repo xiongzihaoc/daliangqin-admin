@@ -1230,8 +1230,9 @@ export default {
           this.getSuspendTask(val)
           break
         case 'operation':
+          console.log(val.aiName);
           sessionStorage.setItem('taskHospitalId', val.hospitalId)
-          // sessionStorage.setItem('taskTaskStage', val.taskStage)
+          sessionStorage.setItem('taskAiName', val.aiName)
           sessionStorage.setItem('taskRobotCallJobId', val.robotCallJobId)
           this.$router.push({ name: 'analysis' })
           break

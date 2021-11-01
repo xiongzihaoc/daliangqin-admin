@@ -154,8 +154,19 @@ export default {
   created() {
     // this.searchForm.robotCallJobIds = this.$route.params.id
     this.searchForm.hospitalId = sessionStorage.getItem('taskHospitalId')
-    this.searchForm.taskStage = sessionStorage.getItem('taskTaskStage')
+    this.searchForm.taskAiName = sessionStorage.getItem('taskAiName')
     this.searchForm.robotCallJobIds = sessionStorage.getItem('taskRobotCallJobId')
+    console.log(this.searchForm.taskAiName);
+    if (this.searchForm.taskAiName) {
+      this.selectTaskStage('robotCallJobId')
+      this.getSearchForm.getTaskStage = 'robotCallJobId'
+      this.getSearchForm.selectTaskStage = {
+        text: this.searchForm.taskAiName,
+        robotCallJobId: this.searchForm.robotCallJobIds,
+      }
+      this.searchForm.aiName = this.searchForm.taskAiName
+    }
+
     this.getJobStats()
   },
   mounted() {
@@ -251,6 +262,7 @@ export default {
      * 任务与期数选择
      */
     selectTaskStage(val) {
+      console.log(this.getSearchForm)
       this.$set(this.getSearchForm, 'selectTaskStage', '')
       if (val === 'robotCallJobId') {
         this.getAiTaskNameList()
@@ -259,6 +271,7 @@ export default {
       }
     },
     getTaskStage(val) {
+      console.log(val)
       if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
         delete this.searchForm.taskStage
         this.searchForm.aiName = val.text
@@ -272,7 +285,7 @@ export default {
      */
     removeSession() {
       sessionStorage.removeItem('taskHospitalId')
-      sessionStorage.removeItem('taskTaskStage')
+      sessionStorage.removeItem('taskAiName')
       sessionStorage.removeItem('taskRobotCallJobId')
     },
     /**
