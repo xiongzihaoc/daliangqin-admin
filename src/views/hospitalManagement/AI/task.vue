@@ -523,7 +523,7 @@
               v-model="timeForm.notDial"
               format="yyyy-MM-dd"
               value-format="yyyy-MM-dd"
-              type="datetimerange"
+              type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
@@ -542,7 +542,7 @@
             v-model="item.callDate"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
-            type="datetimerange"
+            type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -1073,17 +1073,8 @@ export default {
     /**
      * ai时间添加区域
      */
-    getDialable() {
-      //开始searchForm.daily[0] 结束[1]
-      // console.log('获取可拨打时间', this.searchForm.daily)
-    },
-    notDialable() {
-      //1.dialForm 2.notDialTimeArr
-      // console.log('获取不可拨打时间', this.notDialTimeArr)
-      // 不可拨打日期  1.this.timeForm.notDial 2.notDialDateArr
-      // console.log('1不可拨打日期修改', this.timeForm.notDial)
-      // console.log('2不可拨打日期修改', this.notDialDateArr)
-    },
+    getDialable() { },
+    notDialable() { },
     deleteNotCall(val, index) {
       if (val === 'time') {
         this.notDialTimeArr.splice(index, 1)
@@ -1096,9 +1087,7 @@ export default {
       this.timeVisible = true
     },
     // 时间添加 周期选择 checkbox
-    getPeriod() {
-      // console.log('周期', this.timeForm.checkListPeriod)
-    },
+    getPeriod() { },
     // 不可拨打时间段添加
     notDialTime(val) {
       let notDialTimeArr = this.notDialTimeArr
@@ -1239,6 +1228,7 @@ export default {
           this.getSuspendTask(val)
           break
         case 'operation':
+          console.log(val);
           sessionStorage.setItem('taskHospitalId', val.hospitalId)
           // sessionStorage.setItem('taskTaskStage', val.taskStage)
           sessionStorage.setItem('taskRobotCallJobId', val.robotCallJobId)
