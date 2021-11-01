@@ -11,6 +11,7 @@
       :on-progress="handleUploadProgress"
       :on-success="handleUploadSuccess">
       <el-input class="w100"
+        :disabled="state"
         readonly
         v-model="uploadValue"></el-input>
     </el-upload>
@@ -26,9 +27,11 @@ export default {
   props: {
     value: String,
     uploadType: String,
+    disabled: Boolean,
   },
   data() {
     return {
+      state: this.disabled,
       dataObj: {
         policy: "",
         signature: "",
@@ -42,7 +45,6 @@ export default {
     };
   },
   mounted() {
-    
     httpAdminUploadApi
       .postAliyunSignAdmin({ adminUpload: this.uploadType })
       .then((res) => {
