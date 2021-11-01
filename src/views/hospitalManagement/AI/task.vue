@@ -587,11 +587,11 @@ export default {
       addSubmit: false,
       formRules: {
         hospitalId: [
-          { required: true, message: '请选择医院', trigger: 'change' },
+          { required: true, message: '请选择医院', trigger: 'blur' },
         ],
         name: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
         dialogFlowId: [
-          { required: true, message: '请输入BOT名称', trigger: 'change' },
+          { required: true, message: '请输入BOT名称', trigger: 'blur' },
         ],
         concurrencyQuota: [
           { required: true, message: '请输入并发数', trigger: 'blur' },
