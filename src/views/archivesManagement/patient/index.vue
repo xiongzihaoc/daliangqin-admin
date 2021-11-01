@@ -647,10 +647,40 @@ export default {
       return titleExcel
     },
     exportExcel() {
+      if(this.checkboxList.length > 0){
       if (this.checkExcelList.length <= 0) {
         this.$message.warning('请选择要导出的内容')
         return
       }
+      if (this.checkboxList.length <= 3000) {
+        this.$confirm(
+          '确定要导出当前<strong>' + this.checkboxList.length + '</strong>条数据？',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+          }
+        )
+          .then(() => {
+            this.getExpportData()
+          })
+          .catch(() => {})
+      } else {
+        this.$confirm(
+          '当前要导出的<strong>' +
+            this.checkboxList.length +
+            '</strong>条数据，数据量过大，不能一次导出！<br/>建议分段导出所需数据。',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            showCancelButton: false,
+          }
+        )
+          .then(() => {})
+          .catch(() => {})
+      }
+    }else{
       if (this.total <= 3000) {
         this.$confirm(
           '确定要导出当前<strong>' + this.total + '</strong>条数据？',
@@ -679,6 +709,7 @@ export default {
           .then(() => {})
           .catch(() => {})
       }
+    }
     },
     // 对导出数据格式处理
     formatJson(filterVal, jsonData) {
@@ -693,6 +724,54 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)',
       })
+      if(this.checkboxList.length > 0){
+         let handleDataList = this.checkboxList
+             handleDataList.forEach((item) => {
+            if (item.gender) {
+              item.gender = this.genderFormatter(item)
+            }
+            if (item.birthday) {
+              item.birthday = parseTime(item.birthday)?.slice(0, 10)
+            }
+            if (item.highBloodStatus) {
+              item.highBloodStatus = this.diseaseState(item, 'highBloodStatus')
+            }
+            if (item.diabetesStatus) {
+              item.diabetesStatus = this.diseaseState(item, 'diabetesStatus')
+            }
+            if (item.heartRateStatus) {
+              item.heartRateStatus = this.getHeart(item)
+            }
+            // 创建时间
+            if (item.archivesMongo?.createTime) {
+              item.createTime = parseTime(item.archivesMongo?.createTime)
+            }
+            if (item.archivesMongo?.createUserName) {
+              item.createUserName = item.archivesMongo?.createUserName
+            }
+          })
+          if (handleDataList.length > 0) {
+            require.ensure([], () => {
+              const {
+                export_json_to_excel,
+              } = require('@/utils/vendor/Export2Excel')
+              // 导出的表头
+              const tHeader = this.checkExcelList
+              // 导出表头要对应的数据
+              const filterVal = titleExcel
+              const data = this.formatJson(filterVal, handleDataList)
+              export_json_to_excel(tHeader, data, '档案管理列表')
+            })
+            this.excelVisible = false
+          } else {
+            this.$message({
+              message: '数据出錯，请稍后重试',
+              duration: 2000,
+              type: 'warning',
+            })
+          }
+          loading.close()
+      }else{
       // 请求参数
       let searchForm = {
         page: 1,
@@ -764,6 +843,7 @@ export default {
           loading.close()
         }
       )
+      }
     },
     /***** 表格格式化内容区域 *****/
     // 出生年月
