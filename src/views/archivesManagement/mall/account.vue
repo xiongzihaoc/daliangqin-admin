@@ -36,14 +36,14 @@
       </el-form>
     </div>
     <div>
-      <el-button
-        type="primary"
-        size="small"
-        plain
-        class="tableAdd"
-        icon="el-icon-plus"
-        >添加任务</el-button
-      >
+        <el-button-group style="margin-bottom: 15px">
+        <el-button size="small" type="primary" @click="checkBtn()"
+          >积分收入</el-button
+        >
+        <el-button size="small" type="primary" @click="checkBtn()"
+          >积分兑换</el-button
+        >
+      </el-button-group>
     </div>
     <!-- 表格 -->
     <EleTable
@@ -91,6 +91,10 @@ export default {
   },
   methods: {
     getList() {},
+    /**
+     * 切换
+     */
+    checkBtn(){},
     /**
      * 搜索
      */

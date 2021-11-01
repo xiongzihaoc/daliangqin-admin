@@ -43,6 +43,7 @@
         plain
         class="tableAdd"
         icon="el-icon-plus"
+        @click="taskOperate"
         >添加任务</el-button
       >
     </div>
@@ -69,6 +70,41 @@
       <el-table-column align="center" label="创建时间"></el-table-column>
       <el-table-column align="center" label="操作"></el-table-column>
     </EleTable>
+    <!-- 弹框 -->
+    <el-dialog title="任务操作" :visible.sync="dialogVisible" width="40%">
+      <el-form label-width="160px" label-position="left">
+        <el-form-item label="任务名称:">
+          <el-input v-model="taskForm.text" placeholder="请输入任务名称" maxlength="20"></el-input>
+        </el-form-item>
+        <el-form-item label="任务描述:">
+          <el-input v-model="taskForm.text" placeholder="请输入任务描述" maxlength="20"></el-input>
+        </el-form-item>
+        <el-form-item label="可得积分:">
+          <el-input v-model="taskForm.text" placeholder="请输入可得积分" maxlength="6"></el-input>
+        </el-form-item>
+        <el-form-item label="每人每日可完成次数:">
+          <el-input v-model="taskForm.text" placeholder="请输入每人每日可完成次数" maxlength="6" ></el-input>
+        </el-form-item>
+        <el-form-item label="跳转地址:">
+          <el-input v-model="taskForm.text" placeholder="请输入跳转地址" maxlength="6" ></el-input>
+        </el-form-item>
+        <el-form-item label="平台每日发放积分次数:">
+            <el-input v-model="taskForm.text" placeholder="请输入平台每日发放积分次数" maxlength="6" ></el-input>
+        </el-form-item>
+        <el-form-item label="积分规则:">
+            <el-input v-model="taskForm.text" rows="10"  type="textarea" placeholder="请输入商品规格"></el-input>
+        </el-form-item>
+        <el-form-item label="状态:">
+          <el-radio v-model="taskForm.radio" label="1">显示</el-radio>
+          <el-radio v-model="taskForm.radio" label="2">隐藏</el-radio>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false"
+          >确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -81,16 +117,28 @@ export default {
   data() {
     return {
       searchForm: {},
+      taskForm: {
+        radio: '1',
+      },
       list: [],
       tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
       total: 0,
+      // 弹出层
+      dialogVisible: false,
     }
   },
   methods: {
     getList() {},
+    /**
+     * 任务操作
+     */
+    taskOperate() {
+      console.log('object');
+      this.dialogVisible = true
+    },
     /**
      * 搜索
      */
