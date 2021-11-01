@@ -703,9 +703,9 @@ export const AiTaskStatus = [
   { id: 8, label: "已终止", value: "TERMINATE" },
   { id: 9, label: "排队中", value: "IN_QUEUE" },
   { id: 10, label: "系统挂起", value: "SYSTEM_HANG_UP" },
-  { id: 11, label: "等待重呼", value: "WAITING_FOR_REDIAL" },
-  { id: 12, label: "账户禁用", value: "ACCOUNT_DISABLE" },
-  { id: 13, label: "系统维护", value: "MAINTAIN" },
+  // { id: 11, label: "等待重呼", value: "WAITING_FOR_REDIAL" },
+  // { id: 12, label: "账户禁用", value: "ACCOUNT_DISABLE" },
+  // { id: 13, label: "系统维护", value: "MAINTAIN" },
 ]
 // 通话 状态
 export const AiResultStatus = [
