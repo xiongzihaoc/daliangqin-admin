@@ -3,6 +3,7 @@
     <el-upload action="https://cdn.daliangqing.com"
       :data="dataObj"
       :multiple="false"
+       accept=".xls,.xlsx"
       :before-upload="beforeUpload"
       :show-file-list="false"
       :on-remove="handleRemove"
