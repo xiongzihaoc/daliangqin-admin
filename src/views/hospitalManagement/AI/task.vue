@@ -418,6 +418,7 @@
               v-model="addUserFrom.fileName"
               @uploadFinish="uploadFinish"
               uploadType="BANNER"
+              :disabled="excelStatus"
             ></single-upload>
             <div slot="tip" class="el-upload__tip" style="font-size: 13px">
               仅支持上传Excel格式的文件，且不超过10万条。
@@ -585,6 +586,7 @@ export default {
       AiTaskStatus,
       editBot: false,
       addSubmit: false,
+      excelStatus: false,
       formRules: {
         hospitalId: [
           { required: true, message: '请选择医院', trigger: 'blur' },
@@ -1228,7 +1230,6 @@ export default {
           this.getSuspendTask(val)
           break
         case 'operation':
-          console.log(val);
           sessionStorage.setItem('taskHospitalId', val.hospitalId)
           // sessionStorage.setItem('taskTaskStage', val.taskStage)
           sessionStorage.setItem('taskRobotCallJobId', val.robotCallJobId)
@@ -1290,6 +1291,7 @@ export default {
      */
     // 获取任务详情 显示 编辑
     async showTaskdetail(val) {
+      this.excelStatus = this.upExcel(val.status)
       this.title = '编辑'
       this.timeTitle = '时间编辑'
       this.editBot = true
@@ -1399,6 +1401,24 @@ export default {
       }
       this.confirmCallTime(true)
       this.userVisible = true
+    },
+    /**
+     * 是否可重新上传excel
+     */
+    upExcel(val){
+      switch(val){
+        case 'NOT_STARTED' :
+          return false
+          break
+        case 'USER_PAUSE' :
+          return false
+          break
+        case 'SYSTEM_HANG_UP' :
+          return false
+          break
+        default :
+          return false
+      }
     },
     /**
      * 路由跳转
