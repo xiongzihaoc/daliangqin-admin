@@ -152,10 +152,9 @@ export default {
     }
   },
   created() {
-    console.log('router', this.$route.params.id)
-    this.searchForm.robotCallJobIds = this.$route.params.id
+    // this.searchForm.robotCallJobIds = this.$route.params.id
     this.searchForm.hospitalId = sessionStorage.getItem('taskHospitalId')
-    // this.searchForm.taskStage = sessionStorage.getItem('taskTaskStage')
+    this.searchForm.taskStage = sessionStorage.getItem('taskTaskStage')
     this.searchForm.robotCallJobIds = sessionStorage.getItem('taskRobotCallJobId')
     this.getJobStats()
   },
@@ -168,12 +167,11 @@ export default {
   },
   methods: {
     // 获取列表
-    getList() {
-      httpAdminAiAnalysis.getAnalysisList().then((res) => {
-        this.infoObj = res.data.elements[0]
-        console.log(this.infoObj)
-      })
-    },
+    // getList() {
+    //   httpAdminAiAnalysis.getAnalysisList().then((res) => {
+    //     this.infoObj = res.data.elements[0]
+    //   })
+    // },
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
@@ -182,7 +180,6 @@ export default {
     },
     // 获取图表数据
     getJobStats() {
-      console.log(this.searchForm);
       httpAdminAiAnalysis.getJobStats(this.searchForm).then((res) => {
         let outboundList = res.data.aiHistoryStatisticalVO
         this.listData = res.data
@@ -263,10 +260,10 @@ export default {
     },
     getTaskStage(val) {
       if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
-        this.$set(this.searchForm, 'taskStage', '')
-        this.searchForm.robotCallJobIds = val.robotCallJobId
+        delete this.searchForm.taskStage
+        this.searchForm.aiName = val.text
       } else {
-        this.$set(this.searchForm, 'robotCallJobId', '')
+        delete this.searchForm.aiName
         this.searchForm.taskStage = val.text
       }
     },
