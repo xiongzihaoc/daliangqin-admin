@@ -18,26 +18,25 @@
               :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="任务名称">
+        <el-form-item label="任务">
           <el-select v-model="getSearchForm.getTaskStage"
             size="small"
             filterable
             value-key="name"
-            placeholder="请选择任务名称"
+            placeholder="请选择任务名称或期名"
             @change="selectTaskStage">
             <el-option v-for="item in taskStage"
               :key="item.id"
               :label="item.name"
               :value="item.id"></el-option>
           </el-select>
-
         </el-form-item>
-        <el-form-item label="期名">
+        <el-form-item label="任务或期名">
           <el-select v-model="getSearchForm.selectTaskStage"
             size="small"
             filterable
             value-key="text"
-            placeholder="请选择期名"
+            placeholder="请选择任务或期名"
             @change="getTaskStage">
             <el-option v-for="item in aiTaskList"
               :key="item.text"
@@ -685,6 +684,7 @@ export default {
             robotCallJobId: val.robotCallJobId,
           })
         })
+
       })
     },
     // 获取话术
