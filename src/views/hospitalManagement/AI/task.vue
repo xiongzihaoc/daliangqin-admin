@@ -2,240 +2,194 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        class="searchForm"
+      <el-form class="searchForm"
         ref="searchFormRef"
         :model="searchForm"
-        :inline="true"
-      >
+        :inline="true">
         <el-form-item label="医院名称">
-          <el-select
-            v-model="searchForm.hospitalId"
+          <el-select v-model="searchForm.hospitalId"
             size="small"
             filterable
             value-key="id"
-            placeholder="请选择医院"
-          >
-            <el-option
-              v-for="item in hospitalList"
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="任务名称">
-          <el-select
-            v-model="getSearchForm.getTaskStage"
+          <el-select v-model="getSearchForm.getTaskStage"
             size="small"
             filterable
             value-key="name"
-            placeholder="请选择任务名称或期名"
-            @change="selectTaskStage"
-          >
-            <el-option
-              v-for="item in taskStage"
+            placeholder="请选择任务名称"
+            @change="selectTaskStage">
+            <el-option v-for="item in taskStage"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
-          <el-select
-            v-model="getSearchForm.selectTaskStage"
+
+        </el-form-item>
+        <el-form-item label="期名">
+          <el-select v-model="getSearchForm.selectTaskStage"
             size="small"
             filterable
             value-key="text"
-            placeholder="请选择任务名称或期名"
-            @change="getTaskStage"
-          >
-            <el-option
-              v-for="item in aiTaskList"
+            placeholder="请选择期名"
+            @change="getTaskStage">
+            <el-option v-for="item in aiTaskList"
               :key="item.text"
               :label="item.text"
-              :value="item"
-            ></el-option>
+              :value="item"></el-option>
           </el-select>
         </el-form-item>
+
         <el-form-item label="任务状态">
-          <el-select v-model="searchForm.status" size="small" filterable>
-            <el-option
-              v-for="item in AiTaskStatus"
+          <el-select v-model="searchForm.status"
+            size="small"
+            filterable>
+            <el-option v-for="item in AiTaskStatus"
               :key="item.value"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="完成时间">
-          <el-date-picker
-            v-model="searchForm.completeStartTime"
+          <el-date-picker v-model="searchForm.completeStartTime"
             type="datetimerange"
             value-format="timestamp"
             format="yyyy-MM-dd HH:mm"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            size="small"
-          ></el-date-picker>
+            size="small"></el-date-picker>
         </el-form-item>
         <el-form-item label="创建时间">
-          <el-date-picker
-            v-model="searchForm.creationTime"
+          <el-date-picker v-model="searchForm.creationTime"
             type="datetimerange"
             value-format="timestamp"
             format="yyyy-MM-dd HH:mm"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            size="small"
-          ></el-date-picker>
+            size="small"></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div>
-      <el-button
-        @click="addTask"
+      <el-button @click="addTask"
         type="primary"
         size="small"
         plain
         class="tableAdd"
-        icon="el-icon-plus"
-        >添加任务</el-button
-      >
+        icon="el-icon-plus">添加任务</el-button>
     </div>
     <!-- 表格 -->
-    <EleTable
-      :data="list"
+    <EleTable :data="list"
       :header="tableHeaderBig"
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
       @handleSizeChange="handleSizeChange"
-      @handleCurrentChange="handleCurrentChange"
-    >
-      <el-table-column
-        align="center"
+      @handleCurrentChange="handleCurrentChange">
+      <el-table-column align="center"
         type="index"
-        label="序号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        label="序号"></el-table-column>
+      <el-table-column align="center"
         label="医院名称"
-        prop="hospitalName"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="hospitalName"></el-table-column>
+      <el-table-column align="center"
         label="任务名称"
-        prop="aiName"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="aiName"></el-table-column>
+      <el-table-column align="center"
         label="期名"
-        prop="taskStage"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="taskStage"></el-table-column>
+      <el-table-column align="center"
         label="BOT名称"
         prop="dialogFlowName"
-        width="200"
-      >
+        width="200">
         <template slot-scope="scope">
-          <el-tooltip
-            class="item"
+          <el-tooltip class="item"
             effect="dark"
             :content="scope.row.dialogFlowName"
-            placement="top"
-          >
+            placement="top">
             <span class="hidden">{{ scope.row.dialogFlowName }}</span>
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         label="任务状态"
         prop="status"
-        :formatter="statusFormatter"
-      ></el-table-column>
-      <el-table-column align="center" label="总外呼人数" prop="taskTotalNumber">
+        :formatter="statusFormatter"></el-table-column>
+      <el-table-column align="center"
+        label="总外呼人数"
+        prop="taskTotalNumber">
         <template slot-scope="scope">
-          <span
-            :class="[scope.row.taskTotalNumber ? 'skipStyle' : '']"
+          <span :class="[scope.row.taskTotalNumber ? 'skipStyle' : '']"
             @click="
               ;[
                 scope.row.taskTotalNumber
                   ? skipRouter('addcall', scope.row)
                   : '',
               ]
-            "
-            >{{ scope.row.taskTotalNumber }}</span
-          >
+            ">{{ scope.row.taskTotalNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="已呼人数" prop="alreadyNumber">
+      <el-table-column align="center"
+        label="已呼人数"
+        prop="alreadyNumber">
         <template slot-scope="scope">
-          <span
-            :class="[scope.row.alreadyNumber ? 'skipStyle' : '']"
+          <span :class="[scope.row.alreadyNumber ? 'skipStyle' : '']"
             @click="
               ;[
                 scope.row.alreadyNumber
                   ? skipRouter('fulfillcall', scope.row, 'cause')
                   : '',
               ]
-            "
-            >{{ scope.row.alreadyNumber }}</span
-          >
+            ">{{ scope.row.alreadyNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="未呼人数" prop="notNumber">
+      <el-table-column align="center"
+        label="未呼人数"
+        prop="notNumber">
         <template slot-scope="scope">
-          <span
-            :class="[scope.row.notNumber ? 'skipStyle' : '']"
+          <span :class="[scope.row.notNumber ? 'skipStyle' : '']"
             @click="
               ;[scope.row.notNumber ? skipRouter('notcall', scope.row) : '']
-            "
-            >{{ scope.row.notNumber }}</span
-          >
+            ">{{ scope.row.notNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         label="已接听人数"
-        prop="alreadyPeopleNumber"
-      >
+        prop="alreadyPeopleNumber">
         <template slot-scope="scope">
-          <span
-            :class="[scope.row.alreadyPeopleNumber ? 'skipStyle' : '']"
+          <span :class="[scope.row.alreadyPeopleNumber ? 'skipStyle' : '']"
             @click="
               ;[
                 scope.row.alreadyPeopleNumber
                   ? skipRouter('fulfillcall', scope.row, ['ANSWERED'])
                   : '',
               ]
-            "
-            >{{ scope.row.alreadyPeopleNumber }}</span
-          >
+            ">{{ scope.row.alreadyPeopleNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="未接听人数" prop="notPeopleNumber">
+      <el-table-column align="center"
+        label="未接听人数"
+        prop="notPeopleNumber">
         <template slot-scope="scope">
-          <span
-            :class="[scope.row.notPeopleNumber ? 'skipStyle' : '']"
+          <span :class="[scope.row.notPeopleNumber ? 'skipStyle' : '']"
             @click="
               ;[
                 scope.row.notPeopleNumber
@@ -252,204 +206,162 @@
                     ])
                   : '',
               ]
-            "
-            >{{ scope.row.notPeopleNumber }}</span
-          >
+            ">{{ scope.row.notPeopleNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         label="并发数量"
-        prop="concurrentQuantity"
-      ></el-table-column>
-      <el-table-column
-        width="150px"
+        prop="concurrentQuantity"></el-table-column>
+      <el-table-column width="150px"
         align="center"
         label="启动时间"
-        prop="startTime"
-      >
+        prop="startTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        width="150px"
+      <el-table-column width="150px"
         align="center"
         label="完成时间"
-        prop="completeTime"
-      >
+        prop="completeTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.completeTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         label="创建人"
-        prop="createName"
-      ></el-table-column>
-      <el-table-column
-        width="150px"
+        prop="createName"></el-table-column>
+      <el-table-column width="150px"
         align="center"
         label="创建时间"
-        prop="createTime"
-      >
+        prop="createTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="150" fixed="right">
+      <el-table-column align="center"
+        label="操作"
+        width="150"
+        fixed="right">
         <template slot-scope="scope">
           <el-dropdown>
-            <el-button type="primary" size="mini">
+            <el-button type="primary"
+              size="mini">
               更多菜单
               <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item
-                v-show="moreMenus(scope.row.status, 'edit')"
-                @click.native="compile(scope.row, 'edit')"
-                >编辑</el-dropdown-item
-              >
-              <el-dropdown-item
-                v-show="moreMenus(scope.row.status, 'copy')"
-                @click.native="compile(scope.row, 'copy')"
-                >复制</el-dropdown-item
-              >
-              <el-dropdown-item
-                v-show="moreMenus(scope.row.status, 'delete')"
-                @click.native="compile(scope.row, 'delete')"
-                >删除</el-dropdown-item
-              >
-              <el-dropdown-item
-                v-show="moreMenus(scope.row.status, 'startTask')"
-                @click.native="compile(scope.row, 'startTask')"
-                >开始任务</el-dropdown-item
-              >
-              <el-dropdown-item
-                v-show="moreMenus(scope.row.status, 'USER_PAUSE')"
-                @click.native="compile(scope.row, 'USER_PAUSE')"
-                >暂停任务</el-dropdown-item
-              >
-              <el-dropdown-item
-                v-show="moreMenus(scope.row.status, '中止任务')"
-                @click.native="compile(scope.row)"
-                >中止任务</el-dropdown-item
-              >
-              <el-dropdown-item
-                v-show="moreMenus(scope.row.status, '运营概况')"
-                @click.native="compile(scope.row, 'operation')"
-                >运营概况</el-dropdown-item
-              >
-              <el-dropdown-item
-                v-show="moreMenus(scope.row.status, 'issueStatistics')"
-                @click.native="compile(scope.row, 'issueStatistics')"
-                >问题统计</el-dropdown-item
-              >
+              <el-dropdown-item v-show="moreMenus(scope.row.status, 'edit')"
+                @click.native="compile(scope.row, 'edit')">编辑</el-dropdown-item>
+              <el-dropdown-item v-show="moreMenus(scope.row.status, 'copy')"
+                @click.native="compile(scope.row, 'copy')">复制</el-dropdown-item>
+              <el-dropdown-item v-show="moreMenus(scope.row.status, 'delete')"
+                @click.native="compile(scope.row, 'delete')">删除</el-dropdown-item>
+              <el-dropdown-item v-show="moreMenus(scope.row.status, 'startTask')"
+                @click.native="compile(scope.row, 'startTask')">开始任务</el-dropdown-item>
+              <el-dropdown-item v-show="moreMenus(scope.row.status, 'USER_PAUSE')"
+                @click.native="compile(scope.row, 'USER_PAUSE')">暂停任务</el-dropdown-item>
+              <el-dropdown-item v-show="moreMenus(scope.row.status, '中止任务')"
+                @click.native="compile(scope.row)">中止任务</el-dropdown-item>
+              <el-dropdown-item v-show="moreMenus(scope.row.status, '运营概况')"
+                @click.native="compile(scope.row, 'operation')">运营概况</el-dropdown-item>
+              <el-dropdown-item v-show="moreMenus(scope.row.status, 'issueStatistics')"
+                @click.native="compile(scope.row, 'issueStatistics')">问题统计</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 弹出区域 -->
-    <el-dialog :title="title" :visible.sync="userVisible" width="40%">
-      <el-form
-        :rules="formRules"
+    <el-dialog :title="title"
+      :visible.sync="userVisible"
+      width="40%">
+      <el-form :rules="formRules"
         ref="addUserFrom"
         :model="addUserFrom"
-        label-width="100px"
-      >
-        <el-form-item label="选择医院:" prop="hospitalId">
-          <el-select
-            v-model="addUserFrom.hospitalId"
+        label-width="100px">
+        <el-form-item label="选择医院:"
+          prop="hospitalId">
+          <el-select v-model="addUserFrom.hospitalId"
             filterable
             clearable
             :disabled="editBot"
             value-key="id"
             style="width: 100%"
             placeholder="请选择医院"
-            @change="getHospitalName"
-          >
-            <el-option
-              v-for="item in hospitalList"
+            @change="getHospitalName">
+            <el-option v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item"
-            ></el-option>
+              :value="item"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="任务名称:" prop="name">
-          <el-input
-            :disabled="editBot"
+        <el-form-item label="任务名称:"
+          prop="name">
+          <el-input :disabled="editBot"
             v-model="addUserFrom.name"
-            placeholder="请输入任务名称"
-          ></el-input>
+            placeholder="请输入任务名称"></el-input>
         </el-form-item>
-        <el-form-item label="BOT名称:" prop="dialogFlowId">
-          <el-select
-            v-model="addUserFrom.dialogFlowId"
+        <el-form-item label="BOT名称:"
+          prop="dialogFlowId">
+          <el-select v-model="addUserFrom.dialogFlowId"
             value-key="dialogFlowId"
             filterable
             style="width: 100%"
             placeholder="请选择BOT名称"
             :disabled="editBot"
-            @change="getBotName"
-          >
-            <el-option
-              v-for="item in aiSpeechList"
+            @change="getBotName">
+            <el-option v-for="item in aiSpeechList"
               :label="item.name"
               :value="item"
-              :key="item.dialogFlowId"
-            ></el-option>
+              :key="item.dialogFlowId"></el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="并发数量" prop="concurrencyQuota">
                     <el-input placeholder="请输入并发数量"></el-input>
                 </el-form-item>-->
         <el-form-item label="时间设置:">
-          <el-input
-            @focus="userSetTime"
-            v-model="searchForm.setTime"
-          ></el-input>
+          <el-input @focus="userSetTime"
+            v-model="searchForm.setTime"></el-input>
         </el-form-item>
-        <el-form-item label="导入用户:" prop="fileName">
+        <el-form-item label="导入用户:"
+          prop="fileName">
           <div class="skipStyle">
             <!-- 上传组件 -->
-            <single-upload
-              v-model="addUserFrom.fileName"
+            <single-upload v-model="addUserFrom.fileName"
               @uploadFinish="uploadFinish"
               uploadType="BANNER"
-              :disabled="excelStatus"
-            ></single-upload>
-            <div slot="tip" class="el-upload__tip" style="font-size: 13px">
+              :disabled="excelStatus"></single-upload>
+            <div slot="tip"
+              class="el-upload__tip"
+              style="font-size: 13px">
               仅支持上传Excel格式的文件，且不超过10万条。
-              <span class="skipStyle" @click="getAiDownload">下载模板</span>
+              <span class="skipStyle"
+                @click="getAiDownload">下载模板</span>
             </div>
           </div>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="userVisible = false">取 消</el-button>
-        <el-button type="primary" :disabled="addSubmit" @click="judgeBtn('addUserFrom')"
-          >确 定</el-button
-        >
+        <el-button type="primary"
+          :disabled="addSubmit"
+          @click="judgeBtn('addUserFrom')">确 定</el-button>
       </span>
     </el-dialog>
     <!-- ai时间段 -->
-    <el-dialog
-      :title="timeTitle"
+    <el-dialog :title="timeTitle"
       :visible.sync="timeVisible"
       :model="dialForm"
-      width="40%"
-    >
-      <el-form
-        label-width="120px"
+      width="40%">
+      <el-form label-width="120px"
         label-position="left"
         :rules="formRules"
-        :model="dialForm"
-      >
-        <el-form-item label="可拨打时间段" prop="notCallTime">
-          <el-time-picker
-            is-range
+        :model="dialForm">
+        <el-form-item label="可拨打时间段"
+          prop="notCallTime">
+          <el-time-picker is-range
             format="HH:mm"
             value-format="HH:mm"
             v-model="searchForm.daily"
@@ -457,13 +369,11 @@
             start-placeholder="开始时间"
             end-placeholder="结束时间"
             placeholder="选择时间范围"
-            @change="getDialable"
-          ></el-time-picker>
+            @change="getDialable"></el-time-picker>
         </el-form-item>
         <el-form-item label="不可拨打时间段">
           <div style="display: flex">
-            <el-time-picker
-              is-range
+            <el-time-picker is-range
               format="HH:mm"
               value-format="HH:mm"
               :default-time="['09:00', '20:00']"
@@ -472,19 +382,15 @@
               start-placeholder="开始时间"
               end-placeholder="结束时间"
               placeholder="选择时间范围"
-              @change="notDialable"
-            ></el-time-picker>
-            <el-button
-              type="primary"
+              @change="notDialable"></el-time-picker>
+            <el-button type="primary"
               style="margin-left: 15px"
-              @click="notDialTime('time')"
-              >按时间顺序添加</el-button
-            >
+              @click="notDialTime('time')">按时间顺序添加</el-button>
           </div>
         </el-form-item>
-        <el-form-item v-for="(item, index) in notDialTimeArr" :key="item.id">
-          <el-time-picker
-            :picker-options="{ selectableRange: '18:30:00 - 20:30:00' }"
+        <el-form-item v-for="(item, index) in notDialTimeArr"
+          :key="item.id">
+          <el-time-picker :picker-options="{ selectableRange: '18:30:00 - 20:30:00' }"
             is-range
             format="HH:mm"
             value-format="HH:mm"
@@ -493,22 +399,17 @@
             start-placeholder="开始时间"
             end-placeholder="结束时间"
             placeholder="选择时间范围"
-            @change="notDialable"
-          ></el-time-picker>
-          <el-button
-            type="danger"
+            @change="notDialable"></el-time-picker>
+          <el-button type="danger"
             icon="el-icon-delete"
             @click="deleteNotCall('time', index)"
             circle
-            style="margin-left: 15px"
-          ></el-button>
+            style="margin-left: 15px"></el-button>
         </el-form-item>
         <el-form-item label="重复周期">
-          <el-checkbox-group
-            v-model="timeForm.checkListPeriod"
+          <el-checkbox-group v-model="timeForm.checkListPeriod"
             @change="getPeriod"
-            :min="1"
-          >
+            :min="1">
             <el-checkbox label="MONDAY">周一</el-checkbox>
             <el-checkbox label="TUESDAY">周二</el-checkbox>
             <el-checkbox label="WEDNESDAY">周三</el-checkbox>
@@ -520,49 +421,41 @@
         </el-form-item>
         <el-form-item label="不可拨打日期">
           <div style="display: flex">
-            <el-date-picker
-              v-model="timeForm.notDial"
+            <el-date-picker v-model="timeForm.notDial"
               format="yyyy-MM-dd"
               value-format="yyyy-MM-dd"
               type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
-              @change="notDialable"
-            ></el-date-picker>
-            <el-button
-              type="primary"
+              @change="notDialable"></el-date-picker>
+            <el-button type="primary"
               style="margin-left: 15px"
-              @click="notDialTime('date')"
-              >按时间顺序添加</el-button
-            >
+              @click="notDialTime('date')">按时间顺序添加</el-button>
           </div>
         </el-form-item>
-        <el-form-item v-for="(item, index) in notDialDateArr" :key="index">
-          <el-date-picker
-            v-model="item.callDate"
+        <el-form-item v-for="(item, index) in notDialDateArr"
+          :key="index">
+          <el-date-picker v-model="item.callDate"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            @change="notDialable"
-          ></el-date-picker>
-          <el-button
-            type="danger"
+            @change="notDialable"></el-date-picker>
+          <el-button type="danger"
             icon="el-icon-delete"
             @click="deleteNotCall('', index)"
             circle
-            style="margin-left: 15px"
-          ></el-button>
+            style="margin-left: 15px"></el-button>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="timeVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirmCallTime(true)"
-          >确 定</el-button
-        >
+        <el-button type="primary"
+          @click="confirmCallTime(true)">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -704,20 +597,31 @@ export default {
       return [startTime, endTime]
     },
     judgeTimeSize(time) {
-      let [getOkTime, oneTime, twoTime, threeTime] = [arguments[0], arguments[1],arguments[2], arguments[3]]
-      if(oneTime === ''){ return false }
-      if( getOkTime[0] >= oneTime[0] || getOkTime[1] <= oneTime[1]){
-        this.$message.warning("不可拨打时间不能超过可拨打时间")
+      let [getOkTime, oneTime, twoTime, threeTime] = [
+        arguments[0],
+        arguments[1],
+        arguments[2],
+        arguments[3],
+      ]
+      if (oneTime === '') {
+        return false
+      }
+      if (getOkTime[0] >= oneTime[0] || getOkTime[1] <= oneTime[1]) {
+        this.$message.warning('不可拨打时间不能超过可拨打时间')
         return true
       }
-      if(twoTime === ''){ return false }
-        if( oneTime[1] >= twoTime[0] || oneTime[1] >= twoTime[1]){
-        this.$message.warning("请按时间顺序添加不可拨打时间")
+      if (twoTime === '') {
+        return false
+      }
+      if (oneTime[1] >= twoTime[0] || oneTime[1] >= twoTime[1]) {
+        this.$message.warning('请按时间顺序添加不可拨打时间')
         return true
       }
-      if(threeTime === ''){ return false }
-        if( twoTime[1] >= threeTime[0] || twoTime[1] >= threeTime[1]){
-        this.$message.warning("请按时间顺序添加不可拨打时间")
+      if (threeTime === '') {
+        return false
+      }
+      if (twoTime[1] >= threeTime[0] || twoTime[1] >= threeTime[1]) {
+        this.$message.warning('请按时间顺序添加不可拨打时间')
         return true
       }
     },
@@ -1075,8 +979,8 @@ export default {
     /**
      * ai时间添加区域
      */
-    getDialable() { },
-    notDialable() { },
+    getDialable() {},
+    notDialable() {},
     deleteNotCall(val, index) {
       if (val === 'time') {
         this.notDialTimeArr.splice(index, 1)
@@ -1089,7 +993,7 @@ export default {
       this.timeVisible = true
     },
     // 时间添加 周期选择 checkbox
-    getPeriod() { },
+    getPeriod() {},
     // 不可拨打时间段添加
     notDialTime(val) {
       let notDialTimeArr = this.notDialTimeArr
@@ -1103,7 +1007,7 @@ export default {
       }
       if (val === 'time') {
         if (this.notDialTimeArr.length >= 2) return
-        notDialTimeArr.push({ callTime: [ '', '' ] })
+        notDialTimeArr.push({ callTime: ['', ''] })
       } else {
         if (this.notDialDateArr.length >= 2) return
         notDialDateArr.push({ callDate: '' })
@@ -1150,11 +1054,24 @@ export default {
       let callTime = this.searchForm.daily
       // 是否正确添加不可拨打时间
       let getOkTime = this.disposeDaily(this.searchForm.daily)
-      let oneTime = inactiveTimeList[0]?.startTime ? this.disposeTime(inactiveTimeList[0]) : ''
-      let twoTime = inactiveTimeList[1]?.startTime ? this.disposeTime(inactiveTimeList[1]) : ''
-      let threeTime = inactiveTimeList[2]?.startTime ? this.disposeTime(inactiveTimeList[2]) : ''
-      let switchState = this.judgeTimeSize(getOkTime, oneTime, twoTime, threeTime)
-      if(switchState){ return }
+      let oneTime = inactiveTimeList[0]?.startTime
+        ? this.disposeTime(inactiveTimeList[0])
+        : ''
+      let twoTime = inactiveTimeList[1]?.startTime
+        ? this.disposeTime(inactiveTimeList[1])
+        : ''
+      let threeTime = inactiveTimeList[2]?.startTime
+        ? this.disposeTime(inactiveTimeList[2])
+        : ''
+      let switchState = this.judgeTimeSize(
+        getOkTime,
+        oneTime,
+        twoTime,
+        threeTime
+      )
+      if (switchState) {
+        return
+      }
       // 拼接周期
       if (period.length === 7) {
         if (inactiveTimeList.length === 1 && inactiveTimeList[0].startTime) {
@@ -1230,7 +1147,7 @@ export default {
           this.getSuspendTask(val)
           break
         case 'operation':
-          console.log(val.aiName);
+          console.log(val.aiName)
           sessionStorage.setItem('taskHospitalId', val.hospitalId)
           sessionStorage.setItem('taskAiName', val.aiName)
           sessionStorage.setItem('taskRobotCallJobId', val.robotCallJobId)
@@ -1406,18 +1323,18 @@ export default {
     /**
      * 是否可重新上传excel
      */
-    upExcel(val){
-      switch(val){
-        case 'NOT_STARTED' :
+    upExcel(val) {
+      switch (val) {
+        case 'NOT_STARTED':
           return false
           break
-        case 'USER_PAUSE' :
+        case 'USER_PAUSE':
           return false
           break
-        case 'SYSTEM_HANG_UP' :
+        case 'SYSTEM_HANG_UP':
           return false
           break
-        default :
+        default:
           return false
       }
     },
