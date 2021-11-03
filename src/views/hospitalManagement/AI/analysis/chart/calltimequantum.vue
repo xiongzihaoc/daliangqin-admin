@@ -71,7 +71,7 @@ export default {
           type: 'value',
           minInterval: 1,
           axisLabel: {
-            formatter: '{value}人',
+            formatter: '{value}s',
             textStyle: {
               color: '#ccc',
             },
