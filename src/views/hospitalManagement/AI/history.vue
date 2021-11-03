@@ -49,6 +49,8 @@
               :value="item.id"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="任务或期名">
           <el-select
             v-model="getSearchForm.selectTaskStage"
             size="small"
@@ -403,6 +405,7 @@ export default {
     searchReset() {
       this.$set(this, 'searchForm', {})
       this.$set(this, 'getSearchForm', {})
+      this.$set(this, 'aiTaskList', [])
       this.getAiHistoryList()
     },
     /**

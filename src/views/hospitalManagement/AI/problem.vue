@@ -42,6 +42,8 @@
               :value="item.id"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="任务或期名">
           <el-select
             v-model="getSearchForm.selectTaskStage"
             size="small"
@@ -72,10 +74,18 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
+          <el-button
+            @click="searchBtn"
+            type="primary"
+            size="small"
+            icon="el-icon-search"
             >搜索</el-button
           >
-          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh"
+          <el-button
+            @click="searchReset"
+            size="small"
+            plain
+            icon="el-icon-refresh"
             >重置</el-button
           >
         </el-form-item>
@@ -91,7 +101,11 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
     >
-      <el-table-column align="center" label="序号" type="index"></el-table-column>
+      <el-table-column
+        align="center"
+        label="序号"
+        type="index"
+      ></el-table-column>
       <el-table-column
         v-if="show"
         width="150px"
@@ -108,8 +122,16 @@
         label="医院名称"
         prop="hospitalName"
       ></el-table-column>
-      <el-table-column align="center" label="任务名称" prop="aiName"></el-table-column>
-      <el-table-column align="center" label="期名" prop="taskStage"></el-table-column>
+      <el-table-column
+        align="center"
+        label="任务名称"
+        prop="aiName"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="期名"
+        prop="taskStage"
+      ></el-table-column>
       <el-table-column
         align="center"
         label="外呼总量(位)"
@@ -140,12 +162,20 @@
         label="对话总轮次"
         prop="chatRoundTotal"
       ></el-table-column>
-      <el-table-column align="center" label="总通话时长(s)" prop="chatDurationTotal">
+      <el-table-column
+        align="center"
+        label="总通话时长(s)"
+        prop="chatDurationTotal"
+      >
         <template slot-scope="scope">
           <span>{{ formatSeconds(scope.row.chatDurationTotal) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="平均通话时长(s)" prop="avgTalkTime">
+      <el-table-column
+        align="center"
+        label="平均通话时长(s)"
+        prop="avgTalkTime"
+      >
         <template slot-scope="scope">
           <span>{{ formatSeconds(scope.row.avgTalkTime) }}</span>
         </template>
@@ -155,15 +185,12 @@
 </template>
 
 <script>
-import EleTable from "@/components/Table";
-import { httpAdminHospital } from "@/api/admin/httpAdminHospital";
-import { httpAdminAiHistory } from "@/api/admin/httpAdminAiHistory";
-import { httpAdminAiAnalysis } from "@/api/admin/httpAdminAiAnalysis";
+import EleTable from '@/components/Table'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { httpAdminAiHistory } from '@/api/admin/httpAdminAiHistory'
+import { httpAdminAiAnalysis } from '@/api/admin/httpAdminAiAnalysis'
 
-import {
-  parseTime,
-  formatSeconds,
-} from "@/utils/index";
+import { parseTime, formatSeconds } from '@/utils/index'
 export default {
   components: {
     EleTable,
@@ -174,17 +201,17 @@ export default {
       formatSeconds,
       show: true,
       searchForm: {
-        aiCallSummaryType: "DATE",
+        aiCallSummaryType: 'DATE',
       },
       getSearchForm: {
-        getTaskStage: "",
-        selectTaskStage: "",
-        callDuration: "",
+        getTaskStage: '',
+        selectTaskStage: '',
+        callDuration: '',
       },
       list: [],
       taskStage: [
-        { id: "robotCallJobId", name: "任务名称" },
-        { id: "taskStage", name: "期名" },
+        { id: 'robotCallJobId', name: '任务名称' },
+        { id: 'taskStage', name: '期名' },
       ],
       aiTaskList: [],
       tableHeaderBig: [],
@@ -193,30 +220,30 @@ export default {
       pickerOptions: {
         shortcuts: [
           {
-            text: "最近一周",
+            text: '最近一周',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
             },
           },
           {
-            text: "最近一个月",
+            text: '最近一个月',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
             },
           },
           {
-            text: "最近三个月",
+            text: '最近三个月',
             onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
             },
           },
         ],
@@ -225,107 +252,108 @@ export default {
       pageSize: 10,
       pageNum: 1,
       total: 0,
-    };
+    }
   },
   created() {
-    this.getList();
-    this.getHospitalList();
+    this.getList()
+    this.getHospitalList()
   },
   methods: {
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
-        this.hospitalList = res.data.elements;
-      });
+        this.hospitalList = res.data.elements
+      })
     },
     getList() {
       httpAdminAiAnalysis.getCallSummary(this.searchForm).then((res) => {
-        console.log(res);
-        this.list = res.data.elements;
-        this.total = res.data.totalSize;
-      });
+        console.log(res)
+        this.list = res.data.elements
+        this.total = res.data.totalSize
+      })
     },
     getAiStageList() {
       httpAdminAiHistory.getAiStageList().then((res) => {
-        this.aiTaskList = [];
+        this.aiTaskList = []
         res.data.forEach((val) => {
-          this.aiTaskList.push({ text: val.taskStage });
-        });
-      });
+          this.aiTaskList.push({ text: val.taskStage })
+        })
+      })
     },
     getAiTaskNameList() {
       httpAdminAiHistory.getAiTaskNameList().then((res) => {
-        this.aiTaskList = [];
+        this.aiTaskList = []
         res.data.forEach((val) => {
           this.aiTaskList.push({
             text: val.aiName,
             robotCallJobId: val.robotCallJobId,
-          });
-        });
-      });
+          })
+        })
+      })
     },
     /**
      * 逻辑
      */
     selectTaskStage(val) {
-      this.$set(this.getSearchForm, "selectTaskStage", "");
-      if (val === "robotCallJobId") {
-        this.getAiTaskNameList();
+      this.$set(this.getSearchForm, 'selectTaskStage', '')
+      if (val === 'robotCallJobId') {
+        this.getAiTaskNameList()
       } else {
-        this.getAiStageList();
+        this.getAiStageList()
       }
     },
     getTaskStage(val) {
-      if (this.getSearchForm.getTaskStage === "robotCallJobId") {
-        this.$set(this.searchForm, "taskStage", "");
-        this.searchForm.robotCallJobId = val.robotCallJobId;
+      if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
+        this.$set(this.searchForm, 'taskStage', '')
+        this.searchForm.robotCallJobId = val.robotCallJobId
       } else {
-        this.$set(this.searchForm, "robotCallJobId", "");
-        this.searchForm.taskStage = val.text;
+        this.$set(this.searchForm, 'robotCallJobId', '')
+        this.searchForm.taskStage = val.text
       }
     },
     getSearchFormTime(val) {
-      this.searchForm.startTime = val[0];
-      this.searchForm.endTime = val[1];
+      this.searchForm.startTime = val[0]
+      this.searchForm.endTime = val[1]
     },
     checkBtn(val) {
-      console.log("查看日期期名", val);
-      if (val === "date") {
-        this.searchForm.aiCallSummaryType = "DATE";
-        this.show = true;
+      console.log('查看日期期名', val)
+      if (val === 'date') {
+        this.searchForm.aiCallSummaryType = 'DATE'
+        this.show = true
       } else {
-        this.searchForm.aiCallSummaryType = "STAGE";
-        this.show = false;
+        this.searchForm.aiCallSummaryType = 'STAGE'
+        this.show = false
       }
-      this.getList();
+      this.getList()
     },
     /**
      * 搜索
      */
     searchBtn() {
-      console.log("搜索", this.searchForm);
-      this.getList();
+      console.log('搜索', this.searchForm)
+      this.getList()
     },
     searchReset() {
-      this.$set(this, "getSearchFormTime", {});
-      this.$set(this, "searchForm", {});
-      this.$set(this, "getSearchForm", {});
-      this.$set(this.searchForm, "aiCallSummaryType", "DATE");
-      this.getList();
+      this.$set(this, 'getSearchFormTime', {})
+      this.$set(this, 'searchForm', {})
+      this.$set(this, 'getSearchForm', {})
+      this.$set(this.searchForm, 'aiCallSummaryType', 'DATE')
+      this.$set(this, 'aiTaskList', [])
+      this.getList()
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style></style>

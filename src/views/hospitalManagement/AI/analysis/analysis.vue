@@ -34,6 +34,8 @@
               :value="item.id"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="任务或期名">
           <el-select
             v-model="getSearchForm.selectTaskStage"
             size="small"
@@ -155,8 +157,9 @@ export default {
     // this.searchForm.robotCallJobIds = this.$route.params.id
     this.searchForm.hospitalId = sessionStorage.getItem('taskHospitalId')
     this.searchForm.taskAiName = sessionStorage.getItem('taskAiName')
-    this.searchForm.robotCallJobIds = sessionStorage.getItem('taskRobotCallJobId')
-    console.log(this.searchForm.taskAiName);
+    this.searchForm.robotCallJobIds =
+      sessionStorage.getItem('taskRobotCallJobId')
+    console.log(this.searchForm.taskAiName)
     if (this.searchForm.taskAiName) {
       this.selectTaskStage('robotCallJobId')
       this.getSearchForm.getTaskStage = 'robotCallJobId'
@@ -185,7 +188,7 @@ export default {
     // },
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+      httpAdminHospital.getHospital({ pageSize: -1 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
@@ -299,6 +302,7 @@ export default {
       this.removeSession()
       this.$set(this, 'searchForm', {})
       this.$set(this, 'getSearchForm', {})
+      this.$set(this, 'aiTaskList', [])
       this.getJobStats()
     },
   },
