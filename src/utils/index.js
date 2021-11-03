@@ -900,7 +900,7 @@ export const formatterElement = {
     // TRANSFER_ARTIFICIAL: '转人工呼损',
   },
   hangUpState: {
-    REMOTE_HANGUP: '客户挂断',
+    REMOTE_HANGUP: '用户挂断',
     INITIAL_HANGUP: 'AI挂断',
     CS_HANGUP: '人工坐席挂断',
     OTHER_HANGUP: '未知原因',
