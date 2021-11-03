@@ -26,6 +26,7 @@ export const httpAdminAiAnalysis = {
         return request({
             url: 'ai/analysis/jobStats',
             method: 'get',
+            params: data
         })
     },
 }
