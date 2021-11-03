@@ -4,10 +4,10 @@
     <div class="search-box">
       <el-form class="searchForm" ref="searchFormRef" :model="searchForm" :inline="true">
         <el-form-item label="用户姓名">
-          <el-input v-model="searchForm.calledPhoneNumber" size="small"></el-input>
+          <el-input v-model="searchForm.customerPersonName" size="small"></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
-          <el-input v-model="searchForm.customerPersonName" size="small"></el-input>
+          <el-input v-model="searchForm.calledPhoneNumber" size="small"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
