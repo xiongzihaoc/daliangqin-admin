@@ -195,7 +195,7 @@ const hospitalRouter = {
       hidden: true,
       component: () => import('@/views/hospitalManagement/AI/callout/addcall'),
       meta: {
-        title: '外呼总人数',
+        title: '总外呼人数',
       },
     },
     {
@@ -204,7 +204,7 @@ const hospitalRouter = {
       hidden: true,
       component: () => import('@/views/hospitalManagement/AI/callout/notcall'),
       meta: {
-        title: '未呼用户',
+        title: '未呼人数',
       },
     },
     {
@@ -213,7 +213,7 @@ const hospitalRouter = {
       hidden: true,
       component: () => import('@/views/hospitalManagement/AI/callout/fulfillcall'),
       meta: {
-        title: '已呼用户',
+        title: '已呼人数',
       },
     },
     {
