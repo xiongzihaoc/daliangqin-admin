@@ -35,7 +35,11 @@
             icon="el-icon-refresh"
             >重置</el-button
           >
-          <el-button @click="searchAddBtn" type="primary" size="small"
+          <el-button
+            :disabled="importUser"
+            @click="searchAddBtn"
+            type="primary"
+            size="small"
             >单个导入</el-button
           >
         </el-form-item>
@@ -69,10 +73,18 @@
       <!-- 操作 -->
       <el-table-column label="操作" align="center" width="220">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
+          <el-button
+            size="mini"
+            type="primary"
+            :disabled="editDel"
+            @click="editBtn(scope.row)"
             >编辑</el-button
           >
-          <el-button size="mini" type="danger" @click="deleteBtn(scope.row)"
+          <el-button
+            size="mini"
+            type="danger"
+            :disabled="editDel"
+            @click="deleteBtn(scope.row)"
             >删除</el-button
           >
         </template>
@@ -117,6 +129,9 @@ export default {
     return {
       validatePhone,
       title: '导入单个用户',
+      taskState: '',
+      importUser: false,
+      editDel: false,
       formRules: {
         name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         phoneNumber: [
@@ -151,7 +166,12 @@ export default {
   created() {
     this.importForm.robotCallJobId = this.$route.query.robotCallJobId
     this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
+    this.taskState = sessionStorage.getItem('taskState')
+    this.disabledSw()
     this.getList()
+  },
+  beforeDestroy() {
+    sessionStorage.removeItem('taskState')
   },
   methods: {
     /**
@@ -169,7 +189,6 @@ export default {
       })
     },
     postAiStatistics() {
-      console.log(this.importForm)
       httpAdminAiCall.postAiStatistics(this.importForm).then((res) => {
         if (res.code === 'OK') {
           this.$message.success(res.message)
@@ -189,7 +208,6 @@ export default {
         robotCallJobId: this.importForm.robotCallJobId,
       }
       httpAdminAiCall.putInformationUser(data).then((res) => {
-        console.log('编辑', res)
         if (res.code === 'OK') {
           this.$message.success('编辑成功')
         }
@@ -211,6 +229,28 @@ export default {
       })
     },
     /**
+     * 导入、编辑、删除状态
+     */
+    disabledSw() {
+      switch (this.taskState) {
+        case 'NOT_STARTED':
+          this.editDel = false
+          this.importUser = false
+          break
+        case 'USER_PAUSE':
+          this.editDel = true
+          this.importUser = false
+          break
+        case 'SYSTEM_HANG_UP':
+          this.editDel = true
+          this.importUser = false
+          break
+        default:
+          this.editDel = true
+          this.importUser = true
+      }
+    },
+    /**
      * 按钮
      */
     searchAddBtn() {
@@ -218,7 +258,6 @@ export default {
       delete this.importForm.name
       delete this.importForm.phoneNumber
       delete this.importForm.id
-      console.log(this.importForm)
       this.importVisible = true
     },
     /**

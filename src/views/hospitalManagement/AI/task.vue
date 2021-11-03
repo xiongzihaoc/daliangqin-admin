@@ -140,7 +140,7 @@
             @click="
               ;[
                 scope.row.taskTotalNumber
-                  ? skipRouter('addcall', scope.row)
+                  ? skipRouter('addcall', scope.row, 'add')
                   : '',
               ]
             ">{{ scope.row.taskTotalNumber }}</span>
@@ -1147,7 +1147,6 @@ export default {
           this.getSuspendTask(val)
           break
         case 'operation':
-          console.log(val.aiName)
           sessionStorage.setItem('taskHospitalId', val.hospitalId)
           sessionStorage.setItem('taskAiName', val.aiName)
           sessionStorage.setItem('taskRobotCallJobId', val.robotCallJobId)
@@ -1342,10 +1341,13 @@ export default {
      * 路由跳转
      */
     skipRouter(name, val, state) {
-      if (state !== undefined && state !== 'cause') {
+      if (state !== undefined && state !== 'cause' && state !== 'add') {
         sessionStorage.setItem('taskPhoneState', JSON.stringify(state))
         // 跳转已呼用户 暂时不带医院id
         // sessionStorage.setItem('taskHospitalId', val.hospitalId)
+      }
+      if(state === 'add'){
+        sessionStorage.setItem('taskState', val.status)
       }
       this.$router.push({
         name,
