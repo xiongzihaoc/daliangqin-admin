@@ -32,7 +32,7 @@
             size="small"
             filterable
             value-key="name"
-            placeholder="请选择任务名称与期名"
+            placeholder="请选择任务"
             @change="selectTaskStage"
           >
             <el-option

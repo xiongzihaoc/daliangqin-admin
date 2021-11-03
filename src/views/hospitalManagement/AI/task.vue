@@ -23,7 +23,7 @@
             size="small"
             filterable
             value-key="name"
-            placeholder="请选择任务名称或期名"
+            placeholder="请选择任务"
             @change="selectTaskStage">
             <el-option v-for="item in taskStage"
               :key="item.id"
@@ -36,7 +36,7 @@
             size="small"
             filterable
             value-key="text"
-            placeholder="请选择任务或期名"
+            placeholder="请选择任务名称或期名"
             @change="getTaskStage">
             <el-option v-for="item in aiTaskList"
               :key="item.text"
