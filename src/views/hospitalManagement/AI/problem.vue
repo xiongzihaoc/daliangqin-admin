@@ -26,7 +26,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="任务">
+        <el-form-item label="任务名称">
           <el-select v-model="searchForm.aiName"
             size="small"
             filterable
