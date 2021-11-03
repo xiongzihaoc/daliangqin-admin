@@ -727,8 +727,16 @@ export const AiResultStatus = [
 export const printStatusList = [
   { id: 2, label: "已打印", value: "HAVE_PRINT" },
   { id: 3, label: "未打印", value: "NOT_PRINT" },
-
 ]
+
+// 问题统计 用户回答状态
+export const problemState = [
+  { id: 2, label: "是", value: "YES" },
+  { id: 3, label: "否", value: "NO" },
+  { id: 4, label: "不知道", value: "UNKNOWN" },
+  { id: 5, label: "不明确", value: "UNRECOGNIZED" },
+]
+
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式

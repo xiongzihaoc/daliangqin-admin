@@ -20,6 +20,8 @@
         </el-form-item>
         <el-form-item label="任务名称">
           <el-select
+            multiple
+            collapse-tags
             v-model="searchForm.aiName"
             size="small"
             filterable
@@ -136,6 +138,7 @@ export default {
       listData: {}, // 全图表数据
       searchForm: {
         hospitalId: '',
+        aiName: [],
         infoObj: {}, // 单个医院具体信息
       },
       // 任务名称与期数
@@ -168,12 +171,6 @@ export default {
     this.removeSession()
   },
   methods: {
-    // 获取列表
-    // getList() {
-    //   httpAdminAiAnalysis.getAnalysisList().then((res) => {
-    //     this.infoObj = res.data.elements[0]
-    //   })
-    // },
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: -1 }).then((res) => {
@@ -195,7 +192,7 @@ export default {
           {
             title: '已接听率',
             ratio: `${
-              outboundList.answerRate ? outboundList.answerRate : '0'
+              outboundList.answerRate ? this.getDecimals(outboundList.answerRate) : '0'
             }%`,
             minuteNumber: `已接听人数${outboundList.answerNumber}位`,
           },
@@ -208,7 +205,7 @@ export default {
           },
           {
             title: '挂机率',
-            ratio: `${outboundList.hangupRate ? outboundList.hangupRate : '0'}`,
+            ratio: `${outboundList.hangupRate ? outboundList.hangupRate : '0'}%`,
             minuteNumber: `挂机人数${outboundList.hangupNumber}位`,
           },
           {
@@ -239,6 +236,15 @@ export default {
       httpAdminAiHistory.getAiTaskNameList().then((res) => {
         this.aiTaskList = res.data
       })
+    },
+    /**
+     * 已接听整数补零
+     */
+    getDecimals(val){
+      if(val.toString().length == 2){
+        val = val + '.00'
+      }
+      return val
     },
     /**
      * 清除缓存

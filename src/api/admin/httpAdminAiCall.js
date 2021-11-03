@@ -142,4 +142,14 @@ export const httpAdminAiCall = {
       params: data
     })
   },
+  
+  // 查询问题名称
+  getProblemList(data) {
+    return request({
+      url: `ai/problem/${data.robotCallJobId}`,
+      method: 'get',
+      params: data
+    })
+  },
+  
 }

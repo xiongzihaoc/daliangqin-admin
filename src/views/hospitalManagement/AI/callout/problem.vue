@@ -25,7 +25,7 @@
         <template slot-scope="scope">
           <span
             :class="[scope.row.yesIntent == 0 ? '' : 'skipStyle']"
-            @click="skipRouter(scope.row)"
+            @click="skipRouter(scope.row, 'YES')"
             >{{ scope.row.yesIntent }}人</span
           >
         </template>
@@ -34,7 +34,7 @@
         <template slot-scope="scope">
           <span
             :class="[scope.row.noIntent == 0 ? '' : 'skipStyle']"
-            @click="skipRouter(scope.row)"
+            @click="skipRouter(scope.row, 'NO')"
             >{{ scope.row.noIntent }}人</span
           >
         </template>
@@ -43,7 +43,7 @@
         <template slot-scope="scope">
           <span
             :class="[scope.row.unknownIntent == 0 ? '' : 'skipStyle']"
-            @click="skipRouter(scope.row)"
+            @click="skipRouter(scope.row, 'UNKNOWN')"
             >{{ scope.row.unknownIntent }}人</span
           >
         </template>
@@ -52,7 +52,7 @@
         <template slot-scope="scope">
           <span
             :class="[scope.row.unknownIntent == 0 ? '' : 'unrecognizedIntent']"
-            @click="skipRouter(scope.row)"
+            @click="skipRouter(scope.row, 'UNRECOGNIZED')"
             >{{ scope.row.unrecognizedIntent }}人</span
           >
         </template>
@@ -105,7 +105,9 @@ export default {
     /**
      * 路由跳转
      */
-    skipRouter(val) {
+    skipRouter(val, state) {
+      sessionStorage.setItem('problemName', val.problem)
+      sessionStorage.setItem('problemState', state)
       this.$router.push({
         name: 'fulfillcall',
         query: { robotCallJobId: this.searchForm.robotCallJobId },

@@ -52,6 +52,34 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="问题名称">
+          <el-select
+            v-model="searchForm.problem"
+            size="small"
+            filterable
+          >
+            <el-option
+              v-for="(item, index) in problemName"
+              :key="index"
+              :label="item.problem"
+              :value="item.problem"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="答案">
+          <el-select
+            v-model="searchForm.answer"
+            size="small"
+            filterable
+          >
+            <el-option
+              v-for="(item, index) in problemState"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button
             @click="searchBtn"
@@ -95,7 +123,7 @@
       ></el-table-column>
       <el-table-column
         align="center"
-        label="用户名"
+        label="用户姓名"
         prop="patientUserName"
       ></el-table-column>
       <el-table-column
@@ -205,6 +233,7 @@ import {
   formatSeconds,
   formatterElement,
   AiResultStatus,
+  problemState,
 } from '@/utils/index'
 
 export default {
@@ -215,6 +244,7 @@ export default {
     return {
       parseTime,
       formatSeconds,
+      problemState,
       AiResultStatus,
       inputMsg: '',
       src: '', // 语音播放路径
@@ -225,6 +255,8 @@ export default {
         startTime: '',
         endTime: '',
         hospitalId: '',
+        answer: '',
+        problem: '',
         resultStatusList: [],
       },
       telephoneMessage: {
@@ -241,6 +273,7 @@ export default {
       chatList: [],
       tableHeaderBig: [],
       messageList: [],
+      problemName: [], // 问题名称
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -251,18 +284,30 @@ export default {
   created() {
     let taskPhoneState = JSON.parse(sessionStorage.getItem('taskPhoneState'))
     let taskHospitalId = sessionStorage.getItem('taskHospitalId')
+    let problem = sessionStorage.getItem('problemName')
+    let problemState = sessionStorage.getItem('problemState')
     if (taskPhoneState) {
       this.searchForm.resultStatusList = taskPhoneState
     }
     if (taskHospitalId) {
       this.searchForm.hospitalId = taskHospitalId
     }
+    if (problem) {
+      this.searchForm.problem = problem
+    }
+    if (problemState) {
+      this.searchForm.answer = problemState
+    }
+    
     this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
+    this.getProblemList()
     this.getList()
   },
   beforeDestroy() {
     sessionStorage.removeItem('taskPhoneState')
     sessionStorage.removeItem('taskHospitalId')
+    sessionStorage.removeItem('problemName')
+    sessionStorage.removeItem('problemState')
   },
   methods: {
     /**
@@ -306,6 +351,11 @@ export default {
           this.dialogVisible = true
         })
     },
+    getProblemList(){
+      httpAdminAiCall.getProblemList({robotCallJobId: this.searchForm.robotCallJobId}).then((res) => {
+        this.problemName = res.data
+      })
+    },
     /**
      * 选择时间
      */
@@ -340,6 +390,8 @@ export default {
       this.searchForm.hospitalId = sessionStorage.getItem('hospitalId')
       sessionStorage.removeItem('taskPhoneState')
       sessionStorage.removeItem('taskHospitalId')
+      sessionStorage.removeItem('problemName')
+      sessionStorage.removeItem('problemState')
       this.getList()
     },
     /**
