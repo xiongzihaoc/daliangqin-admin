@@ -266,8 +266,8 @@ export default {
       })
     },
     getList() {
-      httpAdminAiAnalysis.getCallSummary(this.searchForm).then((res) => {
-        console.log(res)
+      let data = Object.assign(this.searchForm, { page: this.pageNum, pageSize: this.pageSize, })
+      httpAdminAiAnalysis.getCallSummary(data).then((res) => {
         this.list = res.data.elements
         this.total = res.data.totalSize
       })
