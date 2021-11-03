@@ -32,7 +32,7 @@
       <el-table-column align="center" type="index" label="序号"></el-table-column>
       <el-table-column
         align="center"
-        label="用户名"
+        label="用户姓名"
         prop="customerPersonName"
       ></el-table-column>
       <el-table-column
