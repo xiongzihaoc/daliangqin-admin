@@ -308,7 +308,7 @@ export default {
   },
   created() {
     this.getHospitalList()
-    this.getAiHistoryList()
+    this.getList()
   },
   mounted() {},
   methods: {
@@ -318,8 +318,9 @@ export default {
         this.hospitalList = res.data.elements
       })
     },
-    getAiHistoryList() {
-      httpAdminAiHistory.getAiHistoryList(this.searchForm).then((res) => {
+    getList() {
+      let data = Object.assign(this.searchForm, { page: this.pageNum, pageSize: this.pageSize, })
+      httpAdminAiHistory.getAiHistoryList(data).then((res) => {
         this.list = res.data.elements
         this.total = res.data.totalSize
       })
@@ -400,13 +401,13 @@ export default {
      * 搜索
      */
     searchBtn() {
-      this.getAiHistoryList()
+      this.getList()
     },
     searchReset() {
       this.$set(this, 'searchForm', {})
       this.$set(this, 'getSearchForm', {})
       this.$set(this, 'aiTaskList', [])
-      this.getAiHistoryList()
+      this.getList()
     },
     /**
      * 播放语音
