@@ -27,37 +27,27 @@
           </el-select>
         </el-form-item>
         <el-form-item label="任务">
-          <el-select
-            v-model="getSearchForm.getTaskStage"
+          <el-select v-model="searchForm.aiName"
             size="small"
             filterable
-            value-key="name"
-            placeholder="请选择任务"
-            @change="selectTaskStage"
-          >
-            <el-option
-              v-for="item in taskStage"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+            value-key="robotCallJobId"
+            placeholder="请选择任务名称">
+            <el-option v-for="item in aiTaskList"
+              :key="item.aiName"
+              :label="item.aiName"
+              :value="item.aiName"></el-option>
+        </el-select>
         </el-form-item>
-        <el-form-item label="任务或期名">
-          <el-select
-            v-model="getSearchForm.selectTaskStage"
+        <el-form-item label="期名">
+          <el-select v-model="searchForm.taskStage"
             size="small"
             filterable
-            value-key="text"
-            placeholder="请选择任务名称与期名"
-            @change="getTaskStage"
-          >
-            <el-option
-              v-for="item in aiTaskList"
-              :key="item.text"
-              :label="item.text"
-              :value="item"
-            ></el-option>
+            value-key="taskStage"
+            placeholder="请选择期名">
+            <el-option v-for="item in aiPeriodsList"
+              :key="item.taskStage"
+              :label="item.taskStage"
+              :value="item.taskStage"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="统计日期">
@@ -114,7 +104,7 @@
         prop="callStartTime"
       >
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.callStartTime) }}</span>
+          <span>{{ parseTime(scope.row.callStartTime).slice(0,10) }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -213,7 +203,9 @@ export default {
         { id: 'robotCallJobId', name: '任务名称' },
         { id: 'taskStage', name: '期名' },
       ],
+      // 任务、期名
       aiTaskList: [],
+      aiPeriodsList: [],
       tableHeaderBig: [],
       hospitalList: [],
       // 日期快捷选项
@@ -258,6 +250,10 @@ export default {
     this.getList()
     this.getHospitalList()
   },
+  mounted(){
+    this.getAiStageList()
+    this.getAiTaskNameList()
+  },
   methods: {
     // 获取医院列表
     getHospitalList() {
@@ -274,21 +270,12 @@ export default {
     },
     getAiStageList() {
       httpAdminAiHistory.getAiStageList().then((res) => {
-        this.aiTaskList = []
-        res.data.forEach((val) => {
-          this.aiTaskList.push({ text: val.taskStage })
-        })
+        this.aiPeriodsList = res.data
       })
     },
     getAiTaskNameList() {
       httpAdminAiHistory.getAiTaskNameList().then((res) => {
-        this.aiTaskList = []
-        res.data.forEach((val) => {
-          this.aiTaskList.push({
-            text: val.aiName,
-            robotCallJobId: val.robotCallJobId,
-          })
-        })
+        this.aiTaskList = res.data
       })
     },
     /**
@@ -316,7 +303,6 @@ export default {
       this.searchForm.endTime = val[1]
     },
     checkBtn(val) {
-      console.log('查看日期期名', val)
       if (val === 'date') {
         this.searchForm.aiCallSummaryType = 'DATE'
         this.show = true
@@ -330,11 +316,9 @@ export default {
      * 搜索
      */
     searchBtn() {
-      console.log('搜索', this.searchForm)
       this.getList()
     },
     searchReset() {
-      this.$set(this, 'getSearchFormTime', {})
       this.$set(this, 'searchForm', {})
       this.$set(this, 'getSearchForm', {})
       this.$set(this.searchForm, 'aiCallSummaryType', 'DATE')

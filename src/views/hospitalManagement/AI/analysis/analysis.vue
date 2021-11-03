@@ -20,35 +20,33 @@
         </el-form-item>
         <el-form-item label="任务">
           <el-select
-            v-model="getSearchForm.getTaskStage"
+            v-model="searchForm.aiName"
             size="small"
             filterable
-            value-key="name"
-            placeholder="请选择任务"
-            @change="selectTaskStage"
-          >
-            <el-option
-              v-for="item in taskStage"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="任务或期名">
-          <el-select
-            v-model="getSearchForm.selectTaskStage"
-            size="small"
-            filterable
-            value-key="text"
-            placeholder="请选择任务与期数名称"
-            @change="getTaskStage"
+            value-key="aiName"
+            placeholder="请选择任务名称"
           >
             <el-option
               v-for="item in aiTaskList"
-              :key="item.text"
-              :label="item.text"
-              :value="item"
+              :key="item.aiName"
+              :label="item.aiName"
+              :value="item.aiName"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="期名">
+          <el-select
+            v-model="searchForm.taskStage"
+            size="small"
+            filterable
+            value-key="taskStage"
+            placeholder="请选择期名"
+          >
+            <el-option
+              v-for="item in aiPeriodsList"
+              :key="item.taskStage"
+              :label="item.taskStage"
+              :value="item.taskStage"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -142,6 +140,7 @@ export default {
       },
       // 任务名称与期数
       aiTaskList: [],
+      aiPeriodsList: [],
       taskStage: [
         { id: 'robotCallJobId', name: '任务' },
         { id: 'taskStage', name: '期数' },
@@ -156,25 +155,14 @@ export default {
   created() {
     // this.searchForm.robotCallJobIds = this.$route.params.id
     this.searchForm.hospitalId = sessionStorage.getItem('taskHospitalId')
-    this.searchForm.taskAiName = sessionStorage.getItem('taskAiName')
-    this.searchForm.robotCallJobIds =
-      sessionStorage.getItem('taskRobotCallJobId')
-    console.log(this.searchForm.taskAiName)
-    if (this.searchForm.taskAiName) {
-      this.selectTaskStage('robotCallJobId')
-      this.getSearchForm.getTaskStage = 'robotCallJobId'
-      this.getSearchForm.selectTaskStage = {
-        text: this.searchForm.taskAiName,
-        robotCallJobId: this.searchForm.robotCallJobIds,
-      }
-      this.searchForm.aiName = this.searchForm.taskAiName
-    }
-
+    this.searchForm.aiName = sessionStorage.getItem('taskAiName')
+    this.searchForm.taskStage = sessionStorage.getItem('taskStage')
     this.getJobStats()
   },
   mounted() {
-    // this.getJobStats();
     this.getHospitalList()
+    this.getAiStageList()
+    this.getAiTaskNameList()
   },
   beforeDestroy() {
     this.removeSession()
@@ -244,44 +232,13 @@ export default {
      */
     getAiStageList() {
       httpAdminAiHistory.getAiStageList().then((res) => {
-        this.aiTaskList = []
-        res.data.forEach((val) => {
-          this.aiTaskList.push({ text: val.taskStage })
-        })
+        this.aiPeriodsList = res.data
       })
     },
     getAiTaskNameList() {
       httpAdminAiHistory.getAiTaskNameList().then((res) => {
-        this.aiTaskList = []
-        res.data.forEach((val) => {
-          this.aiTaskList.push({
-            text: val.aiName,
-            robotCallJobId: val.robotCallJobId,
-          })
-        })
+        this.aiTaskList = res.data
       })
-    },
-    /**
-     * 任务与期数选择
-     */
-    selectTaskStage(val) {
-      console.log(this.getSearchForm)
-      this.$set(this.getSearchForm, 'selectTaskStage', '')
-      if (val === 'robotCallJobId') {
-        this.getAiTaskNameList()
-      } else {
-        this.getAiStageList()
-      }
-    },
-    getTaskStage(val) {
-      console.log(val)
-      if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
-        delete this.searchForm.taskStage
-        this.searchForm.aiName = val.text
-      } else {
-        delete this.searchForm.aiName
-        this.searchForm.taskStage = val.text
-      }
     },
     /**
      * 清除缓存
@@ -289,7 +246,7 @@ export default {
     removeSession() {
       sessionStorage.removeItem('taskHospitalId')
       sessionStorage.removeItem('taskAiName')
-      sessionStorage.removeItem('taskRobotCallJobId')
+      sessionStorage.removeItem('taskStage')
     },
     /**
      * 搜索
@@ -304,6 +261,8 @@ export default {
       this.$set(this, 'getSearchForm', {})
       this.$set(this, 'aiTaskList', [])
       this.getJobStats()
+      this.getAiStageList()
+      this.getAiTaskNameList()
     },
   },
 }

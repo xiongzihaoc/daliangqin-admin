@@ -19,32 +19,29 @@
           </el-select>
         </el-form-item>
         <el-form-item label="任务">
-          <el-select v-model="getSearchForm.getTaskStage"
+          <el-select v-model="searchForm.aiName"
             size="small"
             filterable
-            value-key="name"
-            placeholder="请选择任务"
-            @change="selectTaskStage">
-            <el-option v-for="item in taskStage"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="任务或期名">
-          <el-select v-model="getSearchForm.selectTaskStage"
-            size="small"
-            filterable
-            value-key="text"
-            placeholder="请选择任务名称或期名"
-            @change="getTaskStage">
+            value-key="robotCallJobId"
+            placeholder="请选择任务名称">
             <el-option v-for="item in aiTaskList"
-              :key="item.text"
-              :label="item.text"
-              :value="item"></el-option>
+              :key="item.aiName"
+              :label="item.aiName"
+              :value="item.aiName"></el-option>
           </el-select>
         </el-form-item>
-
+        <el-form-item label="期名">
+          <el-select v-model="searchForm.taskStage"
+            size="small"
+            filterable
+            value-key="taskStage"
+            placeholder="请选择期名">
+            <el-option v-for="item in aiPeriodsList"
+              :key="item.taskStage"
+              :label="item.taskStage"
+              :value="item.taskStage"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="任务状态">
           <el-select v-model="searchForm.status"
             size="small"
@@ -509,11 +506,6 @@ export default {
         setTime: '',
         daily: ['09:00', '20:00'],
       },
-      getSearchForm: {
-        getTaskStage: '',
-        selectTaskStage: '',
-        callDuration: '',
-      },
       botFrom: {
         dialogFlowId: '',
         dialogFlowName: '',
@@ -558,11 +550,9 @@ export default {
       // 不可拨打时间
       notDialTimeArr: [],
       notDialDateArr: [],
+      // 任务名称、期名
       aiTaskList: [],
-      taskStage: [
-        { id: 'robotCallJobId', name: '任务名称' },
-        { id: 'taskStage', name: '期名' },
-      ],
+      aiPeriodsList: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -578,6 +568,8 @@ export default {
   mounted() {
     this.getHospitalList()
     this.getAiSpeech()
+    this.getAiStageList()
+    this.getAiTaskNameList()
   },
   methods: {
     /**
@@ -667,24 +659,14 @@ export default {
         })
     },
     // 获取任务与期数
-    getAiStageList() {
-      httpAdminAiHistory.getAiStageList().then((res) => {
-        this.aiTaskList = []
-        res.data.forEach((val) => {
-          this.aiTaskList.push({ text: val.taskStage })
-        })
-      })
-    },
     getAiTaskNameList() {
       httpAdminAiHistory.getAiTaskNameList().then((res) => {
-        this.aiTaskList = []
-        res.data.forEach((val) => {
-          this.aiTaskList.push({
-            text: val.aiName,
-            robotCallJobId: val.robotCallJobId,
-          })
-        })
-
+        this.aiTaskList = res.data
+      })
+    },
+    getAiStageList() {
+      httpAdminAiHistory.getAiStageList().then((res) => {
+        this.aiPeriodsList = res.data
       })
     },
     // 获取话术
@@ -834,26 +816,6 @@ export default {
           .then((res) => {
             this.getList()
           })
-      }
-    },
-    /**
-     * 任务与期数选择
-     */
-    selectTaskStage(val) {
-      this.$set(this.getSearchForm, 'selectTaskStage', '')
-      if (val === 'robotCallJobId') {
-        this.getAiTaskNameList()
-      } else {
-        this.getAiStageList()
-      }
-    },
-    getTaskStage(val) {
-      if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
-        this.$set(this.searchForm, 'taskStage', '')
-        this.searchForm.aiName = val.text
-      } else {
-        this.$set(this.searchForm, 'aiName', '')
-        this.searchForm.taskStage = val.text
       }
     },
     /**
@@ -1124,7 +1086,6 @@ export default {
     compile(val, name) {
       switch (name) {
         case 'edit':
-          // this.userVisible = true;
           this.showTaskdetail(val)
           break
         case 'issueStatistics':
@@ -1149,7 +1110,7 @@ export default {
         case 'operation':
           sessionStorage.setItem('taskHospitalId', val.hospitalId)
           sessionStorage.setItem('taskAiName', val.aiName)
-          sessionStorage.setItem('taskRobotCallJobId', val.robotCallJobId)
+          sessionStorage.setItem('taskStage', val.taskStage)
           this.$router.push({ name: 'analysis' })
           break
       }
@@ -1366,12 +1327,13 @@ export default {
       this.searchForm.creationTime = ''
       this.searchForm.hospitalId = ''
       this.$set(this.searchForm, 'status', '')
+      this.$set(this.searchForm, 'taskStage', '')
       this.searchForm.aiName = ''
-      this.searchForm.taskStage = ''
       this.taskForm.task = ''
       this.taskForm.taskContent = ''
-      this.$set(this, 'getSearchForm', {})
       this.$set(this, 'aiTaskList', [])
+      this.getAiStageList()
+      this.getAiTaskNameList()
       this.getList()
     },
     /**

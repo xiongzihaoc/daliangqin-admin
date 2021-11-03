@@ -33,38 +33,28 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="任务">
-          <el-select
-            v-model="getSearchForm.getTaskStage"
+           <el-form-item label="任务">
+          <el-select v-model="searchForm.aiName"
             size="small"
             filterable
-            value-key="name"
-            placeholder="请选择任务"
-            @change="selectTaskStage"
-          >
-            <el-option
-              v-for="item in taskStage"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
+            value-key="robotCallJobId"
+            placeholder="请选择任务名称">
+            <el-option v-for="item in aiTaskList"
+              :key="item.aiName"
+              :label="item.aiName"
+              :value="item.aiName"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="任务或期名">
-          <el-select
-            v-model="getSearchForm.selectTaskStage"
+        <el-form-item label="期名">
+          <el-select v-model="searchForm.taskStage"
             size="small"
             filterable
-            value-key="text"
-            placeholder="请选择任务名称与期名"
-            @change="getTaskStage"
-          >
-            <el-option
-              v-for="item in aiTaskList"
-              :key="item.text"
-              :label="item.text"
-              :value="item"
-            ></el-option>
+            value-key="taskStage"
+            placeholder="请选择期名">
+            <el-option v-for="item in aiPeriodsList"
+              :key="item.taskStage"
+              :label="item.taskStage"
+              :value="item.taskStage"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="呼叫时间">
@@ -289,15 +279,12 @@ export default {
       telephoneMessage: {},
       selfInfo: {},
       toInfo: {},
-      taskStage: [
-        { id: 'robotCallJobId', name: '任务' },
-        { id: 'taskStage', name: '期名' },
-      ],
       hospitalList: [],
       list: [],
       messageList: [],
       tableHeaderBig: [],
       aiTaskList: [],
+      aiPeriodsList: [],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -310,7 +297,10 @@ export default {
     this.getHospitalList()
     this.getList()
   },
-  mounted() {},
+  mounted() {
+    this.getAiStageList()
+    this.getAiTaskNameList()
+  },
   methods: {
     // 获取医院列表
     getHospitalList() {
@@ -356,42 +346,13 @@ export default {
     },
     getAiStageList() {
       httpAdminAiHistory.getAiStageList().then((res) => {
-        this.aiTaskList = []
-        res.data.forEach((val) => {
-          this.aiTaskList.push({ text: val.taskStage })
-        })
+        this.aiPeriodsList = res.data
       })
     },
     getAiTaskNameList() {
       httpAdminAiHistory.getAiTaskNameList().then((res) => {
-        this.aiTaskList = []
-        res.data.forEach((val) => {
-          this.aiTaskList.push({
-            text: val.aiName,
-            robotCallJobId: val.robotCallJobId,
-          })
-        })
+        this.aiTaskList = res.data
       })
-    },
-    /**
-     * 任务与期数选择
-     */
-    selectTaskStage(val) {
-      this.$set(this.getSearchForm, 'selectTaskStage', '')
-      if (val === 'robotCallJobId') {
-        this.getAiTaskNameList()
-      } else {
-        this.getAiStageList()
-      }
-    },
-    getTaskStage(val) {
-      if (this.getSearchForm.getTaskStage === 'robotCallJobId') {
-        this.$set(this.searchForm, 'taskStage', '')
-        this.searchForm.robotCallJobId = val.robotCallJobId
-      } else {
-        this.$set(this.searchForm, 'robotCallJobId', '')
-        this.searchForm.taskStage = val.text
-      }
     },
     getSearchFormTime(val) {
       this.searchForm.startTime = val[0]
@@ -407,6 +368,8 @@ export default {
       this.$set(this, 'searchForm', {})
       this.$set(this, 'getSearchForm', {})
       this.$set(this, 'aiTaskList', [])
+      this.getAiStageList()
+      this.getAiTaskNameList()
       this.getList()
     },
     /**
