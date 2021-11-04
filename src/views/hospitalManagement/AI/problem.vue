@@ -117,7 +117,11 @@
         prop="answerRate"></el-table-column>
       <el-table-column align="center"
         label="总挂机率(%)"
-        prop="hangupRate"></el-table-column>
+        prop="hangupRate">
+        <template slot-scope="scope">
+          <span>{{ scope.row.hangupRate ?  scope.row.hangupRate : '0'  }}</span>
+        </template>
+        </el-table-column>
       <el-table-column align="center"
         label="对话总轮次"
         prop="chatRoundTotal"></el-table-column>

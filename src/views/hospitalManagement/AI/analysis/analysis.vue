@@ -160,7 +160,7 @@ export default {
     this.searchForm.hospitalId = sessionStorage.getItem('taskHospitalId')
     let aiName = sessionStorage.getItem('taskAiName')
     if(aiName){
-      this.searchForm.aiNameList = aiName
+      this.searchForm.aiNameList = [aiName]
     }
     this.searchForm.taskStage = sessionStorage.getItem('taskStage')
     this.getJobStats()
