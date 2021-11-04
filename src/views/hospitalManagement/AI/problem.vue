@@ -125,14 +125,14 @@
         label="总通话时长(s)"
         prop="chatDurationTotal">
         <template slot-scope="scope">
-          <span>{{ formatSeconds(scope.row.chatDurationTotal) }}</span>
+          <span>{{ formatSeconds(scope.row.chatDurationTotal)  }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center"
         label="平均通话时长(s)"
         prop="avgTalkTime">
         <template slot-scope="scope">
-          <span>{{ formatSeconds(scope.row.avgTalkTime) }}</span>
+          <span>{{ scope.row.avgTalkTime ?  formatSeconds(scope.row.avgTalkTime) : '00秒' }}</span>
         </template>
       </el-table-column>
     </EleTable>
