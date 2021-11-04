@@ -362,9 +362,9 @@ export default {
   },
   created() {
     this.getList()
-    this.getHospitalList()
   },
   mounted() {
+    this.getHospitalList()
     this.getAiSpeech()
   },
   methods: {

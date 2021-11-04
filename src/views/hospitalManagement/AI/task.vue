@@ -1307,7 +1307,7 @@ export default {
         // 跳转已呼用户 暂时不带医院id
         // sessionStorage.setItem('taskHospitalId', val.hospitalId)
       }
-      if(state === 'add'){
+      if (state === 'add') {
         sessionStorage.setItem('taskState', val.status)
       }
       this.$router.push({

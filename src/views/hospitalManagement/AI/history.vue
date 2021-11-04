@@ -2,38 +2,32 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form :model="searchForm" class="searchForm" :inline="true">
+      <el-form :model="searchForm"
+        class="searchForm"
+        :inline="true">
         <el-form-item label="用户姓名">
-          <el-input
-            v-model="searchForm.patientUserName"
+          <el-input v-model="searchForm.patientUserName"
             size="small"
-            placeholder="请输入用户姓名"
-          ></el-input>
+            placeholder="请输入用户姓名"></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
-          <el-input
-            v-model="searchForm.calledPhoneNumber"
+          <el-input v-model="searchForm.calledPhoneNumber"
             maxlength="11"
             size="small"
-            placeholder="请输入用户手机号"
-          ></el-input>
+            placeholder="请输入用户手机号"></el-input>
         </el-form-item>
         <el-form-item label="医院名称">
-          <el-select
-            v-model="searchForm.hospitalId"
+          <el-select v-model="searchForm.hospitalId"
             size="small"
             filterable
-            placeholder="请选择医院"
-          >
-            <el-option
-              v-for="item in hospitalList"
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-           <el-form-item label="任务名称">
+        <el-form-item label="任务名称">
           <el-select v-model="searchForm.aiName"
             size="small"
             filterable
@@ -58,8 +52,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="呼叫时间">
-          <el-date-picker
-            v-model="getSearchForm.callDuration"
+          <el-date-picker v-model="getSearchForm.callDuration"
             format="yyyy-MM-dd HH:mm"
             value-format="timestamp"
             type="datetimerange"
@@ -67,132 +60,100 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             size="small"
-            @change="getSearchFormTime"
-          ></el-date-picker>
+            @change="getSearchFormTime"></el-date-picker>
         </el-form-item>
         <el-form-item label="通话状态">
-          <el-select
-            v-model="searchForm.resultStatus"
+          <el-select v-model="searchForm.resultStatus"
             size="small"
             filterable
-            placeholder="通话状态"
-          >
-            <el-option
-              v-for="item in AiResultStatus"
+            placeholder="通话状态">
+            <el-option v-for="item in AiResultStatus"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格区域 -->
-    <EleTable
-      :data="list"
+    <EleTable :data="list"
       :header="tableHeaderBig"
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
       @handleSizeChange="handleSizeChange"
-      @handleCurrentChange="handleCurrentChange"
-    >
-      <el-table-column
-        align="center"
+      @handleCurrentChange="handleCurrentChange">
+      <el-table-column align="center"
         label="序号"
-        type="index"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        type="index"></el-table-column>
+      <el-table-column align="center"
         label="医院名称"
-        prop="hospitalName"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="hospitalName"></el-table-column>
+      <el-table-column align="center"
         label="用户姓名"
-        prop="patientUserName"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="patientUserName"></el-table-column>
+      <el-table-column align="center"
         label="用户手机号"
-        prop="calledPhoneNumber"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="calledPhoneNumber"></el-table-column>
+      <el-table-column align="center"
         label="任务名称"
-        prop="aiName"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="aiName"></el-table-column>
+      <el-table-column align="center"
         label="BOT名称"
-        prop="dialogFlowName"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="dialogFlowName"></el-table-column>
+      <el-table-column align="center"
         label="期名"
-        prop="taskStage"
-      ></el-table-column>
-      <el-table-column align="center" label="通话时长" prop="chatDuration">
+        prop="taskStage"></el-table-column>
+      <el-table-column align="center"
+        label="通话时长"
+        prop="chatDuration">
         <template slot-scope="scope">
           <span>{{ formatSeconds(scope.row.chatDuration) }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         label="对话轮次"
-        prop="chatRound"
-      ></el-table-column>
-      <el-table-column
-        width="150px"
+        prop="chatRound"></el-table-column>
+      <el-table-column width="150px"
         align="center"
         label="呼叫时间"
-        prop="callStartTime"
-      >
+        prop="callStartTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.callStartTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         label="通话状态"
         prop="resultStatus"
-        :formatter="phoneState"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        :formatter="phoneState"></el-table-column>
+      <el-table-column align="center"
         label="挂断状态"
         prop="hangupBy"
-        :formatter="hangupState"
-      ></el-table-column>
-      <el-table-column align="center" label="通话详情" prop="hospitalName">
+        :formatter="hangupState"></el-table-column>
+      <el-table-column align="center"
+        label="通话详情"
+        prop="hospitalName">
         <template slot-scope="scope">
-          <el-button
-            type="primary"
+          <el-button type="primary"
             size="small"
-            @click="getAlCallDetailList(scope.row)"
-            >查看</el-button
-          >
+            @click="getAlCallDetailList(scope.row)">查看</el-button>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 弹出层 -->
-    <el-dialog title="通话详情" :visible.sync="dialogVisible" width="50%">
+    <el-dialog title="通话详情"
+      :visible.sync="dialogVisible"
+      width="50%">
       <div class="chat">
         <div class="flex-bet">
           <div>
@@ -204,44 +165,46 @@
             </p>
           </div>
           <div>
-            <audio autoplay="autoplay" controls="controls" ref="audio">
+            <audio autoplay="autoplay"
+              controls="controls"
+              ref="audio">
               Your browser does not support the audio element.
             </audio>
           </div>
         </div>
         <div class="chat-content">
           <!-- 聊天记录数组-->
-          <div v-for="(item, index) in messageList" :key="index">
+          <div v-for="(item, index) in messageList"
+            :key="index">
             <!-- 对方 -->
-            <div class="word" v-if="!item.isSelf">
+            <div class="word"
+              v-if="!item.isSelf">
               <!-- 如果头像不为空 -->
-              <img v-if="toInfo.avatarUrl != ''" :src="toInfo.avatarUrl" />
-              <img
-                v-else
-                src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png"
-              />
+              <img v-if="toInfo.avatarUrl != ''"
+                :src="toInfo.avatarUrl" />
+              <img v-else
+                src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png" />
               <div class="info">
                 <p class="time">{{ toInfo.userName }} {{ item.createTime }}</p>
                 <div class="info-content">{{ item.leaveContent }}</div>
               </div>
             </div>
             <!-- 我的 -->
-            <div class="word-my" v-else>
+            <div class="word-my"
+              v-else>
               <div class="info">
                 <p class="time">Ai机器人 {{ item.createTime }}</p>
                 <div class="info-content">{{ item.leaveContent }}</div>
               </div>
-              <img
-                src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png"
-              />
+              <img src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png" />
             </div>
           </div>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
+      <span slot="footer"
+        class="dialog-footer">
+        <el-button type="primary"
+          @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -294,27 +257,31 @@ export default {
     }
   },
   created() {
-    this.getHospitalList()
     this.getList()
   },
   mounted() {
     this.getAiStageList()
     this.getAiTaskNameList()
+    this.getHospitalList()
   },
   methods: {
+    getList() {
+      let data = Object.assign(this.searchForm, {
+        page: this.pageNum,
+        pageSize: this.pageSize,
+      })
+      httpAdminAiHistory.getAiHistoryList(data).then((res) => {
+        this.list = res.data.elements
+        this.total = res.data.totalSize
+      })
+    },
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
-    getList() {
-      let data = Object.assign(this.searchForm, { page: this.pageNum, pageSize: this.pageSize, })
-      httpAdminAiHistory.getAiHistoryList(data).then((res) => {
-        this.list = res.data.elements
-        this.total = res.data.totalSize
-      })
-    },
+
     // 聊天详情
     getAlCallDetailList(val) {
       httpAdminAiCall

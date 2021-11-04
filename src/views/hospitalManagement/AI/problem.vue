@@ -3,27 +3,26 @@
     <!-- 搜索区域 -->
     <div class="search-box">
       <el-button-group style="margin-bottom: 15px">
-        <el-button size="small" type="primary" @click="checkBtn('date')"
-          >按日期查看</el-button
-        >
-        <el-button size="small" type="primary" @click="checkBtn('stage')"
-          >按期名查看</el-button
-        >
+        <el-button size="small"
+          type="primary"
+          @click="checkBtn('date')">按日期查看</el-button>
+        <el-button size="small"
+          type="primary"
+          @click="checkBtn('stage')">按期名查看</el-button>
       </el-button-group>
-      <el-form :model="searchForm" class="searchForm" :inline="true">
-        <el-form-item label="医院名称" align="left">
-          <el-select
-            v-model="searchForm.hospitalId"
+      <el-form :model="searchForm"
+        class="searchForm"
+        :inline="true">
+        <el-form-item label="医院名称"
+          align="left">
+          <el-select v-model="searchForm.hospitalId"
             size="small"
             filterable
-            placeholder="请选择医院"
-          >
-            <el-option
-              v-for="item in hospitalList"
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="任务名称">
@@ -36,7 +35,7 @@
               :key="item.aiName"
               :label="item.aiName"
               :value="item.aiName"></el-option>
-        </el-select>
+          </el-select>
         </el-form-item>
         <el-form-item label="期名">
           <el-select v-model="searchForm.taskStage"
@@ -51,8 +50,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="统计日期">
-          <el-date-picker
-            v-model="getSearchForm.callDuration"
+          <el-date-picker v-model="getSearchForm.callDuration"
             :picker-options="pickerOptions"
             value-format="timestamp"
             type="daterange"
@@ -60,112 +58,77 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             size="small"
-            @change="getSearchFormTime"
-          ></el-date-picker>
+            @change="getSearchFormTime"></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格区域 -->
-    <EleTable
-      :data="list"
+    <EleTable :data="list"
       :header="tableHeaderBig"
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
       @handleSizeChange="handleSizeChange"
-      @handleCurrentChange="handleCurrentChange"
-    >
-      <el-table-column
-        align="center"
+      @handleCurrentChange="handleCurrentChange">
+      <el-table-column align="center"
         label="序号"
-        type="index"
-      ></el-table-column>
-      <el-table-column
-        v-if="show"
+        type="index"></el-table-column>
+      <el-table-column v-if="show"
         width="150px"
         align="center"
         label="日期"
-        prop="callStartTime"
-      >
+        prop="callStartTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.callStartTime).slice(0,10) }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         label="医院名称"
-        prop="hospitalName"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="hospitalName"></el-table-column>
+      <el-table-column align="center"
         label="任务名称"
-        prop="aiName"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="aiName"></el-table-column>
+      <el-table-column align="center"
         label="期名"
-        prop="taskStage"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="taskStage"></el-table-column>
+      <el-table-column align="center"
         label="外呼总量(位)"
-        prop="callTotal"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="callTotal"></el-table-column>
+      <el-table-column align="center"
         label="接听总量(位)"
-        prop="answeredTotal"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="answeredTotal"></el-table-column>
+      <el-table-column align="center"
         label="挂机总量(位)"
-        prop="hangupByTotal"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="hangupByTotal"></el-table-column>
+      <el-table-column align="center"
         label="总接听率(%)"
-        prop="answerRate"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="answerRate"></el-table-column>
+      <el-table-column align="center"
         label="总挂机率(%)"
-        prop="hangupRate"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="hangupRate"></el-table-column>
+      <el-table-column align="center"
         label="对话总轮次"
-        prop="chatRoundTotal"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        prop="chatRoundTotal"></el-table-column>
+      <el-table-column align="center"
         label="总通话时长(s)"
-        prop="chatDurationTotal"
-      >
+        prop="chatDurationTotal">
         <template slot-scope="scope">
           <span>{{ formatSeconds(scope.row.chatDurationTotal) }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         label="平均通话时长(s)"
-        prop="avgTalkTime"
-      >
+        prop="avgTalkTime">
         <template slot-scope="scope">
           <span>{{ formatSeconds(scope.row.avgTalkTime) }}</span>
         </template>
@@ -248,24 +211,27 @@ export default {
   },
   created() {
     this.getList()
-    this.getHospitalList()
   },
-  mounted(){
+  mounted() {
+    this.getHospitalList()
     this.getAiStageList()
     this.getAiTaskNameList()
   },
   methods: {
+    getList() {
+      let data = Object.assign(this.searchForm, {
+        page: this.pageNum,
+        pageSize: this.pageSize,
+      })
+      httpAdminAiAnalysis.getCallSummary(data).then((res) => {
+        this.list = res.data.elements
+        this.total = res.data.totalSize
+      })
+    },
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
         this.hospitalList = res.data.elements
-      })
-    },
-    getList() {
-      let data = Object.assign(this.searchForm, { page: this.pageNum, pageSize: this.pageSize, })
-      httpAdminAiAnalysis.getCallSummary(data).then((res) => {
-        this.list = res.data.elements
-        this.total = res.data.totalSize
       })
     },
     getAiStageList() {
