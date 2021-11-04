@@ -26,9 +26,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="任务名称">
-          <el-select v-model="searchForm.aiName"
+          <el-select v-model="searchForm.aiNameList"
             size="small"
             filterable
+            multiple
+            collapse-tags
             value-key="robotCallJobId"
             placeholder="请选择任务名称">
             <el-option v-for="item in aiTaskList"
@@ -155,6 +157,7 @@ export default {
       show: true,
       searchForm: {
         aiCallSummaryType: 'DATE',
+        aiNameList: [],
       },
       getSearchForm: {
         getTaskStage: '',

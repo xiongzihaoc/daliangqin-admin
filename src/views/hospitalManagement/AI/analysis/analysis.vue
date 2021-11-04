@@ -22,7 +22,7 @@
           <el-select
             multiple
             collapse-tags
-            v-model="searchForm.aiName"
+            v-model="searchForm.aiNameList"
             size="small"
             filterable
             value-key="aiName"
@@ -138,7 +138,7 @@ export default {
       listData: {}, // 全图表数据
       searchForm: {
         hospitalId: '',
-        aiName: [],
+        aiNameList: [],
         infoObj: {}, // 单个医院具体信息
       },
       // 任务名称与期数
@@ -158,7 +158,10 @@ export default {
   created() {
     // this.searchForm.robotCallJobIds = this.$route.params.id
     this.searchForm.hospitalId = sessionStorage.getItem('taskHospitalId')
-    this.searchForm.aiName = sessionStorage.getItem('taskAiName')
+    let aiName = sessionStorage.getItem('taskAiName')
+    if(aiName){
+      this.searchForm.aiNameList = aiName
+    }
     this.searchForm.taskStage = sessionStorage.getItem('taskStage')
     this.getJobStats()
   },
