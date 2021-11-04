@@ -139,15 +139,12 @@ export default {
       searchForm: {
         hospitalId: '',
         aiNameList: [],
+        taskStage: '',
         infoObj: {}, // 单个医院具体信息
       },
       // 任务名称与期数
       aiTaskList: [],
       aiPeriodsList: [],
-      taskStage: [
-        { id: 'robotCallJobId', name: '任务' },
-        { id: 'taskStage', name: '期数' },
-      ],
       getSearchForm: {
         getTaskStage: '',
         selectTaskStage: '',

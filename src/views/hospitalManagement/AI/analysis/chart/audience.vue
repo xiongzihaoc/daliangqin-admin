@@ -95,15 +95,15 @@ export default {
             smooth: false,
 
           },
-          {
-            name: '挂断率',
-            type: 'line',
-            itemStyle: {
-              color: colors[2],
-            },
-            data: [],
-            smooth: false,
-          },
+          // {
+          //   name: '挂断率',
+          //   type: 'line',
+          //   itemStyle: {
+          //     color: colors[2],
+          //   },
+          //   data: [],
+          //   smooth: false,
+          // },
         ],
       },
     }
