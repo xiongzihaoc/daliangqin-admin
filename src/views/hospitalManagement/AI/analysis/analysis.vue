@@ -155,12 +155,12 @@ export default {
   created() {
     // this.searchForm.robotCallJobIds = this.$route.params.id
     this.searchForm.hospitalId = sessionStorage.getItem('taskHospitalId')
-    let aiName = sessionStorage.getItem('taskAiName')
-    if(aiName){
-      this.searchForm.aiNameList = [aiName]
-    }
     this.searchForm.taskStage = sessionStorage.getItem('taskStage')
-    // this.getJobStats()
+    let aiName = sessionStorage.getItem('taskAiName')
+     if(aiName){
+      this.searchForm.aiNameList = [aiName]
+      this.getJobStats()
+    }
   },
   mounted() {
     this.getHospitalList()
