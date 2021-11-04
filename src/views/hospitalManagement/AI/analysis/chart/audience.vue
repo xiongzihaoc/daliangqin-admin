@@ -67,7 +67,7 @@ export default {
             show: true,
           },
           type: 'value',
-          max: 100,
+          // max: 100,
           axisLabel: {
             formatter: '{value}%',
             textStyle: {
@@ -133,7 +133,7 @@ export default {
       this.cdata.xAxis.data = xAxisData
       this.cdata.series[0].data = answerRate
       this.cdata.series[1].data = noAnswerRate
-      this.cdata.series[2].data = hangupRate
+      // this.cdata.series[2].data = hangupRate
     },
   },
 }

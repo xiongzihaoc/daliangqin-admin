@@ -160,7 +160,7 @@ export default {
       this.searchForm.aiNameList = [aiName]
     }
     this.searchForm.taskStage = sessionStorage.getItem('taskStage')
-    this.getJobStats()
+    // this.getJobStats()
   },
   mounted() {
     this.getHospitalList()
