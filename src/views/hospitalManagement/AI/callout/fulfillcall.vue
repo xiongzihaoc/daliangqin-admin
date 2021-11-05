@@ -53,11 +53,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="问题名称">
-          <el-select
-            v-model="searchForm.problem"
-            size="small"
-            filterable
-          >
+          <el-select v-model="searchForm.problem" size="small" filterable>
             <el-option
               v-for="(item, index) in problemName"
               :key="index"
@@ -67,11 +63,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="答案">
-          <el-select
-            v-model="searchForm.answer"
-            size="small"
-            filterable
-          >
+          <el-select v-model="searchForm.answer" size="small" filterable>
             <el-option
               v-for="(item, index) in problemState"
               :key="index"
@@ -164,6 +156,7 @@
             type="primary"
             size="small"
             @click="getAlCallDetailList(scope.row)"
+            :disabled="disabledLookOver(scope.row.hangupBy)"
             >查看</el-button
           >
         </template>
@@ -298,7 +291,7 @@ export default {
     if (problemState) {
       this.searchForm.answer = problemState
     }
-    
+
     this.searchForm.robotCallJobId = this.$route.query.robotCallJobId
     this.getProblemList()
     this.getList()
@@ -351,10 +344,22 @@ export default {
           this.dialogVisible = true
         })
     },
-    getProblemList(){
-      httpAdminAiCall.getProblemList({robotCallJobId: this.searchForm.robotCallJobId}).then((res) => {
-        this.problemName = res.data
-      })
+    getProblemList() {
+      httpAdminAiCall
+        .getProblemList({ robotCallJobId: this.searchForm.robotCallJobId })
+        .then((res) => {
+          this.problemName = res.data
+        })
+    },
+    /**
+     * 查看按钮 状态
+     */
+    disabledLookOver(state) {
+      if (state === '' || state === null) {
+        return true
+      } else {
+        return false
+      }
     },
     /**
      * 选择时间
