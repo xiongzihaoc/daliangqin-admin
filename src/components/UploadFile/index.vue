@@ -69,7 +69,6 @@ export default {
     },
     beforeUpload(file) {
       if (this.uploadType === 'MUSIC') {
-        console.log(file)
         if (file.type != 'audio/mpeg' && file.type != 'audio/ogg') {
           return this.$message.error('请上传mp3格式文件')
         }
@@ -85,9 +84,10 @@ export default {
       this.$emit('uploadProgress', event.percent)
     },
     handleUploadSuccess(response, file, fileList) {
-      let value = 'https://cdn.daliangqing.com/' + this.dataObj.key
-      this.uploadValue = 'https://cdn.daliangqing.com/' + this.dataObj.key
-      this.$emit('uploadFinish', value)
+      let value = 'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
+      this.uploadValue = 'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
+      console.log(this.uploadValue)
+    this.$emit('uploadFinish', value)
     },
   },
 }
