@@ -4,11 +4,20 @@
     <div class="search-box">
       <el-form class="searchForm" :inline="true">
         <el-form-item label="商品标题">
-          <el-input placeholder="请输入商品标题" size="small"></el-input>
+          <el-input
+            v-model="searchForm.name"
+            placeholder="请输入商品标题"
+            size="small"
+          ></el-input>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="searchForm.shop" size="small">
-            <el-option label="规格" value="规格"> </el-option>
+          <el-select v-model="searchForm.status" size="small">
+            <el-option
+              v-for="(item, idx) in goodsStatus"
+              :key="idx"
+              :label="item.lab"
+              :value="item.val"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -36,7 +45,7 @@
         plain
         class="tableAdd"
         icon="el-icon-plus"
-        @click="dialogVisible = true"
+        @click="addTake"
         >添加任务</el-button
       >
     </div>
@@ -63,7 +72,7 @@
       <el-table-column align="center" label="商品图片" prop="goodsIcons">
         <template slot-scope="scope">
           <div>
-            <img :src="scope.row.goodsIcons[0]" alt="">
+            <img :src="scope.row.goodsIcons[0]" alt="" />
           </div>
         </template>
       </el-table-column>
@@ -219,7 +228,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="affirmbtn('goodsForm')"
+        <el-button type="primary" @click="affirBtn('goodsForm')"
           >确 定</el-button
         >
       </span>
@@ -243,6 +252,7 @@ export default {
       title: '添加商品',
       searchForm: {},
       goodsForm: {
+        id: '',
         name: '',
         remark: '',
         icons: [],
@@ -251,10 +261,15 @@ export default {
         price: '',
         integral: '',
         detail: '',
+        status: 'SHOW',
       },
       skuArr: [],
       list: [],
       tableHeaderBig: [],
+      goodsStatus: [
+        { val: 'DELETE', lab: '隐藏' },
+        { val: 'SHOW', lab: '显示' },
+      ],
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -279,8 +294,7 @@ export default {
   },
   methods: {
     getList() {
-      httpAdminGoods.getGoods(this.goodsForm).then((res) => {
-        console.log(res)
+      httpAdminGoods.getGoods(this.searchForm).then((res) => {
         this.list = res.data.elements
         this.total = res.data.totalSize
       })
@@ -295,20 +309,31 @@ export default {
         }
       })
     },
-    sortGoods(id,status) {
-      httpAdminGoods.putGoodsSort({id, status}).then((res) => {
-        if(res.data.code === 'OK'){
+    sortGoods(id, status) {
+      httpAdminGoods.putGoodsSort({ id, status }).then((res) => {
+        if (res.data.code === 'OK') {
           this.$message.success('操作成功')
         }
+      })
+    },
+    getGoodsEdit() {
+      this.goodsForm.skus = this.goodsForm.skus.concat(this.skuArr)
+      httpAdminGoods.getGoodsEdit(this.goodsForm).then((res) => {
+        console.log(res)
       })
     },
     /**
      * 添加商品 确认
      */
-    affirmbtn(form) {
+    affirBtn(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          this.addGoods()
+          console.log(this.title)
+          if (this.title == '编辑商品') {
+            this.getGoodsEdit()
+          } else {
+            this.addGoods()
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -334,7 +359,7 @@ export default {
       this.goodsForm.icons.pop()
     },
     /**
-     *  商品状态
+     *  修改 商品状态
      */
     goodsState(val) {
       console.log(val)
@@ -342,25 +367,73 @@ export default {
         .putGoodsStatus({ id: val.id, status: val.status })
         .then((res) => {
           console.log(res)
-          if(res.data.code === 'OK'){
+          if (res.data.code === 'OK') {
             this.$message.success('操作成功')
             this.getList()
           }
         })
     },
     /**
+     * 添加商品
+     */
+    addTake() {
+      this.clearGoods()
+      this.title = '添加商品'
+      this.dialogVisible = true
+    },
+    /**
+     * 清空 商品数据
+     */
+    clearGoods() {
+      this.goodsForm = {
+        id: '',
+        name: '',
+        remark: '',
+        icons: [],
+        specification: '',
+        skus: [],
+        price: '',
+        integral: '',
+        detail: '',
+        status: 'SHOW',
+      }
+      this.skuArr = []
+    },
+    /**
      * 编辑商品信息
      */
     editGoods(val) {
+      // this.goodsForm = {}
+      this.clearGoods()
       this.dialogVisible = true
       this.title = '编辑商品'
-      console.log(val);
+      this.goodsForm.id = val.id
+      this.goodsForm.name = val.name
+      this.goodsForm.detail = val.detail
+      this.goodsForm.icons = val.goodsIcons
+      this.goodsForm.specification = val.specification
+      // 处理商品sku
+      if (val.goodsSkus.length > 0) {
+        this.goodsForm.skus = [val.goodsSkus[0]]
+      }
+      if (val.goodsSkus.length > 1) {
+        this.skuArr = val.goodsSkus.slice(1, val.goodsSkus.length)
+      }
+      this.goodsForm.price = val.price
+      this.goodsForm.integral = val.integral
+      this.goodsForm.remark = val.remark
+      this.goodsForm.status = val.status
     },
     /**
      * 搜索
      */
-    searchBtn() {},
-    searchReset() {},
+    searchBtn() {
+      this.getList()
+    },
+    searchReset() {
+      this.$set(this, 'searchForm', {})
+      this.getList()
+    },
     /**
      * 分页
      */
