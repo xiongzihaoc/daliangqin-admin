@@ -55,13 +55,6 @@
         prop="name"
         label="音乐名称">
       </el-table-column>
-      <!-- <el-table-column align="center"
-        prop="timeLength"
-        label="音乐时长(s)">
-        <template slot-scope="scope">
-          {{formatSeconds(scope.row.timeLength)}}
-        </template>
-      </el-table-column> -->
       <el-table-column align="center"
         prop="url"
         label="播放">
@@ -79,7 +72,6 @@
           <span> {{parseTime(scope.row.createTime)}}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center"
         prop="status"
         label="状态">
@@ -177,7 +169,7 @@ export default {
       tableHeaderBig: [],
       formRules: {
         name: [{ required: true, message: '请输入音乐名称', trigger: 'blur' }],
-        // url: [{ required: true, message: '请选择音乐  ', trigger: 'blur' }],
+        state: [{ required: true, message: '请选择状态', trigger: 'blur' }],
       },
       // 搜索表单
       searchForm: {
@@ -187,7 +179,7 @@ export default {
       editAddForm: {
         name: '',
         url: '',
-        state: true,
+        state: null,
       },
       infoTitle: '',
       // 分页区域
