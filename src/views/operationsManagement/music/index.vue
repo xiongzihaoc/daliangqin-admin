@@ -119,7 +119,8 @@
         label-width="100px">
         <el-form-item label="音乐名称"
           prop="name">
-          <el-input v-model.trim="editAddForm.name"
+          <el-input maxlength="30"
+            v-model.trim="editAddForm.name"
             placeholder="请输入音乐名称"></el-input>
         </el-form-item>
         <el-form-item label="上传音乐"
@@ -137,7 +138,8 @@
         </el-form-item>
         <el-form-item label="状态"
           prop="state">
-          <el-select class="w100" v-model="editAddForm.state"
+          <el-select class="w100"
+            v-model="editAddForm.state"
             placeholder="请选择状态">
             <el-option label="上架"
               :value="true"></el-option>

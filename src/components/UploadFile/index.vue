@@ -84,10 +84,11 @@ export default {
       this.$emit('uploadProgress', event.percent)
     },
     handleUploadSuccess(response, file, fileList) {
-      let value = 'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
-      this.uploadValue = 'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
-      console.log(this.uploadValue)
-    this.$emit('uploadFinish', value)
+      let value =
+        'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
+      this.uploadValue =
+        'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
+      this.$emit('uploadFinish', value)
     },
   },
 }
