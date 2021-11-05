@@ -38,7 +38,7 @@ export const httpAdminGoods = {
   },
   // 详情
   getGoodsDetails(data) {
-    return requsest({
+    return request({
       url: `goods/${data.id}`,
       method: 'get',
       data
@@ -46,9 +46,10 @@ export const httpAdminGoods = {
   },
   // 编辑
   getGoodsEdit(data) {
-    return requsest({
+    return request({
       url: `goods/${data.id}`,
       method: 'put',
+      data
     })
   },
 }
