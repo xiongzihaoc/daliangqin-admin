@@ -77,7 +77,7 @@ export default {
         },
         series: [
           {
-            name: '接听率',
+            name: '接听率(%)',
             type: 'line',
             itemStyle: {
               color: colors[0],
@@ -86,7 +86,7 @@ export default {
             smooth: false,
           },
           {
-            name: '未接听率',
+            name: '未接听率(%)',
             type: 'line',
             itemStyle: {
               color: colors[1],

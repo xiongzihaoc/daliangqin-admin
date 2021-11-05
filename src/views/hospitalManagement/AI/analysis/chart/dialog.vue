@@ -78,7 +78,7 @@ export default {
         },
         series: [
           {
-            name: '0 - 3',
+            name: '0 - 3次',
             type: 'bar',
             barWidth: 30,
             stack: 'total',
@@ -91,7 +91,7 @@ export default {
             data: [],
           },
           {
-            name: '4 - 6',
+            name: '4 - 6次',
             type: 'bar',
             stack: 'total',
             emphasis: {
@@ -103,7 +103,7 @@ export default {
             data: [],
           },
           {
-            name: '7 - 9',
+            name: '7 - 9次',
             type: 'bar',
             stack: 'total',
             emphasis: {
@@ -115,7 +115,7 @@ export default {
             data: [],
           },
           {
-            name: '> 10',
+            name: '> 10次',
             type: 'bar',
             stack: 'total',
             emphasis: {
