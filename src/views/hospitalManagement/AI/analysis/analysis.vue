@@ -199,6 +199,13 @@ export default {
             hint: '总的外呼人数',
           },
           {
+            title: '任务时长',
+            ratio: `${
+             formatSeconds(outboundList.taskTime) 
+            }`,
+            hint: '任务完成时间-任务开始时间',
+          },
+          {
             title: '已接听率',
             ratio: `${
               outboundList.answerRate
