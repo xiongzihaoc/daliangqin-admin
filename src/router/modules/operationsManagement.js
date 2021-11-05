@@ -156,6 +156,15 @@ const operationsRouter = {
       }
     },
     {
+      path: 'music',
+      name: 'music',
+      component: () => import('@/views/operationsManagement/music'),
+      meta: {
+        title: '铃声设置',
+        icon: 'music'
+      }
+    },
+    {
       path: 'system',
       name: 'system',
       component: () => import('@/views/operationsManagement/system'),
