@@ -834,6 +834,7 @@ export default {
     },
     // 添加任务
     addTask() {
+      this.addSubmit = false
       this.editBot = false
       this.addUserFrom = {}
       this.title = '添加'
