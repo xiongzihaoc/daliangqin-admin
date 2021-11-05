@@ -326,7 +326,7 @@
             <!-- 上传组件 -->
             <single-upload v-model="addUserFrom.fileName"
               @uploadFinish="uploadFinish"
-              uploadType="BANNER"
+              uploadType="EXCEL"
               :disabled="excelStatus"></single-upload>
             <div slot="tip"
               class="el-upload__tip"
