@@ -145,7 +145,6 @@
               :value="false"></el-option>
           </el-select>
         </el-form-item>
-
       </el-form>
       <span slot="footer"
         class="dialog-footer">
