@@ -17,7 +17,7 @@
         </el-form-item>
         <el-form-item label="用户手机号">
           <el-input
-            v-model="searchForm.customerPersonName"
+            v-model="searchForm.calledPhoneNumber"
             size="small"
             placeholder="请输入手机号"
           ></el-input>
