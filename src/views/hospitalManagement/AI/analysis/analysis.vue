@@ -79,6 +79,14 @@
       >
         <div class="title">
           <span>{{ item.title }}</span>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            :content="item.hint"
+            placement="top"
+          >
+            <i style="margin: 0 5px;" class="el-icon-question"></i>
+          </el-tooltip>
         </div>
         <p class="title">{{ item.ratio }}</p>
         <span>{{ item.minuteNumber }}</span>
@@ -157,7 +165,7 @@ export default {
     this.searchForm.hospitalId = sessionStorage.getItem('taskHospitalId')
     this.searchForm.taskStage = sessionStorage.getItem('taskStage')
     let aiName = sessionStorage.getItem('taskAiName')
-     if(aiName){
+    if (aiName) {
       this.searchForm.aiNameList = [aiName]
       this.getJobStats()
     }
@@ -188,13 +196,17 @@ export default {
             ratio: `${
               outboundList.peopleNumber ? outboundList.peopleNumber : '0'
             }位`,
+            hint: '总的外呼人数',
           },
           {
             title: '已接听率',
             ratio: `${
-              outboundList.answerRate ? this.getDecimals(outboundList.answerRate) : '0'
+              outboundList.answerRate
+                ? this.getDecimals(outboundList.answerRate)
+                : '0'
             }%`,
             minuteNumber: `已接听人数${outboundList.answerNumber}位`,
+            hint: '已接听人数/已呼人数',
           },
           {
             title: '未接听率',
@@ -202,11 +214,15 @@ export default {
               outboundList.noAnswerRate ? outboundList.noAnswerRate : '0'
             }%`,
             minuteNumber: `未接听人数${outboundList.noAnswerNumber}位`,
+            hint: '未接听人数/已呼人数',
           },
           {
             title: '挂机率',
-            ratio: `${outboundList.hangupRate ? outboundList.hangupRate : '0'}%`,
+            ratio: `${
+              outboundList.hangupRate ? outboundList.hangupRate : '0'
+            }%`,
             minuteNumber: `挂机人数${outboundList.hangupNumber}位`,
+            hint: '接听且通话轮次未达到两轮的人数/已接听人数',
           },
           {
             title: '总通话时长',
@@ -220,6 +236,7 @@ export default {
                 ? formatSeconds(outboundList.avgTalkTime)
                 : '0'
             }`,
+            hint: '通话时长总和/接听总量',
           },
         ]
       })
@@ -240,8 +257,8 @@ export default {
     /**
      * 已接听整数补零
      */
-    getDecimals(val){
-      if(val.toString().length == 2){
+    getDecimals(val) {
+      if (val.toString().length == 2) {
         val = val + '.00'
       }
       return val
