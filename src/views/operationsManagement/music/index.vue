@@ -96,8 +96,11 @@
       <!-- 操作 -->
       <el-table-column align="center"
         label="操作"
-        width="120">
+        width="200">
         <template slot-scope="scope">
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
           <el-button size="mini"
             type="danger"
             @click="deleteBtn(scope.row.id)">删除</el-button>
@@ -105,7 +108,7 @@
       </el-table-column>
     </EleTable>
     <!-- 增改页面 -->
-    <el-dialog title="新增"
+    <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
@@ -132,6 +135,17 @@
             v-show="percentage > 0 && percentage < 100"
             :percentage="percentage"></el-progress>
         </el-form-item>
+        <el-form-item label="状态"
+          prop="state">
+          <el-select class="w100" v-model="editAddForm.state"
+            placeholder="请选择状态">
+            <el-option label="上架"
+              :value="true"></el-option>
+            <el-option label="下架"
+              :value="false"></el-option>
+          </el-select>
+        </el-form-item>
+
       </el-form>
       <span slot="footer"
         class="dialog-footer">
@@ -164,15 +178,17 @@ export default {
         name: [{ required: true, message: '请输入音乐名称', trigger: 'blur' }],
         // url: [{ required: true, message: '请选择音乐  ', trigger: 'blur' }],
       },
-      // 新增编辑表单
-      editAddForm: {
-        name: '',
-        url: '',
-      },
       // 搜索表单
       searchForm: {
         state: null,
       },
+      // 新增编辑表单
+      editAddForm: {
+        name: '',
+        url: '',
+        state: true,
+      },
+      infoTitle: '',
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -225,7 +241,13 @@ export default {
      */
     // 新增
     addBtn() {
+      this.infoTitle = '新增'
       this.editAddForm = {}
+      this.editDialogVisible = true
+    },
+    editBtn(val) {
+      this.infoTitle = '编辑'
+      this.editAddForm = JSON.parse(JSON.stringify(val))
       this.editDialogVisible = true
     },
     // 删除
@@ -257,15 +279,16 @@ export default {
     editPageEnter() {
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
-          
           // 发送请求
-          httpAdminMusic.postMusic({...this.editAddForm,timeLength:43}).then((res) => {
-            if (res.code === 'OK') {
-              this.$message.success('新增成功')
-              this.getList()
-              this.editDialogVisible = false
-            }
-          })
+          httpAdminMusic
+            .postMusic({ ...this.editAddForm, timeLength: 43 })
+            .then((res) => {
+              if (res.code === 'OK') {
+                this.$message.success('新增成功')
+                this.getList()
+                this.editDialogVisible = false
+              }
+            })
         }
       })
     },

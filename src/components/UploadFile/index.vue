@@ -69,7 +69,8 @@ export default {
     },
     beforeUpload(file) {
       if (this.uploadType === 'MUSIC') {
-        if (file.type !== 'audio/mpeg' || file.type !== 'audio/ogg') {
+        console.log(file)
+        if (file.type != 'audio/mpeg' && file.type != 'audio/ogg') {
           return this.$message.error('请上传mp3格式文件')
         }
       }
