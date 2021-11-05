@@ -201,7 +201,7 @@ export default {
           {
             title: '任务时长',
             ratio: `${
-             formatSeconds(outboundList.taskTime) 
+             outboundList.taskTime ? formatSeconds(outboundList.taskTime) : '0秒'
             }`,
             hint: '任务完成时间-任务开始时间',
           },
@@ -241,7 +241,7 @@ export default {
             minuteNumber: `平均通话时长${
               outboundList.avgTalkTime
                 ? formatSeconds(outboundList.avgTalkTime)
-                : '0'
+                : '0秒'
             }`,
             hint: '通话时长总和/接听总量',
           },
