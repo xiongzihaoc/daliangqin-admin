@@ -146,7 +146,7 @@
         <template slot-scope="scope">
           <el-button type="primary"
             size="small"
-            @click="getAlCallDetailList(scope.row)">查看</el-button>
+            @click="getAlCallDetailList(scope.row)" :disabled="disabledLookOver(scope.row.hangupBy)">查看</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -351,6 +351,16 @@ export default {
     },
     stop() {
       this.$refs.audio.pause()
+    },
+    /**
+     * 查看按钮 状态
+     */
+    disabledLookOver(state){
+      if(state === '' || state === null){
+        return true
+      }else{
+        return false
+      }
     },
     /**
      * 表格格式化
