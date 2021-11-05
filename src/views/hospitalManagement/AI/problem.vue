@@ -4,10 +4,10 @@
     <div class="search-box">
       <el-button-group style="margin-bottom: 15px">
         <el-button size="small"
-          type="primary"
+          :type="timebtn"
           @click="checkBtn('date')">按日期查看</el-button>
         <el-button size="small"
-          type="primary"
+          :type="weekbtn"
           @click="checkBtn('stage')">按期名查看</el-button>
       </el-button-group>
       <el-form :model="searchForm"
@@ -57,6 +57,7 @@
             value-format="timestamp"
             type="daterange"
             range-separator="至"
+            :default-time="['00:00:00', '23:59:59']"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             size="small"
@@ -159,6 +160,8 @@ export default {
       parseTime,
       formatSeconds,
       show: true,
+      timebtn: 'primary',
+      weekbtn: 'info',
       searchForm: {
         aiCallSummaryType: 'DATE',
         aiNameList: [],
@@ -272,6 +275,7 @@ export default {
       }
     },
     getSearchFormTime(val) {
+      console.log(val);
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
     },
@@ -279,9 +283,13 @@ export default {
       if (val === 'date') {
         this.searchForm.aiCallSummaryType = 'DATE'
         this.show = true
+        this.timebtn = 'primary'
+        this.weekbtn = 'info'
       } else {
         this.searchForm.aiCallSummaryType = 'STAGE'
         this.show = false
+        this.timebtn = 'info'
+        this.weekbtn = 'primary'
       }
       this.getList()
     },
