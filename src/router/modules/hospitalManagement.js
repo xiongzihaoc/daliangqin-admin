@@ -157,7 +157,7 @@ const hospitalRouter = {
           component: () => import('@/views/hospitalManagement/AI/task'),
           meta: {
             title: '呼叫任务',
-            icon: 'general'
+            icon: 'general',
           },
         },
         {

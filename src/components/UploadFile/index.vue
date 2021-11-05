@@ -19,9 +19,9 @@
   </div>
 </template>
 <script>
-import { httpAdminUploadApi } from "@/api/admin/httpAdminUploadApi";
+import { httpAdminUploadApi } from '@/api/admin/httpAdminUploadApi'
 export default {
-  name: "SingleUpload",
+  name: 'SingleUpload',
   props: {
     value: String,
     uploadType: String,
@@ -29,30 +29,30 @@ export default {
   data() {
     return {
       dataObj: {
-        policy: "",
-        signature: "",
-        key: "",
-        ossaccessKeyId: "",
-        host: "",
+        policy: '',
+        signature: '',
+        key: '',
+        ossaccessKeyId: '',
+        host: '',
       },
       percentage: 0,
       infoList: [],
-    };
+    }
   },
   mounted() {
     httpAdminUploadApi
       .postAliyunSignAdmin({ adminUpload: this.uploadType })
       .then((res) => {
-        this.infoList = res.data;
-      });
+        this.infoList = res.data
+      })
   },
   computed: {
     uploadValue: {
       get() {
-        return this.value;
+        return this.value
       },
       set(val) {
-        this.value = val;
+        this.value = val
       },
     },
   },
@@ -61,31 +61,36 @@ export default {
       //   this.emitInput("");
     },
     getUUID() {
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
         return (
-          c === "x" ? (Math.random() * 16) | 0 : "r&0x3" | "0x8"
-        ).toString(16);
-      });
+          c === 'x' ? (Math.random() * 16) | 0 : 'r&0x3' | '0x8'
+        ).toString(16)
+      })
     },
     beforeUpload(file) {
-      console.log(file);
-      const _self = this;
-      _self.dataObj.policy = this.infoList.policy;
-      _self.dataObj.signature = this.infoList.signature;
-      _self.dataObj.ossaccessKeyId = this.infoList.accessId;
-      _self.dataObj.key = this.infoList.key + file.name;
-      _self.dataObj.host = this.infoList.endPoint;
+      if (this.uploadType === 'MUSIC') {
+        console.log(file)
+        if (file.type != 'audio/mpeg' && file.type != 'audio/ogg') {
+          return this.$message.error('请上传mp3格式文件')
+        }
+      }
+      const _self = this
+      _self.dataObj.policy = this.infoList.policy
+      _self.dataObj.signature = this.infoList.signature
+      _self.dataObj.ossaccessKeyId = this.infoList.accessId
+      _self.dataObj.key = this.infoList.key + file.name
+      _self.dataObj.host = this.infoList.endPoint
     },
     handleUploadProgress(event, file, fileList) {
-      this.$emit("uploadProgress", event.percent);
+      this.$emit('uploadProgress', event.percent)
     },
     handleUploadSuccess(response, file, fileList) {
-      let value = "https://cdn.daliangqing.com/" + this.dataObj.key;
-      this.uploadValue = "https://cdn.daliangqing.com/" + this.dataObj.key;
-      this.$emit("uploadFinish", value);
+      let value = 'https://cdn.daliangqing.com/' + this.dataObj.key
+      this.uploadValue = 'https://cdn.daliangqing.com/' + this.dataObj.key
+      this.$emit('uploadFinish', value)
     },
   },
-};
+}
 </script>
 <style>
 .container .el-upload--text {
