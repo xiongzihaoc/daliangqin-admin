@@ -182,15 +182,23 @@ export default {
     }
   },
   created() {
-    this.searchForm.startTime = sessionStorage.getItem('monitoringStartTime')
-    this.searchForm.endTime = sessionStorage.getItem('monitoringEndTime')
-    this.superviseTime = [ this.searchForm.startTime, this.searchForm.endTime ]
+    let startTime = sessionStorage.getItem('monitoringStartTime')
+    let endTime = sessionStorage.getItem('monitoringEndTime')
+    if (!startTime) {
+      this.superviseTime = []
+    } else {
+      this.searchForm.startTime = startTime
+      this.searchForm.endTime = endTime
+      this.superviseTime = [startTime, endTime]
+    }
     this.getList()
     this.getHospitalList()
   },
   mounted() {},
   beforeDestroy() {
     sessionStorage.removeItem('monitoringHospitalId')
+    sessionStorage.removeItem('monitoringStartTime')
+    sessionStorage.removeItem('monitoringEndTime')
   },
   methods: {
     getList() {
@@ -232,7 +240,7 @@ export default {
           '&isArchives=true'
       )
     },
-        // 用户选择时间
+    // 用户选择时间
     changeMonitorTime(val) {
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
@@ -250,6 +258,8 @@ export default {
       this.pageNum = 1
       this.searchForm = {}
       this.superviseTime = []
+      sessionStorage.removeItem('monitoringStartTime')
+      sessionStorage.removeItem('monitoringEndTime')
       this.getList()
     },
     /**
