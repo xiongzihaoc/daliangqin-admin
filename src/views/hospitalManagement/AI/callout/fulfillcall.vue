@@ -91,7 +91,6 @@
             @click="exportExcel"
             type="success"
             size="small"
-            plain
             icon="el-icon-upload2"
             >导出</el-button
           >
