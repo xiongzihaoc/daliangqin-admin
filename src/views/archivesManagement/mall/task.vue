@@ -4,11 +4,21 @@
     <div class="search-box">
       <el-form class="searchForm" :inline="true">
         <el-form-item label="商品标题">
-          <el-input placeholder="请输入商品标题" size="small"></el-input>
+          <el-input
+            v-model="searchForm.name"
+            placeholder="请输入商品标题"
+            size="small"
+          ></el-input>
         </el-form-item>
         <el-form-item label="状态">
-          <el-select v-model="searchForm.shop" size="small">
-            <el-option label="规格" value="规格"> </el-option>
+          <el-select v-model="searchForm.status" size="small">
+            <el-option
+              v-for="(item, idx) in goodsStatus"
+              :key="idx"
+              :label="item.lab"
+              :value="item.val"
+            >
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -100,10 +110,30 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作"></el-table-column>
+      <el-table-column align="center" label="操作" fixed="right" width="200">
+        <template slot-scope="scope">
+          <div>
+            <el-button size="mini" type="primary" @click="editTask(scope.row)"
+              >编辑</el-button
+            >
+            <el-button
+              size="mini"
+              plain
+              icon="el-icon-top"
+              @click="sortMall(scope.row.id, 'UP')"
+            ></el-button>
+            <el-button
+              size="mini"
+              plain
+              icon="el-icon-bottom"
+              @click="sortMall(scope.row.id, 'DOWN')"
+            ></el-button>
+          </div>
+        </template>
+      </el-table-column>
     </EleTable>
     <!-- 弹框 -->
-    <el-dialog title="任务操作" :visible.sync="dialogVisible" width="40%">
+    <el-dialog :title="taskTitle" :visible.sync="dialogVisible" width="40%">
       <el-form
         :model="mallTaskForm"
         :rules="rules"
@@ -153,14 +183,6 @@
             maxlength="6"
           ></el-input>
         </el-form-item>
-        <!-- <el-form-item label="积分规则:">
-          <el-input
-            v-model="mallTaskForm.text"
-            rows="10"
-            type="textarea"
-            placeholder="请输入商品规格"
-          ></el-input>
-        </el-form-item> -->
         <el-form-item label="状态:" prop="status">
           <el-radio v-model="mallTaskForm.status" label="SHOW">显示</el-radio>
           <el-radio v-model="mallTaskForm.status" label="DELETE">隐藏</el-radio>
@@ -173,6 +195,18 @@
         >
       </span>
     </el-dialog>
+    <!-- <el-dialog title="积分规则" :visible.sync="dialogVisibleS" width="40%">
+      <el-form>
+        <el-form-item label="积分规则:">
+          <el-input
+            v-model="mallTaskForm.text"
+            rows="10"
+            type="textarea"
+            placeholder="请输入商品规格"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -187,6 +221,7 @@ export default {
   data() {
     return {
       parseTime,
+      taskTitle: '添加任务',
       searchForm: {},
       mallTaskForm: {
         name: '',
@@ -197,6 +232,10 @@ export default {
         dayLimitNum: '', // 平台每日发放积分次数
         status: 'SHOW',
       },
+      goodsStatus: [
+        { val: 'DELETE', lab: '隐藏' },
+        { val: 'SHOW', lab: '显示' },
+      ],
       list: [],
       tableHeaderBig: [],
       //表单验证
@@ -236,23 +275,54 @@ export default {
   },
   methods: {
     getList() {
-      httpAdminMallTask.getMallTask().then((res) => {
-        console.log(res)
+      let data = Object.assign(this.searchForm, {
+        page: this.pageNum,
+        pageSize: this.pageSize,
+      })
+      httpAdminMallTask.getMallTask(data).then((res) => {
         this.list = res.data.elements
         this.total = res.data.totalSize
       })
     },
-    addMallTask(){
-      httpAdminMallTask.postAddMallTask(this.mallTaskForm).then((res)=>{
-        console.log(res);
+    addMallTask() {
+      httpAdminMallTask.postAddMallTask(this.mallTaskForm).then((res) => {
+        if (res.code === 'OK') {
+          this.dialogVisible = false
+          this.$message.success('添加成功')
+          this.getList()
+        }
+      })
+    },
+    editMall() {
+      httpAdminMallTask.putMall(this.mallTaskForm).then((res) => {
+        if (res.code === 'OK') {
+          this.$message.success('编辑成功')
+          this.dialogVisible = false
+          this.getList()
+        }
       })
     },
     /**
      * 任务操作
      */
     taskOperate() {
-      console.log('object')
+      this.mallTaskForm = { status: 'SHOW' }
+      this.taskTitle = '添加任务'
       this.dialogVisible = true
+    },
+    editTask(data) {
+      this.taskTitle = '编辑任务'
+      this.mallTaskForm = {}
+      this.mallTaskForm = data
+      this.dialogVisible = true
+    },
+    sortMall(id, status){
+      httpAdminMallTask.putMallSort({ id, status }).then((res)=>{
+        if(res.code === 'OK'){
+          this.$message.success('操作成功')
+          this.getList()
+        }
+      })
     },
     /**
      * 添加任务 表单验证
@@ -260,8 +330,11 @@ export default {
     affirBtn(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          console.log('submit!!')
-          this.addMallTask()
+          if (this.taskTitle == '编辑任务') {
+            this.editMall()
+          } else {
+            this.addMallTask()
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -272,11 +345,9 @@ export default {
      *  修改 积分任务状态
      */
     goodsState(val) {
-      console.log(val)
       httpAdminMallTask
         .putMallStatus({ id: val.id, status: val.status })
         .then((res) => {
-          console.log(res)
           if (res.data.code === 'OK') {
             this.$message.success('操作成功')
             this.getList()
@@ -286,8 +357,13 @@ export default {
     /**
      * 搜索
      */
-    searchBtn() {},
-    searchReset() {},
+    searchBtn() {
+      this.getList()
+    },
+    searchReset() {
+      this.$set(this, 'searchForm', {})
+      this.getList()
+    },
     /**
      * 分页
      */
