@@ -566,10 +566,10 @@ export default {
     this.getList()
   },
   mounted() {
-    this.getHospitalList()
     this.getAiSpeech()
     this.getAiStageList()
     this.getAiTaskNameList()
+    this.getHospitalList()
   },
   methods: {
     /**
