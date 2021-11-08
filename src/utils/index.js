@@ -737,6 +737,13 @@ export const problemState = [
   { id: 5, label: "不明确", value: "UNRECOGNIZED" },
 ]
 
+// 积分商城 订单状态
+export const ordeStatus = [
+  { id: 1, label: "已完成", value:"SUCCESS" },
+  { id: 2, label: "待收货", value: "WAIT_CONFIRM" },
+  { id: 3, label: "待发货", value: "WAIT_DELIVERY" },
+]
+
 // 所有枚举类型转义
 export const formatterElement = {
   // 随访方式

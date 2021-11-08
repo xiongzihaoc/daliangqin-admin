@@ -36,13 +36,6 @@
             icon="el-icon-refresh"
             >重置</el-button
           >
-          <el-button
-            @click="searchBtn"
-            type="primary"
-            size="small"
-            icon="el-icon-search"
-            >积分规则</el-button
-          >
         </el-form-item>
       </el-form>
     </div>
@@ -195,18 +188,6 @@
         >
       </span>
     </el-dialog>
-    <!-- <el-dialog title="积分规则" :visible.sync="dialogVisibleS" width="40%">
-      <el-form>
-        <el-form-item label="积分规则:">
-          <el-input
-            v-model="mallTaskForm.text"
-            rows="10"
-            type="textarea"
-            placeholder="请输入商品规格"
-          ></el-input>
-        </el-form-item>
-      </el-form>
-    </el-dialog> -->
   </div>
 </template>
 <script>

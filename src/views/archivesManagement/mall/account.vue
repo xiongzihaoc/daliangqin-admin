@@ -4,18 +4,30 @@
     <div class="search-box">
       <el-form class="searchForm" :inline="true">
         <el-form-item label="医院名称">
-          <el-select v-model="searchForm.shop" size="small">
-            <el-option label="规格" value="规格"> </el-option>
+          <el-select v-model="searchForm.hospitalName" size="small">
+            <el-option v-for="item in hospitalList" :key="item.id" :label="item.name" :value="item.name"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="医生姓名">
-          <el-input placeholder="请输入医生姓名" size="small"></el-input>
+          <el-input
+            v-model="searchForm.doctorName"
+            placeholder="请输入医生姓名"
+            size="small"
+          ></el-input>
         </el-form-item>
         <el-form-item label="用户姓名">
-          <el-input placeholder="请输入用户姓名" size="small"></el-input>
+          <el-input
+            v-model="searchForm.userName"
+            placeholder="请输入用户姓名"
+            size="small"
+          ></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
-          <el-input placeholder="请输入用户手机号" size="small"></el-input>
+          <el-input
+            v-model="searchForm.phone"
+            placeholder="请输入用户手机号"
+            size="small"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -35,16 +47,6 @@
         </el-form-item>
       </el-form>
     </div>
-    <div>
-        <el-button-group style="margin-bottom: 15px">
-        <el-button size="small" type="primary" @click="checkBtn()"
-          >积分收入</el-button
-        >
-        <el-button size="small" type="primary" @click="checkBtn()"
-          >积分兑换</el-button
-        >
-      </el-button-group>
-    </div>
     <!-- 表格 -->
     <EleTable
       :data="list"
@@ -60,19 +62,51 @@
         type="index"
         label="序号"
       ></el-table-column>
-      <el-table-column align="center" label="医院名称"></el-table-column>
-      <el-table-column align="center" label="医师姓名"></el-table-column>
-      <el-table-column align="center" label="用户姓名"></el-table-column>
-      <el-table-column align="center" label="年龄"></el-table-column>
-      <el-table-column align="center" label="用户手机号"></el-table-column>
-      <el-table-column align="center" label="可用积分"></el-table-column>
-      <el-table-column align="center" label="已使用积分"></el-table-column>
-      <el-table-column align="center" label="操作"></el-table-column>
+      <el-table-column
+        align="center"
+        label="医院名称"
+        prop="hospitalName"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="医师姓名"
+        prop="doctorName"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="用户姓名"
+        prop="userName"
+      ></el-table-column>
+      <el-table-column align="center" label="年龄" prop="age"></el-table-column>
+      <el-table-column
+        align="center"
+        label="用户手机号"
+        prop="phone"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="可用积分"
+        prop="available"
+      ></el-table-column>
+      <el-table-column
+        align="center"
+        label="已使用积分"
+        prop="used"
+      ></el-table-column>
+      <el-table-column align="center" label="操作" fixed="right">
+        <template slot-scope="scope">
+          <el-button size="mini" plain @click="skipParticulars(scope.row)"
+            >查看明细</el-button
+          >
+        </template>
+      </el-table-column>
     </EleTable>
   </div>
 </template>
 <script>
 import EleTable from '@/components/Table'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
+import { httpAdminUserIntegral } from '@/api/admin/httpAdminUserIntegral'
 
 export default {
   components: {
@@ -82,6 +116,7 @@ export default {
     return {
       searchForm: {},
       list: [],
+      hospitalList: [],
       tableHeaderBig: [],
       // 分页区域
       pageSize: 10,
@@ -89,12 +124,40 @@ export default {
       total: 0,
     }
   },
+  created() {
+    this.getList()
+    this.getHospitalList()
+  },
   methods: {
-    getList() {},
+    getList() {
+      let data = Object.assign(this.searchForm, {
+        page: this.pageNum,
+        pageSize: this.pageSize,
+      })
+      httpAdminUserIntegral.getUserIntegral(data).then((res) => {
+        this.list = res.data.elements
+        this.total = res.data.totalSize
+      })
+    },
+    // 获取医院列表
+    getHospitalList(hospitalId) {
+      httpAdminHospital
+        .getHospital({ pageSize: -1, hospitalId })
+        .then((res) => {
+          this.hospitalList = res.data.elements
+        })
+    },
+    skipParticulars(val) {
+      sessionStorage.setItem('hospitalNameAccount', val.hospitalName)
+      sessionStorage.setItem('userNameAccount', val.userName)
+      sessionStorage.setItem('doctorNameAccount', val.doctorName)
+      sessionStorage.setItem('phoneAccount', val.phone)
+      this.$router.push('particulars')
+    },
     /**
      * 切换
      */
-    checkBtn(){},
+    checkBtn() {},
     /**
      * 搜索
      */

@@ -1,6 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- <h1>积分商品</h1> -->
     <div class="search-box">
       <el-form class="searchForm" :inline="true">
         <el-form-item label="商品标题">
@@ -107,11 +106,10 @@
       <el-table-column align="center" label="操作" width="250" fixed="right">
         <template slot-scope="scope">
           <div>
-            <!-- <el-button size="small" @click="sortGoods(scope.row)">排序</el-button> -->
             <el-button size="mini" type="primary" @click="editGoods(scope.row)"
               >编辑</el-button
             >
-            <el-button size="mini" type="danger">删除</el-button>
+            <el-button size="mini" type="danger" @click="deleteGoods(scope.row, 'DELETE')">删除</el-button>
             <el-button
               size="mini"
               plain
@@ -294,7 +292,8 @@ export default {
   },
   methods: {
     getList() {
-      httpAdminGoods.getGoods(this.searchForm).then((res) => {
+      let data = Object.assign(this.searchForm, { page: this.pageNum, pageSize: this.pageSize })
+      httpAdminGoods.getGoods(data).then((res) => {
         this.list = res.data.elements
         this.total = res.data.totalSize
       })
@@ -423,6 +422,14 @@ export default {
       this.goodsForm.integral = val.integral
       this.goodsForm.remark = val.remark
       this.goodsForm.status = val.status
+    },
+    deleteGoods(val, status){
+      httpAdminGoods.putGoodsStatus({ id: val.id, status }).then((res)=>{
+        if(res.code == 'OK'){
+          this.$message.success('删除成功')
+          this.getList()
+        }
+      })
     },
     /**
      * 搜索
