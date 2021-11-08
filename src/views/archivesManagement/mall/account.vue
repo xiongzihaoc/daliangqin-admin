@@ -161,7 +161,9 @@ export default {
     /**
      * 搜索
      */
-    searchBtn() {},
+    searchBtn() {
+      this.getList()
+    },
     searchReset() {},
     /**
      * 分页
