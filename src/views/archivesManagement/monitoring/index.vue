@@ -245,7 +245,7 @@ export default {
       if (val.printNumber !== null && state === 'NOT_PRINT') {
         this.$router.push('/archivesManagement/record/heart')
       }
-      if (val.uploadNumber !== null && state === 'uploadNumber') {
+      if ( Boolean(val.uploadNumber) && state === 'uploadNumber') {
         this.$router.push('/archivesManagement/usage')
       }
     },
