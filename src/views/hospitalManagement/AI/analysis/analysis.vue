@@ -26,7 +26,7 @@
             size="small"
             filterable
             value-key="aiName"
-            placeholder="请选择任务名称"
+            placeholder="请选择任务名称(必填)"
           >
             <el-option
               v-for="item in aiTaskList"
@@ -284,6 +284,16 @@ export default {
      * 搜索
      */
     searchBtn() {
+      let hospitalId = this.searchForm.hospitalId
+      let aiNameList = this.searchForm.aiNameList
+      let taskStage = this.searchForm.taskStage
+      if (!hospitalId && !taskStage) {
+        if (!aiNameList || aiNameList.length == 0) {
+          this.outboundList = []
+          this.$message.error('请选择任务名称')
+          return
+        }
+      }
       this.getJobStats()
     },
     // 重置
