@@ -85,7 +85,7 @@
             :content="item.hint"
             placement="top"
           >
-            <i style="margin: 0 5px;" class="el-icon-question"></i>
+            <i style="margin: 0 5px" class="el-icon-question"></i>
           </el-tooltip>
         </div>
         <p class="title">{{ item.ratio }}</p>
@@ -201,7 +201,9 @@ export default {
           {
             title: '任务时长',
             ratio: `${
-             outboundList.taskTime ? formatSeconds(outboundList.taskTime) : '0秒'
+              outboundList.taskTime
+                ? formatSeconds(outboundList.taskTime)
+                : '0秒'
             }`,
             hint: '任务完成时间-任务开始时间',
           },
