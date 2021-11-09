@@ -148,7 +148,6 @@ export default {
         hospitalId: '',
         aiNameList: [],
         taskStage: '',
-        infoObj: {}, // 单个医院具体信息
       },
       // 任务名称与期数
       aiTaskList: [],
@@ -160,20 +159,23 @@ export default {
       },
     }
   },
-  created() {
+  async created() {
     // this.searchForm.robotCallJobIds = this.$route.params.id
     this.searchForm.hospitalId = sessionStorage.getItem('taskHospitalId')
     this.searchForm.taskStage = sessionStorage.getItem('taskStage')
     let aiName = sessionStorage.getItem('taskAiName')
+    const { data: res } = await this.getAiTaskNameList()
+    this.aiTaskList = res
     if (aiName) {
       this.searchForm.aiNameList = [aiName]
-      this.getJobStats()
+    } else {
+      this.searchForm.aiNameList = [res[0].aiName]
     }
+    this.getJobStats()
   },
   mounted() {
     this.getHospitalList()
     this.getAiStageList()
-    this.getAiTaskNameList()
   },
   beforeDestroy() {
     this.removeSession()
@@ -187,6 +189,7 @@ export default {
     },
     // 获取图表数据
     getJobStats() {
+      console.log('列表', this.searchForm)
       httpAdminAiAnalysis.getJobStats(this.searchForm).then((res) => {
         let outboundList = res.data.aiHistoryStatisticalVO
         this.listData = res.data
@@ -258,10 +261,9 @@ export default {
         this.aiPeriodsList = res.data
       })
     },
-    getAiTaskNameList() {
-      httpAdminAiHistory.getAiTaskNameList().then((res) => {
-        this.aiTaskList = res.data
-      })
+    async getAiTaskNameList() {
+      let res = await httpAdminAiHistory.getAiTaskNameList()
+      return res
     },
     /**
      * 已接听整数补零
@@ -297,14 +299,17 @@ export default {
       this.getJobStats()
     },
     // 重置
-    searchReset() {
+    async searchReset() {
       this.removeSession()
       this.$set(this, 'searchForm', {})
       this.$set(this, 'getSearchForm', {})
       this.$set(this, 'aiTaskList', [])
-      this.getJobStats()
       this.getAiStageList()
-      this.getAiTaskNameList()
+      this.outboundList = []
+      const { data: res } = await this.getAiTaskNameList()
+      this.searchForm.aiNameList = [res[0].aiName]
+      this.aiTaskList = res
+      this.getJobStats()
     },
   },
 }
