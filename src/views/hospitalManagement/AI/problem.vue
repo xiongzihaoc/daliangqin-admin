@@ -161,7 +161,7 @@ export default {
       formatSeconds,
       show: true,
       timebtn: 'primary',
-      weekbtn: 'info',
+      weekbtn: '',
       searchForm: {
         aiCallSummaryType: 'DATE',
         aiNameList: [],
@@ -284,11 +284,11 @@ export default {
         this.searchForm.aiCallSummaryType = 'DATE'
         this.show = true
         this.timebtn = 'primary'
-        this.weekbtn = 'info'
+        this.weekbtn = ''
       } else {
         this.searchForm.aiCallSummaryType = 'STAGE'
         this.show = false
-        this.timebtn = 'info'
+        this.timebtn = ''
         this.weekbtn = 'primary'
       }
       this.getList()
