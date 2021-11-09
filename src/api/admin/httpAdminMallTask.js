@@ -24,15 +24,15 @@ export const httpAdminMallTask = {
     return request({
       url: `mallTask/sort/${data.id}`,
       method: 'put',
-      data
+      params: data
     })
   },
-  // 排序
+  // 状态
   putMallStatus(data) {
     return request({
       url: `mallTask/status/${data.id}`,
       method: 'put',
-      data
+      params: data
     })
   },
   // 列表详情
