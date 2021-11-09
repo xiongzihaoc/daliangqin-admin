@@ -918,5 +918,11 @@ export const formatterElement = {
     INITIAL_HANGUP: 'AI挂断',
     CS_HANGUP: '人工坐席挂断',
     OTHER_HANGUP: '未知原因',
+  },
+  // 积分商城 订单状态
+  goodsOrde: {
+    SUCCESS: '已完成',
+    WAIT_CONFIRM: '待收货',
+    WAIT_DELIVERY: '待发货',
   }
 }
