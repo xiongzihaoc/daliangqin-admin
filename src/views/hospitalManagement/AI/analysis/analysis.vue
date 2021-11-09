@@ -189,7 +189,6 @@ export default {
     },
     // 获取图表数据
     getJobStats() {
-      console.log('列表', this.searchForm)
       httpAdminAiAnalysis.getJobStats(this.searchForm).then((res) => {
         let outboundList = res.data.aiHistoryStatisticalVO
         this.listData = res.data

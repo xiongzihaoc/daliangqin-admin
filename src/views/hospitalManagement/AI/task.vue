@@ -322,7 +322,7 @@
         </el-form-item>
         <el-form-item label="导入用户:"
           prop="fileName">
-          <div class="skipStyle">
+          <div>
             <!-- 上传组件 -->
             <single-upload v-model="addUserFrom.fileName"
               @uploadFinish="uploadFinish"
@@ -332,7 +332,7 @@
               class="el-upload__tip"
               style="font-size: 13px">
               仅支持上传Excel格式的文件，且不超过10万条。
-              <span class="skipStyle"
+              <span class="skipStyle" style="cursor:pointer"
                 @click="getAiDownload">下载模板</span>
             </div>
           </div>
@@ -653,7 +653,7 @@ export default {
     // 获取医院列表
     getHospitalList(hospitalId) {
       httpAdminHospital
-        .getHospital({ pageSize: 10000, hospitalId })
+        .getHospital({ pageSize: -1, hospitalId })
         .then((res) => {
           this.hospitalList = res.data.elements
         })
@@ -814,6 +814,9 @@ export default {
         httpAdminAiCall
           .getInformationCopy({ aiName, hospitalId, robotCallJobId })
           .then((res) => {
+            if(res.code === 'OK'){
+              this.$message.success('复制成功')
+            }
             this.getList()
           })
       }
