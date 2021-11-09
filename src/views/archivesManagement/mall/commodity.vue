@@ -300,9 +300,7 @@ export default {
     },
     addGoods() {
       this.goodsForm.skus = this.goodsForm.skus.concat(this.skuArr)
-      console.log(this.goodsForm)
       httpAdminGoods.postGoods(this.goodsForm).then((res) => {
-        console.log(res)
         if (res.code === 'OK') {
           this.$message.success('添加成功')
         }
@@ -318,7 +316,11 @@ export default {
     getGoodsEdit() {
       this.goodsForm.skus = this.goodsForm.skus.concat(this.skuArr)
       httpAdminGoods.getGoodsEdit(this.goodsForm).then((res) => {
-        console.log(res)
+        if(res.code == 'OK'){
+          this.$message.success('编辑成功')
+          this.getList()
+          this.dialogVisible = false
+        }
       })
     },
     /**

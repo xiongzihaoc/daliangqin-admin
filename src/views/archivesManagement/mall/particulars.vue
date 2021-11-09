@@ -35,7 +35,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item v-if="spending != 'primary'" label="任务名称">
-          <el-input v-model="searchForm.taskNames" size="small" placeholder="请输入任务名称"></el-input>
+          <el-input
+            v-model="searchForm.taskNames"
+            size="small"
+            placeholder="请输入任务名称"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -185,10 +189,7 @@ export default {
     this.getHospitalList()
   },
   beforeDestroy() {
-    sessionStorage.removeItem('hospitalNameAccount')
-    sessionStorage.removeItem('userNameAccount')
-    sessionStorage.removeItem('doctorNameAccount')
-    sessionStorage.removeItem('phoneAccount')
+    this.removeItem()
   },
   methods: {
     getList() {
@@ -211,6 +212,15 @@ export default {
         })
     },
     /**
+     * 移除缓存
+     */
+    removeItem() {
+      sessionStorage.removeItem('hospitalNameAccount')
+      sessionStorage.removeItem('userNameAccount')
+      sessionStorage.removeItem('doctorNameAccount')
+      sessionStorage.removeItem('phoneAccount')
+    },
+    /**
      * 搜索
      */
     searchBtn() {
@@ -220,6 +230,7 @@ export default {
       this.spending = 'info'
       this.income = 'primary'
       this.searchForm = { type: 'INCOME' }
+      this.removeItem()
       this.getList()
     },
     /**
