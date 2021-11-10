@@ -376,7 +376,7 @@ export default {
         },
       ],
       loading: true,
-      // 医生列表跳转用户列表携带参数
+      // 医师列表跳转用户列表携带参数
       doctorId: '',
       collectionDoctorUserId: '',
       // 分页区域
@@ -443,7 +443,7 @@ export default {
         this.hospitalList = res.data.elements
       })
     },
-    // 获取医生列表
+    // 获取医师列表
     getDoctor(hospitalId) {
       httpAdminDoctor.getDoctor({ hospitalId, pageSize: 10000 }).then((res) => {
         this.doctorList = res.data.elements
@@ -520,7 +520,7 @@ export default {
         this.affirmBtn = false
       }
     },
-    // 转移 医生选择
+    // 转移 医师选择
     selectDoctor() {
       const all = (arr, fn = Boolean) => arr.every(fn)
       let doctorIdJudge = all(
@@ -554,7 +554,7 @@ export default {
           arr.push(val.id)
         }
       })
-      // 获取到医生id
+      // 获取到医师id
       if (arr.length <= 0 || this.transfer.doctorName === undefined) return
       this.putArchivesDoctor({
         patientUserIds: arr,

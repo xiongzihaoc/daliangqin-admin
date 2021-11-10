@@ -6,19 +6,19 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
-        <!-- 医生姓名 -->
-        <el-form-item label="医生姓名"
+        <!-- 医师姓名 -->
+        <el-form-item label="医师姓名"
           align="left">
           <el-input v-model="searchForm.doctorUserName"
             size="small"
-            placeholder="请输入医生姓名"></el-input>
+            placeholder="请输入医师姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医生手机号"
+        <el-form-item label="医师手机号"
           align="left">
           <el-input v-model="searchForm.doctorUserPhone"
             size="small"
             maxlength="11"
-            placeholder="请输入医生手机号"></el-input>
+            placeholder="请输入医师手机号"></el-input>
         </el-form-item>
         <el-form-item label="医院名称"
           align="left">
@@ -160,7 +160,7 @@
               :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择医生"
+        <el-form-item label="选择医师"
           prop="doctorUserId">
           <el-select style="width: 100%"
             filterable
@@ -168,7 +168,7 @@
             :disabled="this.infoTitle === '编辑' ? true : false"
             @change="selectDoctor"
             v-model="editAddForm.doctorUserId"
-            placeholder="请选择医生">
+            placeholder="请选择医师">
             <el-option v-for="item in doctorList"
               :key="item.id"
               :label="item.name"
@@ -266,7 +266,7 @@ export default {
           { required: true, message: '请选择医院', trigger: 'blur' },
         ],
         doctorUserId: [
-          { required: true, message: '请选择医生', trigger: 'blur' },
+          { required: true, message: '请选择医师', trigger: 'blur' },
         ],
         patientUserId: [
           { required: true, message: '请选择用户', trigger: 'blur' },
@@ -300,12 +300,12 @@ export default {
         endTime: '',
         status: '',
       },
-      selectDoctorId: '', // 选择医生的id
+      selectDoctorId: '', // 选择医师的id
       selectPatientUserName: '', // 搜索用户的姓名
       tableHeaderBig: [
         { type: 'index', label: '序号' },
-        { prop: 'doctorUserName', label: '医生姓名' },
-        { prop: 'doctorUserPhone', label: '医生手机号' },
+        { prop: 'doctorUserName', label: '医师姓名' },
+        { prop: 'doctorUserPhone', label: '医师手机号' },
         { prop: 'hospitalName', label: '医院名称' },
         {
           prop: 'type',
@@ -458,7 +458,7 @@ export default {
         this.hospitalList = res.data.elements;
       });
     },
-    // 获取医生列表
+    // 获取医师列表
     getDoctorList(id) {
       httpAdminDoctor
         .getDoctor({ hospitalId: id, pageSize: 10000 })

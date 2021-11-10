@@ -6,19 +6,19 @@
         :model="searchForm"
         :inline="true"
         class="searchForm">
-        <el-form-item label="医生姓名"
+        <el-form-item label="医师姓名"
           align="left">
           <el-input v-model="searchForm.doctorName"
             size="small"
-            placeholder="请输入医生姓名"></el-input>
+            placeholder="请输入医师姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医生手机号"
+        <el-form-item label="医师手机号"
           align="left">
           <el-input v-model="searchForm.doctorPhone"
             v-Int
             maxlength="11"
             size="small"
-            placeholder="请输入医生手机号"></el-input>
+            placeholder="请输入医师手机号"></el-input>
         </el-form-item>
         <el-form-item label="医院名称"
           align="left">
@@ -56,7 +56,7 @@
             v-Int
             maxlength="11"
             size="small"
-            placeholder="请输入医生手机号"></el-input>
+            placeholder="请输入医师手机号"></el-input>
         </el-form-item>
         <el-form-item label="高血压">
           <el-select v-model="searchForm.highBloodStatus"
@@ -163,7 +163,7 @@
               :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="医生姓名"
+        <el-form-item label="医师姓名"
           prop="doctorUserId">
           <el-select v-model="editAddForm.doctorUserId"
             @change="selectDoctor"
@@ -350,7 +350,7 @@ export default {
       genderList,
       formRules: {
         doctorUserId: [
-          { required: true, message: '请选择医生', trigger: 'blur' },
+          { required: true, message: '请选择医师', trigger: 'blur' },
         ],
         patientUserId: [
           { required: true, message: '请选择用户', trigger: 'blur' },
@@ -381,12 +381,12 @@ export default {
         templates: [],
         content: '',
       },
-      selectDoctorId: '', // 选择医生的id
+      selectDoctorId: '', // 选择医师的id
       selectPatientUserName: '', // 搜索用户的姓名
       tableHeaderBig: [
         { type: 'index', label: '序号' },
-        { prop: 'doctorName', label: '医生姓名' },
-        { prop: 'doctorPhone', label: '医生手机号' },
+        { prop: 'doctorName', label: '医师姓名' },
+        { prop: 'doctorPhone', label: '医师手机号' },
         { prop: 'hospitalName', label: '医院名称' },
         {
           prop: 'doctorType',
@@ -509,7 +509,7 @@ export default {
         this.hospitalList = res.data.elements;
       });
     },
-    // 获取医生列表
+    // 获取医师列表
     getDoctorList(val) {
       httpAdminDoctor
         .getDoctor({ hospitalId: val, pageSize: 10000 })

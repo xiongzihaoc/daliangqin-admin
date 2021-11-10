@@ -6,21 +6,21 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
-        <el-form-item label="医生姓名"
+        <el-form-item label="医师姓名"
           align="left"
           prop="userName">
           <el-input v-model="searchForm.userName"
             size="small"
-            placeholder="请输入医生姓名"></el-input>
+            placeholder="请输入医师姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医生手机号"
+        <el-form-item label="医师手机号"
           align="left"
           prop="userPhone">
           <el-input v-model="searchForm.userPhone"
             size="small"
             v-Int
             maxlength="11"
-            placeholder="请输入医生手机号"></el-input>
+            placeholder="请输入医师手机号"></el-input>
         </el-form-item>
         <el-form-item label="职位"
           prop="type">
@@ -86,11 +86,11 @@
         type="index">
       </el-table-column>
       <el-table-column align="center"
-        label="医生姓名"
+        label="医师姓名"
         prop="userName">
       </el-table-column>
       <el-table-column align="center"
-        label="医生手机号"
+        label="医师手机号"
         prop="userPhone">
       </el-table-column>
       <el-table-column align="center"

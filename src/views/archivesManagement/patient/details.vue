@@ -554,7 +554,7 @@ export default {
           return time.getTime() > Date.now() - 8.64e6
         },
       },
-      // 医生列表
+      // 医师列表
       doctorList: [],
       hospitalList: [],
       isArchives:false,
@@ -710,7 +710,7 @@ export default {
         this.hospitalList = res.data.elements
       })
     },
-    // 获取医生列表
+    // 获取医师列表
     getDoctorList(val) {
       httpAdminDoctor
         .getDoctor({ hospitalId: val, pageSize: 10000 })

@@ -197,7 +197,7 @@
           <div class="footer">
             <div class="left"></div>
             <div class="right">
-              <span class="fz14">医生签名：</span>
+              <span class="fz14">医师签名：</span>
             </div>
           </div>
         </div>

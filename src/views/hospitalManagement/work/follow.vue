@@ -3,19 +3,19 @@
     <!-- 搜索区域 -->
     <div class="search-box">
       <el-form ref="searchFormRef" :model="searchForm" class="searchForm" :inline="true">
-        <el-form-item label="医生姓名">
+        <el-form-item label="医师姓名">
           <el-input
             v-model="searchForm.doctorUserName"
             size="small"
-            placeholder="请输入医生姓名"
+            placeholder="请输入医师姓名"
           ></el-input>
         </el-form-item>
-        <el-form-item label="医生手机号">
+        <el-form-item label="医师手机号">
           <el-input
             v-model="searchForm.doctorPhone"
             size="small"
             maxlength="11"
-            placeholder="请输入医生手机号"
+            placeholder="请输入医师手机号"
           ></el-input>
         </el-form-item>
         <el-form-item label="职位">
@@ -211,7 +211,7 @@ export default {
   data() {
     return {
       parseTime,
-      // 医生类型列表
+      // 医师类型列表
       doctorTypeList,
       // 随访方式列表
       followTypeList,
@@ -248,8 +248,8 @@ export default {
       // 表格数据
       tableHeaderBig: [
         { type: "index", label: "序号" },
-        { prop: "doctorUserName", label: "医生姓名" },
-        { prop: "doctorPhone", label: "医生手机号" },
+        { prop: "doctorUserName", label: "医师姓名" },
+        { prop: "doctorPhone", label: "医师手机号" },
         { prop: "hospitalName", label: "医院名称" },
         {
           prop: "doctorType",

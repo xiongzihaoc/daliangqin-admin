@@ -6,13 +6,13 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
-        <!-- 医生姓名 -->
-        <el-form-item label="医生姓名"
+        <!-- 医师姓名 -->
+        <el-form-item label="医师姓名"
           align="left"
           prop="fromDoctorUserName">
           <el-input v-model="searchForm.fromDoctorUserName"
             size="small"
-            placeholder="请输入医生姓名"></el-input>
+            placeholder="请输入医师姓名"></el-input>
         </el-form-item>
         <!-- 专家姓名 -->
         <el-form-item label="专家姓名"
@@ -116,7 +116,7 @@ export default {
       transferStatusList,
       formRules: {
         doctorUserId: [
-          { required: true, message: "请选择医生名称", trigger: "blur" },
+          { required: true, message: "请选择医师名称", trigger: "blur" },
         ],
         patientUserId: [
           { required: true, message: "请选择用户名称", trigger: "blur" },
@@ -140,7 +140,7 @@ export default {
       list: [],
       tableHeaderBig: [
         { type: "index", label: "序号" },
-        { prop: "fromDoctorUserName", label: "医生姓名" },
+        { prop: "fromDoctorUserName", label: "医师姓名" },
         {
           prop: "transferTime",
           label: "转诊时间",

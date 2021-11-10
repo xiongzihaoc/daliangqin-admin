@@ -6,21 +6,21 @@
         :model="searchForm"
         class="searchForm"
         :inline="true">
-        <el-form-item label="医生姓名"
+        <el-form-item label="医师姓名"
           align="left"
           prop="doctorName">
           <el-input v-model="searchForm.doctorName"
             size="small"
-            placeholder="请输入医生姓名"></el-input>
+            placeholder="请输入医师姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医生手机号"
+        <el-form-item label="医师手机号"
           align="left"
           prop="doctorPhone">
           <el-input v-model="searchForm.doctorPhone"
             v-Int
             size="small"
             maxlength="11"
-            placeholder="请输入医生手机号"></el-input>
+            placeholder="请输入医师手机号"></el-input>
         </el-form-item>
         <el-form-item label="职位"
           align="left"
@@ -222,8 +222,8 @@ export default {
       // 表格数据
       tableHeaderBig: [
         { type: 'index', label: '序号' },
-        { prop: 'doctorName', label: '医生姓名' },
-        { prop: 'doctorPhone', label: '医生手机号' },
+        { prop: 'doctorName', label: '医师姓名' },
+        { prop: 'doctorPhone', label: '医师手机号' },
         {
           prop: 'doctorType',
           label: '职位',

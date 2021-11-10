@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 /**
- * 医生地址数据
+ * 医师地址数据
  */
 export const httpAdminAddressDoctor = {
   getAddressDoctor(data) {

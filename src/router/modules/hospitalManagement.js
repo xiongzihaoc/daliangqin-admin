@@ -19,13 +19,13 @@ const hospitalRouter = {
         icon: 'yiyuan'
       }
     },
-    // 医生管理
+    // 医师管理
     {
       path: 'doctor',
       name: 'doctor',
       component: () => import('@/views/hospitalManagement/doctor'),
       meta: {
-        title: '医生管理',
+        title: '医师管理',
         icon: 'doctor'
       }
     },

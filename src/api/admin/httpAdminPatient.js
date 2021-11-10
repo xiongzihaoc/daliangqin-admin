@@ -11,7 +11,7 @@ export const httpAdminPatient = {
       params: data
     })
   },
-  // 获取转诊医生列表
+  // 获取转诊医师列表
   getPatientTransfer(data) {
     return request({
       url: 'patient/transfer',

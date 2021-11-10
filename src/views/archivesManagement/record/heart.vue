@@ -39,7 +39,7 @@
           <el-select v-model="searchForm.doctorUserId"
             size="small"
             filterable
-            placeholder="请选择医生">
+            placeholder="请选择医师">
             <el-option v-for="item in doctorList"
               :key="item.id"
               :label="item.name"
@@ -418,7 +418,7 @@
           <div class="footer">
             <div class="left"></div>
             <div class="right">
-              <span class="fz14">医生签名：</span>
+              <span class="fz14">医师签名：</span>
             </div>
           </div>
         </div>
@@ -628,7 +628,7 @@ export default {
         this.hospitalList = res.data.elements
       })
     },
-    // 获取医生列表
+    // 获取医师列表
     getDoctorList() {
       httpAdminDoctor.getDoctor({ pageSize: 10000 }).then((res) => {
         this.doctorList = res.data.elements

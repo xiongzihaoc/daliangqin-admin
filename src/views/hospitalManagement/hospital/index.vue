@@ -138,7 +138,7 @@
               <el-table-column
                 align="center"
                 prop="doctorCount"
-                label="医生数量"
+                label="医师数量"
               >
                 <template slot-scope="scope">
                   <span
@@ -194,7 +194,7 @@
           >
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="doctorCount" label="医生数量">
+      <el-table-column align="center" prop="doctorCount" label="医师数量">
         <template slot-scope="scope">
           <span
             @click="skipDoctor(scope.row)"
@@ -461,7 +461,7 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-    // 跳转医生列表
+    // 跳转医师列表
     skipDoctor(val) {
       this.$router.push('/hospitalManagement/doctor')
       localStorage.setItem('hospitalId', val.id)

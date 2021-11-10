@@ -183,7 +183,7 @@
               :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择医生"
+        <el-form-item label="选择医师"
           prop="doctorUserId">
           <el-select class="w100"
             :disabled="this.infoTitle === '编辑'?true:false"
@@ -191,7 +191,7 @@
             clearable
             @change="selectDoctor"
             v-model="editAddForm.doctorUserId"
-            placeholder="请选择医生">
+            placeholder="请选择医师">
             <el-option v-for="item in doctorList"
               :key="item.id"
               :label="item.name"
@@ -289,7 +289,7 @@ export default {
           { required: true, message: '请选择医院', trigger: 'blur' },
         ],
         doctorUserId: [
-          { required: true, message: '请选择医生', trigger: 'blur' },
+          { required: true, message: '请选择医师', trigger: 'blur' },
         ],
         detectType: [
           { required: true, message: '请选择监测模式', trigger: 'blur' },
@@ -360,7 +360,7 @@ export default {
         this.hospitalList = res.data.elements
       })
     },
-    // 获取医生列表
+    // 获取医师列表
     getDoctorList(val) {
       httpAdminDoctor
         .getDoctor({ hospitalId: val, pageSize: 10000 })

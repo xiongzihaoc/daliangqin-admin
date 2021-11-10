@@ -36,19 +36,19 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="医生姓名" prop="doctorUserName">
+        <el-form-item label="医师姓名" prop="doctorUserName">
           <el-input
             v-model="searchForm.doctorUserName"
             size="small"
-            placeholder="请输入医生姓名"
+            placeholder="请输入医师姓名"
           ></el-input>
         </el-form-item>
-        <el-form-item label="医生手机号" prop="doctorPhone">
+        <el-form-item label="医师手机号" prop="doctorPhone">
           <el-input
             v-model="searchForm.doctorPhone"
             size="small"
             maxlength="11"
-            placeholder="请输入医生手机号"
+            placeholder="请输入医师手机号"
           ></el-input>
         </el-form-item>
         <el-form-item label="回复时间" prop="replyTime">
@@ -201,9 +201,9 @@ export default {
             return parseTime(row.leaveTime);
           },
         },
-        { prop: "doctorUserName", label: "医生姓名" },
-        { prop: "doctorPhone", label: "医生手机号" },
-        { prop: "replyCount", label: "医生回复数" },
+        { prop: "doctorUserName", label: "医师姓名" },
+        { prop: "doctorPhone", label: "医师手机号" },
+        { prop: "replyCount", label: "医师回复数" },
         {
           prop: "replyTime",
           label: "最近回复时间",

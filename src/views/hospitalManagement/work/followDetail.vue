@@ -22,11 +22,11 @@
                   :value="item.id"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="选择医生"
+            <el-form-item label="选择医师"
               prop="doctorUserId">
               <el-select v-model="form.doctorUserId"
                 @change="selectDoctor"
-                placeholder="请选择医生"
+                placeholder="请选择医师"
                 :disabled="$route.query.type === 'edit'?true:false">
                 <el-option v-for="item in doctorList"
                   :key="item.id"
@@ -632,7 +632,7 @@ export default {
           { required: true, message: '请选择医院', trigger: 'change' },
         ],
         doctorUserId: [
-          { required: true, message: '请选择医生', trigger: 'change' },
+          { required: true, message: '请选择医师', trigger: 'change' },
         ],
         patientUserId: [
           { required: true, message: '请选择用户', trigger: 'change' },
@@ -684,7 +684,7 @@ export default {
       hospitalList: [],
       doctorList: [],
       patientList: [],
-      selectDoctorId: '', // 选择医生的id
+      selectDoctorId: '', // 选择医师的id
       selectPatientUserName: '', // 搜索用户的姓名
       diabetesChecked: false,
       bloodChecked: false,
@@ -798,7 +798,7 @@ export default {
             this.bloodChecked = true;
             this.highBloodForm = res?.data?.followBloodMongo;
           }
-          this.doctorList = [ // 回显医生信息
+          this.doctorList = [ // 回显医师信息
             { id: res.data.doctorUserId, name: res.data.doctorUserName },
           ];
           this.patientList = [ // 回显用户信息

@@ -13,10 +13,10 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="医生姓名">
+        <el-form-item label="医师姓名">
           <el-input
             v-model="searchForm.doctorName"
-            placeholder="请输入医生姓名"
+            placeholder="请输入医师姓名"
             size="small"
           ></el-input>
         </el-form-item>

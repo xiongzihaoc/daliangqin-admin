@@ -94,7 +94,7 @@
           <span v-for="(item, index) in scope.row.appType"
             :key="index">
             <span v-if="item === 'PATIENT'">用户端 </span>
-            <span v-else>医生端 </span>
+            <span v-else>医师端 </span>
           </span>
         </template>
       </el-table-column>

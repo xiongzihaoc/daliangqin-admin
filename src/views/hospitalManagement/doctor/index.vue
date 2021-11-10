@@ -181,33 +181,33 @@
         :rules="formRules"
         :model="editAddForm"
         label-width="100px">
-        <el-form-item label="医生姓名"
+        <el-form-item label="医师姓名"
           prop="name">
-          <!-- 编辑阻止修改医生姓名 -->
+          <!-- 编辑阻止修改医师姓名 -->
           <el-input :disabled="this.infoTitle === '编辑' ? true : false"
             v-model="editAddForm.name"
-            placeholder="请输入医生真实姓名"></el-input>
+            placeholder="请输入医师真实姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医生头像"
+        <el-form-item label="医师头像"
           prop="avatarUrl">
           <single-upload v-model="editAddForm.avatarUrl"
             uploadType="AVATAR" />
         </el-form-item>
-        <!-- 编辑阻止修改医生手机号-->
+        <!-- 编辑阻止修改医师手机号-->
         <el-form-item label="手机号"
           prop="phone">
           <el-input :disabled="this.infoTitle === '编辑' ? true : false"
             v-model="editAddForm.phone"
             v-Int
             maxlength="11"
-            placeholder="请输入该医生手机号"></el-input>
+            placeholder="请输入该医师手机号"></el-input>
         </el-form-item>
-        <!-- 编辑阻止修改医生身份证号 -->
+        <!-- 编辑阻止修改医师身份证号 -->
         <el-form-item label="身份证号">
           <el-input v-model="editAddForm.idCard"
             maxlength="18"
             :disabled="idCardIsDisabled"
-            placeholder="请输入该医生身份证号"></el-input>
+            placeholder="请输入该医师身份证号"></el-input>
         </el-form-item>
         <el-form-item label="职位"
           prop="type">
@@ -241,13 +241,13 @@
             maxlength="140"
             placeholder="请输入个人简介"></el-input>
         </el-form-item>
-        <el-form-item label="医生擅长"
+        <el-form-item label="医师擅长"
           prop="goodAt">
           <el-input type="textarea"
             :rows="5"
             v-model="editAddForm.goodAt"
             maxlength="140"
-            placeholder="请输入医生擅长"></el-input>
+            placeholder="请输入医师擅长"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer"
@@ -283,7 +283,7 @@ export default {
       doctorTypeList,
       genderList,
       formRules: {
-        name: [{ required: true, message: '请输入医生姓名', trigger: 'blur' }],
+        name: [{ required: true, message: '请输入医师姓名', trigger: 'blur' }],
         avatarUrl: [{ required: true, message: '请上传头像', trigger: 'blur' }],
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
         // idCard: [
@@ -335,7 +335,7 @@ export default {
     this.getList()
   },
   mounted() {
-    // 获取医院  转诊医生列表
+    // 获取医院  转诊医师列表
     this.getHospitalList()
   },
   //离开当前页面后执行
@@ -406,7 +406,7 @@ export default {
     addBtn() {
       this.infoTitle = '新增'
       this.editAddForm = {}
-      // 添加默认医生头像
+      // 添加默认医师头像
       this.$set(
         this.editAddForm,
         'avatarUrl',

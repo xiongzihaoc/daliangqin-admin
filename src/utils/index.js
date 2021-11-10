@@ -270,7 +270,7 @@ export const educationType = [
   { id: 6, label: "高中", value: "SENIOR_MIDDLE" },
   { id: 7, label: "初中及以下", value: "JUNIOR_HIGH" },
 ]
-// 医生类型列表
+// 医师类型列表
 export const doctorTypeList = [
   { id: 1, label: "医师", value: "PHYSICIAN" },
   { id: 2, label: "主治医师", value: "ATTENDING_PHYSICIAN" },
@@ -304,8 +304,8 @@ export const adminRoleTypeList = [
   { id: 1, label: "管理员", value: "ADMIN" },
   { id: 2, label: "运营人员", value: "OPERATOR" },
   { id: 3, label: "数据大图", value: "VIEWER" },
-  { id: 4, label: "医院心电医生", value: "HOSPITAL_ECG_DOCTOR" },
-  { id: 5, label: "公司心电医生", value: "PLAT_FORM_ECG_DOCTOR" },
+  { id: 4, label: "医院心电医师", value: "HOSPITAL_ECG_DOCTOR" },
+  { id: 5, label: "公司心电医师", value: "PLAT_FORM_ECG_DOCTOR" },
 ]
 // 设备类型
 export const deviceTypeList = [
@@ -317,7 +317,7 @@ export const deviceTypeList = [
 
 // app类型列表
 export const appTypeList = [
-  { id: 1, label: "医生端", value: "DOCTOR" },
+  { id: 1, label: "医师端", value: "DOCTOR" },
   { id: 2, label: "用户端", value: "PATIENT" },
 ]
 
@@ -820,7 +820,7 @@ export const formatterElement = {
     RELATIVE: "亲人"
   },
   appType: {
-    DOCTOR: "医生端",
+    DOCTOR: "医师端",
     PATIENT: "用户端",
   },
   deviceType: {

@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
 /**
- * 医生相关
+ * 医师相关
  */
 export const httpAdminDoctor = {
-  // 获取医生列表
+  // 获取医师列表
   getDoctor(data) {
     return request({
       url: 'doctor',
@@ -12,7 +12,7 @@ export const httpAdminDoctor = {
       params: data
     })
   },
-  // 获取转诊医生列表
+  // 获取转诊医师列表
   getDoctoTransfer(data) {
     return request({
       url: 'doctor/transfer',
