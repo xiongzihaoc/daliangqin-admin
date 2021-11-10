@@ -11,7 +11,13 @@ export const httpAdminHospital = {
       params: data
     })
   },
-
+  getHospitalAll(data) {
+    return request({
+      url: 'hospital/all',
+      method: 'get',
+      params: data
+    })
+  },
   postHospital(data) {
     return request({
       url: 'hospital',

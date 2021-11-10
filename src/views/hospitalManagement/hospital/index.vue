@@ -8,18 +8,34 @@
         class="searchForm"
         :inline="true"
       >
-        <el-form-item label="医院名称" align="left" prop="hospitalName">
+        <el-form-item label="中心医院名称" align="left" prop="hospitalName">
           <el-select
-            v-model="searchForm.hospitalId"
+            v-model="searchForm.hospitalNameCenter"
             size="small"
             filterable
             placeholder="请选择医院"
+            @change="optionHospitalId"
           >
             <el-option
               v-for="item in searchHospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
+              :value="item.name"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="下属医院名称" align="left" prop="hospitalName">
+          <el-select
+            v-model="searchForm.hospitalName"
+            size="small"
+            filterable
+            placeholder="请选择医院"
+          >
+            <el-option
+              v-for="item in searchAffiliatedHospitalList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -80,7 +96,11 @@
       <el-table-column align="center" type="expand">
         <template slot-scope="scope">
           <div class="text-center">
-            <el-table v-if="scope.row.children.length > 0" :data="scope.row.children" style="width: 100%;">
+            <el-table
+              v-if="scope.row.children.length > 0"
+              :data="scope.row.children"
+              style="width: 100%;"
+            >
               <el-table-column prop="name" label="医院名称" width="180">
               </el-table-column>
               <el-table-column prop="avatarUrl" label="医院头像" width="180">
@@ -333,6 +353,7 @@ export default {
         hospitalType: '',
       },
       searchHospitalList: [],
+      searchAffiliatedHospitalList: [], // 下属医院名称
       // 列表数据
       list: [],
       cateListProps: {
@@ -379,6 +400,8 @@ export default {
           pageSize: this.pageSize,
           hospitalId: this.searchForm.hospitalId,
           hospitalType: this.searchForm.hospitalType,
+          hospitalName: this.searchForm.hospitalName,
+          hospitalNameCenter: this.searchForm.hospitalNameCenter
         })
         .then((res) => {
           this.list = res.data.elements
@@ -387,17 +410,30 @@ export default {
     },
     getSeachHospitalList() {
       httpAdminHospital
-        .getHospital({
-          pageSize: 10000,
+        .getHospitalAll({
+          pageSize: -1,
+          hospitalCategoryType: 'CENTER',
         })
         .then((res) => {
           this.searchHospitalList = res.data.elements
         })
     },
+
     selectAddrssChange(val) {
       this.editAddForm.province = val[0]
       this.editAddForm.city = val[1]
       this.editAddForm.area = val[2]
+    },
+    optionHospitalId(val) {
+      console.log(val)
+      httpAdminHospital
+        .getHospitalAll({
+          pageSize: -1,
+          hospitalCategoryType: 'SERVICE',
+        })
+        .then((res) => {
+          this.searchAffiliatedHospitalList = res.data.elements
+        })
     },
     // 递归处理json文件的最后一级
     getTreeData(data) {
@@ -539,7 +575,7 @@ export default {
 </script>
 
 <style scope>
-.text-center{
+.text-center {
   text-align: center;
 }
 </style>
