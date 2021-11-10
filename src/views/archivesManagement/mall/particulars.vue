@@ -164,6 +164,11 @@ export default {
       spending: '',
       searchForm: {
         type: 'INCOME',
+        hospitalName: '',
+        doctorName: '',
+        userName: '',
+        phone: '',
+        taskNames: '',
       },
       list: [],
       tableHeaderBig: [],
@@ -240,10 +245,12 @@ export default {
       if (val === 'spending') {
         this.spending = 'primary'
         this.income = ''
+        this.searchForm = {}
         this.searchForm.type = 'SPENDING'
       } else {
         this.spending = ''
         this.income = 'primary'
+        this.searchForm = {}
         this.searchForm.type = 'INCOME'
       }
       this.getList()
