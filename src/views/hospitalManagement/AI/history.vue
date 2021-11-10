@@ -146,7 +146,8 @@
         <template slot-scope="scope">
           <el-button type="primary"
             size="small"
-            @click="getAlCallDetailList(scope.row)" :disabled="disabledLookOver(scope.row.hangupBy)">查看</el-button>
+            @click="getAlCallDetailList(scope.row)"
+            :disabled="disabledLookOver(scope.row.hangupBy)">查看</el-button>
         </template>
       </el-table-column>
     </EleTable>
@@ -277,7 +278,7 @@ export default {
     },
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+      httpAdminHospital.getHospitalAll({ pageSize: -1 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
@@ -355,10 +356,10 @@ export default {
     /**
      * 查看按钮 状态
      */
-    disabledLookOver(state){
-      if(state === '' || state === null){
+    disabledLookOver(state) {
+      if (state === '' || state === null) {
         return true
-      }else{
+      } else {
         return false
       }
     },

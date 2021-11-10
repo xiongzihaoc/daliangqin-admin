@@ -624,13 +624,13 @@ export default {
     },
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+      httpAdminHospital.getHospitalAll({ pageSize: -1 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
     // 获取医师列表
     getDoctorList() {
-      httpAdminDoctor.getDoctor({ pageSize: 10000 }).then((res) => {
+      httpAdminDoctor.getDoctor({ pageSize: -1 }).then((res) => {
         this.doctorList = res.data.elements
       })
     },
@@ -936,9 +936,7 @@ export default {
       }
     },
     // 批量打印
-    bulkPrint() {
-      
-    },
+    bulkPrint() {},
     // 双击自定义打印次数
     cellDblClick(row, column, cell, event) {
       if (

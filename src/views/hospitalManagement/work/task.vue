@@ -454,14 +454,14 @@ export default {
     },
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+      httpAdminHospital.getHospitalAll({ pageSize: -1 }).then((res) => {
         this.hospitalList = res.data.elements;
       });
     },
     // 获取医师列表
     getDoctorList(id) {
       httpAdminDoctor
-        .getDoctor({ hospitalId: id, pageSize: 10000 })
+        .getDoctor({ hospitalId: id, pageSize: -1 })
         .then((res) => {
           this.doctorList = res.data.elements;
         });

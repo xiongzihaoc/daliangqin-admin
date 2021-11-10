@@ -203,7 +203,7 @@ export default {
         })
     },
     getHospitalList() {
-      httpAdminHospital.getHospital({ pageSize: -1, }).then((res) => {
+      httpAdminHospital.getHospitalAll({ pageSize: -1 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },

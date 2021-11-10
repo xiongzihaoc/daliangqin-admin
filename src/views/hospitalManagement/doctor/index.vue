@@ -362,7 +362,7 @@ export default {
         })
     },
     getHospitalList() {
-      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+      httpAdminHospital.getHospitalAll({ pageSize: -1 }).then((res) => {
         this.hospitalList = res.data.elements
         this.searchHospitalList = res.data.elements
       })
