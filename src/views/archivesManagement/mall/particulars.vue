@@ -161,7 +161,7 @@ export default {
     return {
       parseTime,
       income: 'primary',
-      spending: 'info',
+      spending: '',
       searchForm: {
         type: 'INCOME',
       },
@@ -227,7 +227,7 @@ export default {
       this.getList()
     },
     searchReset() {
-      this.spending = 'info'
+      this.spending = ''
       this.income = 'primary'
       this.searchForm = { type: 'INCOME' }
       this.removeItem()
@@ -239,10 +239,10 @@ export default {
     checkBtn(val) {
       if (val === 'spending') {
         this.spending = 'primary'
-        this.income = 'info'
+        this.income = ''
         this.searchForm.type = 'SPENDING'
       } else {
-        this.spending = 'info'
+        this.spending = ''
         this.income = 'primary'
         this.searchForm.type = 'INCOME'
       }

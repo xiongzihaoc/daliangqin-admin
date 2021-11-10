@@ -45,7 +45,7 @@
         class="tableAdd"
         icon="el-icon-plus"
         @click="addTake"
-        >添加任务</el-button
+        >添加商品</el-button
       >
     </div>
     <!-- 表格 -->
@@ -236,7 +236,7 @@
 <script>
 import EleTable from '@/components/Table'
 import Upload from '@/components/Upload'
-import { parseTime, AiTaskStatus, formatterElement } from '@/utils/index'
+import { parseTime } from '@/utils/index'
 import { httpAdminGoods } from '@/api/admin/httpAdminGoods'
 
 export default {
@@ -329,7 +329,6 @@ export default {
     affirBtn(form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
-          console.log(this.title)
           if (this.title == '编辑商品') {
             this.getGoodsEdit()
           } else {
@@ -363,12 +362,10 @@ export default {
      *  修改 商品状态
      */
     goodsState(val) {
-      console.log(val)
       httpAdminGoods
         .putGoodsStatus({ id: val.id, status: val.status })
         .then((res) => {
-          console.log(res)
-          if (res.data.code === 'OK') {
+          if (res.code === 'OK') {
             this.$message.success('操作成功')
             this.getList()
           }
