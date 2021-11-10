@@ -230,7 +230,7 @@ export default {
     },
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+      httpAdminHospital.getHospitalAll({ pageSize: -1 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },

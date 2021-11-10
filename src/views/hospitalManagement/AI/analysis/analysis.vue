@@ -2,90 +2,73 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        ref="searchFormRef"
+      <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true"
-      >
-        <el-form-item label="医院名称" align="left" prop="title">
-          <el-select class="w100" size="small" v-model="searchForm.hospitalId">
-            <el-option
-              v-for="item in hospitalList"
+        :inline="true">
+        <el-form-item label="医院名称"
+          align="left"
+          prop="title">
+          <el-select class="w100"
+            size="small"
+            v-model="searchForm.hospitalId">
+            <el-option v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="任务名称">
-          <el-select
-            multiple
+          <el-select multiple
             collapse-tags
             v-model="searchForm.aiNameList"
             size="small"
             filterable
             value-key="aiName"
-            placeholder="请选择任务名称(必填)"
-          >
-            <el-option
-              v-for="item in aiTaskList"
+            placeholder="请选择任务名称(必填)">
+            <el-option v-for="item in aiTaskList"
               :key="item.aiName"
               :label="item.aiName"
-              :value="item.aiName"
-            ></el-option>
+              :value="item.aiName"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="期名">
-          <el-select
-            v-model="searchForm.taskStage"
+          <el-select v-model="searchForm.taskStage"
             size="small"
             filterable
             value-key="taskStage"
-            placeholder="请选择期名"
-          >
-            <el-option
-              v-for="item in aiPeriodsList"
+            placeholder="请选择期名">
+            <el-option v-for="item in aiPeriodsList"
               :key="item.taskStage"
               :label="item.taskStage"
-              :value="item.taskStage"
-            ></el-option>
+              :value="item.taskStage"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 数字展示 -->
     <div class="show-card">
-      <el-card
-        class="box-card"
+      <el-card class="box-card"
         v-for="(item, index) in outboundList"
-        :key="index"
-      >
+        :key="index">
         <div class="title">
           <span>{{ item.title }}</span>
-          <el-tooltip
-            class="item"
+          <el-tooltip class="item"
             effect="dark"
             :content="item.hint"
-            placement="top"
-          >
-            <i style="margin: 0 5px" class="el-icon-question"></i>
+            placement="top">
+            <i style="margin: 0 5px"
+              class="el-icon-question"></i>
           </el-tooltip>
         </div>
         <p class="title">{{ item.ratio }}</p>
@@ -183,7 +166,7 @@ export default {
   methods: {
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital({ pageSize: -1 }).then((res) => {
+      httpAdminHospital.getHospitalAll({ pageSize: -1 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
