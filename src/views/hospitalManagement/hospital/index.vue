@@ -143,8 +143,18 @@
                 <template slot-scope="scope">
                   <span
                     @click="skipDoctor(scope.row)"
-                    style="color: #1890ff; text-decoration: underline;"
+                    :class="[scope.row.doctorCount ? 'skipStyle' : '']"
                     >{{ scope.row.doctorCount }}</span
+                  >
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="操作" width="220">
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    type="primary"
+                    @click="editBtn(scope.row)"
+                    >编辑</el-button
                   >
                 </template>
               </el-table-column>
@@ -198,7 +208,7 @@
         <template slot-scope="scope">
           <span
             @click="skipDoctor(scope.row)"
-            style="color: #1890ff; text-decoration: underline;"
+            :class="[scope.row.doctorCount ? 'skipStyle' : '']"
             >{{ scope.row.doctorCount }}</span
           >
         </template>
@@ -401,7 +411,7 @@ export default {
           hospitalId: this.searchForm.hospitalId,
           hospitalType: this.searchForm.hospitalType,
           hospitalName: this.searchForm.hospitalName,
-          hospitalNameCenter: this.searchForm.hospitalNameCenter
+          hospitalNameCenter: this.searchForm.hospitalNameCenter,
         })
         .then((res) => {
           this.list = res.data.elements
@@ -463,11 +473,13 @@ export default {
     },
     // 跳转医师列表
     skipDoctor(val) {
+      if(!val.doctorCount)return
       this.$router.push('/hospitalManagement/doctor')
       localStorage.setItem('hospitalId', val.id)
     },
     // 跳转档案管理
     skipRoute(val) {
+      if(!val.patientCount)return
       sessionStorage.setItem('skipHospitalId', JSON.stringify([val.id]))
       this.$router.push('/archivesManagement/patient')
     },
