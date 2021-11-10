@@ -3,7 +3,7 @@
     <div class="search-box">
       <el-form class="searchForm" :inline="true">
         <el-form-item label="医院名称">
-          <el-select v-model="searchForm.shop" size="small">
+          <el-select v-model="searchForm.hospitalName" size="small">
             <el-option
               v-for="item in hospitalList"
               :key="item.id"
@@ -14,16 +14,16 @@
           </el-select>
         </el-form-item>
         <el-form-item label="医生姓名">
-          <el-input placeholder="请输入医生姓名" size="small"></el-input>
+          <el-input v-model="searchForm.doctorName" placeholder="请输入医生姓名" size="small"></el-input>
         </el-form-item>
         <el-form-item label="用户姓名">
-          <el-input placeholder="请输入用户姓名" size="small"></el-input>
+          <el-input v-model="searchForm.userName" placeholder="请输入用户姓名" size="small"></el-input>
         </el-form-item>
         <el-form-item label="用户手机号">
-          <el-input placeholder="请输入用户手机号" size="small"></el-input>
+          <el-input v-model="searchForm.phone" placeholder="请输入用户手机号" size="small"></el-input>
         </el-form-item>
         <el-form-item label="订单编号">
-          <el-input placeholder="请输入订单编号" size="small"></el-input>
+          <el-input v-model="searchForm.tradeNo" placeholder="请输入订单编号" size="small"></el-input>
         </el-form-item>
         <el-form-item label="订单状态">
           <el-select v-model="searchForm.status" size="small">
@@ -234,7 +234,7 @@ export default {
   },
   methods: {
     getList() {
-      httpAdminOrder.getOrder().then((res) => {
+      httpAdminOrder.getOrder(this.searchForm).then((res) => {
         this.list = res.data.elements
         this.total = res.data.totalSize
       })
