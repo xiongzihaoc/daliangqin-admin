@@ -203,7 +203,6 @@ export default {
         pageSize: this.pageSize,
       })
       httpAdminIntegralRecord.getIntegralRecord(data).then((res) => {
-        console.log(res)
         this.list = res.data.elements
         this.total = res.data.totalSize
       })
