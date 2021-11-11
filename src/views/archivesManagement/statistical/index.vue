@@ -2,25 +2,30 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form ref="searchFormRef"
+      <el-form
+        ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true">
-        <el-form-item label="医院名称"
-          align="left">
-          <el-select v-model="searchForm.hospitalId"
+        :inline="true"
+      >
+        <el-form-item label="医院名称" align="left">
+          <el-select
+            v-model="searchForm.hospitalId"
             size="small"
             filterable
-            placeholder="请选择医院">
-            <el-option v-for="item in hospitalList"
+            placeholder="请选择医院"
+          >
+            <el-option
+              v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"></el-option>
+              :value="item.id"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="日期"
-          align="left">
-          <el-date-picker v-model="searchForm.statisticalTime"
+        <el-form-item label="日期" align="left">
+          <el-date-picker
+            v-model="searchForm.statisticalTime"
             size="small"
             type="daterange"
             align="right"
@@ -31,39 +36,49 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :picker-options="pickerOptions"></el-date-picker>
+            :picker-options="pickerOptions"
+          ></el-date-picker>
         </el-form-item>
-        <el-form-item label="维度"
-          align="left">
-          <el-select class="w100"
+        <el-form-item label="维度" align="left">
+          <el-select
+            class="w100"
             v-model="searchForm.equipmentDimensionType"
-            size="small">
-            <el-option label="医院维度"
-              value="HOSPITAL"></el-option>
-            <el-option label="日期维度"
-              value="DATE"></el-option>
+            size="small"
+          >
+            <el-option label="医院维度" value="HOSPITAL"></el-option>
+            <el-option label="日期维度" value="DATE"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn"
+          <el-button
+            @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search">搜索</el-button>
-          <el-button @click="searchReset"
+            icon="el-icon-search"
+            >搜索</el-button
+          >
+          <el-button
+            @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh">重置</el-button>
+            icon="el-icon-refresh"
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
     <div class="show-card">
-      <el-card class="box-card">
+      <el-card
+        class="box-card"
+        v-for="(item, idx) in hospitalDataList"
+        :key="idx"
+      >
         <div class="title">
-          <div>医院总数</div>
+          <p>{{ item.title }}</p>
         </div>
-        <div class="title">9位</div>
+        <p class="title">{{ item.ratio }}</p>
       </el-card>
-      <el-card class="box-card">
+      <!-- <el-card class="box-card">
         <div class="title">
           <div>医师总数</div>
         </div>
@@ -81,9 +96,9 @@
           <div></div>
         </div>
         <div class="title">9位</div>
-      </el-card>
+      </el-card> -->
     </div>
-    <div class="chart">
+    <div class="chart" >
       <div>
         <MonitoringNumber :listData="listData" />
       </div>
@@ -144,6 +159,7 @@ export default {
       cardData: {}, // 卡片数据
       tableHeaderBig: [],
       hospitalList: [],
+      hospitalDataList: [], //医院数据
       searchForm: {
         hospitalId: '',
         statisticalTime: '',
@@ -197,11 +213,19 @@ export default {
   },
   methods: {
     getList() {
+      let data = Object.assign(this.searchForm, {
+        equipmentDimensionType: this.searchForm.equipmentDimensionType,
+      })
       httpAdminEquipmentHeartStatistical
-        .getEquipmentHeartStatistical({
-          equipmentDimensionType: this.searchForm.equipmentDimensionType,
-        })
+        .getEquipmentHeartStatistical(data)
         .then((res) => {
+          let data = res.data.equipmentHeartRateStatisticalVO
+          this.hospitalDataList = [
+            { title: '医院总数', ratio: `${data.hospitalCount}` },
+            { title: '医师总数', ratio: `${data.doctorCount}人` },
+            { title: '已监测总人数', ratio: `${data.heartRatePeopleCount}人` },
+            { title: '已监测总次数', ratio: `${data.heartRateNumberCount}次` },
+          ]
           this.listData = res.data // 图表数据
           this.cardData = res.data.equipmentHeartRateStatisticalVO // 卡片数据
         })
@@ -222,7 +246,9 @@ export default {
     },
     // 重置
     searchReset() {
-      this.searchForm = {}
+      this.searchForm = {
+        equipmentDimensionType: 'HOSPITAL',
+      }
       this.getList()
     },
     /**
@@ -251,5 +277,9 @@ export default {
   div {
     margin-bottom: 20px;
   }
+}
+.box-card {
+  min-width: 180px;
+  min-height: 130px;
 }
 </style>
