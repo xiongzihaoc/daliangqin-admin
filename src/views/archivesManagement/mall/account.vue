@@ -164,7 +164,10 @@ export default {
     searchBtn() {
       this.getList()
     },
-    searchReset() {},
+    searchReset() {
+      this.searchForm = {}
+      this.getList()
+    },
     /**
      * 分页
      */
