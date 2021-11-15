@@ -7,6 +7,9 @@
 </template>
 <script>
 import Chart from "@/components/Echarts/chart";
+window.onresize = function () {
+  console.log(444)
+}
 export default {
   props: {
     listData: {

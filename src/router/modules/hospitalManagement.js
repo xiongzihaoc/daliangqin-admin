@@ -146,14 +146,14 @@ const hospitalRouter = {
       path: 'AI',
       name: 'AI',
       component: () => import('@/views/hospitalManagement/AI'),
-      redirect: "/hospitalManagement/AI/task",
+      redirect: "/hospitalManagement/AI/callTask",
       meta: {
         title: 'AI随访',
         icon: 'AI'
       },
       children: [{
-          path: "task",
-          name: "task",
+          path: "callTask",
+          name: "callTask",
           component: () => import('@/views/hospitalManagement/AI/task'),
           meta: {
             title: '呼叫任务',
