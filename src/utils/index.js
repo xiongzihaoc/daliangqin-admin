@@ -260,6 +260,16 @@ export function formatSeconds(value) {
   res += `${s}秒`;
   return res;
 }
+// base64转file
+export function base64ToFile(dataUrl, name) {
+  var arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], name + '.jpg', { type: "image/jpg" });
+}
+
 // 文化程度
 export const educationType = [
   { id: 1, label: "研究生及以上", value: "POSTGRADUATE" },
@@ -739,7 +749,7 @@ export const problemState = [
 
 // 积分商城 订单状态
 export const ordeStatus = [
-  { id: 1, label: "已完成", value:"SUCCESS" },
+  { id: 1, label: "已完成", value: "SUCCESS" },
   { id: 2, label: "待收货", value: "WAIT_CONFIRM" },
   { id: 3, label: "待发货", value: "WAIT_DELIVERY" },
 ]

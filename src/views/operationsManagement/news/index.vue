@@ -174,7 +174,8 @@
         </el-form-item>
         <el-form-item label="类型"
           prop="type">
-          <el-select style="width: 100%"
+          <el-select @change="changeType"
+            style="width: 100%"
             v-model.trim="editAddForm.type"
             placeholder="请选择类型">
             <el-option label="富文本"
@@ -200,6 +201,9 @@
             @focus="onEditorFocus($event)"
             @change="onEditorChange($event)">
           </quill-editor>
+          <singleUpload2 uploadType="NEWS"
+            v-show="false"
+            @uploadFinish="uploadFinish" />
         </el-form-item>
         <el-form-item label="呈现位置"
           prop="appTypes">
@@ -225,7 +229,6 @@
           <single-upload v-model="editAddForm.avatarUrl"
             uploadType="AVATAR" />
         </el-form-item>
-
         <el-form-item label="发布人职位"
           prop="position"
           v-if="editAddForm.type === 'LONG_TEXT'">
@@ -273,6 +276,7 @@
 <script>
 import EleTable from '@/components/Table'
 import singleUpload from '@/components/Upload'
+import singleUpload2 from '@/components/UploadFile'
 import { httpAdminNews } from '@/api/admin/httpAdminNews'
 import Vue from 'vue'
 import VueQuillEditor from 'vue-quill-editor'
@@ -292,10 +296,27 @@ import {
   newsStatusList,
   appTypeList,
 } from '@/utils/index'
+const toolbarOptions = [
+  ['bold', 'italic', 'underline', 'strike'], //加粗，斜体，下划线，删除线
+  // ["blockquote", "code-block"], //引用，代码块
+  [{ header: 1 }, { header: 2 }], // 标题，键值对的形式；1、2表示字体大小
+  // [{ list: "ordered" }, { list: "bullet" }], //列表
+  // [{ script: "sub" }, { script: "super" }], // 上下标
+  // [{ indent: "-1" }, { indent: "+1" }], // 缩进
+  // [{ direction: "rtl" }], // 文本方向
+  [{ size: ['12px', false, '18px', '22px', '26px', '32px', '36px'] }], // 字体大小
+  // [{ header: [1, 2, 3, 4, 5, 6, false] }], //几级标题
+  [{ color: [] }, { background: [] }], // 字体颜色，字体背景颜色
+  // [{ font: ['Helvetica Neue', 'Helvetica', 'Arial'] }], //字体
+  // [{ align: [] }], //对齐方式
+  ['clean'], //清除字体样式
+  ['image', 'video'], //上传图片、上传视频
+]
 export default {
   components: {
     EleTable,
     singleUpload,
+    singleUpload2,
   },
   data() {
     return {
@@ -357,26 +378,24 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: '',
+      richImg: '',
       editorOption: {
+        // 富文本配置
         placeholder: '请在这里输入',
         modules: {
-          toolbar: [
-            ['bold', 'italic', 'underline', 'strike'], //加粗，斜体，下划线，删除线
-            // ["blockquote", "code-block"], //引用，代码块
-            [{ header: 1 }, { header: 2 }], // 标题，键值对的形式；1、2表示字体大小
-            // [{ list: "ordered" }, { list: "bullet" }], //列表
-            // [{ script: "sub" }, { script: "super" }], // 上下标
-            // [{ indent: "-1" }, { indent: "+1" }], // 缩进
-            // [{ direction: "rtl" }], // 文本方向
-            [{ size: ['12px', false, '18px', '22px', '26px', '32px', '36px'] }], // 字体大小
-            // [{ header: [1, 2, 3, 4, 5, 6, false] }], //几级标题
-            [{ color: [] }, { background: [] }], // 字体颜色，字体背景颜色
-            // [{ font: ['Helvetica Neue', 'Helvetica', 'Arial'] }], //字体
-            // [{ align: [] }], //对齐方式
-            ['clean'], //清除字体样式
-            ['image', 'video'], //上传图片、上传视频
-          ],
-          imageDrop: true,
+          toolbar: {
+            container: toolbarOptions,
+            handlers: {
+              ['image'](value) {
+                if (value) {
+                  document.querySelector('#quill-img').click()
+                } else {
+                  this.myQuillEditor.format('image', false)
+                }
+              },
+            },
+          },
+          imageDrop: false,
           imageResize: {
             displayStyles: {
               backgroundColor: 'black',
@@ -417,10 +436,22 @@ export default {
         }
       })
     },
-        /**
+    /**
+     * 类型是url还是富文本
+     */
+    changeType(val) {
+      this.editAddForm.content = ''
+    },
+    uploadFinish(val) {
+      console.log(val)
+      const quill = this.$refs.myQuillEditor.quill
+      const length = quill.getSelection.index
+      quill.insertEmbed(length, 'image', val)
+      quill.setSelection(length + 1)
+    },
+    /**
      * 搜索
      */
-    // 搜索
     searchBtn() {
       this.pageNum = 1
       this.getList()
@@ -431,7 +462,7 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-        /**
+    /**
      * CRUD
      */
     // 新增
@@ -474,29 +505,30 @@ export default {
     },
     // 新增编辑
     editPageEnter() {
-      this.$refs.FormRef.validate((valid) => {
-        if (valid) {
-          if (this.infoTitle === '新增') {
-            // 发送请求
-            httpAdminNews.postNews(this.editAddForm).then((res) => {
-              if (res.code === 'OK') {
-                this.$message.success('新增成功')
-                this.getList()
-                this.editDialogVisible = false
-              }
-            })
-          } else {
-            // 发送请求
-            httpAdminNews.putNews(this.editAddForm).then((res) => {
-              if (res.code === 'OK') {
-                this.$message.success('编辑成功')
-                this.getList()
-                this.editDialogVisible = false
-              }
-            })
-          }
-        }
-      })
+      console.log(this.editAddForm.content)
+      // this.$refs.FormRef.validate((valid) => {
+      //   if (valid) {
+      //     if (this.infoTitle === '新增') {
+      //       // 发送请求
+      //       httpAdminNews.postNews(this.editAddForm).then((res) => {
+      //         if (res.code === 'OK') {
+      //           this.$message.success('新增成功')
+      //           this.getList()
+      //           this.editDialogVisible = false
+      //         }
+      //       })
+      //     } else {
+      //       // 发送请求
+      //       httpAdminNews.putNews(this.editAddForm).then((res) => {
+      //         if (res.code === 'OK') {
+      //           this.$message.success('编辑成功')
+      //           this.getList()
+      //           this.editDialogVisible = false
+      //         }
+      //       })
+      //     }
+      //   }
+      // })
     },
     // 排序
     sortTop(id) {
@@ -521,13 +553,13 @@ export default {
     },
     // 失去焦点事件
     onEditorBlur(e) {
-      console.log(e)
+      // console.log(e)
     },
     // 获得焦点事件
     onEditorFocus() {},
     // 内容改变事件
     onEditorChange() {},
-        /**
+    /**
      * 表格格式化
      */
     contentTypeFormatter(row) {
@@ -543,7 +575,7 @@ export default {
     publishTimeFormatter(row) {
       return parseTime(row.publishTime).slice(0, 10)
     },
-        /**
+    /**
      * 分页
      */
     handleSizeChange(newSize) {

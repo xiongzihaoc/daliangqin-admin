@@ -2,30 +2,25 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        ref="searchFormRef"
+      <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true"
-      >
-        <el-form-item label="医院名称" align="left">
-          <el-select
-            v-model="searchForm.hospitalId"
+        :inline="true">
+        <el-form-item label="医院名称"
+          align="left">
+          <el-select v-model="searchForm.hospitalId"
             size="small"
             filterable
-            placeholder="请选择医院"
-          >
-            <el-option
-              v-for="item in hospitalList"
+            placeholder="请选择医院">
+            <el-option v-for="item in hospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
-            ></el-option>
+              :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="日期" align="left">
-          <el-date-picker
-            v-model="searchForm.statisticalTime"
+        <el-form-item label="日期"
+          align="left">
+          <el-date-picker v-model="searchForm.statisticalTime"
             size="small"
             type="daterange"
             align="right"
@@ -36,43 +31,35 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :picker-options="pickerOptions"
-          ></el-date-picker>
+            :picker-options="pickerOptions"></el-date-picker>
         </el-form-item>
-        <el-form-item label="维度" align="left">
-          <el-select
-            class="w100"
+        <el-form-item label="维度"
+          align="left">
+          <el-select class="w100"
             v-model="searchForm.equipmentDimensionType"
-            size="small"
-          >
-            <el-option label="医院维度" value="HOSPITAL"></el-option>
-            <el-option label="日期维度" value="DATE"></el-option>
+            size="small">
+            <el-option label="医院维度"
+              value="HOSPITAL"></el-option>
+            <el-option label="日期维度"
+              value="DATE"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="show-card">
-      <el-card
-        class="box-card"
+      <el-card class="box-card"
         v-for="(item, idx) in hospitalDataList"
-        :key="idx"
-      >
+        :key="idx">
         <div class="title">
           <p>{{ item.title }}</p>
         </div>
@@ -98,7 +85,7 @@
         <div class="title">9位</div>
       </el-card> -->
     </div>
-    <div class="chart" >
+    <div class="chart">
       <div>
         <MonitoringNumber :listData="listData" />
       </div>

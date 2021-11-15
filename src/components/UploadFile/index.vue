@@ -10,6 +10,7 @@
       :on-progress="handleUploadProgress"
       :on-success="handleUploadSuccess">
       <el-input class="w100"
+        id="quill-img"
         readonly
         v-model="uploadValue"></el-input>
     </el-upload>
@@ -84,10 +85,8 @@ export default {
       this.$emit('uploadProgress', event.percent)
     },
     handleUploadSuccess(response, file, fileList) {
-      let value =
-        'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
-      this.uploadValue =
-        'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
+      const value = 'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
+      this.uploadValue = 'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
       this.$emit('uploadFinish', value)
     },
   },
