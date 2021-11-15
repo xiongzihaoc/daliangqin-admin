@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div id="advice">
-      <Chart :cdata="cdata" />
+    <div>
+      <Chart id="advice"
+        :cdata="cdata" />
     </div>
   </div>
 </template>
@@ -16,9 +17,6 @@ const colors = [
   '#E5C5B7',
   '#AB8783',
 ]
-window.onresize = function () {
-  console.log(333)
-}
 export default {
   props: {
     listData: {

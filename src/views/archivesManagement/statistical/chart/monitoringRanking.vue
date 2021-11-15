@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div id="print">
-      <Chart :cdata="cdata" />
+    <div>
+      <Chart :cdata="cdata" id="monitoringRanking" />
     </div>
   </div>
 </template>

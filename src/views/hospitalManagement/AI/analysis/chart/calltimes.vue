@@ -50,8 +50,7 @@ export default {
           type: 'category',
           axisLabel: {
             show: true,
-            // interval: 0,
-            // rotate: 10,
+            interval: 0,
             textStyle: {
               color: '#ccc',
             },

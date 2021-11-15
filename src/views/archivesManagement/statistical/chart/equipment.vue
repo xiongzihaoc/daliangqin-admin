@@ -1,12 +1,13 @@
 <template>
   <div>
-    <div id="print">
-      <Chart :cdata="cdata" />
+    <div>
+      <Chart id="equipment"
+        :cdata="cdata" />
     </div>
   </div>
 </template>
 <script>
-import Chart from "@/components/Echarts/chart";
+import Chart from '@/components/Echarts/chart'
 export default {
   props: {
     listData: {
@@ -18,76 +19,76 @@ export default {
     return {
       cdata: {
         tooltip: {
-          trigger: "axis",
+          trigger: 'axis',
           axisPointer: {
-            type: "none",
+            type: 'none',
           },
         },
         title: {
-          text: "设备状态统计图 Top15",
+          text: '设备状态统计图 Top15',
           textStyle: {
-            color: "#000",
+            color: '#000',
             fontSize: 14,
           },
         },
         legend: {
           show: true,
           textStyle: {
-            color: "#000",
+            color: '#000',
           },
           padding: [30, 0, 0, 0],
         },
         grid: {
-          left: "15%",
+          left: '15%',
         },
         xAxis: {
           axisLine: {
             show: true,
           },
-          type: "category",
+          type: 'category',
           axisLabel: {
             show: true,
             interval: 0,
             rotate: 20,
             textStyle: {
-              color: "#ccc",
+              color: '#ccc',
             },
           },
           data: [],
         },
         yAxis: [
           {
-            type: "value",
+            type: 'value',
             axisLabel: {
               show: true,
-              formatter: "{value}次",
+              formatter: '{value}次',
               textStyle: {
-                color: "#B8BBC2",
+                color: '#B8BBC2',
               },
             },
           },
         ],
         series: [
           {
-            name: "已上传",
+            name: '已上传',
             data: [],
-            type: "bar",
+            type: 'bar',
             itemStyle: {
-              color: "#5470C6",
+              color: '#5470C6',
             },
           },
           {
-            name: "待上传",
+            name: '待上传',
             data: [],
-            type: "bar",
+            type: 'bar',
             smooth: false,
             itemStyle: {
-              color: "#73DEB3",
+              color: '#73DEB3',
             },
           },
         ],
       },
-    };
+    }
   },
   components: {
     Chart,
@@ -95,22 +96,22 @@ export default {
   // 监听父组件传过来的参数
   watch: {
     listData(newValue, oldValue) {
-      const list = newValue.equipmentHeartRateDeviceStatusStatisticalVOList;
+      const list = newValue.equipmentHeartRateDeviceStatusStatisticalVOList
       const xAxisData = list.map((item) => {
-        return item.hospitalName;
-      });
+        return item.hospitalName
+      })
       const seriesData1 = list.map((item) => {
-        return item.uploaded;
-      });
+        return item.uploaded
+      })
       const seriesData2 = list.map((item) => {
-        return item.tobeUploaded;
-      });
-      this.cdata.xAxis.data = xAxisData;
-      this.cdata.series[0].data = seriesData1;
-      this.cdata.series[1].data = seriesData2;
+        return item.tobeUploaded
+      })
+      this.cdata.xAxis.data = xAxisData
+      this.cdata.series[0].data = seriesData1
+      this.cdata.series[1].data = seriesData2
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Echart :options="options"
+    <Echart :id="id"
+      :options="options"
       height="500px"></Echart>
   </div>
 </template>
@@ -21,7 +22,12 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    id: {
+      type: String,
+      default: 'chart',
+    },
   },
+
   watch: {
     cdata: {
       handler(newData) {

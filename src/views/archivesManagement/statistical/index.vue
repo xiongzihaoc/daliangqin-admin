@@ -85,7 +85,7 @@
         <div class="title">9位</div>
       </el-card> -->
     </div>
-    <div class="chart">
+    <div class="chart" ref="chart">
       <div>
         <MonitoringNumber :listData="listData" />
       </div>
@@ -196,7 +196,11 @@ export default {
     this.getHospitalList()
   },
   mounted() {
+    const that = this
     this.getList()
+    // window.onresize = function () {
+    //   that.$refs.chart.resize()
+    // }
   },
   methods: {
     getList() {

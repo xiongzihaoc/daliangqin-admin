@@ -1,8 +1,7 @@
 <template>
   <div>
     <div>
-      <Chart :cdata="cdata"
-        ref="monitoringNumber" />
+      <Chart :cdata="cdata" id="monitoringNumber" />
     </div>
   </div>
 </template>

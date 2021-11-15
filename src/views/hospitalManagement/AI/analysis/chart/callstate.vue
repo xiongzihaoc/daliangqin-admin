@@ -58,7 +58,6 @@ export default {
           axisLabel: {
             show: true,
             interval: 0,
-            rotate: 20,
             textStyle: {
               color: '#ccc',
             },
