@@ -395,7 +395,7 @@ export default {
               },
             },
           },
-          imageDrop: false,
+          imageDrop: true,
           imageResize: {
             displayStyles: {
               backgroundColor: 'black',
@@ -602,7 +602,7 @@ export default {
   padding: 0;
 }
 .ql-container {
-  height: 270px;
+  height: 600px;
 }
 .ql-toolbar.ql-snow {
   background-color: #f5f5f5;
