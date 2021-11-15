@@ -1,5 +1,8 @@
 import request from '@/utils/request'
-// ai列表接口
+
+/**
+ * ai联系历史
+ */
 export const httpAdminAiHistory = {
   getAiHistoryList(data) {
     return request({

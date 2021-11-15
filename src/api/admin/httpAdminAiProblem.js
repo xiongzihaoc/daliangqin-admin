@@ -1,5 +1,8 @@
 import request from '@/utils/request'
-// ai呼叫任务
+
+/**
+ * ai通话情况汇总
+ */
 export const httpAdminAiProblem = {
   getAiProblemList(data) {
     return request({
