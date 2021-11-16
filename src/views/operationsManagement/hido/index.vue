@@ -136,7 +136,6 @@
         :rules="formRules"
         :model="editAddForm"
         label-width="100px">
-
         <el-form-item label="内容类型"
           prop="contentType">
           <el-select class="w100"
@@ -149,24 +148,21 @@
               :value="item.value"></el-option>
           </el-select>
         </el-form-item>
-
         <el-form-item label="标题"
           prop="title">
           <el-input v-model.trim="editAddForm.title"
             maxlength="30"
             placeholder="请输入标题"></el-input>
         </el-form-item>
-
         <el-form-item label="封面图"
           prop="coverUrl">
           <single-upload v-model="editAddForm.coverUrl"
             uploadType="NEWS" />
         </el-form-item>
-
         <el-form-item label="上传视频"
           v-if="editAddForm.contentType === 'HD_VIDEO'">
           <single-upload2 v-model="editAddForm.content"
-            uploadType="NEWS"
+            uploadType="VIDEO"
             fileType='.mp4'
             @uploadFinish="uploadVideoFinish" />
         </el-form-item>
@@ -372,9 +368,11 @@ export default {
     changeType(val) {
       this.editAddForm.content = ''
     },
-    uploadVideoFinish(val){
+    // 上传视频成功
+    uploadVideoFinish(val) {
       this.editAddForm.content = val
     },
+    // 富文本上传图片成功
     uploadFinish(val) {
       const quill = this.$refs.myQuillEditor.quill
       const length = quill.getSelection.index

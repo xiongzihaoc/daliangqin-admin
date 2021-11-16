@@ -9,10 +9,22 @@
       :accept="fileType"
       :on-progress="handleUploadProgress"
       :on-success="handleUploadSuccess">
-      <el-input class="w100"
-        id="quill-img"
-        readonly
-        v-model="uploadValue"></el-input>
+      <div v-if="uploadType === 'VIDEO'"
+        class="VIDEO">
+        <video v-if="this.value"
+          :src="this.value"
+          autoplay
+          class="avatar"></video>
+        <i v-else
+          style="border:1px dashed #ccc;border-radius:10px;"
+          class="el-icon-plus avatar-uploader-icon"></i>
+      </div>
+      <div v-else>
+        <el-input class="w100"
+          id="quill-img"
+          readonly
+          v-model="uploadValue"></el-input>
+      </div>
     </el-upload>
     <el-progress v-show="percentage < 100 && percentage > 0"
       :percentage="percentage"
@@ -112,5 +124,32 @@ export default {
 <style>
 .container .el-upload--text {
   width: 100%;
+}
+.VIDEO {
+  text-align: left;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 100%;
+  height: 200px;
+  line-height: 200px;
+  text-align: center;
+}
+.avatar {
+  width: 100%;
+  height: 200px;
+  display: block;
+  border-radius: 10px;
 }
 </style>
