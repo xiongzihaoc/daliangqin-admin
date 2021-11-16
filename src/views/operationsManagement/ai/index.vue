@@ -117,9 +117,6 @@ export default {
       operationType: 'ai新增',
       removeHospitalId: '', // 删除医院的id
       form: {
-        time: '',
-        beginDate: '',
-        endDate: '',
         equipmentHeartRateAis: [],
       },
       hospitalList: [],
@@ -131,15 +128,17 @@ export default {
   methods: {
     // 获取医院列表
     getHospitalList() {
-      httpAdminHospital.getHospital({ pageSize: 10000 }).then((res) => {
+      httpAdminHospital.getHospitalAll({ pageSize: -1 }).then((res) => {
         this.hospitalList = res.data.elements
       })
     },
     // 选择医院
     selectHospital(val) {
+      console.log(val)
       httpAdminHeartRate
         .getHeartRateAiSuggest({ id: val[val.length - 1].id })
         .then((res) => {
+          console.log(res)
           val[val.length - 1].beginDate = res.data.beginDate
           val[val.length - 1].endOfDate = res.data.endOfDate
           val[val.length - 1].num = res.data.num

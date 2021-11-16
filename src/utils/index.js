@@ -348,7 +348,14 @@ export const newsTypeList = [
   { id: 2, label: "视频", value: "VIDEO" },
   { id: 3, label: "直播", value: "LIVE" },
 ]
-
+// 海多新闻类型
+export const hidoNewsTypeList = [
+  { id: 1, label: "媒体报道", value: "HD_REPORTS" },
+  { id: 2, label: "企业动态", value: "HD_DYNAMIC" },
+  { id: 3, label: "视频集锦", value: "HD_VIDEO" },
+  { id: 4, label: "政策解读", value: "HD_POLICY_INTERPRETATION" },
+  { id: 5, label: "政策支持", value: "HD_POLICY_SUPPORT" },
+]
 // 医院级别列表
 export const hospitalClassList = [
   { id: 1, label: "三甲", value: "CLASS_3_A" },
@@ -811,6 +818,13 @@ export const formatterElement = {
     NEWS: "资讯",
     VIDEO: "视频",
     LIVE: "直播",
+  },
+  hidoContentType: {
+    HD_REPORTS: "媒体报道",
+    HD_DYNAMIC: "企业动态",
+    HD_VIDEO: "视频集锦",
+    HD_POLICY_INTERPRETATION: "政策解读",
+    HD_POLICY_SUPPORT: "政策支持",
   },
   // 医院级别列表
   hospitalType: {

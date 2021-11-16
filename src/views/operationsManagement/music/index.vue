@@ -118,6 +118,7 @@
         <el-form-item label="上传音乐"
           prop="url">
           <single-upload v-model="editAddForm.url"
+            fileType='.mp3'
             @uploadFinish="uploadFinish"
             @uploadProgress="uploadProgress"
             uploadType="MUSIC" />

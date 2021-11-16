@@ -41,7 +41,7 @@ export default {
       handler(options) {
         // 设置true清空echart缓存
         this.chart.setOption(options, true)
-        const that = this
+        // 所有图表自适应
         window.addEventListener('resize', () => {
           this.chart.resize()
         })

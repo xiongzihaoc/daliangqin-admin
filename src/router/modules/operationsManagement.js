@@ -84,68 +84,18 @@ const operationsRouter = {
       component: () => import('@/views/operationsManagement/news'),
       meta: {
         title: '内容管理',
-        icon: 'content', 
-        // noCache: true
+        icon: 'content',
       },
     },
-    // 商城管理
-    // {
-    //   path: 'mall',
-    //   name: 'mall',
-    //   component: () => import('@/views/operationsManagement/mall/mall'),
-    //   redirect: "/operationsManagement/mall/product ",
-    //   meta: {
-    //     title: '商城管理',
-    //     icon: 'mall'
-    //   },
-    //   children: [{
-    //     path: "product",
-    //     name: "product",
-    //     component: () => import('@/views/operationsManagement/mall/product'),
-    //     meta: {
-    //       title: '单品管理',
-    //       icon: 'general'
-    //     },
-    //   },
-    //   {
-    //     path: "order",
-    //     name: "order",
-    //     component: () => import('@/views/operationsManagement/mall/order'),
-    //     meta: {
-    //       title: '订单管理',
-    //       icon: 'general'
-    //     },
-    //   },
-    //   {
-    //     path: "dispatch",
-    //     name: "dispatch",
-    //     component: () => import('@/views/operationsManagement/mall/dispatch'),
-    //     meta: {
-    //       title: '发货单',
-    //       icon: 'general'
-    //     },
-    //   }, {
-    //     path: "returns",
-    //     name: "returns",
-    //     component: () => import('@/views/operationsManagement/mall/returns'),
-    //     meta: {
-    //       title: '退货单',
-    //       icon: 'general'
-    //     },
-    //   },
-    //   ],
-    // },
-    // 取消原因
-    // {
-    //   path: 'reason',
-    //   name: 'reason',
-    //   component: () => import('@/views/operationsManagement/cancelReason'),
-    //   meta: {
-    //     title: '取消原因',
-    //     icon: 'reason'
-    //   }
-    // },
-    // 取消原因
+    {
+      path: 'hido',
+      name: 'hido',
+      component: () => import('@/views/operationsManagement/hido'),
+      meta: {
+        title: '海多星球',
+        icon: 'hido',
+      },
+    },
     {
       path: 'sms',
       name: 'sms',

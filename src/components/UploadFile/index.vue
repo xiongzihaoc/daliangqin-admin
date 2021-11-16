@@ -6,7 +6,7 @@
       :before-upload="beforeUpload"
       :show-file-list="false"
       :on-remove="handleRemove"
-      class="w100"
+      :accept="fileType"
       :on-progress="handleUploadProgress"
       :on-success="handleUploadSuccess">
       <el-input class="w100"
@@ -26,6 +26,7 @@ export default {
   props: {
     value: String,
     uploadType: String,
+    fileType: String,
   },
   data() {
     return {
@@ -70,8 +71,21 @@ export default {
     },
     beforeUpload(file) {
       if (this.uploadType === 'MUSIC') {
+        const isLt25M = file.size / 1024 / 1024 < 25
         if (file.type != 'audio/mpeg' && file.type != 'audio/ogg') {
-          return this.$message.error('请上传mp3格式文件')
+          return this.$message.error('请上传符合格式的音频')
+        }
+        if (!isLt25M) {
+          return this.$message.error('不能大于10M')
+        }
+      }
+      if (this.uploadType === 'VIDEO') {
+        const isLt25M = file.size / 1024 / 1024 < 10
+        if (file.type != 'video/mp4' && file.type != 'video/webm') {
+          return this.$message.error('请上传符合格式的视频')
+        }
+        if (!isLt25M) {
+          return this.$message.error('不能大于10M')
         }
       }
       const _self = this
@@ -85,9 +99,12 @@ export default {
       this.$emit('uploadProgress', event.percent)
     },
     handleUploadSuccess(response, file, fileList) {
-      const value = 'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
-      this.uploadValue = 'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
+      const value =
+        'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
+      this.uploadValue =
+        'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
       this.$emit('uploadFinish', value)
+      console.log(value)
     },
   },
 }
