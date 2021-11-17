@@ -9,11 +9,12 @@
       :accept="fileType"
       :on-progress="handleUploadProgress"
       :on-success="handleUploadSuccess">
+      <!-- 上传类型为视频 -->
       <div v-if="uploadType === 'VIDEO'"
         class="VIDEO">
         <video v-if="this.value"
           :src="this.value"
-          autoplay
+          controls="controls"
           class="avatar"></video>
         <i v-else
           style="border:1px dashed #ccc;border-radius:10px;"
