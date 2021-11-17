@@ -505,30 +505,29 @@ export default {
     },
     // 新增编辑
     editPageEnter() {
-      console.log(this.editAddForm.content)
-      // this.$refs.FormRef.validate((valid) => {
-      //   if (valid) {
-      //     if (this.infoTitle === '新增') {
-      //       // 发送请求
-      //       httpAdminNews.postNews(this.editAddForm).then((res) => {
-      //         if (res.code === 'OK') {
-      //           this.$message.success('新增成功')
-      //           this.getList()
-      //           this.editDialogVisible = false
-      //         }
-      //       })
-      //     } else {
-      //       // 发送请求
-      //       httpAdminNews.putNews(this.editAddForm).then((res) => {
-      //         if (res.code === 'OK') {
-      //           this.$message.success('编辑成功')
-      //           this.getList()
-      //           this.editDialogVisible = false
-      //         }
-      //       })
-      //     }
-      //   }
-      // })
+      this.$refs.FormRef.validate((valid) => {
+        if (valid) {
+          if (this.infoTitle === '新增') {
+            // 发送请求
+            httpAdminNews.postNews(this.editAddForm).then((res) => {
+              if (res.code === 'OK') {
+                this.$message.success('新增成功')
+                this.getList()
+                this.editDialogVisible = false
+              }
+            })
+          } else {
+            // 发送请求
+            httpAdminNews.putNews(this.editAddForm).then((res) => {
+              if (res.code === 'OK') {
+                this.$message.success('编辑成功')
+                this.getList()
+                this.editDialogVisible = false
+              }
+            })
+          }
+        }
+      })
     },
     // 排序
     sortTop(id) {

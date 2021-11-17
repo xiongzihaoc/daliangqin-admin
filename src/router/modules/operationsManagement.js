@@ -87,15 +87,15 @@ const operationsRouter = {
         icon: 'content',
       },
     },
-    {
-      path: 'hido',
-      name: 'hido',
-      component: () => import('@/views/operationsManagement/hido'),
-      meta: {
-        title: '海多星球',
-        icon: 'hido',
-      },
-    },
+    // {
+    //   path: 'hido',
+    //   name: 'hido',
+    //   component: () => import('@/views/operationsManagement/hido'),
+    //   meta: {
+    //     title: '海多星球',
+    //     icon: 'hido',
+    //   },
+    // },
     {
       path: 'sms',
       name: 'sms',
