@@ -15,6 +15,7 @@ body {
   text-rendering: optimizeLegibility;
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
     Microsoft YaHei, Arial, sans-serif;
+  // font-family: "Menlo", "DejaVu Sans Mono", "Lucida Console", monospace;
 }
 
 label {
@@ -201,6 +202,7 @@ div:focus {
   border-radius: 0;
   background: rgba(0, 0, 0, 0.1);
 }
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

@@ -84,7 +84,7 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        label="序号"
+        label="序号" width="50"
         type="index">
       </el-table-column>
       <el-table-column align="center"
@@ -389,7 +389,7 @@ export default {
     selectPatient() {
       this.$forceUpdate()
     },
-        /**
+    /**
      * 搜索
      */
     // 搜索
@@ -403,7 +403,7 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-        /**
+    /**
      * CRUD
      */
     // 新增
@@ -506,7 +506,7 @@ export default {
     detectTypeFormatter(row) {
       return formatterElement.glucoseDetectType[row.detectType]
     },
-        /**
+    /**
      * 分页
      */
     handleSizeChange(newSize) {

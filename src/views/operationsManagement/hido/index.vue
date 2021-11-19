@@ -64,7 +64,7 @@
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
         type="index"
-        label="序号"></el-table-column>
+        label="序号" width="50"></el-table-column>
       <el-table-column align="center"
         prop="title"
         label="标题"></el-table-column>

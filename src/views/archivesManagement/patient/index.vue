@@ -317,7 +317,7 @@ export default {
       checkboxList: [], //转移用户数据
       checkExcelList: [],
       tableHeaderBig: [
-        { type: 'index', label: '序号' },
+        { type: 'index', label: '序号', width: 50 },
         { prop: 'name', label: '姓名' },
         { prop: 'avatarUrl', label: '照片', isImg: true },
         { prop: 'idCard', label: '身份证号' },

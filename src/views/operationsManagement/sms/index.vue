@@ -73,7 +73,7 @@ export default {
       // 列表数据
       list: [],
       tableHeaderBig: [
-        { label: '序号', type: 'index' },
+        { label: '序号', type: 'index', width: 50 },
         { prop: 'phone', label: '手机号' },
         {
           prop: 'content',
@@ -152,7 +152,7 @@ export default {
         }
       })
     },
-        /**
+    /**
      * 表格格式化
      */
     typeFormatter(row) {

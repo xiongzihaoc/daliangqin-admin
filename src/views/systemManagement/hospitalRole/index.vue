@@ -153,7 +153,7 @@ export default {
         hospitalId: '',
       },
       tableHeaderBig: [
-        { label: '序号', type: 'index' },
+        { label: '序号', type: 'index', width: 50 },
         { prop: 'userName', label: '姓名' },
         { prop: 'userPhone', label: '手机号' },
         { prop: 'hospitalName', label: '医院名称' },

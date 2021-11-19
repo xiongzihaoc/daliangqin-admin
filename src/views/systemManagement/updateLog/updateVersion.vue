@@ -218,7 +218,7 @@ export default {
         url: '',
       },
       tableHeaderBig: [
-        { type: 'index', label: '序号' },
+        { type: 'index', label: '序号', width: 50 },
         {
           prop: 'appType',
           label: 'app类型',

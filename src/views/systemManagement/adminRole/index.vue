@@ -208,7 +208,7 @@ export default {
         hospitalId: '',
       },
       tableHeaderBig: [
-        { label: '序号', type: 'index' },
+        { label: '序号', type: 'index', width: 50 },
         { prop: 'name', label: '姓名' },
         { prop: 'phone', label: '手机号' },
         { prop: 'roleName', label: '身份' },

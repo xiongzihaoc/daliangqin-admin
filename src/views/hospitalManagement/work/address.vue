@@ -221,7 +221,7 @@ export default {
       },
       // 表格数据
       tableHeaderBig: [
-        { type: 'index', label: '序号' },
+        { type: 'index', label: '序号', width: 50 },
         { prop: 'doctorName', label: '医师姓名' },
         { prop: 'doctorPhone', label: '医师手机号' },
         {
@@ -304,7 +304,7 @@ export default {
       }
       return data
     },
-        /**
+    /**
      * 搜索
      */
     // 搜索
@@ -318,7 +318,7 @@ export default {
       this.searchForm = {}
       this.getList()
     },
-        /**
+    /**
      * CRUD
      */
     // 查看收货地址按钮
@@ -356,7 +356,7 @@ export default {
         }
       })
     },
-        /**
+    /**
      * 表格格式化
      */
     doctorTypeFormatter(row) {
@@ -365,7 +365,7 @@ export default {
     addressInfosFormatter(row) {
       return row.province + row.city + row.area + row.detail
     },
-        /**
+    /**
      * 分页
      */
     handleSizeChange(newSize) {

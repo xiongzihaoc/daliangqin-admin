@@ -85,6 +85,7 @@
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
         label="序号"
+        width="50"
         type="index"></el-table-column>
       <el-table-column v-if="show"
         width="150px"
@@ -122,7 +123,7 @@
         <template slot-scope="scope">
           <span>{{ scope.row.hangupRate ?  scope.row.hangupRate : '0'  }}</span>
         </template>
-        </el-table-column>
+      </el-table-column>
       <el-table-column align="center"
         label="对话总轮次"
         prop="chatRoundTotal"></el-table-column>
@@ -275,7 +276,7 @@ export default {
       }
     },
     getSearchFormTime(val) {
-      console.log(val);
+      console.log(val)
       this.searchForm.startTime = val[0]
       this.searchForm.endTime = val[1]
     },

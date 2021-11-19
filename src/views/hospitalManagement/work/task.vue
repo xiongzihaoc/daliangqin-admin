@@ -237,18 +237,18 @@
   </div>
 </template>
 <script>
-import EleTable from '@/components/Untable';
-import { httpAdminTask } from '@/api/admin/httpAdminTask';
-import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor';
-import { httpAdminPatient } from '@/api/admin/httpAdminPatient';
-import { httpAdminHospital } from '@/api/admin/httpAdminHospital';
+import EleTable from '@/components/Untable'
+import { httpAdminTask } from '@/api/admin/httpAdminTask'
+import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
+import { httpAdminPatient } from '@/api/admin/httpAdminPatient'
+import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import {
   followTypeList,
   parseTime,
   resourceTypeList,
   statusList,
   formatterElement,
-} from '@/utils/index';
+} from '@/utils/index'
 
 export default {
   components: {
@@ -303,7 +303,7 @@ export default {
       selectDoctorId: '', // 选择医师的id
       selectPatientUserName: '', // 搜索用户的姓名
       tableHeaderBig: [
-        { type: 'index', label: '序号' },
+        { type: 'index', label: '序号', width: 50 },
         { prop: 'doctorUserName', label: '医师姓名' },
         { prop: 'doctorUserPhone', label: '医师手机号' },
         { prop: 'hospitalName', label: '医院名称' },
@@ -311,7 +311,7 @@ export default {
           prop: 'type',
           label: '随访方式',
           formatter: (row) => {
-            return this.typeFormatter(row);
+            return this.typeFormatter(row)
           },
         },
         { prop: 'content', label: '随访内容', isTooltip: true },
@@ -321,63 +321,63 @@ export default {
           prop: 'highBloodStatus',
           label: '高血压',
           formatter: (row) => {
-            return this.highBloodFormatter(row);
+            return this.highBloodFormatter(row)
           },
         },
         {
           prop: 'diabetesStatus',
           label: '糖尿病',
           formatter: (row) => {
-            return this.diabetesFormatter(row);
+            return this.diabetesFormatter(row)
           },
         },
         {
           prop: 'heartRateStatus',
           label: '心率',
           formatter: (row) => {
-            return this.heartRateFormatter(row);
+            return this.heartRateFormatter(row)
           },
         },
         {
           prop: 'startTime',
           label: '预计开始时间',
           formatter: (row) => {
-            return parseTime(row.startTime);
+            return parseTime(row.startTime)
           },
         },
         {
           prop: 'endTime',
           label: '预计结束时间',
           formatter: (row) => {
-            return parseTime(row.endTime);
+            return parseTime(row.endTime)
           },
         },
         {
           prop: 'createTime',
           label: '创建时间',
           formatter: (row) => {
-            return parseTime(row.createTime);
+            return parseTime(row.createTime)
           },
         },
         {
           prop: 'resource',
           label: '加入方式',
           formatter: (row) => {
-            return this.resourceFormatter(row);
+            return this.resourceFormatter(row)
           },
         },
         {
           prop: 'status',
           label: '状态',
           formatter: (row) => {
-            return this.statusFormatter(row);
+            return this.statusFormatter(row)
           },
         },
         {
           prop: 'cancelTime',
           label: '取消时间',
           formatter: (row) => {
-            return parseTime(row.cancelTime);
+            return parseTime(row.cancelTime)
           },
         },
         { prop: 'cancelReason', label: '取消原因' },
@@ -388,9 +388,9 @@ export default {
           {
             text: '今天',
             onClick(picker) {
-              const start = new Date(new Date().toLocaleDateString()).getTime();
-              const end = new Date().getTime();
-              picker.$emit('pick', [start, end]);
+              const start = new Date(new Date().toLocaleDateString()).getTime()
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
             },
           },
           {
@@ -398,9 +398,9 @@ export default {
             onClick(picker) {
               const start =
                 new Date(new Date().toLocaleDateString()).getTime() -
-                3600 * 1000 * 24 * 6;
-              const end = new Date().getTime();
-              picker.$emit('pick', [start, end]);
+                3600 * 1000 * 24 * 6
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
             },
           },
           {
@@ -408,9 +408,9 @@ export default {
             onClick(picker) {
               const start =
                 new Date(new Date().toLocaleDateString()).getTime() -
-                3600 * 1000 * 24 * 30;
-              const end = new Date().getTime();
-              picker.$emit('pick', [start, end]);
+                3600 * 1000 * 24 * 30
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
             },
           },
         ],
@@ -422,13 +422,13 @@ export default {
       //   弹框区域
       editDialogVisible: false,
       infoTitle: '',
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   mounted() {
-    this.getHospitalList();
+    this.getHospitalList()
   },
   methods: {
     getList() {
@@ -448,23 +448,23 @@ export default {
           resourceType: this.searchForm.resource,
         })
         .then((res) => {
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     // 获取医院列表
     getHospitalList() {
       httpAdminHospital.getHospitalAll({ pageSize: -1 }).then((res) => {
-        this.hospitalList = res.data.elements;
-      });
+        this.hospitalList = res.data.elements
+      })
     },
     // 获取医师列表
     getDoctorList(id) {
       httpAdminDoctor
         .getDoctor({ hospitalId: id, pageSize: -1 })
         .then((res) => {
-          this.doctorList = res.data.elements;
-        });
+          this.doctorList = res.data.elements
+        })
     },
     // 获取用户列表
     getPatientList() {
@@ -474,75 +474,75 @@ export default {
           name: this.selectPatientUserName,
         })
         .then((res) => {
-          this.patientList = res.data.elements;
-        });
+          this.patientList = res.data.elements
+        })
     },
     // 远程搜索用户
     filterPatient(val) {
       if (val) {
-        this.selectPatientUserName = val;
-        this.getPatientList();
+        this.selectPatientUserName = val
+        this.getPatientList()
       }
     },
     // 清空搜索用户重置列表
     clearSelectPatient() {
-      this.selectPatientUserName = '';
-      this.getPatientList();
+      this.selectPatientUserName = ''
+      this.getPatientList()
     },
     async selecthospital(val) {
-      await this.getDoctorList(val);
-      this.editAddForm.doctorUserId = '';
-      this.editAddForm.patientUserId = '';
+      await this.getDoctorList(val)
+      this.editAddForm.doctorUserId = ''
+      this.editAddForm.patientUserId = ''
     },
     async selectDoctor(val) {
-      this.$forceUpdate();
-      this.selectDoctorId = val;
-      await this.getPatientList();
-      this.editAddForm.patientUserId = '';
+      this.$forceUpdate()
+      this.selectDoctorId = val
+      await this.getPatientList()
+      this.editAddForm.patientUserId = ''
     },
     selectPatient() {
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
     // 搜索选择时间
     searchTaskTimeChange(val) {
-      this.searchForm.startTime = val[0];
-      this.searchForm.endTime = val[1];
+      this.searchForm.startTime = val[0]
+      this.searchForm.endTime = val[1]
     },
     // 搜索
     searchBtn() {
-      this.pageNum = 1;
-      this.getList();
+      this.pageNum = 1
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.pageNum = 1;
-      this.searchForm = {};
-      this.getList();
+      this.pageNum = 1
+      this.searchForm = {}
+      this.getList()
     },
     /**
      * CRUD
      */
     // 选择时间
     selectTaskTime(val) {
-      this.editAddForm.startTime = val[0];
-      this.editAddForm.endTime = val[1];
+      this.editAddForm.startTime = val[0]
+      this.editAddForm.endTime = val[1]
     },
     // 新增
     addBtn() {
-      this.infoTitle = '新增';
-      this.editAddForm = {};
-      this.doctorList = [];
-      this.patientList = [];
-      this.editDialogVisible = true;
+      this.infoTitle = '新增'
+      this.editAddForm = {}
+      this.doctorList = []
+      this.patientList = []
+      this.editDialogVisible = true
     },
     // 编辑
     editBtn(val) {
-      this.doctorList = [{ id: val.doctorUserId, name: val.doctorUserName }];
-      this.patientList = [{ id: val.patientUserId, name: val.patientUserName }];
-      this.infoTitle = '编辑';
-      this.editAddForm = JSON.parse(JSON.stringify(val));
-      this.$set(this.editAddForm, 'taskTime', [val.startTime, val.endTime]);
-      this.editDialogVisible = true;
+      this.doctorList = [{ id: val.doctorUserId, name: val.doctorUserName }]
+      this.patientList = [{ id: val.patientUserId, name: val.patientUserName }]
+      this.infoTitle = '编辑'
+      this.editAddForm = JSON.parse(JSON.stringify(val))
+      this.$set(this.editAddForm, 'taskTime', [val.startTime, val.endTime])
+      this.editDialogVisible = true
     },
     // 删除
     async deleteBtn(id) {
@@ -554,20 +554,20 @@ export default {
           cancelButtonText: '取消',
           type: 'warning',
         }
-      ).catch((err) => console.log(err));
+      ).catch((err) => console.log(err))
       if (confirmResult != 'confirm') {
-        return this.$message.info('取消删除');
+        return this.$message.info('取消删除')
       }
       // 发送请求
       httpAdminTask.deleteTask(id).then((res) => {
         if (res.code === 'OK') {
-          this.$message.success('删除成功');
-          this.getList();
+          this.$message.success('删除成功')
+          this.getList()
         }
-      });
+      })
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 新增编辑
     editPageEnter() {
@@ -577,87 +577,87 @@ export default {
             // 发送请求
             httpAdminTask.postTask(this.editAddForm).then((res) => {
               if (res.code === 'OK') {
-                this.$message.success('新增成功');
-                this.getList();
-                this.editDialogVisible = false;
+                this.$message.success('新增成功')
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           } else {
             // 发送请求
             httpAdminTask.putTask(this.editAddForm).then((res) => {
               if (res.code === 'OK') {
-                this.$message.success('编辑成功');
-                this.getList();
-                this.editDialogVisible = false;
+                this.$message.success('编辑成功')
+                this.getList()
+                this.editDialogVisible = false
               }
-            });
+            })
           }
         }
-      });
+      })
     },
     /***** 表格格式化内容区域 *****/
     // 随访方式
     typeFormatter(row) {
-      return formatterElement.followType[row.type];
+      return formatterElement.followType[row.type]
     },
     // 高血压状态
     highBloodFormatter(row) {
       switch (row.highBloodStatus) {
         case 'HEALTH':
-          return `<span class='HEALTH'>健康</span>`;
+          return `<span class='HEALTH'>健康</span>`
         case 'SLIGHT':
-          return `<span class='SLIGHT'>轻度</span>`;
+          return `<span class='SLIGHT'>轻度</span>`
         case 'MEDIUM':
-          return `<span class='MEDIUM'>中度</span>`;
+          return `<span class='MEDIUM'>中度</span>`
         case 'SERIOUS':
-          return `<span class='SERIOUS'>重度</span>`;
+          return `<span class='SERIOUS'>重度</span>`
       }
     },
     // 糖尿病状态
     diabetesFormatter(row) {
       switch (row.diabetesStatus) {
         case 'HEALTH':
-          return `<span class='HEALTH'>健康</span>`;
+          return `<span class='HEALTH'>健康</span>`
         case 'SLIGHT':
-          return `<span class='SLIGHT'>轻度</span>`;
+          return `<span class='SLIGHT'>轻度</span>`
         case 'MEDIUM':
-          return `<span class='MEDIUM'>中度</span>`;
+          return `<span class='MEDIUM'>中度</span>`
         case 'SERIOUS':
-          return `<span class='SERIOUS'>重度</span>`;
+          return `<span class='SERIOUS'>重度</span>`
       }
     },
     // 心率状态
     heartRateFormatter(row) {
       switch (row.heartRateStatus) {
         case 'NORMAL':
-          return `<span class='HEALTH'>正常</span>`;
+          return `<span class='HEALTH'>正常</span>`
         case 'SLOW':
-          return `<span class='MEDIUM'>稍慢</span>`;
+          return `<span class='MEDIUM'>稍慢</span>`
         case 'FAST':
-          return `<span class='SERIOUS'>稍快</span>`;
+          return `<span class='SERIOUS'>稍快</span>`
       }
     },
     // 加入方式
     resourceFormatter(row) {
-      return formatterElement.resource[row.resource];
+      return formatterElement.resource[row.resource]
     },
     // 状态
     statusFormatter(row) {
-      return formatterElement.status[row.status];
+      return formatterElement.status[row.status]
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style></style>

@@ -220,7 +220,7 @@ export default {
       },
       // 表格数据
       tableHeaderBig: [
-        { type: 'index', label: '序号' },
+        { type: 'index', label: '序号', width: 50 },
         { prop: 'doctorUserName', label: '医师姓名' },
         { prop: 'doctorPhone', label: '医师手机号' },
         { prop: 'hospitalName', label: '医院名称' },

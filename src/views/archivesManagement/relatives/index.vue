@@ -76,7 +76,7 @@ export default {
       // 列表数据
       list: [],
       tableHeaderBig: [
-        { label: '序号', type: 'index' },
+        { label: '序号', type: 'index', width: 50 },
         { prop: 'userName', label: '用户姓名' },
         { prop: 'userPhone', label: '用户手机号' },
         { prop: 'name', label: '亲属姓名' },

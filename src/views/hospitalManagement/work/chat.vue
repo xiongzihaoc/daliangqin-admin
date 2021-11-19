@@ -2,25 +2,26 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form ref="searchFormRef" :model="searchForm" class="searchForm" :inline="true">
-        <el-form-item label="用户姓名" prop="patientUserName">
-          <el-input
-            v-model="searchForm.patientUserName"
+      <el-form ref="searchFormRef"
+        :model="searchForm"
+        class="searchForm"
+        :inline="true">
+        <el-form-item label="用户姓名"
+          prop="patientUserName">
+          <el-input v-model="searchForm.patientUserName"
             size="small"
-            placeholder="请输入用户姓名"
-          ></el-input>
+            placeholder="请输入用户姓名"></el-input>
         </el-form-item>
-        <el-form-item label="用户手机号" prop="patientPhone">
-          <el-input
-            v-model="searchForm.patientPhone"
+        <el-form-item label="用户手机号"
+          prop="patientPhone">
+          <el-input v-model="searchForm.patientPhone"
             size="small"
             maxlength="11"
-            placeholder="请输入用户手机号"
-          ></el-input>
+            placeholder="请输入用户手机号"></el-input>
         </el-form-item>
-        <el-form-item label="留言时间" prop="leaveTime">
-          <el-date-picker
-            class="w100"
+        <el-form-item label="留言时间"
+          prop="leaveTime">
+          <el-date-picker class="w100"
             v-model="searchForm.leaveTime"
             type="daterange"
             size="small"
@@ -32,28 +33,25 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :picker-options="pickerOptions"
-          >
+            :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="医师姓名" prop="doctorUserName">
-          <el-input
-            v-model="searchForm.doctorUserName"
+        <el-form-item label="医师姓名"
+          prop="doctorUserName">
+          <el-input v-model="searchForm.doctorUserName"
             size="small"
-            placeholder="请输入医师姓名"
-          ></el-input>
+            placeholder="请输入医师姓名"></el-input>
         </el-form-item>
-        <el-form-item label="医师手机号" prop="doctorPhone">
-          <el-input
-            v-model="searchForm.doctorPhone"
+        <el-form-item label="医师手机号"
+          prop="doctorPhone">
+          <el-input v-model="searchForm.doctorPhone"
             size="small"
             maxlength="11"
-            placeholder="请输入医师手机号"
-          ></el-input>
+            placeholder="请输入医师手机号"></el-input>
         </el-form-item>
-        <el-form-item label="回复时间" prop="replyTime">
-          <el-date-picker
-            class="w100"
+        <el-form-item label="回复时间"
+          prop="replyTime">
+          <el-date-picker class="w100"
             v-model="searchForm.replyTime"
             type="daterange"
             size="small"
@@ -65,65 +63,68 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            :picker-options="pickerOptions"
-          >
+            :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button @click="searchBtn" type="primary" size="small" icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button @click="searchReset" size="small" plain icon="el-icon-refresh"
-            >重置</el-button
-          >
+          <el-button @click="searchBtn"
+            type="primary"
+            size="small"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
+            size="small"
+            plain
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格区域 -->
-    <EleTable
-      :data="list"
+    <EleTable :data="list"
       :header="tableHeaderBig"
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
       @handleSizeChange="handleSizeChange"
-      @handleCurrentChange="handleCurrentChange"
-    >
+      @handleCurrentChange="handleCurrentChange">
       <!-- 操作 -->
-      <el-table-column align="center" slot="fixed" fixed="right" label="操作" width="220">
+      <el-table-column align="center"
+        slot="fixed"
+        fixed="right"
+        label="操作"
+        width="220">
         <template slot-scope="scope">
-          <el-button size="mini" @click="examineBtn(scope.row)" type="primary"
-            >查看</el-button
-          >
+          <el-button size="mini"
+            @click="examineBtn(scope.row)"
+            type="primary">查看</el-button>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 增改页面 -->
-    <el-dialog
-      title="查看"
+    <el-dialog title="查看"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
-      v-dialogDrag
-    >
+      v-dialogDrag>
       <div class="chat-content">
         <!-- 聊天记录数组-->
-        <div v-for="(item, index) in messageList" :key="index">
+        <div v-for="(item, index) in messageList"
+          :key="index">
           <!-- 对方 -->
-          <div class="word" v-if="!item.isSelf">
+          <div class="word"
+            v-if="!item.isSelf">
             <!-- 如果头像不为空 -->
-            <img v-if="toInfo.avatarUrl != ''" :src="toInfo.avatarUrl" />
-            <img
-              v-else
-              src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png"
-            />
+            <img v-if="toInfo.avatarUrl != ''"
+              :src="toInfo.avatarUrl" />
+            <img v-else
+              src="http://cdn.daliangqing.com/patient/%E6%BE%B6%E6%9D%91%E5%84%9A2.png" />
             <div class="info">
               <p class="time">{{ toInfo.userName }} {{ parseTime(item.createTime) }}</p>
               <div class="info-content">{{ item.leaveContent }}</div>
             </div>
           </div>
           <!-- 我的 -->
-          <div class="word-my" v-else>
+          <div class="word-my"
+            v-else>
             <div class="info">
               <p class="time">{{ selfInfo.userName }} {{ parseTime(item.createTime) }}</p>
               <div class="info-content">{{ item.leaveContent }}</div>
@@ -132,28 +133,30 @@
           </div>
         </div>
       </div>
-      <el-form ref="FormRef" :rules="formRules" :model="editAddForm">
+      <el-form ref="FormRef"
+        :rules="formRules"
+        :model="editAddForm">
         <el-form-item prop="leaveContent">
-          <el-input
-            type="textarea"
+          <el-input type="textarea"
             :rows="5"
             v-model="editAddForm.leaveContent"
             size="small"
-            placeholder="请输入回复内容"
-          ></el-input>
+            placeholder="请输入回复内容"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import EleTable from "@/components/Untable";
-import { parseTime } from "@/utils/index";
-import { httpAdminChat } from "@/api/admin/httpAdminChat";
+import EleTable from '@/components/Untable'
+import { parseTime } from '@/utils/index'
+import { httpAdminChat } from '@/api/admin/httpAdminChat'
 export default {
   components: {
     EleTable,
@@ -163,16 +166,18 @@ export default {
       parseTime,
       // 表单验证规则
       formRules: {
-        leaveContent: [{ required: true, trigger: "blur", message: "请输入回复内容" }],
+        leaveContent: [
+          { required: true, trigger: 'blur', message: '请输入回复内容' },
+        ],
       },
       // 搜索表单
       searchForm: {
-        fromUserName: "",
-        toUserName: "",
-        leaveStartTime: "",
-        leaveEndTime: "",
-        replyStartTime: "",
-        replayEndTime: "",
+        fromUserName: '',
+        toUserName: '',
+        leaveStartTime: '',
+        leaveEndTime: '',
+        replyStartTime: '',
+        replayEndTime: '',
       },
       // 列表数据
       list: [],
@@ -180,66 +185,66 @@ export default {
       messageList: [],
       // 增改表单
       editAddForm: {
-        contentType: "TEXT",
-        doctorUserId: "",
-        leaveContent: "",
+        contentType: 'TEXT',
+        doctorUserId: '',
+        leaveContent: '',
         isSelf: true,
-        patientUserId: "",
+        patientUserId: '',
       },
       selfInfo: {},
       toInfo: {},
       // 表格数据
       tableHeaderBig: [
-        { type: "index", label: "序号" },
-        { prop: "patientUserName", label: "用户姓名" },
-        { prop: "patientPhone", label: "用户手机号" },
-        { prop: "leaveCount", label: "用户留言数" },
+        { type: 'index', label: '序号', width: 50 },
+        { prop: 'patientUserName', label: '用户姓名' },
+        { prop: 'patientPhone', label: '用户手机号' },
+        { prop: 'leaveCount', label: '用户留言数' },
         {
-          prop: "leaveTime",
-          label: "最近留言时间",
+          prop: 'leaveTime',
+          label: '最近留言时间',
           formatter: (row) => {
-            return parseTime(row.leaveTime);
+            return parseTime(row.leaveTime)
           },
         },
-        { prop: "doctorUserName", label: "医师姓名" },
-        { prop: "doctorPhone", label: "医师手机号" },
-        { prop: "replyCount", label: "医师回复数" },
+        { prop: 'doctorUserName', label: '医师姓名' },
+        { prop: 'doctorPhone', label: '医师手机号' },
+        { prop: 'replyCount', label: '医师回复数' },
         {
-          prop: "replyTime",
-          label: "最近回复时间",
+          prop: 'replyTime',
+          label: '最近回复时间',
           formatter: (row) => {
-            return parseTime(row.replyTime);
+            return parseTime(row.replyTime)
           },
         },
       ],
       pickerOptions: {
         shortcuts: [
           {
-            text: "今天",
+            text: '今天',
             onClick(picker) {
-              const start = new Date(new Date().toLocaleDateString()).getTime();
-              const end = new Date().getTime();
-              picker.$emit("pick", [start, end]);
+              const start = new Date(new Date().toLocaleDateString()).getTime()
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
             },
           },
           {
-            text: "最近一周",
+            text: '最近一周',
             onClick(picker) {
               const start =
                 new Date(new Date().toLocaleDateString()).getTime() -
-                3600 * 1000 * 24 * 6;
-              const end = new Date().getTime();
-              picker.$emit("pick", [start, end]);
+                3600 * 1000 * 24 * 6
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
             },
           },
           {
-            text: "最近一个月",
+            text: '最近一个月',
             onClick(picker) {
               const start =
                 new Date(new Date().toLocaleDateString()).getTime() -
-                3600 * 1000 * 24 * 30;
-              const end = new Date().getTime();
-              picker.$emit("pick", [start, end]);
+                3600 * 1000 * 24 * 30
+              const end = new Date().getTime()
+              picker.$emit('pick', [start, end])
             },
           },
         ],
@@ -253,23 +258,23 @@ export default {
       chatPageSize: 20000,
       //   弹框区域
       editDialogVisible: false,
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   mounted() {
-    this.scrollToBottom();
+    this.scrollToBottom()
   },
   updated() {
-    this.scrollToBottom();
+    this.scrollToBottom()
   },
   methods: {
     scrollToBottom() {
       this.$nextTick(() => {
-        var container = this.$el.querySelector(".chat-content");
-        container.scrollTop = container.scrollHeight;
-      });
+        var container = this.$el.querySelector('.chat-content')
+        container.scrollTop = container.scrollHeight
+      })
     },
     getList() {
       httpAdminChat
@@ -286,10 +291,10 @@ export default {
           doctorPhone: this.searchForm.doctorPhone,
         })
         .then((res) => {
-          console.log(res);
-          this.list = res.data.elements;
-          this.total = res.data.totalSize;
-        });
+          console.log(res)
+          this.list = res.data.elements
+          this.total = res.data.totalSize
+        })
     },
     getChatSubscribe(val) {
       httpAdminChat
@@ -300,58 +305,58 @@ export default {
           doctorUserId: val.doctorUserId,
         })
         .then((res) => {
-          this.messageList = res.data.elements.reverse();
-          this.selfInfo = res.data.expand.selfInfo;
-          this.toInfo = res.data.expand.toInfo;
-          console.log(toInfo);
-        });
+          this.messageList = res.data.elements.reverse()
+          this.selfInfo = res.data.expand.selfInfo
+          this.toInfo = res.data.expand.toInfo
+          console.log(toInfo)
+        })
     },
     // 日期控件选择事件
     selectLeaveTime(val) {
-      this.searchForm.leaveStartTime = val[0];
-      this.searchForm.leaveEndTime = val[1];
+      this.searchForm.leaveStartTime = val[0]
+      this.searchForm.leaveEndTime = val[1]
     },
     selectReplyTime(val) {
-      this.searchForm.replyStartTime = val[0];
-      this.searchForm.replayEndTime = val[1];
+      this.searchForm.replyStartTime = val[0]
+      this.searchForm.replayEndTime = val[1]
     },
     /**
      * 搜索
      */
     // 搜索
     searchBtn() {
-      this.pageNum = 1;
-      this.getList();
+      this.pageNum = 1
+      this.getList()
     },
     // 重置
     searchReset() {
-      this.pageNum = 1;
-      this.searchForm = {};
-      this.getList();
+      this.pageNum = 1
+      this.searchForm = {}
+      this.getList()
     },
     /**
      * CRUD
      */
     // 查看
     examineBtn(val) {
-      this.val = val;
-      this.getChatSubscribe(val);
-      this.editAddForm.doctorUserId = val.doctorUserId;
-      this.editAddForm.patientUserId = val.patientUserId;
-      this.editDialogVisible = true;
+      this.val = val
+      this.getChatSubscribe(val)
+      this.editAddForm.doctorUserId = val.doctorUserId
+      this.editAddForm.patientUserId = val.patientUserId
+      this.editDialogVisible = true
     },
     editDialogClosed() {
-      this.$refs.FormRef.resetFields();
+      this.$refs.FormRef.resetFields()
     },
     // 发送消息
     editPageEnter() {
-      let currentTime = new Date().getTime();
+      let currentTime = new Date().getTime()
       this.$refs.FormRef.validate((valid) => {
         if (valid) {
           // 发送请求
           httpAdminChat
             .postChat({
-              contentType: "TEXT",
+              contentType: 'TEXT',
               createTime: currentTime,
               leaveContent: this.editAddForm.leaveContent,
               doctorUserId: this.editAddForm.doctorUserId,
@@ -359,35 +364,35 @@ export default {
               patientUserId: this.editAddForm.patientUserId,
             })
             .then((res) => {
-              if (res.code === "OK") {
+              if (res.code === 'OK') {
                 this.messageList.push({
-                  contentType: "TEXT",
+                  contentType: 'TEXT',
                   createTime: currentTime,
                   leaveContent: this.editAddForm.leaveContent,
                   doctorUserId: this.editAddForm.doctorUserId,
                   isSelf: true,
                   patientUserId: this.editAddForm.patientUserId,
-                });
-                this.editAddForm.leaveContent = "";
-                this.getList();
+                })
+                this.editAddForm.leaveContent = ''
+                this.getList()
               }
-            });
+            })
         }
-      });
+      })
     },
     /**
      * 分页
      */
     handleSizeChange(newSize) {
-      this.pageSize = newSize;
-      this.getList();
+      this.pageSize = newSize
+      this.getList()
     },
     handleCurrentChange(newPage) {
-      this.pageNum = newPage;
-      this.getList();
+      this.pageNum = newPage
+      this.getList()
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -434,7 +439,7 @@ export default {
         position: absolute;
         left: -8px;
         top: 8px;
-        content: "";
+        content: '';
         border-right: 10px solid #fff;
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
@@ -481,7 +486,7 @@ export default {
         position: absolute;
         right: -8px;
         top: 8px;
-        content: "";
+        content: '';
         border-left: 10px solid #425c5a;
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;

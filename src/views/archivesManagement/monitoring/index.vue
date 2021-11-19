@@ -55,7 +55,7 @@
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
-        label="序号"
+        label="序号" width="50"
         type="index"></el-table-column>
       <el-table-column align="center"
         label="医院名称"

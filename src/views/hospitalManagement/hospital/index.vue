@@ -2,312 +2,260 @@
   <div class="app-container">
     <!-- 搜索区域 -->
     <div class="search-box">
-      <el-form
-        ref="searchFormRef"
+      <el-form ref="searchFormRef"
         :model="searchForm"
         class="searchForm"
-        :inline="true"
-      >
-        <el-form-item label="中心医院名称" align="left" prop="hospitalName">
-          <el-select
-            v-model="searchForm.hospitalNameCenter"
+        :inline="true">
+        <el-form-item label="中心医院名称"
+          align="left"
+          prop="hospitalName">
+          <el-select v-model="searchForm.hospitalNameCenter"
             size="small"
             filterable
             placeholder="请选择医院"
-            @change="optionHospitalId"
-          >
-            <el-option
-              v-for="item in searchHospitalList"
+            @change="optionHospitalId">
+            <el-option v-for="item in searchHospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.name"
-            ></el-option>
+              :value="item.name"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="下属医院名称" align="left" prop="hospitalName">
-          <el-select
-            v-model="searchForm.hospitalName"
+        <el-form-item label="下属医院名称"
+          align="left"
+          prop="hospitalName">
+          <el-select v-model="searchForm.hospitalName"
             size="small"
             filterable
-            placeholder="请选择医院"
-          >
-            <el-option
-              v-for="item in searchAffiliatedHospitalList"
+            placeholder="请选择医院">
+            <el-option v-for="item in searchAffiliatedHospitalList"
               :key="item.id"
               :label="item.name"
-              :value="item.name"
-            ></el-option>
+              :value="item.name"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="医院等级" prop="hospitalType">
-          <el-select
-            v-model="searchForm.hospitalType"
+        <el-form-item label="医院等级"
+          prop="hospitalType">
+          <el-select v-model="searchForm.hospitalType"
             size="small"
-            placeholder="请选择医院等级"
-          >
-            <el-option
-              v-for="item in hospitalClassList"
+            placeholder="请选择医院等级">
+            <el-option v-for="item in hospitalClassList"
               :key="item.id"
               :label="item.label"
-              :value="item.value"
-            ></el-option>
+              :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button
-            @click="searchBtn"
+          <el-button @click="searchBtn"
             type="primary"
             size="small"
-            icon="el-icon-search"
-            >搜索</el-button
-          >
-          <el-button
-            @click="searchReset"
+            icon="el-icon-search">搜索</el-button>
+          <el-button @click="searchReset"
             size="small"
             plain
-            icon="el-icon-refresh"
-            >重置</el-button
-          >
+            icon="el-icon-refresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 表格上方按钮 -->
     <div>
-      <el-button
-        @click="addBtn"
+      <el-button @click="addBtn"
         type="primary"
         class="tableAdd"
         size="small"
         plain
-        icon="el-icon-plus"
-        >新增</el-button
-      >
+        icon="el-icon-plus">新增</el-button>
     </div>
     <!-- 表格区域 -->
-    <EleTable
-      :data="list"
+    <EleTable :data="list"
       :header="tableHeaderBig"
       :pageNum="pageNum"
       :pageSize="pageSize"
       :total="total"
       @handleSizeChange="handleSizeChange"
-      @handleCurrentChange="handleCurrentChange"
-    >
-      <el-table-column align="center" type="expand">
+      @handleCurrentChange="handleCurrentChange">
+      <el-table-column align="center"
+        type="expand">
         <template slot-scope="scope">
           <div class="text-center">
-            <el-table
-              v-if="scope.row.children.length > 0"
+            <el-table v-if="scope.row.children.length > 0"
               :data="scope.row.children"
-              style="width: 100%;"
-            >
-              <el-table-column prop="name" label="医院名称" width="180">
+              style="width: 100%;">
+              <el-table-column prop="name"
+                label="医院名称"
+                width="180">
               </el-table-column>
-              <el-table-column prop="avatarUrl" label="医院头像" width="180">
+              <el-table-column prop="avatarUrl"
+                label="医院头像"
+                width="180">
                 <template slot-scope="scope">
-                  <img class="tableImg" :src="scope.row.avatarUrl" />
+                  <img class="tableImg"
+                    :src="scope.row.avatarUrl" />
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="contract"
-                label="医院电话号码"
-              ></el-table-column>
-              <el-table-column
-                prop="address"
+              <el-table-column prop="contract"
+                label="医院电话号码"></el-table-column>
+              <el-table-column prop="address"
                 label="医院地址"
-                :formatter="addressFormatter"
-              ></el-table-column>
-              <el-table-column
-                prop="hospitalType"
+                :formatter="addressFormatter"></el-table-column>
+              <el-table-column prop="hospitalType"
                 label="医院等级"
-                :formatter="hospitalTypeFormatter"
-              ></el-table-column>
-              <el-table-column
-                align="center"
+                :formatter="hospitalTypeFormatter"></el-table-column>
+              <el-table-column align="center"
                 prop="patientCount"
-                label="用户数量"
-              >
+                label="用户数量">
                 <template slot-scope="scope">
-                  <span
-                    :class="[scope.row.patientCount ? 'skipStyle' : '']"
-                    @click="skipRoute(scope.row)"
-                    >{{ scope.row.patientCount }}</span
-                  >
+                  <span :class="[scope.row.patientCount ? 'skipStyle' : '']"
+                    @click="skipRoute(scope.row)">{{ scope.row.patientCount }}</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                align="center"
+              <el-table-column align="center"
                 prop="doctorCount"
-                label="医师数量"
-              >
+                label="医师数量">
                 <template slot-scope="scope">
-                  <span
-                    @click="skipDoctor(scope.row)"
-                    :class="[scope.row.doctorCount ? 'skipStyle' : '']"
-                    >{{ scope.row.doctorCount }}</span
-                  >
+                  <span @click="skipDoctor(scope.row)"
+                    :class="[scope.row.doctorCount ? 'skipStyle' : '']">{{ scope.row.doctorCount }}</span>
                 </template>
               </el-table-column>
-              <el-table-column align="center" label="操作" width="220">
+              <el-table-column align="center"
+                label="操作"
+                width="220">
                 <template slot-scope="scope">
-                  <el-button
-                    size="mini"
+                  <el-button size="mini"
                     type="primary"
-                    @click="editBtn(scope.row)"
-                    >编辑</el-button
-                  >
+                    @click="editBtn(scope.row)">编辑</el-button>
                 </template>
               </el-table-column>
             </el-table>
-            <div v-else style="color: #ccc;" slot="empty">暂无数据</div>
+            <div v-else
+              style="color: #ccc;"
+              slot="empty">暂无数据</div>
           </div>
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         type="index"
-        label="序号"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        label="序号" width="50"></el-table-column>
+      <el-table-column align="center"
         prop="name"
-        label="医院名称"
-      ></el-table-column>
-      <el-table-column align="center" prop="avatarUrl" label="医院头像">
+        label="医院名称"></el-table-column>
+      <el-table-column align="center"
+        prop="avatarUrl"
+        label="医院头像">
         <template slot-scope="scope">
-          <img class="tableImg" :src="scope.row.avatarUrl" />
+          <img class="tableImg"
+            :src="scope.row.avatarUrl" />
         </template>
       </el-table-column>
-      <el-table-column
-        align="center"
+      <el-table-column align="center"
         prop="contract"
-        label="医院电话"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        label="医院电话"></el-table-column>
+      <el-table-column align="center"
         prop="address"
         label="医院地址"
-        :formatter="addressFormatter"
-      ></el-table-column>
-      <el-table-column
-        align="center"
+        :formatter="addressFormatter"></el-table-column>
+      <el-table-column align="center"
         prop="hospitalType"
         label="医院等级"
-        :formatter="hospitalTypeFormatter"
-      ></el-table-column>
-      <el-table-column align="center" prop="patientCount" label="用户数量">
+        :formatter="hospitalTypeFormatter"></el-table-column>
+      <el-table-column align="center"
+        prop="patientCount"
+        label="用户数量">
         <template slot-scope="scope">
-          <span
-            :class="[scope.row.patientCount ? 'skipStyle' : '']"
-            @click="skipRoute(scope.row)"
-            >{{ scope.row.patientCount }}</span
-          >
+          <span :class="[scope.row.patientCount ? 'skipStyle' : '']"
+            @click="skipRoute(scope.row)">{{ scope.row.patientCount }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="doctorCount" label="医师数量">
+      <el-table-column align="center"
+        prop="doctorCount"
+        label="医师数量">
         <template slot-scope="scope">
-          <span
-            @click="skipDoctor(scope.row)"
-            :class="[scope.row.doctorCount ? 'skipStyle' : '']"
-            >{{ scope.row.doctorCount }}</span>
+          <span @click="skipDoctor(scope.row)"
+            :class="[scope.row.doctorCount ? 'skipStyle' : '']">{{ scope.row.doctorCount }}</span>
         </template>
       </el-table-column>
       <!-- 操作 -->
-      <el-table-column align="center" label="操作" width="220">
+      <el-table-column align="center"
+        label="操作"
+        width="220">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="editBtn(scope.row)"
-            >编辑</el-button
-          >
+          <el-button size="mini"
+            type="primary"
+            @click="editBtn(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </EleTable>
     <!-- 增改页面 -->
-    <el-dialog
-      :title="infoTitle"
+    <el-dialog :title="infoTitle"
       :visible.sync="editDialogVisible"
       width="40%"
       @closed="editDialogClosed"
-      v-dialogDrag
-    >
-      <el-form
-        ref="FormRef"
+      v-dialogDrag>
+      <el-form ref="FormRef"
         :rules="formRules"
         :model="editAddForm"
-        label-width="110px"
-      >
-        <el-form-item label="医院名称" prop="name">
-          <el-input
-            v-model="editAddForm.name"
-            placeholder="请输入医院名称"
-          ></el-input>
+        label-width="110px">
+        <el-form-item label="医院名称"
+          prop="name">
+          <el-input v-model="editAddForm.name"
+            placeholder="请输入医院名称"></el-input>
         </el-form-item>
-        <el-form-item label="医院头像" prop="avatarUrl">
-          <single-upload v-model="editAddForm.avatarUrl" uploadType="AVATAR" />
+        <el-form-item label="医院头像"
+          prop="avatarUrl">
+          <single-upload v-model="editAddForm.avatarUrl"
+            uploadType="AVATAR" />
         </el-form-item>
-        <el-form-item label="医院电话" prop="contract">
-          <el-input
-            v-model="editAddForm.contract"
+        <el-form-item label="医院电话"
+          prop="contract">
+          <el-input v-model="editAddForm.contract"
             v-Int
             maxlength="11"
-            placeholder="请输入医院电话"
-          ></el-input>
+            placeholder="请输入医院电话"></el-input>
         </el-form-item>
-        <el-form-item label="省市区" prop="address">
-          <el-cascader
-            style="width: 100%;"
+        <el-form-item label="省市区"
+          prop="address">
+          <el-cascader style="width: 100%;"
             v-model="editAddForm.address"
             :options="addressJson"
             :props="cateListProps"
             @change="selectAddrssChange"
-            clearable
-          ></el-cascader>
+            clearable></el-cascader>
         </el-form-item>
-        <el-form-item label="详细地址" prop="detail">
-          <el-input
-            v-model="editAddForm.detail"
-            placeholder="请输入医院地址"
-          ></el-input>
+        <el-form-item label="详细地址"
+          prop="detail">
+          <el-input v-model="editAddForm.detail"
+            placeholder="请输入医院地址"></el-input>
         </el-form-item>
-        <el-form-item label="医院等级" prop="hospitalType">
-          <el-select
-            v-model="editAddForm.hospitalType"
+        <el-form-item label="医院等级"
+          prop="hospitalType">
+          <el-select v-model="editAddForm.hospitalType"
             placeholder="请选择医院等级"
-            style="width: 100%;"
-          >
-            <el-option
-              v-for="item in hospitalClassList"
+            style="width: 100%;">
+            <el-option v-for="item in hospitalClassList"
               :key="item.id"
               :value="item.value"
-              :label="item.label"
-            ></el-option>
+              :label="item.label"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="管理员姓名"
+        <el-form-item label="管理员姓名"
           v-if="this.infoTitle === '新增'"
-          prop="adminName"
-        >
-          <el-input
-            v-model="editAddForm.adminName"
-            placeholder="请输入管理员姓名"
-          ></el-input>
+          prop="adminName">
+          <el-input v-model="editAddForm.adminName"
+            placeholder="请输入管理员姓名"></el-input>
         </el-form-item>
-        <el-form-item
-          label="管理员手机号"
+        <el-form-item label="管理员手机号"
           v-if="this.infoTitle === '新增'"
-          prop="adminPhone"
-        >
-          <el-input
-            v-model="editAddForm.adminPhone"
+          prop="adminPhone">
+          <el-input v-model="editAddForm.adminPhone"
             v-Int
             maxlength="11"
-            placeholder="请输入管理员手机号"
-          ></el-input>
+            placeholder="请输入管理员手机号"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer"
+        class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editPageEnter">确 定</el-button>
+        <el-button type="primary"
+          @click="editPageEnter">确 定</el-button>
       </span>
     </el-dialog>
   </div>

@@ -56,7 +56,7 @@
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
         type="index"
-        label="序号">
+        label="序号" width="50">
       </el-table-column>
       <el-table-column align="center"
         label="医师姓名"
@@ -130,11 +130,13 @@ export default {
         })
     },
     // 搜索
-    searchBtn() {this.pageNum = 1
+    searchBtn() {
+      this.pageNum = 1
       this.getList()
     },
     // 搜索条件重置
-    searchReset() {this.pageNum = 1
+    searchReset() {
+      this.pageNum = 1
       this.searchForm = {}
       this.getList()
     },

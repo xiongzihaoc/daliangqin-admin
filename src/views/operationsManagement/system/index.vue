@@ -93,7 +93,7 @@ export default {
         configValue: '',
       },
       tableHeaderBig: [
-        { type: 'index', label: '序号' },
+        { type: 'index', label: '序号',width:50 },
         { prop: 'configKey', label: 'key' },
         { prop: 'configName', label: '名称' },
         { prop: 'configValue', label: '数值', isTooltip: true },

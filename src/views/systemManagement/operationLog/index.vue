@@ -66,7 +66,7 @@ export default {
       // 列表数据
       list: [],
       tableHeaderBig: [
-        { label: '序号', type: 'index' },
+        { label: '序号', type: 'index', width: 50 },
         { prop: 'description', label: '目录' },
         { prop: 'url', label: '链接' },
         { prop: 'name', label: '姓名' },

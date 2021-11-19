@@ -83,7 +83,8 @@
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
         label="序号"
-        type="index">
+        type="index"
+        width="50">
       </el-table-column>
       <el-table-column align="center"
         label="医师姓名"
