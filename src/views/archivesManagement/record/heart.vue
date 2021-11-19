@@ -769,7 +769,7 @@ export default {
         detectType: this.searchForm.detectType,
         auditStatus: this.searchForm.auditStatus,
         doctorUserId: this.searchForm.doctorUserId,
-        hospitalId: this.searchForm.hospitalId,
+        hospitalIdList: JSON.stringify(this.searchForm.hospitalId),
         resultStatus: this.searchForm.resultStatus,
         ecgResult: this.searchForm.ecgResult,
         heartRateAdviceType: this.searchForm.suggestion,
@@ -778,6 +778,7 @@ export default {
       }
       httpAdminHeartRate.getHeartRate(searchForm).then(
         (res) => {
+          console.log(res)
           let handleDataList = res.data.elements
           handleDataList.forEach((item) => {
             if (item.length) {
