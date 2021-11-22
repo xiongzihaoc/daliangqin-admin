@@ -721,7 +721,7 @@ export default {
             this.userVisible = false
             this.addSubmit = false
           } else {
-            this.$message.warning(res.message)
+            this.addSubmit = false
           }
         })
     },
