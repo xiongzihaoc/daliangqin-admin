@@ -9,18 +9,7 @@
       :accept="fileType"
       :on-progress="handleUploadProgress"
       :on-success="handleUploadSuccess">
-      <!-- 上传类型为视频 -->
-      <div v-if="uploadType === 'VIDEO'"
-        class="VIDEO">
-        <video v-if="this.value"
-          :src="this.value"
-          controls="controls"
-          class="avatar"></video>
-        <i v-else
-          style="border:1px dashed #ccc;border-radius:10px;"
-          class="el-icon-plus avatar-uploader-icon"></i>
-      </div>
-      <div v-else>
+      <div>
         <el-input class="w100"
           id="quill-img"
           readonly
@@ -112,11 +101,13 @@ export default {
       this.$emit('uploadProgress', event.percent)
     },
     handleUploadSuccess(response, file, fileList) {
+      console.log(file)
+      const type = file.raw.type
       const value =
         'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
       this.uploadValue =
         'https://cdn.daliangqing.com/' + encodeURIComponent(this.dataObj.key)
-      this.$emit('uploadFinish', value)
+      this.$emit('uploadFinish', value, type)
       console.log(value)
     },
   },

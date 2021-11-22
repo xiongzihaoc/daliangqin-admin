@@ -64,7 +64,8 @@
       @handleCurrentChange="handleCurrentChange">
       <el-table-column align="center"
         type="index"
-        label="序号" width="50"></el-table-column>
+        label="序号"
+        width="50"></el-table-column>
       <el-table-column align="center"
         prop="title"
         label="标题"></el-table-column>
@@ -159,16 +160,15 @@
           <single-upload v-model="editAddForm.coverUrl"
             uploadType="NEWS" />
         </el-form-item>
-        <el-form-item label="上传视频"
+        <!-- <el-form-item label="上传视频"
           v-if="editAddForm.contentType === 'HD_VIDEO'">
           <single-upload2 v-model="editAddForm.content"
             uploadType="VIDEO"
             fileType='.mp4'
             @uploadFinish="uploadVideoFinish" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="详情"
-          prop="content"
-          v-else>
+          prop="content">
           <quill-editor v-model="editAddForm.content"
             ref="myQuillEditor"
             class="ql-editor"
@@ -297,6 +297,8 @@ export default {
         deletedStatus: '',
       },
       tableHeaderBig: [],
+      uploadType: '111',
+
       // 分页区域
       pageSize: 10,
       pageNum: 1,
@@ -313,6 +315,13 @@ export default {
             container: toolbarOptions,
             handlers: {
               ['image'](value) {
+                if (value) {
+                  document.querySelector('#quill-img').click()
+                } else {
+                  this.myQuillEditor.format('image', false)
+                }
+              },
+              ['video'](value) {
                 if (value) {
                   document.querySelector('#quill-img').click()
                 } else {
@@ -369,14 +378,24 @@ export default {
       this.editAddForm.content = ''
     },
     // 上传视频成功
-    uploadVideoFinish(val) {
-      this.editAddForm.content = val
+    uploadVideoFinish(val, type) {
+      // this.editAddForm.content = val
     },
     // 富文本上传图片成功
-    uploadFinish(val) {
+    uploadFinish(val, type) {
       const quill = this.$refs.myQuillEditor.quill
       const length = quill.getSelection.index
-      quill.insertEmbed(length, 'image', val)
+      // 如何是视频 插入视频
+      if (
+        type === 'audio/mpeg' ||
+        type === 'audio/ogg' ||
+        type === 'video/mp4'
+      ) {
+        quill.insertEmbed(length, 'video', val)
+      } else {
+        // 如果是图片 插入图片
+        quill.insertEmbed(length, 'image', val)
+      }
       quill.setSelection(length + 1)
     },
     /**
@@ -607,5 +626,9 @@ export default {
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value='monospace']::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value='monospace']::before {
   content: '等宽字体';
+}
+.ql-video {
+  width: 100%;
+  height: 300px;
 }
 </style>
