@@ -209,7 +209,7 @@
       <el-table-column align="center"
         label="并发数量"
         prop="concurrentQuantity"></el-table-column>
-      <el-table-column width="150px"
+      <el-table-column width="160px"
         align="center"
         label="启动时间"
         prop="startTime">
@@ -217,7 +217,7 @@
           <span>{{ parseTime(scope.row.startTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px"
+      <el-table-column width="160px"
         align="center"
         label="完成时间"
         prop="completeTime">
@@ -228,7 +228,7 @@
       <el-table-column align="center"
         label="创建人"
         prop="createName"></el-table-column>
-      <el-table-column width="150px"
+      <el-table-column width="160px"
         align="center"
         label="创建时间"
         prop="createTime">
