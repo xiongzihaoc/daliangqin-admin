@@ -65,6 +65,15 @@ const archivesRouter = {
                 },
             },
             {
+                path: "demo",
+                name: "demo",
+                component: () => import('@/views/archivesManagement/record/demo'),
+                meta: {
+                    title: '测试',
+                    icon: 'general',
+                },
+            },
+            {
                 path: "heartDetail",
                 name: "heartDetail",
                 hidden: true,
