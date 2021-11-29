@@ -940,9 +940,18 @@ export default {
     },
     // 批量打印
     bulkPrint() {
+      const LODOP = getLodop()
+      LODOP.PRINT_INIT('心率详情') //初始化在循环中
+      LODOP.SET_PRINT_PAGESIZE(1, '297mm', '210mm', 'A4') // 设定纸张大小
+      this.createAllPages()
+      LODOP.PREVIEW() // 预览
+      // LODOP.PRINT_DESIGN() // 设计
+      // LODOP.PRINT() // 打印
+    },
+    // 获取批量打印数据并且分页
+    createAllPages() {
       // 获取需要打印的列表
       const printList = this.list
-      let LODOP = getLodop()
       for (var i = 0; i < printList.length; i++) {
         let heartDetail = JSON.parse(printList[i].reportResult)?.body?.data
         // 生成模板
@@ -973,13 +982,13 @@ export default {
           align-items: center;
           width: 33.33%;
         }
-        .txt-r {
-          display: inline-block;
-          word-break: keep-all;
-          white-space: nowrap;
-          width: 70px;
-          text-align-last: justify; 
-        }
+        // .box .txt-r {
+        //   display: inline-block;
+        //   width: 50px;
+        //   word-break: keep-all;
+        //   white-space: nowrap;
+        //   text-align-last: justify; 
+        // }
         .top {
           display: flex;
           align-items: center;
@@ -1134,12 +1143,10 @@ export default {
         .margin {
           margin: 10px 0;
         }
-          </style>
-
+        </style>
           `
-      
-      // HTML
-        resHtml += ` <div class="print-container">
+        // HTML
+        resHtml += `<div class="print-container">
         <div class="container"
           id="printMe">
           <h3 class="fz18">院外便携式心电监测</h3>
@@ -1212,7 +1219,7 @@ export default {
             </div>
           </div>
           <div class="analyse">
-            <img class="analyse-img" :src="${heartDetail.fileImagePath}" />
+            <img class="analyse-img" src="${heartDetail.fileImagePath}" />
             <div class="fz14 analyse-title">心率分析：</div>
             <div class="flex margin resultWidth">
               <div>
@@ -1278,13 +1285,11 @@ export default {
           </div>
         </div>
       </div> 
-        `
-        LODOP.PRINT_INIT('心率详情') //初始化在循环中
-        LODOP.SET_PRINT_PAGESIZE(1, '297mm', '210mm', 'A4') // 设定纸张大小
+      <div style="page-break-before:always"></div>
+      `
+
+        LODOP.NewPage()
         LODOP.ADD_PRINT_HTM(10, 10, '100%', '100%', resHtml) // 增加超文本项
-        LODOP.PREVIEW() // 预览
-        // LODOP.PRINT_DESIGN(); // 设计
-        // LODOP.PRINT() // 打印
       }
     },
     // 双击自定义打印次数
