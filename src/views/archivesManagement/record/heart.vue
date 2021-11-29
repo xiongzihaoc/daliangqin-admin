@@ -128,10 +128,10 @@
             type="success"
             icon="el-icon-upload2"
             @click="exportExcel">导出Excel</el-button>
-          <!-- <el-button size="small"
+          <el-button size="small"
             type="success"
             icon="el-icon-folder-checked"
-            @click="bulkPrint">批量打印</el-button> -->
+            @click="bulkPrint">批量打印</el-button>
           <el-tooltip class="item"
             effect="dark"
             content="注意：重置次数是指将筛选后的列表打印次数重置为0"
@@ -449,6 +449,7 @@
 </template>
 <script>
 import EleTable from '@/components/Table'
+import { getLodop } from '@/utils/lodop/LodopFuncs.js'
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
@@ -938,7 +939,354 @@ export default {
       }
     },
     // 批量打印
-    bulkPrint() {},
+    bulkPrint() {
+      // 获取需要打印的列表
+      const printList = this.list
+      let LODOP = getLodop()
+      for (var i = 0; i < printList.length; i++) {
+        let heartDetail = JSON.parse(printList[i].reportResult)?.body?.data
+        // 生成模板
+        // CSS
+        let resHtml = `<style> .print-container {width: 100%;margin: 0 auto} 
+        .container {
+          width: 90%; 
+          margin: 0 auto;
+          font-size: 11px;
+          padding: 20px;
+          box-sizing: border-box;
+          border: 1px solid #ccc; 
+        }
+        h3 {
+          text-align: center;
+        }
+        .userInfo {
+          padding: 10px 10px;
+          box-sizing: border-box;
+          border-top: 2px solid #000;
+        }
+        .userName {
+          display: flex;
+          justify-content: space-around;
+        }
+        .box {
+          display: flex;
+          align-items: center;
+          width: 33.33%;
+        }
+        .txt-r {
+          display: inline-block;
+          word-break: keep-all;
+          white-space: nowrap;
+          width: 70px;
+          text-align-last: justify; 
+        }
+        .top {
+          display: flex;
+          align-items: center;
+          border-bottom: none;
+          justify-content: space-between;
+        }
+        .analyse {
+          padding: 0 10px 10px;
+          box-sizing: border-box;
+          border-bottom: 2px solid #000;
+        }
+        .analyse-img {
+          display: block;
+          margin: 0 auto;
+          width: 100%;
+          height: 120px;
+        }
+        .analyse-title {
+          margin: 5px 0;
+        }
+        .impression {
+          padding: 8px 10px;
+          box-sizing: border-box;
+          border-bottom: 2px solid #000;
+        }
+        .impression-title {
+          margin-bottom: 5px;
+        }
+        .result {
+          padding: 8px 10px;
+          box-sizing: border-box;
+          border-bottom: 2px solid #000;
+        }
+        .result-text {
+          margin: 10px 0;
+        }
+        .middle {
+          margin: 10px 0;
+        }
+        .result-option {
+          display: flex;
+        }
+        .result-title {
+          word-break: keep-all;
+          white-space: nowrap;
+          line-height: 1.5;
+          min-width: 60px;
+        }
+        .content {
+          min-width: 200px;
+          line-height: 1.5;
+          text-align-last: left;
+          text-align: justify;
+          text-justify: distribute-all-lines;
+        }
+        .variation-box {
+          padding: 8px 10px;
+          box-sizing: border-box;
+        }
+        .variation {
+          margin: 5px 0;
+        }
+        .variation-text {
+          line-height: 18px;
+          text-align-last: left;
+          text-align: justify;
+          text-justify: distribute-all-lines;
+        }
+        .footer {
+          display: flex;
+          align-items: center;
+          margin-top: 10px;
+          padding: 8px 10px;
+        }
+        .footer .left,.footer .right {
+          flex: 1;
+        }
+        .footer .left {
+          display: flex;
+        }
+        .footer .left span {
+          flex: 1;
+          flex-wrap: nowrap;
+        }
+        .footer .left .date {
+          min-width: 120px;
+        }
+        .footer .right {
+          display: flex;
+          align-items: center;
+        }
+        .footer .right span {
+          min-width: 80px;
+        }
+        .resultWidth div {
+          min-width: 110px;
+        }
+        .rightSignature {
+          margin-left: 30px;
+
+        }
+        .rightSignature img {
+          width: 260px;
+          height: 70px;
+          border-radius: 5px;
+        }
+        .ecgResultTz {
+          line-height: 1.5;
+        }
+        .advice {
+          font-size: 11px;
+        }
+        .remark {
+          text-align: center;
+          margin: 30px 0;
+          font-size: 12px;
+          color: #ccc;
+        }
+        .tooltip {
+          display: inline-block;
+          font-size: 10px;
+          color: #ccc;
+        }
+        .flex {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .over {
+          visibility: hidden;
+        }
+        .fz11 {
+          font-size: 11px;
+          font-weight: 700;
+        }
+
+        .fz14 {
+          font-size: 14px;
+          font-weight: 700;
+        }
+        .fz18 {
+          font-size: 18px;
+          font-weight: 700;
+        }
+        .fw {
+          font-weight: 700;
+        }
+        .minWidth {
+          display: inline-block;
+          min-width: 10px;
+        }
+        .margin {
+          margin: 10px 0;
+        }
+          </style>
+
+          `
+      
+      // HTML
+        resHtml += ` <div class="print-container">
+        <div class="container"
+          id="printMe">
+          <h3 class="fz18">院外便携式心电监测</h3>
+          <!-- 监测医院 时间 -->
+          <div class="userInfo top">
+            <div class="hospital">
+              <span class="title fw">监测医院：</span>
+              <span class="content minWidth">${printList[i].hospitalName}</span>
+            </div>
+            <div class="hospital">
+              <span class="title fw">监测时间：</span>
+              <span class="content">${parseTime(
+                printList[i].inspectionTime
+              )}</span>
+            </div>
+          </div>
+          <!-- 个人详细信息 -->
+          <div class="userInfo">
+            <div class="userName flex margin">
+              <div class="box">
+                <span class="fw txt-r">姓名</span>：
+                <span contenteditable="true"
+                  class="minWidth">${printList[i].patientUserName}</span>
+              </div>
+              <div class="box">
+                <span class="fw txt-r">年龄</span>：
+                <span>${printList[i].age}</span>
+              </div>
+              <div class="box">
+                <span class="fw txt-r">身份证号</span>：
+                <span>${printList[i].idCard}</span>
+              </div>
+            </div>
+            <div class="userName flex margin">
+              <div class="box">
+                <span class="fw txt-r">手机号码</span>：
+                <span>${printList[i].patientUserPhone}</span>
+              </div>
+              <div class="box">
+                <span class="fw txt-r">监测设备</span>：
+                <span>${printList[i].name}</span>
+              </div>
+              <div class="box">
+                <span class="fw txt-r">监测模式</span>：
+                <span>${
+                  printList[i].detectType === 'DAILY'
+                    ? '日常监测'
+                    : '24小时监测'
+                }</span>
+              </div>
+            </div>
+            <div class="userName flex">
+              <div class="box">
+                <span class="fw txt-r">监测时长</span>：
+                <span>${formatSeconds(heartDetail.length)}</span>
+              </div>
+              <div class="over box">
+                <span class="fw txt-r">测量结果</span>：
+                <span ref="title"
+                  class="minWidth"
+                  style="
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    word-break: break-all;
+                  "${heartDetail.title}</span>
+              </div>
+              <!-- 占位符 -->
+              <div class="over box"><span class="fw"></span></div>
+            </div>
+          </div>
+          <div class="analyse">
+            <img class="analyse-img" :src="${heartDetail.fileImagePath}" />
+            <div class="fz14 analyse-title">心率分析：</div>
+            <div class="flex margin resultWidth">
+              <div>
+                <span class="fw">平均心率：</span>
+                <span class="fw fz16">${heartDetail.avg}</span>
+                <span class="fw">bpm</span>
+              </div>
+              <div>
+                <span class="fw">最高心率：</span>
+                <span class="fw fz16">${heartDetail.max}</span>
+                <span class="fw">bpm</span>
+              </div>
+              <div>
+                <span class="fw">最低心率：</span>
+                <span class="fw fz16">${heartDetail.min}</span>
+                <span class="fw">bpm</span>
+              </div>
+            </div>
+            <div class="flex resultWidth">
+              <div>
+                <span class="fw">正常心率：</span>
+                <span class="fw fz16">${heartDetail.normalRate}</span>
+                <span class="fw">%</span>
+              </div>
+              <div>
+                <span class="fw">心率偏快：</span>
+                <span class="fw fz16">${heartDetail.heartbeatRate}</span>
+                <span class="fw">%</span>
+              </div>
+              <div>
+                <span class="fw">心率偏慢：</span>
+                <span class="fw fz16">${heartDetail.slowRate}</span>
+                <span class="fw">%</span>
+              </div>
+            </div>
+          </div>
+          <div class="impression">
+            <div class="fz14 impression-title">心电分析印象：</div>
+            <div class="ecgResultTz">${heartDetail.ecgResultTz}</div>
+          </div>
+          <div class="result">
+            <div class="fz14">心电分析结果：</div>
+            <div class="fz11 result-text">${heartDetail.ecgResult}</div>
+            <div class="result-option">
+              <div class="fw result-title">处置建议：</div>
+              <div class="content">${heartDetail.suggestion}</div>
+            </div>
+            <div class="result-option middle">
+              <div class="fw result-title">原因分析：</div>
+              <div class="content">${heartDetail.abnorAnalysis}</div>
+            </div>
+            <div class="result-option">
+              <div class="fw result-title">保健建议：</div>
+              <div class="content">${heartDetail.healthCareAdvice}</div>
+            </div>
+          </div>
+          <!-- 底部 -->
+          <div class="footer">
+            <div class="left"></div>
+            <div class="right">
+              <span class="fz14">医师签名：</span>
+            </div>
+          </div>
+        </div>
+      </div> 
+        `
+        LODOP.PRINT_INIT('心率详情') //初始化在循环中
+        LODOP.SET_PRINT_PAGESIZE(1, '297mm', '210mm', 'A4') // 设定纸张大小
+        LODOP.ADD_PRINT_HTM(10, 10, '100%', '100%', resHtml) // 增加超文本项
+        LODOP.PREVIEW() // 预览
+        // LODOP.PRINT_DESIGN(); // 设计
+        // LODOP.PRINT() // 打印
+      }
+    },
     // 双击自定义打印次数
     cellDblClick(row, column, cell, event) {
       if (
