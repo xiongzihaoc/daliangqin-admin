@@ -959,7 +959,7 @@ export default {
     bulkPrint() {
       if (this.printTotal <= 100) {
         this.$confirm(
-          '确定要导出当前<strong>' + this.printTotal + '</strong>条数据？',
+          '确定要打印当前<strong>' + this.printTotal + '</strong>条数据？',
           '提示',
           {
             dangerouslyUseHTMLString: true,

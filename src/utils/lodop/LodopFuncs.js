@@ -45,8 +45,8 @@ export function needCLodop() {
 
 //====页面引用CLodop云打印必须的JS文件,用双端口(8000和18000）避免其中某个被占用：====
 if (needCLodop()) {
-    var src1 = "http://localhost:8000/CLodopfuncs.js?priority=1";
-    var src2 = "http://localhost:18000/CLodopfuncs.js?priority=0";
+    var src1 = "https://localhost:8000/CLodopfuncs.js?priority=1";
+    var src2 = "https://localhost:18000/CLodopfuncs.js?priority=0";
 
     var head = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
     var oscript = document.createElement("script");
@@ -74,17 +74,7 @@ export function getLodop(oOBJECT, oEMBED) {
     try {
         var ua = navigator.userAgent;
         var isIE = !!(ua.match(/MSIE/i)) || !!(ua.match(/Trident/i));
-
-        var needClodop = true;
-
-
-        try {
-            LODOP = getCLodop();
-        } catch (err) {
-            needClodop = false;
-        }
-
-        if (needCLodop) {
+        if (needCLodop()) {
             try {
                 LODOP = getCLodop();
             } catch (err) { }
