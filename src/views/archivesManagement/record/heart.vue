@@ -449,7 +449,7 @@
 </template>
 <script>
 import EleTable from '@/components/Table'
-import { getLodop, getLodop2 } from '@/utils/lodop/LodopFuncs.js'
+import { getLodop } from '@/utils/lodop/LodopFuncs.js'
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
@@ -957,42 +957,29 @@ export default {
     },
     // 批量打印
     bulkPrint() {
-      var LODOP = getLodop2()
-
-      if (!Boolean(LODOP)) {
-        console.log(err)
-        alert('没安装', err)
-      }
-
-      try {
-        LODOP.PRINT_INIT('心率详情')
-      } catch (err) {
-        console.log(err)
-        alert('没安装',err)
-      }
-
-      return
-
       if (this.printTotal <= 100) {
-        this.$confirm(
-          '确定要打印当前<strong>' + this.printTotal + '</strong>条数据？',
-          '提示',
-          {
-            dangerouslyUseHTMLString: true,
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-          }
-        )
-          .then(() => {
-            const LODOP = getLodop()
-            LODOP.PRINT_INIT('心率详情') //初始化在循环中
-            LODOP.SET_PRINT_PAGESIZE(1, '297mm', '210mm', 'A4') // 设定纸张大小
-            this.createAllPages()
-            LODOP.PREVIEW() // 预览
-            // LODOP.PRINT_DESIGN() // 设计
-            // LODOP.PRINT() // 打印
-          })
-          .catch(() => {})
+        // this.$confirm(
+        //   '确定要打印当前<strong>' + this.printTotal + '</strong>条数据？',
+        //   '提示',
+        //   {
+        //     dangerouslyUseHTMLString: true,
+        //     confirmButtonText: '确定',
+        //     cancelButtonText: '取消',
+        //   }
+        // )
+        //   .then(() => {
+
+        //   })
+        //   .catch((err) => {
+        //     console.log(3333333333333)
+        //   })
+        const LODOP = getLodop()
+        LODOP.PRINT_INIT('心率详情') //初始化在循环中
+        LODOP.SET_PRINT_PAGESIZE(1, '297mm', '210mm', 'A4') // 设定纸张大小
+        this.createAllPages()
+        LODOP.PREVIEW() // 预览
+        // LODOP.PRINT_DESIGN() // 设计
+        // LODOP.PRINT() // 打印
       } else {
         this.$confirm(
           '当前要打印的<strong>' +
