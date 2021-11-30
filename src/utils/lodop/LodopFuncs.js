@@ -58,6 +58,19 @@ if (needCLodop()) {
     CLodopIsLocal = !!((src1 + src2).match(/\/\/localho|\/\/127.0.0./i));
 }
 
+export function getLodop2() {
+    var LODOP = document.createElement("object");
+    LODOP.setAttribute("width", 0);
+    LODOP.setAttribute("height", 0);
+    LODOP.setAttribute("style", "position:absolute;left:0px;top:-100px;width:0px;height:0px;");
+    if (isIE)
+        LODOP.setAttribute("classid", "clsid:2105C259-1E0C-4534-8141-A753534CB4CA");
+    else
+        LODOP.setAttribute("type", "application/x-print-lodop");
+    document.documentElement.appendChild(LODOP);
+    return LODOP
+}
+
 //====获取LODOP对象的主过程：====
 export function getLodop(oOBJECT, oEMBED) {
     var strHtmInstall = "<br><font color='#FF00FF'>打印控件未安装!点击这里<a href='install_lodop32.exe' target='_self'>执行安装</a>,安装后请刷新页面或重新进入。</font>";

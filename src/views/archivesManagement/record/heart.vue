@@ -449,7 +449,7 @@
 </template>
 <script>
 import EleTable from '@/components/Table'
-import { getLodop } from '@/utils/lodop/LodopFuncs.js'
+import { getLodop, getLodop2 } from '@/utils/lodop/LodopFuncs.js'
 import { httpAdminHeartRate } from '@/api/admin/httpAdminHeartRate'
 import { httpAdminHospital } from '@/api/admin/httpAdminHospital'
 import { httpAdminDoctor } from '@/api/admin/httpAdminDoctor'
@@ -957,6 +957,16 @@ export default {
     },
     // 批量打印
     bulkPrint() {
+      var LODOP = getLodop2()
+
+      try {
+        LODOP.PRINT_INIT('心率详情')
+      } catch (err) {
+        alert('没安装')
+      }
+
+      return
+
       if (this.printTotal <= 100) {
         this.$confirm(
           '确定要打印当前<strong>' + this.printTotal + '</strong>条数据？',
