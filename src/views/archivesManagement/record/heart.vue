@@ -549,7 +549,7 @@ export default {
         extraHead: '',
       },
       printList: [], // 批量打印的列表
-      printTotal:10, // 打印总数
+      printTotal: 10, // 打印总数
       printId: '', // 打印某条记录的Id
       printNumberDialogVisible: false, // 自定义修改打印次数弹框
       customPrintNumber: '', // 自定义修改的数量

@@ -74,7 +74,17 @@ export function getLodop(oOBJECT, oEMBED) {
     try {
         var ua = navigator.userAgent;
         var isIE = !!(ua.match(/MSIE/i)) || !!(ua.match(/Trident/i));
-        if (needCLodop()) {
+
+        var needClodop = true;
+
+
+        try {
+            LODOP = getCLodop();
+        } catch (err) {
+            needClodop = false;
+        }
+
+        if (needCLodop) {
             try {
                 LODOP = getCLodop();
             } catch (err) { }
