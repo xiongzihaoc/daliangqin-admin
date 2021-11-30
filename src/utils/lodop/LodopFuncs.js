@@ -1,4 +1,8 @@
-﻿var CreatedOKLodop7766 = null, CLodopIsLocal;
+﻿import {
+    Message
+} from 'element-ui'
+
+var CreatedOKLodop7766 = null, CLodopIsLocal;
 
 //====判断是否需要 Web打印服务CLodop:===
 //===(不支持插件的浏览器版本需要用它)===
@@ -60,17 +64,17 @@ if (needCLodop()) {
 
 //====获取LODOP对象的主过程：====
 export function getLodop(oOBJECT, oEMBED) {
-    var strHtmInstall = "<br><font color='#FF00FF'>打印控件未安装!点击这里<a href='install_lodop32.exe' target='_blank'>执行安装</a>,安装后请刷新页面或重新进入。</font>";
-    var strHtmUpdate = "<br><font color='#FF00FF'>打印控件需要升级!点击这里<a href='install_lodop32.exe' target='_blank'>执行升级</a>,升级后请重新进入。</font>";
-    var strHtm64_Install = "<br><font color='#FF00FF'>打印控件未安装!点击这里<a href='install_lodop64.exe' target='_blank'>执行安装</a>,安装后请刷新页面或重新进入。</font>";
-    var strHtm64_Update = "<br><font color='#FF00FF'>打印控件需要升级!点击这里<a href='install_lodop64.exe' target='_blank'>执行升级</a>,升级后请重新进入。</font>";
-    var strHtmFireFox = "<br><br><font color='#FF00FF'>（注意：如曾安装过Lodop旧版附件npActiveXPLugin,请在【工具】->【附加组件】->【扩展】中先卸它）</font>";
-    var strHtmChrome = "<br><br><font color='#FF00FF'>(如果此前正常，仅因浏览器升级或重安装而出问题，需重新执行以上安装）</font>";
+    // var strHtmInstall = "<br><font color='#FF00FF'>打印控件未安装!点击这里<a href='install_lodop32.exe' target='_blank'>执行安装</a>,安装后请刷新页面或重新进入。</font>";
+    // var strHtmUpdate = "<br><font color='#FF00FF'>打印控件需要升级!点击这里<a href='install_lodop32.exe' target='_blank'>执行升级</a>,升级后请重新进入。</font>";
+    // var strHtm64_Install = "<br><font color='#FF00FF'>打印控件未安装!点击这里<a href='install_lodop64.exe' target='_blank'>执行安装</a>,安装后请刷新页面或重新进入。</font>";
+    // var strHtm64_Update = "<br><font color='#FF00FF'>打印控件需要升级!点击这里<a href='install_lodop64.exe' target='_blank'>执行升级</a>,升级后请重新进入。</font>";
+    // var strHtmFireFox = "<br><br><font color='#FF00FF'>（注意：如曾安装过Lodop旧版附件npActiveXPLugin,请在【工具】->【附加组件】->【扩展】中先卸它）</font>";
+    // var strHtmChrome = "<br><br><font color='#FF00FF'>(如果此前正常，仅因浏览器升级或重安装而出问题，需重新执行以上安装）</font>";
     // C-LODOP打印
-    var strCLodopInstall_1 = "<br><font color='#FF00FF'>Web打印服务CLodop未安装启动，点击这里<a href='https://cdn.daliangqing.com/CLodop_Setup_for_Win32NT.exe'>下载执行安装</a>";
-    var strCLodopInstall_2 = "<br>（若此前已安装过，可<a href='CLodop.protocol:setup' target='_blank'>点这里直接再次启动</a>）";
+    var strCLodopInstall_1 = "<br><font color='#FF00FF'>1. Web打印服务CLodop未安装启动，点击这里<a style='text-decoration:underline' href='https://cdn.daliangqing.com/CLodop_Setup_for_Win32NT.exe'>下载执行安装</a>";
+    var strCLodopInstall_2 = "<br>2. 若此前已安装过，可<a style='text-decoration:underline' href='CLodop.protocol:setup' target='_blank'>点这里直接再次启动</a>）";
     var strCLodopInstall_3 = "，成功后请刷新本页面。</font>";
-    var strCLodopUpdate = "<br><font color='#FF00FF'>Web打印服务CLodop需升级!点击这里<a href='https://cdn.daliangqing.com/CLodop_Setup_for_Win32NT.exe'>执行升级</a>,升级后请刷新页面。</font>";
+    var strCLodopUpdate = "<br><font color='#FF00FF'>Web打印服务CLodop需升级!点击这里<a style='text-decoration:underline' href='https://cdn.daliangqing.com/CLodop_Setup_for_Win32NT.exe'>执行升级</a>,升级后请刷新页面。</font>";
     var LODOP;
     try {
         var ua = navigator.userAgent;
@@ -84,7 +88,8 @@ export function getLodop(oOBJECT, oEMBED) {
             //     return;
             // }
             if (!LODOP) {
-                document.body.innerHTML = strCLodopInstall_1 + (CLodopIsLocal ? strCLodopInstall_2 : "") + strCLodopInstall_3 + document.body.innerHTML;
+                const div = `<div style="margin-left:220px">${strCLodopInstall_1}${CLodopIsLocal ? strCLodopInstall_2 : ""}${strCLodopInstall_3}</div>`
+                document.body.innerHTML = div + document.body.innerHTML;
                 return;
             } else {
                 if (CLODOP.CVERSION < "3.0.8.3") {
@@ -127,10 +132,10 @@ export function getLodop(oOBJECT, oEMBED) {
         //         return LODOP;
         //     }
         // }
-        if (LODOP.VERSION < "6.2.2.6") {
-            if (!needCLodop())
-                document.body.innerHTML = (is64IE ? strHtm64_Update : strHtmUpdate) + document.body.innerHTML;
-        }
+        // if (LODOP.VERSION < "6.2.2.6") {
+        //     if (!needCLodop())
+        //         document.body.innerHTML = (is64IE ? strHtm64_Update : strHtmUpdate) + document.body.innerHTML;
+        // }
         //===如下空白位置适合调用统一功能(如注册语句、语言选择等):==
 
         // 添加注册码，打印就不会出现 “本页由lodop试用版输出 ” 

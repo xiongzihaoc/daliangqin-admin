@@ -958,21 +958,6 @@ export default {
     // 批量打印
     bulkPrint() {
       if (this.printTotal <= 100) {
-        // this.$confirm(
-        //   '确定要打印当前<strong>' + this.printTotal + '</strong>条数据？',
-        //   '提示',
-        //   {
-        //     dangerouslyUseHTMLString: true,
-        //     confirmButtonText: '确定',
-        //     cancelButtonText: '取消',
-        //   }
-        // )
-        //   .then(() => {
-
-        //   })
-        //   .catch((err) => {
-        //     console.log(3333333333333)
-        //   })
         const LODOP = getLodop()
         LODOP.PRINT_INIT('心率详情') //初始化在循环中
         LODOP.SET_PRINT_PAGESIZE(1, '297mm', '210mm', 'A4') // 设定纸张大小
