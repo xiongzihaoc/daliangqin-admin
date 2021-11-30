@@ -548,6 +548,8 @@ export default {
         extraCss: '',
         extraHead: '',
       },
+      printList: [], // 批量打印的列表
+      printTotal:10, // 打印总数
       printId: '', // 打印某条记录的Id
       printNumberDialogVisible: false, // 自定义修改打印次数弹框
       customPrintNumber: '', // 自定义修改的数量
@@ -621,6 +623,7 @@ export default {
         })
         .then((res) => {
           this.list = res.data.elements
+          this.printList = res.data.elements
           this.total = res.data.totalSize
         })
     },
@@ -636,6 +639,19 @@ export default {
         this.doctorList = res.data.elements
       })
     },
+    // 获取批量打印列表
+    getPrintList() {
+      httpAdminHeartRate
+        .getHeartRate({
+          page: 1,
+          pageSize: 100,
+          ...this.searchForm,
+        })
+        .then((res) => {
+          this.printList = res.data.elements
+          this.printTotal = res.data.totalSize
+        })
+    },
     // 选择监测日期
     changeMonitorTime(val) {
       this.searchForm.startTime = val[0]
@@ -647,6 +663,7 @@ export default {
     searchBtn() {
       this.pageNum = 1
       this.getList()
+      this.getPrintList()
     },
     // 重置
     searchReset() {
@@ -940,30 +957,54 @@ export default {
     },
     // 批量打印
     bulkPrint() {
-      const LODOP = getLodop()
-      LODOP.PRINT_INIT('心率详情') //初始化在循环中
-      LODOP.SET_PRINT_PAGESIZE(1, '297mm', '210mm', 'A4') // 设定纸张大小
-      this.createAllPages()
-      LODOP.PREVIEW() // 预览
-      // LODOP.PRINT_DESIGN() // 设计
-      // LODOP.PRINT() // 打印
+      if (this.printTotal <= 100) {
+        this.$confirm(
+          '确定要导出当前<strong>' + this.printTotal + '</strong>条数据？',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+          }
+        )
+          .then(() => {
+            const LODOP = getLodop()
+            LODOP.PRINT_INIT('心率详情') //初始化在循环中
+            LODOP.SET_PRINT_PAGESIZE(1, '297mm', '210mm', 'A4') // 设定纸张大小
+            this.createAllPages()
+            LODOP.PREVIEW() // 预览
+            // LODOP.PRINT_DESIGN() // 设计
+            // LODOP.PRINT() // 打印
+          })
+          .catch(() => {})
+      } else {
+        this.$confirm(
+          '当前要打印的<strong>' +
+            this.printTotal +
+            '</strong>条数据，数据量过大，不能一次打印！<br/>建议分时间段打印所需数据。',
+          '提示',
+          {
+            dangerouslyUseHTMLString: true,
+            showCancelButton: false,
+          }
+        )
+          .then(() => {})
+          .catch(() => {})
+      }
     },
     // 获取批量打印数据并且分页
     createAllPages() {
-      // 获取需要打印的列表
-      const printList = this.list
+      const printList = this.printList
       for (var i = 0; i < printList.length; i++) {
         let heartDetail = JSON.parse(printList[i].reportResult)?.body?.data
         // 生成模板
         // CSS
-        let resHtml = `<style> .print-container {width: 100%;margin: 0 auto} 
+        let resHtml = `<style> .print-container {width: 100%;margin: 0 auto}
         .container {
-          width: 90%; 
           margin: 0 auto;
           font-size: 11px;
           padding: 20px;
           box-sizing: border-box;
-          border: 1px solid #ccc; 
         }
         h3 {
           text-align: center;
@@ -987,7 +1028,7 @@ export default {
         //   width: 50px;
         //   word-break: keep-all;
         //   white-space: nowrap;
-        //   text-align-last: justify; 
+        //   text-align-last: justify;
         // }
         .top {
           display: flex;
@@ -1284,11 +1325,9 @@ export default {
             </div>
           </div>
         </div>
-      </div> 
-      <div style="page-break-before:always"></div>
+      </div>
       `
-
-        LODOP.NewPage()
+        LODOP.NewPage() // 分页
         LODOP.ADD_PRINT_HTM(10, 10, '100%', '100%', resHtml) // 增加超文本项
       }
     },
