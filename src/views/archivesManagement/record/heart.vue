@@ -959,11 +959,17 @@ export default {
     bulkPrint() {
       var LODOP = getLodop2()
 
-      try {
-        LODOP.PRINT_INIT('心率详情')
-      } catch (err) {
-        alert('没安装')
+      if (!Boolean(LODOP)) {
+        console.log(err)
+        alert('没安装', err)
       }
+
+      // try {
+      //   // LODOP.PRINT_INIT('心率详情')
+      // } catch (err) {
+      //   console.log(err)
+      //   alert('没安装',err)
+      // }
 
       return
 
