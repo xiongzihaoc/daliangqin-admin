@@ -63,6 +63,10 @@ export function getLodop2() {
     LODOP.setAttribute("width", 0);
     LODOP.setAttribute("height", 0);
     LODOP.setAttribute("style", "position:absolute;left:0px;top:-100px;width:0px;height:0px;");
+
+    var ua = navigator.userAgent;
+    var isIE = !!(ua.match(/MSIE/i)) || !!(ua.match(/Trident/i));
+
     if (isIE)
         LODOP.setAttribute("classid", "clsid:2105C259-1E0C-4534-8141-A753534CB4CA");
     else
